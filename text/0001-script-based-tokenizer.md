@@ -135,7 +135,11 @@ TBD
 - [unicode-segmentation](https://github.com/unicode-rs/unicode-segmentation) for Latin scripts
 - [Jieba](https://github.com/messense/jieba-rs) for Chinese
 - [Lindera](https://github.com/lindera-morphology/lindera) for Japanese and Korean
-
+//TODO: read through this material and give a summary
+Sonic aslo uses whatlang to peform the toikenization, it could be interesting to checkout how they do it:
+https://github.com/valeriansaliou/sonic/tree/master/src/lexer
+tantivy also advertise good multilingual support: https://github.com/tantivy-search/tantivy/tree/main/src/tokenizer
+how elastic search handle it: https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-tokenizers.html
 <!-- Discuss prior art, both the good and the bad, in relation to this proposal.
 A few examples of what this can include are:
 
