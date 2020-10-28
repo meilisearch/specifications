@@ -7,7 +7,7 @@
 # Summary
 [summary]: #summary
 
-Tokenizer's principal role is to split documents into words (tokens) so each document can be indexed by it's contained words. It is also needed to split a search a query into token, and search on the work index.
+Tokenizer's principal role is to split documents into words (tokens) so each document can be indexed by it's contained words. It is also needed to split a search query into tokens, and search in the words index.
 
 # Motivation
 [motivation]: #motivation
