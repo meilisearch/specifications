@@ -92,7 +92,7 @@ pub struct WordSlice<'a> {
 }
 ```
 
-## Interal Tokenizer trait
+## Internal Tokenizer trait
 The `InternalTokenizer` traits provides a common interface to adapt other tokenizers to the tokenizer. This allows extensability of the current tokenizer to other languages.
 ```rust
 use crate::token::{Token, WordSlice, Script};
