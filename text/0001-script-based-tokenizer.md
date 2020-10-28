@@ -26,7 +26,11 @@ TBD
 [reference-level-explanation]: #reference-level-explanation
 
 ## Tokenizer
-
+The tokenizer serves s a proxy for other tokenizers, specialized in the language detected by the Tokenizer. It is instantiated with a String, and is then polled for tokens until it's delepted:
+```rust
+let tokenizer = Tokenizer::new("The quick brown fox jumps over the lazy dog");
+assert_eq!(tokenizer.next().txt(), "The")
+\```
 ```rust
 use crate::token::Token;
 use crate::internal_tokenizer::InternalTokenizer;
