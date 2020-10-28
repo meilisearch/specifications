@@ -87,8 +87,6 @@ pub struct WordSlice<'a> {
     pub word: &'a str,
     /// index of the first character of the token in the whole document
     pub char_index: usize,
-    /// script of the token (https://docs.rs/whatlang/0.10.0/whatlang/enum.Script.html)
-    pub script: Script,
 }
 ```
 
