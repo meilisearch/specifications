@@ -20,17 +20,26 @@ We should implement a new tokenizer which detect script and tokenize based on it
 # Guide-level explanation
 [guide-level-explanation]: #guide-level-explanation
 
-TBD
-
-# Reference-level explanation
-[reference-level-explanation]: #reference-level-explanation
-
-## Tokenizer
 The tokenizer serves s a proxy for other tokenizers, specialized in the language detected by the Tokenizer. It is instantiated with a String, and is then polled for tokens until it's delepted:
 ```rust
 let tokenizer = Tokenizer::new("The quick brown fox jumps over the lazy dog");
 assert_eq!(tokenizer.next().txt(), "The")
-\```
+assert_eq!(tokenizer.next().txt(), " ")
+assert_eq!(tokenizer.next().txt(), "quick")
+```
+
+# Reference-level explanation
+[reference-level-explanation]: #reference-level-explanation
+
+We could have 2 approach of tokenization based on the script,
+the main difficulty is to handle multi-script documents
+which need to segment each part of script and tokenize them differently,
+theses 2 approach are:
+- first iterate over the whole document, splitting it by script, and after, tokenize each part with specialized lexer
+- detect the script of the start of the document, tokenize with specialized lexer while script is the same, switch lexer if the script change
+
+## Tokenizer
+
 ```rust
 use crate::token::Token;
 use crate::internal_tokenizer::InternalTokenizer;
@@ -67,9 +76,18 @@ impl<'a> Iterator for Tokenizer<'a> {
 /// script of a token (https://docs.rs/whatlang/0.10.0/whatlang/enum.Script.html)
 pub type Script = whatlang::Script;
 
-/// atomic item returned by `Tokenizer::next()`,
-/// it determine the type of the token and contains a `WordSlice`
-pub enum Token<'a> {
+/// atomic item returned by `Tokenizer::next()`
+pub struct Token<'a> {
+    word: Lexeme<'a>,
+    script: Script,
+}
+
+impl<'a> Token<'a> {
+    fn txt(&self) -> &str { unimplemented!() }
+}
+
+/// Determine the type of the token and contains a `WordSlice`
+pub enum Lexeme<'a> {
     /// the token is a word,
     /// meaning that it should be indexed as an important part of the document
     Word(WordSlice<'a>),
@@ -77,12 +95,10 @@ pub enum Token<'a> {
     /// meaning that it can be ignored to optimize size and performance or be indexed as a Word
     StopWord(WordSlice<'a>),
     /// the token is a separator,
-    /// meaning that it shouln't be indexed but used to determine word proximity
+    /// meaning that it shouldn't be indexed but used to determine word proximity
     Separator(WordSlice<'a>)
 }
-impl<'a> Token<'a> {
-    fn txt(&self) -> &str { unimplemented!() }
-}
+
 /// The script, the char_index and the content of the token
 pub struct WordSlice<'a> {
     /// content of the token
@@ -136,7 +152,7 @@ TBD
 - [Jieba](https://github.com/messense/jieba-rs) for Chinese
 - [Lindera](https://github.com/lindera-morphology/lindera) for Japanese and Korean
 //TODO: read through this material and give a summary
-Sonic aslo uses whatlang to peform the toikenization, it could be interesting to checkout how they do it:
+Sonic also uses whatlang to peform the tokenization, it could be interesting to checkout how they do it:
 https://github.com/valeriansaliou/sonic/tree/master/src/lexer
 tantivy also advertise good multilingual support: https://github.com/tantivy-search/tantivy/tree/main/src/tokenizer
 how elastic search handle it: https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-tokenizers.html
