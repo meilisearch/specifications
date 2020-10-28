@@ -80,7 +80,9 @@ pub enum Token<'a> {
     /// meaning that it shouln't be indexed but used to determine word proximity
     Separator(WordSlice<'a>)
 }
-
+impl<'a> Token<'a> {
+    fn txt(&self) -> &str { unimplemented!() }
+}
 /// The script, the char_index and the content of the token
 pub struct WordSlice<'a> {
     /// content of the token
