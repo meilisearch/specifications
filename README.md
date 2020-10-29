@@ -6,7 +6,7 @@ specifications of the main features of MeiliSearch
 The goal of the specification is to serve as a basis for development, design
 and inter-team synchronization. When a new feature or product is to be
 developed, a new pull request is created, and people are invited to discuss
-the its content. The goal here is to specify, on a high level the expected
+the content. The goal here is to specify, on a high level the expected
 behaviour, but also to point out corner cases that need to be addressed. 
 
 The specifications at MeiliSearch are made up of 3 sections that are described
