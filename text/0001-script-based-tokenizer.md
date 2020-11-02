@@ -18,10 +18,29 @@ We should implement a new tokenizer which detect script and tokenize based on it
 
 ### Prior Art and R&D
 
-> TO BE DIEFINED
-<!-- Discuss prior art, both the good and the bad, concerning this proposal. Put some links about what we can see on other tools, search API, or dev tools.
+**tokenization:**
+- > **[unicode-segmentation](https://github.com/unicode-rs/unicode-segmentation):**
+  > tokenizer which follow the [Standard Annex #29: Unicode Text Segmentation](http://www.unicode.org/reports/tr29/),
+  > this tokenizer seems promising for Latin scripts.
+- > **[Jieba](https://github.com/messense/jieba-rs):**
+  > tokenizer specialized in Chinese languages
+- > **[Lindera](https://github.com/lindera-morphology/lindera):**
+  > Japanese and Korean
 
-This section intends to encourage you as an author to think about the lessons from other tools and provide readers of your RFC with a fuller picture. If there is no prior art, that is fine - your ideas are interesting to us, whether they are brand new or adaptation from other tools. -->
+**lang/script detection:**
+- > **[whatlang](https://github.com/greyblake/whatlang-rs):**
+  > whatlang is able to detect script or/and language in a text,
+  > language detection is low but script is acceptable.
+  > note: Sonic also uses whatlang to peform the tokenization, it could be interesting to checkout how they do it.
+- > **toku (@qdequele):**
+  > in a R&D project, @qdequele was able to detect language based on stop word distribution in a text.
+  > If, in a latin script, there is lot of French stop words then the text language is probably french.
+
+**other solution that advertise multilingual support:**
+> TODO: dig deeper in it
+- Sonic uses whatlang to peform the tokenization, it could be interesting to checkout how they do it: https://github.com/valeriansaliou/sonic/tree/master/src/lexer
+- tantivy advertise good multilingual support: https://github.com/tantivy-search/tantivy/tree/main/src/tokenizer
+- how elastic search handle it: https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-tokenizers.html
 
 ### Explanation
 
