@@ -37,7 +37,7 @@ Explain the proposal as if it was already included in MeiliSearch and you were t
 
 If the changes modify the HTTP API, provide a description of the method, URL, parameters, body, status code, errors, etc...
 
-If the CLI changes, provide the env variable name, the argument name, and the description.
+If it modifies the CLI, provide the env variable name, the argument name, and the description.
 
 This serves as a user-level guide. Anything that the user may encounter during its interaction with the feature should be presented here.
 
