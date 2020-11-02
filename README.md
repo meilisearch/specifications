@@ -43,7 +43,7 @@ This serves as a user-level guide. Anything that the user may encounter during i
 
 ### Impact on documentation
 
-If the feature requires that things are added to the documentation or if sections of the documentation need to be updated because of this feature, it should be said here. It's the role of the documentation team to point out the sections of the documentation that need to be updated.
+If the feature requires additions to the documentation or if sections of the documentation need to be updated because of this feature, it should be mentioned here. It's the role of the documentation team to point out the sections of the documentation that need to be updated.
 
 ## Second Section: Technical Specifications
 
