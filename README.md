@@ -3,10 +3,9 @@ Specifications of the main features of MeiliSearch.
 
 ## Process
 
-The goal of the specification is to serve as a basis for development, design, and  inter-team synchronization. When a new feature or product is to be developed, a new pull request is created, and people are invited to discuss the content and propose suggestions. The goal here is to specify the expected behavior on a high level and point out corner cases that need to be addressed.
+The goal of the specification is to serve as a basis for development, design, and  inter-team synchronization. When a new feature or product is to be developed, a new pull request is created, and people are invited to discuss its content and propose suggestions. The goal here is to specify the expected behavior on a high level and point out corner cases that need to be addressed.
 
-The specifications at MeiliSearch are made up of 3 sections that are described
-in the rest of this document.
+The specifications at MeiliSearch are made up of 3 sections that are described in the rest of this document.
 
 ## First section: Feature Description and Interaction
 
@@ -33,7 +32,7 @@ Explain the proposal as if it was already included in MeiliSearch and you were t
 - Introducing new named concepts.
 - Explaining the feature largely in terms of examples.
 - The API for this feature, HTTP, CLI or config.
-Explaining how the user should _think_ about the feature and how it should impact the way they use MeiliSearch. It should explain the impact as concretely as possible.
+- Explaining how the user should _think_ about the feature and how it should impact the way they use MeiliSearch. It should explain the impact as concretely as possible.
 - If applicable, provide sample error messages, deprecation warnings, or migration guidance.
 
 If the changes modify the HTTP API, provide a description of the method, URL, parameters, body, status code, errors, etc...
@@ -46,7 +45,7 @@ This serves as a user-level guide. Anything that the user may encounter during i
 
 If the feature requires that things are added to the documentation or if sections of the documentation need to be updated because of this feature, it should be said here. It's the role of the documentation team to point out the sections of the documentation that need to be updated.
 
-## Technical Specifications
+## Second Section: Technical Specifications
 
 This section has a much narrower audience: the developer that will implement the feature. Its goal is to make it as clear as possible to develop the feature, share knowledge, and think about the possibilities.
 
@@ -62,6 +61,6 @@ Some aspects will need to be made precise, such as interfaces or specific algori
 
 Some aspects of the development will necessitate special care, they should be pointed out, and if there are still unanswered questions, they belong here too.
 
-## Future possibilities
+## Third Section: Future possibilities
 
 This last section talks about what has been thought of related to this issue, but has been decided not to be done now, and what it means regarding the feature at hand.
