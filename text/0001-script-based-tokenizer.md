@@ -1,26 +1,33 @@
-
 - Title: Script Based Tokenizer
 - Start Date: 2020-10-27
-- specification PR: meilisearch/specifications#1
+- specification PR: meilisearch/specifications#2
 - Meilisearch Issue: meilisearch/Meilsearch#624
 
-# Summary
-[summary]: #summary
+## Feature Description and Interaction
+
+This first part has a general audience. It should be as little technical as possible (think user-level). This section contains 4 sub-sections:
+
+### Summary
 
 Tokenizer's principal role is to split documents into words (tokens) so each document can be indexed by it's contained words. It is also needed to split a search query into tokens, and search in the words index.
 
-# Motivation
-[motivation]: #motivation
+### Motivation
 
 It turns out that splitting texts into tokens is a complicated task, especially when you need to handle more than a single language. While the task for english may seem trivial at first glance (mostly split white space), Chinese tokenization, for example is completely different (no spaces between words, groups of 1, 2 or 3 characters...).
 
 Actual Tokenizer is naive and partially handle Latin Scripts only, lot of users ask for a smarter tokenizer to handle their own languages.
 We should implement a new tokenizer which detect script and tokenize based on it.
 
-# Guide-level explanation
-[guide-level-explanation]: #guide-level-explanation
+### Prior Art and R&D
 
-The tokenizer serves s a proxy for other tokenizers, specialized in the language detected by the Tokenizer. It is instantiated with a String, and is then polled for tokens until it's delepted:
+> TO BE DIEFINED
+<!-- Discuss prior art, both the good and the bad, concerning this proposal. Put some links about what we can see on other tools, search API, or dev tools.
+
+This section intends to encourage you as an author to think about the lessons from other tools and provide readers of your RFC with a fuller picture. If there is no prior art, that is fine - your ideas are interesting to us, whether they are brand new or adaptation from other tools. -->
+
+### Explanation
+
+The tokenizer serves as a proxy for other tokenizers, specialized in the language detected by the Tokenizer. It is instantiated with a String, and is then polled for tokens until it's delepted:
 ```rust
 let tokenizer = Tokenizer::new("The quick brown fox jumps over the lazy dog");
 assert_eq!(tokenizer.next().txt(), "The")
@@ -28,8 +35,22 @@ assert_eq!(tokenizer.next().txt(), " ")
 assert_eq!(tokenizer.next().txt(), "quick")
 ```
 
-# Reference-level explanation
-[reference-level-explanation]: #reference-level-explanation
+### Impact on documentation
+
+This feature should not impact the meilisearch user documentation,
+in future versions we will probably provide a way to configure tokenizer and this will be discussed in a new specification.
+
+## Technical Specifications
+
+This section has a much narrower audience: the developer that will implement the feature. Its goal is to make it as clear as possible to develop the feature, share knowledge, and think about the possibilities.
+
+### Architecture
+
+As the actual tokenizer, this tokenizer will be a standolone library,
+and will be used by meilisearch like another one.
+We decided to put it in an other repository to be able to use it in meilisearch/Meilisearch and in the future core-engine.
+
+### Implementation Details
 
 We could have 2 approach of tokenization based on the script,
 the main difficulty is to handle multi-script documents
@@ -38,7 +59,7 @@ theses 2 approach are:
 - first iterate over the whole document, splitting it by script, and after, tokenize each part with specialized lexer
 - detect the script of the start of the document, tokenize with specialized lexer while script is the same, switch lexer if the script change
 
-## Tokenizer
+#### Tokenizer
 
 ```rust
 use crate::token::Token;
@@ -70,7 +91,7 @@ impl<'a> Iterator for Tokenizer<'a> {
 }
 ```
 
-## Token
+#### Token
 
 ```rust
 /// script of a token (https://docs.rs/whatlang/0.10.0/whatlang/enum.Script.html)
@@ -108,7 +129,7 @@ pub struct WordSlice<'a> {
 }
 ```
 
-## Internal Tokenizer trait
+#### Internal Tokenizer trait (Lexer)
 The `InternalTokenizer` traits provides a common interface to adapt other tokenizers to the tokenizer. This allows extensability of the current tokenizer to other languages.
 ```rust
 use crate::token::{Token, WordSlice, Script};
@@ -132,75 +153,17 @@ pub(crate) fn from_script<'a>(script: Script, inner: &'a str, char_index: usize)
 ```
 
 
-# Drawbacks
-[drawbacks]: #drawbacks
+### Corner Cases
 
-TBD
+In some languages like chinese, there can be multiple "words" extracted that are considered to be at the same position in the text. For example 计算所 gives 计算 and 计算所, that are at the same position in the text but don't have the same length, the tokenizer should support that behavior.
 
-# Rationale and alternatives
-[rationale-and-alternatives]: #rationale-and-alternatives
 
-TBD
-<!-- - Why is this design the best in the space of possible designs?
-- What other designs have been considered and what is the rationale for not choosing them?
-- What is the impact of not doing this? -->
+## Future possibilities
 
-# Prior art
-[prior-art]: #prior-art
 
-- [unicode-segmentation](https://github.com/unicode-rs/unicode-segmentation) for Latin scripts
-- [Jieba](https://github.com/messense/jieba-rs) for Chinese
-- [Lindera](https://github.com/lindera-morphology/lindera) for Japanese and Korean
-//TODO: read through this material and give a summary
-Sonic also uses whatlang to peform the tokenization, it could be interesting to checkout how they do it:
-https://github.com/valeriansaliou/sonic/tree/master/src/lexer
-tantivy also advertise good multilingual support: https://github.com/tantivy-search/tantivy/tree/main/src/tokenizer
-how elastic search handle it: https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-tokenizers.html
-<!-- Discuss prior art, both the good and the bad, in relation to this proposal.
-A few examples of what this can include are:
-
-- For language, library, cargo, tools, and compiler proposals: Does this feature exist in other programming languages and what experience have their community had?
-- For community proposals: Is this done by some other community and what were their experiences with it?
-- For other teams: What lessons can we learn from what other communities have done here?
-- Papers: Are there any published papers or great posts that discuss this? If you have some relevant papers to refer to, this can serve as a more detailed theoretical background.
-
-This section is intended to encourage you as an author to think about the lessons from other languages, provide readers of your RFC with a fuller picture.
-If there is no prior art, that is fine - your ideas are interesting to us whether they are brand new or if it is an adaptation from other languages.
-
-Note that while precedent set by other languages is some motivation, it does not on its own motivate an RFC.
-Please also take into consideration that rust sometimes intentionally diverges from common language features. -->
-
-# Unresolved questions
-[unresolved-questions]: #unresolved-questions
-
-- Is `Token` sufficiently exhaustive?
-<!-- - What parts of the design do you expect to resolve through the RFC process before this gets merged?
-- What parts of the design do you expect to resolve through the implementation of this feature before stabilization?
-- What related issues do you consider out of scope for this RFC that could be addressed in the future independently of the solution that comes out of this RFC? -->
-
-# Does it Impact Meilisearch Documentation? If yes, how much and which part?
-
-It should not impact the meilisearch documentation.
-
-# Future possibilities
-[future-possibilities]: #future-possibilities
-
-TBD
-
-<!-- Think about what the natural extension and evolution of your proposal would
-be and how it would affect the language and project as a whole in a holistic
-way. Try to use this section as a tool to more fully consider all possible
-interactions with the project and language in your proposal.
-Also consider how the this all fits into the roadmap for the project
-and of the relevant sub-team.
-
-This is also a good place to "dump ideas", if they are out of scope for the
-RFC you are writing but otherwise related.
-
-If you have tried and cannot think of any future possibilities,
-you may simply state that you cannot think of anything.
-
-Note that having something written down in the future-possibilities section
-is not a reason to accept the current or a future RFC; such notes should be
-in the section on motivation or rationale in this or subsequent RFCs.
-The section merely provides additional information. -->
+- The field `char_index` is usefull for the current meilisearch but not in the future core-engine, It would be deprecated in future versions
+- We should add a way to configure tokenizer forcing a specific language/script
+- We should add a way to configure tokenizer adding custom stopword
+- We should add a way to configure tokenizer activating/deactivating stopword detection
+- We should add a way to configure tokenizer whitelisting/backlisting separators
+- The tokenizer specified here is based on scripts, we should base it on languages to be able to have default stop-words for each language
