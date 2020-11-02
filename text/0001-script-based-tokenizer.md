@@ -5,8 +5,6 @@
 
 ## Feature Description and Interaction
 
-This first part has a general audience. It should be as little technical as possible (think user-level). This section contains 4 sub-sections:
-
 ### Summary
 
 Tokenizer's principal role is to split documents into words (tokens) so each document can be indexed by it's contained words. It is also needed to split a search query into tokens, and search in the words index.
@@ -41,8 +39,6 @@ This feature should not impact the meilisearch user documentation,
 in future versions we will probably provide a way to configure tokenizer and this will be discussed in a new specification.
 
 ## Technical Specifications
-
-This section has a much narrower audience: the developer that will implement the feature. Its goal is to make it as clear as possible to develop the feature, share knowledge, and think about the possibilities.
 
 ### Architecture
 
@@ -139,7 +135,6 @@ use crate::token::{Token, WordSlice, Script};
 /// this should be implemented as an `Iterator` with `Token` as `Item`,
 pub(crate) trait Lexer<'a>: Iterator<Item = Lexeme<'a>> {
     /// create the tokenizer based on the given `text` and `char_index`
-    /// [ERR]: this trait cannot be made into an object because associated function `new` has no `self` parameter the trait `internal_tokenizer::InternalTokenizer` cannot be made into an object
     fn new(text: &'a str, char_index: usize) -> Self;
     /// return the `char_index` of the next potential token,
     /// it should be used when switching internal tokenizer
