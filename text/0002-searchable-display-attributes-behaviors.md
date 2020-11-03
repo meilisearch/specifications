@@ -12,9 +12,9 @@ This first part has a general audience. It should be as little technical as poss
 ### Summary
 
 We wanted to change `searchable_attributes`, beacause it was confusing. We recently add wildcard in this field to select all. This last change introduced lot of edge-cases:
-- we don't know the order of searchable attributes when we use wildcards
+- we don't know the order of searchable attributes when we use wildcards.
 
-Searchable attribute have several uses:
+Searchable attributes have several uses:
 - know in which fields we can search
 - know the importance of fields for the criterion `Attributes`
 
