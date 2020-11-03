@@ -30,8 +30,6 @@ Is it relevant to mix this 2 information when we have wildcards?
 
 #### wildcard (*) & `searchable_attributes` order
 
-> When the value of searchable attributes is set to ["*"] the priority of the documents attributes could be different from what you expect. If the priority of your attributes matters (because you want to use the default criterion "attribute" we highly recommend you changing the default value for the priority you need. For example, if the "title" is more important than the "description" field, you should set the searchable attributes to ["title", "description"], in this order.
-
 > When the searchable attributes value is set to ["*"] the priority of the documents attributes is not defined.
 
 By default searchable attributes should be in the order of the first indexed document, for example:
