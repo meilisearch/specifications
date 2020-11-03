@@ -30,7 +30,7 @@ Is it relevant to mix this 2 information when we have wildcards?
 
 #### wildcard (*) & `searchable_attributes` order
 
-> When the searchable attributes value is set to ["*"] the priority of the documents attributes is not defined.
+> When the searchable attributes value is set to ["*"] the priority of the documents attributes is undefined.
 
 By default searchable attributes should be in the order of the first indexed document, for example:
 ```json
