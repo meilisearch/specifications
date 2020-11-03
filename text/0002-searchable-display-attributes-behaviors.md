@@ -25,7 +25,7 @@ Is it relevant to mix this 2 information when we have wildcards?
 
 #### default values
 
-`searchable_attributes`: *
+`searchable_attributes`: *   
 `displayed_attributes`: *
 
 #### wildcard (*) & `searchable_attributes` order
