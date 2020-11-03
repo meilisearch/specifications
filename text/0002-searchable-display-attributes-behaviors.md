@@ -21,18 +21,6 @@ Searchable attributes have several uses:
 When a wildcard is used, the order of searchable attributes is written no-where.
 
 Is it relevant to mix this 2 information when we have wildcards?
-<!-- One paragraph explains the feature formulated as a user story ("When I do X I want Y to happen because Z"). This paragraph describes the problem from a user perspective. -->
-
-### Motivation
-
-<!-- Why are we doing this? What use cases does it support? What is the expected outcome? Link to related issues and discussions.
- -->
-### Prior Art and R&D
-
-<!-- Discuss prior art, both the good and the bad, concerning this proposal. Put some links about what we can see on other tools, search API, or dev tools.
-
-This section intends to encourage you as an author to think about the lessons from other tools and provide readers of your RFC with a fuller picture. If there is no prior art, that is fine - your ideas are interesting to us, whether they are brand new or adaptation from other tools. -->
-
 ### Explanation
 
 #### default values
