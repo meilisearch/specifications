@@ -15,8 +15,8 @@ We wanted to change `searchable_attributes`, beacause it was confusing. We recen
 - we don't know the order of searchable attributes when we use wildcards.
 
 Searchable attributes have several uses:
-- know in which fields we can search
-- know the importance of fields for the criterion `Attributes`
+- know in which fields we can search.
+- know the importance of fields for the criterion `Attributes`.
 
 When a wildcard is used, the order of searchable attributes is written no-where.
 
