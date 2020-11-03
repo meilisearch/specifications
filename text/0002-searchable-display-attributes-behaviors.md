@@ -98,7 +98,6 @@ If the feature requires additions to the documentation or if sections of the doc
 ### Architecture
 
 This change will impact **settings**, the **indexer** and the **search-engine** (`Attribute` criterion).
-<!-- This section presents how the new feature should be done on an abstract level and how it fits within the codebase. This should define a scope where the feature exists. -->
 
 ### Implementation Details
 
