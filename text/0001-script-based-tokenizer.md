@@ -37,10 +37,14 @@ We should implement a new tokenizer which detect script and tokenize based on it
   > If, in a latin script, there is lot of French stop words then the text language is probably french.
 
 **other solution that advertise multilingual support:**
-> TODO: dig deeper in it
 - Sonic uses whatlang to peform the tokenization, it could be interesting to checkout how they do it: https://github.com/valeriansaliou/sonic/tree/master/src/lexer
+	- Sonic uses whatlang to detect the languages, but don't acutally seems to use it to segment the text. It simply uses unicode segmentation, I can't really explain what they actually do with the language information.
 - tantivy advertise good multilingual support: https://github.com/tantivy-search/tantivy/tree/main/src/tokenizer
-- how elastic search handle it: https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-tokenizers.html
+	- Tantivy is similar to elastic in the sense that you can setup a custom text analyzer. The difference is that it is only made of `tokenizer` -> `token_filter`. Tantivy also provides a colleciton of tokenizer to choose from. Token are rather simple and do not contain any metadata, except for it's position.
+- How elastic search handle it: https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-tokenizers.html:
+	- Algolia proposed to create custom text analyzer. A text analyzer is a pipelined text processor with the collowing components: `char_filter` -> `tokenizer` -> `token_filter`. There are multiple diffferent tokenizer that can be chosed, depending on the usecase. This is a bit complicated, but I also think that advanced users should be able to chose the tokenizer they want. (default behaviour is us guessing what's the best tokenizer to use.)
+- Algolia:
+	- Algolia seems to use default word segmentation use user configurable separators. The use can also set the `queryLanguage` or provide a list of `stopWords`, but it is unclear how this work under the hood for languages such as Mandarin. They also word decompounging, meaning that they can split words that are mode of multiple words (mostly germanic/nordic languages apparently).
 
 ### Explanation
 
