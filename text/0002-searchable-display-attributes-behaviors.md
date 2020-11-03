@@ -3,7 +3,7 @@
 - specification PR: meilisearch/specifications#3
 - Meilisearch Issue: 
 
-# `searchable_attributes` & `display_attributes` behaviors
+# `searchable_attributes` & `displayed_attributes` behaviors
 
 ## First section: Feature Description and Interaction
 
