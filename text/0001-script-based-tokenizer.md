@@ -178,10 +178,10 @@ In some languages like chinese, there can be multiple "words" extracted that are
 
 ## Future possibilities
 
-
 - The field `char_index` is usefull for the current meilisearch but not in the future core-engine, It would be deprecated in future versions
 - We should add a way to configure tokenizer forcing a specific language/script
 - We should add a way to configure tokenizer adding custom stopword
 - We should add a way to configure tokenizer activating/deactivating stopword detection
 - We should add a way to configure tokenizer whitelisting/backlisting separators
 - The tokenizer specified here is based on scripts, we should base it on languages to be able to have default stop-words for each language
+- The chinese tokenizer is a complicated subject. The first implementation will simply adapt jieba's `cut` method. In another RFC, we'll think about improving this, and this will probably require the help of a native mandarin speaker input.
