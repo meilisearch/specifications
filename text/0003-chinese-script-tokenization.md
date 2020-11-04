@@ -31,10 +31,10 @@ this text has several equivalent derivation of tokenization:
 |<------------->|    |<>|
 |  2 char word  |    |1 char word
 ```
-Which can be tokenized as `(word, start_pos, end_pos)` like:
+Which can be tokenized as `(word, start_pos, end_pos)` like:   
 `[("计算所", 0, 3), ("计算", 0, 2), ("所", 2, 3)]`.
 
-**BUT, What should be the word position of each word?**
+_BUT, What should be the word position of each word?_
 
 #### First Approach: Have all derivations at the same position
 
