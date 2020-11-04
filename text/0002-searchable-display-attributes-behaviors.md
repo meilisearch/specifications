@@ -11,16 +11,18 @@ This first part has a general audience. It should be as little technical as poss
 
 ### Summary
 
-We wanted to change `searchable_attributes`, beacause it was confusing. We recently add wildcard in this field to select all. This last change introduced lot of edge-cases:
-- we don't know the order of searchable attributes when we use wildcards.
+Ever since the beginning, the design of `searchableAttributes` and `displayedAttributes` as shown flaws. The introduction of the wildcard tried to adress some of those flaws, but there are still issues that this specs tries to correct.
 
 Searchable attributes have several uses:
 - know in which fields we can search.
 - know the importance of fields for the criterion `Attributes`.
 
-When a wildcard is used, the order of searchable attributes is written no-where.
+The main issues we want to adress here are:
+- The question of `searchableAttributes` order when the wildcard is used.
+- The fact that already known attributes (e.g from facets), are not indexed correctly is put before the documents (bug), need to be taken into account in the design.
 
 Is it relevant to mix this 2 information when we have wildcards?
+
 ### Explanation
 
 #### default values
@@ -70,7 +72,12 @@ The searchable attributes order would be:
 - more complexity
 - could be replace by a small note about wildcard in `searchable_attributes`
 
-#### Changes in meilisearch documentation
+#### Related issues
+
+- https://github.com/meilisearch/MeiliSearch/issues/1066
+- https://github.com/meilisearch/MeiliSearch/issues/942
+
+### Changes in meilisearch documentation
 
 Depending on what we choose, we'll have to add **default** and **wildcard** behavior of configurations, we'll potentially add a new configuration `attributes_order`. 
 
