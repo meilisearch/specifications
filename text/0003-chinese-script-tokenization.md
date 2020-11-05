@@ -1,6 +1,6 @@
 - Title: Chinese Script Tokenization
 - Start Date: 2020-11-04
-- specification PR:
+- specification PR: https://github.com/meilisearch/specifications/pull/5
 - Meilisearch Issue: 
 
 # Chinese Script Tokenization
@@ -11,10 +11,14 @@
 
 In Chinese Script, there can be multiple "words" extracted that are considered to be at the same position in the text. For example 计算所 gives 计算 and 计算所, that are at the same position in the text but don't have the same length, the tokenizer should support that behavior.
 
-
 ### Motivation
 
 Have a better tokenizer for Chinese Script will enhance the relevancy of search for chinese users.
+Moreover we have some issues that asking to have a better support of Chinese Script:
+- [#240: Use jieba to tokenize CJK languages](https://github.com/meilisearch/MeiliSearch/issues/240)
+- [#535: Search for Chinese?](https://github.com/meilisearch/MeiliSearch/issues/535)
+- [#790: How to match CJK vocabulary accurately, use keyword search directly, without word segmentation.](https://github.com/meilisearch/MeiliSearch/issues/790)
+- [#894: cjk search experience is too bad, the highlight position is wrong.](https://github.com/meilisearch/MeiliSearch/issues/894)
 
 ### Prior Art and R&D
 ### Explanation
