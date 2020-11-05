@@ -59,7 +59,7 @@ In this Approach, each derivations of the previous text `计算所` would be tok
 ```rust
 [("计算所", 0), ("计算", 0), ("所", 0)]
 ```   
-Making searches `"计算所"`, `"计算"` or `"所"` match words at `word_position=0` perfectly.
+Making searches `"计算所"`, `"计算"` or `"所"` will match words at `word_position=0` perfectly.
 
 Taking the other example `永和服装饰品有限公司meilisearch`:
 ```rust
@@ -75,10 +75,11 @@ In this Approach, each derivations of the previous text `计算所` would be tok
 ```rust
 [("计算所", 0), ("计算", 0), ("所", 1)]
 ```   
-Making searches `"计算所"` or `"计算"` match words at `word_position=0` perfectly; and making search `"所"` match word at `word_position=1` perfectly.
+Here we index explicitely that `"计算"` is directly followed by `"所"`.
+Making searches `"计算所"` or `"计算"` will match words at `word_position=0` perfectly; and making search `"所"` will match word at `word_position=1` perfectly.
 
 Taking the other example `永和服装饰品有限公司meilisearch`:
-```
+```rust
 [("永和", 0), ("服装", 1), ("饰品", 2), ("有限公司", 3), ("有限", 3), ("公司", 4), ("meilisearch", 5)]
 ```   
 On the second example we can see some specificities:
