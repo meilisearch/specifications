@@ -111,7 +111,7 @@ The default order is then **always** the order a field was in a document when it
 
 ##### drawbacks:
 - new config added
-- could be replace by a small note about wildcard in `searchable_attributes`
+- could be replaced by a small note about wildcard in `searchable_attributes`
 
 
 ### Changes in meilisearch documentation
@@ -124,7 +124,7 @@ Depending on what we choose, we'll have to add **default** and **wildcard** beha
 
 ### Architecture
 
-This change will impact **settings**, the **indexer** and the **search-engine** (`Attribute` criterion).
+This change will impact **settings**, the **indexer** and the **search-engine** (`Attributes` criterion).
 
 ### Implementation Details
 
