@@ -49,11 +49,81 @@ We should implement a new tokenizer which detect script and tokenize based on it
 ### Explanation
 
 The tokenizer serves as a proxy for other tokenizers, specialized in the language detected by the Tokenizer. It is instantiated with a String, and is then polled for tokens until it's delepted:
+
 ```rust
 let tokenizer = Tokenizer::new("The quick brown fox jumps over the lazy dog");
-assert_eq!(tokenizer.next().txt(), "The")
-assert_eq!(tokenizer.next().txt(), " ")
-assert_eq!(tokenizer.next().txt(), "quick")
+let token_group = tokenizer.next();
+assert_eq!(token_group.tokens().map(|t| t.text()).collect(), ["The"]);
+assert_eq!(token_group.normalized().map(|t| t.text()).collect(), ["the"]);
+let token_group = tokenizer.next();
+assert_eq!(token_group.tokens().map(|t| t.text()).collect(), [" "])
+let token_group = tokenizer.next();
+assert_eq!(token_group.tokens().map(|t| t.text()).collect(), ["quick"])
+```
+
+#### highlight
+
+```rust
+fn highlight_record(record: &mut IndexMap<String, String>, words: &HashSet<String>) {
+  for (_key, value) in record.iter_mut() {
+    let old_value = mem::take(value);
+    let tokenizer = Tokenizer::new(&the_string);
+    for token_group in tokenizer {
+      // get the longest normalized token
+      let token = token_goup.normalized().max_by(|a, b| a.token_len().cmp(b.token_len()));
+      if token.kind() == TokenKind::Word {
+        let normalized_token = token.text();
+        let to_highlight = words.contains(&normalized_token);
+        if to_highlight { value.push_str("<mark>") }
+        value.push_str(token.original.text());
+        if to_highlight { value.push_str("</mark>") }
+      } else {
+        value.push_str(token);
+      }
+    }
+  }
+}
+```
+
+```rust
+// original
+fn highlight_record(record: &mut IndexMap<String, String>, words: &HashSet<String>) {
+    for (_key, value) in record.iter_mut() {
+        let old_value = mem::take(value);
+        for (token_type, token) in simple_tokenizer(&old_value) {
+            if token_type == TokenType::Word {
+                let lowercase_token = token.to_lowercase();
+                let to_highlight = words.contains(&lowercase_token);
+                if to_highlight { value.push_str("<mark>") }
+                value.push_str(token);
+                if to_highlight { value.push_str("</mark>") }
+            } else {
+                value.push_str(token);
+            }
+        }
+    }
+}
+```
+
+#### Store
+
+```rust
+let tokenizer = Tokenizer::new(&content);
+for (pos, token_group) in tokenizer.filter_map(only_token).enumerate().take(MAX_POSITION) {
+    let position = (attr as usize * MAX_POSITION + pos) as u32;
+    for token in token_group.normalized() {
+        words_positions.entry(token.txt()).or_insert_with(SmallVec32::new).push(position);
+    }
+}
+```
+
+```rust
+// original
+for (pos, token) in simple_tokenizer(&content).filter_map(only_token).enumerate().take(MAX_POSITION) {
+    let word = token.to_lowercase();
+    let position = (attr as usize * MAX_POSITION + pos) as u32;
+    words_positions.entry(word).or_insert_with(SmallVec32::new).push(position);
+}
 ```
 
 ### Impact on documentation
@@ -100,16 +170,13 @@ impl<'a> Tokenizer<'a> {
     fn new(inner: &'a str) -> Self { unimplemented!() }
 }
 
-// we implement StreamingIterator instead of Iterator because we want to return tokens referencing self
-// https://docs.rs/streaming-iterator/0.1.5/streaming_iterator/trait.StreamingIterator.html
-impl<'a> StreamingIterator for Tokenizer<'a> {
+impl<'a> Iterator for Tokenizer<'a> {
     type Item = Token<'a>;
 
     /// return the next token calling the `next` method of the internal tokenizer,
     /// if the internal tokeizer return None, the function try to redetect script and chose a new tokenizer,
     /// if no iternal tokenizer is chosen, the method return None
-    fn advance(&mut self) { unimplemented!() }
-    fn get(&self) -> Option<Self::Item> { unimplemented!() }
+    fn next(&mut self) -> Option<Self::Item> { unimplemented!() }
 }
 ```
 
@@ -120,34 +187,65 @@ impl<'a> StreamingIterator for Tokenizer<'a> {
 pub type Script = whatlang::Script;
 
 /// atomic item returned by `Tokenizer::next()`
-pub struct Token<'a> {
-    word: Lexeme<'a>,
+pub struct TokenGroup<'a> {
+    tokens: Cow<'a, '[Token<'a>]>,
     script: Script,
 }
 
-impl<'a> Token<'a> {
-    fn txt(&self) -> &str { unimplemented!() }
+struct NormalizedTokenIter {
+    script: Script,
+    token: Iter<Token<'a>>
+}
+
+impl Deref for NormalizedToken {
+
+}
+
+struct NormalizedToken<'a> {
+    original: Token<'a>,
+    normalized: Cow<str>,
+}
+
+impl NormalizedToken {
+    fn text() -> &str {}
+}
+
+impl Iterator for NormalizedTokenIter {
+    type Item = NormalizedToken;
+    
+    fn next() -> Self::Item {
+        // token.word = self.normalize(token)
+    }
+}
+
+impl<'a> TokenGroup<'a> {
+    fn tokens(&self) -> impl Iterator<Item = Token<'a>> {}
+    fn normalized() -> NormalizedTokenIterator {}
+}
+
+enum TokenKind {
+    Word,
+    /// the token is a stop word,
+    /// meaning that it can be ignored to optimize size and performance or be indexed as a Word
+    StopWord,
+    /// the token is a separator,
+    /// meaning that it shouldn't be indexed but used to determine word proximity
+    Separator
 }
 
 /// Determine the type of the token and contains a `WordSlice`
-pub enum Lexeme<'a> {
-    /// the token is a word,
-    /// meaning that it should be indexed as an important part of the document
-    Word(WordSlice<'a>),
-    /// the token is a stop word,
-    /// meaning that it can be ignored to optimize size and performance or be indexed as a Word
-    StopWord(WordSlice<'a>),
-    /// the token is a separator,
-    /// meaning that it shouldn't be indexed but used to determine word proximity
-    Separator(WordSlice<'a>)
+pub struct Token<'a> {
+    kind: TokenKind,
+    word: &'a str,
+    /// index of the first character of the token in the whole document
+    char_index: usize,
+    byte_index: usize,
+    token_index: usize,
 }
 
-/// The script, the char_index and the content of the token
-pub struct WordSlice<'a> {
-    /// content of the token
-    pub word: &'a str,
-    /// index of the first character of the token in the whole document
-    pub char_index: usize,
+impl Token {
+    fn token_len(&self) -> usize {}
+    fn kind(&self) -> TokenKind {}
 }
 ```
 
@@ -173,7 +271,6 @@ pub(crate) trait Lexer<'a>: Iterator<Item = Lexeme<'a>> {
 pub(crate) fn from_script<'a>(script: Script, inner: &'a str, char_index: usize) -> Option<Box<dyn InternalTokenizer<'a>>> { unimplemented!() }
 ```
 
-
 ### Corner Cases
 
 In some languages like chinese, there can be multiple "words" extracted that are considered to be at the same position in the text. For example 计算所 gives 计算 and 计算所, that are at the same position in the text but don't have the same length, the tokenizer should support that behavior.
@@ -187,5 +284,5 @@ In some languages like chinese, there can be multiple "words" extracted that are
 - We should add a way to configure tokenizer activating/deactivating stopword detection
 - We should add a way to configure tokenizer whitelisting/backlisting separators
 - The tokenizer specified here is based on scripts, we should base it on languages to be able to have default stop-words for each language
-- The chinese tokenizer is a complicated subject. The first implementation will simply adapt jieba's `cut` method. In another RFC, we'll think about improving this, and this will probably require the help of a native mandarin speaker input.
+- The chinese tokenizer is a complicated subject. The first implementation will simply adapt jieba's `cut` method. In another [specification](https://github.com/meilisearch/specifications/pull/5), we'll think about improving this, and this will probably require the help of a native mandarin speaker input.
 - We will want in the future to allow user configuration for the tokenizer. This is taken into account in the design of the new Tokenizer.
