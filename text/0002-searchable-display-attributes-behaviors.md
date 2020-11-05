@@ -12,8 +12,8 @@
 Ever since the beginning, the design of `searchableAttributes` and `displayedAttributes` as shown flaws. The introduction of the wildcard tried to address some of those flaws, but there are still issues that this specs tries to correct.
 
 Searchable attributes have several uses:
-- know in which fields we can search.
-- know the importance of fields for the criterion `Attributes`.
+- Establish in which document fields the search can be performed.
+- Define the order and priority in which those fields are used by the criterion `Attributes`.
 
 The main issues we want to address here are:
 - The question of `searchableAttributes` order when the wildcard is used.
