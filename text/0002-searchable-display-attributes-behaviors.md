@@ -17,7 +17,7 @@ Searchable attributes have several uses:
 
 The main issues we want to address here are:
 - The question of `searchableAttributes` order when the wildcard is used.
-- The fact that already known attributes (e.g from facets), are not indexed correctly is put before the documents (bug), need to be taken into account in the design.
+- The fact that already known attributes (e.g from facets), are not correctly added to `searchableAttributes` and `displayedAttributes` when adding new documents (bug), need to be taken into account in the design.
 
 
 ### Motivation
