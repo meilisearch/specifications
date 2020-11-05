@@ -99,7 +99,35 @@ Being searchable and displayed are 2 different concept, and there should not be 
 
 Adding a new configuration `attributesPosition` that link all attributes present in a document  to a position makes it possible to keep track of the position without caring about whether a field is searchable or displayed. This also allows to keep track of all the fields that have been found in documents in the database.
 
+
+The default order is then **always** the order a field was in a document when it was first found.
+
+##### Content of `attributesPosition`
+
+The role of `attributesPosition` is to link each field to a position in a document. Hence, it contains all the attributes that have been found while indexing documents and ascociate them with a position. By default, this position is the position the field had when it was first encountered in a document.
+
+##### Addition of new fields
+
+When a new field is discovered, it is given the position it had in the document where it was found. It is ok to have two fields with the same position, and they are considered equal according to the `Attributes` criterion.
+
+e.g: In this example is makes sense that this is the default:
+
 ```json
+/// documents
+[
+	{
+		"id": 1,
+		"title": "the title"
+	},
+	{
+
+		"id": 2,
+		"titre": "le titre"
+	}
+]
+```
+```json
+/// attributesPosition
 {
 	"id": 0,
 	"title": 1,
@@ -107,7 +135,91 @@ Adding a new configuration `attributesPosition` that link all attributes present
 }
 ```
 
-The default order is then **always** the order a field was in a document when it was first found.
+##### Updating the `attributesPosition`
+
+There are 2 kinds of operations we need to consider:
+
+1) **Deletion**: `attributesPosition` are essential to the functionning of meilisearch. Their deletion should not be allowed. However they can be cleaned:
+calling `DELETE /indexes/:index_uid/attributes_position` triggers a reindexation, and only the fields present in the documents are kept. e.g:
+if my `attributesPosition` look like this: 
+```json
+/// attributesPosition
+{
+	"id": 0,
+	"title": 1,
+	"titre": 1
+}
+```
+and thoses are all of my documents are:
+```json
+/// documents
+[
+	{
+		"id": 1,
+		"title": "the title"
+	},
+	{
+
+		"id": 2,
+		"title": "the title2"
+	}
+]
+```
+
+then a call to `DELETE /indexes/:index_uid/attributes_position` will result in a re-indexation and `attributesPosition` will look like this: 
+```json
+/// attributesPosition
+{
+	"id": 0,
+	"title": 1
+}
+```
+
+2) **Updates**: As we have seen before, we don't want to allow deletion of those fields unless we are sure that this field does not exist in any documents. That would imply that trying to update the `attributesPosition` with a missing value is not allowed.
+
+Rather than returning an error, a call to `POST /indexes/:index_uid/attributes_position` will instead accept a partial dictionary, that it will merge with the current. Adding new values is allowed, missing values are ignored and existing one are updated with the new value. This results results in a user friendly experience.
+
+example:
+
+if I have this `attributesPosition`:
+```json
+/// attributesPosition
+{
+	"id": 0,
+	"title": 1,
+	"titre": 1
+}
+```
+
+and make a call to `POST /indexes/:index_uid/attributes_position` with the payload:
+
+```json
+{
+	"titre": 2,
+	"description":3
+}
+```
+
+then my `attributesPosition` will look like:
+
+```json
+{
+	"id": 0,
+	"title": 1,
+	"titre": 2,
+	"description":3
+}
+```
+
+#### Interaction with `searchableAttributes`
+
+As we've seen before, the `attributesPosition` contains an _at least_ exhaustive list of all the fields present in the documents stored in the database. This means that any existing document field that is used in the `searchableAttributes` is assured to have a position assigned. Any other field present in the `searchableAttributes` is simply ignored, for it is not present in any document. If in the future this same field appears in a document, then it will have a position associated with it, and everything will work as usually.
+
+The `["*"]` for `searchableAttibutes` and `displayedAttributes` simply means all the attributes found in `attributesPosition`, which is the same as all attributes present in the documents, as we've seen.
+
+#### (Future work) What if a really want to remove an `attributePosition`
+
+In a future work, we may allow to remove a specific `attributesPosition,` if we are **sure that it is not referenced by any documents**. Trying to remove a field that is referenced would trigger an error.
 
 ##### drawbacks:
 - new config added
