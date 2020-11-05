@@ -3,7 +3,7 @@
 - specification PR: meilisearch/specifications#3
 - Meilisearch Issue: 
 
-# `searchable_attributes` & `displayed_attributes` behaviors
+# `searchableAttributes` & `displayedAttributes` behaviors
 
 ## First section: Feature Description and Interaction
 
@@ -36,17 +36,17 @@ TODO
 ### Explanation
 
 For simplicity sake, we want MeiliSearch to work without configuration. To achieve this, the expected behaviour of Meiilisearch is to consider all attributes to be both `displayedAttributes` and `SearchableAttributes` by default.
-Currently, the `SearchabeAttributes` fields is order sensitive: the order of the fields in this array define the order of the fields in any documents, hence it's importance in a search with the attribute ranking rule. By default, this order is set to the order of the fields of the first document to be indexed.
+Currently, the `searchableAttributes` fields is order sensitive: the order of the fields in this array define the order of the fields in any documents, hence it's importance in a search with the attribute ranking rule. By default, this order is set to the order of the fields of the first document to be indexed.
 
 The default values for both of these attributes is `["*"]` (wildcard), to symbolize that all fields are contained.
 
 This way of doing thing comes with a few caveats, that need to be addressed here:
 
-#### wildcard (*) & `searchable_attributes` order
+#### wildcard (*) & `searchableAttributes` order
 
-The current choice of having an ordered array for `SearchableAttributes` means that when the value is set to wildcard (its default value), we loose all information about the order.
+The current choice of having an ordered array for `searchableAttributes` means that when the value is set to wildcard (its default value), we loose all information about the order.
 
-> When the searchable attributes value is set to ["*"] the priority of the documents attributes is undefined.
+> When the searchable attributes value is set to `["*"]` the priority of the documents attributes is undefined.
 
 By default searchable attributes should be in the order of the first indexed document, for example:
 
@@ -56,10 +56,10 @@ By default searchable attributes should be in the order of the first indexed doc
   "description": "it is awfull to be liked by many"
 }
 ```
-The default `searchable_attributes` order should be `["title", "description"]` where `"title" > "description"`.
+The default `searchableAttributes` order should be `["title", "description"]` where `"title" > "description"`.
 
-TBD: What happens if the order is changed and wildcard is set back to `*`?
-- undefined behaviour: the order when using `*` can't be relied upon
+TBD: What happens if the order is changed and wildcard is set back to `["*"]`?
+- undefined behaviour: the order when using `["*"]` can't be relied upon
 - some default value: which? Why?
 - Dissociate order and existence.
 
@@ -91,11 +91,11 @@ What that means is that when we index documents, we must check if a field alread
 	- same position as `title` (thus allowing attributes to exists at the same position like Algolia)
 	- added at the last position
 
-#### `searchable_attributes` & `displayed_attributes`
+#### `searchableAttributes` & `displayedAttributes`
 
 Being searchable and displayed are 2 different concept, and there should not be interactions between the two: a field can be searchable and not displayed, or displayed and not searchable, etc.
 
-#### add a new configuration `attributes_order`?
+#### add a new configuration `attributesPosition`?
 
 Adding a new configuration `attributesPosition` that link all attributes present in a document  to a position makes it possible to keep track of the position without caring about whether a field is searchable or displayed. This also allows to keep track of all the fields that have been found in documents in the database.
 
@@ -111,12 +111,12 @@ The default order is then **always** the order a field was in a document when it
 
 ##### drawbacks:
 - new config added
-- could be replaced by a small note about wildcard in `searchable_attributes`
+- could be replaced by a small note about wildcard in `searchableAttributes`
 
 
 ### Changes in meilisearch documentation
 
-Depending on what we choose, we'll have to add **default** and **wildcard** behavior of configurations, we'll potentially add a new configuration `attributes_order`. 
+Depending on what we choose, we'll have to add **default** and **wildcard** behavior of configurations, we'll potentially add a new configuration `attributesPosition`. 
 
 ## Second Section: Technical Specifications
 
