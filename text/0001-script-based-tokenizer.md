@@ -100,13 +100,16 @@ impl<'a> Tokenizer<'a> {
     fn new(inner: &'a str) -> Self { unimplemented!() }
 }
 
-impl<'a> Iterator for Tokenizer<'a> {
+// we implement StreamingIterator instead of Iterator because we want to return tokens referencing self
+// https://docs.rs/streaming-iterator/0.1.5/streaming_iterator/trait.StreamingIterator.html
+impl<'a> StreamingIterator for Tokenizer<'a> {
     type Item = Token<'a>;
 
     /// return the next token calling the `next` method of the internal tokenizer,
     /// if the internal tokeizer return None, the function try to redetect script and chose a new tokenizer,
     /// if no iternal tokenizer is chosen, the method return None
-    fn next(&mut self) -> Option<Self::Item> { unimplemented!() }
+    fn advance(&mut self) { unimplemented!() }
+    fn get(&self) -> Option<Self::Item> { unimplemented!() }
 }
 ```
 
