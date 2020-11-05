@@ -13,8 +13,8 @@ Tokenizer's principal role is to split documents into words (tokens) so each doc
 
 It turns out that splitting texts into tokens is a complicated task, especially when you need to handle more than a single language. While the task for english may seem trivial at first glance (mostly split white space), Chinese tokenization, for example is completely different (no spaces between words, groups of 1, 2 or 3 characters...).
 
-Actual Tokenizer is naive and partially handle Latin Scripts only, lot of users ask for a smarter tokenizer to handle their own languages.
-We should implement a new tokenizer which detect script and tokenize based on it.
+The Tokenizer we have now is naive and partially handles Latin Scripts only, a lot of users ask for a smarter tokenizer to handle their own languages.
+We should implement a new tokenizer which detects script and tokenize based on it.
 
 ### Prior Art and R&D
 
