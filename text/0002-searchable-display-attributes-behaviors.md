@@ -7,96 +7,116 @@
 
 ## First section: Feature Description and Interaction
 
-This first part has a general audience. It should be as little technical as possible (think user-level). This section contains 4 sub-sections:
-
 ### Summary
 
-Ever since the beginning, the design of `searchableAttributes` and `displayedAttributes` as shown flaws. The introduction of the wildcard tried to adress some of those flaws, but there are still issues that this specs tries to correct.
+Ever since the beginning, the design of `searchableAttributes` and `displayedAttributes` as shown flaws. The introduction of the wildcard tried to address some of those flaws, but there are still issues that this specs tries to correct.
 
 Searchable attributes have several uses:
 - know in which fields we can search.
 - know the importance of fields for the criterion `Attributes`.
 
-The main issues we want to adress here are:
+The main issues we want to address here are:
 - The question of `searchableAttributes` order when the wildcard is used.
 - The fact that already known attributes (e.g from facets), are not indexed correctly is put before the documents (bug), need to be taken into account in the design.
 
-Is it relevant to mix this 2 information when we have wildcards?
+
+### Motivation
+
+The current behavior of `SearchableAttributes` is buggy and confusing, it is necessary that this setting is stabilized as soon as possible.
+
+#### Related issues
+
+- https://github.com/meilisearch/MeiliSearch/issues/1066
+- https://github.com/meilisearch/MeiliSearch/issues/942
+- 
+### Prior Art and R&D
+
+TODO
 
 ### Explanation
 
-#### default values
+For simplicity sake, we want MeiliSearch to work without configuration. To achieve this, the expected behaviour of Meiilisearch is to consider all attributes to be both `displayedAttributes` and `SearchableAttributes` by default.
+Currently, the `SearchabeAttributes` fields is order sensitive: the order of the fields in this array define the order of the fields in any documents, hence it's importance in a search with the attribute ranking rule. By default, this order is set to the order of the fields of the first document to be indexed.
 
-`searchable_attributes`: *   
-`displayed_attributes`: *
+The default values for both of these attributes is `["*"]` (wildcard), to symbolize that all fields are contained.
+
+This way of doing thing comes with a few caveats, that need to be addressed here:
 
 #### wildcard (*) & `searchable_attributes` order
+
+The current choice of having an ordered array for `SearchableAttributes` means that when the value is set to wildcard (its default value), we loose all information about the order.
 
 > When the searchable attributes value is set to ["*"] the priority of the documents attributes is undefined.
 
 By default searchable attributes should be in the order of the first indexed document, for example:
+
 ```json
 {
   "title": "many the fish",
   "description": "it is awfull to be liked by many"
 }
 ```
-default `searchable_attributes` order should be `["title", "description"]` where `"title" > "description"`
+The default `searchable_attributes` order should be `["title", "description"]` where `"title" > "description"`.
 
-When a wildcard is set we should have the default behavior.
+TBD: What happens if the order is changed and wildcard is set back to `*`?
+- undefined behaviour: the order when using `*` can't be relied upon
+- some default value: which? Why?
+- Dissociate order and existence.
+
+#### Pre-existing attributes
+
+Another issue with the current functioning of the attributes resides in the way we register the attributes. If a user adds, for example, attributes to the `facetAttributes` before indexing any documents, then this field will be registered as a known field, and when the user adds eventually indexes his documents, the field previously registered is not add to the searchable and displayed attributes.
+
+This means that there should be a distinction between the creation of an `fieldId` (when a field is first registered), and it's usage/position in `searchableAttributes` and `displayedAttributes`.
+What that means is that when we index documents, we must check if a field already has a position, and if not, give it a position (after adding it to the fieldmap) according to its position in the document.
+
+##### caveat
+- If a new document contains a new field at a position for which we already have a field:
+```json
+[
+	{
+		"id": 1,
+		"title": "the title"
+	},
+	{
+
+		"id": 1,
+		"titre": "le titre"
+	}
+]
+```
+
+- To make sure that the `searchableAttributes` and `displayedAttributes` are in sync, the must come from the same source of information; this should be the field_position.
+ TBD: What should be the position of `titre`?
+	- same position as `title` (thus allowing attributes to exists at the same position like Algolia)
+	- added at the last position
 
 #### `searchable_attributes` & `displayed_attributes`
 
-what is the behavior for a field that:
-- > **is in `searchable_attributes` and in `displayed_attributes`:**
-  > meilisearch will use the field for a search and the field will be returned in search results
-- > **is in `searchable_attributes` but not in `displayed_attributes`:**
-  > meilisearch will use the field for a search but the field will **not** be returned in search results
-- > **is not in `searchable_attributes` but in `displayed_attributes`:**
-  > meilisearch will **not** use the field for a search but the field will be returned in search results
-- > **is not in `searchable_attributes` and not in `displayed_attributes`:**
-  > meilisearch will **not** use the field for a search and the field will **not** be returned in search results. The field is unused but should be kept in case of it is added in `searchable_attributes` or `displayed_attributes`.
+Being searchable and displayed are 2 different concept, and there should not be interactions between the two: a field can be searchable and not displayed, or displayed and not searchable, etc.
 
 #### add a new configuration `attributes_order`?
 
-This new config may define the order of attributes for the criterion `Attributes`, no wildcard allowed.
-if `searchable_attribute` is: `["title", "desc"]`
-and `attributes_order` is: `["desc", "id", "title"]`
-The searchable attributes order would be:
-`"desc" > "title"` (`"id"` is not searchable so is ignored by the criterion `Attributes`).
+Adding a new configuration `attributesPosition` that link all attributes present in a document  to a position makes it possible to keep track of the position without caring about whether a field is searchable or displayed. This also allows to keep track of all the fields that have been found in documents in the database.
 
-`attributes_order` is always exhaustive, If a new field is added, it is "pushed" at the end of the list.
+```json
+{
+	"id": 0,
+	"title": 1,
+	"titre": 1
+}
+```
+
+The default order is then **always** the order a field was in a document when it was first found.
 
 ##### drawbacks:
 - new config added
-- more complexity
 - could be replace by a small note about wildcard in `searchable_attributes`
 
-#### Related issues
-
-- https://github.com/meilisearch/MeiliSearch/issues/1066
-- https://github.com/meilisearch/MeiliSearch/issues/942
 
 ### Changes in meilisearch documentation
 
 Depending on what we choose, we'll have to add **default** and **wildcard** behavior of configurations, we'll potentially add a new configuration `attributes_order`. 
-
-<!-- Explain the proposal as if it was already included in MeiliSearch and you were teaching it to another user. That generally means:
-
-- Introducing new named concepts.
-- Explaining the feature largely in terms of examples.
-- The API for this feature, HTTP, CLI or config.
-- Explaining how the user should think about the feature and how it should impact the way they use MeiliSearch. It should explain the impact as concretely as possible.
-- If applicable, provide sample error messages, deprecation warnings, or migration guidance.
-
-If the changes modify the HTTP API, provide a description of the method, URL, parameters, body, status code, errors, etc...
-
-If it modifies the CLI, provide the env variable name, the argument name, and the description.
-
-This serves as a user-level guide. Anything that the user may encounter during its interaction with the feature should be presented here.
-Impact on documentation
-
-If the feature requires additions to the documentation or if sections of the documentation need to be updated because of this feature, it should be mentioned here. It's the role of the documentation team to point out the sections of the documentation that need to be updated. -->
 
 ## Second Section: Technical Specifications
 
