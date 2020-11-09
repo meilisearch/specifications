@@ -197,8 +197,8 @@ struct NormalizedTokenIter {
     token: Iter<Token<'a>>
 }
 
-impl Deref for NormalizedToken {
-
+impl<'a> Deref for NormalizedToken<'a> {
+type Target = Token<'a>;
 }
 
 struct NormalizedToken<'a> {
