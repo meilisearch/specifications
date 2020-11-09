@@ -1,66 +1,66 @@
-# specifications
-Specifications of the main features of MeiliSearch.
+# Specifications
+This repository provides a template for creating **feature specifications** for MeiliSearch. A feature specification is a written description of a feature that serves as a basis for development, design, and inter-team synchronization.
 
 ## Process
 
-The goal of the specification is to serve as a basis for development, design, and  inter-team synchronization. When a new feature or product is to be developed, a new pull request is created, and people are invited to discuss its content and propose suggestions. The goal here is to specify the expected behavior on a high level and point out corner cases that need to be addressed.
+When a new feature or product is to be developed, a new pull request is created, and contributors are invited to discuss its content and propose suggestions. The goal of a feature specification is to define the expected behavior on a high level and point out corner cases that need to be addressed.
 
-The specifications at MeiliSearch are made up of 3 sections that are described in the rest of this document.
+MeiliSearch's feature specifications are made up of three sections, described below.
 
-## First section: Feature Description and Interaction
+## 1. Feature Description and Interaction
 
-This first part has a general audience. It should be as little technical as possible (think user-level). This section contains 4 sub-sections:
+This first section gives a high level overview of the feature. It should avoid technical language so that it can be understood by a general audience (think user-level). It is broken into five sub-sections, which are as follows:
 
-### Summary
+### I. Summary
 
-One paragraph explains the feature formulated as a user story ("When I do X I want Y to happen because Z"). This paragraph describes the problem from a user perspective.
+One paragraph explaining the feature from the perspective of a user, e.g. "When I do X I want Y to happen because Z". This paragraph describes the problem and solution simply, without going into detail.
 
-### Motivation
+### II. Motivation
 
-Why are we doing this? What use cases does it support? What is the expected outcome? Link to related issues and discussions.
+Why develop this feature? What use cases does it support? What is the expected outcome? Add links to related issues and discussions.
 
-### Prior Art and R&D
+### III. Additional Materials
 
-Discuss prior art, both the good and the bad, concerning this proposal. Put some links about what we can see on other tools, search API, or dev tools.
+Discuss and include links to similar features in other tools or products. Share any concept art or visualizations that demonstrate what this proposal might look like in our search API (can be a screenshot of another tool, or a mockup made w/ dev tools). Consider any lessons that can be learned from outside implementations of the feature.
 
-This section intends to encourage you as an author to think about the lessons from other tools and provide readers of your RFC with a fuller picture. If there is no prior art, that is fine - your ideas are interesting to us, whether they are brand new or adaptation from other tools.
+This section is intended to provide readers of your pull request with a fuller picture of the proposed feature by comparing it with similar features in other tools and offering visual aids. If you don't have any examples of similar features being implemented elsewhere, that is fine—your ideas are interesting to us, whether they are brand new or adaptations from other tools.
 
-### Explanation
+### IV. Explanation
 
-Explain the proposal as if it was already included in MeiliSearch and you were teaching it to another user. That generally means:
+Thoroughly explain your feature as if it was already implemented in MeiliSearch and you were teaching another user how to use it. That generally means:
 
-- Introducing new named concepts.
-- Explaining the feature largely in terms of examples.
-- The API for this feature, HTTP, CLI or config.
-- Explaining how the user should _think_ about the feature and how it should impact the way they use MeiliSearch. It should explain the impact as concretely as possible.
+- Introducing (and naming) any new concepts.
+- Explaining the feature largely through examples.
+- Noting the API for this feature, HTTP, CLI or config.
+- Explaining how the user should _think_ about the feature and how it will impact the way they use MeiliSearch (provide concrete examples).
 - If applicable, provide sample error messages, deprecation warnings, or migration guidance.
 
 If the changes modify the HTTP API, provide a description of the method, URL, parameters, body, status code, errors, etc...
 
 If it modifies the CLI, provide the env variable name, the argument name, and the description.
 
-This serves as a user-level guide. Anything that the user may encounter during its interaction with the feature should be presented here.
+This section serves as a user-level guide and should resemble official documentation. Anything that the user may encounter while interacting with the feature should be presented here.
 
-### Impact on documentation
+### V. Impact on Documentation
 
-If the feature requires additions to the documentation or if sections of the documentation need to be updated because of this feature, it should be mentioned here. It's the role of the documentation team to point out the sections of the documentation that need to be updated.
+If the feature requires additions or updates to the documentation, they should be noted here. It's the role of the documentation team to ensure this section of the feature specification is accurate.
 
-## Second Section: Technical Specifications
+## 2. Technical Specifications
 
-This section has a much narrower audience: the developer that will implement the feature. Its goal is to make it as clear as possible to develop the feature, share knowledge, and think about the possibilities.
+This section of the feature specification document has a much narrower audience: the developer(s) that will implement the feature. Its goal is to discuss and clarify how the feature will be developed and implemented. It has three subsections.
 
-### Architecture
+### I. Architecture
 
-This section presents how the new feature should be done on an abstract level and how it fits within the codebase. This should define a scope where the feature exists.
+This section presents how the new feature will fit into the existing architecture and codebase on an abstract level. It should also define a scope where the feature exists.
 
-### Implementation Details
+### II. Implementation Details
 
-Some aspects will need to be made precise, such as interfaces or specific algorithmic choices.
+This section is for precise, practical aspects of implementation, e.g. interfaces, potential code problems, or specific algorithmic choices.
 
-### Corner Cases
+### III. Corner Cases
 
-Some aspects of the development will necessitate special care, they should be pointed out, and if there are still unanswered questions, they belong here too.
+Take note of any potential problem areas, undefined behavior, or remaining unanswered questions about behavior here.
 
-## Third Section: Future possibilities
+## 3. Future Possibilities
 
-This last section talks about what has been thought of related to this issue, but has been decided not to be done now, and what it means regarding the feature at hand.
+This last section includes any related topics or features which are not currently in MeiliSearch and will not be added at this time, but which may affect the proposed feature in the future.

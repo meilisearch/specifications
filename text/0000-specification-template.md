@@ -1,22 +1,22 @@
 - Title:
 - Start Date:
-- specification PR:
-- Meilisearch Issue: 
+- Specification PR:
+- MeiliSearch Issue: 
 
 # Title
 
-## First section: Feature Description and Interaction
+## 1. Feature Description and Interaction
 
 ### Summary
 ### Motivation
-### Prior Art and R&D
+### Additional Materials
 ### Explanation
 ### Impact on documentation
 
-## Second Section: Technical Specifications
+## 2. Technical Specifications
 
 ### Architecture
 ### Implementation Details
 ### Corner Cases
 
-## Third Section: Future possibilities
+## 3. Future Possibilities
