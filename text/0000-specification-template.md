@@ -11,7 +11,7 @@
 ### Motivation
 ### Additional Materials
 ### Explanation
-### Impact on documentation
+### Impact on Documentation
 
 ## 2. Technical Specifications
 
