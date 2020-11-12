@@ -260,6 +260,10 @@ pub struct TokenizerConfig {
 }
 ```
 
+_edit 1: return several token as the same word_position seems to be overenginering, we may want to have only 1 token by iteration making API simplier_
+
+_edit 2: we have to normalize text in order to have a more accurate tokenization (traditional vs simplified chinese)_
+
 #### Tokenizer
 
 The tokenizer exposes an abstracted interface to the tokenization process. Its API is standard:
@@ -276,7 +280,6 @@ struct Tokenizer<'a> {
     current_char_index: u64,
     /// reference on the document content
     inner: &'a str,
-    stop_words: HashSet<String>,
     tokenizer_map: HashMap<(Script, Language), Box<dyn InternalTokenizer>>,
 }
 
@@ -285,64 +288,13 @@ impl<'a> Tokenizer<'a> {
     /// and chose the specialized internal tokenizer
     fn new(config: TokenizerConfig) -> Self { unimplemented!() }
     // Analyses the text (typically a field) and select the correct tokenizer from the tokenizer_map, return an iterator of token groups, from the Cow<[Token<'a'>]> emitted from the internal tokenizer
-    fn tokenize(s: &'a str) -> impl Iterator<Item = &'a TokenGroup<'a>>
+    fn tokenize(s: &'a str) -> impl Iterator<Item = &'a Token<'a>>
 }
 ```
 
 #### Token
 
-The `InternalTokenizer` emits group of tokens that are then collected in a `TokenGroup` by the `Tokenizer`. There is two way to access the tokens inside of a `TokenGroup`:
-- the `tokens` method that returns an iterator over the tokens
-- the `normalized` that returns an iterator of `NormalizedToken`. The `NormalizedToken` derefs to its underlying `Token`, to it can be manipulated like a normal token. Its `text` method is overloaded to return the normalized version of the word. The original version of the word is still accessible with `token.original.text()`.
-
 ```rust
-/// script of a token (https://docs.rs/whatlang/0.10.0/whatlang/enum.Script.html)
-pub type Script = whatlang::Script;
-
-pub struct TokenGroup<'a> {
-    tokens: Cow<'a, '[Token<'a>]>,
-    script: Script,
-}
-```
-
-```rust
-struct NormalizedTokenIter {
-    script: Script,
-    token: Iter<Token<'a>>
-}
-
-impl<'a> Deref for NormalizedToken<'a> {
-    type Target = Token<'a>;
-}
-
-struct NormalizedToken<'a> {
-    pub original: Token<'a>,
-    normalized: Cow<str>,
-}
-
-impl NormalizedToken {
-    /// return the normalized text for the token.
-    fn text() -> &str {}
-}
-
-impl Iterator for NormalizedTokenIter {
-    type Item = NormalizedToken;
-    
-    fn next() -> Self::Item {
-        // token.word = self.normalize(token)
-    }
-}
-
-```
-
-```rust
-impl<'a> TokenGroup<'a> {
-    /// returns an iterator over the tokens of the token group.
-    fn tokens(&self) -> impl Iterator<Item = Token<'a>> {}
-    /// Returns an iterator over normalized tokens of the iterator group.
-    fn normalized() -> NormalizedTokenIterator {}
-}
-
 enum TokenKind {
     Word,
     /// the token is a stop word,
@@ -357,16 +309,17 @@ enum TokenKind {
 ```rust
 pub struct Token<'a> {
     kind: TokenKind,
-    word: &'a str,
+    word: Cow<str>,
     /// index of the first character of the word
-    char_index: usize,
+    char_start: usize,
+    char_end: usize,
     /// byte index of the first character of the word
-    byte_index: usize,
+    byte_index: usize, // usefull?
     /// position of the token in the token stream
-    token_index: usize,
+    token_index: usize, // useful?
 }
 
-impl Token {
+mpl Token {
     fn token_len(&self) -> usize {}
     fn kind(&self) -> TokenKind {}
     fn is_word(&self) -> bool {}
@@ -388,9 +341,10 @@ use crate::token::{Token, WordSlice, Script};
 pub(crate) trait InternalTokenizer<'a> {
     /// the tokenize method takes text as an input and emits tokens
     /// Tokens must be returned with an monotonically increasing token position, and tokens with the same position must be grouped together.
-    fn tokenize(text: &'a str) -> impl Iterator<Item = Cow<'a, [Token<'a>]>>;
+    fn tokenize(text: &'a str) -> impl Iterator<Item = Token<'a>>>;
 }
 ```
+
 
 ### Implementation Details
 
