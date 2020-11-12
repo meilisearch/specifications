@@ -7,7 +7,7 @@ When a new feature or product is to be developed, a new pull request is created,
 
 MeiliSearch's feature specifications are made up of three sections, described below.
 
-## 1. Feature Description and Interaction
+## 1. Functional Specification
 
 This first section gives a high level overview of the feature. It should avoid technical language so that it can be understood by a general audience (think user-level). It is broken into five sub-sections, which are as follows:
 
