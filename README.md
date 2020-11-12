@@ -64,3 +64,12 @@ Some aspects of the development will necessitate special care, they should be po
 ## Third Section: Future possibilities
 
 This last section talks about what has been thought of related to this issue, but has been decided not to be done now, and what it means regarding the feature at hand.
+
+## Review process
+
+The specification review is a two steps process:
+
+- 1) When the specification PR is opened (as draft), only ideas are discussed, until an agreement is found on the substance.
+- 2) When an agreement on the substance has been found, the PR is opened for review, and change requests to the shape are accepted.
+
+This prevents back and forth discussions between substance and shape, and keeps discussions organized and focused.
