@@ -50,14 +50,12 @@ In order to use the tokenizer, all the user has to do is to instantiate a `Token
 ```rust
 let config = TokenizerConfig::default().set_stopwords(&["the", "of"]);
 let tokenizer = Tokenizer::new(config);
-let groups = tokenizer.tokenize("The quick brown fox jumps over the lazy dog");
-let token_group = groups.next();
-assert_eq!(token_group.tokens().map(|t| t.text()).collect(), ["The"]);
-assert_eq!(token_group.normalized().map(|t| t.text()).collect(), ["the"]);
-let token_group = tokens.next();
-assert_eq!(token_group.tokens().map(|t| t.text()).collect(), [" "])
-let token_group = groups.next();
-assert_eq!(token_group.tokens().map(|t| t.text()).collect(), ["quick"])
+let tokens = tokenizer.tokenize("The quick brown fox jumps over the lazy dog");
+// notice text is normalized
+assert_eq!(tokens.next().unwrap().text(), ["the"]);
+// whitespaces are returned
+assert_eq!(tokens.next().unwrap().text(), [" "])
+assert_eq!(tokens.next().unwrap().text(), ["quick"])
 ```
 
 The call to the tokenize method allows the reuse of the same `Tokenizer` instance, and keep it's configuration state and allocations.
@@ -68,23 +66,30 @@ Bellow are example of the integration of the new tokenizer in existing code:
 ```rust
 // new tokenizer
 fn highlight_record(record: &mut IndexMap<String, String>, words: &HashSet<String>) {
-  for (_key, value) in record.iter_mut() {
-    let old_value = mem::take(value);
-    let tokenizer = Tokenizer::new(&the_string);
-    for token_group in tokenizer {
-      // get the longest normalized token
-      let token = token_goup.normalized().max_by(|a, b| a.token_len().cmp(b.token_len()));
-      if token.kind() == TokenKind::Word {
-        let normalized_token = token.text();
-        let to_highlight = words.contains(&normalized_token);
-        if to_highlight { value.push_str("<mark>") }
-        value.push_str(token.original.text());
-        if to_highlight { value.push_str("</mark>") }
-      } else {
-        value.push_str(token);
-      }
+    for (_key, value) in record.iter_mut() {
+        let old_value = mem::take(value);
+        let tokenizer = Tokenizer::new(TokenizerConfig::default());
+        let tokens = tokenizer.tokenize(&old_value);
+        // positions should be ordered now
+        // possibly check for overlaps?
+        // omitted: transform position into offsets
+        // start1 (end1-start1) .. ...
+        let highlight_pos = tokens.filter_map(|t| {
+            if words.contains(t) {
+                Some((t.char_start, t.char_end))
+            } else {
+                None
+            }
+        });
+        
+        let mut old_value = old_value.chars();
+        for (start, end) in highlight_pos {
+           old_value.take(start).for_each(|c| value.push(c));
+           value.push_str("<mark>");
+           old_value.take(end).for_each(|c| value.push(c));
+           value.push_str("</mark>");
+        }
     }
-  }
 }
 ```
 ```rust
@@ -122,10 +127,60 @@ for (pos, token_group) in tokenizer.filter_map(only_token).enumerate().take(MAX_
 
 ```rust
 // original
-for (pos, token) in simple_tokenizer(&content).filter_map(only_token).enumerate().take(MAX_POSITION) {
-    let word = token.to_lowercase();
-    let position = (attr as usize * MAX_POSITION + pos) as u32;
-    words_positions.entry(word).or_insert_with(SmallVec32::new).push(position);
+fn index_token<A>(
+    token: Token,
+    id: DocumentId,
+    indexed_pos: IndexedPos,
+    word_limit: usize,
+    stop_words: &fst::Set<A>,
+    words_doc_indexes: &mut BTreeMap<Word, Vec<DocIndex>>,
+    docs_words: &mut HashMap<DocumentId, Vec<Word>>,
+) -> bool
+where A: AsRef<[u8]>,
+{
+    if token.index >= word_limit {
+        return false;
+    }
+
+    // This is an instance of a NormalizedToken
+    let normalized = token.text();
+    let token = Token {
+        word: &lower,
+        ..token
+    };
+
+    if !stop_words.contains(&token.word) {
+        match token_to_docindex(id, indexed_pos, token) {
+            Some(docindex) => {
+                let word = Vec::from(token.word);
+
+                if word.len() <= WORD_LENGTH_LIMIT {
+                    words_doc_indexes
+                        .entry(word.clone())
+                        .or_insert_with(Vec::new)
+                        .push(docindex);
+                    docs_words.entry(id).or_insert_with(Vec::new).push(word);
+
+                    if !lower.contains(is_cjk) {
+                        let unidecoded = deunicode_with_tofu(&lower, "");
+                        if unidecoded != lower && !unidecoded.is_empty() {
+                            let word = Vec::from(unidecoded);
+                            if word.len() <= WORD_LENGTH_LIMIT {
+                                words_doc_indexes
+                                    .entry(word.clone())
+                                    .or_insert_with(Vec::new)
+                                    .push(docindex);
+                                docs_words.entry(id).or_insert_with(Vec::new).push(word);
+                            }
+                        }
+                    }
+                }
+            }
+            None => return false,
+        }
+    }
+
+    true
 }
 ```
 
@@ -260,9 +315,9 @@ pub struct TokenizerConfig {
 }
 ```
 
-_edit 1: return several token as the same word_position seems to be overenginering, we may want to have only 1 token by iteration making API simplier_
+_edit 1: return several token as the same word_position seems to be over-engineering, we may want to have only 1 token by iteration making API simpler_
 
-_edit 2: we have to normalize text in order to have a more accurate tokenization (traditional vs simplified chinese)_
+_edit 2: we have to normalize text in order to have a more accurate tokenization (traditional vs simplified Chinese)_
 
 #### Tokenizer
 
@@ -306,6 +361,8 @@ enum TokenKind {
 }
 ```
 
+The emitted token position are relative to the original text, this information is reliable. The `word` is normalized is need be.
+
 ```rust
 pub struct Token<'a> {
     kind: TokenKind,
@@ -319,7 +376,7 @@ pub struct Token<'a> {
     token_index: usize, // useful?
 }
 
-mpl Token {
+impl Token {
     fn token_len(&self) -> usize {}
     fn kind(&self) -> TokenKind {}
     fn is_word(&self) -> bool {}
@@ -354,7 +411,7 @@ pub(crate) trait InternalTokenizer<'a> {
 
 ### Corner Cases
 
-In some languages like chinese, there can be multiple "words" extracted that are considered to be at the same position in the text. For example 计算所 gives 计算 and 计算所, that are at the same position in the text but don't have the same length, the tokenizer should support that behavior.
+In some languages like Chinese, there can be multiple "words" extracted that are considered to be at the same position in the text. For example 计算所 gives 计算 and 计算所, that are at the same position in the text but don't have the same length, the tokenizer should support that behavior.
 
 ## Future possibilities
 
