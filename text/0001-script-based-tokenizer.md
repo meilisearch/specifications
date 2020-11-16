@@ -423,3 +423,4 @@ In some languages like Chinese, there can be multiple "words" extracted that are
 - The tokenizer specified here is based on scripts, we should base it on languages to be able to have default stop-words for each language
 - The chinese tokenizer is a complicated subject. The first implementation will simply adapt jieba's `cut` method. In another [specification](https://github.com/meilisearch/specifications/pull/5), we'll think about improving this, and this will probably require the help of a native mandarin speaker input.
 - We will want in the future to allow user configuration for the tokenizer. This is taken into account in the design of the new Tokenizer.
+- Add a normalization step before the tokenization (lowercase, remove all diacritics, remove punctuation within words, transform traditional Chinese to modern). 
