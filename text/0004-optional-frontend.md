@@ -45,4 +45,5 @@ Pass an argument to `create_app` to conditionally enable the frontend service.
 TDB
 
 ## Third Section: Future possibilities
-N.A
+
+- Add an opt-in flag to re-enable the frontend in production environment, as suggested per [comment](https://github.com/meilisearch/specifications/pull/8#issuecomment-729676988)
