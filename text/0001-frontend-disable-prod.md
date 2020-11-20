@@ -13,7 +13,7 @@ For testing purposes, MeiliSearch is shipped with a frontend that is served at t
 
 ### Motivation
 
-This frontend was developed for testing purposes, and it should not be present in a production environment.
+This frontend was developed for testing purposes, therefore it should only be present in a production environment.
 
 ### Prior Art and R&D
 
