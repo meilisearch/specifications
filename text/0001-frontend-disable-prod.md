@@ -9,11 +9,11 @@
 
 ### Summary
 
-For testing purposes, MeiliSearch is shipped with a frontend that is served at the server's root. This provides the user with a basic GUI to perform searches on his documents. While this is useful in a development environment, this is not necessarily desirable in a production environment. This specification proposes to remove this frontend in a development environment.
+For testing purposes, MeiliSearch is shipped with a frontend that is served at the server's root. This provides the user with a basic GUI to perform searches on his documents. While this is useful in a development environment, this is not necessarily desirable in a production environment. This specification proposes to remove this frontend in a production environment.
 
 ### Motivation
 
-This frontend was developed for testing purposes, therefore it should only be present in a production environment.
+This frontend was developed for testing purposes, therefore it should only be present in a development environment.
 
 ### Prior Art and R&D
 
