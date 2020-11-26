@@ -5,7 +5,7 @@ This repository provides a template for creating **feature specifications** for 
 
 When a new feature or product is to be developed, a new pull request is created, and contributors are invited to discuss its content and propose suggestions. The goal of a feature specification is to define the expected behavior on a high level and point out corner cases that need to be addressed.
 
-The person in charge of the RP (the owner) is the person assigned to the RP. This allows for the possibility of changing it over time. When the PR assignee changes, both new and old assignees should be notified.
+The person in charge of the PR (the owner) is the person assigned to the PR. This allows for changing ownership. When the PR assignee changes, both new and old assignees should be notified.
 
 #### Start
 
