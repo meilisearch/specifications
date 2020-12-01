@@ -69,6 +69,21 @@ Changes in `settings` route changing `AttributeForFaceting` to handle Number typ
 
 ### Architecture
 ### Implementation Details
+
+We have a database for the facets, the keys are prefixed by the field_id (u8), a level (u8) and, the facet value (i64, f64). The facet values don't have a level when those are strings. The data stored under those keys is the document ids that are faceted under those facets values.
+
+The type of the facet (i.e. i64, f64 or string) is stored in another data structure and this is by using it that we know how to read the facet value. If the facet type is a number we are able to use more operators like greater than or lower than (e.g. <, <=, >, >=, =, !=).
+
+#### Indexing phase
+
+When documents come in and fields are declared as facets, we start storing the facet values in the previously described database, the key becomes the facet value (as a globally ordered byte slice) and, the entry data now contains the document id that contains this facet value. Note that if the facet value is a number we store it like [field id][level][left facet value][right facet value] where the level is 0 and if it is a string then we don't store the level.
+
+Once the facet values that are numbers are stored we got a list of facet values prefixed with the field id and the base level (i.e. 0). We use this base level to generate more levels, each level contains groups of 4 groups of the level below, so level 1 aggregates the ids of the documents of each group of 4 facet values of level 0. The left and right facet values are the inclusive bounds of the group, the level 0 group have equal left and right bounds.
+
+#### Querying phase
+
+Those levels are used to reduce the number of entries to run through, reducing the time it takes to answer too wide range filter queries, like duration > 0 where 80% of the entries will match. We go through each of the levels going from the higher one, the one which describes the biggest amount facet values and, we go deeper in the levels to find a better fitting bound.
+
 ### Corner Cases
 
 It is hard to detect the type of a `facet` (`float`/`int`/`string`), and we should precise it in `settings`
