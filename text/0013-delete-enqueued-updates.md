@@ -111,7 +111,7 @@ the update status document will look like:
 
 - The given update id is a processed id: 
     - Status code: `400`
-    - Error code: `invalid_update_id`
+    - Error code: `unabortable_update`
     - Error description: `The requested update id exist but could not be aborted. A processing/processed/failed update cannot be aborted.`
 
 - Error during the abort process:
