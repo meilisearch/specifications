@@ -48,14 +48,19 @@ We want to provide our users with an always improved searching experience. For t
 In order to use the tokenizer, all the user has to do is to instantiate a `Tokenizer`, call `tokenize(&str)` on it and iterate over the emitted tokens:
 
 ```rust
-let config = TokenizerConfig::default().set_stopwords(&["the", "of"]);
-let tokenizer = Tokenizer::new(config);
-let tokens = tokenizer.tokenize("The quick brown fox jumps over the lazy dog");
-// notice text is normalized
-assert_eq!(tokens.next().unwrap().text(), ["the"]);
-// whitespaces are returned
-assert_eq!(tokens.next().unwrap().text(), [" "])
-assert_eq!(tokens.next().unwrap().text(), ["quick"])
+let stop_words = Set::from_iter(["the", "of"].iter()).unwrap();
+let analyzer = Analyzer::new(AnalyzerConfig::default_with_stopwords(&stop_words));
+
+let orig = "The quick (\"brown\") fox can't jump 32.3 feet, right? Brr, it's 29.3°F!";
+let analyzed = analyzer.analyze(orig);
+let mut analyzed = analyzed.tokens();
+assert_eq!("the", analyzed.next().unwrap().text());
+assert_eq!(" ", analyzed.next().unwrap().text());
+assert_eq!("quick", analyzed.next().unwrap().text());
+assert_eq!(" ", analyzed.next().unwrap().text());
+assert_eq!("(", analyzed.next().unwrap().text());
+assert_eq!("\"", analyzed.next().unwrap().text());
+assert_eq!("brown", analyzed.next().unwrap().text());
 ```
 
 The call to the tokenize method allows the reuse of the same `Tokenizer` instance, and keep it's configuration state and allocations.
@@ -66,28 +71,22 @@ Bellow are example of the integration of the new tokenizer in existing code:
 ```rust
 // new tokenizer
 fn highlight_record(record: &mut IndexMap<String, String>, words: &HashSet<String>) {
+    let stop_words = Set::from_iter([""].iter()).unwrap();
+    let analyzer = Analyzer::new(AnalyzerConfig::default_with_stopwords(&stop_words));
+
     for (_key, value) in record.iter_mut() {
         let old_value = mem::take(value);
-        let tokenizer = Tokenizer::new(TokenizerConfig::default());
-        let tokens = tokenizer.tokenize(&old_value);
-        // positions should be ordered now
-        // possibly check for overlaps?
-        // omitted: transform position into offsets
-        // start1 (end1-start1) .. ...
-        let highlight_pos = tokens.filter_map(|t| {
-            if words.contains(t) {
-                Some((t.char_start, t.char_end))
-            } else {
-                None
-            }
-        });
+        let analyzed = analyzer.analyze(&old_value);
         
-        let mut old_value = old_value.chars();
-        for (start, end) in highlight_pos {
-           old_value.take(start).for_each(|c| value.push(c));
-           value.push_str("<mark>");
-           old_value.take(end).for_each(|c| value.push(c));
-           value.push_str("</mark>");
+        for (original, token) in analyzed.reconstruct() {
+            if token.is_word() {
+                let to_highlight = words.contains(&token.text());
+                if to_highlight { value.push_str("<mark>") }
+                value.push_str(original);
+                if to_highlight { value.push_str("</mark>") }
+            } else {
+                value.push_str(original);
+            }
         }
     }
 }
@@ -112,180 +111,6 @@ fn highlight_record(record: &mut IndexMap<String, String>, words: &HashSet<Strin
 }
 ```
 
-- Indexing in @kerollmops milli
-
-```rust
-// new tokenizer
-let tokenizer = Tokenizer::new(&content);
-for (pos, token_group) in tokenizer.filter_map(only_token).enumerate().take(MAX_POSITION) {
-    let position = (attr as usize * MAX_POSITION + pos) as u32;
-    for token in token_group.normalized() {
-        words_positions.entry(token.txt()).or_insert_with(SmallVec32::new).push(position);
-    }
-}
-```
-
-```rust
-// original
-fn index_token<A>(
-    token: Token,
-    id: DocumentId,
-    indexed_pos: IndexedPos,
-    word_limit: usize,
-    stop_words: &fst::Set<A>,
-    words_doc_indexes: &mut BTreeMap<Word, Vec<DocIndex>>,
-    docs_words: &mut HashMap<DocumentId, Vec<Word>>,
-) -> bool
-where A: AsRef<[u8]>,
-{
-    if token.index >= word_limit {
-        return false;
-    }
-
-    // This is an instance of a NormalizedToken
-    let normalized = token.text();
-    let token = Token {
-        word: &lower,
-        ..token
-    };
-
-    if !stop_words.contains(&token.word) {
-        match token_to_docindex(id, indexed_pos, token) {
-            Some(docindex) => {
-                let word = Vec::from(token.word);
-
-                if word.len() <= WORD_LENGTH_LIMIT {
-                    words_doc_indexes
-                        .entry(word.clone())
-                        .or_insert_with(Vec::new)
-                        .push(docindex);
-                    docs_words.entry(id).or_insert_with(Vec::new).push(word);
-
-                    if !lower.contains(is_cjk) {
-                        let unidecoded = deunicode_with_tofu(&lower, "");
-                        if unidecoded != lower && !unidecoded.is_empty() {
-                            let word = Vec::from(unidecoded);
-                            if word.len() <= WORD_LENGTH_LIMIT {
-                                words_doc_indexes
-                                    .entry(word.clone())
-                                    .or_insert_with(Vec::new)
-                                    .push(docindex);
-                                docs_words.entry(id).or_insert_with(Vec::new).push(word);
-                            }
-                        }
-                    }
-                }
-            }
-            None => return false,
-        }
-    }
-
-    true
-}
-```
-
-- index token method in the current Meilisearch engine
-
-```rust
-// new tokenizer, missing details
-fn index_token<A>(
-    group: TokenGroup,
-    id: DocumentId,
-    indexed_pos: IndexedPos,
-    word_limit: usize,
-    stop_words: &fst::Set<A>,
-    words_doc_indexes: &mut BTreeMap<Word, Vec<DocIndex>>,
-    docs_words: &mut HashMap<DocumentId, Vec<Word>>,
-) -> bool
-where A: AsRef<[u8]>,
-{
-    // we get normalized token: token normalization is performed by the tokenizer
-    for token in group.normalized() {
-        if token.token_index() >= word_limit {
-            return false;
-        }
-
-        if !token.is_stopword() {
-            match token_to_docindex(id, indexed_pos, token) {
-                Some(docindex) => {
-                    let word = Vec::from(token.word);
-
-                    if word.len() <= WORD_LENGTH_LIMIT {
-                        words_doc_indexes
-                            .entry(word.clone())
-                            .or_insert_with(Vec::new)
-                            .push(docindex);
-                        docs_words.entry(id).or_insert_with(Vec::new).push(word);
-                    }
-		    // no need to reindex a normalized version, the query string will be normalized too
-                }
-                None => return false,
-            }
-        }
-    }
-
-    true
-}
-```
-```rust
-// original
-fn index_token<A>(
-    token: Token,
-    id: DocumentId,
-    indexed_pos: IndexedPos,
-    word_limit: usize,
-    stop_words: &fst::Set<A>,
-    words_doc_indexes: &mut BTreeMap<Word, Vec<DocIndex>>,
-    docs_words: &mut HashMap<DocumentId, Vec<Word>>,
-) -> bool
-where A: AsRef<[u8]>,
-{
-    if token.index >= word_limit {
-        return false;
-    }
-
-    // This is an instance of a NormalizedToken
-    let normalized = token.text();
-    let token = Token {
-        word: &lower,
-        ..token
-    };
-
-    if !stop_words.contains(&token.word) {
-        match token_to_docindex(id, indexed_pos, token) {
-            Some(docindex) => {
-                let word = Vec::from(token.word);
-
-                if word.len() <= WORD_LENGTH_LIMIT {
-                    words_doc_indexes
-                        .entry(word.clone())
-                        .or_insert_with(Vec::new)
-                        .push(docindex);
-                    docs_words.entry(id).or_insert_with(Vec::new).push(word);
-
-                    if !lower.contains(is_cjk) {
-                        let unidecoded = deunicode_with_tofu(&lower, "");
-                        if unidecoded != lower && !unidecoded.is_empty() {
-                            let word = Vec::from(unidecoded);
-                            if word.len() <= WORD_LENGTH_LIMIT {
-                                words_doc_indexes
-                                    .entry(word.clone())
-                                    .or_insert_with(Vec::new)
-                                    .push(docindex);
-                                docs_words.entry(id).or_insert_with(Vec::new).push(word);
-                            }
-                        }
-                    }
-                }
-            }
-            None => return false,
-        }
-    }
-
-    true
-}
-```
-
 As we can see, the changes that need to be made are very minimal: this is because efforts have been made to make it's API close to the previous one.
 
 ### Impact on documentation
@@ -299,89 +124,151 @@ in future versions we will probably provide a way to configure tokenizer and thi
 
 The new version of the tokenizer will replace the current version as a standalone library.
 
-We want to support different tokenizers based on the language of the text to be indexed. For this we may need to change the tokenizer we are using while indexing, depending on the language and the script. The tokenizer provides an interface that abstract this need away from the consumer of the tokens.
+### Implementation Details
+
+We want to support different tokenizers based on the language of the text to be indexed. For this we may need to change the tokenizer we are using while indexing, depending on the language and the script. The Analyzer provides an interface that abstract this need away from the consumer of the tokens.
+
+#### Pipeline
+
+A pipeline contains all the steps needed to tokenize a specific language or script,
+one or several preprocessors to prepare text before tokenization e.g. traditional chinese translation
+or erasing some characters;
+a tokeninizer to transform the text in an iterator of tokens;
+one or several normalizers to normalize tokens for indexation e.g. deunicode or lowercase.
+```rust
+pub struct Pipeline {
+    pre_processor: Box<dyn PreProcessor + 'static>,
+    tokenizer: Box<dyn Tokenizer + 'static>,
+    normalizer: Box<dyn Normalizer + 'static>,
+}
+```
 
 #### Configuration
 
 The tokenizer in configured at initialization. A `Default` implementation is provided with the settings we believe suits most cases.
 The configuration options, for now, are:
-- the `stopwords`, default to empty
-- the `tokenizers_map` that links a `(Script, Language)` to a `Box<dyn InternalTokenizer>`. This defaults to the mapping we find best fitting for most cases. This settings should be left as is now, but will allow user defined tokenizers in the future.
+- the `stop_words`
+- the `pipeline_map` that links a `(Script, Language)` to a `Pipeline`. This defaults to the mapping we find best fitting for most cases. This settings should be left as is now, but will allow user defined Pipelines in the future.
 
 ```rust
-pub struct TokenizerConfig {
-	stopwords: Vec<String>,
-	tokenizer_map: HashMap<(Script, Language), Box<dyn InternalTokenizer>>,
+pub struct AnalyzerConfig<'a, A> {
+    /// language specialized pipeline, this can be switched during
+    /// document tokenization if the document contains several languages
+    pub pipeline_map: HashMap<(Script, Language), Pipeline>,
+    pub stop_words: &'a Set<A>,
 }
 ```
 
-_edit 1: return several token as the same word_position seems to be over-engineering, we may want to have only 1 token by iteration making API simpler_
+#### Analyzer
 
-_edit 2: we have to normalize text in order to have a more accurate tokenization (traditional vs simplified Chinese)_
-
-#### Tokenizer
-
-The tokenizer exposes an abstracted interface to the tokenization process. Its API is standard:
+The analyzer exposes an abstracted interface to the tokenization process. Its API is standard:
 
 ```rust
 use crate::token::Token;
-use crate::internal_tokenizer::InternalTokenizer;
+use crate::tokenizer::Tokenizer;
 
-struct Tokenizer<'a> {
-    /// script specialized tokenizer, this can be switched during
-    /// document tokenization if the document contains several scripts
-    current_tokenizer: Option<Box<dyn InternalTokenizer<'a>>>,
-    /// current character index in the document
-    current_char_index: u64,
-    /// reference on the document content
-    inner: &'a str,
-    tokenizer_map: HashMap<(Script, Language), Box<dyn InternalTokenizer>>,
+pub struct Analyzer<'a, A> {
+    config: AnalyzerConfig<'a, A>,
 }
 
-impl<'a> Tokenizer<'a> {
+impl<'a, A> Analyzer<'a, A>
+where
+    A: AsRef<[u8]>
+{
     /// create a new tokenizer detecting script
     /// and chose the specialized internal tokenizer
-    fn new(config: TokenizerConfig) -> Self { unimplemented!() }
-    // Analyses the text (typically a field) and select the correct tokenizer from the tokenizer_map, return an iterator of token groups, from the Cow<[Token<'a'>]> emitted from the internal tokenizer
-    fn tokenize(s: &'a str) -> impl Iterator<Item = &'a Token<'a>>
+    pub fn new(config: AnalyzerConfig<'a, A>) -> Self { unimplemented!() }
+
+    /// Builds an `AnalyzedText` instance with the correct analyzer pipeline, and pre-processes the
+    /// text.
+    ///
+    /// If an analysis pipeline exists for the inferred `(Script, Language)`, the analyzer will look
+    /// for a user specified default `(Script::Other, Language::Other)`. If the user default is not
+    /// specified, it will fallback to `(IdentityPreProcessor, UnicodeSegmenter, IdentityNormalizer)`.
+    ///
+    /// ```rust
+    /// use meilisearch_tokenizer::{Analyzer, AnalyzerConfig};
+    /// use fst::Set;
+    /// // defaults to unicode segmenter with identity preprocessor and normalizer.
+    /// let stop_words = Set::from_iter([""].iter()).unwrap();
+    /// let analyzer = Analyzer::new(AnalyzerConfig::default_with_stopwords(&stop_words));
+    /// let analyzed = analyzer.analyze("The quick (\"brown\") fox can't jump 32.3 feet, right? Brr, it's 29.3°F!");
+    /// let mut tokens = analyzed.tokens();
+    /// assert!("the" == tokens.next().unwrap().text());
+    /// ```
+    pub fn analyze<'t>(&'t self, text: &'t str) -> AnalyzedText<'t, A> { unimplemented!() }
+}
+
+/// result of analyzer.analyze() function, made to choose how tokens will be returned.
+pub struct AnalyzedText<'a, A> {}
+
+impl<'a, A> AnalyzedText<'a, A>
+where
+    A: AsRef<[u8]>
+{
+    /// Returns a `TokenStream` for the Analyzed text.
+    pub fn tokens(&'a self) -> TokenStream<'a> { unimplemented!() }
+
+    /// Attaches each token to its corresponding portion of the original text.
+    pub fn reconstruct(&'a self) -> impl Iterator<Item = (&'a str, Token<'a>)>  { unimplemented!() }
 }
 ```
 
 #### Token
 
 ```rust
-enum TokenKind {
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum SeparatorKind {
+    Hard,
+    Soft,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum TokenKind {
     Word,
     /// the token is a stop word,
     /// meaning that it can be ignored to optimize size and performance or be indexed as a Word
     StopWord,
     /// the token is a separator,
     /// meaning that it shouldn't be indexed but used to determine word proximity
-    Separator
+    Separator(SeparatorKind),
+    Any,
 }
 ```
 
 The emitted token position are relative to the original text, this information is reliable. The `word` is normalized is need be.
 
 ```rust
+#[derive(Debug, Clone, Default)]
 pub struct Token<'a> {
-    kind: TokenKind,
-    word: Cow<str>,
+    pub kind: TokenKind,
+    pub word: Cow<'a, str>,
     /// index of the first character of the word
-    char_start: usize,
-    char_end: usize,
-    /// byte index of the first character of the word
-    byte_index: usize, // usefull?
-    /// position of the token in the token stream
-    token_index: usize, // useful?
+    pub char_index: usize,
+    /// indexes of start and end of the byte slice
+    pub byte_start: usize,
+    pub byte_end: usize,
 }
 
-impl Token {
-    fn token_len(&self) -> usize {}
-    fn kind(&self) -> TokenKind {}
-    fn is_word(&self) -> bool {}
-    fn is_separator(&self) -> bool {}
-    fn is_stopword(&self) -> bool {}
+impl<'a> Token<'a> {
+    // return the normalized version of the token
+    pub fn text(&self) -> &str { unimplemented!() }
+
+    // return the size in byte of the original text
+    pub fn byte_len(&self) -> usize { unimplemented!() }
+
+    // return the TokenKind of the token
+    pub fn kind(&self) -> TokenKind { unimplemented!() }
+
+    // return true if the TokenKind of the token is TokenKind::Word
+    pub fn is_word(&self) -> bool { unimplemented!() }
+
+    // return Some(SeparatorKind) if the TokenKind of the token is TokenKind::Separator(SeparatorKind),
+    // None if the token is not a separator
+    pub fn is_separator(&self) -> Option<SeparatorKind> { unimplemented!() }
+
+    // return true if the TokenKind of the token is TokenKind::StopWord
+    pub fn is_stopword(&self) -> bool { unimplemented!() }
 }
 ```
 
@@ -390,38 +277,42 @@ impl Token {
 The `InternalTokenizer` traits provides a common interface to adapt other tokenizers to the tokenizer. This allows extensibility of the current tokenizer to other languages.
 
 ```rust
-use crate::token::{Token, WordSlice, Script};
+/// iterator over tokens processed by the specialized tokenizer
+pub struct TokenStream<'a> {
+    pub(crate) inner: Box<dyn Iterator<Item = Token<'a>> + 'a>
+}
+
+impl<'a> Iterator for TokenStream<'a> {
+    type Item = Token<'a>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.inner.next()
+    }
+}
 
 /// trait defining an internal tokenizer,
 /// an internal tokenizer should be a script specialized tokenizer,
 /// this should be implemented as an `Iterator` with `Token` as `Item`,
-pub(crate) trait InternalTokenizer<'a> {
-    /// the tokenize method takes text as an input and emits tokens
-    /// Tokens must be returned with an monotonically increasing token position, and tokens with the same position must be grouped together.
-    fn tokenize(text: &'a str) -> impl Iterator<Item = Token<'a>>>;
+pub trait Tokenizer: Sync + Send {
+    /// create the tokenizer based on the given `text` and `char_index`
+    fn tokenize<'a>(&self, s: &'a ProcessedText<'a>) -> TokenStream<'a>;
 }
 ```
 
 
-### Implementation Details
 
 - use of jieba for chinese tokenization
 - use of unicode-segmenter for other segmentations
-- Use StreamingIterator instead of Iterator
 
 ### Corner Cases
 
 In some languages like Chinese, there can be multiple "words" extracted that are considered to be at the same position in the text. For example 计算所 gives 计算 and 计算所, that are at the same position in the text but don't have the same length, the tokenizer should support that behavior.
-
+> return several token as the same word_position seems to be over-engineering, we may want to have only 1 token by iteration making API simplier
 ## Future possibilities
 
-- The field `char_index` is usefull for the current meilisearch but not in the future core-engine, It would be deprecated in future versions
 - We should add a way to configure tokenizer forcing a specific language/script
-- We should add a way to configure tokenizer adding custom stopword
-- We should add a way to configure tokenizer activating/deactivating stopword detection
 - We should add a way to configure tokenizer whitelisting/backlisting separators
 - The tokenizer specified here is based on scripts, we should base it on languages to be able to have default stop-words for each language
 - The chinese tokenizer is a complicated subject. The first implementation will simply adapt jieba's `cut` method. In another [specification](https://github.com/meilisearch/specifications/pull/5), we'll think about improving this, and this will probably require the help of a native mandarin speaker input.
 - We will want in the future to allow user configuration for the tokenizer. This is taken into account in the design of the new Tokenizer.
-- Add a normalization step before the tokenization (lowercase, remove all diacritics, remove punctuation within words, transform traditional Chinese to modern). 
 - Normalized synonyms (#964)
