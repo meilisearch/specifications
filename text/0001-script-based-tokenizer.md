@@ -145,7 +145,7 @@ pub struct Pipeline {
 
 #### Configuration
 
-The tokenizer in configured at initialization. A `Default` implementation is provided with the settings we believe suits most cases.
+The tokenizer is configured at initialization. A `Default` implementation is provided with the settings we believe suits most cases.
 The configuration options, for now, are:
 - the `stop_words`
 - the `pipeline_map` that links a `(Script, Language)` to a `Pipeline`. This defaults to the mapping we find best fitting for most cases. This settings should be left as is now, but will allow user defined Pipelines in the future.
