@@ -71,7 +71,7 @@ Bellow are example of the integration of the new tokenizer in existing code:
 ```rust
 // new tokenizer
 fn highlight_record(record: &mut IndexMap<String, String>, words: &HashSet<String>) {
-    let stop_words = Set::from_iter([""].iter()).unwrap();
+   let stop_words = Set::default();
     let analyzer = Analyzer::new(AnalyzerConfig::default_with_stopwords(&stop_words));
 
     for (_key, value) in record.iter_mut() {
