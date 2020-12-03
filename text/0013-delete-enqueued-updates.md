@@ -125,6 +125,7 @@ the update status document will look like:
 - Add on the guide the mention of the `aborted` status. 
 - Change on the guide where we explain that it's not possible to abort an update. 
 - Add the two methods described in the HTTP API part of the documentation.
+- Add the errors in the errors guide.
 
 ## 2. Technical Specifications
 
