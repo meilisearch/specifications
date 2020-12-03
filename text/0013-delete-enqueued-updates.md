@@ -94,7 +94,7 @@ the update status document will look like:
 - Status code: 204
 - Response: No Body
 
-** abort all update:**
+**Abort every pending updates:**
 
 - Method: DELETE
 - Route: `/indexes/:index_uid/updates`
