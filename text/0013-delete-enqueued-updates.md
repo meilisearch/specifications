@@ -100,7 +100,7 @@ the update status document will look like:
 - Route: `/indexes/:index_uid/updates`
     - index_uid: The index uid
 - Status code: 204
-- Response: No Response
+- Response: No Body
 
 #### Potential errors
 
