@@ -115,7 +115,7 @@ the update status document will look like:
     - Error description: `The requested update id exists but could not be aborted. A processing/processed/failed update cannot be aborted.`
 
 - Error during the abort process:
-    - Status code: `400`
+    - Status code: `500`
     - Error code: `update_abortion_failed`
     - Error description: `An error occurred during the update abortion process. The requested abortion has not been taken into account.`
 
