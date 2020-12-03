@@ -23,7 +23,7 @@ The update queue is convenient because it allows us to serialize updates and ass
 
 ### Additional Materials
 
-As explained on the [parent spec](https://github.com/meilisearch/specifications/pull/12), It's quite rare to have this kind of update queue. Elasticsearch or Algolia, who have this kind of update queue, don't give the abort or clear their 'tasks' queues. 
+As explained in the [parent spec](https://github.com/meilisearch/specifications/pull/12), It's quite rare to have this kind of update queue. Elasticsearch or Algolia, who have this kind of update queue, don't give the abort or clear their 'tasks' queues. 
 
 ### Explanation
 
