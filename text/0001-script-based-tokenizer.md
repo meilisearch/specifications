@@ -7,7 +7,7 @@
 
 ### Summary
 
-The first step of document indexing in the Meilisearch engine is tokenization. Tokenization in the action of taking a sentence and splitting in units of language called tokens. The tokenization task is highly language dependant and is a critical factor in the quality of the search results.
+The first step of document indexing in the Meilisearch engine is tokenization. Tokenization is the action of taking a sentence and splitting it in units of language called tokens. The tokenization task is highly language dependant and is a critical factor in the quality of the search results.
 
 ### Motivation
 
