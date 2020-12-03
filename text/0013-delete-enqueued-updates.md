@@ -79,7 +79,7 @@ the update status document will look like:
   },
   "duration": 0,
   "enqueuedAt": "2019-12-07T21:16:09.623944Z",
-  "processedAt": "2019-12-07T21:16:09.703509Z" // Date of deletion
+  "processedAt": "2019-12-07T21:16:09.703509Z" // date of abortion
 }
 ```
 
