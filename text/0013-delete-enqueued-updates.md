@@ -117,7 +117,7 @@ the update status document will look like:
 - Error during the abort process:
     - Status code: `400`
     - Error code: `update_abortion_failed`
-    - Error description: `An error occurred during the abort update process. The requested abort has not been taken into account.`
+    - Error description: `An error occurred during the update abortion process. The requested abortion has not been taken into account.`
 
 
 ### Impact on Documentation
