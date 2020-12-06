@@ -1,4 +1,4 @@
-- Title: Abort enqueued updates
+- Title: Abort pending updates
 - Start Date:
 - Specification PR: https://github.com/meilisearch/specifications/pull/13
 - MeiliSearch Issue: 
@@ -6,7 +6,7 @@
 - Parent Spec: https://github.com/meilisearch/specifications/pull/12
 
 
-# Abort enqueued updates
+# Abort pending updates
 
 ## 1. Feature Description and Interaction
 
@@ -49,7 +49,7 @@ An aborted update will stay at its place in the queue. So the typical answer of 
         ...
     },
     {
-        "status": "enqueued",
+        "status": "pending",
         "updateId": 4,
         ...
     },
@@ -59,7 +59,7 @@ An aborted update will stay at its place in the queue. So the typical answer of 
         ...
     },
     {
-        "status": "enqueued",
+        "status": "pending",
         "updateId": 6,
         ...
     },
