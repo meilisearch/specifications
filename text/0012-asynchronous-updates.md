@@ -82,7 +82,7 @@ These not include:
 
 Updates return the following information:
 
-* **status**: The status of the operation (enqueued, processed, or failed).
+* **status**: The status of the operation (pending, processed, or failed).
 * **updateId**: The identifier of the update.
 * **type**: The type of the operation.
 * **enqueuedAt:** The date at which the operation has been added to the queue.
@@ -145,7 +145,7 @@ N.A.
 ## 3\. Future Possibilities
 
 - Add the possibility to clear the update queue.
-- Add the option to remove one enqueued element.
+- Add the option to remove one pending element.
 - Compact old elements.
 - Get all updates with some filters.
 - Improve the error system. 
