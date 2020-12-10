@@ -1,9 +1,9 @@
-* Title: Asynchronous Updates
+* Title: Asynchronous Tasks
 * Start Date:
 * Specification PR: https://github.com/meilisearch/specifications/pull/12
 * MeiliSearch Issue:
 
-# Asynchronous updates
+# Asynchronous Tasks
 
 ## 1\. Feature Description and Interaction
 
@@ -12,16 +12,16 @@
 This spec is the spec of a feature already in place. 
 
 It's scope is:
-- The name for update list and update identifiers. 
-- The route to get one update with this identifier.
-- The route to get all updates. 
-- The update's format (JSON).
+- The name for task list and task identifiers. 
+- The route to get one task with this identifier.
+- The route to get all tasks. 
+- The task's format (JSON).
 
 ### Motivation
 
 MeiliSearch is an asynchronous API. It means that the API does not behave as you would expect when handling the request's responses. Some operations are put in a queue and will be executed in turn (asynchronously).
 
-We must define how to interact with this update queue.
+We must define how to interact with this task queue.
 
 ### Additional Materials
 
@@ -39,10 +39,10 @@ Other databases don't seem to have an async update queue.
 
 #### Async flow
 
-* When making a written request (create/update/delete) against the search engine, it stores the operation received in a queue and returns a updateId. With this id, the operation update is trackable.
-* Each update received is treated following the order it has been received.
-* You can get the update status on the /updates route.
-* Processed updates are marked as processed and kept in the operation list (available at `/indexes/:index\_uid/updates`). They won't be deleted.
+* When making a written request (create/update/delete) against the search engine, it stores the operation received in a queue and returns a taskId. With this id, the operation task is trackable.
+* Each task received is treated following the order it has been received.
+* You can get the task status on the /tasks route.
+* Processed tasks are marked as processed and kept in the operation list (available at `/indexes/:index\_uid/tasks`). They won't be deleted.
 
 #### Which operations are async?
 
@@ -56,34 +56,34 @@ These include:
 These not include:
 
 * Create/update/delete an index
-* Create a dump
+* Create a dump (Will in the future)
 
 #### HTTP API
 
-**Get an update status:** 
+**Get an task status:** 
 
 - Method: GET 
-- Route: `/indexes/:index_uid/updates/:update_id` 
+- Route: `/indexes/:index_uid/tasks/:task_id` 
      - index_uid: The index unique identifier
-     - update_id: The update identifier
-- Response: An update object (see examples)
+     - task_id: The task identifier
+- Response: An task object (see examples)
 - Status Code: 200 Ok
 
-**Get all update status:**
+**Get all task status:**
 
 - Method: GET 
-- Route: `/indexes/:index_uid/updates` 
+- Route: `/indexes/:index_uid/tasks` 
      - index_uid: The index unique identifier
-- Response: An array of update object (see examples)
+- Response: An array of task object (see examples)
 - Status Code: 200 Ok
 
 
-#### Understanding updates
+#### Understanding tasks
 
-Updates return the following information:
+tasks return the following information:
 
 * **status**: The status of the operation (pending, processed, or failed).
-* **updateId**: The identifier of the update.
+* **taskId**: The identifier of the task.
 * **type**: The type of the operation.
 * **enqueuedAt:** The date at which the operation has been added to the queue.
 * **processedAt**: The date at which the operation has been processed.
@@ -95,7 +95,7 @@ Updates return the following information:
 ```json
 {
   "status": "processed",
-  "updateId": 1,
+  "taskId": 1,
   "type": {
     "name": "DocumentsAddition",
     "number": 19653
@@ -111,7 +111,7 @@ Updates return the following information:
 ```json
 {
   "status": "failed",
-  "updateId": 3,
+  "taskId": 3,
   "type": {
     "name": "DocumentsAddition",
     "number": 1
@@ -127,6 +127,10 @@ Updates return the following information:
 
 * We already documented the update queue in a guide: https://docs.meilisearch.com/guides/advanced\_guides/asynchronous\_updates.html#asynchronous-updates
 * The API to get one or several updates status is already written: https://docs.meilisearch.com/references/updates.html
+
+Some stuff are changing:
+- Renaming `updates` to `tasks`; Task is more generic, will allow us tu put inside the Dumps, etc..
+- Renaming the status `enqueued` to `pending`; But we keep the enqueuedAt
 
 ## 2\. Technical Specifications
 
@@ -144,8 +148,8 @@ N.A.
 
 ## 3\. Future Possibilities
 
-- Add the possibility to clear the update queue.
+- Add the possibility to clear the task queue.
 - Add the option to remove one pending element.
 - Compact old elements.
-- Get all updates with some filters.
+- Get all tasks with some filters.
 - Improve the error system. 
