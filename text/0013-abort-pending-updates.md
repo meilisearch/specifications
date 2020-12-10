@@ -1,129 +1,176 @@
-- Title: Abort pending updates
+- Title: Cancel pending tasks
 - Start Date:
 - Specification PR: https://github.com/meilisearch/specifications/pull/13
 - MeiliSearch Issue: 
-    - https://github.com/meilisearch/MeiliSearch/issues/1104
+ - https://github.com/meilisearch/MeiliSearch/issues/1104
 - Parent Spec: https://github.com/meilisearch/specifications/pull/12
 
 
-# Abort pending updates
+# Cancel pending tasks
 
 ## 1. Feature Description and Interaction
 
 ### Summary
 
-Allow to abort messages in the update queue or to empty the entire queue. An aborted update will have the status `aborted`.
-
-Questions not answered:
-- We have an attribute on update info `processedAt`. What becomes this attribute if we add the possibility to abort an update? We already use this term in the case of a failed update.
+Allow to cancel tasks in the task queue or to cancel the entire coming tasks in the queue. A canceled task will have the status `canceled`. Only pending tasks will be cancellable. 
 
 ### Motivation
 
-The update queue is convenient because it allows us to serialize updates and assure the [ACID property](https://en.wikipedia.org/wiki/ACID) of MeiliSearch. It also causes some problems. As the queue message is an append-only queue, it is impossible to remove an update from this queue. The updates can be large and can take a long time to index. Sometimes, it would be convenient to abort a message in this queue or empty it. 
+The task queue is convenient because it allows us to serialize tasks (updates/config/dumps) and assure the [ACID property](https://en.wikipedia.org/wiki/ACID) of MeiliSearch. It also causes some problems. As the task queue is an append-only queue, it is impossible to remove a task from this queue. The tasks can be large and can take a long time to index. Sometimes, it would be convenient to cancel a message in this queue or all the next pending tasks on it. 
 
 ### Additional Materials
 
-As explained in the [parent spec](https://github.com/meilisearch/specifications/pull/12), It's quite rare to have this kind of update queue. Elasticsearch or Algolia, who have this kind of update queue, don't give the abort or clear their 'tasks' queues. 
+As explained in the [parent spec](https://github.com/meilisearch/specifications/pull/12), It's quite rare to have this kind of task queue. Elasticsearch or Algolia, who have this kind of task queue, don't give the cancel or clear their 'tasks' queues. 
 
 ### Explanation
 
-Two new routes and a new status (`aborted`) must be added to make this feature possible. 
+Two new routes and a new status (`canceled`) must be added to make this feature possible. 
 
-An aborted update will stay at its place in the queue. So the typical answer of the get all update status route will be: 
+A canceled task will stay at its place in the queue. So the typical answer of the get all task status route will be: 
 
 ```json
 [
-    {
-        "status": "processed",
-        "updateId": 1,
-        ...
-    },
-    {
-        "status": "failed",
-        "updateId": 2,
-        ...
-    },
-    {
-        "status": "processed",
-        "updateId": 3,
-        ...
-    },
-    {
-        "status": "pending",
-        "updateId": 4,
-        ...
-    },
-    {
-        "status": "aborted",
-        "updateId": 5,
-        ...
-    },
-    {
-        "status": "pending",
-        "updateId": 6,
-        ...
-    },
-    ...
+ {
+ "status": "processed",
+ "taskId": 1,
+ ...
+ },
+ {
+ "status": "failed",
+ "taskId": 2,
+ ...
+ },
+ {
+ "status": "processed",
+ "taskId": 3,
+ ...
+ },
+ {
+ "status": "pending",
+ "taskId": 4,
+ ...
+ },
+ {
+ "status": "canceled",
+ "taskId": 5,
+ ...
+ },
+ {
+ "status": "pending",
+ "taskId": 6,
+ ...
+ },
+ ...
 ]
 ```
 
-the update status document will look like:
+the task status document will look like:
 
 ```json
 {
-  "status": "aborted",
-  "updateId": 12,
-  "type": {
-    "name": "DocumentsAddition",
-    "number": 4
-  },
-  "duration": 0,
-  "enqueuedAt": "2019-12-07T21:16:09.623944Z",
-  "processedAt": "2019-12-07T21:16:09.703509Z" // date of abortion
+ "status": "canceled",
+ "taskId": 12,
+ "type": {
+ "name": "DocumentsAddition",
+ "number": 4
+ },
+ "duration": 0,
+ "enqueuedAt": "2019-12-07T21:16:09.623944Z",
+ "processedAt": null,
+ "canceledAt": "2019-12-07T21:16:09.703509Z", // date of cancelation
 }
 ```
 
+Until now, we will consider that every task status documents returned will have all fields. Even empty ones. 
+
+For example:
+- A pending task will look like:
+```json
+{
+ "status": "pending",
+ "taskId": 12,
+ "type": {
+ ...
+ },
+ "duration": null,
+ "enqueuedAt": "2019-12-07T21:16:09.623944Z",
+ "processedAt": null,
+ "canceledAt": null
+}
+```
+
+- A canceled task will look like:
+```json
+{
+ "status": "canceled",
+ "taskId": 12,
+ "type": {
+ ...
+ },
+ "duration": null,
+ "enqueuedAt": "2019-12-07T21:16:09.623944Z",
+ "processedAt": null,
+ "canceledAt": "2019-12-07T21:16:09.703509Z"
+}
+```
+
+- A processed/failed task will look like:
+```json
+{
+ "status": "processed",
+ "taskId": 12,
+ "type": {
+ ...
+ },
+ "duration": 120,
+ "enqueuedAt": "2019-12-07T21:16:09.623944Z",
+ "processedAt": "2019-12-07T21:16:09.703509Z",
+ "canceledAt": null
+}
+```
+
+
 #### HTTP API
 
-**Abort an update:**
+**Cancel a task:**
 
-- Method: DELETE
-- Route: `/indexes/:index_uid/updates/:update_id`
-    - index_uid: The index uid
-    - update_id: The update identifier
+- Method: PUT
+- Route: `/indexes/:index_uid/tasks/:task_id/cancel`
+ - index_uid: The index uid
+ - task_id: The task identifier
 - Status code: 204
 - Response: No Body
 
-**Abort every pending updates:**
+**Cancel every pending task:**
 
-- Method: DELETE
-- Route: `/indexes/:index_uid/updates`
-    - index_uid: The index uid
+- Method: PUT
+- Route: `/indexes/:index_uid/tasks/cancel`
+ - index_uid: The index uid
 - Status code: 204
 - Response: No Body
 
 #### Potential errors
 
-- The given update id does not exist: 
-    - Status code: `404`
-    - Error code: `update_not_found`
-    - Error description: `The requested update can't be retrieved. Either it doesn't exist, or the database was left in an inconsistent state.`
+- The given task id does not exist: 
+ - Status code: `404`
+ - Error code: `task_not_found`
+ - Error description: `The requested task can't be retrieved. Either it doesn't exist, or the database was left in an inconsistent state.`
 
-- The given update id is a processed id: 
-    - Status code: `400`
-    - Error code: `unabortable_update`
-    - Error description: `The requested update id exists but could not be aborted. A processing/processed/failed update cannot be aborted.`
+- The given task id is a processed id: 
+ - Status code: `400`
+ - Error code: `uncancellable_task`
+ - Error description: `The requested task id exists but could not be canceled. A processing/processed/failed task cannot be canceled.`
 
-- Error during the abort process:
-    - Status code: `500`
-    - Error code: `update_abortion_failed`
-    - Error description: `An error occurred during the update abortion process. The requested abortion has not been taken into account.`
+- Error during the cancel process:
+ - Status code: `500`
+ - Error code: `task_cancelion_failed`
+ - Error description: `An error occurred during the task cancellation process. The requested cancellation has not been taken into account.`
 
 
 ### Impact on Documentation
 
-- Add on the guide the mention of the `aborted` status. 
-- Change on the guide where we explain that it's not possible to abort an update. 
+- Add on the guide the mention of the `canceled` status. 
+- Change the guide where we explain that it's not possible to cancel a task. 
 - Add the two methods described in the HTTP API part of the documentation.
 - Add the errors in the errors guide.
 
@@ -132,12 +179,13 @@ the update status document will look like:
 ### Architecture
 ### Implementation Details
 
-⚠️ When an update is aborted, the content itself should be deleted. It will free more disk.
+⚠️ When a task is canceled, the content itself should be deleted. It will free more disk.
 
 ### Corner Cases
 
 ## 3. Future Possibilities
-- Abort an in-process update.
-- Add the option to abort items with a filter based on the `type`.
-- Add an option to abort a range of items based on the `updateID`. 
-- Abort multiple updates with comma-separated values (e.g. `/indexes/movies/updates/12,13,14,15`). 
+- Cancel/Abort an in-process task.
+- Add the option to cancel items with a filter based on the `type`.
+- Add an option to cancel a range of items based on the `taskID`. 
+- Cancel multiple tasks with comma-separated values (e.g. `/indexes/movies/tasks/12,13,14,15`). 
+
