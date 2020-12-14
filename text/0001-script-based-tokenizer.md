@@ -111,7 +111,7 @@ fn highlight_record(record: &mut IndexMap<String, String>, words: &HashSet<Strin
 }
 ```
 
-As we can see, the changes that need to be made are very minimal: this is because efforts have been made to make it's API close to the previous one.
+As we can see, the changes that need to be made are very minimal: this is because efforts have been made to make its API close to the previous one.
 
 ### Impact on documentation
 
