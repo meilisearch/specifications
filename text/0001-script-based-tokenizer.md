@@ -126,7 +126,7 @@ The new version of the tokenizer will replace the current version as a standalon
 
 ### Implementation Details
 
-We want to support different tokenizers based on the language of the text that needs to be indexed. For this, we may need to change the tokenizer we are using while indexing, depending on the language and the script. The Analyzer provides an interface that abstracts this need away from the consumer of the tokens.
+We want to support different tokenizers based on the language of the text that needs to be indexed. For this, we may need to change the tokenizer we are using while indexing, depending on the language and the script, detected by `whatlang`. The Analyzer provides an interface that abstracts this need away from the consumer of the tokens.
 
 #### Pipeline
 
@@ -215,6 +215,15 @@ where
 
 #### Token
 
+The `Token` is is the result of an iteration of the `Analyzer`,
+it wraps a `&str`, a byte slice containing one or several characters, with some informations about:
+- the `kind: TokenKind` defining if the token is a `Word`, a `Separator` or a `StopWord`
+- the `char_index: usize` defining the index of the first character of the `Token` in the whole original text
+- the `byte_start/byte_end: usize` defining the indexes of start and end of the byte slice in the whole original text
+
+:warning: The wrapped byte slice should not be considered as a subset of the original text 
+but as a normalized version of the subset.
+
 ```rust
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum SeparatorKind {
@@ -273,7 +282,7 @@ impl<'a> Token<'a> {
 
 #### Internal Tokenizer trait
 
-The `InternalTokenizer` traits provide a common interface to adapt other tokenizers to the tokenizer. This allows the extensibility of the current tokenizer to other languages.
+The `InternalTokenizer` trait provides a common interface to adapt other tokenizers to the tokenizer. This allows the extensibility of the current tokenizer to other languages.
 
 ```rust
 /// iterator over tokens processed by the specialized tokenizer
