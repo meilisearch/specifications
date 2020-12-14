@@ -236,7 +236,7 @@ pub enum TokenKind {
 }
 ```
 
-The emitted token position are relative to the original text, this information is reliable. The `word` is normalized if need be.
+The emitted token position is relative to the original text, this information is reliable. The `word` is normalized if need be.
 
 ```rust
 #[derive(Debug, Clone, Default)]
