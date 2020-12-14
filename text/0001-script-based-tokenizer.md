@@ -126,7 +126,7 @@ The new version of the tokenizer will replace the current version as a standalon
 
 ### Implementation Details
 
-We want to support different tokenizers based on the language of the text to be indexed. For this we may need to change the tokenizer we are using while indexing, depending on the language and the script. The Analyzer provides an interface that abstract this need away from the consumer of the tokens.
+We want to support different tokenizers based on the language of the text that needs to be indexed. For this, we may need to change the tokenizer we are using while indexing, depending on the language and the script. The Analyzer provides an interface that abstracts this need away from the consumer of the tokens.
 
 #### Pipeline
 
