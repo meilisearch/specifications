@@ -298,8 +298,8 @@ pub trait Tokenizer: Sync + Send {
     fn tokenize<'a>(&self, s: &'a ProcessedText<'a>) -> TokenStream<'a>;
 }
 ```
-- use of jieba for chinese tokenization
-- use of unicode-segmenter for other segmentations
+- use of `jieba` for Chinese tokenization
+- use of `unicode-segmenter` for other segmentations
 
 ### Corner Cases
 
