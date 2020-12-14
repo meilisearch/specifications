@@ -130,11 +130,10 @@ We want to support different tokenizers based on the language of the text that n
 
 #### Pipeline
 
-A pipeline contains all the steps needed to tokenize a specific language or script,
-one or several preprocessors to prepare text before tokenization e.g. traditional chinese translation
-or erasing some characters;
-a tokeninizer to transform the text in an iterator of tokens;
-one or several normalizers to normalize tokens for indexation e.g. deunicode or lowercase.
+A pipeline is a structure that contains all the steps needed to tokenize a specific language or script:
+- One or several preprocessors to prepare text before tokenization e.g. traditional Chinese translation or erasing some characters;
+- A tokenizer to transform the text into an iterator of tokens;
+- One or several normalizers to normalize tokens for indexation e.g. deunicode or lowercase.
 ```rust
 pub struct Pipeline {
     pre_processor: Box<dyn PreProcessor + 'static>,
