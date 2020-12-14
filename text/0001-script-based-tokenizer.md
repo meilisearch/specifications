@@ -274,7 +274,7 @@ impl<'a> Token<'a> {
 
 #### Internal Tokenizer trait
 
-The `InternalTokenizer` traits provides a common interface to adapt other tokenizers to the tokenizer. This allows extensibility of the current tokenizer to other languages.
+The `InternalTokenizer` traits provide a common interface to adapt other tokenizers to the tokenizer. This allows the extensibility of the current tokenizer to other languages.
 
 ```rust
 /// iterator over tokens processed by the specialized tokenizer
