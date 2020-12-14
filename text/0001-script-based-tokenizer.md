@@ -37,7 +37,7 @@ We want to provide our users with an always improved searching experience. For t
 - Sonic uses whatlang to perform the tokenization, it could be interesting to checkout how they do it: https://github.com/valeriansaliou/sonic/tree/master/src/lexer
 	- Sonic uses whatlang to detect the languages, but don't acutally seems to use it to segment the text. It simply uses unicode segmentation, I can't really explain what they actually do with the language information.
 - tantivy advertise good multilingual support: https://github.com/tantivy-search/tantivy/tree/main/src/tokenizer
-	- Tantivy is similar to elastic in the sense that you can setup a custom text analyzer. The difference is that it is only made of `tokenizer` -> `token_filter`. Tantivy also provides a colleciton of tokenizer to choose from. Token are rather simple and do not contain any metadata, except for it's position.
+	- Tantivy is similar to elastic in the sense that you can setup a custom text analyzer. The difference is that it is only made of `tokenizer` -> `token_filter`. Tantivy also provides a collection of tokenizer to choose from. Token are rather simple and do not contain any metadata, except for it's position.
 - How elastic search handle it: https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-tokenizers.html:
 	- Elastic proposed to create custom text analyzer. A text analyzer is a pipelined text processor with the following components: `char_filter` -> `tokenizer` -> `token_filter`. There are multiple diffferent tokenizer that can be chosed, depending on the usecase. This is a bit complicated, but I also think that advanced users should be able to chose the tokenizer they want. (default behaviour is us guessing what's the best tokenizer to use.)
 - Algolia:
