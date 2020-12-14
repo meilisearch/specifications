@@ -303,7 +303,7 @@ pub trait Tokenizer: Sync + Send {
 
 ### Corner Cases
 
-In some languages like Chinese, there can be multiple "words" extracted that are considered to be at the same position in the text. For example 计算所 gives 计算 and 计算所, that are at the same position in the text but don't have the same length, the tokenizer should support that behavior.
+In some languages like Chinese, there can be multiple "words" extracted that are considered to be at the same position in the text. For example, 计算所 gives 计算 and 计算所, that are at the same position in the text but don't have the same length, the tokenizer should support that behavior. See #5.
 > return several token as the same word_position seems to be over-engineering, we may want to have only 1 token by iteration making API simplier
 ## Future possibilities
 
