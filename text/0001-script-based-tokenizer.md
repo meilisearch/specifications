@@ -27,8 +27,8 @@ We want to provide our users with an always improved searching experience. For t
 **lang/script detection:**
 - > **[whatlang](https://github.com/greyblake/whatlang-rs):**
   > whatlang is able to detect script or/and language in a text,
-  > language detection is low but script is acceptable.
-  > note: Sonic also uses whatlang to peform the tokenization, it could be interesting to checkout how they do it.
+  > language detection is low but the script is acceptable.
+  > note: Sonic also uses whatlang to perform the tokenization, it could be interesting to check out how they do it.
 - > **toku (@qdequele):**
   > in a R&D project, @qdequele was able to detect language based on stop word distribution in a text.
   > If, in a latin script, there is lot of French stop words then the text language is probably french.
