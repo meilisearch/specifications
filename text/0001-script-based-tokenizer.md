@@ -307,7 +307,7 @@ In some languages like Chinese, there can be multiple "words" extracted that are
 > return several token as the same word_position seems to be over-engineering, we may want to have only 1 token by iteration making API simplier
 ## Future possibilities
 
-- We should add a way to configure tokenizer forcing a specific language/script
+- We should add a way to configure the tokenizer to enforce a specific language/script
 - We should add a way to configure tokenizer whitelisting/blacklisting separators
 - The tokenizer specified here is based on scripts, we should base it on languages to be able to have default stop-words for each language
 - The chinese tokenizer is a complicated subject. The first implementation will simply adapt jieba's `cut` method. In another [specification](https://github.com/meilisearch/specifications/pull/5), we'll think about improving this, and this will probably require the help of a native mandarin speaker input.
