@@ -1,4 +1,5 @@
 # Specifications
+
 This repository provides a template for creating **feature specifications** for MeiliSearch. A feature specification is a written description of a feature that serves as a basis for development, design, and inter-team synchronization.
 
 ## Process
@@ -9,23 +10,24 @@ The person in charge of the PR (the owner) is the person assigned to the PR. Thi
 
 #### Start
 
-To start a new specification, it is recommended to write the first draft by filling in only the `Summary` and `Motivation` parts. 
+To start a new specification, it is recommended to write the first draft by filling in only the `Summary` and `Motivation` parts.
 
-The name of the spec must follow the pattern: `PR_number-feature-name.md`. For example, if PR number 12 is about facetting, its spec will be named `0012-facetting.md` or `0012-facetted-search.md`. It will be logical that the names of the PRs will not follow each other. This is not a problem. The fact that the name has the number of PR simplifies the fact that there is no synchronization to choose this number. 
+The name of the spec must follow the pattern: `PR_number-feature-name.md`. For example, if PR number 12 is about facetting, its spec will be named `0012-facetting.md` or `0012-facetted-search.md`. It will be logical that the names of the PRs will not follow each other. This is not a problem. The fact that the name has the number of PR simplifies the fact that there is no synchronization to choose this number.
 
 #### Draft PR
 
-Once the file is created with the two parts, `Summary` and `Motivation` filled in. It is time to create a draft PR. The PR should remain in draft until the content is, according to the author, ready for comments. However, outsiders can make some recommendations, but these are more in the spirit of helping rather than suggesting changes. 
+Once the file is created with the two parts, `Summary` and `Motivation` filled in. It is time to create a draft PR. The PR should remain in draft until the content is, according to the author, ready for comments. However, outsiders can make some recommendations, but these are more in the spirit of helping rather than suggesting changes.
 
 #### Open PR
 
-Once the specification is finished in the owner's eyes, he can then switch the PR to open. At that time, it can be commented on, modified, and challenged by these peers. If there is the slightest friction during this process, a discussion will be recommended offline within MeiliSearch. The PR owner will organize this discussion, and at the end of this interview, the owner will clearly describe the report of the meeting in the PR and make any necessary changes.
+Once the specification is finished in the owner's eyes, at least the `Summary` and `Motivation` part must be written, he can then switch the PR to open. At that time, it can be commented on, modified, and challenged by these peers. If there is the slightest friction during this process, a discussion will be recommended offline within MeiliSearch. The PR owner will organize this discussion, and at the end of this interview, the owner will clearly describe the report of the meeting in the PR and make any necessary changes.
 
 #### Merged PR
 
-To validate and merge the PR, it must be validated by at least three people. 
-- One person from the integration team (preferably @curquiza). 
-- One person from the Core team (preferably @Kerollmops). 
+To validate and merge the PR, it must be validated by at least three people.
+
+- One person from the integration team (preferably @curquiza).
+- One person from the Core team (preferably @Kerollmops).
 - One person from the DevRel team (preferably the person in charge of the documentation).
 
 Once it's done, the differents tracking-issues could be created on the [MeiliSearch](https://github.com/meilisearch/meilisearch) repository.
