@@ -1,0 +1,132 @@
+- Title: Facets
+- Start Date:
+- Specification PR:
+- MeiliSearch Issue: 
+
+# Facets
+
+## 1. Feature Description and Interaction
+
+### Summary
+
+This spec is about facets, it's means about how to declare faceted attributes, how they are handle and how to use them during a search.
+
+#### Scopes
+
+- Facets on strings/tags/text and arrays. 
+- How to declare a faceted attribute.
+- How to retrieve facets during the search. How to request them, and what look like the response. 
+- Every parameters/settings that could be used with facets
+- ❌ Not talk about filters appart when is about restricting facets values. 
+- ❌ The facets on numbers will be discussed in a separate spec. 
+
+#### Questions
+
+- One of the biggest decision that we should take is about the `attributesForFacetting`. We should define the naming on the settings part and how to specify that an attribute will be used for faceting, just indexed for a faster filtering, searchable. Also, for performance reason and for correctness, it's preferable to know in advance the type of the attribute. 
+
+### Motivation
+
+It is necessary for many e-commerce sites and other services to have the ability to "categorize" these documents and want to refine the results through these categories. Moreover, in many cases it may be interesting to return the number of documents that respond to the search by category. 
+
+### Additional Materials
+### Explanation
+
+The first thing to understand is that even though the word facet is often used in filter documentation, the two functionalized ones actually have absolutely no relationship.  So I will start by explaining the scope of each one, starting with facet, because it is on them that there is the greatest confusion of language. However it is almost mandatory to use filters when using facets, the reciprocal is not true.
+
+In order to have a simple understanding of things I will use during the whole example simple data that can come from an e-commerce site. Here is what the json of a document will look like.
+
+```json
+{
+	"skuId": 1,
+	"productUid": "A4372KF73",
+	"name": "Shoes xxx",
+	"brand": "Addidas",
+	"color": ["brown", "black"],
+	"size": 45,
+	"price": 45.50,
+	"category": ["man", "closes", "shoe"],
+	"rating": 4.5,
+	"inStock": true
+}
+```
+
+#### Example of faceted search
+
+- Amazon use facets but don't show the number of element per facets.
+![Amazon](https://res.cloudinary.com/meilisearch/image/upload/v1608109877/Specs/Facets/Amazon.png)
+
+- Zappos use the facetted search with the number of element per facets.
+![Zappos](https://res.cloudinary.com/meilisearch/image/upload/v1608109877/Specs/Facets/zappos.png)
+
+#### Use Cases
+
+1. In the most common use case it's used to categorise documents and allow to filter on multiples categories. 
+2. A most advanced usage of the first one is by getting also the exact number of documents that match per category. It could be used by two different way. Imagine you have a category/facet on a shoe size, if a user choose 45, two behaviour could be asked. 
+	
+	2.1 The other size will not be returned neither on the hits result and the facets results.
+	
+	2.2 The other size will not be returned on the hits but will be on the facets results. Like that you cloud propose a way to said "If you also choose 44.5 you will have x more results"
+	
+3. It's also used in many solution to speedup the filters. 
+
+#### Configure attributes for Faceting
+
+- Multiples typed indexes: 
+	- tagIndex/textIndex/wordIndex/labelIndex => tagAttributes/textAttributes/wordAttributes/labelAttributes
+	- numericIndex => numericAttributes
+
+- Declare attributes for Faceting
+
+The settings `attributesForFaceting` is really used to declare witch attributes will be used for the faceting.
+
+E.g. 
+```json
+{
+	"attributesForFacetting": [
+		"brand",
+		"color",
+		"size",
+		"price",
+		"category",
+		"rating"
+	]
+}
+```
+
+- Declare facets that can be searched
+- Declare facets that can be prefixed
+
+#### Retrieving facets
+
+- Request for facets
+
+- Restrict facets
+
+- Facet responses
+
+
+#### Facet on arrays
+
+- Contains/do not contains
+
+#### Negation and escape
+
+#### Keep facets count on disjunctive filters
+
+#### Settings
+
+- Numbers of values per facets 
+- Facet after distinct
+- Sort facets response (by count/alphabetical)
+
+#### 
+
+### Impact on Documentation
+
+## 2. Technical Specifications
+
+### Architecture
+### Implementation Details
+### Corner Cases
+
+## 3. Future Possibilities
