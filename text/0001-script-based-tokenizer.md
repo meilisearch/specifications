@@ -63,7 +63,7 @@ assert_eq!("\"", analyzed.next().unwrap().text());
 assert_eq!("brown", analyzed.next().unwrap().text());
 ```
 
-The call to the tokenize method allows the reuse of the same `Tokenizer` instance, and keep it's configuration state and allocations.
+The call to the tokenize method allows the reuse of the same `Tokenizer` instance, and keep its configuration state and allocations.
 
 Below are examples of the integration of the new tokenizer in existing code:
 
