@@ -115,8 +115,8 @@ As we can see, the changes that need to be made are very minimal: this is becaus
 
 ### Impact on documentation
 
-This feature should not impact the meilisearch user documentation,
-in future versions we will probably provide a way to configure tokenizer and this will be discussed in a new specification.
+This feature should not impact meilisearch users' documentation. 
+In future versions, we will probably provide a way to configure tokenizer and this will be discussed in a new specification.
 
 ## Technical Specifications
 
