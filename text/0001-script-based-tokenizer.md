@@ -124,6 +124,7 @@ In future versions, we will probably provide a way to configure tokenizer and th
 
 The new version of the tokenizer will replace the current version as a standalone library.
 
+![Tokenizer](https://user-images.githubusercontent.com/6482087/102896344-8560d200-4466-11eb-8cfe-b4ae8741093b.jpg)
 ### Implementation Details
 
 We want to support different tokenizers based on the language of the text that needs to be indexed. For this, we may need to change the tokenizer we are using while indexing, depending on the language and the script, detected by `whatlang`. The Analyzer provides an interface that abstracts this need away from the consumer of the tokens.
