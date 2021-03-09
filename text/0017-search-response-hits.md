@@ -45,4 +45,7 @@ related issues: meilisearch/transplant#75
 
 ## 3. Future Possibilities
 
-// SUGGESTIONS WELCOME
+- Remove `_formatedHits` and apply formating directly on first-level fields.
+- Keep like it is
+- Rename fields
+- Remove `_matchesInfo` or rename it as we don't think anyone use it, or knows about it.
