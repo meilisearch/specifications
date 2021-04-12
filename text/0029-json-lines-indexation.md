@@ -1,7 +1,7 @@
 - Title: Json Lines Indexation
 - Start Date: 2021-04-12
-- Specification PR: TBD
-- MeiliSearch Issues: [#128](https://github.com/meilisearch/transplant/issues/128),[#1332](https://github.com/meilisearch/MeiliSearch/issues/1332)
+- Specification PR: [PR-#29](https://github.com/meilisearch/specifications/pull/29)
+- MeiliSearch Issues: TBD
 
 ## Feature Description and Interaction
 
@@ -13,7 +13,7 @@ The initiation step of document indexing is to send some file matching a format 
 
 We want to provide our users with an always improved usage experience. Currently, the engine only accepts JSON format as a data source. We want to give users the possibility of another simple file format to use. Thus, give them more versatility at the data source choices for the indexation step.
 
-Writing performance is also considered as a motivation since JSON Lines parsing is less CPU and memory intensive than parsing JSON because every new lines represent a separate entry, making the JSON Lines file streamable. Thus, more suited for indexing a consequent data set.
+Writing performance is also considered as a motivation since JSON Lines file parsing is less CPU and memory intensive than parsing standard JSON because every new lines represent a separate entry, making the JSON Lines file streamable. Thus, more suited for indexing a consequent data set.
 
 ### Explanation
 ### Impact on documentation
