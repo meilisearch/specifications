@@ -1,7 +1,7 @@
 - Title: Csv Indexation
 - Start Date: 2021-04-9
-- Specification PR: TODO
-- Meilisearch Issue: [#128](https://github.com/meilisearch/transplant/issues/128),[#1332](https://github.com/meilisearch/MeiliSearch/issues/1332)
+- Specification PR: [PR-#28](https://github.com/meilisearch/specifications/pull/28)
+- MeiliSearch Issues: [#128](https://github.com/meilisearch/transplant/issues/128),[#1332](https://github.com/meilisearch/MeiliSearch/issues/1332)
 
 ## Feature Description and Interaction
 
