@@ -37,8 +37,8 @@ While there's [RFC 4180](https://tools.ietf.org/html/rfc4180) as a try to add a 
 - Each of the following lines will represent a document for MeiliSearch.
 - Each value should be enclosed in double quotes tags to handle comma character presence inside.
 - Using double-quotes to enclose fields, then a double-quote appearing inside a field must be escaped by preceding it with another double quote as mentioned in [RFC 4180](https://tools.ietf.org/html/rfc4180).
-- Float value should be written with a `.` character, like `3.14`
-- CSV text should be encoded in UTF8
+- Float value should be written with a `.` character, like `3.14`.
+- CSV text should be encoded in UTF8.
 - The format can't handle array cell values. We are providing `nd-json` format to deal with theses types of attribute in a easier way.
 
 ##### Example with a comma inside a cell
@@ -49,7 +49,7 @@ Given the csv payload
 "1","t-shirt","4.99","red","Thus, you will rock at summer time."
 ```
 the search result should be displayed as 
-```json=
+```json
 {
   "hits": [
     {
@@ -72,7 +72,7 @@ Given the csv payload
 "1","t-shirt","4.99","red","Hey, you will ""rock"" at summer time."
 ```
 the search result should be displayed as
-```json=
+```json
 {
   "hits": [
     {
@@ -95,11 +95,11 @@ the search result should be displayed as
  
 #### Add or Replace Documents [📎](https://docs.meilisearch.com/reference/api/documents.html#add-or-replace-documents)
 
-```curl=
+```curl
 curl \
   -X POST 'http://localhost:7700/indexes/movies/documents' \
   -H 'Content-Type: text/csv' \
-  --data data.csv
+  --data-binary data.csv
 ```
 > Response code: 202 Accepted
 
@@ -112,7 +112,7 @@ curl \
 
 ### Add or Update Documents [📎](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents)
 
-```curl=
+```curl
 curl \
   -X PUT 'http://localhost:7700/indexes/movies/documents' \
   -H 'Content-Type: text/csv' \
