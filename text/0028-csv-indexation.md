@@ -107,7 +107,7 @@ curl \
 
 > - Sending a different payload than the `Content-Type` header should return a `415 unsupported_media_type` error.
 > - Too large payload according to the limit should return a `413 payload_too_large` error 
-> - Wrong file encoding should return should return a `420 unprocessable_entity` error
+> - Wrong file encoding should return a `420 unprocessable_entity` error
 > - Invalid CSV data should return a `420 unprocessable_entity` error
 
 ### Add or Update Documents [📎](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents)
@@ -124,7 +124,7 @@ curl \
 
 > - Sending a different payload than the `Content-Type` header should return a `415 unsupported_media_type` error.
 > - Too large payload according to the limit should return a `413 payload_too_large` error 
-> - Wrong file encoding should return should return a `420 unprocessable_entity` error
+> - Wrong file encoding should return a `420 unprocessable_entity` error
 > - Invalid CSV data should return a `420 unprocessable_entity` error
 
 ### V. Impact on documentation
