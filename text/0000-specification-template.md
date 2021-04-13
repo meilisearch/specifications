@@ -1,49 +1,22 @@
 - Title:
 - Start Date:
 - Specification PR:
-- Parent specification: 
-- MeiliSearch Issue: 
+- MeiliSearch Issues: 
 
-# Title
+# 1. Functional Specification
 
-## 1. Feature Description and Interaction
+## I. Summary
+## II. Motivation
+## III. Additional Materials
+## IV. Explanation
+## V. Impact on Documentation
+## VI. Impact on SDKs
 
-### Summary
+# 2. Technical Specifications
 
-#### TL;DR
-#### Scopes
-#### Questions
+## I. Architecture
+## II. Implementation Details
+## III. Issues Summary
+## IV. Corner Cases
 
-### Motivation
-### Additional Materials
-### Explanation
-
-#### HTTP Calls
-
-**Method Name:**
-- Method: GET/POST/PUT/DELETE
-- Route: `/indexes/:index_uid/xx`
-     - index_uid: The index unique identifier
-- Status code: 200/201/204
-- Response: 
-```json
-{
-}
-```
-
-#### Errors
-
-- Error short description: 
-     - Status code: `404`
-     - Error code: `‌`
-     - Error description: `‌`
-
-### Impact on Documentation
-
-## 2. Technical Specifications
-
-### Architecture
-### Implementation Details
-### Corner Cases
-
-## 3. Future Possibilities
+# 3. Future Possibilities

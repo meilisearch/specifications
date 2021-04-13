@@ -2,7 +2,7 @@
 
 This repository provides a template for creating **feature specifications** for MeiliSearch. A feature specification is a written description of a feature that serves as a basis for development, design, and inter-team synchronization. 
 
-A **Merged specification** represents a MeiliSearch feature implemented or ready to be. Specifications listed into the main branch act as a `source of truth`.
+A **Merged specification** represents a MeiliSearch feature that is implemented or ready to be.
 
 ---
 
@@ -60,7 +60,7 @@ In this precise case, a new PR is created and should follow the specification wo
 
 ---
 
-## Specification Description
+## Specification Description and Interaction
 
 MeiliSearch's feature specifications are made up of three sections, described below.
 
@@ -102,9 +102,15 @@ This section serves as a user-level guide and should resemble official documenta
 
 If the feature requires additions or updates to the documentation, they should be noted here. It's the role of the documentation team to ensure this section of the feature specification is accurate.
 
+#### VI. Impact on SDKs
+
+If the feature requires additions or updates to the SDks, they should be noted here. It's the role of the integration team to ensure this section of the feature specification is accurate.
+
 ### 2. Technical Specifications
 
-This section of the feature specification document has a much narrower audience: the developer(s) that will implement the feature. Its goal is to discuss and clarify how the feature will be developed and implemented. It has three subsections.
+This section of the feature specification document has a much narrower audience: the developer(s) that will implement the feature. Its goal is to discuss and clarify how the feature will be developed and implemented. It has four subsections.
+
+Architecture and Implementation Details parts should be considered as critical when the specification is owned by someone outside MeiliSearch teams. Internal technical teams may use this part to keep track of technical brainstorms, related proto code or basecode examples.
 
 #### I. Architecture
 
@@ -114,7 +120,11 @@ This section presents how the new feature will fit into the existing architectur
 
 This section is for precise, practical aspects of implementation, e.g. interfaces, potential code problems, or specific algorithmic choices.
 
-#### III. Corner Cases
+#### III. Issues Summary
+
+This section is for listing any related issues that need to be done to fully implement this specification.
+
+#### IV. Corner Cases
 
 Take note of any potential problem areas, undefined behavior, or remaining unanswered questions about behavior here.
 
