@@ -177,7 +177,7 @@ Here is the summary of all the breaking changes (that are detailed in the paragr
 - The `facetFilters` parameter during the search is removed. Only `filters` can be used.
 - The users need to set the attributes to `attributesForFaceting` to use the filters during the search via the `filters` parameters.
 - The users can now pass an attribute containing numbers (float or integer) in `attributesForFaceting`. It means they can use `filters` and `facetsDistribution` on this numeric field.
-- The `filters` parameter can accept both syntax: string (with `OR`/`AND`) and array.
+- The `filters` parameter can accept both syntax: string (with `OR`/`AND`/`NOT`) and array.
 - The `:` operator does not exist anymore (was previously present in `facetFilters` in v0.20.0) and is replaced by `=`.
 - The `facetsDistribution` is now applied after the `filters` parameter. This point is currently not documented, not sure this is useful to add it to the docs.
 - All the integer in the user documents are converted into float. So integers with high values lose precision. However, integers from −2^53 to 2^53 (−9007199254740992 to 9007199254740992) can be exactly represented, which is enough in 99% of cases. Not sure this is important to documented it either.
