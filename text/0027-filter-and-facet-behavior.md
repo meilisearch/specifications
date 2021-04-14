@@ -210,7 +210,7 @@ Using `=` or `!=` operator on `price` attribute will lead the engine to query th
 
 We have a database for the facets, the keys are prefixed by the field_id (u8), a level (u8) and, the facet value (f64). The facet values don't have a level when the type is a string. The data stored under those keys is the document ids that are faceted under those facets values.
 
-The type of the facet (i.e. i64, f64 or string) is stored in another data structure and this is by using it that we know how to read the facet value. If the facet type is a number we are able to use more operators like greater than or lower than (e.g. <, <=, >, >=, =, !=).
+The type of the facet (i.e. f64 or string) is stored in another data structure and this is by using it that we know how to read the facet value. If the facet type is a number we are able to use more operators like greater than or lower than (e.g. <, <=, >, >=, =, !=).
 
 ##### Indexing phase
 
