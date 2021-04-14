@@ -70,7 +70,7 @@ ex: `price > 19` does not return `"price": "20"` but returns `"price": 20` -> no
 
 Two syntaxes will be accepted for the `filters` parameter during the search:
 
-- the string syntax with the `AND`/`OR` operators
+- the string syntax with the `AND`/`OR`/`NOT` operators combined with parentheses
 ex:
 ```json
 {
