@@ -4,23 +4,23 @@
 
 # Facet and Filter Behavior
 
-## 1. Feature Description and Interaction
+## 1. Functional Specification
 
-### Summary
+### I. Summary
 
 Contrary to MeiliSearch v0.20.0, in the search engine that will be released in the v0.21.0, the users need to declare in `attributesForFaceting` the attributes on which they want to apply the filters.
 
-Why? Under the hood and during the indexation, the core engine creates structures of data that improve the performances drastically during a search with filters.
+Why? Under the hood and during indexing phase, the core engine creates structures of data that improve the performances drastically during a search with filters.
 
-### Motivation
+### II. Motivation
 
 Because the users need to set the attributes to `attributesForFaceting` no matter what they are using (`filters` or `facetFilters`) during the search, we need to re-define the usage of the filters/facets and stay as ISO as possible with the MeiliSearch v0.20.0.
 
-### Additional Materials
+### III. Additional Materials
 
 N/A
 
-### Explanation
+### IV. Explanation
 
 #### Remove `facetFilters`, keep `filters`
 
@@ -182,24 +182,49 @@ Here is the summary of all the breaking changes (that are detailed in the paragr
 - The `facetsDistribution` is now applied after the `filters` parameter. This point is currently not documented, not sure this is useful to add it to the docs.
 - All the integer in the user documents are converted into float. So integers with high values lose precision. However, integers from −2^53 to 2^53 (−9007199254740992 to 9007199254740992) can be exactly represented, which is enough in 99% of cases. Not sure this is important to documented it either.
 
-### Impact on Documentation
+### V. Impact on Documentation
 
 See the previous part.
 
-## 2. Technical Specifications
+The documentation should present a complex filter query with multiple levels to precise that MeiliSearch is not limited to deepness level.
 
-### Architecture
+Example: 
 
-Internal MeiliSearch engine uses an index data structure for each type encountered in an attribute. Doing this eliminate the need for the user to strictly type the attribute and permits to deal with loosely typed document at indexation. Thus, facilitating the developper experience.
+```json
+{
+    "filters": "((genres = Comedy OR genres = Romance) AND (director = 'Mati Diop' OR director = 'Wong Kar-wai')) OR genres = 'Fantasy'"
+}
+```
 
-As for example, let’s imagine that we want to index two documents with a price attribute. One containing `"price": "20"` and the second `"price": 20` as value. The two attribute values will be stored in two different indexes. At search time, the engine will be capable to query the right index independently of the parameter type in the `filters` query.
+## 2. Technical Aspects
 
-### Implementation Details
+### I. Abstract
 
-### Corner Cases
+Internal MeiliSearch engine uses an index data structure for each type encountered in an attribute. Doing this eliminate the need for the user to strictly type the attribute and permits to deal with loosely typed document at indexing time. Thus, facilitating the developper experience.
 
+As for example, let’s imagine that we want to index two documents with a price attribute. One containing `"price": "20"` and the second `"price": 20` as value. The two attribute values will be stored in two different indexes.
+
+Using `=` or `!=` operator on `price` attribute will lead the engine to query the two indexes and get matching document ids with an `UNION` operation. So it will return documents matching `"20"` or `20` as values for the `price` attribute.
+
+#### Implementation Details
+
+We have a database for the facets, the keys are prefixed by the field_id (u8), a level (u8) and, the facet value (i64, f64). The facet values don't have a level when those are strings. The data stored under those keys is the document ids that are faceted under those facets values.
+
+The type of the facet (i.e. i64, f64 or string) is stored in another data structure and this is by using it that we know how to read the facet value. If the facet type is a number we are able to use more operators like greater than or lower than (e.g. <, <=, >, >=, =, !=).
+
+##### Indexing phase
+
+When documents come in and fields are declared as facets, we start storing the facet values in the previously described database, the key becomes the facet value (as a globally ordered byte slice) and, the entry data now contains the document id that contains this facet value. Note that if the facet value is a number we store it like [field id][level][left facet value][right facet value] where the level is 0 and if it is a string then we don't store the level.
+
+Once the facet values that are numbers are stored we got a list of facet values prefixed with the field id and the base level (i.e. 0). We use this base level to generate more levels, each level contains groups of 4 groups of the level below, so level 1 aggregates the ids of the documents of each group of 4 facet values of level 0. The left and right facet values are the inclusive bounds of the group, the level 0 group have equal left and right bounds.
+
+##### Querying phase
+
+Those levels are used to reduce the number of entries to run through, reducing the time it takes to answer too wide range filter queries, like duration > 0 where 80% of the entries will match. We go through each of the levels going from the higher one, the one which describes the biggest amount facet values and, we go deeper in the levels to find a better fitting bound.
+
+### II. Issues Summary
 TBD
 
 ## 3. Future Possibilities
 
-TBD
+- Provide facet statistics like `min` `max` `sum` `average`
