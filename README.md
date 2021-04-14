@@ -28,7 +28,7 @@ Once the file is created with the two parts, `Summary` and `Motivation` filled i
 
 ### Open State
 
-Once the specification is ready for comments in the owner's eyes, he can then switch the PR to open. At that time, it can be commented on, modified, challenged by these peers. If there is the slightest friction during this process, a discussion will be recommended offline within MeiliSearch. The PR owner will organize this discussion, and at the end of this interview, the owner will make any necessary changes.
+Once the specification is ready for comments in the owner's eyes, the owner can then switch the PR to open. At that time, it can be commented on, modified, challenged by these peers. If there is the slightest friction during this process, a discussion will be recommended offline within MeiliSearch. The PR owner will organize this discussion, and at the end of this interview, the owner will make any necessary changes.
 
 At this step, the PR should be primarily tagged as `In Progress`.
 
@@ -132,4 +132,3 @@ In order to keep track of technical changes concerning the specification, it req
 ### 3. Future Possibilities
 
 This last section includes any related topics or features which are not currently in MeiliSearch and will not be added at this time, but which may affect the proposed feature in the future.
-
