@@ -1,0 +1,82 @@
+- Title: ASC / DESC Criterion
+- Start Date: 2021-04-14
+- Specification PR: []()
+- MeiliSearch Issues: [](),[]()
+
+## 1. Feature Description and Interaction
+
+### I. Summary
+
+Ranking rules are built-in rules that ensure relevancy in search results. Ranking rules are applied in a default order which can be changed in the settings. You can add or remove rules and change their order of importance.
+
+MeiliSearch allows you to create custom rules within the default rules. Custom rules are dedicated to sorting in ascending or descending order on an attribute.
+
+### II. Motivation
+
+We want to provide our users with an always improved usage experience. Relevance is essential in a search engine since it is what allows the engine to fulfill its objective. Delivering results that match user demands by allowing modification of the relevance is critical.
+
+The new search engine called Milli no longer processes this criterion of relevance as the current MeilliSearch. This specification makes it possible to state that Milli will be identical to the ISO version (v0.20) in the usage of API interfaces but also in the expected search results.
+
+### III. Additional Materials
+
+#### Algolia
+
+Algolia offers 8 classification rules to achieve relevance.
+
+- Number of typos
+- Geolocation
+- Number of words in the query matching in the result
+- Filters
+- Distance between words
+- Best matching attribute in the record
+- Number of words matching exactly (without typo)
+- Custom ranking
+
+Note that Algolia don't recommend to change the order of the default criteria because of the fact that it works for the vast majority of their use cases. Like MeiliSearch (v0.20), document that don’t have an attribute that’s in the customRanking list are pushed to the bottom of the search result.
+
+### IV.Explanation
+
+#### Current behavior of v0.20
+
+It returns documents that don't have the attribute set on a custom ASC / DESC rule as a search result at the bottom. Documents are not excluded and can be returned in the search result.
+
+> In the case of several custom ASC / DESC rules configured within the rankings rules, the sorting behavior is difficult to explain and can appear undefined when the documents do not necessarily contain the attributes which are set on this rule.
+
+This criterion can only be used with an attribute containing numbers. 
+
+#### Current behavior of Milli
+
+If the attribute on which the ASC / DESC criterion is configured does not exist in all the documents of the index concerned by the search, Milli will discard them and never return them. This behavior is not necessarily what a end user would expect when searching.
+
+As v0.20, Milli can’t handle ASC / DESC criterion on string. Only numbers allow its use.
+
+#### Decisions
+
+We thought about allowing the use of the ASC / DESC criterion in the ranking rules settings as long as it would also be declared in the attributesForFaceting.
+
+✅ We have decided that Milli will act exactly as MeiliSearch. Since the rankings rules and the attributes for faceting do not stictly meet the same needs. Moreover this could confuse the users configuring the search engine. The criterion configuration will remain on the `rankingRrules` field of the [global settings endpoint](https://docs.meilisearch.com/reference/api/settings.html#get-settings) and in the 
+[specific ranking rules setting endpoint](https://docs.meilisearch.com/reference/api/ranking_rules.html).
+
+We wondered if Milli's current behavior, which is to discard documents from search results that do not have the attribute configured as ascending and descending criteria might make sense for the purpose of a user performing a search.
+
+✅ We have decided that Milli will act exactly as MeiliSearch concerning search results. The ASC / DESC criterion will no longer discard documents which do not have the attribute.
+
+### V. Impact on documentation
+
+- It should inform users about that having custom ASC / DESC criteria on attributes that are not always defined for each document may return results that are not necessarily relevant in the end user's eye.
+- To be able to use this criterion on a date format, it must indicate that the timestamp is to be preferred since the type string is not supported.
+
+### VI. Impact on SDKs
+N/A
+
+## 2. Technical Aspects
+
+### I. Abstract
+TBD
+
+### II. Issues Summary
+TBD
+
+## 3. Future possibilities
+
+- ASC / DESC criterion on string value.
