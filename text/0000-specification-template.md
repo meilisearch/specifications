@@ -12,11 +12,9 @@
 ## V. Impact on Documentation
 ## VI. Impact on SDKs
 
-# 2. Technical Specifications
+# 2. Technical Aspects
 
-## I. Architecture
-## II. Implementation Details
-## III. Issues Summary
-## IV. Corner Cases
+## I. Abstract
+## II. Issues Summary
 
 # 3. Future Possibilities

@@ -28,7 +28,7 @@ Once the file is created with the two parts, `Summary` and `Motivation` filled i
 
 ### Open State
 
-Once the specification is finished in the owner's eyes, he can then switch the PR to open. At that time, it can be commented on, modified, and challenged by these peers. If there is the slightest friction during this process, a discussion will be recommended offline within MeiliSearch. The PR owner will organize this discussion, and at the end of this interview, the owner will clearly describe the report of the meeting in the PR and make any necessary changes.
+Once the specification is ready for comments in the owner's eyes, he can then switch the PR to open. At that time, it can be commented on, modified, challenged by these peers. If there is the slightest friction during this process, a discussion will be recommended offline within MeiliSearch. The PR owner will organize this discussion, and at the end of this interview, the owner will make any necessary changes.
 
 At this step, the PR should be primarily tagged as `In Progress`.
 
@@ -44,7 +44,7 @@ To validate and merge the PR, it must be validated by at least three people.
 - One person from the Core team (preferably @Kerollmops).
 - One person from the DevRel team (preferably the person in charge of the documentation).
 
-Note that if the specification does not satisfy the merging conditions, it will go back to the previous step above (***Open State***) since it's lacking some pieces of information.
+Note that if the specification does not satisfy the merging conditions, it will go back to the previous step above (***Open State***) since it's lacking some pieces of information in the reviewer's eyes.
 
 ### Merge State
 
@@ -106,27 +106,28 @@ If the feature requires additions or updates to the documentation, they should b
 
 If the feature requires additions or updates to the SDks, they should be noted here. It's the role of the integration team to ensure this section of the feature specification is accurate.
 
-### 2. Technical Specifications
+### 2. Technical Aspects
 
-This section of the feature specification document has a much narrower audience: the developer(s) that will implement the feature. Its goal is to discuss and clarify how the feature will be developed and implemented. It has four subsections.
+This section of the feature specification document has a much narrower audience: the developer(s) that will implement the feature. Its goal is to discuss and clarify how the feature will be developed and implemented when its not a trivial concern.
 
-Architecture and Implementation Details parts should be considered as critical when the specification is owned by someone outside MeiliSearch teams. Internal technical teams may use this part to keep track of technical brainstorms, related proto code or basecode examples.
+> Internal technical teams may use this part to keep track of technical brainstorms, related proto code or basecode examples to clear the technical details of the specification.
 
-#### I. Architecture
+At this time, the specification process is not enforcing a way to describe technical aspects. It can change in the future if we think that it is needed to ease the workflow of a specification creation.
 
-This section presents how the new feature will fit into the existing architecture and codebase on an abstract level. It should also define a scope where the feature exists.
+When writing technical details, we recommend describing practical aspects of implementation, e.g. interfaces, potential code problems, or specific algorithmic choices.
 
-#### II. Implementation Details
+#### I. Abstract
 
-This section is for precise, practical aspects of implementation, e.g. interfaces, potential code problems, or specific algorithmic choices.
+This section is used to present technical solution in a few words on an abstract level.
 
-#### III. Issues Summary
+#### II. Issues Summary
 
-This section is for listing any related issues that need to be done to fully implement this specification.
+This section is edited by intertal teams for listing any related issues that need to be done to fully implement this specification.
 
-#### IV. Corner Cases
-
-Take note of any potential problem areas, undefined behavior, or remaining unanswered questions about behavior here.
+In order to keep track of technical changes concerning the specification, it requires that: 
+- `Spec Related` label has to be added to the issues.
+- Issues have to mention the spec in their description.
+- Issues must absolutely link to the PRs that resolve the spec, so that we can easily track them.
 
 ### 3. Future Possibilities
 
