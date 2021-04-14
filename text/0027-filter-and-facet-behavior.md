@@ -223,7 +223,14 @@ Once the facet values that are numbers are stored we got a list of facet values 
 Those levels are used to reduce the number of entries to run through, reducing the time it takes to answer too wide range filter queries, like duration > 0 where 80% of the entries will match. We go through each of the levels going from the higher one, the one which describes the biggest amount facet values and, we go deeper in the levels to find a better fitting bound.
 
 ### II. Issues Summary
-TBD
+
+In Milli:
+- https://github.com/meilisearch/milli/issues/152: the main issue gathering all the internal changes.
+
+In Transplant:
+- https://github.com/meilisearch/transplant/issues/140: expose both syntaxes for `filters`.
+- https://github.com/meilisearch/transplant/issues/70: the push of `attributesForFaceting`. The behavior does not change between v0.20.0 and v0.21.0 but it still needs changes in Transplant.
+- https://github.com/meilisearch/transplant/issues/81: only keeping `filters` and removing `facetFilters`.
 
 ## 3. Future Possibilities
 
