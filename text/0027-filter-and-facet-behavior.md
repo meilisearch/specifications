@@ -220,7 +220,7 @@ Once the facet values that are numbers are stored we got a list of facet values 
 
 ##### Querying phase
 
-Those levels are used to reduce the number of entries to run through, reducing the time it takes to answer too wide range filter queries, like duration > 0 where 80% of the entries will match. We go through each of the levels going from the higher one, the one which describes the biggest amount facet values and, we go deeper in the levels to find a better fitting bound.
+Those levels are used to reduce the number of entries to run through, reducing the time it takes to answer too wide range filter queries, like duration > 0 where 80% of the entries will match. We go through each of the levels going from the higher one, the one which describes the biggest amount of facet values and, we go deeper in the levels to find better fitting bounds.
 
 ### II. Issues Summary
 
