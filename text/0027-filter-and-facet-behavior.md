@@ -55,9 +55,9 @@ becomes
 
 We decided to replace the `:` operator in favor of `=`.
 
-#### Operator behavior during the search
+#### Operator behavior during search
 
-During the search, the operators should behave as they already do in MeiliSearch v0.20.0.
+During search, logical operators should behave as they already do in MeiliSearch v0.20.0.
 
 Here is a quick reminder of the v0.20.0 operator behavior:
 
