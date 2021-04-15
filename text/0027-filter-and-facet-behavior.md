@@ -24,7 +24,7 @@ N/A
 
 #### Remove `facetFilters`, keep `filters`
 
-The usage of `facetsFilter` is not needed anymore since everything is doable by only using the `filters` parameter.
+The usage of `facetFilters` is not needed anymore since everything is doable by only using the `filters` parameter.
 
 ```json
 // Settings
