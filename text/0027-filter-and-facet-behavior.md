@@ -61,7 +61,7 @@ During the search, the operators should behave as they already do in MeiliSearch
 
 Here is a quick reminder of the v0.20.0 operator behavior:
 
-- `<`, `=<`, `>`, `=>` => only operates on numbers. MeiliSearch returns only the documents with numbers for this field.
+- `<`, `=<`, `>`, `=>` => only operate on number values. MeiliSearch returns only documents that have numbers in this field.
 ex: `price > 19` does not return `"price": "20"` but returns `"price": 20` -> no field value conversions is done.
 - `=`, `!=`/`NOT` => string and number operation. MeiliSearch returns the documents with numbers, string (and array of strings) for this field.
 - cannot filter on `null`, objects, arrays of "undefined elements" (ex: array of `null`)
