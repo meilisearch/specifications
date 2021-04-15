@@ -8,9 +8,7 @@
 
 ### I. Summary
 
-Contrary to MeiliSearch v0.20.0, in the search engine that will be released in the v0.21.0, the users need to declare in `attributesForFaceting` the attributes on which they want to apply the filters.
-
-Why? Under the hood and during indexing phase, the core engine creates structures of data that improve the performances drastically during a search with filters.
+With v0.21.0, we are trying to erase the distinction between facets and filters. facetFilters is removed as a query parameter. Instead, all filters are performed with the filters parameter. In addition, any attribute you wish to use with filters must first be added to attributesForFaceting (rename pending).
 
 ### II. Motivation
 
