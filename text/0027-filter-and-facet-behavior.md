@@ -168,7 +168,7 @@ In MeiliSeach v0.20.0, with the following documents
 
 ##### Final decision for v0.21.0
 
-MeiliSearch v0.21.0 will behave as the `facetFilters` already behave in MeiliSearch v0.20.0: the `facetsDistribution` will be applied after the filters.
+In MeiliSearch v0.21.0, `facetsDistribution` will behave with `filters` the same way it currently does with `facetFilters`: the `facetsDistribution` will be applied after the filters.
 
 #### TLDR; all the breaking changes
 
