@@ -1,0 +1,134 @@
+- Title: NDJSON Support
+- Start Date: 2021-04-12
+- Specification PR: [PR-#29](https://github.com/meilisearch/specifications/pull/29)
+- MeiliSearch Issue Track: TBD
+
+# Indexing NDJSON format
+
+## 1. Feature Description and Interaction
+
+### I. Summary
+
+The initiation step of document indexing is to send some file matching a format to be parsed and tokenized in order to give search results to end-users. An [NDJSON](http://ndjson.org/) file is easier to use than a CSV file because it propose a convenient format for storing structured data.
+
+### II. Motivation
+
+Currently, the engine only accepts JSON format as a data source. We want to give users the possibility of another simple file format to use. Thus, give them more versatility at the data source choices for the indexation step.
+
+Writing performance is also considered as a motivation since JSON Lines file parsing is less CPU and memory intensive than parsing standard JSON because every new lines represent separate entries, making the NDJSON file streamable. Thus, more suited for indexing a consequent data set.
+
+While we give the ability to Meilisearch to ingest CSV files for indexing in this [specification](https://github.com/meilisearch/specifications/pull/27), we are aware of the limitations of CSV so we also want to provide a format that is easy to validate. Handling the validity of a CSV can be frustrating and difficult. Only strings can be managed within a CSV. In addition, there is no official specification except [RFC 4180](https://tools.ietf.org/html/rfc4180) which is not sufficient for all data scheme.
+
+Representing nested structures in JSON files is easy and convenient.
+
+### III. Additional Materials
+
+TBD
+
+### IV. Explanation
+
+Newline-delimited JSON (`ndjson`), line-delimited JSON (`ldjson`), JSON lines (`jsonl`) are three terms expressing the same formats primarily intended for JSON streaming.
+
+As of now, we will use `ndjson` in the next parts to refer to a file that represents JSON entries separated by a new line character.
+
+- Each entries will represent a document for MeiliSearch.
+- Each entries should be a valid JSON object.
+- The file should be encoded in UTF-8.
+
+#### Example of a valid NJSON
+
+Given the NDJSON payload
+'''
+{"id":1, "label": "t-shirt", "price": 4.99, "colors": ["red", "green", "blue"]}
+{"id":499, "label": "hoodie", "price": 19.99, "colors": ["purple"]}
+'''
+the search result should be displayed as
+```json
+{
+  "hits": [
+    {
+      "id": 1,
+      "label": "t-shirt",
+      "price": 4.99,
+      "colors": [
+          "red",
+          "green",
+          "blue"
+      ],
+    },
+    {
+      "id": 499,
+      "label": "hoodie",
+      "price": 19.99,
+      "colors": [
+          "purple"
+      ],
+    }
+  ],
+  ...
+}
+```
+
+#### API Endpoints
+
+> Each API endpoints mentioned above will now require a `application/x-ndjson` as `Content-Type` header to process NDJSON data.
+
+#### Add or Replace Documents [📎](https://docs.meilisearch.com/reference/api/documents.html#add-or-replace-documents)
+
+```curl
+curl \
+  -X POST 'http://localhost:7700/indexes/movies/documents' \
+  -H 'Content-Type: application/x-ndjson' \
+  --data '
+    {"id":1, "label": "t-shirt", "price": 4.99, "colors": ["red", "green", "blue"]}\n
+    {"id":499, "label": "hoodie", "price": 19.99, "colors": ["purple"]}
+  '
+```
+> Response code: 202 Accepted
+
+##### Error codes
+
+> - Sending a different payload than the `Content-Type` header should return a `415 unsupported_media_type` error.
+> - Too large payload according to the limit should return a `413 payload_too_large` error 
+> - Wrong file encoding should return a `420 unprocessable_entity` error
+> - Invalid CSV data should return a `420 unprocessable_entity` error
+
+### Add or Update Documents [📎](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents)
+
+```curl
+curl \
+  -X PUT 'http://localhost:7700/indexes/movies/documents' \
+  -H 'Content-Type: application/x-ndjson' \
+  --data '
+    {"id":1, "label": "t-shirt", "price": 4.99, "colors": ["red", "green", "blue"]}\n
+    {"id":499, "label": "hoodie", "price": 19.99, "colors": ["purple"]}
+  '
+```
+> Response code: 202 Accepted
+
+##### Errors handling
+
+> - Sending a different payload than the `Content-Type` header should return a `415 unsupported_media_type` error.
+> - Too large payload according to the limit should return a `413 payload_too_large` error 
+> - Wrong file encoding should return a `420 unprocessable_entity` error
+> - Invalid NDJSON data should return a `420 unprocessable_entity` error
+
+### V. Impact on documentation
+
+This feature should impact MeiliSearch users documentation by adding mention of `ndjson` capability inside Documents scope at [Add or replace documents](https://docs.meilisearch.com/reference/api/documents.html#add-or-replace-documents) and [Add or update documents](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents).
+
+We should also not only mention JSON format in `unsupported_media_type` section on the [errors page](https://docs.meilisearch.com/errors/#unsupported_media_type) and add `ndjson` format.
+
+Documentation should also guide the user in the correct way to properly format and send the ndjson file. Adding a dedicated page for the purpose of formatting and sending a ndjson file should be considered.
+
+### VI. Impact on SDKs
+
+This feature should impact MeiliSearch SDK's in the future by adding the possibility to send a ndjson file to MeiliSearch on the previous explicited endpoints.
+
+## 2. Technical Aspects
+
+TBD
+
+## 3. Future possibilities
+- Provide an interface in the future dashboard to upload JSOn data into an index.
+- Set a payload limit directly related to the type of files. Currently, the payload size is equivalent to [JSON payload size](https://docs.meilisearch.com/reference/features/configuration.html#payload-limit-size). Metrics on feature usage and configuration update should help to choose a better suited value for this type of file.
