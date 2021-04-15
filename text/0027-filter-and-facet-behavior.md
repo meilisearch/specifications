@@ -1,6 +1,6 @@
 - Title: Filter and Facet Behavior
 - Specification PR: [#27](https://github.com/meilisearch/specifications/pull/27)
-- MeiliSearch Tracking-Issues: https://github.com/meilisearch/milli/issues/152, https://github.com/meilisearch/transplant/issues/140, https://github.com/meilisearch/transplant/issues/70, https://github.com/meilisearch/transplant/issues/81
+- MeiliSearch Tracking-Issues: [milli/#152](https://github.com/meilisearch/milli/issues/152), [transplant/#140](https://github.com/meilisearch/transplant/issues/140), [transplant/#70](https://github.com/meilisearch/transplant/issues/70), [transplant/#81](https://github.com/meilisearch/transplant/issues/81)
 
 # Facet and Filter Behavior
 
