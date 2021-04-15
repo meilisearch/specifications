@@ -1,6 +1,6 @@
 - Title: Filter and Facet Behavior
 - Specification PR: [#27](https://github.com/meilisearch/specifications/pull/27)
-- MeiliSearch Issues: [#70](https://github.com/meilisearch/transplant/issues/70), [#81](https://github.com/meilisearch/transplant/issues/81), [#140](https://github.com/meilisearch/transplant/issues/140), [#152](https://github.com/meilisearch/milli/issues/152)
+- MeiliSearch Tracking-Issues:
 
 # Facet and Filter Behavior
 
@@ -14,7 +14,7 @@ Why? Under the hood and during indexing phase, the core engine creates structure
 
 ### II. Motivation
 
-Because the users need to set the attributes to `attributesForFaceting` no matter what they are using (`filters` or `facetFilters`) during the search, we need to re-define the usage of the filters/facets and stay as ISO as possible with the MeiliSearch v0.20.0.
+Because the users need to set the attributes to `attributesForFaceting` no matter what they are using (`filters` or `facetFilters`) during the search, we need to re-define the usage of the filters/facets and stay as backwards compatible as possible with the MeiliSearch v0.20.0.
 
 ### III. Additional Materials
 
