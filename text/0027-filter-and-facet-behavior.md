@@ -214,7 +214,7 @@ The type of the facet (i.e. f64 or string) is stored in another data structure a
 
 ##### Indexing phase
 
-When documents come in and fields are declared as facets, we start storing the facet values in the previously described database, the key becomes the facet value (as a globally ordered byte slice) and, the entry data now contains the document id that contains this facet value. Note that if the facet value is a number we store it like [field id][level][left facet value][right facet value] where the level is 0 and if it is a string then we don't store the level.
+When documents come in and fields are declared as facets, we start storing the facet values in the previously described database, the key becomes the facet value (as a globally ordered byte slice) and, the entry data now contains the document id that contains this facet value. Note that if the facet value is a number we store it like `[field id][level][left facet value][right facet value]` where the level is 0 and if it is a string then we don't store the level.
 
 Once the facet values that are numbers are stored we got a list of facet values prefixed with the field id and the base level (i.e. 0). We use this base level to generate more levels, each level contains groups of 4 groups of the level below, so level 1 aggregates the ids of the documents of each group of 4 facet values of level 0. The left and right facet values are the inclusive bounds of the group, the level 0 group have equal left and right bounds.
 
