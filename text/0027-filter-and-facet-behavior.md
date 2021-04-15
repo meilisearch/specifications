@@ -66,23 +66,44 @@ ex: `price > 19` does not return `"price": "20"` but returns `"price": 20` -> no
 
 #### Accepted syntaxes for `filters`
 
-Two syntaxes will be accepted for the `filters` parameter during search:
+Three syntaxes will be accepted for the `filters` parameter during search. `String syntax`, `Array syntax` and `Mixed syntax`. 
 
-- the string syntax with the `AND`/`OR`/`NOT` operators combined with parentheses
-ex:
+##### String syntax
+
+The string syntax uses the `AND`/`OR`/`NOT` operators combined with parentheses to express a search filter.
+
+Example:
 ```json
 {
     "filters": "(genres = Comedy OR genres = Romance) AND director = 'Mati Diop'"
 }
 ```
 
-- the array syntax:
-ex:
+##### Array syntax
+
+The array syntax uses dimensional array to express logical connectives.
+
+- Inner arrays elements are connected by an OR operator (e.g. [["genres:Comedy", "genres:Romance"]]).
+- Outer arrays elements are connected by an AND operator (e.g. ["genres:Romance", "director:Mati Diop"]).
+
+Example:
 ```json
 {
     "filters": [["genres = Comedy", "genres = Romance"], "director = 'Mati Diop'"]
 }
 ```
+
+> The array syntax is limited to express a
+
+##### Mixed syntax
+
+The mixed syntax can mix string and array syntaxes.
+
+Example:
+```json
+{
+    "filters": [["price = 20 OR size < 12"], "NOT genre = comedy"]
+}
 
 > Note that string values that are longer than a single word need to be enclosed by quote. `"director = Mati Diop"` will lead to a parsing error. The valid syntax is `"director = 'Mati Diop'"`.
 
@@ -234,3 +255,4 @@ In Transplant:
 ## 3. Future Possibilities
 
 - Provide facet statistics like `min` `max` `sum` `average`
+- Rename `attributesForFaceting` for clarity.
