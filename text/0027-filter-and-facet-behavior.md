@@ -99,10 +99,16 @@ Example:
 
 The mixed syntax can mix string and array syntaxes.
 
+Let's say that we want to translate
+```json
+{
+    "filters": "((genres = Comedy AND genres = Romance) OR genres = Action) AND director != 'Mati Diop'"
+}
+```
 Example:
 ```json
 {
-    "filters": [["price = 20 OR size < 12"], "NOT genre = comedy"]
+    "filters": [["genres = Comedy AND genres = Romance", "genres = Action"], "NOT director = comedy"]
 }
 
 > Note that string values that are longer than a single word need to be enclosed by quote. `"director = Mati Diop"` will lead to a parsing error. The valid syntax is `"director = 'Mati Diop'"`.
