@@ -1,7 +1,7 @@
 - Title:
 - Start Date:
 - Specification PR:
-- MeiliSearch Issues: 
+- MeiliSearch Issues-Tracking:
 
 # Title
 ## 1. Functional Specification
@@ -14,8 +14,5 @@
 ### VI. Impact on SDKs
 
 ## 2. Technical Aspects
-
-### I. Abstract
-### II. Issues Summary
 
 ## 3. Future Possibilities
