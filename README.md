@@ -18,9 +18,9 @@ MeiliSearch's feature specifications flow is made up of 5 states, described belo
 
 To start a new specification, it is recommended to write the first draft by filling in only the `Summary` and `Motivation` parts. 
 
-The name of the spec must follow the pattern: `PR_number-feature-name.md`. For example, if PR number 12 is about facetting, its spec will be named `0012-facetting.md` or `0012-facetted-search.md`. It will be logical that the names of the PRs will not follow each other. This is not a problem. The fact that the name has the number of PR simplifies the fact that there is no synchronization to choose this number.
+The name of the spec file must follow the pattern: `PR_number-feature-name.md`. After the pull request creation, the owner should update the specification filename. For example, if PR number 12 is about facetting, its spec will be named `0012-facetting.md`.
 
-Note that a pull request not strictly dealing about a specification conception will be tagged as `Not A Spec`.
+> Note that a pull request not strictly dealing about a specification conception will be tagged as `Not A Spec`.
 
 ### Draft State
 
@@ -48,9 +48,16 @@ Note that if the specification does not satisfy the merging conditions, it will 
 
 ### Merge State
 
-Once it's done, the specification is accepted and merged to the main branch. 
+The differents tracking-issues could be created on concerned repositories.
 
-The differents tracking-issues could be created on the [MeiliSearch](https://github.com/meilisearch/meilisearch) repository. 
+Created issues should:  
+- `Spec Related` label has to be added to the issues.
+- Issues have to mention the spec in their description.
+- Issues must absolutely link to the PRs that resolve the spec, so that we can easily track them.
+
+In order to keep track of technical changes concerning the specification, delivery team should update the `MeiliSearch Tracking-issues` part of the specification. 
+
+Once it's done, the specification is accepted and merged to the main branch.
 
 ## Specification Revision
 
@@ -115,19 +122,6 @@ This section of the feature specification document has a much narrower audience:
 At this time, the specification process is not enforcing a way to describe technical aspects. It can change in the future if we think that it is needed to ease the workflow of a specification creation.
 
 When writing technical details, we recommend describing practical aspects of implementation, e.g. interfaces, potential code problems, or specific algorithmic choices.
-
-#### I. Abstract
-
-This section is used to present technical solution in a few words on an abstract level.
-
-#### II. Issues Summary
-
-This section is edited by intertal teams for listing any related issues that need to be done to fully implement this specification.
-
-In order to keep track of technical changes concerning the specification, it requires that: 
-- `Spec Related` label has to be added to the issues.
-- Issues have to mention the spec in their description.
-- Issues must absolutely link to the PRs that resolve the spec, so that we can easily track them.
 
 ### 3. Future Possibilities
 

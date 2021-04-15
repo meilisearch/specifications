@@ -1,9 +1,12 @@
 - Title:
 - Start Date:
 - Specification PR:
-- MeiliSearch Issues-Tracking:
+- MeiliSearch Tracking-issues:
+
+> ❗️ The MeiliSearch Tracking-issues field is edited by delivery teams for listing any related issues that need to be done to fully implement this specification.
 
 # Title
+
 ## 1. Functional Specification
 
 ### I. Summary
