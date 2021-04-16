@@ -52,12 +52,12 @@ As v0.20, Milli can’t handle ASC / DESC criterion on string. Only numbers allo
 
 #### Decisions
 
-We thought about allowing the use of the ASC / DESC criterion in the ranking rules settings as long as it would also be declared in the attributesForFaceting.
+1. We thought about allowing the use of the ASC / DESC criterion in the ranking rules settings as long as it would also be declared in the attributesForFaceting.
 
-✅ We have decided that Milli will act exactly as MeiliSearch. Since the rankings rules and the attributes for faceting do not stictly meet the same needs. Moreover this could confuse the users configuring the search engine. The criterion configuration will remain on the `rankingRrules` field of the [global settings endpoint](https://docs.meilisearch.com/reference/api/settings.html#get-settings) and in the 
+✅ We have decided that Milli will act exactly as MeiliSearch: no need to declare the ranking rule field in `attributeForFaceting` since the rankings rules and the attributes for faceting do not strictly meet the same needs. Moreover, this could confuse the users configuring the search engine. The criterion configuration will remain on the `rankingRrules` field of the [global settings endpoint](https://docs.meilisearch.com/reference/api/settings.html#get-settings) and in the 
 [specific ranking rules setting endpoint](https://docs.meilisearch.com/reference/api/ranking_rules.html).
 
-We wondered if Milli's current behavior, which is to discard documents from search results that do not have the attribute configured as ascending and descending criteria might make sense for the purpose of a user performing a search.
+2. We wondered if Milli's current behavior, which is to discard documents from search results that do not have the attribute configured as ascending and descending criteria might make sense for the purpose of a user performing a search.
 
 ✅ We have decided that Milli will act exactly as MeiliSearch concerning search results. The ASC / DESC criterion will no longer discard documents which do not have the attribute.
 
@@ -71,11 +71,20 @@ N/A
 
 ## 2. Technical Aspects
 
-### I. Abstract
-TBD
+To apply the ranking rule, the search engine needs to create a database. This database is the same as we create to apply facets and filters on an attribute.
+However, the users will not pass the attribute into `attributeForFaceting` when setting a ranking rule. It means the search engine must create this database for the related attribute.
 
-### II. Issues Summary
-TBD
+ex:
+```json
+{
+  "rankingRules": ["words", "typo", "asc(price)", "proximity"],
+  "attributesForFaceting": ["genre"]
+}
+```json
+
+means the search engine has to create facet databases for `genre` and `price`.
+
+⚠️ Following this example, it also means the search engine would be technically able to apply filters and facet distribution on `price`, however, we should prevent this. To avoid confusion, the search engine should prevent the users to execute a filter or get facet distribution on the ranking attributes. Only the ranking rule should be available for this field.
 
 ## 3. Future possibilities
 
