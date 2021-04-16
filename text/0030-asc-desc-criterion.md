@@ -1,7 +1,7 @@
 - Title: ASC / DESC Criterion
 - Start Date: 2021-04-14
 - Specification PR: [#30](https://github.com/meilisearch/specifications/pull/30)
-- MeiliSearch Tracking-Issues: TBD
+- MeiliSearch Tracking-Issues: [#161](https://github.com/meilisearch/milli/issues/161)
 
 ## 1. Feature Description and Interaction
 
