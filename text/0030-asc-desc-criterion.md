@@ -38,7 +38,7 @@ Note that Algolia don't recommend to change the order of the default criteria be
 
 #### Current behavior of v0.20
 
-It returns documents that don't have the attribute set on a custom ASC / DESC rule as a search result at the bottom. Documents are not excluded and can be returned in the search result.
+In the case of certain documents that do not contain the attribute configured on a custom ASC/DESC ranking rules, it will return those documents at the bottom of the search result. Documents are not excluded and can be returned in the search result.
 
 > In the case of several custom ASC / DESC rules configured within the rankings rules, the sorting behavior is difficult to explain and can appear undefined when the documents do not necessarily contain the attributes which are set on this rule.
 
