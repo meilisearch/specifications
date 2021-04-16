@@ -1,6 +1,6 @@
 - Title: Rename attributesForFaceting
 - Start Date: 2021-04-16
-- Specification PR: TBD
+- Specification PR: [#35](https://github.com/meilisearch/specifications/pull/35)
 - MeiliSearch Tracking-Issues: TBD
 
 # Rename attributesForFaceting
