@@ -1,7 +1,9 @@
-- Title: Csv Indexation
+- Title: Indexing CSV
 - Start Date: 2021-04-9
 - Specification PR: [PR-#28](https://github.com/meilisearch/specifications/pull/28)
 - MeiliSearch Issues: [#128](https://github.com/meilisearch/transplant/issues/128),[#1332](https://github.com/meilisearch/MeiliSearch/issues/1332)
+
+# Indexing CSV
 
 ## 1. Feature Description and Interaction
 
@@ -139,16 +141,7 @@ Documentation should also guide the user in the correct way to properly format a
 
 This feature should impact MeiliSearch SDK's in the future by adding the possibility to send a CSV to MeiliSearch on the previous explicited endpoints.
 
-## 2. Technical Implementation
-
-### I. Architecture
-N/A
-
-### II. Implementation Details
-N/A
-
-### III. Corner Cases
-N/A
+## 2. Technical Aspects
 
 ## 3. Future possibilities
 
