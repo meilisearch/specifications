@@ -1,9 +1,9 @@
-- Title: NDJSON Support
+- Title: Indexing NDJSON
 - Start Date: 2021-04-12
 - Specification PR: [PR-#29](https://github.com/meilisearch/specifications/pull/29)
-- MeiliSearch Issue Track: TBD
+- MeiliSearch Tracking-Issues: TBD
 
-# Indexing NDJSON format
+# Indexing NDJSON
 
 ## 1. Feature Description and Interaction
 
@@ -126,8 +126,6 @@ Documentation should also guide the user in the correct way to properly format a
 This feature should impact MeiliSearch SDK's in the future by adding the possibility to send a ndjson file to MeiliSearch on the previous explicited endpoints.
 
 ## 2. Technical Aspects
-
-TBD
 
 ## 3. Future possibilities
 - Provide an interface in the future dashboard to upload NDJSON data into an index.
