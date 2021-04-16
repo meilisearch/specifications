@@ -1,6 +1,6 @@
 - Title: Logging
 - Start Date: 2021-04-16
-- Specification PR: TBD
+- Specification PR: [#33](https://github.com/meilisearch/specifications/pull/33)
 - MeiliSearch Tracking-Issues: TBD
 
 # Logging
