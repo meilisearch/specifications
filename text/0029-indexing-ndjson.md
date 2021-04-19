@@ -9,15 +9,17 @@
 
 ### I. Summary
 
-The initiation step of document indexing is to send some file matching a format to be parsed and tokenized in order to give search results to end-users. An [NDJSON](http://ndjson.org/) file is easier to use than a CSV file because it propose a convenient format for storing structured data.
+To index documents, the body of the add documents request has to match a specific format. That specific format is then parsed and tokenized inside MeiliSearch. After which, the documents added are in the pool of searchable and returnable documents.
+
+An [NDJSON](http://ndjson.org/) data format is easier to use than a CSV format because it propose a convenient format for storing structured data.
 
 ### II. Motivation
 
-Currently, the engine only accepts JSON format as a data source. We want to give users the possibility of another simple file format to use. Thus, give them more versatility at the data source choices for the indexation step.
+Currently, the engine only accepts JSON format as a data source. We want to give users the possibility of another simple data format to use. Thus, give them more versatility at the data source choices for the indexation step.
 
-Writing performance is also a motivation since JSON Lines file parsing is less CPU and memory-intensive than parsing standard JSON. When new lines represent separate entries it makes the NDJSON file streamable, thus, more suited for indexing a consequent data set.
+Writing performance is also a motivation since JSON Lines data parsing is less CPU and memory-intensive than parsing standard JSON. When new lines represent separate entries it makes the NDJSON data streamable, thus, more suited for indexing a consequent data set.
 
-While we give the ability to Meilisearch to ingest CSV files for indexing in this [specification](https://github.com/meilisearch/specifications/pull/28), we are aware of the limitations of CSV so we also want to provide a format that is easy to validate. Handling the validity of a CSV can be frustrating and difficult. Only strings can be managed within a CSV. In addition, there is no official specification except [RFC 4180](https://tools.ietf.org/html/rfc4180) which is not sufficient for all data scheme.
+While we give the ability to Meilisearch to ingest CSV data for indexing in this [specification](https://github.com/meilisearch/specifications/pull/28), we are aware of the limitations of CSV so we also want to provide a format that is easy to validate. Handling the validity of a CSV can be frustrating and difficult. Only strings can be managed within a CSV. In addition, there is no official specification except [RFC 4180](https://tools.ietf.org/html/rfc4180) which is not sufficient for all data scheme.
 
 Representing nested structures in a JSON object is easy and convenient.
 
@@ -29,11 +31,11 @@ TBD
 
 Newline-delimited JSON (`ndjson`), line-delimited JSON (`ldjson`), JSON lines (`jsonl`) are three terms expressing the same formats primarily intended for JSON streaming.
 
-As of now, we will use `ndjson` in the next parts to refer to a file that represents JSON entries separated by a new line character.
+As of now, we will use `ndjson` in the next parts to refer to a data format that represents JSON entries separated by a new line character.
 
 - Each entries will represent a document for MeiliSearch.
 - Each entries should be a valid JSON object.
-- The file should be encoded in UTF-8.
+- The data should be encoded in UTF-8.
 
 #### Example of a valid NJSON
 
@@ -90,7 +92,7 @@ curl \
 
 > - Sending a different payload than the `Content-Type` header should return a `415 unsupported_media_type` error.
 > - Too large payload according to the limit should return a `413 payload_too_large` error 
-> - Wrong file encoding should return a `420 unprocessable_entity` error
+> - Wrong encoding should return a `420 unprocessable_entity` error
 > - Invalid NDJSON data should return a `420 unprocessable_entity` error
 
 ### Add or Update Documents [📎](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents)
@@ -110,7 +112,7 @@ curl \
 
 > - Sending a different payload than the `Content-Type` header should return a `415 unsupported_media_type` error.
 > - Too large payload according to the limit should return a `413 payload_too_large` error 
-> - Wrong file encoding should return a `420 unprocessable_entity` error
+> - Wrong encoding should return a `420 unprocessable_entity` error
 > - Invalid NDJSON data should return a `420 unprocessable_entity` error
 
 ### V. Impact on documentation
@@ -119,14 +121,14 @@ This feature should impact MeiliSearch users documentation by adding the possibi
 
 We should also not only mention JSON format in `unsupported_media_type` section on the [errors page](https://docs.meilisearch.com/errors/#unsupported_media_type) and add `ndjson` format. The documentation says "Currently, MeiliSearch supports only JSON payloads."
 
-Documentation should also guide the user in the correct way to properly format and send the ndjson file. Adding a dedicated page for the purpose of formatting and sending a ndjson file should be considered.
+Documentation should also guide the user in the correct way to properly format and send ndjson data. Adding a dedicated page for the purpose of formatting and sending ndjson data should be considered.
 
 ### VI. Impact on SDKs
 
-This feature should impact MeiliSearch SDK's in the future by adding the possibility to send a ndjson file to MeiliSearch on the previous explicited endpoints.
+This feature should impact MeiliSearch SDK's in the future by adding the possibility to send ndjson data to MeiliSearch on the previous explicited endpoints.
 
 ## 2. Technical Aspects
 
 ## 3. Future possibilities
 - Provide an interface in the future dashboard to upload NDJSON data into an index.
-- Set a payload limit directly related to the type of files. Currently, the payload size is equivalent to [JSON payload size](https://docs.meilisearch.com/reference/features/configuration.html#payload-limit-size). Metrics on feature usage and configuration update should help to choose a better suited value for this type of file.
+- Set a payload limit directly related to the type of data format. Currently, the payload size is equivalent to [JSON payload size](https://docs.meilisearch.com/reference/features/configuration.html#payload-limit-size). Metrics on feature usage and configuration update should help to choose a better suited value for this type of data.
