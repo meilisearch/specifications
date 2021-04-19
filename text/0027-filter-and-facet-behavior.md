@@ -8,7 +8,7 @@
 
 ### I. Summary
 
-With v0.21.0, we are trying to erase the distinction between facets and filters. facetFilters is removed as a query parameter. Instead, all filters are performed with the filters parameter. In addition, any attribute you wish to use with filters must first be added to attributesForFaceting (rename pending).
+With v0.21.0, we are trying to erase the distinction between facets and filtering. `facetFilters` is removed as a query parameter. Instead, all filters are performed with the `filter` parameter. In addition, any attribute you wish to use with `filter` must first be added to attributesForFaceting.
 
 ### II. Motivation
 
@@ -20,9 +20,10 @@ N/A
 
 ### IV. Explanation
 
-#### Remove `facetFilters`, keep `filters`
+#### Remove `facetFilters`, Rename `filters` to `filter`
 
 The usage of `facetFilters` is not needed anymore since everything is doable by only using the `filters` parameter.
+We rename `filters` to `filter` mainly because the parameter's value will only ever be a single filter string, array or mixed syntax. Even if the value can be nested allowing for complexity, it's still just a logical expression. This name implicitly describes the action of filtering the results using a single filter expression made up of several logical operators.
 
 ```json
 // Settings
@@ -47,7 +48,7 @@ becomes
 // Search
 {
     "q": "",
-    "filters": "price < 20 AND author = 'JK Rowling'"
+    "filter": "price < 20 AND author = 'JK Rowling'"
 }
 ```
 
@@ -64,9 +65,9 @@ ex: `price > 19` does not return `"price": "20"` but returns `"price": 20` -> no
 - `=`, `!=`/`NOT` => operate on string and number values. MeiliSearch returns only documents that have numbers, strings, or arrays of strings in this field.
 - cannot filter on `null`, objects, arrays of "undefined elements" (ex: array of `null`)
 
-#### Accepted syntaxes for `filters`
+#### Accepted syntaxes for `filter`
 
-Three syntaxes will be accepted for the `filters` parameter during search. `String syntax`, `Array syntax` and `Mixed syntax`.
+Three syntaxes will be accepted for the `filter` parameter during search. `String syntax`, `Array syntax` and `Mixed syntax`.
 
 ##### String syntax
 
@@ -75,7 +76,7 @@ The string syntax uses the `AND`/`OR`/`NOT` operators combined with parentheses 
 Example:
 ```json
 {
-    "filters": "(genres = Comedy OR genres = Romance) AND director = 'Mati Diop'"
+    "filter": "(genres = Comedy OR genres = Romance) AND director = 'Mati Diop'"
 }
 ```
 
@@ -89,7 +90,7 @@ The array syntax uses dimensional array to express logical connectives.
 Example:
 ```json
 {
-    "filters": [["genres = Comedy", "genres = Romance"], "director = 'Mati Diop'"]
+    "filter": [["genres = Comedy", "genres = Romance"], "director = 'Mati Diop'"]
 }
 ```
 
@@ -102,13 +103,13 @@ The mixed syntax can mix string and array syntaxes.
 Let's say that we want to translate
 ```json
 {
-    "filters": "((genres = Comedy AND genres = Romance) OR genres = Action) AND director != 'Mati Diop'"
+    "filter": "((genres = Comedy AND genres = Romance) OR genres = Action) AND director != 'Mati Diop'"
 }
 ```
 Example:
 ```json
 {
-    "filters": [["genres = Comedy AND genres = Romance", "genres = Action"], "NOT director = comedy"]
+    "filter": [["genres = Comedy AND genres = Romance", "genres = Action"], "NOT director = comedy"]
 }
 
 > Note that string values that are longer than a single word need to be enclosed by quote. `"director = Mati Diop"` will lead to a parsing error. The valid syntax is `"director = 'Mati Diop'"`.
@@ -194,18 +195,19 @@ In MeiliSeach v0.20.0, with the following documents
 
 ##### Final decision for v0.21.0
 
-In MeiliSearch v0.21.0, `facetsDistribution` will behave with `filters` the same way it currently does with `facetFilters`: the `facetsDistribution` will be applied after the filters.
+In MeiliSearch v0.21.0, `facetsDistribution` will behave with `filter` the same way it currently does with `facetFilters`: the `facetsDistribution` will be applied after the filters.
 
 #### TLDR; all the breaking changes
 
 Here is the summary of all the breaking changes (that are detailed in the paragraphs above):
 
-- The `facetFilters` parameter during the search is removed. Only `filters` can be used.
-- The users need to set the attributes to `attributesForFaceting` to use the filters during the search via the `filters` parameters.
-- The users can now pass an attribute containing numbers (float or integer) in `attributesForFaceting`. It means they can use `filters` and `facetsDistribution` on this numeric field.
-- The `filters` parameter can accept both syntax: string (with `OR`/`AND`/`NOT`) and array.
+- The `facetFilters` parameter during the search is removed. Only `filter` can be used.
+- The `filters`parameter is renamed `filter`.
+- The users need to set the attributes to `attributesForFaceting` to use the filters during the search via the `filter` parameters.
+- The users can now pass an attribute containing numbers (float or integer) in `attributesForFaceting`. It means they can use `filter` and `facetsDistribution` on this numeric field.
+- The `filter` parameter can accept three syntaxes: string (with `OR`/`AND`/`NOT`), array and a mixed with string and array.
 - The `:` operator does not exist anymore (was previously present in `facetFilters` in v0.20.0) and is replaced by `=`.
-- The `facetsDistribution` is now applied after the `filters` parameter. This point is currently not documented, not sure this is useful to add it to the docs.
+- The `facetsDistribution` is now applied after the `filter` parameter. This point is currently not documented, not sure this is useful to add it to the docs.
 - All the integer in the user documents are converted into float. So integers with high values lose precision. However, integers from −2^53 to 2^53 (−9007199254740992 to 9007199254740992) can be exactly represented, which is enough in 99% of cases. Not sure this is important to documented it either.
 
 ### V. Impact on Documentation
@@ -218,7 +220,7 @@ Example:
 
 ```json
 {
-    "filters": "((genres = Comedy OR genres = Romance) AND (director = 'Mati Diop' OR director = 'Wong Kar-wai')) OR genres = 'Fantasy'"
+    "filter": "((genres = Comedy OR genres = Romance) AND (director = 'Mati Diop' OR director = 'Wong Kar-wai')) OR genres = 'Fantasy'"
 }
 ```
 
