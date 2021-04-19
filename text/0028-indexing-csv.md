@@ -9,7 +9,7 @@
 
 ### I. Summary
 
-To index documents, the body of the add documents request has to match a specific format. That specific format is then parsed and tokenized inside MeiliSearch. After which, the documents added are in the pool of searchable and returnable documents. 
+To index documents, the body of the add documents request has to match a specific format. That specific format is then parsed and tokenized inside MeiliSearch. After which, the documents added are in the pool of searchable and returnable documents.
 
 A [CSV](https://en.wikipedia.org/wiki/Comma-separated_values) data format is broadly used to store and exchange data in a simple format.
 
@@ -32,7 +32,7 @@ N/A
 
 While there's [RFC 4180](https://tools.ietf.org/html/rfc4180) as a try to add a specification for csv format, we will find a lot of variations from that. MeiliSearch features capabilities requires csv data to be formatted the proper way to be parsable by the engine.
 
-- Csv data format need to contain a first line representing the list of attributes with the choosen type separated from the attribute name by `:` character. 
+- Csv data format need to contain a first line representing the list of attributes with the choosen type separated from the attribute name by `:` character.
 
 > An attribute can be specificed with two types: `string` or `number`. A missing type will be interpreted as a `string` by default.
 >
@@ -52,7 +52,7 @@ Given the csv payload
 "id:number","label","price:number","colors","description"
 "1","t-shirt","4.99","red","Thus, you will rock at summer time."
 ```
-the search result should be displayed as 
+the search result should be displayed as
 ```json
 {
   "hits": [
@@ -96,21 +96,24 @@ the search result should be displayed as
 #### API Endpoints
 
 > Each API endpoints mentioned above will now require a `text/csv` as `Content-Type` header to process CSV data.
- 
+
 #### Add or Replace Documents [📎](https://docs.meilisearch.com/reference/api/documents.html#add-or-replace-documents)
 
 ```curl
 curl \
   -X POST 'http://localhost:7700/indexes/movies/documents' \
   -H 'Content-Type: text/csv' \
-  --data-binary data.csv
+  --data '
+    "id","label","price:number","colors","description"\n
+    "1","hoodie","19.99","purple","Hey, you will rock at summer time."
+  '
 ```
 > Response code: 202 Accepted
 
 ##### Error codes
 
 > - Sending a different payload than the `Content-Type` header should return a `415 unsupported_media_type` error.
-> - Too large payload according to the limit should return a `413 payload_too_large` error 
+> - Too large payload according to the limit should return a `413 payload_too_large` error
 > - Wrong encoding should return a `420 unprocessable_entity` error
 > - Invalid CSV data should return a `420 unprocessable_entity` error
 
@@ -120,14 +123,17 @@ curl \
 curl \
   -X PUT 'http://localhost:7700/indexes/movies/documents' \
   -H 'Content-Type: text/csv' \
-  --data-binary data.csv
+  --data '
+    "id","label","price:number","colors","description"\n
+    "1","hoodie","19.99","purple","Hey, you will rock at summer time."
+  '
 ```
 > Response code: 202 Accepted
 
 ##### Errors handling
 
 > - Sending a different payload than the `Content-Type` header should return a `415 unsupported_media_type` error.
-> - Too large payload according to the limit should return a `413 payload_too_large` error 
+> - Too large payload according to the limit should return a `413 payload_too_large` error
 > - Wrong encoding should return a `420 unprocessable_entity` error
 > - Invalid CSV data should return a `420 unprocessable_entity` error
 
