@@ -15,7 +15,7 @@ The initiation step of document indexing is to send some file matching a format 
 
 Currently, the engine only accepts JSON format as a data source. We want to give users the possibility of another simple file format to use. Thus, give them more versatility at the data source choices for the indexation step.
 
-Writing performance is also considered as a motivation since JSON Lines file parsing is less CPU and memory intensive than parsing standard JSON because every new lines represent separate entries, making the NDJSON file streamable. Thus, more suited for indexing a consequent data set.
+Writing performance is also a motivation since JSON Lines file parsing is less CPU and memory-intensive than parsing standard JSON. When new lines represent separate entries it makes the NDJSON file streamable, thus, more suited for indexing a consequent data set.
 
 While we give the ability to Meilisearch to ingest CSV files for indexing in this [specification](https://github.com/meilisearch/specifications/pull/28), we are aware of the limitations of CSV so we also want to provide a format that is easy to validate. Handling the validity of a CSV can be frustrating and difficult. Only strings can be managed within a CSV. In addition, there is no official specification except [RFC 4180](https://tools.ietf.org/html/rfc4180) which is not sufficient for all data scheme.
 
@@ -71,7 +71,7 @@ the search result should be displayed as
 
 #### API Endpoints
 
-> Each API endpoints mentioned above will now require a `application/x-ndjson` as `Content-Type` header to process NDJSON data.
+> Each API endpoints mentioned above will now require a `application/x-ndjson` as `Content-Type` header to be processed as NDJSON data.
 
 #### Add or Replace Documents [📎](https://docs.meilisearch.com/reference/api/documents.html#add-or-replace-documents)
 
@@ -115,7 +115,7 @@ curl \
 
 ### V. Impact on documentation
 
-This feature should impact MeiliSearch users documentation by adding mention of `ndjson` capability inside Documents scope at [Add or replace documents](https://docs.meilisearch.com/reference/api/documents.html#add-or-replace-documents) and [Add or update documents](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents).
+This feature should impact MeiliSearch users documentation by adding the possibility to use `ndjson` as a accepted format in the  Documents scope at [Add or replace documents](https://docs.meilisearch.com/reference/api/documents.html#add-or-replace-documents) and [Add or update documents](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents).
 
 We should also not only mention JSON format in `unsupported_media_type` section on the [errors page](https://docs.meilisearch.com/errors/#unsupported_media_type) and add `ndjson` format.
 
