@@ -224,6 +224,11 @@ Example:
 }
 ```
 
+### VI. Impact on SDKs
+
+- Remove `facetFilters` from their payload.
+- Rename `filters` to `filter`.
+
 ## 2. Technical Aspects
 
 ### I. Abstract
