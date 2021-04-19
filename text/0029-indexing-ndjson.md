@@ -117,7 +117,7 @@ curl \
 
 This feature should impact MeiliSearch users documentation by adding the possibility to use `ndjson` as an accepted format in the  Documents scope at [Add or replace documents](https://docs.meilisearch.com/reference/api/documents.html#add-or-replace-documents) and [Add or update documents](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents).
 
-We should also not only mention JSON format in `unsupported_media_type` section on the [errors page](https://docs.meilisearch.com/errors/#unsupported_media_type) and add `ndjson` format.
+We should also not only mention JSON format in `unsupported_media_type` section on the [errors page](https://docs.meilisearch.com/errors/#unsupported_media_type) and add `ndjson` format. The documentation says "Currently, MeiliSearch supports only JSON payloads."
 
 Documentation should also guide the user in the correct way to properly format and send the ndjson file. Adding a dedicated page for the purpose of formatting and sending a ndjson file should be considered.
 
