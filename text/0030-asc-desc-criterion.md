@@ -52,7 +52,7 @@ As v0.20, Milli can’t handle ASC / DESC criterion on string. Only numbers allo
 
 #### Decisions
 
-1. We thought about allowing the use of the ASC / DESC criterion in the ranking rules settings as long as it would also be declared in the attributesForFaceting.
+1. We thought about allowing filtering of the attributes used in the ASC / DESC criterion as long as it would also be declared in the `attributesForFaceting` parameter.
 
 ✅ We have decided that Milli will act exactly as MeiliSearch: no need to declare the ranking rule field in `attributeForFaceting` since the rankings rules and the attributes for faceting do not strictly meet the same needs. Moreover, this could confuse the users configuring the search engine. The criterion configuration will remain on the `rankingRrules` field of the [global settings endpoint](https://docs.meilisearch.com/reference/api/settings.html#get-settings) and in the
 [specific ranking rules setting endpoint](https://docs.meilisearch.com/reference/api/ranking_rules.html).
