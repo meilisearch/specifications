@@ -97,8 +97,6 @@ Example:
 }
 ```
 
-> The array syntax is limited to express a
-
 ##### Mixed syntax
 
 The mixed syntax can mix string and array syntaxes.
@@ -205,7 +203,7 @@ In MeiliSearch v0.21.0, `facetsDistribution` will behave with `filter` the same 
 Here is the summary of all the breaking changes (that are detailed in the paragraphs above):
 
 - The `facetFilters` parameter during the search is removed. Only `filter` can be used.
-- The `filters`parameter is renamed `filter`.
+- The `filters` parameter is renamed `filter`.
 - The users need to set the attributes to `attributesForFaceting` to use the filters during the search via the `filter` parameters.
 - The users can now pass an attribute containing numbers (float or integer) in `attributesForFaceting`. It means they can use `filter` and `facetsDistribution` on this numeric field.
 - The `filter` parameter can accept three syntaxes: string (with `OR`/`AND`/`NOT`), array and a mixed with string and array.
