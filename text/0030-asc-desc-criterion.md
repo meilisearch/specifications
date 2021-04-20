@@ -15,7 +15,7 @@ MeiliSearch allows you to create custom rules within the default rules. Custom r
 
 We want to provide our users with an always improved usage experience. Relevance is essential in a search engine since it is what allows the engine to fulfill its objective. Delivering results that match user demands by allowing modification of the relevance is critical.
 
-The new search engine called Milli no longer processes this criterion of relevance as the current MeilliSearch. This specification makes it possible to state that Milli will be identical to the ISO version (v0.20) in the usage of API interfaces but also in the expected search results.
+The new search engine called Milli no longer processes this criterion of relevance the same way as the current MeilliSearch. This specification aims to make Milli identical both in API usage and in expected search results as the current ISO version (v0.20).
 
 ### III. Additional Materials
 
@@ -32,7 +32,7 @@ Algolia offers 8 classification rules to achieve relevance.
 - Number of words matching exactly (without typo)
 - Custom ranking
 
-Note that Algolia don't recommend to change the order of the default criteria because of the fact that it works for the vast majority of their use cases. Like MeiliSearch (v0.20), document that don’t have an attribute that’s in the customRanking list are pushed to the bottom of the search result.
+Note that Algolia doesn't recommend changing the order of the default criteria because of the fact that it works for the vast majority of their use cases. Like MeiliSearch (v0.20), documents, where the attribute specified in the custom ranking is missing, are pushed to the bottom of the search results.
 
 ### IV.Explanation
 
@@ -85,6 +85,8 @@ ex:
 means the search engine has to create facet databases for `genre` and `price`.
 
 ⚠️ Following this example, it also means the search engine would be technically able to apply filters and facet distribution on `price`, however, we should prevent this. To avoid confusion, the search engine should prevent the users to execute a filter or get facet distribution on the ranking attributes. Only the ranking rule should be available for this field.
+
+If the user wants to filter on that attribute, he will have to add it in `attributesForFaceting` as well. 
 
 ## 3. Future possibilities
 
