@@ -259,3 +259,4 @@ Those levels are used to reduce the number of entries to run through, reducing t
 
 - Provide facet statistics like `min` `max` `sum` `average`
 - Rename `attributesForFaceting` for clarity.
+- Rename `facetsDistribution` for clarity.
