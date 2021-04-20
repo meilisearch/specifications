@@ -58,11 +58,14 @@ We decided to replace the `:` operator in favor of `=`.
 
 During search, logical operators should behave as they already do in MeiliSearch v0.20.0.
 
-Here is a quick reminder of the v0.20.0 operator behavior:
+Here is a quick reminder of the v0.20.0 operators behavior:
 
 - `<`, `=<`, `>`, `=>` => only operate on number values. MeiliSearch returns only documents that have numbers in this field.
 ex: `price > 19` does not return `"price": "20"` but returns `"price": 20` -> no type conversions are done.
 - `=`, `!=`/`NOT` => operate on string and number values. MeiliSearch returns only documents that have numbers, strings, or arrays of strings in this field.
+
+#### Known limitations
+
 - cannot filter on `null`, objects, arrays of "undefined elements" (ex: array of `null`)
 
 #### Accepted syntaxes for `filter`
