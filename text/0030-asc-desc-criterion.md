@@ -42,7 +42,7 @@ In the case of certain documents that do not contain the attribute configured on
 
 > In the case of several custom ASC / DESC rules configured within the rankings rules, the sorting behavior is difficult to explain and can appear undefined when the documents do not necessarily contain the attributes which are set on this rule.
 
-This criterion can only be used with an attribute containing numbers. 
+This criterion can only be used with an attribute containing numbers.
 
 #### Current behavior of Milli
 
@@ -54,7 +54,7 @@ As v0.20, Milli can’t handle ASC / DESC criterion on string. Only numbers allo
 
 1. We thought about allowing the use of the ASC / DESC criterion in the ranking rules settings as long as it would also be declared in the attributesForFaceting.
 
-✅ We have decided that Milli will act exactly as MeiliSearch: no need to declare the ranking rule field in `attributeForFaceting` since the rankings rules and the attributes for faceting do not strictly meet the same needs. Moreover, this could confuse the users configuring the search engine. The criterion configuration will remain on the `rankingRrules` field of the [global settings endpoint](https://docs.meilisearch.com/reference/api/settings.html#get-settings) and in the 
+✅ We have decided that Milli will act exactly as MeiliSearch: no need to declare the ranking rule field in `attributeForFaceting` since the rankings rules and the attributes for faceting do not strictly meet the same needs. Moreover, this could confuse the users configuring the search engine. The criterion configuration will remain on the `rankingRrules` field of the [global settings endpoint](https://docs.meilisearch.com/reference/api/settings.html#get-settings) and in the
 [specific ranking rules setting endpoint](https://docs.meilisearch.com/reference/api/ranking_rules.html).
 
 2. We wondered if Milli's current behavior, which is to discard documents from search results that do not have the attribute configured as ascending and descending criteria might make sense for the purpose of a user performing a search.
@@ -80,13 +80,12 @@ ex:
   "rankingRules": ["words", "typo", "asc(price)", "proximity"],
   "attributesForFaceting": ["genre"]
 }
-```json
-
+```
 means the search engine has to create facet databases for `genre` and `price`.
 
 ⚠️ Following this example, it also means the search engine would be technically able to apply filters and facet distribution on `price`, however, we should prevent this. To avoid confusion, the search engine should prevent the users to execute a filter or get facet distribution on the ranking attributes. Only the ranking rule should be available for this field.
 
-If the user wants to filter on that attribute, he will have to add it in `attributesForFaceting` as well. 
+If the user wants to filter on that attribute, he will have to add it in `attributesForFaceting` as well.
 
 ## 3. Future possibilities
 
