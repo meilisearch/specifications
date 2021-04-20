@@ -44,7 +44,8 @@ TypeSense distinct feature uses `group_by`and `group_limit` to achieve de-duplic
 |-------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | group_by    | It is possible to aggregate records into groups by setting multiple fields separated by a comma. E.g. group_by=country,company_name |
 | group_limit | Control the maximum number of top records returned for groups. By default, TypeSense `group_limit` parameter is set to 3.                                                                       |
-Using group_by add a nested structure in the search result. Buckets are returned in `grouped_hits` field.
+
+> Using group_by add a nested structure in the search result. Buckets are returned in `grouped_hits` field.
 
 #### ElasticSearch
 TBD
@@ -80,9 +81,7 @@ Let's say that we have 2 documents with the same `product_id`. Each document exi
 
 Without setting `product_id` as a distinct attribute, a search with `t-shirt` as a query will return the two documents.
 
-It can be useful to display one product per color variation as a search result for example. But as your number of products variations grows over time, you might want to display only one result as a top search result, mostly for UI concerns.
-
-It's in this case that the distinct attribute finds all its interest.
+It can be useful to display one product per color variation as a search result but as your number of products variations grows over time, you might want to display only one result as a top search result, mostly for UI concerns. It's in this case that the distinct attribute finds all its interest.
 
 Setting `product_id` as a distinct attribute will discard all others documents having the same value for `product_id` from the search result.
 
@@ -93,7 +92,7 @@ Setting `product_id` as a distinct attribute will discard all others documents h
 It is possible to configure the distinct attribute using two endpoints. [Update All Settings](https://docs.meilisearch.com/reference/api/settings.html#update-settings) and the [distinct attribute](https://docs.meilisearch.com/reference/api/distinct_attribute.html#update-distinct-attribute) endpoint.
 
 Given this setting :
-```json=
+```json
 {
     "distinctAttribute": "product_id"
 }
@@ -178,7 +177,7 @@ Since MeiliSearch can only de-duplicate documents matching the distinct attribut
 
 #### Distinct on multiple fields
 
-> It probably require to add a nested structure to return hits for each groups with clarity.
+> It probably requires to add a nested structure to return hits for each groups with clarity.
 
 ##### Indexing time
 
@@ -208,4 +207,4 @@ or
 }
 ```
 
-> It can be used in combination with `groupLimit` to define the topmost relevant documents before discarding the others for each group.
+> It can be used in combination with `groupLimit` to define the topmost relevant documents before discarding the others in each group.
