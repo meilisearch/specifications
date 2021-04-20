@@ -63,8 +63,11 @@ As v0.20, Milli can’t handle ASC / DESC criterion on string. Only numbers allo
 
 ### V. Impact on documentation
 
-- It should inform users about that having custom ASC / DESC criteria on attributes that are not always defined for each document may return results that are not necessarily relevant in the end user's eye.
-- To be able to use this criterion on a date format, it must indicate that the timestamp is to be preferred since the type string is not supported.
+- It should inform users that having custom ASC / DESC criteria on attributes that are not always defined for each document may return results that are not necessarily relevant in the end user's eye.
+> Already done by https://github.com/meilisearch/documentation/pull/905
+
+- To be able to use this criterion on a date format, it must indicate that the timestamp is to be preferred since the string type is not supported.
+> Related to https://github.com/meilisearch/documentation/issues/840.
 
 ### VI. Impact on SDKs
 N/A
