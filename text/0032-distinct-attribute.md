@@ -36,14 +36,15 @@ Algolia distinct functionality enables deduplication and aggregation by allowing
 
 #### TypeSense
 
-TypeSense distinct feature uses `group_by`and `group_limit` to achieve de-duplication and grouping at query time.
+TypeSense distinct feature uses `group_by` and `group_limit` to achieve de-duplication and grouping at query time.
 
 > A field that is setted as a parameter of group_by must be previously faceted.
 
 | Parameter   | Description                                                                                                                                                                                                                                   |
 |-------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| group_by    | It is possible to aggregate records into groups by setting multiple fields separated by a comma. E.g. group_by=country,company_name |
-| group_limit | Control the maximum number of top records returned for groups. By default, TypeSense `group_limit` parameter is set to 3.                                                                       |
+| group_by    | It is possible to aggregate records into groups by setting multiple fields separated by a comma. E.g. group_by=country,company_name                                                                                                           |
+| group_limit | Control the maximum number of top records returned for groups. By default, TypeSense `group_limit` parameter is set to 3.                                                                                                                     |
+
 Using group_by add a nested structure in the search result. Buckets are returned in `grouped_hits` field.
 
 #### ElasticSearch
@@ -69,7 +70,7 @@ E.g Terms aggregation
 ```
 The size parameter can be set to define how many term buckets should be returned out of the overall terms list. Term aggregations by default return 10 buckets only.
 
-Composite aggregation is allows users to paginate over buckets containing a lot of values.
+Composite aggregation allows to paginate over buckets containing a lot of values.
 
 > Cardinality aggregation can calculates the count of distinct values for a field.
 
