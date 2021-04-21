@@ -25,10 +25,10 @@ Algolia distinct feature is based on one attribute, as defined in `attributeForD
 
 Algolia distinct functionality enables deduplication and aggregation by allowing a numeric value for the defined distinct attribute.
 
-| Behavior       | `distinct` value | Description                                                                                       |
-|----------------|------------------|---------------------------------------------------------------------------------------------------|
-| de-duplication | N = 1            | Used to remove similar records from the search result. Only the most relevant record is returned. |
-| grouping       | N > 1            | N records containing the same value for the distinct attribute will be returned.                  |
+| Behavior       | Distinct value | Description                                                                                       |
+|----------------|----------------|---------------------------------------------------------------------------------------------------|
+| de-duplication | N = 1          | Used to remove similar records from the search result. Only the most relevant record is returned. |
+| grouping       | N > 1          | N records containing the same value for the distinct attribute will be returned.                  |
 
 > `distinct` is silently ignored at query time if `attibuteForDistinct` is not defined. It is not mandatory but possible to set `distinct` at indexing time via the index settings endpoint.
 >
@@ -44,11 +44,36 @@ TypeSense distinct feature uses `group_by`and `group_limit` to achieve de-duplic
 |-------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | group_by    | It is possible to aggregate records into groups by setting multiple fields separated by a comma. E.g. group_by=country,company_name |
 | group_limit | Control the maximum number of top records returned for groups. By default, TypeSense `group_limit` parameter is set to 3.                                                                       |
-
-> Using group_by add a nested structure in the search result. Buckets are returned in `grouped_hits` field.
+Using group_by add a nested structure in the search result. Buckets are returned in `grouped_hits` field.
 
 #### ElasticSearch
-TBD
+
+Elasticsearch does not provide this functionality directly. Nor a keyword or an operator exists to get de-duplicated or grouped results.
+
+It is difficult to find the information in the official documentation. A lot of people are asking about the distinct feature on StackOverflow or ElasticSearch forums.
+
+By specifying the search with terms or composite aggregations it is possible to have buckets fed by documents that have the same values on a specified field.
+
+E.g Terms aggregation
+```json
+{
+    "aggs": {
+        "distinct_colors": {
+            "terms": {
+                "field": "color",
+                "size": 1000
+            }
+        }
+    }
+}
+```
+The size parameter can be set to define how many term buckets should be returned out of the overall terms list. Term aggregations by default return 10 buckets only.
+
+Composite aggregation is allows users to paginate over buckets containing a lot of values.
+
+> Cardinality aggregation can calculates the count of distinct values for a field.
+
+It is also possible to use the keyword `DISTINCT` from the SQL access feature from X-Pack. However the functionality only allows to return tabular data.
 
 ### IV.Explanation
 
@@ -81,7 +106,9 @@ Let's say that we have 2 documents with the same `product_id`. Each document exi
 
 Without setting `product_id` as a distinct attribute, a search with `t-shirt` as a query will return the two documents.
 
-It can be useful to display one product per color variation as a search result but as your number of products variations grows over time, you might want to display only one result as a top search result, mostly for UI concerns. It's in this case that the distinct attribute finds all its interest.
+It can be useful to display one product per color variation as a search result for example. But as your number of products variations grows over time, you might want to display only one result as a top search result, mostly for UI concerns.
+
+It's in this case that the distinct attribute finds all its interest.
 
 Setting `product_id` as a distinct attribute will discard all others documents having the same value for `product_id` from the search result.
 
@@ -177,7 +204,7 @@ Since MeiliSearch can only de-duplicate documents matching the distinct attribut
 
 #### Distinct on multiple fields
 
-> It probably requires to add a nested structure to return hits for each groups with clarity.
+> It probably require to add a nested structure to return hits for each groups with clarity.
 
 ##### Indexing time
 
@@ -207,4 +234,4 @@ or
 }
 ```
 
-> It can be used in combination with `groupLimit` to define the topmost relevant documents before discarding the others in each group.
+> It can be used in combination with groupLimit to define the topmost relevant documents before discarding the others for each group.
