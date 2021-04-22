@@ -1,6 +1,6 @@
 - Title: Exactness Criterion
 - Start Date: 2021-04-22
-- Specification PR: []()
+- Specification PR: [#36](https://github.com/meilisearch/specifications/pull/36)
 - MeiliSearch Tracking-Issues:
 
 # Exactness Criterion
