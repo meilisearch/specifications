@@ -3,6 +3,8 @@
 - Specification PR: [#30](https://github.com/meilisearch/specifications/pull/30)
 - MeiliSearch Tracking-Issues: [#161](https://github.com/meilisearch/milli/issues/161)
 
+# Asc/Desc Criterion
+
 ## 1. Feature Description and Interaction
 
 ### I. Summary
