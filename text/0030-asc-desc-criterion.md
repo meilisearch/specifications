@@ -38,9 +38,159 @@ Note that Algolia doesn't recommend changing the order of the default criteria b
 
 #### Current behavior of v0.20
 
-In the case of certain documents that do not contain the attribute configured on a custom ASC/DESC ranking rules, it will return those documents at the bottom of the search result. Documents are not excluded and can be returned in the search result.
+In the case of one or many custom ASC / DESC rules configured at different places within the rankings rules, the sorting results can appear undefined when the documents do not necessarily contain the attributes which are set on this rule.
 
-> In the case of several custom ASC / DESC rules configured within the rankings rules, the sorting behavior is difficult to explain and can appear undefined when the documents do not necessarily contain the attributes which are set on this rule.
+E.g.
+Given this set of documents
+
+```json
+[
+  {
+    "colors": "red",
+    "id": 1,
+    "label": "t-shirt",
+    "product_id": 1,
+    "price": 4.99
+  },
+  {
+    "colors": "black",
+    "id": 2,
+    "label": "t-shirt",
+    "product_id": 1
+  },
+  {
+    "colors": "red",
+    "id": 3,
+    "label": "t-short",
+    "product_id": 1,
+    "price": 19.99
+  },
+  {
+    "colors": "red",
+    "id": 4,
+    "label": "t-short",
+    "product_id": 1
+  }
+]
+```
+
+Given this custom ordering of ranking rules
+```json
+[
+  "exactness",
+  "words",
+  "proximity",
+  "attribute",
+  "asc(price)",
+  "wordsPosition",
+  "typo"
+]
+```
+
+A search with `q` containing `t-shirt` will return:
+```json
+{
+  "hits": [
+    {
+      "colors": "red",
+      "id": 1,
+      "label": "t-shirt",
+      "product_id": 1,
+      "price": 4.99
+    },
+    {
+      "colors": "black",
+      "id": 2,
+      "label": "t-shirt",
+      "product_id": 1
+    },
+    {
+      "colors": "red",
+      "id": 3,
+      "label": "t-short",
+      "product_id": 1,
+      "price": 19.99
+    },
+    {
+      "colors": "red",
+      "id": 4,
+      "label": "t-short",
+      "product_id": 1
+    }
+  ],
+}
+```
+
+A search with `q` containing `t-short` will return:
+```json
+{
+  "hits": [
+    {
+      "colors": "red",
+      "id": 3,
+      "label": "t-short",
+      "product_id": 1,
+      "price": 19.99
+    },
+    {
+      "colors": "red",
+      "id": 4,
+      "label": "t-short",
+      "product_id": 1
+    },
+    {
+      "colors": "red",
+      "id": 1,
+      "label": "t-shirt",
+      "product_id": 1,
+      "price": 4.99
+    },
+    {
+      "colors": "black",
+      "id": 2,
+      "label": "t-shirt",
+      "product_id": 1
+    }
+  ]
+}
+```
+
+This is because the exactness criterion is set before the asc/desc criterion.
+
+A search with `q` containing `t-shart` will return:
+```json
+{
+  "hits": [
+    {
+      "colors": "red",
+      "id": 1,
+      "label": "t-shirt",
+      "product_id": 1,
+      "price": 4.99
+    },
+    {
+      "colors": "red",
+      "id": 3,
+      "label": "t-short",
+      "product_id": 1,
+      "price": 19.99
+    },
+    {
+      "colors": "black",
+      "id": 2,
+      "label": "t-shirt",
+      "product_id": 1
+    },
+    {
+      "colors": "red",
+      "id": 4,
+      "label": "t-short",
+      "product_id": 1
+    }
+  ]
+}
+```
+The results are firstly bucketed by the `asc(price)` criterion before the last `typo` criterion.
 
 This criterion can only be used with an attribute containing numbers.
 
