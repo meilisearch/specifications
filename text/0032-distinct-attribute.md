@@ -1,7 +1,7 @@
 - Title: Distinct Attribute
 - Start Date: 2021-04-16
 - Specification PR: [#32](https://github.com/meilisearch/specifications/pull/32)
-- MeiliSearch Tracking-Issues: TBD
+- MeiliSearch Tracking-Issues: [milli#168](https://github.com/meilisearch/milli/issues/168)
 
 # Distinct Attribute
 
