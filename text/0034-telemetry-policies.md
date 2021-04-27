@@ -59,11 +59,8 @@ Discovery metric for federated search feature.
 ##### Number of documents per indexes
 Discovery metric to know the average number of documents are stored in an index.
 
-##### Geographical server distribution
-##### CPU server distribution
-##### RAM server distribution
-##### Disk server distribution
-Discovery metric to choose more relevant data centers over the world for the SaaS cloud platform. Will also be used in order to perform price studies analysis.
+##### Geographical server distribution, CPU server distribution, RAM server distribution, Disk server distribution
+Discovery metrics to choose more relevant data centers over the world for the SaaS cloud platform. Will also be used in order to perform price studies analysis.
 
 For the Geographical Server Distribution we need to make a call to a third-party like http://ip-api.com/json/113.14.168.85 to get `Country`, `City` and `Provider` at MeiliSearch launch.
 TBD - Rate limiting
@@ -102,7 +99,6 @@ Why we consider using Segment to collect and send data ?
 
 - Segment will represent our unique source of collecting data. It permits to change on the fly and fill data to new analytics products without loosing data.
 - It seems to offer smarter mechanisms for collect. Thus, having a very low impact on performance of the system on which it collects data. [See the rust docs here](https://segment.com/docs/connections/sources/catalog/libraries/server/rust/)
-or Segment API then Amplitude
 
 ## 3. Future possibilities
 N/A
