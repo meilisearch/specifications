@@ -139,7 +139,7 @@ curl \
 
 ### V. Impact on documentation
 
-This feature should impact MeiliSearch users documentation by adding mention of csv capability inside Documents scope at [Add or replace documents](https://docs.meilisearch.com/reference/api/documents.html#add-or-replace-documents) and [Add or update documents](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents).
+This feature should impact MeiliSearch users documentation by adding mention of csv capability inside Documents scope at [Add or replace documents](https://docs.meilisearch.com/reference/api/documents.html#add-or-replace-documents) and [Add or update documents](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents). It should also mention that a missing Content-Type will be interpreted as `application/json` since it's the current behavior. Giving an `application/json` Content-Type leads to the same behavior.
 
 We should also not only mention JSON format in `unsupported_media_type` section on the [errors page](https://docs.meilisearch.com/errors/#unsupported_media_type) and add CSV format. The documentation says "Currently, MeiliSearch supports only JSON payloads."
 
@@ -150,6 +150,10 @@ Documentation should also guide the user in the correct way to properly format a
 This feature should impact MeiliSearch SDK's in the future by adding the possibility to send a CSV to MeiliSearch on the previous explicited endpoints.
 
 ## 2. Technical Aspects
+
+### I. Technical Details
+
+⚠ A missing Content-Type will be interpreted as `application/json` since it's the current behavior. Giving an `application/json` Content-Type leads to the same behavior.
 
 ## 3. Future possibilities
 
