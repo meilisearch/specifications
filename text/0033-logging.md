@@ -120,46 +120,70 @@ However, it is possible to deactivate the storage of logs, modify the retention 
 
 #### Current Logging behaviour of MeiliSearch (0.20)
 
+MeiliSearch uses `env_logger` to allow setting the output level of logs from the `RUST_LOG` environment variable. `env_logger` permits to set a specific log level per module if needed. [See more here](https://docs.rs/env_logger/0.8.3/env_logger/).
+
+#### Logging behaviour for Milli (0.21)
+
+We have decided to keep the use of `env_logger` for Milli/Transplant. However, we are going to make changes to make the logging more consistent and more versatile.
+
+##### Log Levels
+
+| Level | Description                                                                                                              |
+|-------|--------------------------------------------------------------------------------------------------------------------------|
+| ERROR | Everything related to an error occuring.                                                                                         |
+| WARN  | Everything related to a warning. TBD                                                                                     |
+| INFO  | Info should be the default level. It displays high level of informations like start/end of process and HTTP calls.                                            |
+| DEBUG | Transplant should add request body and response body on Search endpoint log to provide more informations for debugging purpose. Milli log informations about engine process. |
+| TRACE | It only concerns Mili to trace everything happening on the engine level. Should not be displayed by default. Not used at the moment.             |
+
+
 ##### Log Format
+
 ```
-[2021-03-02T20:33:09Z INFO  actix_web::middleware::logger] 172.17.0.1:57220 "POST /indexes/indexUID/documents HTTP/1.1" 202 14 "-" "PostmanRuntime/7.26.10" 0.023529
+[2021-03-02T20:33:09Z INFO actix_web::middleware::logger] 172.17.0.1:57220 "POST /indexes/indexUID/documents HTTP/1.1" 202 14 "-" "PostmanRuntime/7.26.10" 0.023529
 ```
 
-#### Current Logging behaviour of Milli(0.21)
+###### Mandatory log format part. E.g [TIME_FORMAT LOG_LEVEL MODULE] part.
 
-Milli don't seems to log events in the same way as MeiliSearch. [See the related issue](https://github.com/meilisearch/transplant/issues/66)
+- Time when the request was started to process (in rfc3339 format)
+- Log levels are `ERROR`, `WARN`, `INFO`, `DEBUG`, `TRACE`.
+- The module part gives information about which module logs the entry.
 
-##### Log Format
-TBD
+###### HTTP Call
 
-#### Ideas
-> Ideas will be processed within a working group
+Transplant uses `actix_web::middleware::logger` to log informations on API endpoints that receive calls.
 
-- Log level configuration per env. *Determine a default policy per env*.
-- If so, determine whats need to be logged per log level
-- Log format convention. *Easily readable by an human eye and a monitoring software*
-- Store logs on filesystem (give us future possibilites of rolling strategy)
-- Store logs in a dedicated index? (Time-series based)
-- Develop API endpoint to search the logged events and configure logging policy within the system (SaaS feature in mind)
+Given
+```172.17.0.1:57220 "POST /indexes/indexUID/documents HTTP/1.1" 202 14 "-" "PostmanRuntime/7.26.10" 0.023529```
+
+- Peer IP address (or IP address of reverse proxy if used)
+- First line of request (Example: GET /test HTTP/1.1)
+- Response status code
+- Size of response in bytes, including HTTP headers
+- User-Agent
+- Time taken to serve the request, in seconds to 6 decimal places
+
+> In DEBUG level the Search endpoint should log the request body and response body.
 
 ### V. Impact on Documentation
 
-The documentation only mention the logging behavior for the `development` env on the MEILI_ENV part.
+The documentation only mention the logging behavior for the `development` env on the `MEILI_ENV` part.
 
-```
-development: the master key is optional, and logs are output in "info" mode (console output).
-If the server is running in development mode more logs will be displayed, and the master key can be avoided which implies that there is no security on the updates routes.
-This is useful to debug when integrating the engine with another service.
-In production mode, the web interface is disabled.
-```
+We should explain how to get more or less levels using `RUST_LOG` environment variable.
 
-TBD
+Explaining what we log for each level is also needed.
 
 ### VI. Impact on SDKs
-TBD
+N/A
 
 ## 2. Technical Aspects
-TBD
+
+MeiliSearch is not consistent about logging methods. It have occurences of `println` and `eprintln` in the codebase and occurences of `error`, `warn`, `info`, `debug`, `trace` methods. It also calls `log::warn` or `log::error`.
+
+Milli and Transplant should be careful by keeping a consistent way to log informations.
 
 ## 3. Future Possibilities
-TBD
+
+- Store logs on filesystem (give us future possibilites of rolling strategy). We will keep an eye on https://roadmap.meilisearch.com/c/81-specify-log-path, Github issues and, Slack Community messages. Keep in mind that it is possible to send logs to files using `syslog` or `systemd` journalctl.
+- Develop API endpoint to search the logged events and configure logging policy within the system (SaaS feature in mind).
+
