@@ -91,7 +91,7 @@ curl \
 ##### Error codes
 
 > - Sending a different payload than the `Content-Type` header should return a `415 unsupported_media_type` error.
-> - Too large payload according to the limit should return a `413 payload_too_large` error 
+> - Too large payload according to the limit should return a `413 payload_too_large` error
 > - Wrong encoding should return a `420 unprocessable_entity` error
 > - Invalid NDJSON data should return a `420 unprocessable_entity` error
 
@@ -111,13 +111,13 @@ curl \
 ##### Errors handling
 
 > - Sending a different payload than the `Content-Type` header should return a `415 unsupported_media_type` error.
-> - Too large payload according to the limit should return a `413 payload_too_large` error 
+> - Too large payload according to the limit should return a `413 payload_too_large` error
 > - Wrong encoding should return a `420 unprocessable_entity` error
 > - Invalid NDJSON data should return a `420 unprocessable_entity` error
 
 ### V. Impact on documentation
 
-This feature should impact MeiliSearch users documentation by adding the possibility to use `ndjson` as an accepted format in the  Documents scope at [Add or replace documents](https://docs.meilisearch.com/reference/api/documents.html#add-or-replace-documents) and [Add or update documents](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents).
+This feature should impact MeiliSearch users documentation by adding the possibility to use `ndjson` as an accepted format in the  Documents scope at [Add or replace documents](https://docs.meilisearch.com/reference/api/documents.html#add-or-replace-documents) and [Add or update documents](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents). It should also mention that a missing Content-Type will be interpreted as `application/json` since it's the current behavior. Giving an `application/json` Content-Type leads to the same behavior.
 
 We should also not only mention JSON format in `unsupported_media_type` section on the [errors page](https://docs.meilisearch.com/errors/#unsupported_media_type) and add `ndjson` format. The documentation says "Currently, MeiliSearch supports only JSON payloads."
 
@@ -128,6 +128,10 @@ Documentation should also guide the user in the correct way to properly format a
 This feature should impact MeiliSearch SDK's in the future by adding the possibility to send ndjson data to MeiliSearch on the previous explicited endpoints.
 
 ## 2. Technical Aspects
+
+### I. Technical details
+
+⚠ A missing Content-Type will be interpreted as `application/json` since it's the current behavior. Giving an `application/json` Content-Type leads to the same behavior.
 
 ## 3. Future possibilities
 - Provide an interface in the future dashboard to upload NDJSON data into an index.
