@@ -129,14 +129,14 @@ A word is considered as an exact match when it matches:
 - without complex synonyms
 - without word split
 
-#### Possible names for `Exactness`
+#### Naming Decision
 
-- Exact
-- ...
-
+✅ We decided to rename `Exactness` to `Exact`.
 
 ### V. Impact on Documentation
-TBD
+
+Documentation should rename Exactness mention to Exact.
+
 ### VI. Impact on SDKs
 N/A
 
