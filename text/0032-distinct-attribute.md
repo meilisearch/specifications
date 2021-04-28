@@ -15,13 +15,14 @@ The value of a field whose attribute is set as a distinct attribute will always 
 
 ### II. Motivation
 
-The new search engine called Milli no longer processes the distinct attribute as the current MeilliSearch. This specification makes it possible to state that Milli will be as backwards compatible as possible with the v0.20 in the usage of API interfaces but also in the expected search results.
+The new search engine called Milli no longer processes the distinct attribute as the current MeilliSearch. The specification aims to make Milli as backward compatible as possible with the current release (v.0.20.0). Including both the API usage and the expected search results.
 
 ### III. Additional Materials
 
 #### Algolia
 
-Algolia distinct feature is based on one attribute, as defined in `attributeForDistinct`. It is possible to limit the number of returned records that contains the same attribute value. It is done at indexing time.
+Algolia distinct feature is based on one attribute, as defined in `attributeForDistinct`.
+Adding an attribute to this setting will make that all search results have a different value in the given attributes field. This is done at indexing time.
 
 Algolia distinct functionality enables deduplication and aggregation by allowing a numeric value for the defined distinct attribute.
 
