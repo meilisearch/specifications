@@ -26,7 +26,7 @@ N/A
 
 Following this issue and with the beginning of a product Team we asked yourselves what we wanted to do about telemetry. https://github.com/meilisearch/transplant/issues/141.
 
-✅ We will keep telemetry enabled by default while leaving the option for users to disable it.
+✅ We will keep telemetry enabled by default while leaving the option for users to disable it. See Impact on Documentation part.
 
 > Some new features will had telemetry data points to check the assumptions and measure objectives achievments.
 
@@ -63,9 +63,10 @@ Discovery metric to know the average number of documents are stored in an index.
 Discovery metrics to choose more relevant data centers over the world for the SaaS cloud platform. Will also be used in order to perform price studies analysis.
 
 For the Geographical Server Distribution we need to make a call to a third-party like http://ip-api.com/json/113.14.168.85 to get `Country`, `City` and `Provider` at MeiliSearch launch.
-TBD - Rate limiting
 
-For the CPU, RAM and DISK metrics, we need to use internal system stat method to get this information.
+✅ Staying transparent is important to us, which is why the metrics mentioned in the previous sentence will be discussed on Github with our community.
+
+For the CPU, RAM and DISK metrics, we can use an internal system stat method to get this information.
 
 ##### SDK distribution
 Discovery metric to check adoption of our new sdks and the use of existing ones
@@ -73,13 +74,18 @@ Discovery metric to check adoption of our new sdks and the use of existing ones
 ##### Feature metrics
 E.g. We want to know more about feature usage like how many times the `ranking_rules` order are changed, which is the top most used `ranking_rules` in first position etc.. What is the average `response body` size, what is the average number of `filter` used for the search endpoint.
 
-❗️ Asking for new data points should be specified and explain why these data points will be used for.
+❗️ Asking for new data points should be specified and explain why these data points will be used for in the feature specification.
 
 ### V. Impact on documentation
-TBD
+
+✅ Create a dedicated page aimed to explain why and how we collect anonymous data while being exhaustive on the metrics we collect. Related to https://github.com/meilisearch/documentation/issues/908.
 
 ### VI. Impact on SDKs
 N/A
+
+### VII. Impact on CLI
+
+✅ Currently, MeiliSearch only say if `Anonymous telemetry` is enabled or not on the launch message. It should also provide a message explaing in a few words that we are collecting anonymized MeiliSearch behavior metrics to enhance the product for future releases. Thus, displaying a link to the analytics documentation page.
 
 ## 2. Technical Aspects
 
@@ -91,14 +97,15 @@ N/A
 
 #### Amplitude HTTP V2 Endpoint
 
-Currently MeiliSearch uses a deprecated endpoint to send data to Amplitude. A new endpoint exists and could better suit our needs. [See here](https://developers.amplitude.com/docs/http-api-v2)
+Currently MeiliSearch uses a deprecated endpoint to send data to Amplitude. A new endpoint exists and could better suit our needs. [See here](https://developers.amplitude.com/docs/http-api-v2).
 
-#### Segment to collect data
+✅ 0.21 release will use the `http-api-v2` endpoint.
+
+## 3. Future possibilities
+
+### Segment to collect data
 
 Why we consider using Segment to collect and send data ?
 
 - Segment will represent our unique source of collecting data. It permits to change on the fly and fill data to new analytics products without loosing data.
 - It seems to offer smarter mechanisms for collect. Thus, having a very low impact on performance of the system on which it collects data. [See the rust docs here](https://segment.com/docs/connections/sources/catalog/libraries/server/rust/)
-
-## 3. Future possibilities
-N/A
