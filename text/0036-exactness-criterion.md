@@ -15,9 +15,9 @@ Exactness Criterion is used within ranking rules to sort results by the similari
 
 ### II. Motivation
 
-While we continue to advance the new Milli engine towards a version offering the same features as Meilisearch. We ask ourselves the question of renaming the `exactness` criterion and change its behavior to enhance the relevancy of search results.
+While we continue to advance the new Milli engine towards a version offering the same features as Meilisearch.
 
-This specification aims to clarify the question and in which case decide whether or not to name this criterion differently and what to decide about its behavior.
+This specification aims to change the behavior of the `exactness` criterion to enhance the relevanvy of search results.
 
 ### III. Additional Materials
 
@@ -68,7 +68,7 @@ For each word of the query we match documents:
 
 ##### Pros & Cons
 
-This behavior of the Exactness criterion gives a better rank to documents that match the words of the original query, ranking ngrams, complex synonyms, and word split after.
+This behavior of the Exact criterion gives a better rank to documents that match the words of the original query, ranking ngrams, complex synonyms, and word split after.
 
 In the specific case of a query containing only 1 word, only 1-word attributes matching will boost documents that have an attribute that exactly contains the query word.
 
@@ -132,10 +132,6 @@ A word is considered as an exact match when it matches:
 
 > Given theses layered operations, the higher the rank of a document is, the less relevant it is.
 
-
-##### Naming decisions
-TBD
-
 ### V. Impact on Documentation
 
 N/A
@@ -150,3 +146,4 @@ N/A
 
 - In the second layer, we can rank `Any document that has an attribute that contains exactly the query` with the last word considered as prefix.
 - Give the user the possibility to deactivate some fields for the Exactness criterion.
+- Rename the Exactness criterion.
