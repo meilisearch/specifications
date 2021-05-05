@@ -43,13 +43,12 @@ E.g.
 - Cohort: Servers that are running for more than 30 days with the new version of MS (> v0.10.1)
 - Graph: The total of every telemetry messages received
 - Graph: The total of every unique id seen
-- Graph: The number of servers that are running for more than 7 days/weekly
-- Graph: The number of servers that are running for more than 30 days/month
+- Graph: The number of servers that are running at least since 7 days
+- Graph: The number of servers that are running at least since 30 days
 - User Composition: Device composition
 - User Composition: Version composition
 - Indexes size distribution for more than seven days (<200k not taken into account)
 - Indexes size distribution for the others
-- Retention (not used)
 
 #### New Metrics
 
