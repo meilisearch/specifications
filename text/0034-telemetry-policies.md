@@ -11,11 +11,11 @@
 
 Telemetry concerns the possibility of depositing markers within a system in order to make segments of it. Quantitative data as data metrics are used to discover and verify user behavior.
 
-We would like to have more telemetry to better understand our users in order to improve their usage and feel with Meilisearch.
+We would like to have more telemetry to better understand our users in order to improve their usage and feel with MeiliSearch.
 
 ### II. Motivation
 
-We need to make informed decisions based on data instead of instincts and gut feel. Lack of data does not say anything about how correct or wrong are our intuitions. Lack of data means we did not make testable hypothesis. We will now support ours decisions with data.
+We need to make informed decisions based on data instead of instincts and gut feel. Lack of data does not say anything about how correct or wrong are our intuitions. Lack of data means we did not make testable hypotheses. We will now support our decisions with data.
 
 > 🔒 Note that we strictly don't want to collect private information by default (ip address, email, website url, etc..).
 
@@ -24,13 +24,13 @@ N/A
 
 ### IV.Explanation
 
-Following this issue and with the beginning of a product Team we asked yourselves what we wanted to do about telemetry. https://github.com/meilisearch/transplant/issues/141.
+Following this issue and with the beginning of a product Team we asked ourselves what we wanted to do about telemetry. https://github.com/meilisearch/transplant/issues/141.
 
 ✅ We will keep telemetry enabled by default while leaving the option for users to disable it. See Impact on Documentation part.
 
-> Some new features will had telemetry data points to check the assumptions and measure objectives achievments.
+> Some new features will have telemetry data points to check the assumptions and measure objectives achievements.
 
-✅ Each new feature specification should list data points to be collected and measured. Obviously the specification must explain why these data points are necessary in relation to the feature.
+✅ Each new feature specification should list data points to be collected and measured. Obviously the specification must explain why these data points are necessary for relation to the feature.
 
 #### Current stack for analytics
 
@@ -85,7 +85,7 @@ N/A
 
 ### VII. Impact on CLI
 
-✅ Currently, MeiliSearch only say if `Anonymous telemetry` is enabled or not on the launch message. It should also provide a message explaing in a few words that we are collecting anonymized MeiliSearch behavior metrics to enhance the product for future releases. Thus, displaying a link to the analytics documentation page.
+✅ Currently, MeiliSearch only says if `Anonymous telemetry` is enabled or not on the launch message. It should also provide a message explaining in a few words that we are collecting anonymized MeiliSearch behavior metrics to enhance the product for future releases. Thus, displaying a link to the analytics documentation page.
 
 ## 2. Technical Aspects
 
