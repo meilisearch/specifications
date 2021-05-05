@@ -1,7 +1,7 @@
 - Title: Telemetry Policies
 - Start Date: 2021-04-16
 - Specification PR: [#34](https://github.com/meilisearch/specifications/pull/34)
-- MeiliSearch Tracking-Issues: TBD
+- MeiliSearch Tracking-Issues: [transplant/#181](https://github.com/meilisearch/transplant/issues/181)
 
 # Telemetry Policies
 
