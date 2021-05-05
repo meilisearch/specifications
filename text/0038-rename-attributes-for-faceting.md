@@ -24,11 +24,11 @@ Since faceting is also used to filter the search result by navigation, the idea 
 
 > Any fields declared in `attributesForFaceting` for filtering can be faceted. Any fields declared in `attributesForFaceting` for faceting can be filtered.
 
-attributesForFaceting is lacking precision because it is now used to authorize the usage of `filter` and `facetsDistribution` on those fields.
+`attributesForFaceting` is lacking precision because it is now used to authorize the usage of those fields in `filter` and `facetsDistribution` parameters. Also, note that `facetFilters` and `filters` have been merged in [#27](https://github.com/meilisearch/specifications/pull/27) to be `filter`.
 
 ### II. filterableAttributes
 
-We are proposing `filterableAttributes` as the new parameter name. This will be clearer since all the fields declared within it now allow you to refine the search results. The declared fields allow you to refine the query in two ways. The first allows you to use these in the `filter` parameter. The second also enables the possibility of distributing the fields as a facet by using these in the `facetsDistribution` parameter.
+We are proposing `filterableAttributes` as the new parameter name. This will be clearer since all the fields declared within it now allow you to refine the search results. The declared fields allow you to refine the query in two ways. The first allows you to use these in the `filter` parameter. The second also enables the possibility of distributing the fields as a facet by using those in the `facetsDistribution` parameter.
 
 This way of naming this field is clearly saying that the expected parameter is an array of fields. Keeping the term faceting in the field name is something to be avoided as this field is not related only to faceting. The expected action behind that will remain the fact of activating filtering for these fields.
 
