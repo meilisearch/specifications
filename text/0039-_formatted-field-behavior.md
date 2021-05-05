@@ -1,6 +1,6 @@
 - Title: _formatted Field Behavior
 - Start Date: 2021-05-05
-- Specification PR: [#]()
+- Specification PR: [#39](https://github.com/meilisearch/specifications/pull/39)
 - MeiliSearch Tracking-Issues:
 
 # _formatted Field Behavior
@@ -15,7 +15,11 @@
 
 #### Algolia
 
-By default, Algolia returns `_hightlighResults` even if no `attributesToHighlight` are set at query time.
+By default, Algolia returns `_hightlighResults` even if no `attributesToHighlight` values are set at query time.
+
+#### TypeSense
+
+By default, TypeSense returns `highlights` even if no `highlight_full_fields` values are set at query time.
 
 ### IV. Explanation
 
