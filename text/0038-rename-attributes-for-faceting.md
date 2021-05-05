@@ -7,16 +7,14 @@
 
 ## 1. Feature Description and Interaction
 
-### I. Summary
-
-### II. Motivation
+### I. Summary & Motivation
 
 As the new engine requires filterable fields to be declared in attributesForFaceting, the name of this field is not as clear as we would like it to be. Since it’s now concerning filter and possible wanted facets on search result by the user.
 
-### III. Additional Materials
+### II. Additional Materials
 N/A
 
-### IV.Explanation
+### III.Explanation
 
 #### I. attributesForFaceting
 
@@ -38,12 +36,12 @@ This way of naming this field is clearly saying that the expected parameter is a
 
 On a side note, the term `facetDistribution` is a term used in e-commerce and we will therefore probably deal with this in a future specification.
 
-### V. Impact on documentation
+### III. Impact on documentation
 
-The documentation needs to replace occurences of `attributesForFaceting` by `filterableAttributes` [here](https://docs.meilisearch.com/reference/features/faceted_search.html#filters-or-facets). Also, the documentation should mention that fields needs to be declared in `filterableAttributes` to be used in the `filter` query parameter [here](https://docs.meilisearch.com/reference/features/filtering.html#filtering)
+The documentation needs to replace occurences of `attributesForFaceting` by `filterableAttributes` [here](https://docs.meilisearch.com/reference/features/faceted_search.html#filters-or-facets). Also, the documentation should mention that fields needs to be declared in `filterableAttributes` to be used in the `filter` query parameter [here](https://docs.meilisearch.com/reference/features/filtering.html#filtering).
 
 
-### VI. Impact on SDKs
+### IV. Impact on SDKs
 N/A
 
 ## 2. Technical Aspects
