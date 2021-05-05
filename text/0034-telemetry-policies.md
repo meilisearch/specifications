@@ -87,7 +87,7 @@ N/A
 
 ✅ Currently, MeiliSearch only says if `Anonymous telemetry` is enabled or not on the launch message. It should also provide a message explaining in a few words that we are collecting anonymized MeiliSearch behavior metrics to enhance the product for future releases. Thus, displaying a link to the analytics documentation page.
 
-Message to display on the CLI if analytics are enabled :
+Message to display on the CLI at launch if analytics are enabled:
 > "Thank you for using MeiliSearch! We collect anonymized analytics to improve our product and your experience. You can turn it off easily! See more on the documentation page to know more about our analytics usage and how to turn it off. [Link of the new dedicated page]()."
 
 ## 2. Technical Aspects
