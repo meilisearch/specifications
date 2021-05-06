@@ -20,11 +20,9 @@ The goal of this specification is to clear the behavior of `attributesToRetrieve
 #### Algolia
 
 By default, Algolia returns `_hightlightResult` even if no `attributesToHighlight` are set at query time. So, by default the value is `'*'`.
-
 Setting a specific attribute in `attributesToHighlight` will only give this specific attribute in `_highlightResults`.
 
-By default, Algolia returns `_snippetResult` even if no `attributesToSnippet` are set at query time. So, by default the value is `'*'`.
-
+Unlike highlighting, snippeting must be proactively enabled for each attribute to snippet, however Algolia authorize the usage of `*` to snippet all attributes.
 Setting a specific attribute in `attributesToSnippet` will only give this specific attribute `_snippetResult`.
 
 ### IV. Explanation
