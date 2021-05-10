@@ -1,6 +1,6 @@
 - Title: Pagination
 - Start Date: 2021-05-10
-- Specification PR: [#](https://github.com/meilisearch/specifications/pull)
+- Specification PR: [#40](https://github.com/meilisearch/specifications/pull/40)
 - MeiliSearch Tracking-Issues:
 
 # Pagination
