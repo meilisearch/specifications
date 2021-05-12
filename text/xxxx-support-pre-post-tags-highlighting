@@ -1,0 +1,28 @@
+- Title: Support Pre/post Tags for Highlighting
+- Start Date: 2021-05-12
+- Specification PR: [#41](https://github.com/meilisearch/specifications/pull/41)
+- MeiliSearch Tracking-Issues:
+
+# Support Pre/post Tags for Highlighting
+
+## 1. Feature Description and Interaction
+
+### I. Summary
+
+### II. Motivation
+
+### III. Additional Materials
+
+### IV. Explanation
+
+### V. Impact on Documentation
+TBD
+
+### VI. Impact on SDKs
+TBD
+
+## 2. Technical Aspects
+TBD
+
+## 3. Future Possibilities
+TBD
