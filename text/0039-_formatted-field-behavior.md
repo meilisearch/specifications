@@ -243,28 +243,10 @@ As a user i get:
 Unlike v0.20, `attributesToHighlight` set fields to be in `_formatted` independently from `attributesToRetrieve`.
 
 #### Expected MeiliSearch Behavior (0.21)
-
-The next rules clarify the current behavior of `Milli/Transplant` for the `_formatted` parameter given `attributesToHighlight` and `attributesToCrop` states and combination.
-
-`_formatted` response parameter **SHOULD NOT** be returned in the given cases:
-
-- `attributesToHighlight` is not set AND `attributesToCrop` is not set.
-- `attributesToHighlight` or `attributesToCrop` are set but only contains a non-existent field.
-
-`_formatted` response parameter **SHOULD** be returned in any cases of:
-
-- `attributesToHighlight` is set with `*`.
-- `attributesToCrop` is set with `*`.
-- `attributesToHighlight` is set with **1..N** existing attributes.
-- `attributesToCrop` is set with **1..N** existing attributes.
-
-
-> ⚠️ Note that `displayedAttributes` still control what will be displayed in search results despite asking for fields to be retrieved with `attributesToRetrieve` or to be formatted with `attributesToHighlight` or `attributesToCrop`.
-
+TBD
 
 ### V. Impact on Documentation
-
-- Update engine documentation to precise the default value `*` for `attributesToHighlight`.
+N/A
 
 ### VI. Impact on SDKs
 N/A
