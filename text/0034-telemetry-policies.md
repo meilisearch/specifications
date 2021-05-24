@@ -13,11 +13,15 @@ Telemetry concerns the possibility of depositing markers within a system in orde
 
 We would like to have more telemetry to better understand our users in order to improve their usage and feel with MeiliSearch.
 
+We also use Sentry to trace the errors that occur when using MeiliSearch.
+
 ### II. Motivation
 
 We need to make informed decisions based on data instead of instincts and gut feel. Lack of data does not say anything about how correct or wrong are our intuitions. Lack of data means we did not make testable hypotheses. We will now support our decisions with data.
 
 > 🔒 Note that we strictly don't want to collect private information by default (ip address, email, website url, etc..).
+
+We want to simplify the disabling of telemetry and better inform users about what we want to track.
 
 ### III. Additional Materials
 N/A
@@ -31,6 +35,8 @@ Following this issue and with the beginning of a product Team we asked ourselves
 > Some new features will have telemetry data points to check the assumptions and measure objectives achievements.
 
 ✅ Each new feature specification should list data points to be collected and measured. Obviously the specification must explain why these data points are necessary for relation to the feature.
+
+✅ We will remove the Sentry specific flag `MEILI_NO_SENTRY` to merge its use into the `MEILI_NO_ANALYTICS` flag. This means that its activation and deactivation will be shared with analytics within the `MEILI_NO_ANALYTICS` flag. By default, Sentry metrics will stay activated.
 
 #### Current stack for analytics
 
@@ -78,6 +84,7 @@ E.g. We want to know more about feature usage like how many times the `ranking_r
 ### V. Impact on documentation
 
 ✅ Create a dedicated page aimed to explain why and how we collect anonymous data while being exhaustive on the metrics we collect. Related to https://github.com/meilisearch/documentation/issues/908.
+✅ Remove the [Sentry part](https://docs.meilisearch.com/reference/features/configuration.html#disable-sentry) and mention it on the future dedicated page and in the [Analytics part](https://docs.meilisearch.com/reference/features/configuration.html#analytics).
 
 ### VI. Impact on SDKs
 N/A
@@ -102,6 +109,10 @@ Message to display on the CLI at launch if analytics are enabled:
 Currently MeiliSearch uses a deprecated endpoint to send data to Amplitude. A new endpoint exists and could better suit our needs. [See here](https://developers.amplitude.com/docs/http-api-v2).
 
 ✅ 0.21 release will use the `http-api-v2` endpoint.
+
+#### Logging
+
+✅ Errors when sending metrics to Amplitude or Sentry should be silent.
 
 ## 3. Future possibilities
 
