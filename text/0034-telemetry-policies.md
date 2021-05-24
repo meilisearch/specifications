@@ -69,7 +69,7 @@ Discovery metrics to choose more relevant data centers over the world for the Sa
 
 For the Geographical Server Distribution we need to make a call to a third-party like http://ip-api.com/json/113.14.168.85 to get `Country`, `City` and `Provider` at MeiliSearch launch.
 
-✅ Staying transparent is important to us, which is why the metrics mentioned in the previous sentence will be discussed on Github with our community.
+✅ Staying transparent is important to us, which is why the metrics will be explained in details on a change log, blog post and a dedicated documentation page.
 
 For the CPU, RAM and DISK metrics, we can use an internal system stat method to get this information.
 
