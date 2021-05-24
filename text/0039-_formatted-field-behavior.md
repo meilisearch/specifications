@@ -32,7 +32,7 @@ Setting a specific attribute in `attributesToSnippet` will only give this specif
 Given a document made of two fields `title` and `poster`
 ```
 {
-    "title": "Prince Avalance",
+    "title": "Prince Avalanche",
     "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg"
 }
 ```
@@ -83,7 +83,7 @@ As a user i get:
             "title": "Prince Avalanche",
             "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg",
             "_formatted": {
-                "title": "Prince Avalance",
+                "title": "Prince Avalanche",
                 "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg"
             }
         }
@@ -113,7 +113,7 @@ As a user i get:
             "title": "Prince Avalanche",
             "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg",
             "_formatted": {
-                "title": "<em>Prince</em> Avalance",
+                "title": "<em>Prince</em> Avalanche",
                 "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg"
             }
         }
@@ -143,7 +143,7 @@ As a user i get:
         {
             "title": "Prince Avalanche",
             "_formatted": {
-                "title": "<em>Prince</em> Avalance"
+                "title": "<em>Prince</em> Avalanche"
             }
         }
     ]
@@ -204,7 +204,7 @@ As a user i get:
             "title": "Prince Avalanche",
             "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg",
             "_formatted": {
-                "title": "<em>Prince</em> Avalance"
+                "title": "<em>Prince</em> Avalanche"
             }
         }
     ]
@@ -232,7 +232,7 @@ As a user i get:
         {
             "title": "Prince Avalanche",
             "_formatted": {
-                "title": "<em>Prince</em> Avalance",
+                "title": "<em>Prince</em> Avalanche",
                 "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg"
             }
         }
