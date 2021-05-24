@@ -29,10 +29,11 @@ Setting a specific attribute in `attributesToSnippet` will only give this specif
 
 #### Current MeiliSearch Behavior (0.20)
 
-Given a document made of two fields `title` and `poster`
+Given a document made of three fields `title`, `actor`, and `poster`.
 ```
 {
     "title": "Prince Avalanche",
+    "actor": "Prince",
     "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg"
 }
 ```
@@ -54,6 +55,7 @@ As a user i get:
     "hits": [
         {
             "title": "Prince Avalanche",
+            "actor": "Prince",
             "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg"
         }
     ]
@@ -81,19 +83,80 @@ As a user i get:
     "hits": [
         {
             "title": "Prince Avalanche",
+            "actor": "Prince",
             "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg",
             "_formatted": {
                 "title": "Prince Avalanche",
-                "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg"
+                "actor": "Prince",
+                "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg",
             }
         }
     ]
 }
 ```
 
-The `_formatted` field appears in the search response as soon as the `attributesToHighlight` and/or `attributesToCrop` parameters are sent as a query parameter and are filled with a value representing an existent or inexistent field. Using an inexistent field is similar to setting `attribuesToHighlight`/`attributesToCrop` to `"*"`
+The `_formatted` field appears in the search response as soon as the `attributesToHighlight` and/or `attributesToCrop` parameters are sent as a query parameter and are filled with a value representing an existent or inexistent field. Using an inexistent field is similar to setting `attribuesToHighlight`/`attributesToCrop` to `"*"` but the highlight/cropping is not compute in the `_formatted` field. The fields are returned in a raw format.
 
 **Example 3**
+
+Given these search parameters:
+
+```
+{
+    "q": "Prince",
+    "attributesToRetrieve": ["title"],
+    "attributesToHighlight": ["actor"]
+}
+```
+
+As a user i get:
+
+```
+{
+    "hits": [
+        {
+            "title": "Prince Avalanche",
+            "_formatted": {
+                "actor": "<em>Prince</em>"
+            }
+        }
+    ]
+}
+```
+
+`_formatted` is only filled with the fields set in `attributesToHighlight` despite the fact that the user only ask for `title` in `attributesToRetrieve`.
+
+**Example 4**
+
+Given these search parameters:
+
+```
+{
+    "q": "Prince",
+    "attributesToRetrieve": ["actor", "title"],
+    "attributesToHighlight": ["actor"]
+}
+```
+
+As a user i get:
+
+```
+{
+    "hits": [
+        {
+            "title": "Prince Avalanche",
+            "actor": "Prince",
+            "_formatted": {
+                "actor": "<em>Prince</em>"
+            }
+        }
+    ]
+}
+```
+
+`_formatted` is only filled with the fields in `attributesToHighlight` despite the fact that the user ask for `actor` and `title` in `attributesToRetrieve`.
+
+**Example 5**
 
 Given these search parameters:
 ```
@@ -111,9 +174,11 @@ As a user i get:
     "hits": [
         {
             "title": "Prince Avalanche",
+            "actor": "Prince",
             "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg",
             "_formatted": {
                 "title": "<em>Prince</em> Avalanche",
+                "actor": "Prince",
                 "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg"
             }
         }
@@ -123,9 +188,9 @@ As a user i get:
 
 `_formatted` field behavior that is supposed to be controlled by `attributesToHighlight` and `attributesToCrop` is dependent of `attributesToRetrieve`.
 
-`_formatted` is filled with all the `attributesToRetrieve` despite the fact that the user only ask for one specific field in `attributesToHighlight` or `attributesToCrop`.
+`_formatted` is filled with all the `attributesToRetrieve` despite the fact that the user only ask for one specific field in `attributesToHighlight` or `attributesToCrop`. The highlighing/cropping is only computed on the targeted field in `attributesToHighlight`. Other fields are returned as raw result in `_formatted`.
 
-**Example 4**
+**Example 6**
 
 Given these search parameters:
 ```
@@ -150,11 +215,35 @@ As a user i get:
 }
 ```
 
-`_formatted` is only filled with the `attributesToRetrieve` fields despite the fact that the user wants all fields to be highlighted or cropped given `attributesToHighlight` or `attributesToCrop` value.
+`_formatted` is only filled with the `attributesToRetrieve` fields despite the fact that the user may wants all fields to be in `_formatted` and be highlighted or cropped given `attributesToHighlight` or `attributesToCrop` values.
 
 #### Current Transplant/Milli Behavior (0.21)
 
 **Example 1**
+
+Given these search parameters:
+```
+{
+    "q": "prince",
+    "attributesToRetrieve": ["*"]
+}
+```
+
+As a user i get:
+
+```
+{
+    "hits": [
+        {
+            "title": "Prince Avalanche",
+            "actor": "Prince",
+            "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg"
+        }
+    ]
+}
+```
+
+Since `attributesToHighlight` and `attributesToCrop` are not set, `_formatted` is not computed.
 
 Same behavior as v0.20 release.
 
@@ -182,9 +271,70 @@ As a user i get:
 }
 ```
 
-Unlike v0.20, if no field are matched to be formatted, `_formatted` is not computed.
+Unlike v0.20, if no field are matched to be formatted, `_formatted` is not computed nor returned in response.
 
 **Example 3**
+
+Given these search parameters:
+
+```
+{
+    "q": "Prince",
+    "attributesToRetrieve": ["title"],
+    "attributesToHighlight": ["actor"]
+}
+```
+
+As a user i get:
+
+```
+{
+    "hits": [
+        {
+            "title": "Prince Avalanche",
+            "_formatted": {
+                "actor": "<em>Prince</em>"
+            }
+        }
+    ]
+}
+```
+
+`_formatted` is only filled with the fields set in `attributesToHighlight` despite the fact that the user only ask for `title` in `attributesToRetrieve`.
+
+Same behavior as v0.20 release.
+
+**Example 4**
+
+Given these search paramters:
+
+```
+{
+    "q": "Prince",
+    "attributesToRetrieve": ["actor", "title"],
+    "attributesToHighlight": ["actor"]
+}
+```
+
+As a user i get:
+
+```
+{
+    "hits": [
+        {
+            "title": "Prince Avalanche",
+            "actor": "Prince",
+            "_formatted": {
+                "actor": "<em>Prince</em>"
+            }
+        }
+    ]
+}
+```
+
+Same behavior as v0.20 release.
+
+**Example 5**
 
 Given these search parameters:
 ```
@@ -202,6 +352,7 @@ As a user i get:
     "hits": [
         {
             "title": "Prince Avalanche",
+            "actor": "Prince",
             "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg",
             "_formatted": {
                 "title": "<em>Prince</em> Avalanche"
@@ -211,9 +362,9 @@ As a user i get:
 }
 ```
 
-Unlike v0.20, `_formatted` is only computed for the fields set in `attributesToHighlight` and `attributesToCrop`. Independently from `attributesToRetrieve` value.
+Unlike v0.20, `_formatted` is only containing fields set in `attributesToHighlight` and `attributesToCrop`. Independently from `attributesToRetrieve` value.
 
-**Example 4**
+**Example 6**
 
 Given these search parameters:
 ```
@@ -233,6 +384,7 @@ As a user i get:
             "title": "Prince Avalanche",
             "_formatted": {
                 "title": "<em>Prince</em> Avalanche",
+                "actor": "<em>Prince</em>,
                 "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg"
             }
         }
