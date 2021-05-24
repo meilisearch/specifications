@@ -106,16 +106,6 @@ Any document that has an attribute that contains the query at the n firsts posit
 - without word split
 - with words in the right order
 
-> OR
-
-Any document that has an attribute that contains exactly the query:
-
-- without typo
-- without ngrams
-- without multi-words synonyms
-- without word split
-- with words in the right order
-
 has a rank of `1` (the user didn't finish to type the search but the final query could possibly be an exact match)
 
 ##### Layer 3: Try to match exactly the word of the query anywhere in the document
