@@ -19,7 +19,7 @@ The goal of this specification is to clear the behavior of `attributesToRetrieve
 
 #### Algolia
 
-By default, Algolia returns `_hightlightResult` even if no `attributesToHighlight` are set at query time. So, by default the value is `'*'`.
+By default, Algolia returns `_hightlightResult` even if no `attributesToHighlight` are set at query time. So, by default the value is `*`.
 Setting a specific attribute in `attributesToHighlight` will only give this specific attribute in `_highlightResults`.
 
 Unlike highlighting, snippeting must be proactively enabled for each attribute to snippet, however Algolia authorize the usage of `*` to snippet all attributes.
@@ -29,46 +29,84 @@ Setting a specific attribute in `attributesToSnippet` will only give this specif
 
 #### Current MeiliSearch Behavior (0.20)
 
-The `_formatted` field appears in the search response as soon as the `attributesToHighlight` and/or `attributesToCrop` parameters are sent as a query parameter and are filled with a parameter or as an empty parameter.
-
-`attributesToRetrieve` is independent of `_formatted` and so of `attributesToHighlight` and `attributesToCrop`.
-
-`attributesToHighlight` and `attributesToCrop` have an unwanted behavior on `_formatted` result:
-
 Given a document made of two fields `title` and `poster`
-```json
+```
 {
     "title": "Prince Avalance",
     "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg"
 }
 ```
 
+**Example 1**
+
 Given these search parameters:
-```json
+```
 {
     "q": "prince",
-    "attributesToHighlight": ["title"]
+    "attributesToRetrieve": ["*"]
 }
 ```
 
-As a user i expect to have this response:
+As a user i get:
 
-```json
+```
+{
+    "hits": [
+        {
+            "title": "Prince Avalanche",
+            "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg"
+        }
+    ]
+}
+```
+
+Since `attributesToHighlight` and `attributesToCrop` are not set, `_formatted` is not computed.
+
+
+**Example 2**
+
+Given these search parameters:
+```
+{
+    "q": "prince",
+    "attributesToRetrieve": ["*"],
+    "attributesToHighlight": ["wrongFieldName"]
+}
+```
+
+As a user i get:
+
+```
 {
     "hits": [
         {
             "title": "Prince Avalanche",
             "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg",
             "_formatted": {
-                "title": "<em>Prince</em> Avalance"
+                "title": "Prince Avalance",
+                "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg"
             }
         }
     ]
 }
 ```
 
-but i get:
-```json
+The `_formatted` field appears in the search response as soon as the `attributesToHighlight` and/or `attributesToCrop` parameters are sent as a query parameter and are filled with a value representing an existent or inexistent field. Using an inexistent field is similar to setting `attribuesToHighlight`/`attributesToCrop` to `"*"`
+
+**Example 3**
+
+Given these search parameters:
+```
+{
+    "q": "prince",
+    "attributesToRetrieve": ["*"],
+    "attributesToHighlight": ["title"]
+}
+```
+
+As a user i get:
+
+```
 {
     "hits": [
         {
@@ -83,46 +121,150 @@ but i get:
 }
 ```
 
-`_formatted` is filled with all the `displayedAttributes` despite the fact that the user only ask for one specific field.
+`_formatted` field behavior that is supposed to be controlled by `attributesToHighlight` and `attributesToCrop` is dependent of `attributesToRetrieve`.
 
-This behaviour will be fixed in the `0.21` release in order to only get the fields set in `attributesToHighlight` and `attributesToCrop` in `_formatted`.
+`_formatted` is filled with all the `attributesToRetrieve` despite the fact that the user only ask for one specific field in `attributesToHighlight` or `attributesToCrop`.
 
-#### MeiliSearch Behavior (0.21)
+**Example 4**
 
-As in the `0.20`, the `_formatted` fields appears in the search response as soon as the `attributesToHighlight` and/or `attributesToCrop` parameters are sent with an empty value.
+Given these search parameters:
+```
+{
+    "q": "prince",
+    "attributesToRetrieve": ["title"],
+    "attributesToHighlight": ["*"]
+}
+```
 
-E.g. `"attributesToHighlight": `
+As a user i get:
+```
+{
+    "hits": [
+        {
+            "title": "Prince Avalanche",
+            "_formatted": {
+                "title": "<em>Prince</em> Avalance"
+            }
+        }
+    ]
+}
+```
 
-As in the `0.20`, `_formatted` is also filled with all the `displayedAttributes` despite the fact that the user only ask for one specific field in `attributesForHighlight` or `attributesToCrop`.
+`_formatted` is only filled with the `attributesToRetrieve` fields despite the fact that the user wants all fields to be highlighted or cropped given `attributesToHighlight` or `attributesToCrop` value.
 
-The `_formatted` field appears in the search response as soon as the `attributesToHighlight` and/or `attributesToCrop` parameters are sent as a query parameter and filled with an existent parameter.
+#### Current Transplant/Milli Behavior (0.21)
 
-The next rules clarify the behavior of `_formatted` parameter given `attributesToHighlight` and `attributesToCrop` states and combination.
+**Example 1**
 
-✅  `_formatted` response parameter **SHOULD NOT** be returned in the given cases:
+Same behavior as v0.20 release.
 
-- `attributesToHighlight` is set but is empty AND `attributesToCrop` is set but is empty.
-- `attributesToHighlight` is set but is empty AND `attributesToCrop` isn't set.
-- `attributesToHighlight` is set but only contains a non-existent field AND `attributesToCrop` is set but only contains a non-existent field.
-- `attributesToHighlight` is set but only contains a non-existent field AND (`attributesToCrop` is not set OR `attributesToCrop` is set but is empty).
+**Example 2**
 
-✅ `_formatted` response parameter **SHOULD** be returned in any cases of:
+Given these search parameters:
+```
+{
+    "q": "prince",
+    "attributesToRetrieve": ["*"],
+    "attributesToHighlight": ["wrongFieldName"]
+}
+```
 
-- `attributesToHighlight` is set with `*`. When `attributesToHighlight` is not set, the engine will use `*` as default parameter. So each `displayedAttributes` will be in the `_formated` result in that specific case.
+As a user i get:
+
+```
+{
+    "hits": [
+        {
+            "title": "Prince Avalanche",
+            "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg",
+        }
+    ]
+}
+```
+
+Unlike v0.20, if no field are matched to be formatted, `_formatted` is not computed.
+
+**Example 3**
+
+Given these search parameters:
+```
+{
+    "q": "prince",
+    "attributesToRetrieve": ["*"],
+    "attributesToHighlight": ["title"]
+}
+```
+
+As a user i get:
+
+```
+{
+    "hits": [
+        {
+            "title": "Prince Avalanche",
+            "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg",
+            "_formatted": {
+                "title": "<em>Prince</em> Avalance"
+            }
+        }
+    ]
+}
+```
+
+Unlike v0.20, `_formatted` is only computed for the fields set in `attributesToHighlight` and `attributesToCrop`. Independently from `attributesToRetrieve` value.
+
+**Example 4**
+
+Given these search parameters:
+```
+{
+    "q": "prince",
+    "attributesToRetrieve": ["title"],
+    "attributesToHighlight": ["*"]
+}
+```
+
+As a user i get:
+
+```
+{
+    "hits": [
+        {
+            "title": "Prince Avalanche",
+            "_formatted": {
+                "title": "<em>Prince</em> Avalance",
+                "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg"
+            }
+        }
+    ]
+}
+```
+
+Unlike v0.20, `attributesToHighlight` set fields to be in `_formatted` independently from `attributesToRetrieve`.
+
+#### Expected MeiliSearch Behavior (0.21)
+
+The next rules clarify the current behavior of `Milli/Transplant` for the `_formatted` parameter given `attributesToHighlight` and `attributesToCrop` states and combination.
+
+`_formatted` response parameter **SHOULD NOT** be returned in the given cases:
+
+- `attributesToHighlight` is not set AND `attributesToCrop` is not set.
+- `attributesToHighlight` or `attributesToCrop` are set but only contains a non-existent field.
+
+`_formatted` response parameter **SHOULD** be returned in any cases of:
+
+- `attributesToHighlight` is set with `*`.
 - `attributesToCrop` is set with `*`.
 - `attributesToHighlight` is set with **1..N** existing attributes.
 - `attributesToCrop` is set with **1..N** existing attributes.
 
 
-> ⚠️ Note that if one of the two parameters is requested but empty or contains an attribute that does not exist but the other is valid, `_formatted` will be returned based on the valid parameter.
-
-> ⚠️ Note that `attributesToRetrieve` is independent of `_formatted` and so of `attributesToHighlight` and `attributesToCrop`.
-
-> ⚠️ Note that `displayedAttributes` will control what will be displayed in search results despite asking for fields to be retrieved with `attributesToRetrieve` or to be formatted with `attributesToHighlight` or `attributesToCrop`.
+> ⚠️ Note that `displayedAttributes` still control what will be displayed in search results despite asking for fields to be retrieved with `attributesToRetrieve` or to be formatted with `attributesToHighlight` or `attributesToCrop`.
 
 
 ### V. Impact on Documentation
-N/A
+
+- Update engine documentation to precise the default value `*` for `attributesToHighlight`.
 
 ### VI. Impact on SDKs
 N/A
