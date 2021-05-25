@@ -395,7 +395,68 @@ As a user i get:
 Unlike v0.20, `attributesToHighlight` set fields to be in `_formatted` independently from `attributesToRetrieve`.
 
 #### Expected MeiliSearch Behavior (0.21)
-TBD
+
+✅ If `attributesToRetrieve` and `attributesToCrop` are not set, do not return `_formatted` and don't compute highlights and crops.
+✅ If cumulated fields in `attributesToRetrieve` and `attributesToCrop` resolve to only having non-existent fields, do not return `_formatted`.
+✅ If `attributesToRetrieve` is equal to `*` and `attributesToHighlight` or `attributesToCrop` are equals to `*`, return `_formatted` and compute highlights and crops on each fields.
+✅ If `attributesToRetrieve` is equal to `*` and `attributesToHighlight` or `attributesToCrop` contains a set of fields
+
+**Edge cases**
+
+Given these search parameters:
+
+```
+{
+    "q": "Prince",
+    "attributesToRetrieve": ["title"],
+    "attributesToHighlight": ["actor"]
+}
+```
+
+I want to get:
+
+```
+{
+    "hits": [
+        {
+            "title": "Prince Avalanche",
+            "_formatted": {
+                "title": "Prince Avalanche",
+                "actor": "<em>Prince</em>"
+            }
+        }
+    ]
+}
+```
+
+✅ Stay consistent with the fact that `attributesToRetrieve` are set in `_formatted` result but do not need to be necessary computed for highlighting and cropping until they are declared in `attributesToHighlight` and `attributesToCrop`.
+
+Given these search parameters:
+```
+{
+    "q": "prince",
+    "attributesToRetrieve": ["title"],
+    "attributesToHighlight": ["*"]
+}
+```
+
+I want to get:
+```
+{
+    "hits": [
+        {
+            "title": "Prince Avalanche",
+            "_formatted": {
+                "title": "<em>Prince</em> Avalanche",
+                "actor": "<em>Prince</em>,
+                "poster": "https://image.tmdb.org/t/p/w1280/3KHiQt54usbHyIjLIMzaDAoIJNK.jpg"
+            }
+        }
+    ]
+}
+```
+
+✅ If `attributesToHighlight` or `attributesToCrop` contains a field that is not declared in `attributesToRetrieve`, it his added to `_formatted` and it is highlighted and/or cropped.
 
 ### V. Impact on Documentation
 N/A
