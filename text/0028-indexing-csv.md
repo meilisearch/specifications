@@ -13,13 +13,13 @@ To index documents, the body of the add documents request has to match a specifi
 
 A [CSV](https://en.wikipedia.org/wiki/Comma-separated_values) data format is broadly used to store and exchange data in a simple format.
 
-Also, in order to boost write performance csv data format is more suited than JSON for consequent datasets.
+Also, in order to boost write performance CSV data format is more suited than JSON for consequent datasets has keys are not duplicated for every document.
 
 ### II. Motivation
 
-We want to provide our users with an always improved usage experience. Currently, the engine only accepts JSON format as a data source. We want to give users the possibility of another simple data format, well known, to use. Thus, give them more versatility at the data source choices for the indexation (add and update) step.
+We want to provide our users with an always improved usage experience. Currently, the engine only accepts JSON format as a data source. We want to give users the possibility of another simple data format, well known, to use. Thus, give them more versatility at the data source choices for the indexing (add and update) step.
 
-Since most of SQL engines or SQL clients can easily dump data as csv, it will facilitate MeiliSearch adoption by extending the indexation step on a wider range of customer cases than before.
+Since most SQL engines or SQL clients can easily dump data as CSV, it will facilitate MeiliSearch adoption by extending the indexing step on a wider range of customer cases than before.
 
 Writing performance is also considered as a motivation since CSV parsing is less CPU and memory intensive than parsing Json due to the streamable capability of the CSV format.
 
@@ -32,14 +32,14 @@ N/A
 
 While there's [RFC 4180](https://tools.ietf.org/html/rfc4180) as a try to add a specification for csv format, we will find a lot of variations from that. MeiliSearch features capabilities requires csv data to be formatted the proper way to be parsable by the engine.
 
-- Csv data format need to contain a first line representing the list of attributes with the choosen type separated from the attribute name by `:` character.
+- CSV data format needs to contain a first line representing the list of attributes with the optionally chosen type separated from the attribute name by `:` character. The type is case insensitive.
 
 > An attribute can be specificed with two types: `string` or `number`. A missing type will be interpreted as a `string` by default.
 >
 > Valid headline example: "id:number","title:string","author","price:number"
 
-- Each of the following lines will represent a document for MeiliSearch.
-- Each value should be enclosed in double quotes tags to handle comma character presence inside.
+- The following CSV lines will represent a document for MeiliSearch.
+- A CSV value should be enclosed in double-quotes when it contains a comma character to escape it.
 - Using double-quotes to enclose fields, then a double-quote appearing inside a field must be escaped by preceding it with another double quote as mentioned in [RFC 4180](https://tools.ietf.org/html/rfc4180).
 - Float value should be written with a `.` character, like `3.14`.
 - CSV text should be encoded in UTF8.
@@ -61,7 +61,7 @@ the search result should be displayed as
       "label": "t-shirt",
       "price": 4.99,
       "colors": "red",
-      "description": "Hey, you will rock at summer time.",
+      "description": "Hey, you will rock at summer time."
     }
   ],
   ...
@@ -147,7 +147,7 @@ Documentation should also guide the user in the correct way to properly format a
 
 ### VI. Impact on SDKs
 
-This feature should impact MeiliSearch SDK's in the future by adding the possibility to send a CSV to MeiliSearch on the previous explicited endpoints.
+This feature should impact MeiliSearch SDKs in the future by adding the possibility to send a CSV to MeiliSearch on the previous explicit endpoints. Simplifying the typing of the headers could also be handled by the SDKs.
 
 ## 2. Technical Aspects
 
@@ -157,5 +157,5 @@ This feature should impact MeiliSearch SDK's in the future by adding the possibi
 
 ## 3. Future possibilities
 
-- Provide an interface in the future dashboard to upload CSV data into an index.
+- Provide an interface in the future dashboard to upload CSV data into an index and optionally provide the headers types.
 - Set a payload limit directly related to the type of data format. Currently, the payload size is equivalent to [JSON payload size](https://docs.meilisearch.com/reference/features/configuration.html#payload-limit-size). Metrics on feature usage and configuration update should help to choose a better suited value for this type of data format.
