@@ -15,7 +15,7 @@ Pagination allows the content to be viewed in the form of a sequence in order to
 
 It will make it possible to rule on the subject of the use and behavior of the engine with regard to the pagination of search results for which we have a lot of user feedback and questions about its behavior.
 
-Naturally, our users rely on `nbHits` to determine the number of possible pages. However, in the context of the search endpoint and the internal functioning of the engine dedicated to a fast and accurate search, this number of results represents a number of possible candidates for the search result. This number is exhaustive to guarantee excellent performance.
+Naturally, our users rely on `nbHits` to determine the number of possible pages. However, in the context of the search endpoint and the internal functioning of the engine dedicated to a fast and accurate search, this number of results represents a number of possible candidates for the search result. This number is not exhaustive to avoid a loss in performance.
 
 Developers who want to implement a finite paged search are therefore faced with a hazardous situation. For example, it is possible that by clicking directly on the last page the search will not return any results. This can be explained by the behavior of the search engine which finally finds no relevant candidate to return for this page.
 
@@ -97,5 +97,4 @@ To make it short, the finished pagination will be an experimental feature that w
 
 - Open `forceExhaustivity` in official API documentation.
 - Allow users to configure the `exhaustivityLimit` in settings to be used when `forceExhaustivity` is set to `true`.
-
 
