@@ -1,9 +1,9 @@
-- Title: Pagination
+- Title: Pagination Convention
 - Start Date: 2021-05-10
 - Specification PR: [#40](https://github.com/meilisearch/specifications/pull/40)
 - MeiliSearch Tracking-Issues:
 
-# Pagination
+# Pagination Convention
 
 ## 1. Feature Description and Interaction
 
