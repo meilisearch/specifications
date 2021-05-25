@@ -103,7 +103,7 @@ the search result should be displayed as
 curl \
   -X POST 'http://localhost:7700/indexes/movies/documents' \
   -H 'Content-Type: text/csv' \
-  --data '
+  --binary-data '
     "id","label","price:number","colors","description"\n
     "1","hoodie","19.99","purple","Hey, you will rock at summer time."
   '
@@ -123,7 +123,7 @@ curl \
 curl \
   -X PUT 'http://localhost:7700/indexes/movies/documents' \
   -H 'Content-Type: text/csv' \
-  --data '
+  --binary-data '
     "id","label","price:number","colors","description"\n
     "1","hoodie","19.99","purple","Hey, you will rock at summer time."
   '
