@@ -77,6 +77,7 @@ To make it short, the finished pagination will be an experimental feature that w
 
 - ✅ Accept a `forceExhaustivity` boolean parameter to strictly ensure that the engine will return an exhaustive `nbHits` value.
 - ✅ Add a constant in the core to have a limited number of documents when `forceExhaustivity` is set to `true`. We will start with a value of `1000`. This value will evolve according to our analysis. In the future, if we decide to support this feature officially, we could open it via the API so that the user can change the behavior according to his needs with the consequences that it implies on the performances. `exhaustivityLimit` is a proposal for this constant.
+- ✅ `exhaustiveNbHits` should be set to `true` when `forceExhaustivity` is set to `true`. `exhaustiveNbHits` being all the time at false currently, this will be the way to make it dynamic and keep it consistent.
 
 ### V. Impact on Documentation
 
