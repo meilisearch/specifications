@@ -80,7 +80,7 @@ To make it short, the finished pagination will be an experimental feature that w
 
 ### V. Impact on Documentation
 
-- The `paginateSearch` will be documented in SDKS docs (Code Sample, methods behavior etc). The limit of `1000` exhaustives number should be mentionned. We should also explain that is due to performance reasons.
+- The `paginateSearch` will be documented in SDKS docs (Code Sample, methods behavior etc). The limit of `1000` exhaustives number should be mentionned. We should also explain that it is due to performance reasons to keep fast search performance.
 - Besides that we will write a blog post about our vision for a search experience. It should be understood that we prefer to push a non-finite search like an infinite scroll rather than a finite search.
 
 ### VI. Impact on SDKs
