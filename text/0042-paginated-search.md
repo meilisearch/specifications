@@ -1,6 +1,6 @@
 - Title: Paginated Search
 - Start Date: 2021-05-25
-- Specification PR:
+- Specification PR: [#42](https://github.com/meilisearch/specifications/pull/42)
 - MeiliSearch Tracking-Issues:
 
 # Paginated Search
