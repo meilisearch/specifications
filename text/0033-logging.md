@@ -128,13 +128,13 @@ We have decided to keep the use of `env_logger` for Milli/Transplant. However, w
 
 ##### Log Levels
 
-| Level | Description                                                                                                              |
-|-------|--------------------------------------------------------------------------------------------------------------------------|
-| ERROR | Everything related to an error occuring.                                                                                         |
-| WARN  | Everything related to a warning. TBD                                                                                     |
-| INFO  | Info should be the default level. It displays high level of informations like start/end of process and HTTP calls.                                            |
-| DEBUG | Transplant should add request body and response body on Search endpoint log to provide more informations for debugging purpose. Milli log informations about engine process. |
-| TRACE | It only concerns Mili to trace everything happening on the engine level. Should not be displayed by default. Not used at the moment.             |
+| Level | Description                                                                                                       |
+|-------|-------------------------------------------------------------------------------------------------------------------|
+| ERROR | Everything related to an error. A non blocking error has occured.                                                 |
+| WARN  | Used to warn about an exceptional non-blocking event occurring.                                                   |
+| INFO  | Default Log Level. It displays high level informations of events occuring in the search engine.                   |
+| DEBUG | Used for debugging and development purposes.  More verbose than INFO.                                             |
+| TRACE | Display everything happening at engine level. Not used at the moment.                                             |
 
 
 ##### Log Format
@@ -146,7 +146,7 @@ We have decided to keep the use of `env_logger` for Milli/Transplant. However, w
 ###### Mandatory log format part. E.g [TIME_FORMAT LOG_LEVEL MODULE] part.
 
 - Time when the request was started to process (in rfc3339 format)
-- Log levels are `ERROR`, `WARN`, `INFO`, `DEBUG`, `TRACE`.
+- Log levels are  `ERROR`, `WARN`, `INFO`, `DEBUG`, `TRACE`.
 - The module part gives information about which module logs the entry.
 
 ###### HTTP Call
@@ -169,9 +169,7 @@ Given
 
 The documentation only mention the logging behavior for the `development` env on the `MEILI_ENV` part.
 
-We should explain how to get more or less levels using `RUST_LOG` environment variable.
-
-Explaining what we log for each level is also needed.
+We should explain how to specify the log level using `RUST_LOG` environment variable and display the Log Levels table as information in a dedicated section.
 
 ### VI. Impact on SDKs
 N/A
@@ -187,3 +185,16 @@ Milli and Transplant should be careful by keeping a consistent way to log inform
 - Store logs on filesystem (give us future possibilites of rolling strategy). We will keep an eye on https://roadmap.meilisearch.com/c/81-specify-log-path, Github issues and, Slack Community messages. Keep in mind that it is possible to send logs to files using `syslog` or `systemd` journalctl.
 - Develop API endpoint to search the logged events and configure logging policy within the system (SaaS feature in mind).
 
+## 4. Planned Changes
+
+### 0.21
+
+#### Core
+- Use a consistent method to log
+- Log output should start with the mandatory log format part.
+- If log level is set to DEBUG, /search endpoint should output parameters and response as a log output.
+
+#### Documentation
+- Add a dedicated logging section in the documentation.
+- Add a link to this dedicated section on the `environment` [section](https://docs.meilisearch.com/reference/features/configuration.html#environment).
+- We should add the default level for the production environment on the `environment` section, by default its `INFO`.
