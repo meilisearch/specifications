@@ -190,7 +190,7 @@ Milli and Transplant should be careful by keeping a consistent way to log inform
 ### 0.21
 
 #### Core
-- Use a consistent method to log
+- Use a consistent method to log (relative to internal implementation)
 - Log output should start with the mandatory log format part.
 - If log level is set to DEBUG, /search endpoint should output parameters and response as a log output.
 
