@@ -9,11 +9,11 @@
 
 ### I. Summary
 
-When I use MeiliSearch I want to see what's going on under the hood because it is useful at each stage of development to debug, tweak and maintain MeiliSearch in good conditions giving my usages.
+As a user of the MeiliSearch binary, I want to be able to know what is happening in the engine at different levels of granularity depending on my needs.
 
 ### II. Motivation
 
-Giving tracing about the behavior of a system is useful to those who test, develop and use it in production. The goal of this specification is to state on the logging behavior of the new search engine (Milli).
+Keeping track of the behavior of a system is useful for those who test, develop and use it in production. The purpose of this specification is to indicate the logging behavior of the search engine.
 
 ### III. Additional Materials
 
@@ -27,11 +27,11 @@ Algolia offers an API endpoint dedicated to retrieving the logs of search and in
 
 Algolia gives parameters to modify the request according to the user's needs.
 
-> A query performed without parameters will return the last 10 records by default.
+> A query performed without parameters returns the last 10 records by default.
 >
 > The maximum number of logs that can be returned per request is 1000.
 
-It is possible to use `offset` and `length` parameters to search through the log entries.
+It is possible to use the `offset` and `length` parameters to search the log entries.
 
 A `type` parameter is also provided to select the type of log to retrieve.
 
@@ -46,7 +46,7 @@ Here is the information that Algolia chooses to return:
 
 | Key                | Description                                                                                     |
 |--------------------|-------------------------------------------------------------------------------------------------|
-| timestamp         | Timestamp in ISO-8601 format                                                                   |
+| timestamp          | Timestamp in ISO-8601 format                                                                   |
 | method             | Rest type of the method                                                                        |
 | answer_code        | HTTP response code                                                                              |
 | query_body         | Request body. Limited to 1000 characters                                             |
@@ -62,9 +62,10 @@ Here is the information that Algolia chooses to return:
 | index              | Index name of the log                                                                          |
 | inner_queries      | Contains an object for each performed query with the `indexName`, `queryID`, `offset`, and `userToken` |
 > Source: ***[Algolia documentation](https://www.algolia.com/doc/api-reference/api-methods/get-logs/)***
+
 #### TypeSense
 
-TypeSense makes no mention of logs in its documentation. However, the tracing policy seems to be in verbose mode and give a lot of more or less relevant information.
+TypeSense makes no mention of logs in its documentation. However, the tracing policy seems to be in verbose mode and gives a lot of more or less relevant information.
 
 ```
 typesense_1     | I20210403 01:06:33.688689     1 typesense_server_utils.cpp:301] Starting Typesense 0.19.0
@@ -80,13 +81,13 @@ typesense_1     | I20210403 01:06:33.748559    82 log.cpp:1098] load open segmen
 typesense_1     | I20210403 01:06:33.748966    82 raft_meta.cpp:521] Loaded single stable meta, path /data/state/meta term 3 votedfor 0.0.0.0:8107:8108 time: 193
 ```
 
-It also gives the stack trace in case of an exception.
+It also gives the stack trace in case of exception.
 
 #### ElasticSearch
 
-Elasticsearch is arguably the most versatile search engine when it comes to logging. [See the documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/logging.html).
+Elasticsearch is probably the most versatile search engine when it comes to logging. [See the documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/logging.html).
 
-It is possible to set a precise rolling strategy.
+It is possible to define a precise rolling log strategy.
 
 A rolling log strategy offers permits to:
 
@@ -97,34 +98,34 @@ A rolling log strategy offers permits to:
 
 [See more information here about log rotation strategy](https://en.wikipedia.org/wiki/Log_rotation)
 
-This is something important to have when systems generate a lot of logs or are under heavy load. It is also a great practice to feed a monitoring dashboard at certain times and, through this, to offer an easy way to analyze and understand what has happened in the system in a human-readable way.
+This is an important thing to have when systems generate a lot of logs or are under heavy load. It's also a good practice to populate a monitoring dashboard at certain times and, through that, provide an easy way to analyze and understand what happened in the system in a human-readable way.
 
-Internally, Elasticsearch uses log4j2 to trace events and configure the log strategy. Logging levels can be configured per package, giving the precision needed to monitor a specific feature or time within the lifecycle of a search engine.
+Internally, Elasticsearch uses `log4j2` to track events and configure the logging policy. Logging levels can be configured on a per-package basis, giving the precision needed to monitor a specific feature or time in a search engine's lifecycle.
 
-Log level can be: `debug`, `info`, `warn`, `error`, `fatal`, or `unknown`.
+A log level can be: `debug`, `info`, `warn`, `error`, `fatal`, or `unknown`.
 
 #### Elastic Entreprise Search
 
-Elasticsearch's SaaS platform, like Algolia, offers a quite similar endpoint to browse the logs generated by the system.
+Elasticsearch's SaaS platform, like Algolia, offers a fairly similar endpoint for browsing system-generated logs.
 
-However, it is possible to deactivate the storage of logs, modify the retention period but also to filter the logs with more details.
+However, it is possible to disable log storage, change the retention period and also filter the logs with more details.
 
 ![image](https://www.elastic.co/guide/en/app-search/current/images/guides/log-settings-controls.png)
 *Elastic App Search's Log Retention settings view.*
 
 > It is also possible to do that from a Log Settings API endpoint.
 
-> API Logs is aimed for trace requests and responses at engine level while Analytics Logs trace query, clicks and counts.
+> API Logs track requests and responses at the engine level, while Analytics Logs track requests, clicks and counts.
 
 ### IV. Explanation
 
 #### Current Logging behaviour of MeiliSearch (0.20)
 
-MeiliSearch uses `env_logger` to allow setting the output level of logs from the `RUST_LOG` environment variable. `env_logger` permits to set a specific log level per module if needed. [See more here](https://docs.rs/env_logger/0.8.3/env_logger/).
+MeiliSearch uses `env_logger` to allow to define the log output level from the `RUST_LOG` environment variable. `env_logger` allows to define a specific log level per module if necessary. [See more here](https://docs.rs/env_logger/0.8.3/env_logger/).
 
 #### Logging behaviour for Milli (0.21)
 
-We have decided to keep the use of `env_logger` for Milli/Transplant. However, we are going to make changes to make the logging more consistent and more versatile.
+We have decided to keep the use of `env_logger` for Milli/Transplant. However, we will make some changes to make the logging more consistent and versatile.
 
 ##### Log Levels
 
@@ -147,11 +148,11 @@ We have decided to keep the use of `env_logger` for Milli/Transplant. However, w
 
 - Time when the request was started to process (in rfc3339 format)
 - Log levels are  `ERROR`, `WARN`, `INFO`, `DEBUG`, `TRACE`.
-- The module part gives information about which module logs the entry.
+- The module part gives information about the module that records the log.
 
 ###### HTTP Call
 
-Transplant uses `actix_web::middleware::logger` to log informations on API endpoints that receive calls.
+Transplant uses `actix_web::middleware::logger` to record information about the API endpoints that receive calls.
 
 Given
 ```172.17.0.1:57220 "POST /indexes/indexUID/documents HTTP/1.1" 202 14 "-" "PostmanRuntime/7.26.10" 0.023529```
@@ -163,27 +164,27 @@ Given
 - User-Agent
 - Time taken to serve the request, in seconds to 6 decimal places
 
-> In DEBUG level the Search endpoint should log the request body and response body.
+> At DEBUG log level, the search endpoint must log the request body and the response body.
 
 ### V. Impact on Documentation
 
-The documentation only mention the logging behavior for the `development` env on the `MEILI_ENV` part.
+The documentation only mentions the logging behavior for the `development` env on the `MEILI_ENV` part.
 
-We should explain how to specify the log level using `RUST_LOG` environment variable and display the Log Levels table as information in a dedicated section.
+We should explain how to specify the logging level using the `RUST_LOG` environment variable and display the logging level table as information in a dedicated section.
 
 ### VI. Impact on SDKs
 N/A
 
 ## 2. Technical Aspects
 
-MeiliSearch is not consistent about logging methods. It have occurences of `println` and `eprintln` in the codebase and occurences of `error`, `warn`, `info`, `debug`, `trace` methods. It also calls `log::warn` or `log::error`.
+MeiliSearch is not consistent on logging methods. There are occurrences of `println` and `eprintln` in the codebase and occurrences of `error`, `warn`, `info`, `debug`, `trace` methods. It also calls `log::warn` or `log::error`.
 
-Milli and Transplant should be careful by keeping a consistent way to log informations.
+Milli and Transplant must be careful in keeping a consistent way of logging information.
 
 ## 3. Future Possibilities
 
 - Store logs on filesystem (give us future possibilites of rolling strategy). We will keep an eye on https://roadmap.meilisearch.com/c/81-specify-log-path, Github issues and, Slack Community messages. Keep in mind that it is possible to send logs to files using `syslog` or `systemd` journalctl.
-- Develop API endpoint to search the logged events and configure logging policy within the system (SaaS feature in mind).
+- Develop an API endpoint to search for logged events and configure the logging policy for the instance (SaaS feature in mind).
 
 ## 4. Planned Changes
 
@@ -192,7 +193,7 @@ Milli and Transplant should be careful by keeping a consistent way to log inform
 #### Core
 - Use a consistent method to log (relative to internal implementation)
 - Log output should start with the mandatory log format part.
-- If log level is set to DEBUG, /search endpoint should output parameters and response as a log output.
+- If log level is set to DEBUG, the `/search` endpoint should output request parameters and body response as a log output.
 
 #### Documentation
 - Add a dedicated logging section in the documentation.
