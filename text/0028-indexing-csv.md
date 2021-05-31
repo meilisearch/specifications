@@ -112,10 +112,10 @@ curl \
 
 ##### Error codes
 
-> - Sending a different payload than the `Content-Type` header should return a `415 unsupported_media_type` error.
+> - Sending a different payload than the `Content-Type` header should return a `400 bad_request` error.
 > - Too large payload according to the limit should return a `413 payload_too_large` error
-> - Wrong encoding should return a `420 unprocessable_entity` error
-> - Invalid CSV data should return a `420 unprocessable_entity` error
+> - Wrong encoding should return a `400 bad_request` error
+> - Invalid CSV data should return a `400 bad_request` error
 
 ### Add or Update Documents [📎](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents)
 
@@ -132,10 +132,10 @@ curl \
 
 ##### Errors handling
 
-> - Sending a different payload than the `Content-Type` header should return a `415 unsupported_media_type` error.
+> - Sending a different payload than the `Content-Type` header should return a `400 bad_request` error.
 > - Too large payload according to the limit should return a `413 payload_too_large` error
-> - Wrong encoding should return a `420 unprocessable_entity` error
-> - Invalid CSV data should return a `420 unprocessable_entity` error
+> - Wrong encoding should return a `400 bad_request` error
+> - Invalid CSV data should return a `400 bad_request` error
 
 ### V. Impact on documentation
 
