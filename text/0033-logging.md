@@ -1,7 +1,7 @@
 - Title: Logging
 - Start Date: 2021-04-21
 - Specification PR: [#33](https://github.com/meilisearch/specifications/pull/33)
-- MeiliSearch Tracking-issues:
+- MeiliSearch Tracking-issues: [transplant/#193](https://github.com/meilisearch/transplant/issues/193)
 
 # Logging
 
@@ -193,6 +193,8 @@ Milli and Transplant must be careful in keeping a consistent way of logging info
 #### Core
 - Use a consistent method to log (relative to internal implementation)
 - Log output should start with the mandatory log format part.
+- The HTTP logs should be logged as described in this spec
+- The users should be able to choose the level of debug by filling the `RUST_LOG` environment variable
 - If log level is set to DEBUG, the `/search` endpoint should output request parameters and body response as a log output.
 
 #### Documentation
