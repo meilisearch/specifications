@@ -15,7 +15,7 @@ An [NDJSON](http://ndjson.org/) data format is easier to use than a CSV format b
 
 ### II. Motivation
 
-Currently, the engine only accepts JSON format as a data source. We want to give users the possibility of another simple data format to use. Thus, give them more versatility at the data source choices for the indexation step.
+Currently, the engine only accepts JSON format as a data source. We want to give users the possibility of another simple data format to use. Thus, give them more versatility at the data source choices for the indexing step.
 
 Writing performance is also a motivation since JSON Lines data parsing is less CPU and memory-intensive than parsing standard JSON. When new lines represent separate entries it makes the NDJSON data streamable, thus, more suited for indexing a consequent data set.
 
@@ -81,7 +81,7 @@ the search result should be displayed as
 curl \
   -X POST 'http://localhost:7700/indexes/movies/documents' \
   -H 'Content-Type: application/x-ndjson' \
-  --data '
+  --binary-data '
     {"id":1, "label": "t-shirt", "price": 4.99, "colors": ["red", "green", "blue"]}\n
     {"id":499, "label": "hoodie", "price": 19.99, "colors": ["purple"]}
   '
@@ -90,10 +90,10 @@ curl \
 
 ##### Error codes
 
-> - Sending a different payload than the `Content-Type` header should return a `415 unsupported_media_type` error.
+> - Sending a different payload than the `Content-Type` header should return a `400 bad_request` error.
 > - Too large payload according to the limit should return a `413 payload_too_large` error
-> - Wrong encoding should return a `420 unprocessable_entity` error
-> - Invalid NDJSON data should return a `420 unprocessable_entity` error
+> - Wrong encoding should return a `400 bad_request` error
+> - Invalid NDJSON data should return a `400 bad_request` error
 
 ### Add or Update Documents [📎](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents)
 
@@ -101,7 +101,7 @@ curl \
 curl \
   -X PUT 'http://localhost:7700/indexes/movies/documents' \
   -H 'Content-Type: application/x-ndjson' \
-  --data '
+  --binary-data '
     {"id":1, "label": "t-shirt", "price": 4.99, "colors": ["red", "green", "blue"]}\n
     {"id":499, "label": "hoodie", "price": 19.99, "colors": ["purple"]}
   '
@@ -110,10 +110,10 @@ curl \
 
 ##### Errors handling
 
-> - Sending a different payload than the `Content-Type` header should return a `415 unsupported_media_type` error.
+> - Sending a different payload than the `Content-Type` header should return a `400 bad_request` error.
 > - Too large payload according to the limit should return a `413 payload_too_large` error
-> - Wrong encoding should return a `420 unprocessable_entity` error
-> - Invalid NDJSON data should return a `420 unprocessable_entity` error
+> - Wrong encoding should return a `400 bad_request` error
+> - Invalid NDJSON data should return a `400 bad_request` error
 
 ### V. Impact on documentation
 
