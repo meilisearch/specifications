@@ -29,77 +29,6 @@ N/A
 - ✅ `limit` and `offset` are number parameters.
 - ✅ If `limit` and `offset` can't return any results, the API should not return an error. It's preferable to return empty results in this case.
 
-##### Going further
-
-- Provide a `_links` object with `current`, `next` and `prev` elements to facilitate pagination on client side by pre-computing `next` and `prev` urls parameters given the pagination context.
-
-
-E.g. Result from `GET /indexes/myindex/updates/` at `page 1`.
-
-```json
-{
-    "hits": [
-        {...},
-        {...},
-        {...},
-        {...},
-        {...}
-    ],
-    "total": 50,
-    "size": 5,
-    "offset": 5,
-    "limit": 5,
-    "_links": {
-        "current": "https://0.0.0.0:7070/indexes/myindex/updates?offset=0&limit=5",
-        "next": "https://0.0.0.0:7070/indexes/myindex/updates?offset=5&limit=5",
-        "prev": null
-    }
-}
-```
-
-E.g. Result from `GET /indexes/myindex/updates/` at `page 2`.
-```json
-{
-    "hits": [
-        {...},
-        {...},
-        {...},
-        {...},
-        {...}
-    ],
-    "total": 50,
-    "size": 5,
-    "offset": 5,
-    "limit": 5,
-    "_links": {
-        "current": "https://0.0.0.0:7070/indexes/myindex/updates?offset=5&limit=5",
-        "next": "https://0.0.0.0:7070/indexes/myindex/updates?offset=10&limit=5",
-        "prev": "https://0.0.0.0:7070/indexes/myindex/updates?offset=0&limit=5"
-    }
-}
-```
-E.g. Result from `GET /indexes/myindex/updates/` at `page 10`.
-```json
-{
-    "hits": [
-        {...},
-        {...},
-        {...},
-        {...},
-        {...}
-    ],
-    "total": 50,
-    "size": 5,
-    "offset": 5,
-    "limit": 5,
-    "_links": {
-        "current": "https://0.0.0.0:7070/indexes/myindex/updates?offset=45&limit=5",
-        "next": null,
-        "prev": "https://0.0.0.0:7070/indexes/myindex/updates?offset=40&limit=5"
-    }
-}
-```
-
 ### V. Impact on Documentation
 
 - Create a reference pagination document page to explain the behavior of standard pagination as a central references.
@@ -114,5 +43,5 @@ E.g. Result from `GET /indexes/myindex/updates/` at `page 10`.
 N/A
 
 ## 3. Future Possibilities
-- Develop and branch the `_links` component on standard paginations.
+- Develop and branch a `_links` component  with `prev`, `next` parameters.
 - Introduce a `page` parameter.
