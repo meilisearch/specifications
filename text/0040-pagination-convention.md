@@ -28,7 +28,7 @@ E.g. [GET `/indexes/:index_uid/updates`](https://docs.meilisearch.com/reference/
 
 ##### Request
 
-`{{url}}/indexes/{{indexUID}}/updates`
+`/indexes/:index_uid/updates`
 
 > For the example, let's imagine that the default limit is `20`.
 
@@ -123,7 +123,7 @@ E.g. [GET `/indexes/:index_uid/updates`](https://docs.meilisearch.com/reference/
 
 ##### Request
 
-`{{url}}/indexes/{{indexUID}}/updates?offset=0&limit=2`
+`/indexes/:index_uid/updates?offset=0&limit=2`
 
 ##### Response
 ```
@@ -181,7 +181,7 @@ E.g. [GET `/indexes/:index_uid/updates`](https://docs.meilisearch.com/reference/
 
 ##### Request
 
-`{{url}}/indexes/{{indexUID}}/updates?offset=2&limit=2`
+`/indexes/:index_uid/updates?offset=2&limit=2`
 
 ##### Response
 
@@ -234,9 +234,9 @@ E.g. [GET `/indexes/:index_uid/updates`](https://docs.meilisearch.com/reference/
 
 ##### Request
 
-`{{url}}/indexes/{{indexUID}}/updates?status=processed&offset=50&limit=10`
+`/indexes/:index_uid/updates?status=processed&offset=50&limit=10`
 
-> For the example, let's imagine the total number of processed update is `60` and want page of `10` items.
+> For the example, let's imagine the total number of processed updates is `60` and we want page of `10` items.
 
 ##### Response
 ```
