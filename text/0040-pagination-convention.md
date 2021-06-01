@@ -22,7 +22,7 @@ N/A
 
 ##### Requirements
 
-- ✅ Each paginable route must return the total number of items it can render to the user at the end and the current number of items returned in the response. E.g. `total` and `size`. In the case of multiples pages, all other pages except the last one will have a `size = limit`.
+- ✅ Each paginable route must return the `total` number of items that match the query and the number of items returned in the response as `size`.
 - ✅ Each paginable route should be able to handle `offset` and `limit` to return a specific page.
 - ✅ Each paginable route should handle a default `limit`. E.g. `20`
 - ✅ Each paginable route should handle a default `offset` parameter with a value of `0`.
