@@ -127,7 +127,7 @@ MeiliSearch uses `env_logger` to allow to define the log output level from the `
 
 We have decided to keep the use of `env_logger` for Milli/Transplant. However, we will make some changes to make the logging more consistent and versatile.
 
-We will expose a `LOG_LEVEL` flag that corresponds to `RUST_LOG` in the binary to improve its meaning and clarity to users.
+We will expose a `LOG_LEVEL` environment variable that corresponds to `RUST_LOG` in the binary to improve its meaning and clarity to users.
 
 ##### Log Levels
 
@@ -184,7 +184,7 @@ N/A
 
 - Store logs on filesystem (give us future possibilites of rolling strategy). We will keep an eye on https://roadmap.meilisearch.com/c/81-specify-log-path, Github issues and, Slack Community messages. Keep in mind that it is possible to send logs to files using `syslog` or `systemd` journalctl.
 - Develop an API endpoint to search for logged events and configure the logging policy for the instance (SaaS feature in mind).
-- Add syntaxic sugar helper like `-v, -vv, -vvv` that can be translated to a `LOG_LEVEL` value.
+- Add syntaxic sugar helper flag like `-v, -vv, -vvv` that can be translated to a `LOG_LEVEL` value.
 
 ## 4. Planned Changes
 
