@@ -178,10 +178,7 @@ We should explain how to specify the logging level using the `LOG_LEVEL` environ
 N/A
 
 ## 2. Technical Aspects
-
-MeiliSearch is not consistent on logging methods. There are occurrences of `println` and `eprintln` in the codebase and occurrences of `error`, `warn`, `info`, `debug`, `trace` methods. It also calls `log::warn` or `log::error`.
-
-Milli and Transplant must be careful in keeping a consistent way of logging information.
+N/A
 
 ## 3. Future Possibilities
 
