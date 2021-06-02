@@ -96,6 +96,7 @@ the search result should be displayed as
 #### API Endpoints
 
 > Each API endpoints mentioned above will now require a `text/csv` as `Content-Type` header to process CSV data.
+> ⚠ A missing Content-Type will be interpreted as `application/json` since it's the current behavior. Giving an `application/json` Content-Type leads to the same behavior.
 
 #### Add or Replace Documents [📎](https://docs.meilisearch.com/reference/api/documents.html#add-or-replace-documents)
 
@@ -150,10 +151,7 @@ Documentation should also guide the user in the correct way to properly format a
 This feature should impact MeiliSearch SDKs in the future by adding the possibility to send a CSV to MeiliSearch on the previous explicit endpoints. Simplifying the typing of the headers could also be handled by the SDKs.
 
 ## 2. Technical Aspects
-
-### I. Technical Details
-
-⚠ A missing Content-Type will be interpreted as `application/json` since it's the current behavior. Giving an `application/json` Content-Type leads to the same behavior.
+N/A
 
 ## 3. Future possibilities
 
