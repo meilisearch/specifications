@@ -1,6 +1,6 @@
 - Title: API Format
 - Start Date: 2021-06-03
-- Specification PR: [#44](https://github.com/meilisearch/specifications/pull/44)
+- Specification PR: [#45](https://github.com/meilisearch/specifications/pull/45)
 - MeiliSearch Tracking-issues:
 
 # API Format
