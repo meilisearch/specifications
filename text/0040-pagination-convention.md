@@ -13,26 +13,26 @@ Pagination allows the content to be viewed in the form of a sequence in order to
 
 ### II. Motivation
 
-This specification will be used as a convention to implement simple and standard paginations to be set up on API routes such as `/updates`, `/documents` or `/dumps` for example. Since the pagination of search results is intrinsically linked to technical implementations of the search engine, this specific case is detailed in its own specification.
+This specification will be used as a convention to implement simple and standard paginations to be set up on API routes such as `/updates`, `/documents` or `/dumps` for example. Since the pagination of search results is intrinsically linked to technical implementations of the search engine, this specific case is detailed in its own specification. [Paginated Search specification](https://github.com/meilisearch/specifications/blob/main/text/0042-paginated-search.md).Thus this specification does not deal with this specific case.
 
 ### III. Additional Materials
 N/A
 
 ### IV. Explanation
 
-### Examples
+#### Examples
 
 E.g. [GET `/indexes/:index_uid/updates`](https://docs.meilisearch.com/reference/api/updates.html#get-all-update-status)
 
-#### Default response example
+##### Default response example
 
-##### Request
+###### Request
 
 `/indexes/:index_uid/updates`
 
 > For the example, let's imagine that the default limit is `20`.
 
-##### Response
+###### Response
 ```
 [
     "data": [
@@ -119,13 +119,13 @@ E.g. [GET `/indexes/:index_uid/updates`](https://docs.meilisearch.com/reference/
 ]
 ```
 
-#### Get page 1 of updates with a page size of 2 items
+##### Get page 1 of updates with a page size of 2 items
 
-##### Request
+###### Request
 
 `/indexes/:index_uid/updates?offset=0&limit=2`
 
-##### Response
+###### Response
 ```
 [
     "data": [
@@ -177,13 +177,13 @@ E.g. [GET `/indexes/:index_uid/updates`](https://docs.meilisearch.com/reference/
 ]
 ```
 
-#### Get page 2 of updates with a page size of 2 items
+##### Get page 2 of updates with a page size of 2 items
 
-##### Request
+###### Request
 
 `/indexes/:index_uid/updates?offset=2&limit=2`
 
-##### Response
+###### Response
 
 ```
 [
@@ -230,15 +230,15 @@ E.g. [GET `/indexes/:index_uid/updates`](https://docs.meilisearch.com/reference/
 ]
 ```
 
-#### Get last page of processed updates
+##### Get last page of processed updates
 
-##### Request
+###### Request
 
 `/indexes/:index_uid/updates?status=processed&offset=50&limit=10`
 
 > For the example, let's imagine the total number of processed updates is `60` and we want page of `10` items.
 
-##### Response
+###### Response
 ```
 [
     "data": [
@@ -309,4 +309,3 @@ N/A
 
 ## 3. Future Possibilities
 - Develop and branch a `_links` component  with `prev`, `next` parameters.
-- Introduce a `page` parameter.
