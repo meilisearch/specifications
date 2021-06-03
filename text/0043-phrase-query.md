@@ -1,6 +1,6 @@
 - Title: Phrase Query
 - Start Date: 2021-06-02
-- Specification PR: [#]()
+- Specification PR: [#43](https://github.com/meilisearch/specifications/pull/43)
 - MeiliSearch Tracking-Issues:
 
 # Phrase Query
