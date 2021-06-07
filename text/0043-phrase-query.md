@@ -9,7 +9,7 @@
 
 ### I. Summary
 
-MeiliSearch does not allow users a way to write a strict query in order to ask the engine to be more drastic in its selection of candidates for search results. The Phrase Query feature adds a simple syntax available to users to require the engine to select documents that will strictly match the search field value. That is, without typography, without prefix and, in the order of the given terms.
+MeiliSearch does not allow users a way to write a strict query in order to ask the engine to be more drastic in its selection of candidates for search results. The Phrase Query feature adds a simple syntax available to users to require the engine to select documents that will strictly match the search field value. That is, without typography, n-gram, wordsplit, prefix, synonym, and, proximity. In addition, the expression of a Phrase Query is case insensitive.
 
 ### II. Motivation
 
@@ -47,8 +47,6 @@ GET /_search
 ```
 
 ### IV. Explanation
-
-To use the Phrase Query syntax, simply surround the contiguous search terms with the characters `"`.
 
 Let's say I want to search for a specific book with a title strictly containing `Plays and Playwrights 2002`.
 
@@ -92,9 +90,21 @@ Using the standard query parameter syntax as `q` equals to `Plays and Playwright
 }
 ```
 
-Using the Phrase Query syntax this way, with `q` equals to `"Plays and Playwrights 2002"`, will lead to have only one result because the title is exactly written like that. No typo tolerance nor prefix search were applied on the query terms at search time.
+To use the Phrase Query syntax, simply surround the contiguous search terms with the characters `"`.
+
+Using the Phrase Query syntax this way, with `q` equals to `"Plays and Playwrights 2002"`, will lead to have only one result because the title is exactly written like that.
 
 > Note that it's case insensitive. So, if i search with `"plays and playwrights 2002"`, this will lead to the same result.
+
+The value between the `"` operators will be searched without:
+
+- typography
+- n-gram
+- wordsplit
+- prefix
+- synonym
+- proximity
+
 
 ```
 {
@@ -145,6 +155,8 @@ The query can be exprimed like that `"African American" poem`
             "author": "Barnes &amp; Noble"
         },
 ```
+
+As you can see in the results, the presence or absence of one or more soft separators such as `-` between two words does not affect the query match of the phrase and the document.
 
 ### V. Impact on Documentation
 
