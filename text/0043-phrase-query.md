@@ -9,15 +9,15 @@
 
 ### I. Summary
 
-Meilisearch does not allow users a way to write a strict query in order to ask the engine to be more drastic in its selection of candidates for search results. The Phrase Query feature adds a simple syntax available to users to require the engine to select documents that will strictly match the search field value. That is, without typography, without prefix and, in the order of the given terms.
+MeiliSearch does not allow users a way to write a strict query in order to ask the engine to be more drastic in its selection of candidates for search results. The Phrase Query feature adds a simple syntax available to users to require the engine to select documents that will strictly match the search field value. That is, without typography, without prefix and, in the order of the given terms.
 
 ### II. Motivation
 
 This feature is driven by user needs. Indeed, let's take an example recently brought up in our community slack.
 
-The user in question would like to be able to retrieve specifically the document containing the unique ISBN identifier and only that one. In an ux context of type as you search, this is impossible today without impacting the UI/UX or finding a workaround.
+The user in question would like to be able to retrieve specifically the document containing the unique ISBN identifier and only that one. In a UX context of type as you search, this is impossible today without impacting the UI/UX or finding a workaround.
 
-- It could have had a specific search field only dedicated to this ISBN field in order to make it a filter and using the `=` operator. Not great for the ux.
+- It could have had a specific search field only dedicated to this ISBN field in order to make it a filter and using the `=` operator. Not great for the UX.
 
 - It could also have kept a single search field and detected that an ISBN was entered in the search field using a regex to inject that filter at that point. Not great for the developper experience, moreover, what happens when a pattern cannot be specifically determined?
 
@@ -50,7 +50,7 @@ GET /_search
 
 To use the Phrase Query syntax, simply surround the contiguous search terms with the characters `"`.
 
-Let's say i want to search for a specific book with a title stricly containing `Plays and Playwrights 2002`.
+Let's say I want to search for a specific book with a title strictly containing `Plays and Playwrights 2002`.
 
 Using the standard query parameter syntax as `q` equals to `Plays and Playwrights 2002`, will lead to have multiple search results because of the ranking rules criterions.
 
@@ -158,4 +158,3 @@ N/A
 
 ## 3. Future Possibilities
 N/A
-
