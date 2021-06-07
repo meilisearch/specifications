@@ -94,6 +94,8 @@ Using the standard query parameter syntax as `q` equals to `Plays and Playwright
 
 Using the Phrase Query syntax this way, with `q` equals to `"Plays and Playwrights 2002"`, will lead to have only one result because the title is exactly written like that. No typo tolerance nor prefix search were applied on the query terms at search time.
 
+> Note that it's case insensitive. So, if i search with `"plays and playwrights 2002"`, this will lead to the same result.
+
 ```
 {
     "hits": [
