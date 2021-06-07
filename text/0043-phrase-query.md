@@ -92,7 +92,7 @@ Using the standard query parameter syntax as `q` equals to `Plays and Playwright
 }
 ```
 
-Using the Phrase Query syntax this way, with `q` equals to `"Plays and Playwrights 2002"`, will lead to have only one result because the title is exactly written like that. No typo tolerance, prefix search were applied on the query terms at search time.
+Using the Phrase Query syntax this way, with `q` equals to `"Plays and Playwrights 2002"`, will lead to have only one result because the title is exactly written like that. No typo tolerance nor prefix search were applied on the query terms at search time.
 
 ```
 {
@@ -146,7 +146,7 @@ The query can be exprimed like that `"African American" poem`
 
 ### V. Impact on Documentation
 
-- Mention that new Phrase Query syntax in the [documentation](https://docs.meilisearch.com/reference/features/search_parameters.html#query-q).
+- Mention that new Phrase Query syntax in the documentation. Can it be on a dedicated page or on [the q search parameter](https://docs.meilisearch.com/reference/features/search_parameters.html#query-q)?
 
 ### VI. Impact on SDKs
 N/A
