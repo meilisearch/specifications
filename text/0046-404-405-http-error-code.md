@@ -83,7 +83,7 @@ The message pattern is `Method {{HTTP_VERB}} is not allowed. See {{API REFERENCE
 
 ### V. Impact on Documentation
 
-- Add documentation for `method_not_allowed` and `unrecognized_request_url` errors.
+- Add `method_not_allowed` and `unrecognized_request_url` errors on the [errors documentation page](https://docs.meilisearch.com/errors/).
 
 ### VI. Impact on SDKs
 N/A
