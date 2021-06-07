@@ -23,7 +23,32 @@ N/A
 
 ### IV. Explanation
 
-### 404 Code
+#### Current behaviors for 0.20 and 0.21 versions
+
+Here is a summary table to show the behavior of version 0.20 and version 0.21 in its current state when a badly formed url is entered, when an unauthorized method is used, or when the resource is valid but does not find the requested object.
+
+| 0.20 Behaviors                                      | Invalid url    | Valid url but object not found          | Method not allowed |
+|-----------------------------------------------------|----------------|-----------------------------------------|--------------------|
+| 404 HTTP response status code                       |       x        |                    x                    |         x          |
+| 405 HTTP response status code                       |                |                                         |                    |
+| Presence of a well formed response format           |                |                    x                    |                    |
+
+| 0.21 Behaviors                                      | Invalid url    | Valid url but object not found          | Method not allowed |
+|-----------------------------------------------------|----------------|-----------------------------------------|--------------------|
+| 404 HTTP response status code                       |       x        |                                         |                    |
+| 405 HTTP response status code                       |                |                                         |          x         |
+| 400 HTTP response status code                       |                |                    x                    |                    |
+| Presence of a well formed reponse format            |                |                                         |                    |
+
+The next parts will list the desired behaviors for the release of version 0.21.
+
+| 0.21 Behaviors proposal                             | Invalid url    | Valid url but object not found          | Method not allowed |
+|-----------------------------------------------------|----------------|-----------------------------------------|--------------------|
+| 404 HTTP response status code                       |       x        |                     x                   |                    |
+| 405 HTTP response status code                       |                |                                         |          x         |
+| Presence of a well formed reponse format            |       x        |                     x                   |          x         |
+
+#### 404 Code
 
 The API must return a `404` error code when the resource does not exist or when the url used does not allow to reach a resource.
 
@@ -58,9 +83,10 @@ In that case, the response body should contain a `unrecognized_request_url` erro
     "errorLink": "https://docs.meilisearch.com/errors#unrecognized_request_url"
 }
 ```
-The message pattern is `Unrecognized request URL ({{ HTTP_VERB }}: {{REQUEST URL}}). See https://docs.meilisearch.com/reference/api`
 
-### 405 Code
+The message pattern proposal is `Unrecognized request URL ({{HTTP_VERB}}: {{REQUEST URL}}). See https://docs.meilisearch.com/reference/api`
+
+#### 405 Code
 
 The API must return a `405` error code when the resource is reachable but the HTTP verb is not handled by the resource.
 
@@ -79,7 +105,7 @@ In that case, the response body should contain a `method_not_allowed` errorCode.
 }
 ```
 
-The message pattern is `Method {{HTTP_VERB}} is not allowed. See {{API REFERENCE LINK}}`
+The message pattern proposal is `Method {{HTTP_VERB}} is not allowed. See {{API REFERENCE LINK}}`
 
 ### V. Impact on Documentation
 
