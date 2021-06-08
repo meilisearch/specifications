@@ -156,7 +156,7 @@ The query can be expressed like this: `"African American" poem`
         },
 ```
 
-As you can see in the results, the presence or absence of one or more soft separators such as `-` between two words does not affect the query match of the phrase and the document.
+As you can see in the results, the presence or absence of one or more soft separators such as `-`, `_`, `\`, `:`, `/`, `\\`, `@`, `"`, `+`, `~`, `=`, `^`, `*`, `#` between two words does not affect the query match of the phrase and the document.
 
 ### V. Impact on Documentation
 
