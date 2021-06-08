@@ -9,11 +9,11 @@
 
 ### I. Summary
 
-MeiliSearch does not allow users a way to write a strict query in order to ask the engine to be more drastic in its selection of candidates for search results. The Phrase Query feature adds a simple syntax available to users to require the engine to select documents that will strictly match the search field value. That is, without typography, n-gram, wordsplit, prefix, synonym, and, proximity. In addition, the expression of a Phrase Query is case insensitive.
+MeiliSearch does not allow users a way to write a strict query in order to ask the engine to be more strict in its selection of candidates for search results. The Phrase Query feature adds a simple syntax available to users to require the engine to select documents that strictly match some phrase, indicated by quotation marks. That is, without typography, n-gram, wordsplit, prefix, synonym, and, proximity. In addition, the expression of a Phrase Query is case insensitive.
 
 ### II. Motivation
 
-This feature is driven by user needs. Indeed, let's take an example recently brought up in our community slack.
+This feature is driven by user needs. Indeed, let's take an example recently brought up in our community Slack.
 
 The user in question would like to be able to retrieve specifically the document containing the unique ISBN identifier and only that one. In a UX context of type as you search, this is impossible today without impacting the UI/UX or finding a workaround.
 
@@ -29,7 +29,7 @@ The Phrase Query feature will easily solve this case but will also adapt to the 
 
 Algolia allows the use of Phrase Query syntax as long as the `advancedSyntax` parameter is set to true in the settings.
 
-As Algolia documentation said, a phrase query represents a specific sequence of terms that must be matched next to one another. A phrase query needs to be surrounded by double quotes ("). For example, the query "search engine" only returns a record if it contains “search engine” exactly in at least one attribute.
+As Algolia documentation said, a phrase query represents a specific sequence of terms that must be matched next to one another and in the given order. A phrase query needs to be surrounded by double quotes ("). For example, the query "search engine" only returns a record if it contains “search engine” exactly in at least one attribute.
 
 #### Elasticsearch
 
@@ -92,9 +92,9 @@ Using the standard query parameter syntax as `q` equals to `Plays and Playwright
 
 To use the Phrase Query syntax, simply surround the contiguous search terms with the characters `"`.
 
-Using the Phrase Query syntax this way, with `q` equals to `"Plays and Playwrights 2002"`, will lead to have only one result because the title is exactly written like that.
+Using the Phrase Query syntax this way, with `q` equals to `"Plays and Playwrights 2002"`, will lead to have only one result because the title is written exactly like that.
 
-> Note that it's case insensitive. So, if i search with `"plays and playwrights 2002"`, this will lead to the same result.
+> Note that it's case insensitive. So, if I search with `"plays and playwrights 2002"`, this will lead to the same result.
 
 The value between the `"` operators will be searched without:
 
@@ -123,9 +123,9 @@ The value between the `"` operators will be searched without:
 }
 ```
 
-So now let's say that i want to search title strictly mentioning `"African American"` but speaking about poetry. The Phrase query syntax can be used in conjunction with the basic syntax.
+So now let's say that I want to search for a title that strictly includes the phrase `"African American"` but speaking about poetry. The Phrase Query syntax can be used in conjunction with the basic syntax.
 
-The query can be exprimed like that `"African American" poem`
+The query can be expressed like this: `"African American" poem`
 
 ```
 {
