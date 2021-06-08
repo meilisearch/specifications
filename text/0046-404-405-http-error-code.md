@@ -10,7 +10,7 @@
 
 ### I. Summary
 
-The purpose of this file is to specify the behavior of the API about the http code to return in case a resource does not exists or the http method used is not allowed on the resource.
+The purpose of this file is to specify the behavior of the API about the HTTP code to return in case a resource does not exist or the HTTP method used is not allowed on the resource.
 
 This specification will be merged later into the more global API format specification that is currently being written.
 
@@ -50,13 +50,13 @@ The next parts will list the desired behaviors for the release of version 0.21.
 
 #### 404 Code
 
-The API must return a `404` error code when the resource does not exist or when the url used does not allow to reach a resource.
+The API must return a `404` error code when the resource does not exist or when the URL used does not allow to reach a resource.
 
-E.g. Asking for an inexistent ressource.
+E.g. asking for an inexistent resource.
 
 **GET `/indexes/:index_uid/documents/2`**
 
-In that case, the response body contain a `document_not_found` errorCode.
+In that case, the response body contains a `document_not_found` errorCode.
 
 E.g.
 
@@ -69,7 +69,7 @@ E.g.
 }
 ```
 
-E.g. Using a wrong url.
+E.g. using a wrong URL.
 
 **GET `/indexess/documents/2`**
 
