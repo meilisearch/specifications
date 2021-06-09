@@ -396,6 +396,7 @@ Unlike v0.20, `attributesToHighlight` set fields to be in `_formatted` independe
 
 #### Expected MeiliSearch Behavior (0.21)
 
+✅ If `attributesToRetrieve` is not set as a parameter, the expected behavior is the same as if `attributesToRetrieve` is equal to `*`.
 ✅ If `attributesToHighlight` and `attributesToCrop` are not set, do not return `_formatted` and don't compute highlights and crops.
 ✅ If cumulated fields in `attributesToHighlight` and `attributesToCrop` resolve to only having non-existent fields, do not return `_formatted`.
 ✅ If `attributesToRetrieve` is equal to `*` and `attributesToHighlight` or `attributesToCrop` are equals to `*`, return `_formatted` and compute highlights and crops on each fields.
@@ -429,7 +430,7 @@ I want to get:
 }
 ```
 
-✅ Stay consistent with the fact that `attributesToRetrieve` are set in `_formatted` result but do not need to be necessary computed for highlighting and cropping until they are declared in `attributesToHighlight` and `attributesToCrop`.
+✅ Stay consistent with the fact that every `attributesToRetrieve` are set in `_formatted` result but do not need to be necessary computed for highlighting and cropping until they are declared in `attributesToHighlight` and `attributesToCrop`.
 
 Given these search parameters:
 ```
