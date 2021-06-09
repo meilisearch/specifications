@@ -399,7 +399,7 @@ Unlike v0.20, `attributesToHighlight` set fields to be in `_formatted` independe
 ✅ If `attributesToRetrieve` and `attributesToCrop` are not set, do not return `_formatted` and don't compute highlights and crops.
 ✅ If cumulated fields in `attributesToRetrieve` and `attributesToCrop` resolve to only having non-existent fields, do not return `_formatted`.
 ✅ If `attributesToRetrieve` is equal to `*` and `attributesToHighlight` or `attributesToCrop` are equals to `*`, return `_formatted` and compute highlights and crops on each fields.
-✅ If `attributesToRetrieve` is equal to `*` and `attributesToHighlight` or `attributesToCrop` contains a set of fields
+✅ If `attributesToRetrieve` is equal to `*` and `attributesToHighlight` or `attributesToCrop` contains a set of fields, return `_formatted` containing fields declared in `attributesToRetrieve` and compute highlights and crops on fields declared in `attributesToHighlight` or `attributesTocCrop`.
 
 **Edge cases**
 
