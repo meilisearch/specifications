@@ -13,7 +13,7 @@
 
 ### II. Motivation
 
-The goal of this specification is to clear the behavior of `attributesToRetrieve`, `attributesToHighlight` and `attributesToCrop` on `_formatted` response parameter content.
+The goal of this specification is to clarify the behavior of `attributesToRetrieve`, `attributesToHighlight` and `attributesToCrop` on `_formatted` response parameter content.
 
 ### III. Additional Materials
 
