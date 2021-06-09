@@ -9,7 +9,7 @@
 
 ### I. Summary
 
-`_formatted`  is used in conjunction with raw search results to highlight and/or crop around the query term in the attributes of the document. `_formatted` main goal is to enhance the UI and the UX by providing a nice way to catch the user's eyes on frontend side while searching.
+`_formatted` is used in conjunction with raw search results to highlight and/or crop around the query term in the attributes of the document. `_formatted` main goal is to enhance the UI and the UX by providing a nice way to catch the user's eyes on the front-end side while searching.
 
 ### II. Motivation
 
@@ -48,7 +48,7 @@ Given these search parameters:
 }
 ```
 
-As a user i get:
+As a user I get:
 
 ```
 {
@@ -76,7 +76,7 @@ Given these search parameters:
 }
 ```
 
-As a user i get:
+As a user I get:
 
 ```
 {
@@ -109,7 +109,7 @@ Given these search parameters:
 }
 ```
 
-As a user i get:
+As a user I get:
 
 ```
 {
@@ -138,7 +138,7 @@ Given these search parameters:
 }
 ```
 
-As a user i get:
+As a user I get:
 
 ```
 {
@@ -167,7 +167,7 @@ Given these search parameters:
 }
 ```
 
-As a user i get:
+As a user I get:
 
 ```
 {
@@ -229,7 +229,7 @@ Given these search parameters:
 }
 ```
 
-As a user i get:
+As a user I get:
 
 ```
 {
@@ -258,7 +258,7 @@ Given these search parameters:
 }
 ```
 
-As a user i get:
+As a user I get:
 
 ```
 {
@@ -285,7 +285,7 @@ Given these search parameters:
 }
 ```
 
-As a user i get:
+As a user I get:
 
 ```
 {
