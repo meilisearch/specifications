@@ -22,8 +22,27 @@ N/A
 
 #### Null value request body
 
+E.g. Reset Stop-Words setting with a null value on [POST Stop-Words Endpoint](https://docs.meilisearch.com/reference/api/stop_words.html#update-stop-words)
+
+Given this stop-words configuration
+
+```
+[
+    "of",
+    "the"
+]
+```
+
+As a User I send
+
 ```
 null
+```
+
+To Expect
+
+```
+[]
 ```
 
 #### [POST Stop-Words Endpoint](https://docs.meilisearch.com/reference/api/stop_words.html#update-stop-words)
