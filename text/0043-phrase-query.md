@@ -13,7 +13,7 @@ MeiliSearch does not allow users a way to write a strict query in order to ask t
 
 ### II. Motivation
 
-This feature is driven by user needs. Indeed, let's take an example recently brought up in our community Slack.
+This feature is driven by the user's needs. Indeed, let's take an example recently brought up in our community Slack.
 
 The user in question would like to be able to retrieve specifically the document containing the unique ISBN identifier and only that one. In a UX context of type as you search, this is impossible today without impacting the UI/UX or finding a workaround.
 
