@@ -1,0 +1,49 @@
+- Title: Reset Stop-words and Synonyms settings with null value
+- Start Date: 2021-06-08
+- Specification PR: [#47](https://github.com/meilisearch/specifications/pull/47)
+- MeiliSearch Tracking-issues:
+
+# Reset Stop-words and Synonyms settings with a null value.
+
+## 1. Functional Specification
+
+### I. Summary
+
+All Sub Settings `POST` endpoint accepts a null value in the http request body to reset the engine configuration to the default values. This is not the case for [Stop-words](https://docs.meilisearch.com/reference/api/stop_words.html#update-stop-words) and [Synonyms](https://docs.meilisearch.com/reference/api/synonyms.html#update-synonyms) settings endpoints.
+
+### II. Motivation
+
+This specification is written to make the above mentioned routes consistent with the others.
+
+### III. Additional Materials
+N/A
+
+### IV. Explanation
+
+#### Null value request body
+
+```
+null
+```
+
+#### [POST Stop-Words Endpoint](https://docs.meilisearch.com/reference/api/stop_words.html#update-stop-words)
+
+Sending a `null` value in the request body like the given request body above should reset the `Stop-Words` setting to the engine default values.
+
+Default value for `Stop-Words` is an empty object.
+
+#### [POST Synonyms Endpoint](https://docs.meilisearch.com/reference/api/synonyms.html#update-synonyms)
+
+Sending a `null` value in the request body like the given request body above should reset the `Synonyms` setting to the engine default values.
+
+Default value for `Synonyms` is an empty array.
+
+### V. Impact on Documentation
+N/A
+
+### VI. Impact on SDKs
+N/A
+
+## 2. Technical Aspects
+
+## 3. Future Possibilities
