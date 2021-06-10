@@ -30,13 +30,13 @@ null
 
 Sending a `null` value in the request body like the given request body above should reset the `Stop-Words` setting to the engine default values.
 
-Default value for `Stop-Words` is an empty object.
+The default value for `Stop-Words` is an empty array.
 
 #### [POST Synonyms Endpoint](https://docs.meilisearch.com/reference/api/synonyms.html#update-synonyms)
 
 Sending a `null` value in the request body like the given request body above should reset the `Synonyms` setting to the engine default values.
 
-Default value for `Synonyms` is an empty array.
+The default value for `Synonyms` is an empty object.
 
 ### V. Impact on Documentation
 N/A
