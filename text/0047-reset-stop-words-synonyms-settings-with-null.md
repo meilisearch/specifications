@@ -20,7 +20,7 @@ N/A
 
 ### IV. Explanation
 
-#### Null value request body
+#### Example
 
 E.g. Reset Stop-Words setting with a null value on [POST Stop-Words Endpoint](https://docs.meilisearch.com/reference/api/stop_words.html#update-stop-words)
 
