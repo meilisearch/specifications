@@ -13,7 +13,13 @@ MeiliSearch does not allow users a way to write a strict query in order to ask t
 
 ### II. Motivation
 
-This feature is driven by the user's needs. Indeed, let's take an example recently brought up in our community Slack.
+This feature is driven by the user's needs. Indeed, let's take some examples recently brought up in our community Slack.
+
+#### Example 1
+
+The user wants to have a way to ensure that the words of his search are exactly contained in the order of the terms in the documents returned by MeiliSearch.
+
+#### Example 2
 
 The user in question would like to be able to retrieve specifically the document containing the unique ISBN identifier and only that one. In a UX context of type as you search, this is impossible today without impacting the UI/UX or finding a workaround.
 
@@ -21,7 +27,7 @@ The user in question would like to be able to retrieve specifically the document
 
 - It could also have kept a single search field and detected that an ISBN was entered in the search field using a regex to inject that filter at that point. Not great for the developper experience, moreover, what happens when a pattern cannot be specifically determined?
 
-The Phrase Query feature will easily solve this case but will also adapt to the needs of the user performing the search.
+The Phrase Query feature will easily solve the last case but will also adapt to the needs of the user performing the search.
 
 ### III. Additional Materials
 
@@ -105,6 +111,7 @@ The value between the `"` operators will be searched without:
 - synonym
 - proximity
 
+Moreover, it ensures that all matching documents contain the words in the given order in the Phrase.
 
 ```
 {
@@ -157,6 +164,12 @@ The query can be expressed like this: `"African American" poem`
 ```
 
 As you can see in the results, the presence or absence of one or more soft separators such as `-`, `_`, `\`, `:`, `/`, `\\`, `@`, `"`, `+`, `~`, `=`, `^`, `*`, `#` between two words does not affect the query match of the phrase and the document.
+
+It is possible to use multiple phrase queries within a search.
+
+E.g. `"African American" "Anthology"`
+
+With this expression, the returned documents will contain exactly the existence of both phrase queries.
 
 ### V. Impact on Documentation
 
