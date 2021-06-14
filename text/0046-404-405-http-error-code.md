@@ -77,14 +77,14 @@ In that case, the response body should contain a `unrecognized_request_url` erro
 
 ```
 {
-    "message": "Unrecognized request URL (GET: /indexess/documents/2). See https://docs.meilisearch.com/reference/api",
+    "message": "Unrecognized request URL (GET: /indexess/documents/2).",
     "errorCode": "unrecognized_request_url",
     "errorType": "invalid_request_error",
     "errorLink": "https://docs.meilisearch.com/errors#unrecognized_request_url"
 }
 ```
 
-The message pattern proposal is `Unrecognized request URL ({{HTTP_VERB}}: {{REQUEST URL}}). See https://docs.meilisearch.com/reference/api`
+The message pattern proposal is `Unrecognized request URL ({{HTTP_VERB}}: {{REQUEST_URL}}).`
 
 #### 405 Code
 
@@ -105,7 +105,7 @@ In that case, the response body should contain a `method_not_allowed` errorCode.
 }
 ```
 
-The message pattern proposal is `Method {{HTTP_VERB}} is not allowed. See {{API REFERENCE LINK}}`
+The message pattern proposal is `Method {{HTTP_VERB}} is not allowed. See {{API_REFERENCE_LINK}}`
 
 ### V. Impact on Documentation
 
