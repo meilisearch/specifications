@@ -1,7 +1,7 @@
 - Title: Rename MAX_MDB_SIZE  configuration variable
 - Start Date: 2021-
 - Specification PR: [#48](https://github.com/meilisearch/specifications/pull/48)
-- MeiliSearch Tracking-issues:
+- MeiliSearch Tracking-issues: [transplant/#206](https://github.com/meilisearch/transplant/issues/206)
 
 
 # Rename MAX_MDB_SIZE configuration variable
