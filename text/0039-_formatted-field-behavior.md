@@ -1,7 +1,7 @@
 - Title: _formatted Field Behavior
 - Start Date: 2021-05-05
 - Specification PR: [#39](https://github.com/meilisearch/specifications/pull/39)
-- MeiliSearch Tracking-Issues:
+- MeiliSearch Tracking-Issues: [transplant/#203](https://github.com/meilisearch/transplant/issues/203)
 
 # _formatted Field Behavior
 
@@ -457,7 +457,7 @@ I want to get:
 }
 ```
 
-✅ If `attributesToHighlight` or `attributesToCrop` contains a field that is not declared in `attributesToRetrieve`, it his added to `_formatted` and it is highlighted and/or cropped.
+✅ If `attributesToHighlight` or `attributesToCrop` contains a field that is not declared in `attributesToRetrieve`, it is added to `_formatted` and it is highlighted and/or cropped.
 
 ### V. Impact on Documentation
 N/A
