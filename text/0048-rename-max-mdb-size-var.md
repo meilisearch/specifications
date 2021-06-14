@@ -25,9 +25,6 @@ N/A
  - Rename `--max-mdb-size` to `--max-index-size`
  - Rename `MAX_MDB_SIZE` to `MAX_INDEX_SIZE`
 
-The size entered must therefore be greater than or equal to the largest index of the search engine.
-
-The known limitation is that smaller indexes will take up a space equal to the larger index.
 
 ### V. Impact on Documentation
 
