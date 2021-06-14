@@ -90,7 +90,7 @@ The message pattern proposal is `Unrecognized request URL ({{HTTP_VERB}}: {{REQU
 
 The API must return a `405` error code when the resource is reachable but the HTTP verb is not handled by the resource.
 
-E.g. Using a http verb that is not allowed
+E.g. using a HTTP verb that is not allowed
 
 **DELETE `/indexes/movies/search`**
 
