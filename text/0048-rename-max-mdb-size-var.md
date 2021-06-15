@@ -24,18 +24,6 @@ N/A
 
 - Rename `--max-mdb-size` to `--max-index-size`
 - Rename `MAX_MDB_SIZE` to `MAX_INDEX_SIZE`
-- Error handling at index creation should be iso with version 0.20.
-
-When I test the current version of meilisearch in 0.21, the http call on `POST /indexes/:index_uid/documents` is successful and an empty index is created whereas 0.20 returns an error on the API side and the index is not created.
-
-```
-{
-    "message": "Impossible to create index; heed error; MDB_MAP_FULL: Environment mapsize limit reached",
-    "errorCode": "index_creation_failed",
-    "errorType": "internal_error",
-    "errorLink": "https://docs.meilisearch.com/errors#index_creation_failed"
-}
-```
 
 ### V. Impact on Documentation
 
