@@ -177,6 +177,10 @@ With this expression, the returned documents will contain exactly the existence 
 
 #### Know limitations
 
+##### Case Sensivity
+
+The Phrase Query syntax is case insensitive.
+
 ##### Multiple hard separator case
 
 Given a document containing `David.- .- .- .- .-Bowie` as value for an attribute.
