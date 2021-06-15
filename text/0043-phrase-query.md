@@ -96,6 +96,8 @@ Using the standard query parameter syntax as `q` equals to `Plays and Playwright
 }
 ```
 
+#### Phrase Query usage
+
 To use the Phrase Query syntax, simply surround the contiguous search terms with the characters `"`.
 
 Using the Phrase Query syntax this way, with `q` equals to `"Plays and Playwrights 2002"`, will lead to have only one result because the title is written exactly like that.
@@ -165,11 +167,25 @@ The query can be expressed like this: `"African American" poem`
 
 As you can see in the results, the presence or absence of one or more soft separators such as `-`, `_`, `\`, `:`, `/`, `\\`, `@`, `"`, `+`, `~`, `=`, `^`, `*`, `#` between two words does not affect the query match of the phrase and the document.
 
+#### Multiple Phrase Query usage
+
 It is possible to use multiple phrase queries within a search.
 
 E.g. `"African American" "Anthology"`
 
 With this expression, the returned documents will contain exactly the existence of both phrase queries.
+
+#### Know limitations
+
+##### Multiple hard separator case
+
+Given a document containing `David.- .- .- .- .-Bowie` as value for an attribute.
+
+This document can be matched using a phrase query such as `"David" "Bowie"` or `"David.Bowie"`. At the engine level, this is the same query. The latter is translated into the former phrase because the `.` character is a hard separator. This behavior comes from the default tokenizer, hard separators are seen as a marker for a different context or phrase.
+
+Here is the list of hard separators in the default tokenizer: `.`, `;`, `,`, `!`, `?`, `(`, `)`, `[`, `]`, `{`, `}`, `|`
+
+Multiple hard separator are treaten the same as if they were one. So `"David.-.-.-.Bowie"` will not work to match the document.
 
 ### V. Impact on Documentation
 
