@@ -94,7 +94,14 @@ N/A
 Currently, MeiliSearch only says if `Anonymous telemetry` is enabled or not on the launch message. It should also provide a message explaining in a few words that we are collecting anonymized MeiliSearch behavior metrics to enhance the product for future releases. Thus, displaying a link to the analytics documentation page.
 
 Message to display on the CLI at launch if analytics are enabled:
-> "Thank you for using MeiliSearch! We collect anonymized analytics to improve our product and your experience. To learn more, including how to turn off analytics, visit our dedicated documentation page: [Link of the new dedicated page]()."
+
+
+> Thank you for using MeiliSearch!
+
+> We collect anonymized analytics to improve our product and your experience. To learn more, including how to turn off analytics, visit our dedicated documentation page: [Link of the new dedicated page]()."
+
+> Anonymous telemetry:	"Enabled"
+
 
 ## 2. Technical Aspects
 
@@ -128,8 +135,9 @@ Why we consider using Segment to collect and send data ?
 ### 0.21 Release
 
 - Use `http-api-v2` endpoint to send data to Amplitude.
-- Display a CLI message at Meilisearch start explaining why we collect analytics and how to deactivate it.
+- Display a CLI message at Meilisearch start explaining why we collect analytics and how to deactivate it when the telemetry is enabled.
 - Merge Sentry activation/deactivation in Analytics activation/deactivation flag.
+- Remove the Sentry DSN override possibility.
 - Make errors when sending analytics to Amplitude and Sentry silents.
 - Make a dedicated documentation page to explain why we collect analytics, what we are collecting, how to disable it. This dedicated documentation page will be linked into the new CLI message.
 
