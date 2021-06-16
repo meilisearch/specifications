@@ -121,6 +121,10 @@ We want to use the `http-api-v2` endpoint.
 
 Errors when sending metrics to Amplitude or Sentry should be silent.
 
+#### Debug build
+
+In debug build, no telemetry either Amplitude or Sentry will be collected.
+
 ## 3. Future possibilities
 
 ### Segment to collect data
@@ -140,6 +144,7 @@ Why we consider using Segment to collect and send data ?
 - Remove the Sentry DSN override possibility.
 - Make errors when sending analytics to Amplitude and Sentry silents.
 - Make a dedicated documentation page to explain why we collect analytics, what we are collecting, how to disable it. This dedicated documentation page will be linked into the new CLI message.
+- Deactivate the collect of analytics in debug build.
 
 ### 0.22 Release
 
