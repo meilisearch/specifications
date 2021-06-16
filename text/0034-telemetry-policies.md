@@ -1,17 +1,17 @@
-- Title: Telemetry Policies
+- Title: Analytics Policy
 - Start Date: 2021-04-16
 - Specification PR: [#34](https://github.com/meilisearch/specifications/pull/34)
 - MeiliSearch Tracking-Issues: [transplant/#181](https://github.com/meilisearch/transplant/issues/181)
 
-# Telemetry Policies
+# Analytics Policy
 
 ## 1. Feature Description and Interaction
 
 ### I. Summary
 
-Telemetry concerns the possibility of depositing markers within a system in order to make segments of it. Quantitative data as data metrics are used to discover and verify user behavior.
+Analytics concerns the possibility of depositing markers within a system in order to make segments of it. Quantitative data as data metrics are used to discover and verify user behavior.
 
-We would like to have more telemetry to better understand our users in order to improve their usage and feel with MeiliSearch.
+We would like to have more analytics to better understand our users in order to improve their usage and feel with MeiliSearch.
 
 We also use Sentry to trace the errors that occur when using MeiliSearch.
 
@@ -21,22 +21,22 @@ We need to make informed decisions based on data instead of instincts and gut fe
 
 > 🔒 Note that we strictly don't want to collect private information by default (ip address, email, website url, etc..).
 
-We want to simplify the disabling of telemetry and better inform users about what we want to track.
+We want to simplify the disabling of analytics collect and better inform users about what we want to track.
 
 ### III. Additional Materials
 N/A
 
 ### IV.Explanation
 
-Following this issue and with the beginning of a product Team we asked ourselves what we wanted to do about telemetry. https://github.com/meilisearch/transplant/issues/141.
+Following this issue and with the beginning of a product Team we asked ourselves what we wanted to do about analytics. https://github.com/meilisearch/transplant/issues/141.
 
-We will keep telemetry enabled by default while leaving the option for users to disable it. See Impact on Documentation part.
+We will keep analyctis enabled by default while leaving the option for users to disable it. See Impact on Documentation part.
 
-> Some new features will have telemetry data points to check the assumptions and measure objectives achievements.
+> Some new features will have analytic data points to check the assumptions and measure objectives achievements.
 
 Each new feature specification should list data points to be collected and measured. Obviously the specification must explain why these data points are necessary for relation to the feature.
 
-We will simplify the deactivation of all our telemetries in one action. To do that, we will remove the Sentry specific flag `MEILI_NO_SENTRY` to merge its use into the `MEILI_NO_ANALYTICS` flag. This means that its activation and deactivation will be shared with analytics within the `MEILI_NO_ANALYTICS` flag. By default, Sentry metrics will stay activated.
+We will simplify the deactivation of all our analytics telemetry in one action. To do that, we will remove the Sentry specific flag `MEILI_NO_SENTRY` to merge its use into the `MEILI_NO_ANALYTICS` flag. This means that its activation and deactivation will be shared with analytics within the `MEILI_NO_ANALYTICS` flag. By default, Sentry metrics will stay activated.
 
 #### Current stack for analytics
 
@@ -107,7 +107,7 @@ Message to display on the CLI at launch if analytics are enabled:
 
 ### I. Abstract
 
-⚠ Telemetry should not impact performances for our users.
+⚠ Analytics telemetry should not impact performance for our users.
 
 ### II. Technical Details
 
@@ -143,4 +143,4 @@ Why we consider using Segment to collect and send data ?
 
 ### 0.22 Release
 
-- Branch telemetry at feature level.
+- Branch Analytics telemetry at feature level.
