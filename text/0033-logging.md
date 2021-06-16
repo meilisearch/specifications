@@ -121,13 +121,13 @@ However, it is possible to disable log storage, change the retention period and 
 
 #### Current Logging behaviour of MeiliSearch (0.20)
 
-MeiliSearch uses `env_logger` to allow to define the log output level from the `RUST_LOG` environment variable. `env_logger` allows to define a specific log level per module if necessary. [See more here](https://docs.rs/env_logger/0.8.3/env_logger/).
+MeiliSearch uses the rust lib `env_logger` to output logs based on the log level fetched from the `RUST_LOG` environment variable. `env_logger` allows to define a specific log level per module if necessary. [See more here](https://docs.rs/env_logger/0.8.3/env_logger/).
 
 #### Logging behaviour for Milli (0.21)
 
-We have decided to keep the use of `env_logger` for Milli/Transplant. However, we will make some changes to make the logging more consistent and versatile.
+We have decided to keep using the rust lib `env_logger` for Milli/Transplant. However, we will make some changes to make the logging more consistent and versatile.
 
-We will expose a `MEILI_LOG_LEVEL` environment variable that corresponds to `RUST_LOG` in the binary to improve its meaning and clarity to users. A CLI option `--log-level` will also be added to follow our configuration convention.
+Instead of using `RUST_LOG`, we create a `MEILI_LOG_LEVEL` environment variable that corresponds to `RUST_LOG` in the binary to improve its meaning and clarity to users. A CLI option `--log-level` will also be added to follow our configuration convention.
 
 ##### Log Levels
 
