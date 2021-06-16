@@ -58,7 +58,7 @@ E.g.
 
 #### Future Metrics
 
-##### Number of indexes per DB
+##### Number of indexes per instance
 Discovery metric for federated search feature.
 
 ##### Number of documents per index
