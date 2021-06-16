@@ -127,7 +127,7 @@ MeiliSearch uses `env_logger` to allow to define the log output level from the `
 
 We have decided to keep the use of `env_logger` for Milli/Transplant. However, we will make some changes to make the logging more consistent and versatile.
 
-We will expose a `MEILI_LOG_LEVEL` environment variable that corresponds to `RUST_LOG` in the binary to improve its meaning and clarity to users.
+We will expose a `MEILI_LOG_LEVEL` environment variable that corresponds to `RUST_LOG` in the binary to improve its meaning and clarity to users. A CLI option `--log-level` will also be added to follow our configuration convention.
 
 ##### Log Levels
 
@@ -172,7 +172,7 @@ Given
 
 The documentation only mentions the logging behavior for the `development` env on the `MEILI_ENV` part.
 
-We should explain how to specify the logging level using the `MEILI_LOG_LEVEL` environment variable and display the logging level table as information in a dedicated section.
+We should explain how to specify the logging level using the `MEILI_LOG_LEVEL` environment variable and display the logging level table as information in a dedicated section. It should also mention the usage of the cli flag `--log-level`.
 
 ### VI. Impact on SDKs
 N/A
@@ -194,7 +194,7 @@ N/A
 - Use a consistent method to log (relative to internal implementation).
 - Log output should start with the mandatory log format part.
 - The HTTP logs should be logged as described in this spec.
-- The users should be able to choose the log level by filling the `MEILI_LOG_LEVEL` environment variable.
+- The users should be able to choose the log level by filling the `MEILI_LOG_LEVEL` environment variable or using the CLI option `--log-level`.
 - If log level is set to `DEBUG`, the `/search` endpoint should output request parameters and body response as a log output.
 
 #### Documentation
