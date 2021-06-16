@@ -13,7 +13,7 @@ To index documents, the body of the add documents request has to match a specifi
 
 A [CSV](https://en.wikipedia.org/wiki/Comma-separated_values) data format is broadly used to store and exchange data in a simple format.
 
-Also, in order to boost write performance CSV data format is more suited than JSON for consequent datasets has keys are not duplicated for every document.
+Also, in order to boost write performance CSV data format is more suited than JSON for consequent datasets, as keys are not duplicated for every document.
 
 ### II. Motivation
 
@@ -30,7 +30,7 @@ N/A
 
 #### Csv Formatting Rules
 
-While there's [RFC 4180](https://tools.ietf.org/html/rfc4180) as a try to add a specification for csv format, we will find a lot of variations from that. MeiliSearch features capabilities requires csv data to be formatted the proper way to be parsable by the engine.
+While there's [RFC 4180](https://tools.ietf.org/html/rfc4180) as a try to add a specification for CSV format, we will find a lot of variations from that. MeiliSearch features capabilities requires CSV data to be formatted the proper way to be parsable by the engine.
 
 - CSV data format needs to contain a first line representing the list of attributes with the optionally chosen type separated from the attribute name by `:` character. The type is case insensitive.
 
@@ -39,7 +39,7 @@ While there's [RFC 4180](https://tools.ietf.org/html/rfc4180) as a try to add a 
 > Valid headline example: "id:number","title:string","author","price:number"
 
 - The following CSV lines will represent a document for MeiliSearch.
-- A CSV value should be enclosed in double-quotes when it contains a comma character to escape it.
+- A CSV value should be enclosed in double-quotes when it contains a comma character or a newline to escape it.
 - Using double-quotes to enclose fields, then a double-quote appearing inside a field must be escaped by preceding it with another double quote as mentioned in [RFC 4180](https://tools.ietf.org/html/rfc4180).
 - Float value should be written with a `.` character, like `3.14`.
 - CSV text should be encoded in UTF8.
@@ -47,7 +47,7 @@ While there's [RFC 4180](https://tools.ietf.org/html/rfc4180) as a try to add a 
 
 ##### Example with a comma inside a cell
 
-Given the csv payload
+Given the CSV payload
 ```
 "id:number","label","price:number","colors","description"
 "1","t-shirt","4.99","red","Thus, you will rock at summer time."
@@ -70,7 +70,7 @@ the search result should be displayed as
 
 ##### Example with a double quote inside a cell
 
-Given the csv payload
+Given the CSV payload
 ```
 "id:number","label","price","colors","description"
 "1","t-shirt","4.99","red","Hey, you will ""rock"" at summer time."
@@ -100,7 +100,7 @@ the search result should be displayed as
 
 #### Add or Replace Documents [📎](https://docs.meilisearch.com/reference/api/documents.html#add-or-replace-documents)
 
-```curl
+```bash
 curl \
   -X POST 'http://localhost:7700/indexes/movies/documents' \
   -H 'Content-Type: text/csv' \
@@ -120,7 +120,7 @@ curl \
 
 ### Add or Update Documents [📎](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents)
 
-```curl
+```bash
 curl \
   -X PUT 'http://localhost:7700/indexes/movies/documents' \
   -H 'Content-Type: text/csv' \
