@@ -1,7 +1,7 @@
 - Title: Phrase Query
 - Start Date: 2021-06-02
 - Specification PR: [#43](https://github.com/meilisearch/specifications/pull/43)
-- MeiliSearch Tracking-Issues:
+- MeiliSearch Tracking-Issues: [transplant/#198](https://github.com/meilisearch/transplant/issues/198)
 
 # Phrase Query
 
