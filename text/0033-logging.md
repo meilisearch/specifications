@@ -127,7 +127,7 @@ MeiliSearch uses `env_logger` to allow to define the log output level from the `
 
 We have decided to keep the use of `env_logger` for Milli/Transplant. However, we will make some changes to make the logging more consistent and versatile.
 
-We will expose a `LOG_LEVEL` environment variable that corresponds to `RUST_LOG` in the binary to improve its meaning and clarity to users.
+We will expose a `MEILI_LOG_LEVEL` environment variable that corresponds to `RUST_LOG` in the binary to improve its meaning and clarity to users.
 
 ##### Log Levels
 
@@ -172,7 +172,7 @@ Given
 
 The documentation only mentions the logging behavior for the `development` env on the `MEILI_ENV` part.
 
-We should explain how to specify the logging level using the `LOG_LEVEL` environment variable and display the logging level table as information in a dedicated section.
+We should explain how to specify the logging level using the `MEILI_LOG_LEVEL` environment variable and display the logging level table as information in a dedicated section.
 
 ### VI. Impact on SDKs
 N/A
@@ -184,17 +184,17 @@ N/A
 
 - Store logs on filesystem (give us future possibilites of rolling strategy). We will keep an eye on https://roadmap.meilisearch.com/c/81-specify-log-path, Github issues and, Slack Community messages. Keep in mind that it is possible to send logs to files using `syslog` or `systemd` journalctl.
 - Develop an API endpoint to search for logged events and configure the logging policy for the instance (SaaS feature in mind).
-- Add syntaxic sugar helper flag like `-v, -vv, -vvv` that can be translated to a `LOG_LEVEL` value.
+- Add syntaxic sugar helper flag like `-v, -vv, -vvv` that can be translated to a `MEILI_LOG_LEVEL` value.
 
 ## 4. Planned Changes
 
 ### 0.21
 
 #### Core
-- Use a consistent method to log (relative to internal implementation)
+- Use a consistent method to log (relative to internal implementation).
 - Log output should start with the mandatory log format part.
-- The HTTP logs should be logged as described in this spec
-- The users should be able to choose the log level by filling the `LOG_LEVEL` environment variable
+- The HTTP logs should be logged as described in this spec.
+- The users should be able to choose the log level by filling the `MEILI_LOG_LEVEL` environment variable.
 - If log level is set to `DEBUG`, the `/search` endpoint should output request parameters and body response as a log output.
 
 #### Documentation
