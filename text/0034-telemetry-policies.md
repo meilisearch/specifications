@@ -61,15 +61,15 @@ E.g.
 ##### Number of indexes per DB
 Discovery metric for federated search feature.
 
-##### Number of documents per indexes
-Discovery metric to know the average number of documents are stored in an index.
+##### Number of documents per index
+Discovery metric to know the average number of documents stored in an index.
 
 ##### Geographical server distribution, CPU server distribution, RAM server distribution, Disk server distribution
 Discovery metrics to choose more relevant data centers over the world for the SaaS cloud platform. Will also be used in order to perform price studies analysis.
 
 For the Geographical Server Distribution we need to make a call to a third-party like http://ip-api.com/json/113.14.168.85 to get `Country`, `City` and `Provider` at MeiliSearch launch.
 
-Staying transparent is important to us, which is why the metrics will be explained in details on a change log, blog post and a dedicated documentation page.
+Staying transparent is important to us, which is why the metrics will be explained in detail in a change log, blog post and a dedicated documentation page.
 
 For the CPU, RAM and DISK metrics, we can use an internal system stat method to get this information.
 
@@ -79,7 +79,7 @@ Discovery metric to check adoption of our new sdks and the use of existing ones
 ##### Feature metrics
 E.g. We want to know more about feature usage like how many times the `ranking_rules` order are changed, which is the top most used `ranking_rules` in first position etc.. What is the average `response body` size, what is the average number of `filter` used for the search endpoint.
 
-❗️ Asking for new data points should be specified and explain why these data points will be used for in the feature specification.
+❗️ Asking for new data points should be specified in the feature specification, and accompanied by an explanation of what these data points will be used for.
 
 ### V. Impact on documentation
 
@@ -127,7 +127,7 @@ Errors when sending metrics to Amplitude or Sentry should be silent.
 
 Why we consider using Segment to collect and send data ?
 
-- Segment will represent our unique source of collecting data. It permits to change on the fly and fill data to new analytics products without loosing data.
+- Segment will represent our unique source of collecting data. It permits to change on the fly and fill data to new analytics products without losing data.
 - It seems to offer smarter mechanisms for collect. Thus, having a very low impact on performance of the system on which it collects data. [See the rust docs here](https://segment.com/docs/connections/sources/catalog/libraries/server/rust/)
 
 ## 4. Planned Changes
