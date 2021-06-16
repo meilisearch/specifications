@@ -1,16 +1,16 @@
-- Title: Rename MAX_MDB_SIZE  configuration variable
-- Start Date: 2021-
+- Title: Rename MAX_MDB_SIZE env var and --max-mdb-size option flag
+- Start Date: 2021-04-14
 - Specification PR: [#48](https://github.com/meilisearch/specifications/pull/48)
 - MeiliSearch Tracking-issues: [transplant/#206](https://github.com/meilisearch/transplant/issues/206)
 
 
-# Rename MAX_MDB_SIZE configuration variable
+# Rename MAX_MDB_SIZE env var and --max-mdb-size option flag
 
 ## 1. Functional Specification
 
 ### I. Summary
 
-This specification is written to rename the `MAX_MDB_SIZE` configuration variable.
+This specification is written to rename the `MAX_MDB_SIZE` environnement variable and `--max-mdb-size` option flag to `MAX_INDEX_SIZE` and `--max-index-size`.
 
 ### II. Motivation
 
