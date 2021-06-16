@@ -11,7 +11,7 @@
 
 Exactness Criterion is used within ranking rules to sort results by the similarity of the matched words with the query words. Documents that contain exactly the same terms as the ones queried first are placed first.
 
-> Ranking rules are built-in rules that ensure relevancy in search results. Ranking rules are applied in a default order which can be changed in the settings. You can add or remove rules and change their order of importance.
+> Ranking rules are built-in rules that ensure relevancy in search results. Ranking rules are applied in a default order which can be changed in the settings. You can add or remove rules and change their order.
 
 ### II. Motivation
 
@@ -29,13 +29,13 @@ Typesense calculates a `_text_match` score for ranking the documents about text 
 
 If documents have the exact same `_text_match` score, TypeSense accepts two more numerical fields in the `sort_by` parameter to break the tie.
 
-E.g. ```sort_by=_text_match:desc,price:desc,rating:desc```
+E.g. `sort_by=_text_match:desc,price:desc,rating:desc`
 
 It is possible to put a numerical field before the `_text_match` score.
 
-E.g. ```sort_by=price:desc,_text_match:desc```
+E.g. `sort_by=price:desc,_text_match:desc`
 
-```sort_by``` parameter is set at query time.
+`sort_by` parameter is set at query time.
 
 #### Algolia
 
