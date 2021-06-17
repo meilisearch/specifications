@@ -196,6 +196,7 @@ N/A
 - The HTTP logs should be logged as described in this spec.
 - The users should be able to choose the log level by filling the `MEILI_LOG_LEVEL` environment variable or using the CLI option `--log-level`.
 - If log level is set to `DEBUG`, the `/search` endpoint should output request parameters and body response as a log output.
+- Logs should be displayed in production environment as in development environment, e.g. the default log level is INFO
 
 #### Documentation
 - Add a dedicated logging section in the documentation.
