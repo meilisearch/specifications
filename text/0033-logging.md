@@ -89,10 +89,10 @@ Elasticsearch is probably the most versatile search engine when it comes to logg
 
 It is possible to define a precise rolling log strategy.
 
-A rolling log strategy offers permits to:
+A rolling log strategy permits to:
 
 - Facilitate the administration of systems that generate a large number of logs.
-- It automates swapping, compressing, deleting, and sending logs. It assists in keeping the logging system within the specified file system space limits.
+- automates swapping, compressing, deleting, and sending logs. It assists in keeping the logging system within the specified file system space limits.
 - Defines an interval over which log analysis can be performed
 - Gives an efficient way to identify log files that are no longer used so that an automated process can clean up and compress the log directory and run log analysis programs.
 
