@@ -137,7 +137,7 @@ Instead of using `RUST_LOG`, we create a `MEILI_LOG_LEVEL` environment variable 
 | WARN  | Used to warn about an exceptional non-blocking event occurring.                                                   |
 | INFO  | Default Log Level. It displays high level informations of events occuring in the search engine.                   |
 | DEBUG | Used for debugging and development purposes.  More verbose than INFO.                                             |
-| TRACE | Display everything happening at engine level.                                                                     |
+| TRACE | Display everything happening at engine level. Can be useful for rust developers dealing with complex issues       |
 
 
 ##### Log Format
@@ -202,4 +202,3 @@ N/A
 - Add a dedicated logging section in the documentation.
 - Add a link to this dedicated section on the `environment` [section](https://docs.meilisearch.com/reference/features/configuration.html#environment).
 - We should add the default level for the production environment on the `environment` section, by default its `INFO`.
-- Do not document `trace` level. It is used internally for tracing purpose when debugging complex issues.
