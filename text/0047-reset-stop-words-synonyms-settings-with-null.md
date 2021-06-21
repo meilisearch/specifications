@@ -61,7 +61,8 @@ The default value for `Synonyms` is an empty object.
 N/A
 
 ### VI. Impact on SDKs
-N/A
+
+The SDKs must allow the `null` value for every setting.
 
 ## 2. Technical Aspects
 
