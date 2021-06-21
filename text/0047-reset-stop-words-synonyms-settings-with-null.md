@@ -1,7 +1,7 @@
 - Title: Reset Stop-words and Synonyms settings with null value
 - Start Date: 2021-06-08
 - Specification PR: [#47](https://github.com/meilisearch/specifications/pull/47)
-- MeiliSearch Tracking-issues:
+- MeiliSearch Tracking-issues: [transplant/#217](https://github.com/meilisearch/transplant/issues/217)
 
 # Reset Stop-words and Synonyms settings with a null value.
 
