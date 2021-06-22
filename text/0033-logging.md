@@ -184,8 +184,8 @@ N/A
 
 - Store logs on filesystem (give us future possibilites of rolling strategy). We will keep an eye on https://roadmap.meilisearch.com/c/81-specify-log-path, Github issues and, Slack Community messages. Keep in mind that it is possible to send logs to files using `syslog` or `systemd` journalctl.
 - Develop an API endpoint to search for logged events and configure the logging policy for the instance (SaaS feature in mind).
-- Add syntaxic sugar helper flag like `-v, -vv, -vvv` that can be translated to a `MEILI_LOG_LEVEL` value.
-
+- Add syntactic sugar helper flag like `-v, -vv, -vvv` that can be translated to a `MEILI_LOG_LEVEL` value.
+- Use the rust clone of `log4j2`, [`log4rs`](https://docs.rs/log4rs/1.0.0/log4rs/) instead of `env_logger` to provide the same kind of options that Elasticsearch propose.
 ## 4. Planned Changes
 
 ### 0.21
