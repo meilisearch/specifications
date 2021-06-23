@@ -197,6 +197,7 @@ N/A
 - The users should be able to choose the log level by filling the `MEILI_LOG_LEVEL` environment variable or using the CLI option `--log-level`.
 - If log level is set to `DEBUG`, the `/search` endpoint should output request parameters and body response as a log output.
 - Logs should be displayed in production environment as in development environment, e.g. the default log level is INFO
+- Milli only display logs from `DEBUG` to `TRACE` log level.
 
 #### Documentation
 - Add a dedicated logging section in the documentation.
