@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: MeiliSearch
   description: MeiliSearch API
-  version: 0.20.0
+  version: 0.21.0
   contact:
     name: MeiliSearch
     email: bonjour@meilisearch.com
@@ -34,7 +34,7 @@ components:
         uid:
           type: string
           example: movies
-        primaryKeyTestDiff:
+        primaryKey:
           type: string
           nullable: true
           example: movie_id
@@ -44,7 +44,7 @@ components:
           $ref: '#/components/schemas/timestamp'
       required:
         - uid
-        - primaryKeyTestDiff
+        - primaryKey
         - createdAt
         - updatedAt
     document:
@@ -67,6 +67,7 @@ components:
       required:
         - start
         - length
+      description: ''
     hit:
       type: object
       additionalProperties: true
@@ -117,14 +118,18 @@ components:
           properties:
             '':
               $ref: '#/components/schemas/matchesInfo'
+        attribute:
+          type:
+            - string
+            - number
     documentId:
       oneOf:
         - type: number
         - type: string
       example: 468219
-    facetFilters:
+    filter:
       type: array
-      description: Facet names and values to filter on.
+      description: Attribute to filter on.
       items:
         oneOf:
           - type: string
@@ -137,7 +142,8 @@ components:
         - 'director:Mati Diop'
         - - 'genres:Comedy'
           - 'genres:Romance'
-    queryResponse:
+      title: filter
+    searchResponse:
       type: object
       additionalProperties: false
       properties:
@@ -193,6 +199,7 @@ components:
         - exhaustiveNbHits
         - processingTimeMs
         - query
+      title: ''
     update:
       type: object
       description: |
@@ -281,15 +288,16 @@ components:
         - exactness
         - asc(release_date)
         - desc(rank)
-    attributesForFaceting:
+    filterableAttributes:
       type: array
       description: |
-        Attributes to use as [facets](/reference/features/faceted_search.html).
+        Attributes to use as [facets](/reference/features/faceted_search.html) and for [filtering](/reference/features/filtering.html).
       items:
         type: string
       example:
         - genres
         - director
+      title: filterableAttributes
     distinctAttribute:
       type: string
       description: Search returns documents with distinct (different) values of the given field.
@@ -325,8 +333,8 @@ components:
           $ref: '#/components/schemas/stopWords'
         rankingRules:
           $ref: '#/components/schemas/rankingRules'
-        attributesForFaceting:
-          $ref: '#/components/schemas/attributesForFaceting'
+        filterableAttributes:
+          $ref: '#/components/schemas/filterableAttributes'
         distinctAttribute:
           $ref: '#/components/schemas/distinctAttribute'
         searchableAttributes:
@@ -428,6 +436,23 @@ components:
           type: string
         default:
           - '*'
+    attributesToHighlight:
+      name: attributesToHighlight
+      in: query
+      description: Attributes whose values will contain highlighted matching terms
+      schema:
+        type: array
+        items:
+          type: string
+          default:
+            - ''
+    attributesToCrop:
+      name: attributesToCrop
+      in: query
+      required: false
+      schema:
+        type: array
+      description: Attributes whose values have to be cropped
   responses:
     '202':
       description: Accepted
@@ -810,21 +835,15 @@ paths:
           required: true
           schema:
             type: string
-        - name: filters
+        - name: filter
           in: query
-          description: |
-            Specify a filter to be used with the query.
-
-            See our [dedicated guide](/reference/features/filtering.html).
+          description: 'Specify what to filter on. See our [dedicated guide](/reference/features/filtering.html).'
           schema:
             type: string
             example: '("genres:Horror" OR "genres:Mystery") AND "director:Jordan Peele"'
         - name: facetsDistribution
           in: query
-          description: |
-            If you have [set up faceted attributes](/reference/features/settings.html#attributes-for-faceting), you can retrieve the count of matching terms for each [facets](/reference/features/faceted_search.html).
-
-            [Learn more about facet distribution in the dedicated guide](/reference/features/faceted_search.html#the-facets-distribution)
+          description: 'If you have [set up filterableAttributes](/reference/features/settings.html#filterable-attributes), you can retrieve the count of matching terms for each [facets](/reference/features/faceted_search.html).[Learn more about facet distribution in the dedicated guide](/reference/features/faceted_search.html#the-facets-distribution)'
           schema:
             type: array
             items:
@@ -841,13 +860,16 @@ paths:
           description: Length used to crop field values
           schema:
             type: number
-        - name: attributesToHighlight
+        - $ref: '#/components/parameters/attributesToRetrieve'
+        - $ref: '#/components/parameters/attributesToHighlight'
+        - $ref: '#/components/parameters/attributesToCrop'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - schema:
+            type: boolean
           in: query
-          description: Attributes whose values will contain highlighted matching terms
-          schema:
-            type: array
-            items:
-              type: string
+          name: matches
+          description: Return _matchesInfo.
       responses:
         '200':
           description: Ok
@@ -916,6 +938,7 @@ paths:
           application/json:
             schema:
               type: object
+              additionalProperties: false
               properties:
                 q:
                   type: string
@@ -928,11 +951,11 @@ paths:
                   type: number
                   description: Maximum number of documents returned.
                   default: 20
-                filters:
+                filter:
                   type: string
                   description: Filter queries by an attribute value.
                   example: '("genres:Horror" OR "genres:Mystery") AND "director:Jordan Peele"'
-                facetFilters: null
+                facetFilters: {}
                 facetsDistribution:
                   type: array
                   description: Facets for which to retrieve the matching count.
@@ -941,10 +964,10 @@ paths:
                 attributesToRetrieve:
                   type: array
                   description: Attributes to display in the returned documents.
-                  items:
-                    type: string
                   default:
                     - '*'
+                  items:
+                    type: string
                 attributesToCrop:
                   type: array
                   description: Attributes whose values have to be cropped.
@@ -962,7 +985,6 @@ paths:
                 matches:
                   type: boolean
                   description: Defines whether an object that contains information about the matches should be returned or not.
-              additionalProperties: false
               required:
                 - q
       responses:
@@ -1259,7 +1281,7 @@ paths:
       operationId: indexes.settings.filterableAttributes.get
       summary: Get Filterable Attributes
       description: |
-        Get the [filterable attributes](/reference/features/faceted_search.html) of an index.
+        Get the [filterable attributes](/reference/features/filtering.html) of an index.
       tags:
         - Settings
       security:
@@ -1270,9 +1292,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
+                $ref: '#/components/schemas/filterableAttributes'
     post:
       operationId: indexes.settings.filterableAttributes.update
       summary: Update Filterable Attributes
@@ -1285,6 +1305,12 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/filterableAttributes'
+        description: ''
     delete:
       operationId: indexes.settings.filterableAttributes.reset
       summary: Reset Filterable Attributes
