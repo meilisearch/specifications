@@ -56,6 +56,7 @@ components:
         poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
         overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
         release_date: '1993-01-01'
+      description: A document made of attribute
     matchesInfo:
       type: object
       properties:
@@ -832,9 +833,9 @@ paths:
         - name: q
           in: query
           description: Query string.
-          required: true
           schema:
             type: string
+            default: '""'
         - name: filter
           in: query
           description: 'Specify what to filter on. See our [dedicated guide](/reference/features/filtering.html).'
@@ -844,13 +845,6 @@ paths:
         - name: facetsDistribution
           in: query
           description: 'If you have [set up filterableAttributes](/reference/features/settings.html#filterable-attributes), you can retrieve the count of matching terms for each [facets](/reference/features/faceted_search.html).[Learn more about facet distribution in the dedicated guide](/reference/features/faceted_search.html#the-facets-distribution)'
-          schema:
-            type: array
-            items:
-              type: string
-        - name: attributesToCrop
-          in: query
-          description: Attributes whose values have to be cropped
           schema:
             type: array
             items:
@@ -926,28 +920,16 @@ paths:
                 q:
                   type: string
                   description: Query string _(mandatory)_.
-                offset:
-                  type: number
-                  description: Number of documents to skip.
-                  default: 0
-                limit:
-                  type: number
-                  description: Maximum number of documents returned.
-                  default: 20
-                filter:
-                  type: string
-                  description: Filter queries by an attribute value.
-                  example: '("genres:Horror" OR "genres:Mystery") AND "director:Jordan Peele"'
-                facetsDistribution:
-                  type: array
-                  description: Facets for which to retrieve the matching count.
-                  items:
-                    type: string
                 attributesToRetrieve:
                   type: array
                   description: Attributes to display in the returned documents.
                   default:
                     - '*'
+                  items:
+                    type: string
+                attributesToHighlight:
+                  type: array
+                  description: Attributes whose values will contain highlighted matching terms.
                   items:
                     type: string
                 attributesToCrop:
@@ -959,16 +941,26 @@ paths:
                   type: number
                   description: Length used to crop field values.
                   default: 200
-                attributesToHighlight:
-                  type: array
-                  description: Attributes whose values will contain highlighted matching terms.
-                  items:
-                    type: string
                 matches:
                   type: boolean
                   description: Defines whether an object that contains information about the matches should be returned or not.
-              required:
-                - q
+                filter:
+                  type: string
+                  description: Filter queries by an attribute value.
+                  example: '("genres:Horror" OR "genres:Mystery") AND "director:Jordan Peele"'
+                facetsDistribution:
+                  type: array
+                  description: Facets for which to retrieve the matching count.
+                  items:
+                    type: string
+                offset:
+                  type: number
+                  description: Number of documents to skip.
+                  default: 0
+                limit:
+                  type: number
+                  description: Maximum number of documents returned.
+                  default: 20
             examples:
               Example:
                 value:
@@ -1040,8 +1032,22 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items: null
+                type: object
+                properties:
+                  rankingRules:
+                    $ref: '#/components/schemas/rankingRules'
+                  distinctAttribute:
+                    $ref: '#/components/schemas/distinctAttribute'
+                  searchableAttributes:
+                    $ref: '#/components/schemas/searchableAttributes'
+                  displayedAttributes:
+                    $ref: '#/components/schemas/displayedAttributes'
+                  stopWords:
+                    $ref: '#/components/schemas/stopWords'
+                  synonyms:
+                    $ref: '#/components/schemas/synonyms'
+                  filterableAttributes:
+                    $ref: '#/components/schemas/filterableAttributes'
     post:
       operationId: indexes.settings.update
       summary: Update settings
@@ -1070,14 +1076,14 @@ paths:
                   $ref: '#/components/schemas/stopWords'
                 rankingRules:
                   $ref: '#/components/schemas/rankingRules'
-                attributesForFaceting:
-                  type: 'null'
                 distinctAttribute:
                   $ref: '#/components/schemas/distinctAttribute'
                 searchableAttributes:
                   $ref: '#/components/schemas/searchableAttributes'
                 displayedAttributes:
                   $ref: '#/components/schemas/displayedAttributes'
+                filterableAttributes:
+                  $ref: '#/components/schemas/filterableAttributes'
       responses:
         '202':
           $ref: '#/components/responses/202'
@@ -1600,9 +1606,9 @@ paths:
                   - buildDate
                   - pkgVersion
               examples:
-                0.1.1 example:
+                Example:
                   value:
                     commitSha: b46889b5f0f2f8b91438a08a358ba8f05fc09fc1
                     buildDate: '2019-11-15T09:51:54.278247+00:00'
-                    pkgVersion: 0.1.1
+                    pkgVersion: 0.21.0
 security: []
