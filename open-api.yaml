@@ -876,24 +876,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  hits:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/hit'
-                  limit:
-                    type: number
-                  offset:
-                    type: number
-                  nbHits:
-                    type: number
-                  query:
-                    type: string
-                  exhaustiveNbHits:
-                    type: boolean
-                  processingTimeMs:
-                    type: number
+                $ref: '#/components/schemas/searchResponse'
               examples:
                 Example:
                   value:
@@ -955,7 +938,6 @@ paths:
                   type: string
                   description: Filter queries by an attribute value.
                   example: '("genres:Horror" OR "genres:Mystery") AND "director:Jordan Peele"'
-                facetFilters: {}
                 facetsDistribution:
                   type: array
                   description: Facets for which to retrieve the matching count.
@@ -987,30 +969,30 @@ paths:
                   description: Defines whether an object that contains information about the matches should be returned or not.
               required:
                 - q
+            examples:
+              Example:
+                value:
+                  q: Harry
+                  offset: 0
+                  limit: 20
+                  filter: '("genres:Horror" OR "genres:Mystery") AND "director:Jordan Peele"'
+                  facetsDistribution:
+                    - string
+                  attributesToRetrieve:
+                    - '*'
+                  attributesToCrop:
+                    - my_attribute
+                  cropLength: 200
+                  attributesToHighlight:
+                    - my_attribute
+                  matches: true
       responses:
         '200':
           description: Ok
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  hits:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/hit'
-                  limit:
-                    type: number
-                  offset:
-                    type: number
-                  nbHits:
-                    type: number
-                  query:
-                    type: string
-                  exhaustiveNbHits:
-                    type: boolean
-                  processingTimeMs:
-                    type: number
+                $ref: '#/components/schemas/searchResponse'
               examples:
                 Example:
                   value:
