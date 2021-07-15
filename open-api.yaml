@@ -34,7 +34,7 @@ components:
         uid:
           type: string
           example: movies
-        primaryKey:
+        primaryKeyTestDiff:
           type: string
           nullable: true
           example: movie_id
@@ -44,7 +44,7 @@ components:
           $ref: '#/components/schemas/timestamp'
       required:
         - uid
-        - primaryKey
+        - primaryKeyTestDiff
         - createdAt
         - updatedAt
     document:
