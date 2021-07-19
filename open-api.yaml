@@ -162,6 +162,12 @@ components:
         - type: string
           properties: {}
           pattern: '^[^:]+:[^:]+$'
+        - type: array
+          items:
+            anyOf:
+              - type: array
+                items: {}
+              - type: string
     searchResponse:
       type: object
       additionalProperties: false
@@ -296,7 +302,7 @@ components:
         - enqueuedAt
     synonyms:
       type: object
-      description: List of associated words treated similarly.
+      description: List of associated words treated similarly. A word associated to an array of word as synonyms.
       additionalProperties:
         type: array
         items:
@@ -312,7 +318,7 @@ components:
           - world of warcraft
     stopWords:
       type: array
-      description: List of words ignored by MeiliSearch when present in search queries.
+      description: List of words ignored when present in search queries.
       items:
         type: string
       example:
@@ -1294,6 +1300,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/synonyms'
+            examples: {}
       responses:
         '202':
           $ref: '#/components/responses/202'
