@@ -437,6 +437,11 @@ components:
           example: 20200929-114144097
         status:
           type: string
+          enum:
+            - in_progress
+            - failed
+            - done
+          example: in_progress
         startedAt:
           $ref: '#/components/schemas/timestamp'
         finishedAt:
@@ -1301,6 +1306,7 @@ paths:
             schema:
               $ref: '#/components/schemas/synonyms'
             examples: {}
+        description: ''
       responses:
         '202':
           $ref: '#/components/responses/202'
@@ -1335,6 +1341,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/stopWords'
+              examples: {}
     post:
       operationId: indexes.settings.stopWords.update
       summary: Update stop-words
