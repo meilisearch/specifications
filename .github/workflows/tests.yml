@@ -1,0 +1,19 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+    # trying and staging branches are for BORS config
+    branches:
+      - main
+
+jobs:
+  yaml-lint:
+    runs-on: ubuntu-latest
+    name: linter-check
+    steps:
+      - uses: actions/checkout@v2
+      - name: yaml-lint
+        uses: ibiqlik/action-yamllint@v3
+        with:
+          config_file: .yamllint.yml
