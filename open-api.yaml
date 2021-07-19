@@ -270,6 +270,9 @@ components:
               enum:
                 - DocumentAddition
                 - Settings
+                - DocumentsDeletion
+                - ClearAll
+                - DocumentsPartial
             number:
               type: integer
               description: Number of documents impacted when the information can be given.
@@ -672,8 +675,14 @@ paths:
                 properties:
                   status:
                     type: string
+                    enum:
+                      - available
                 required:
                   - status
+              examples:
+                '200':
+                  value:
+                    status: available
       x-internal: false
   /indexes:
     get:
