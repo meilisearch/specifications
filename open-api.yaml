@@ -235,16 +235,25 @@ components:
         * `processed`: Update is done.
         * `failed`: Update has failed.
       additionalProperties: false
-      examples: []
+      examples:
+        - status: processed
+          updateId: 0
+          type:
+            name: DocumentAddition
+            number: 10
+          enqueuedAt: '2019-11-20T09:40:33.711324Z'
+          processedAt: '2019-11-20T09:40:33.711324Z'
+          duration: 5
       properties:
         status:
+          type: string
           description: The state of the operation. `enqueud | processing | processed | failed`
           enum:
             - enqueued
             - processing
             - processed
             - failed
-          type: string
+          example: processed
         updateId:
           type: integer
           description: The id of the update.
@@ -253,12 +262,19 @@ components:
           additionalProperties: false
           required:
             - name
-            - number
           properties:
             name:
               type: string
+              description: Name of operation
+              example: DocumentAddition
+              enum:
+                - DocumentAddition
+                - Settings
             number:
               type: integer
+              description: Number of documents impacted when the information can be given.
+            settings:
+              $ref: '#/components/schemas/settings'
         enqueuedAt:
           $ref: '#/components/schemas/timestamp'
         processedAt:
@@ -1630,7 +1646,47 @@ paths:
             application/json:
               schema:
                 type: array
-                items: null
+                items:
+                  $ref: '#/components/schemas/update'
+              examples:
+                example-1:
+                  value:
+                    - status: processed
+                      updateId: 0
+                      type:
+                        name: DocumentsAddition
+                        number: 6
+                      duration: 0.031
+                      enqueuedAt: '2021-07-05T12:59:17.035788Z'
+                      processedAt: '2021-07-05T12:59:17.067453Z'
+                    - status: processed
+                      updateId: 1
+                      type:
+                        name: DocumentsAddition
+                        number: 6
+                      duration: 0.043
+                      enqueuedAt: '2021-07-06T07:45:49.883179Z'
+                      processedAt: '2021-07-06T07:45:49.927102Z'
+                    - status: processed
+                      updateId: 2
+                      type:
+                        name: Settings
+                        settings:
+                          searchableAttributes:
+                            - name
+                            - genre
+                          stopWords:
+                            - of
+                            - the
+                          synonyms:
+                            HP:
+                              - Harry Potter
+                            harry potter:
+                              - HP
+                          distinctAttribute: name
+                      duration: 0.042
+                      enqueuedAt: '2021-07-19T15:21:44.984611Z'
+                      processedAt: '2021-07-19T15:21:45.027818Z'
     parameters:
       - $ref: '#/components/parameters/indexUid'
   '/indexes/{indexUid}/updates/{updateId}':
@@ -1650,6 +1706,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/update'
+              examples: {}
     parameters:
       - $ref: '#/components/parameters/indexUid'
       - $ref: '#/components/parameters/updateId'
