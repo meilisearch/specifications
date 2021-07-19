@@ -227,14 +227,24 @@ components:
         Some operations are put in a queue and will be executed in turn (asynchronously). In this case, the server response contains the identifier to track the execution of the operation.
 
         [Learn More](/learn/advanced/asynchronous_updates.html).
+
+        The returned status could be:
+
+        * `enqueud`: Update is enqueud and ready to be processed.
+        * `processing`: Update is being processed by the engine.
+        * `processed`: Update is done.
+        * `failed`: Update has failed.
       additionalProperties: false
+      examples: []
       properties:
         status:
-          description: The state of the operation.
+          description: The state of the operation. `enqueud | processing | processed | failed`
           enum:
             - enqueued
+            - processing
             - processed
             - failed
+          type: string
         updateId:
           type: integer
           description: The id of the update.
@@ -251,11 +261,11 @@ components:
               type: integer
         enqueuedAt:
           $ref: '#/components/schemas/timestamp'
+        processedAt:
+          $ref: '#/components/schemas/timestamp'
         duration:
           type: number
           description: The number of seconds taken to complete the operation.
-        processedAt:
-          $ref: '#/components/schemas/timestamp'
         error:
           type: string
           description: |
@@ -292,21 +302,21 @@ components:
         - to
     rankingRules:
       type: array
-      description: |
-        List of ranking rules sorted by order of importance.
+      description: |-
+        List of ranking rules sorted by order of importance. The order is customizable.
 
         [A list of ordered built-in ranking rules](/learn/core_concepts/relevancy.html#order-of-the-rules).
       items:
         type: string
       example:
-        - typo
         - words
+        - typo
         - proximity
         - attribute
-        - wordsPosition
         - exactness
         - asc(release_date)
         - desc(rank)
+      examples: []
     filterableAttributes:
       type: array
       description: |
@@ -1132,7 +1142,7 @@ paths:
     get:
       operationId: indexes.settings.get
       summary: Get settings
-      description: |
+      description: |-
         Get the settings of an index.
 
         [Learn more about the settings](/reference/features/settings.html).
@@ -1162,6 +1172,14 @@ paths:
                     $ref: '#/components/schemas/synonyms'
                   filterableAttributes:
                     $ref: '#/components/schemas/filterableAttributes'
+                required:
+                  - rankingRules
+                  - distinctAttribute
+                  - searchableAttributes
+                  - displayedAttributes
+                  - stopWords
+                  - synonyms
+                  - filterableAttributes
     post:
       operationId: indexes.settings.update
       summary: Update settings
@@ -1365,7 +1383,7 @@ paths:
 
         Default Value:
         ```json
-        ["typo", "words", "proximity", "attribute", "wordsPosition", "exactness"]
+        ["words", "typo", "proximity", "attribute", "exactness"]
         ```
 
         To remove all ranking rules, which is not recommended in any case, you would send an empty array to the add or replace ranking rules route.
