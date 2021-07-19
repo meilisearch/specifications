@@ -69,7 +69,7 @@ components:
         poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
         overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
         release_date: '1993-01-01'
-      description: A document made of attribute
+      description: 'A document made of attribute. The maximum number of attribute for a document is 65,535.'
     matchesInfo:
       type: object
       properties:
@@ -124,11 +124,11 @@ components:
       properties:
         _formatted:
           type: object
-          description: Only present if attributesToHighlight is not empty. Copy of normal search result fields with every matching string sequence in the given attribute's field wrapped around an <em> tag.
+          description: Only present if `attributesToHighlight`/`attributesToCrop` is not empty. Return highlighted and cropped fields.
           additionalProperties: true
         _matchesInfo:
           type: object
-          description: Only present if matches=true. Array of all search query occurrences in all fields.
+          description: Only present if matches = `true`. Array of all search query occurrences in all fields.
           properties:
             '':
               $ref: '#/components/schemas/matchesInfo'
@@ -136,6 +136,8 @@ components:
           type:
             - string
             - number
+          description: Retrieve attributes of the document. `attributesToRetrieve` controls these fields.
+      description: ''
     documentId:
       oneOf:
         - type: number
@@ -172,10 +174,11 @@ components:
     searchResponse:
       type: object
       additionalProperties: false
+      title: ''
       properties:
         hits:
           type: array
-          description: Results of the query.
+          description: Array of documents matching the search.
           items:
             $ref: '#/components/schemas/hit'
         offset:
@@ -183,10 +186,10 @@ components:
           description: Number of documents skipped.
         limit:
           type: integer
-          description: Number of documents to take.
+          description: Number of returned documents.
         nbHits:
           type: integer
-          description: Total number of matches.
+          description: Total number of candidates for this search in the database.
         exhaustiveNbHits:
           type: boolean
           description: Whether `nbHits` is exhaustive.
@@ -197,7 +200,7 @@ components:
             additionalProperties:
               type: integer
           description: |
-            [Distribution of the given facets](/reference/features/search_parameters.html#the-facets-distribution).
+            [Distribution of the given facets](/reference/features/search_parameters.html#the-facets-distribution). A maximum of 100 values can be returned per facet.
           example:
             genres:
               action: 273
@@ -225,7 +228,6 @@ components:
         - exhaustiveNbHits
         - processingTimeMs
         - query
-      title: ''
     update:
       type: object
       description: |
@@ -234,13 +236,6 @@ components:
         Some operations are put in a queue and will be executed in turn (asynchronously). In this case, the server response contains the identifier to track the execution of the operation.
 
         [Learn More](/learn/advanced/asynchronous_updates.html).
-
-        The returned status could be:
-
-        * `enqueud`: Update is enqueud and ready to be processed.
-        * `processing`: Update is being processed by the engine.
-        * `processed`: Update is done.
-        * `failed`: Update has failed.
       additionalProperties: false
       examples:
         - status: processed
@@ -254,7 +249,7 @@ components:
       properties:
         status:
           type: string
-          description: The state of the operation. `enqueud | processing | processed | failed`
+          description: The status of the operation.
           enum:
             - enqueued
             - processing
@@ -304,10 +299,6 @@ components:
     synonyms:
       type: object
       description: List of associated words treated similarly. A word associated to an array of word as synonyms.
-      additionalProperties:
-        type: array
-        items:
-          type: string
       example:
         wolverine:
           - xmen
@@ -488,7 +479,7 @@ components:
     updateId:
       name: updateId
       in: path
-      description: The update identifier
+      description: The update unique identifier
       required: true
       schema:
         type: number
@@ -503,7 +494,7 @@ components:
     limit:
       name: limit
       in: query
-      description: Maximum number of documents returned.
+      description: Maximum number of documents to return.
       schema:
         type: number
         default: 20
@@ -559,6 +550,32 @@ components:
               - updateId
     '204':
       description: No Content
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          examples:
+            Unauthorized:
+              value:
+                message: You must have an authorization token
+                errorCode: missing_authorization_header
+                errorType: authentication_error
+                errorLink: 'https://docs.meilisearch.com/errors#missing_authorization_header'
+    '413':
+      description: Payload Too Large
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          examples:
+            Payload Too Large:
+              value:
+                message: Payload reached size limit.
+                errorCode: payload_too_large
+                errorType: invalid_request_error
+                errorLink: 'https://docs.meilisearch.com/errors#payload_too_large'
   securitySchemes:
     apiKey:
       type: apiKey
@@ -634,6 +651,8 @@ paths:
                     uid: 20210719-114144097
                     status: in_progress
                     startedAt: '2021-07-19T14:31:16.920473Z'
+        '401':
+          $ref: '#/components/responses/401'
   '/dumps/{dumpUid}/status':
     get:
       operationId: dumps.get
@@ -657,6 +676,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/dumps'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
           content:
@@ -680,7 +701,7 @@ paths:
     get:
       operationId: health.check
       summary: Get health
-      description: Get health of MeiliSearch server.
+      description: Get health of the MeiliSearch instance.
       tags:
         - Health
       responses:
@@ -728,6 +749,8 @@ paths:
                       primaryKey: movie_id
                       createdAt: '2019-11-20T09:40:33.711324Z'
                       updatedAt: '2019-11-20T09:40:33.711324Z'
+        '401':
+          $ref: '#/components/responses/401'
     post:
       operationId: indexes.create
       summary: Create Index
@@ -750,6 +773,11 @@ paths:
               additionalProperties: false
               required:
                 - uid
+            examples:
+              Example:
+                value:
+                  uid: movies
+                  primaryKey: movie_id
       responses:
         '201':
           description: Created
@@ -776,6 +804,8 @@ paths:
                     errorCode: invalid_index_uid
                     errorType: invalid_request_error
                     errorLink: 'https://docs.meilisearch.com/errors#invalid_index_uid'
+        '401':
+          $ref: '#/components/responses/401'
   '/indexes/{indexUid}':
     get:
       operationId: indexes.get
@@ -800,12 +830,14 @@ paths:
                     primaryKey: movie_id
                     createdAt: '2019-11-20T09:40:33.711324Z'
                     updatedAt: '2019-11-20T09:40:33.711324Z'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     put:
       operationId: indexes.update
       summary: Update Index
-      description: Update an index. Add a primaryKey is it doesn't already exists yet.
+      description: Update an index. Add a primaryKey if it doesn't already exists yet.
       tags:
         - Indexes
       security:
@@ -842,6 +874,8 @@ paths:
                     errorCode: primary_key_already_present
                     errorType: invalid_request_error
                     errorLink: 'https://docs.meilisearch.com/errors#primary_key_already_present'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     delete:
@@ -855,6 +889,8 @@ paths:
       responses:
         '204':
           $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     parameters:
@@ -876,7 +912,16 @@ paths:
             application/json:
               schema:
                 type: array
-                items: null
+                items:
+                  $ref: '#/components/schemas/document'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/attributesToRetrieve'
     post:
       operationId: indexes.documents.create
       summary: Add or replace documents
@@ -902,8 +947,10 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
-        '404':
-          description: Not Found
+        '401':
+          $ref: '#/components/responses/401'
+        '413':
+          $ref: '#/components/responses/413'
     put:
       operationId: indexes.documents.upsert
       summary: Add or update documents
@@ -925,12 +972,24 @@ paths:
           application/json:
             schema:
               type: array
-              items: null
+              items:
+                $ref: '#/components/schemas/document'
+            examples:
+              Example:
+                value:
+                  - id: 25684
+                    title: American Ninja 5
+                    poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
+                    overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
+                    release_date: '1993-01-01'
+        description: ''
       responses:
         '202':
           $ref: '#/components/responses/202'
-        '404':
-          description: Not Found
+        '401':
+          $ref: '#/components/responses/401'
+        '413':
+          $ref: '#/components/responses/413'
     delete:
       operationId: indexes.documents.removeAll
       summary: Delete all documents
@@ -942,6 +1001,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     parameters:
@@ -962,11 +1023,22 @@ paths:
             schema:
               type: array
               description: An array of document ids to delete
-              items: {}
-            examples: {}
+              items:
+                type:
+                  - string
+                  - number
+            examples:
+              Example:
+                value:
+                  - 1
+                  - 2
+                  - 3
+                  - a string id
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     parameters:
@@ -987,6 +1059,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/document'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
     delete:
       operationId: indexes.documents.remove
       summary: Delete one document
@@ -998,6 +1074,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     parameters:
@@ -1084,6 +1162,8 @@ paths:
                     query: string
                     exhaustiveNbHits: true
                     processingTimeMs: 0
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     post:
@@ -1200,6 +1280,8 @@ paths:
                     query: string
                     exhaustiveNbHits: true
                     processingTimeMs: 0
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     parameters:
@@ -1246,6 +1328,8 @@ paths:
                   - stopWords
                   - synonyms
                   - filterableAttributes
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     post:
@@ -1287,6 +1371,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     delete:
@@ -1303,6 +1389,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     parameters:
@@ -1324,6 +1412,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/synonyms'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     post:
@@ -1346,6 +1436,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     delete:
@@ -1360,6 +1452,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     parameters:
@@ -1382,6 +1476,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/stopWords'
               examples: {}
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     post:
@@ -1404,6 +1500,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     delete:
@@ -1418,6 +1516,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     parameters:
@@ -1439,6 +1539,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/rankingRules'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     post:
@@ -1464,6 +1566,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     delete:
@@ -1485,6 +1589,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     parameters:
@@ -1506,6 +1612,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/filterableAttributes'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     post:
@@ -1520,6 +1628,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
       requestBody:
@@ -1540,6 +1650,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     parameters:
@@ -1561,6 +1673,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/distinctAttribute'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     post:
@@ -1582,6 +1696,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     delete:
@@ -1596,6 +1712,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     parameters:
@@ -1617,6 +1735,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/searchableAttributes'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     post:
@@ -1637,6 +1757,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     delete:
@@ -1651,6 +1773,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     parameters:
@@ -1672,6 +1796,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/displayedAttributes'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     post:
@@ -1692,6 +1818,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     delete:
@@ -1706,6 +1834,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     parameters:
@@ -1726,8 +1856,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/stats'
-        '404':
-          description: Not Found
+        '201':
+          description: Created
+        '401':
+          $ref: '#/components/responses/401'
     parameters:
       - $ref: '#/components/parameters/indexUid'
   '/indexes/{indexUid}/updates':
@@ -1750,7 +1882,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/update'
               examples:
-                example-1:
+                Example:
                   value:
                     - status: processed
                       updateId: 0
@@ -1788,6 +1920,8 @@ paths:
                       duration: 0.042
                       enqueuedAt: '2021-07-19T15:21:44.984611Z'
                       processedAt: '2021-07-19T15:21:45.027818Z'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     parameters:
@@ -1810,6 +1944,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/update'
               examples: {}
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           description: Not Found
     parameters:
@@ -1841,6 +1977,8 @@ paths:
                 required:
                   - private
                   - public
+        '401':
+          $ref: '#/components/responses/401'
   /stats:
     get:
       operationId: stats.list
@@ -1884,6 +2022,8 @@ paths:
                         fieldDistribution:
                           genre: 10
                           author: 9
+        '401':
+          $ref: '#/components/responses/401'
   /version:
     get:
       operationId: version.get
@@ -1919,4 +2059,6 @@ paths:
                     commitSha: b46889b5f0f2f8b91438a08a358ba8f05fc09fc1
                     buildDate: '2019-11-15T09:51:54.278247+00:00'
                     pkgVersion: 0.21.0
+        '401':
+          $ref: '#/components/responses/401'
 security: []
