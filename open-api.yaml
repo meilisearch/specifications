@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
-  title: MeiliSearch
-  description: MeiliSearch API
+  title: MeiliSearch Core API
+  description: ''
   version: 0.21.0
   contact:
     name: MeiliSearch
@@ -9,6 +9,7 @@ info:
   license:
     name: MIT
     url: 'https://github.com/meilisearch/MeiliSearch/blob/main/LICENSE'
+  summary: 'An open source, blazingly fast and hyper relevant search-engine that will improve your search experience.'
 servers:
   - url: '{protocol}://{domain}:{port}'
     variables:
@@ -633,7 +634,7 @@ paths:
                     uid: 20210719-114144097
                     status: in_progress
                     startedAt: '2021-07-19T14:31:16.920473Z'
-  /dumps/status:
+  '/dumps/{dumpUid}/status':
     get:
       operationId: dumps.get
       summary: Get dump status
@@ -669,6 +670,12 @@ paths:
                     errorCode: not_found
                     errorType: invalid_request_error
                     errorLink: 'https://docs.meilisearch.com/errors#not_found'
+    parameters:
+      - schema:
+          type: string
+        name: dumpUid
+        in: path
+        required: true
   /health:
     get:
       operationId: health.check
@@ -793,6 +800,8 @@ paths:
                     primaryKey: movie_id
                     createdAt: '2019-11-20T09:40:33.711324Z'
                     updatedAt: '2019-11-20T09:40:33.711324Z'
+        '404':
+          description: Not Found
     put:
       operationId: indexes.update
       summary: Update Index
@@ -833,6 +842,8 @@ paths:
                     errorCode: primary_key_already_present
                     errorType: invalid_request_error
                     errorLink: 'https://docs.meilisearch.com/errors#primary_key_already_present'
+        '404':
+          description: Not Found
     delete:
       operationId: indexes.remove
       summary: Delete Index
@@ -844,6 +855,8 @@ paths:
       responses:
         '204':
           $ref: '#/components/responses/204'
+        '404':
+          description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
   '/indexes/{indexUid}/documents':
@@ -889,6 +902,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '404':
+          description: Not Found
     put:
       operationId: indexes.documents.upsert
       summary: Add or update documents
@@ -914,6 +929,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '404':
+          description: Not Found
     delete:
       operationId: indexes.documents.removeAll
       summary: Delete all documents
@@ -925,6 +942,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '404':
+          description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
   '/indexes/{indexUid}/documents/delete-batch':
@@ -944,9 +963,12 @@ paths:
               type: array
               description: An array of document ids to delete
               items: {}
+            examples: {}
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '404':
+          description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
   '/indexes/{indexUid}/documents/{documentId}':
@@ -976,13 +998,15 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '404':
+          description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
       - $ref: '#/components/parameters/documentId'
   '/indexes/{indexUid}/search':
     get:
       operationId: indexes.documents.searchGet
-      summary: Search in an index with GET route
+      summary: Search
       description: |
         Search for documents matching a specific query in the given index.
 
@@ -1060,9 +1084,11 @@ paths:
                     query: string
                     exhaustiveNbHits: true
                     processingTimeMs: 0
+        '404':
+          description: Not Found
     post:
       operationId: indexes.documents.search
-      summary: Search in an index with POST route
+      summary: Search
       description: |
         Search for documents matching a specific query in the given index.
 
@@ -1174,6 +1200,8 @@ paths:
                     query: string
                     exhaustiveNbHits: true
                     processingTimeMs: 0
+        '404':
+          description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
   '/indexes/{indexUid}/settings':
@@ -1218,6 +1246,8 @@ paths:
                   - stopWords
                   - synonyms
                   - filterableAttributes
+        '404':
+          description: Not Found
     post:
       operationId: indexes.settings.update
       summary: Update settings
@@ -1257,6 +1287,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '404':
+          description: Not Found
     delete:
       operationId: indexes.settings.reset
       summary: Reset settings
@@ -1271,6 +1303,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '404':
+          description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
   '/indexes/{indexUid}/settings/synonyms':
@@ -1290,6 +1324,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/synonyms'
+        '404':
+          description: Not Found
     post:
       operationId: indexes.settings.synonyms.update
       summary: Update synonyms
@@ -1310,6 +1346,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '404':
+          description: Not Found
     delete:
       operationId: indexes.settings.synonyms.reset
       summary: Reset synonyms
@@ -1322,6 +1360,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '404':
+          description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
   '/indexes/{indexUid}/settings/stop-words':
@@ -1342,6 +1382,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/stopWords'
               examples: {}
+        '404':
+          description: Not Found
     post:
       operationId: indexes.settings.stopWords.update
       summary: Update stop-words
@@ -1362,6 +1404,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '404':
+          description: Not Found
     delete:
       operationId: indexes.settings.stopWords.reset
       summary: Reset stop-words
@@ -1374,6 +1418,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '404':
+          description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
   '/indexes/{indexUid}/settings/ranking-rules':
@@ -1393,6 +1439,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/rankingRules'
+        '404':
+          description: Not Found
     post:
       operationId: indexes.settings.rankingRules.update
       summary: Update ranking rules
@@ -1416,6 +1464,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '404':
+          description: Not Found
     delete:
       operationId: indexes.settings.rankingRules.reset
       summary: Reset ranking rules
@@ -1435,6 +1485,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '404':
+          description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
   '/indexes/{indexUid}/settings/filterable-attributes':
@@ -1454,6 +1506,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/filterableAttributes'
+        '404':
+          description: Not Found
     post:
       operationId: indexes.settings.filterableAttributes.update
       summary: Update Filterable Attributes
@@ -1466,6 +1520,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '404':
+          description: Not Found
       requestBody:
         content:
           application/json:
@@ -1484,6 +1540,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '404':
+          description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
   '/indexes/{indexUid}/settings/distinct-attribute':
@@ -1503,6 +1561,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/distinctAttribute'
+        '404':
+          description: Not Found
     post:
       operationId: indexes.settings.distinctAttribute.update
       summary: Update distinct attribute
@@ -1522,6 +1582,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '404':
+          description: Not Found
     delete:
       operationId: indexes.settings.distinctAttribute.reset
       summary: Reset distinct attribute
@@ -1534,6 +1596,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '404':
+          description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
   '/indexes/{indexUid}/settings/searchable-attributes':
@@ -1553,6 +1617,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/searchableAttributes'
+        '404':
+          description: Not Found
     post:
       operationId: indexes.settings.searchableAttributes.update
       summary: Update searchable attributes
@@ -1571,6 +1637,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '404':
+          description: Not Found
     delete:
       operationId: indexes.settings.searchableAttributes.reset
       summary: Reset searchable attributes
@@ -1583,6 +1651,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '404':
+          description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
   '/indexes/{indexUid}/settings/displayed-attributes':
@@ -1602,6 +1672,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/displayedAttributes'
+        '404':
+          description: Not Found
     post:
       operationId: indexes.settings.displayedAttributes.update
       summary: Update displayed attributes
@@ -1620,6 +1692,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '404':
+          description: Not Found
     delete:
       operationId: indexes.settings.displayedAttributes.reset
       summary: Reset displayed attributes
@@ -1632,6 +1706,8 @@ paths:
       responses:
         '202':
           $ref: '#/components/responses/202'
+        '404':
+          description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
   '/indexes/{indexUid}/stats':
@@ -1650,6 +1726,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/stats'
+        '404':
+          description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
   '/indexes/{indexUid}/updates':
@@ -1710,6 +1788,8 @@ paths:
                       duration: 0.042
                       enqueuedAt: '2021-07-19T15:21:44.984611Z'
                       processedAt: '2021-07-19T15:21:45.027818Z'
+        '404':
+          description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
   '/indexes/{indexUid}/updates/{updateId}':
@@ -1730,6 +1810,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/update'
               examples: {}
+        '404':
+          description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
       - $ref: '#/components/parameters/updateId'
