@@ -43,10 +43,11 @@ components:
         name:
           type: string
         primaryKey:
-          type: string
+          type:
+            - string
+            - 'null'
           nullable: true
           example: movie_id
-          default: 'null'
         createdAt:
           $ref: '#/components/schemas/timestamp'
         updatedAt:
@@ -56,6 +57,8 @@ components:
         - name
         - createdAt
         - updatedAt
+      description: ''
+      title: ''
     document:
       type: object
       additionalProperties: true
@@ -389,6 +392,24 @@ components:
       examples:
         - uid: 20200929-114144097
           status: done
+    error:
+      title: error
+      type: object
+      properties:
+        message:
+          type: string
+        errorCode:
+          type: string
+        errorType:
+          type: string
+        errorLink:
+          type: string
+      required:
+        - message
+        - errorCode
+        - errorType
+        - errorLink
+      description: ''
   parameters:
     indexUid:
       name: indexUid
@@ -608,6 +629,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/index'
+              examples:
+                Example:
+                  value:
+                    - uid: movies
+                      name: movies
+                      primaryKey: movie_id
+                      createdAt: '2019-11-20T09:40:33.711324Z'
+                      updatedAt: '2019-11-20T09:40:33.711324Z'
     post:
       operationId: indexes.create
       summary: Create Index
@@ -637,6 +666,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/index'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                Index already exists:
+                  value:
+                    message: Index already exists.
+                    errorCode: index_already_exists
+                    errorType: invalid_request_error
+                    errorLink: 'https://docs.meilisearch.com/errors#index_already_exists'
+                Invalid Index Uid:
+                  value:
+                    message: 'Index must have a valid uid; Index uid can be of type integer or string only composed of alphanumeric characters, hyphens (-) and underscores (_).'
+                    errorCode: invalid_index_uid
+                    errorType: invalid_request_error
+                    errorLink: 'https://docs.meilisearch.com/errors#invalid_index_uid'
   '/indexes/{indexUid}':
     get:
       operationId: indexes.get
@@ -653,10 +701,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/index'
+              examples:
+                Example:
+                  value:
+                    uid: movies
+                    name: movies
+                    primaryKey: movie_id
+                    createdAt: '2019-11-20T09:40:33.711324Z'
+                    updatedAt: '2019-11-20T09:40:33.711324Z'
     put:
       operationId: indexes.update
       summary: Update Index
-      description: Update an index.
+      description: Update an index. Add a primaryKey is it doesn't already exists yet.
       tags:
         - Indexes
       security:
@@ -680,6 +736,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/index'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                Primary Key Already Present:
+                  value:
+                    message: A primary key is already present. It's impossible to update it
+                    errorCode: primary_key_already_present
+                    errorType: invalid_request_error
+                    errorLink: 'https://docs.meilisearch.com/errors#primary_key_already_present'
     delete:
       operationId: indexes.remove
       summary: Delete Index
