@@ -80,7 +80,7 @@ components:
       required:
         - start
         - length
-      description: ''
+      description: Starting position and length in bytes of the matched term in the returned value
     hit:
       type: object
       additionalProperties: true
@@ -141,21 +141,27 @@ components:
         - type: string
       example: 468219
     filter:
-      type: array
-      description: Attribute to filter on.
-      items:
-        oneOf:
-          - type: string
-            pattern: '^[^:]+:[^:]+$'
-          - type: array
-            items:
-              type: string
-              pattern: '^[^:]+:[^:]+$'
+      description: |
+        Attribute(s) to filter on.
+
+        Can be made of 3 syntaxes
+
+        - Nested Array: `["something > 1", "genre=comedy", ["genre=horror", "title=batman"]]`
+        - String: `"something > 1 AND genre=comedy AND (genre=horror OR title=batman)"`
+        - Mixed: `["something > 1 AND genre=comedy", "genre=horror OR title=batman"]`
       example:
         - 'director:Mati Diop'
         - - 'genres:Comedy'
           - 'genres:Romance'
       title: filter
+      oneOf:
+        - type: array
+          items:
+            type: string
+            pattern: '^[^:]+:[^:]+$'
+        - type: string
+          properties: {}
+          pattern: '^[^:]+:[^:]+$'
     searchResponse:
       type: object
       additionalProperties: false
