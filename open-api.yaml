@@ -30,21 +30,30 @@ components:
     index:
       type: object
       additionalProperties: false
+      examples:
+        - uid: movies
+          name: movies
+          primaryKey: movie_id
+          createdAt: '2019-11-20T09:40:33.711324Z'
+          updatedAt: '2019-11-20T09:40:33.711324Z'
       properties:
         uid:
           type: string
           example: movies
+        name:
+          type: string
         primaryKey:
           type: string
           nullable: true
           example: movie_id
+          default: 'null'
         createdAt:
           $ref: '#/components/schemas/timestamp'
         updatedAt:
           $ref: '#/components/schemas/timestamp'
       required:
         - uid
-        - primaryKey
+        - name
         - createdAt
         - updatedAt
     document:
