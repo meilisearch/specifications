@@ -352,20 +352,20 @@ components:
         - displayedAttributes
     stats:
       type: object
+      additionalProperties: false
       properties:
         numberOfDocuments:
           type: integer
         isIndexing:
           type: boolean
-        fieldsDistribution:
+        fieldDistribution:
           type: object
           additionalProperties:
             type: integer
-      additionalProperties: false
       required:
         - numberOfDocuments
         - isIndexing
-        - fieldsDistribution
+        - fieldDistribution
     dump:
       type: object
       additionalProperties: false
