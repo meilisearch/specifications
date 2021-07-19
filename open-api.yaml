@@ -378,20 +378,30 @@ components:
         - numberOfDocuments
         - isIndexing
         - fieldDistribution
-    dump:
+    dumps:
       type: object
       additionalProperties: false
+      examples:
+        - uid: 20210719-114144097
+          status: done
+          startedAt: '2021-07-19T14:31:16.920473Z'
+          finishedAt: '2021-07-19T14:32:16.920473Z'
+      title: dumps
+      description: ''
       properties:
         uid:
           type: string
           example: 20200929-114144097
         status:
           type: string
+        startedAt:
+          $ref: '#/components/schemas/timestamp'
+        finishedAt:
+          $ref: '#/components/schemas/timestamp'
       required:
         - uid
-      examples:
-        - uid: 20200929-114144097
-          status: done
+        - status
+        - startedAt
     error:
       title: error
       type: object
@@ -568,13 +578,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/dump'
+                $ref: '#/components/schemas/dumps'
+              examples:
+                Created:
+                  value:
+                    uid: 20210719-114144097
+                    status: in_progress
+                    startedAt: '2021-07-19T14:31:16.920473Z'
   /dumps/status:
     get:
       operationId: dumps.get
       summary: Get dump status
       description: |
         Get the status of a dump creation process using the uid returned after calling the [dump creation route](/reference/api/dump.html#create-a-dump).
+
         The returned status could be:
 
         * `in_progress`: Dump creation is in progress.
@@ -590,7 +607,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/dump'
+                $ref: '#/components/schemas/dumps'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                Not Found:
+                  value:
+                    message: Dump `20201001-110357260` not found
+                    errorCode: not_found
+                    errorType: invalid_request_error
+                    errorLink: 'https://docs.meilisearch.com/errors#not_found'
   /health:
     get:
       operationId: health.check
