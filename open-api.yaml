@@ -403,12 +403,6 @@ components:
       type: object
       additionalProperties: false
       title: ''
-      examples:
-        - numberOfDocuments: 10
-          isIndexing: true
-          fieldDistribution:
-            genre: 10
-            author: 9
       properties:
         numberOfDocuments:
           type: integer
@@ -425,6 +419,12 @@ components:
         - numberOfDocuments
         - isIndexing
         - fieldDistribution
+      examples:
+        - numberOfDocuments: 10
+          isIndexing: true
+          fieldDistribution:
+            genre: 10
+            author: 9
     dumps:
       type: object
       additionalProperties: false
