@@ -1,0 +1,2092 @@
+openapi: 3.1.0
+info:
+  title: MeiliSearch Core API
+  description: ''
+  version: 0.21.0
+  contact:
+    name: MeiliSearch
+    email: bonjour@meilisearch.com
+  license:
+    name: MIT
+    url: 'https://github.com/meilisearch/MeiliSearch/blob/main/LICENSE'
+  summary: 'An open source, blazingly fast and hyper relevant search-engine that will improve your search experience.'
+servers:
+  - url: '{protocol}://{domain}:{port}'
+    variables:
+      protocol:
+        enum:
+          - https
+          - http
+        default: https
+      domain:
+        default: example.meilisearch.com
+      port:
+        default: '7700'
+    description: 'https://example.meilisearch.com:7700'
+components:
+  schemas:
+    timestamp:
+      type: string
+      example: '2019-11-20T09:40:33.711324Z'
+    index:
+      type: object
+      additionalProperties: false
+      examples:
+        - uid: movies
+          name: movies
+          primaryKey: movie_id
+          createdAt: '2019-11-20T09:40:33.711324Z'
+          updatedAt: '2019-11-20T09:40:33.711324Z'
+      description: ''
+      title: ''
+      properties:
+        uid:
+          type: string
+          example: movies
+          description: Unique identifier for the index
+        name:
+          type: string
+          description: Name of the index
+        primaryKey:
+          type:
+            - string
+            - 'null'
+          nullable: true
+          example: movie_id
+          description: Custom primaryKey for documents
+        createdAt:
+          $ref: '#/components/schemas/timestamp'
+        updatedAt:
+          $ref: '#/components/schemas/timestamp'
+      required:
+        - uid
+        - name
+        - createdAt
+        - updatedAt
+    document:
+      type: object
+      additionalProperties: true
+      example:
+        id: 25684
+        title: American Ninja 5
+        poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
+        overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
+        release_date: '1993-01-01'
+      description: 'A document made of attribute. The maximum number of attribute for a document is 65,535.'
+    matchesInfo:
+      type: object
+      properties:
+        start:
+          type: integer
+        length:
+          type: integer
+      additionalProperties: false
+      required:
+        - start
+        - length
+      description: Starting position and length in bytes of the matched term in the returned value
+    hit:
+      type: object
+      additionalProperties: true
+      example:
+        id: 25684
+        title: American Ninja 5
+        poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
+        overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
+        release_date: '1993-01-01'
+        _formatted:
+          id: 25684
+          title: American Ninja 5
+          poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
+          overview: 'When a scientists daughter is kidnapped, American <em>Ninja</em>, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the <em>ninja</em>.'
+          release_date: '1993-01-01'
+        _matchesInfo:
+          overview:
+            - start: 49
+              length: 5
+            - start: 155
+              length: 5
+      examples:
+        - id: 25684
+          title: American Ninja 5
+          poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
+          overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
+          release_date: '1993-01-01'
+          _formatted:
+            id: 25684
+            title: American Ninja 5
+            poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
+            overview: 'When a scientists daughter is kidnapped, American <em>Ninja</em>, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the <em>ninja</em>.'
+            release_date: '1993-01-01'
+          _matchesInfo:
+            overview:
+              - start: 49
+                length: 5
+              - start: 155
+                length: 5
+      properties:
+        _formatted:
+          type: object
+          description: Only present if `attributesToHighlight`/`attributesToCrop` is not empty. Return highlighted and cropped fields.
+          additionalProperties: true
+        _matchesInfo:
+          type: object
+          description: Only present if matches = `true`. Array of all search query occurrences in all fields.
+          properties:
+            '':
+              $ref: '#/components/schemas/matchesInfo'
+        attribute:
+          type:
+            - string
+            - number
+          description: Retrieve attributes of the document. `attributesToRetrieve` controls these fields.
+      description: ''
+    documentId:
+      oneOf:
+        - type: number
+        - type: string
+      example: 468219
+    filter:
+      description: |
+        Attribute(s) to filter on.
+
+        Can be made of 3 syntaxes
+
+        - Nested Array: `["something > 1", "genre=comedy", ["genre=horror", "title=batman"]]`
+        - String: `"something > 1 AND genre=comedy AND (genre=horror OR title=batman)"`
+        - Mixed: `["something > 1 AND genre=comedy", "genre=horror OR title=batman"]`
+      example:
+        - 'director:Mati Diop'
+        - - 'genres:Comedy'
+          - 'genres:Romance'
+      title: filter
+      oneOf:
+        - type: array
+          items:
+            type: string
+            pattern: '^[^:]+:[^:]+$'
+        - type: string
+          properties: {}
+          pattern: '^[^:]+:[^:]+$'
+        - type: array
+          items:
+            anyOf:
+              - type: array
+                items: {}
+              - type: string
+    searchResponse:
+      type: object
+      additionalProperties: false
+      title: ''
+      properties:
+        hits:
+          type: array
+          description: Array of documents matching the search.
+          items:
+            $ref: '#/components/schemas/hit'
+        offset:
+          type: integer
+          description: Number of documents skipped.
+        limit:
+          type: integer
+          description: Number of returned documents.
+        nbHits:
+          type: integer
+          description: Total number of candidates for this search in the database.
+        exhaustiveNbHits:
+          type: boolean
+          description: Whether `nbHits` is exhaustive.
+        facetsDistribution:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties:
+              type: integer
+          description: |
+            [Distribution of the given facets](/reference/features/search_parameters.html#the-facets-distribution). A maximum of 100 values can be returned per facet.
+          example:
+            genres:
+              action: 273
+              animation: 118
+              adventure: 132
+              fantasy: 67
+              comedy: 475
+              mystery: 70
+              thriller: 217
+        exhaustiveFacetsCount:
+          type: boolean
+          description: Whether `facetsDistribution` is exhaustive.
+        processingTimeMs:
+          type: integer
+          description: Processing time of the query.
+        query:
+          type: string
+          description: Query originating the response.
+          example: ninja
+      required:
+        - hits
+        - offset
+        - limit
+        - nbHits
+        - exhaustiveNbHits
+        - processingTimeMs
+        - query
+    update:
+      type: object
+      description: |
+        MeiliSearch is an asynchronous API. It means that the API does not behave as you would typically expect when handling the request's responses.
+
+        Some operations are put in a queue and will be executed in turn (asynchronously). In this case, the server response contains the identifier to track the execution of the operation.
+
+        [Learn More](/learn/advanced/asynchronous_updates.html).
+      additionalProperties: false
+      examples:
+        - status: processed
+          updateId: 0
+          type:
+            name: DocumentAddition
+            number: 10
+          enqueuedAt: '2019-11-20T09:40:33.711324Z'
+          processedAt: '2019-11-20T09:40:33.711324Z'
+          duration: 5
+      properties:
+        status:
+          type: string
+          description: The status of the operation.
+          enum:
+            - enqueued
+            - processing
+            - processed
+            - failed
+          example: processed
+        updateId:
+          type: integer
+          description: The id of the update.
+        type:
+          type: object
+          additionalProperties: false
+          required:
+            - name
+          description: Type object for the update task
+          properties:
+            name:
+              type: string
+              description: Name of operation
+              example: DocumentAddition
+              enum:
+                - DocumentAddition
+                - Settings
+                - DocumentsDeletion
+                - ClearAll
+                - DocumentsPartial
+            number:
+              type: integer
+              description: Number of documents impacted when the information can be given.
+            settings:
+              $ref: '#/components/schemas/settings'
+        enqueuedAt:
+          $ref: '#/components/schemas/timestamp'
+        processedAt:
+          $ref: '#/components/schemas/timestamp'
+        duration:
+          type: number
+          description: The number of seconds taken to complete the operation.
+        error:
+          type: string
+          description: |
+            A string describing [the error that occurred](/errors/).
+      required:
+        - status
+        - updateId
+        - type
+        - enqueuedAt
+    synonyms:
+      type: object
+      description: List of associated words treated similarly. A word associated to an array of word as synonyms.
+      example:
+        wolverine:
+          - xmen
+          - logan
+        logan:
+          - wolverine
+          - xmen
+        wow:
+          - world of warcraft
+    stopWords:
+      type: array
+      description: List of words ignored when present in search queries.
+      items:
+        type: string
+      example:
+        - of
+        - the
+        - to
+    rankingRules:
+      type: array
+      description: |-
+        List of ranking rules sorted by order of importance. The order is customizable.
+
+        [A list of ordered built-in ranking rules](/learn/core_concepts/relevancy.html#order-of-the-rules).
+      items:
+        type: string
+      example:
+        - words
+        - typo
+        - proximity
+        - attribute
+        - exactness
+        - asc(release_date)
+        - desc(rank)
+      examples: []
+    filterableAttributes:
+      type: array
+      description: |
+        Attributes to use as [facets](/reference/features/faceted_search.html) and for [filtering](/reference/features/filtering.html).
+      items:
+        type: string
+      example:
+        - genres
+        - director
+      title: filterableAttributes
+    distinctAttribute:
+      type: string
+      description: Search returns documents with distinct (different) values of the given field.
+      nullable: true
+    searchableAttributes:
+      type: array
+      description: Fields in which to search for matching query words sorted by order of importance.
+      items:
+        type: string
+      example:
+        - title
+        - description
+        - genre
+    displayedAttributes:
+      type: array
+      description: Fields displayed in the returned documents.
+      items:
+        type: string
+      example:
+        - title
+        - description
+        - genre
+        - release_date
+    settings:
+      type: object
+      description: |
+        [Learn more about the settings in this guide](/reference/features/settings.html).
+      additionalProperties: false
+      properties:
+        synonyms:
+          $ref: '#/components/schemas/synonyms'
+        stopWords:
+          $ref: '#/components/schemas/stopWords'
+        rankingRules:
+          $ref: '#/components/schemas/rankingRules'
+        filterableAttributes:
+          $ref: '#/components/schemas/filterableAttributes'
+        distinctAttribute:
+          $ref: '#/components/schemas/distinctAttribute'
+        searchableAttributes:
+          $ref: '#/components/schemas/searchableAttributes'
+        displayedAttributes:
+          $ref: '#/components/schemas/displayedAttributes'
+      required:
+        - synonyms
+        - stopWords
+        - rankingRules
+        - filterableAttributes
+        - distinctAttribute
+        - searchableAttributes
+        - displayedAttributes
+    stats:
+      type: object
+      additionalProperties: false
+      title: ''
+      properties:
+        numberOfDocuments:
+          type: integer
+          description: Number of documents contained in the index.
+        isIndexing:
+          type: boolean
+          description: Whether or not the index is currently ingesting document
+        fieldDistribution:
+          type: object
+          additionalProperties:
+            type: integer
+          description: How many documents contains a field
+      required:
+        - numberOfDocuments
+        - isIndexing
+        - fieldDistribution
+      examples:
+        - numberOfDocuments: 10
+          isIndexing: true
+          fieldDistribution:
+            genre: 10
+            author: 9
+    dumps:
+      type: object
+      additionalProperties: false
+      examples:
+        - uid: 20210719-114144097
+          status: done
+          startedAt: '2021-07-19T14:31:16.920473Z'
+          finishedAt: '2021-07-19T14:32:16.920473Z'
+      title: dumps
+      description: ''
+      properties:
+        uid:
+          type: string
+          example: 20200929-114144097
+          description: ' Unique identifier for the dump'
+        status:
+          type: string
+          enum:
+            - in_progress
+            - failed
+            - done
+          example: in_progress
+          description: Status of the dump
+        startedAt:
+          $ref: '#/components/schemas/timestamp'
+        finishedAt:
+          $ref: '#/components/schemas/timestamp'
+      required:
+        - uid
+        - status
+        - startedAt
+    error:
+      title: error
+      type: object
+      properties:
+        message:
+          type: string
+        errorCode:
+          type: string
+        errorType:
+          type: string
+        errorLink:
+          type: string
+      required:
+        - message
+        - errorCode
+        - errorType
+        - errorLink
+      description: ''
+  parameters:
+    indexUid:
+      name: indexUid
+      in: path
+      description: Index Unique Identifier
+      required: true
+      schema:
+        type: string
+        example: movies
+    documentId:
+      name: documentId
+      in: path
+      description: The document identifier
+      required: true
+      schema:
+        type: any
+    updateId:
+      name: updateId
+      in: path
+      description: The update unique identifier
+      required: true
+      schema:
+        type: number
+    primaryKey:
+      name: primaryKey
+      in: query
+      description: |
+        The [primary key](/learn/core_concepts/documents.html#primary-key) of the documents _(optional)_.
+        If you want to set the __primary key__ of your index through this route, it only has to be done __the first time you add documents__ to the index. After which it will be ignored if given.
+      schema:
+        type: string
+    limit:
+      name: limit
+      in: query
+      description: Maximum number of documents to return.
+      schema:
+        type: number
+        default: 20
+    offset:
+      name: offset
+      in: query
+      description: Number of documents to skip.
+      schema:
+        type: number
+        default: 0
+    attributesToRetrieve:
+      name: attributesToRetrieve
+      in: query
+      description: |
+        Comma-separated list of attributes whose fields will be present in the returned documents.
+        Defaults to to the [displayedAttributes list](/reference/features/settings.html#displayed-attributes) which contains by default all attributes found in the documents.
+      schema:
+        type: array
+        items:
+          type: string
+        default:
+          - '*'
+    attributesToHighlight:
+      name: attributesToHighlight
+      in: query
+      description: Attributes whose values will contain highlighted matching terms.
+      schema:
+        type: array
+        items:
+          type: string
+          default:
+            - ''
+    attributesToCrop:
+      name: attributesToCrop
+      in: query
+      required: false
+      schema:
+        type: array
+      description: Attributes whose values have to be cropped
+  responses:
+    '202':
+      description: Accepted
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              updateId:
+                type: number
+                description: 'This `updateId` allows you to [track the current update](/reference/api/updates.html).'
+            additionalProperties: false
+            required:
+              - updateId
+          examples:
+            Example:
+              value:
+                updateId: 1
+    '204':
+      description: No Content
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          examples:
+            Unauthorized:
+              value:
+                message: You must have an authorization token
+                errorCode: missing_authorization_header
+                errorType: authentication_error
+                errorLink: 'https://docs.meilisearch.com/errors#missing_authorization_header'
+    '413':
+      description: Payload Too Large
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          examples:
+            Payload Too Large:
+              value:
+                message: Payload reached size limit.
+                errorCode: payload_too_large
+                errorType: invalid_request_error
+                errorLink: 'https://docs.meilisearch.com/errors#payload_too_large'
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-Meili-API-Key
+tags:
+  - name: Indexes
+    description: |
+      An index is an entity that gathers a set of [documents](/learn/core_concepts/documents.html) with its own settings.
+      [Learn more about indexes](/learn/core_concepts/indexes.html).
+  - name: Documents
+    description: |
+      Documents are objects composed of fields that can store any type of data.
+      Each field contains an attribute and its associated value.
+      Documents are stored inside [indexes](/learn/core_concepts/indexes.html).
+      [Learn more about documents](/learn/core_concepts/documents.html).
+  - name: Search
+    description: |
+      MeiliSearch exposes 2 routes to perform searches:
+      * A POST route: this is the preferred route when using API authentication, as it allows [preflight request](https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request) caching and better performances.
+      * A GET route: the usage of this route is discouraged, unless you have good reason to do otherwise (specific caching abilities for example).
+      Other than the differences mentioned above, the two routes are strictly equivalent.
+  - name: Updates
+    description: |
+      The `updates` route gives information about the progress of the [asynchronous processes](/learn/advanced/asynchronous_updates.html).
+  - name: Keys
+    description: |
+      Each instance of MeiliSearch has three keys: a master, a private, and a public. Each key has a given set of permissions on the API routes.
+      You must have the master key to access the `keys` route.
+      [More information about the keys and their rights](/reference/features/authentication.html).
+  - name: Settings
+    description: |
+      `Settings` is a list of all the __customization__ possible for an index.
+      It is possible to update all the settings in one go or individually with the dedicated routes. Updates in the settings route are __partial__. This means that any parameters not provided in the body will be left unchanged.
+      Updating the settings means overwriting the default settings of MeiliSearch. You can reset to default values using the `DELETE` routes.
+  - name: Stats
+    description: |
+      `Stats` gives extended information and metrics about indexes and the MeiliSearch database.
+  - name: Health
+    description: |
+      The health check endpoint enables you to periodically test the health of your MeiliSearch instance.
+  - name: Version
+    description: |
+      Current version of Meilisearch.
+  - name: Dumps
+    description: |
+      The `dumps` route allows the creation of database dumps. Dumps are `.dump` files that can be used to launch MeiliSearch. Dumps are compatible between MeiliSearch versions.
+      Creating a dump is also referred to as exporting it, whereas launching MeiliSearch with a dump is referred to as importing it.
+      During a [dump export](/reference/api/dump.html#create-a-dump), all indexes of the current instance are exported—together with their documents and settings—and saved as a single `.dump` file.
+      During a dump import, all indexes contained in the indicated `.dump` file are imported along with their associated documents and settings. Any existing index with the same uid as an index in the dump file will be overwritten.
+      Dump imports are [performed at launch](/reference/features/configuration.html#import-dump) using an option. [Batch size](/reference/features/configuration.html#dump-batch-size) can also be set at this time.
+paths:
+  /dumps:
+    post:
+      operationId: dumps.create
+      summary: Create a Dump
+      description: |
+        Triggers a dump creation process. Once the process is complete, a dump is created in the [dumps directory](/reference/features/configuration.html#dumps-destination). If the dumps directory does not exist yet, it will be created.
+      tags:
+        - Dumps
+      security:
+        - apiKey: []
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dumps'
+              examples:
+                Created:
+                  value:
+                    uid: 20210719-114144097
+                    status: in_progress
+                    startedAt: '2021-07-19T14:31:16.920473Z'
+        '401':
+          $ref: '#/components/responses/401'
+  '/dumps/{dumpUid}/status':
+    get:
+      operationId: dumps.get
+      summary: Get dump status
+      description: |
+        Get the status of a dump creation process using the uid returned after calling the [dump creation route](/reference/api/dump.html#create-a-dump).
+
+        The returned status could be:
+
+        * `in_progress`: Dump creation is in progress.
+        * `failed`: An error occured during dump process, and the task was aborted.
+        * `done`: Dump creation is finished and was successful.
+      tags:
+        - Dumps
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dumps'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                Not Found:
+                  value:
+                    message: Dump `20201001-110357260` not found
+                    errorCode: not_found
+                    errorType: invalid_request_error
+                    errorLink: 'https://docs.meilisearch.com/errors#not_found'
+    parameters:
+      - schema:
+          type: string
+        name: dumpUid
+        in: path
+        required: true
+  /health:
+    get:
+      operationId: health.check
+      summary: Get health
+      description: Get health of the MeiliSearch instance.
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - available
+                required:
+                  - status
+              examples:
+                '200':
+                  value:
+                    status: available
+      x-internal: false
+  /indexes:
+    get:
+      operationId: indexes.list
+      summary: List Indexes
+      description: List all indexes.
+      tags:
+        - Indexes
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/index'
+              examples:
+                Example:
+                  value:
+                    - uid: movies
+                      name: movies
+                      primaryKey: movie_id
+                      createdAt: '2019-11-20T09:40:33.711324Z'
+                      updatedAt: '2019-11-20T09:40:33.711324Z'
+        '401':
+          $ref: '#/components/responses/401'
+    post:
+      operationId: indexes.create
+      summary: Create Index
+      description: Create an index.
+      tags:
+        - Indexes
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                uid:
+                  type: string
+                primaryKey:
+                  type: string
+              additionalProperties: false
+              required:
+                - uid
+            examples:
+              Example:
+                value:
+                  uid: movies
+                  primaryKey: movie_id
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/index'
+              examples: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                Index already exists:
+                  value:
+                    message: Index already exists.
+                    errorCode: index_already_exists
+                    errorType: invalid_request_error
+                    errorLink: 'https://docs.meilisearch.com/errors#index_already_exists'
+                Invalid Index Uid:
+                  value:
+                    message: 'Index must have a valid uid; Index uid can be of type integer or string only composed of alphanumeric characters, hyphens (-) and underscores (_).'
+                    errorCode: invalid_index_uid
+                    errorType: invalid_request_error
+                    errorLink: 'https://docs.meilisearch.com/errors#invalid_index_uid'
+        '401':
+          $ref: '#/components/responses/401'
+  '/indexes/{indexUid}':
+    get:
+      operationId: indexes.get
+      summary: Get Index
+      description: Get information about an index.
+      tags:
+        - Indexes
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/index'
+              examples:
+                Example:
+                  value:
+                    uid: movies
+                    name: movies
+                    primaryKey: movie_id
+                    createdAt: '2019-11-20T09:40:33.711324Z'
+                    updatedAt: '2019-11-20T09:40:33.711324Z'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    put:
+      operationId: indexes.update
+      summary: Update Index
+      description: Update an index. Add a primaryKey if it doesn't already exists yet.
+      tags:
+        - Indexes
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                primaryKey:
+                  type: string
+              additionalProperties: false
+              required:
+                - primaryKey
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/index'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                Primary Key Already Present:
+                  value:
+                    message: A primary key is already present. It's impossible to update it
+                    errorCode: primary_key_already_present
+                    errorType: invalid_request_error
+                    errorLink: 'https://docs.meilisearch.com/errors#primary_key_already_present'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    delete:
+      operationId: indexes.remove
+      summary: Delete Index
+      description: Delete an index.
+      tags:
+        - Indexes
+      security:
+        - apiKey: []
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    parameters:
+      - $ref: '#/components/parameters/indexUid'
+  '/indexes/{indexUid}/documents':
+    get:
+      operationId: indexes.documents.list
+      summary: Get Documents
+      description: |
+        Get [documents](/learn/core_concepts/documents.html) by batch.
+      tags:
+        - Documents
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/document'
+              examples:
+                Example:
+                  value:
+                    - id: 25684
+                      title: American Ninja 5
+                      poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
+                      overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
+                      release_date: '1993-01-01'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/attributesToRetrieve'
+    post:
+      operationId: indexes.documents.create
+      summary: Add or replace documents
+      description: |
+        Add a list of [documents](/learn/core_concepts/documents.html) or replace them if they already exist. If the provided index does not exist, it will be created.
+
+        If you send an already existing document (same [id](/learn/core_concepts/documents.html#primary-key)) the whole existing document will be overwritten by the new document. Fields previously in the document not present in the new document are removed.
+
+        For a partial update of the document see add or update documents.
+
+        If the provided index does not exist, it will be created.
+      tags:
+        - Documents
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items: null
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '413':
+          $ref: '#/components/responses/413'
+    put:
+      operationId: indexes.documents.upsert
+      summary: Add or update documents
+      description: |
+        Add a list of documents or update them if they already exist. If the provided index does not exist, it will be created.
+
+        If you send an already existing document (same [id](/learn/core_concepts/documents.html#primary-key)) the old document will be only partially updated according to the fields of the new document. Thus, any fields not present in the new document are kept and remained unchanged.
+
+        To completely overwrite a document, check out the add or replace documents route.
+
+        If the provided index does not exist, it will be created.
+      tags:
+        - Documents
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/document'
+            examples:
+              Example:
+                value:
+                  - id: 25684
+                    title: American Ninja 5
+                    poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
+                    overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
+                    release_date: '1993-01-01'
+        description: ''
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '413':
+          $ref: '#/components/responses/413'
+    delete:
+      operationId: indexes.documents.removeAll
+      summary: Delete all documents
+      description: Delete all documents in the specified index.
+      tags:
+        - Documents
+      security:
+        - apiKey: []
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    parameters:
+      - $ref: '#/components/parameters/indexUid'
+  '/indexes/{indexUid}/documents/delete-batch':
+    post:
+      operationId: indexes.documents.removeBatch
+      summary: Delete documents
+      description: Delete a selection of documents based on array of document id's.
+      tags:
+        - Documents
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              description: An array of document ids to delete
+              items:
+                type:
+                  - string
+                  - number
+            examples:
+              Example:
+                value:
+                  - 1
+                  - 2
+                  - 3
+                  - a string id
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    parameters:
+      - $ref: '#/components/parameters/indexUid'
+  '/indexes/{indexUid}/documents/{documentId}':
+    get:
+      operationId: indexes.documents.get
+      summary: Get one document
+      description: 'Get one [document](/learn/core_concepts/documents.html) using its unique id.'
+      tags:
+        - Documents
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/document'
+              examples: {}
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    delete:
+      operationId: indexes.documents.remove
+      summary: Delete one document
+      description: Delete one document based on its unique id.
+      tags:
+        - Documents
+      security:
+        - apiKey: []
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    parameters:
+      - $ref: '#/components/parameters/indexUid'
+      - $ref: '#/components/parameters/documentId'
+  '/indexes/{indexUid}/search':
+    get:
+      operationId: indexes.documents.searchGet
+      summary: Search
+      description: |
+        Search for documents matching a specific query in the given index.
+
+        This route should only be used when no API key is required. If an API key is required, use the POST route instead.
+      tags:
+        - Search
+      security:
+        - apiKey: []
+      parameters:
+        - name: q
+          in: query
+          description: Query string.
+          schema:
+            type: string
+            default: '""'
+        - name: filter
+          in: query
+          description: 'Specify what to filter on. See our [dedicated guide](/reference/features/filtering.html).'
+          schema:
+            type: string
+            example: '("genres:Horror" OR "genres:Mystery") AND "director:Jordan Peele"'
+        - name: facetsDistribution
+          in: query
+          description: 'If you have [set up filterableAttributes](/reference/features/settings.html#filterable-attributes), you can retrieve the count of matching terms for each [facets](/reference/features/faceted_search.html).[Learn more about facet distribution in the dedicated guide](/reference/features/faceted_search.html#the-facets-distribution)'
+          schema:
+            type: array
+            items:
+              type: string
+        - name: cropLength
+          in: query
+          description: Length used to crop field values
+          schema:
+            type: number
+        - $ref: '#/components/parameters/attributesToRetrieve'
+        - $ref: '#/components/parameters/attributesToHighlight'
+        - $ref: '#/components/parameters/attributesToCrop'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - schema:
+            type: boolean
+          in: query
+          name: matches
+          description: Return _matchesInfo.
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/searchResponse'
+              examples:
+                Example:
+                  value:
+                    hits:
+                      - id: 25684
+                        title: American Ninja 5
+                        poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
+                        overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
+                        release_date: '1993-01-01'
+                        _formatted:
+                          id: 25684
+                          title: American Ninja 5
+                          poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
+                          overview: 'When a scientists daughter is kidnapped, American <em>Ninja</em>, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the <em>ninja</em>.'
+                          release_date: '1993-01-01'
+                        _matchesInfo:
+                          overview:
+                            - start: 49
+                              length: 5
+                            - start: 155
+                              length: 5
+                    limit: 0
+                    offset: 0
+                    nbHits: 0
+                    query: string
+                    exhaustiveNbHits: true
+                    processingTimeMs: 0
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    post:
+      operationId: indexes.documents.search
+      summary: Search
+      description: |
+        Search for documents matching a specific query in the given index.
+
+        This is the preferred route to perform search when an API key is required, as it allows for [preflight requests](https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request) to be cached. Caching preflight requests improves considerably the speed of the search.
+      tags:
+        - Search
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                q:
+                  type: string
+                  description: Query string _(mandatory)_.
+                attributesToRetrieve:
+                  type: array
+                  description: Attributes to display in the returned documents.
+                  default:
+                    - '*'
+                  items:
+                    type: string
+                attributesToHighlight:
+                  type: array
+                  description: Attributes whose values will contain highlighted matching terms.
+                  items:
+                    type: string
+                attributesToCrop:
+                  type: array
+                  description: Attributes whose values have to be cropped.
+                  items:
+                    type: string
+                cropLength:
+                  type: number
+                  description: Length used to crop field values.
+                  default: 200
+                matches:
+                  type: boolean
+                  description: Defines whether an object that contains information about the matches should be returned or not.
+                filter:
+                  type: string
+                  description: Filter queries by an attribute value.
+                  example: '("genres:Horror" OR "genres:Mystery") AND "director:Jordan Peele"'
+                facetsDistribution:
+                  type: array
+                  description: Facets for which to retrieve the matching count.
+                  items:
+                    type: string
+                offset:
+                  type: number
+                  description: Number of documents to skip.
+                  default: 0
+                limit:
+                  type: number
+                  description: Maximum number of documents returned.
+                  default: 20
+            examples:
+              Example:
+                value:
+                  q: Harry
+                  offset: 0
+                  limit: 20
+                  filter: '("genres:Horror" OR "genres:Mystery") AND "director:Jordan Peele"'
+                  facetsDistribution:
+                    - string
+                  attributesToRetrieve:
+                    - '*'
+                  attributesToCrop:
+                    - my_attribute
+                  cropLength: 200
+                  attributesToHighlight:
+                    - my_attribute
+                  matches: true
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/searchResponse'
+              examples:
+                Example:
+                  value:
+                    hits:
+                      - id: 25684
+                        title: American Ninja 5
+                        poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
+                        overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
+                        release_date: '1993-01-01'
+                        _formatted:
+                          id: 25684
+                          title: American Ninja 5
+                          poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
+                          overview: 'When a scientists daughter is kidnapped, American <em>Ninja</em>, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the <em>ninja</em>.'
+                          release_date: '1993-01-01'
+                        _matchesInfo:
+                          overview:
+                            - start: 49
+                              length: 5
+                            - start: 155
+                              length: 5
+                    limit: 0
+                    offset: 0
+                    nbHits: 0
+                    query: string
+                    exhaustiveNbHits: true
+                    processingTimeMs: 0
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    parameters:
+      - $ref: '#/components/parameters/indexUid'
+  '/indexes/{indexUid}/settings':
+    get:
+      operationId: indexes.settings.get
+      summary: Get settings
+      description: |-
+        Get the settings of an index.
+
+        [Learn more about the settings](/reference/features/settings.html).
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rankingRules:
+                    $ref: '#/components/schemas/rankingRules'
+                  distinctAttribute:
+                    $ref: '#/components/schemas/distinctAttribute'
+                  searchableAttributes:
+                    $ref: '#/components/schemas/searchableAttributes'
+                  displayedAttributes:
+                    $ref: '#/components/schemas/displayedAttributes'
+                  stopWords:
+                    $ref: '#/components/schemas/stopWords'
+                  synonyms:
+                    $ref: '#/components/schemas/synonyms'
+                  filterableAttributes:
+                    $ref: '#/components/schemas/filterableAttributes'
+                required:
+                  - rankingRules
+                  - distinctAttribute
+                  - searchableAttributes
+                  - displayedAttributes
+                  - stopWords
+                  - synonyms
+                  - filterableAttributes
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    post:
+      operationId: indexes.settings.update
+      summary: Update settings
+      description: |
+        Update the settings of an index.
+
+        Updates in the settings route are __partial__. This means that any parameters not provided in the body will be left unchanged.
+        [Learn more about the settings in this guide](/reference/features/settings.html).
+
+        If the provided index does not exist, it will be created.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                synonyms:
+                  $ref: '#/components/schemas/synonyms'
+                stopWords:
+                  $ref: '#/components/schemas/stopWords'
+                rankingRules:
+                  $ref: '#/components/schemas/rankingRules'
+                distinctAttribute:
+                  $ref: '#/components/schemas/distinctAttribute'
+                searchableAttributes:
+                  $ref: '#/components/schemas/searchableAttributes'
+                displayedAttributes:
+                  $ref: '#/components/schemas/displayedAttributes'
+                filterableAttributes:
+                  $ref: '#/components/schemas/filterableAttributes'
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    delete:
+      operationId: indexes.settings.reset
+      summary: Reset settings
+      description: |
+        Reset the settings of an index.
+
+        All settings will be reset to their default value.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    parameters:
+      - $ref: '#/components/parameters/indexUid'
+  '/indexes/{indexUid}/settings/synonyms':
+    get:
+      operationId: indexes.settings.synonyms.get
+      summary: Get synonyms
+      description: |
+        Get the list of [synonyms](/reference/features/synonyms.html) of an index.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/synonyms'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    post:
+      operationId: indexes.settings.synonyms.update
+      summary: Update synonyms
+      description: |
+        Update the list of [synonyms](/reference/features/synonyms.html) of an index. Synonyms are [normalized](/reference/features/synonyms.html#normalization).
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/synonyms'
+            examples: {}
+        description: ''
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    delete:
+      operationId: indexes.settings.synonyms.reset
+      summary: Reset synonyms
+      description: |
+        Reset the list of [synonyms](/reference/features/synonyms.html) of an index to its default value (`{}`).
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    parameters:
+      - $ref: '#/components/parameters/indexUid'
+  '/indexes/{indexUid}/settings/stop-words':
+    get:
+      operationId: indexes.settings.stopWords.get
+      summary: Get stop-words
+      description: |
+        Get the list of [stop-words](/reference/features/stop_words.html) of an index.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/stopWords'
+              examples: {}
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    post:
+      operationId: indexes.settings.stopWords.update
+      summary: Update stop-words
+      description: |
+        Update the list of [stop-words](/reference/features/stop_words.html) of an index.
+
+        If a list of stop-words already exists it will be overwritten (replaced).
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/stopWords'
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    delete:
+      operationId: indexes.settings.stopWords.reset
+      summary: Reset stop-words
+      description: |
+        Reset the list of [stop-words](/reference/features/stop_words.html) of an index to its default value (`[]`).
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    parameters:
+      - $ref: '#/components/parameters/indexUid'
+  '/indexes/{indexUid}/settings/ranking-rules':
+    get:
+      operationId: indexes.settings.rankingRules.get
+      summary: Get ranking rules
+      description: |
+        Get the [ranking rules](/learn/core_concepts/relevancy.html#ranking-rules) of an index.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rankingRules'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    post:
+      operationId: indexes.settings.rankingRules.update
+      summary: Update ranking rules
+      description: |
+        Update the [ranking rules](/learn/core_concepts/relevancy.html#ranking-rules) of an index.
+
+        To add your own ranking rule, you have to communicate either `asc` for ascending order or `desc` for descending order followed by the field name in brackets.
+
+        * To apply an ascending sorting (results sorted by increasing value of the attribute): `asc(attribute_name)`
+        * To apply a descending sorting (results sorted by decreasing value of the attribute): `desc(attribute_name)`
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/rankingRules'
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    delete:
+      operationId: indexes.settings.rankingRules.reset
+      summary: Reset ranking rules
+      description: |
+        Reset the [ranking rules](/learn/core_concepts/relevancy.html#ranking-rules) of an index to its default value.
+
+        Default Value:
+        ```json
+        ["words", "typo", "proximity", "attribute", "exactness"]
+        ```
+
+        To remove all ranking rules, which is not recommended in any case, you would send an empty array to the add or replace ranking rules route.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    parameters:
+      - $ref: '#/components/parameters/indexUid'
+  '/indexes/{indexUid}/settings/filterable-attributes':
+    get:
+      operationId: indexes.settings.filterableAttributes.get
+      summary: Get Filterable Attributes
+      description: |
+        Get the [filterable attributes](/reference/features/filtering.html) of an index.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/filterableAttributes'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    post:
+      operationId: indexes.settings.filterableAttributes.update
+      summary: Update Filterable Attributes
+      description: |
+        Update the [filterable attributes](/reference/features/faceted_search.html) of an index.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/filterableAttributes'
+        description: ''
+    delete:
+      operationId: indexes.settings.filterableAttributes.reset
+      summary: Reset Filterable Attributes
+      description: |
+        Reset the [filterable attributes](/reference/features/faceted_search.html) of an index to its default value (`[]`).
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    parameters:
+      - $ref: '#/components/parameters/indexUid'
+  '/indexes/{indexUid}/settings/distinct-attribute':
+    get:
+      operationId: indexes.settings.distinctAttribute.get
+      summary: Get distinct attribute
+      description: |
+        Get the [distinct attribute](/reference/features/settings.html#distinct-attribute) field of an index.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/distinctAttribute'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    post:
+      operationId: indexes.settings.distinctAttribute.update
+      summary: Update distinct attribute
+      description: |
+        Update the [distinct attribute](/reference/features/settings.html#distinct-attribute) field of an index.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/distinctAttribute'
+        description: ''
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    delete:
+      operationId: indexes.settings.distinctAttribute.reset
+      summary: Reset distinct attribute
+      description: |
+        Reset the [distinct attribute](/reference/features/settings.html#distinct-attribute) field of an index to its default value (`null`).
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    parameters:
+      - $ref: '#/components/parameters/indexUid'
+  '/indexes/{indexUid}/settings/searchable-attributes':
+    get:
+      operationId: indexes.settings.searchableAttributes.get
+      summary: Get searchable attributes
+      description: |
+        Get the [searchable attributes](/reference/features/field_properties.html#searchable-fields) of an index.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/searchableAttributes'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    post:
+      operationId: indexes.settings.searchableAttributes.update
+      summary: Update searchable attributes
+      description: |
+        Update the [searchable attributes](/reference/features/field_properties.html#searchable-fields) of an index.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/searchableAttributes'
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    delete:
+      operationId: indexes.settings.searchableAttributes.reset
+      summary: Reset searchable attributes
+      description: |
+        Reset the [searchable attributes](/reference/features/field_properties.html#searchable-fields) of an index to its default value (`['*']`).
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    parameters:
+      - $ref: '#/components/parameters/indexUid'
+  '/indexes/{indexUid}/settings/displayed-attributes':
+    get:
+      operationId: indexes.settings.displayedAttributes.get
+      summary: Get displayed attributes
+      description: |
+        Get the [displayed attributes](h/reference/features/settings.html#displayed-attributes) of an index.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/displayedAttributes'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    post:
+      operationId: indexes.settings.displayedAttributes.update
+      summary: Update displayed attributes
+      description: |
+        Update the [displayed attributes](/reference/features/settings.html#displayed-attributes) of an index.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/displayedAttributes'
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    delete:
+      operationId: indexes.settings.displayedAttributes.reset
+      summary: Reset displayed attributes
+      description: |
+        Reset the [displayed attributes](/reference/features/settings.html#displayed-attributes) of an index to its default value (`['*']`).
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    parameters:
+      - $ref: '#/components/parameters/indexUid'
+  '/indexes/{indexUid}/stats':
+    get:
+      operationId: indexes.stats.get
+      summary: Get stat of an index
+      description: Get stats of an index.
+      tags:
+        - Stats
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/stats'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    parameters:
+      - $ref: '#/components/parameters/indexUid'
+  '/indexes/{indexUid}/updates':
+    get:
+      operationId: indexes.updates.list
+      summary: Get all update status
+      description: |
+        Get the status of all [updates](https://docs.meilisearch.com/learn/advanced/asynchronous_updates.html) in a given [index](https://docs.meilisearch.com/learn/core_concepts/indexes.html).
+      tags:
+        - Updates
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/update'
+              examples:
+                Example:
+                  value:
+                    - status: processed
+                      updateId: 0
+                      type:
+                        name: DocumentsAddition
+                        number: 6
+                      duration: 0.031
+                      enqueuedAt: '2021-07-05T12:59:17.035788Z'
+                      processedAt: '2021-07-05T12:59:17.067453Z'
+                    - status: processed
+                      updateId: 1
+                      type:
+                        name: DocumentsAddition
+                        number: 6
+                      duration: 0.043
+                      enqueuedAt: '2021-07-06T07:45:49.883179Z'
+                      processedAt: '2021-07-06T07:45:49.927102Z'
+                    - status: processed
+                      updateId: 2
+                      type:
+                        name: Settings
+                        settings:
+                          searchableAttributes:
+                            - name
+                            - genre
+                          stopWords:
+                            - of
+                            - the
+                          synonyms:
+                            HP:
+                              - Harry Potter
+                            harry potter:
+                              - HP
+                          distinctAttribute: name
+                      duration: 0.042
+                      enqueuedAt: '2021-07-19T15:21:44.984611Z'
+                      processedAt: '2021-07-19T15:21:45.027818Z'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    parameters:
+      - $ref: '#/components/parameters/indexUid'
+  '/indexes/{indexUid}/updates/{updateId}':
+    get:
+      operationId: indexes.updates.get
+      summary: Get an update status
+      description: |
+        Get the status of an [update](https://docs.meilisearch.com/learn/advanced/asynchronous_updates.html) in a given [index](https://docs.meilisearch.com/learn/core_concepts/indexes.html).
+      tags:
+        - Updates
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/update'
+              examples: {}
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    parameters:
+      - $ref: '#/components/parameters/indexUid'
+      - $ref: '#/components/parameters/updateId'
+  /keys:
+    get:
+      operationId: keys.get
+      summary: Get keys
+      description: |
+        Get the private and public [key](/reference/features/authentication.html).
+      tags:
+        - Keys
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  private:
+                    type: string
+                  public:
+                    type: string
+                additionalProperties: false
+                required:
+                  - private
+                  - public
+        '401':
+          $ref: '#/components/responses/401'
+  /stats:
+    get:
+      operationId: stats.list
+      summary: Get stats of all indexes
+      description: Get stats of all indexes.
+      tags:
+        - Stats
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  databaseSize:
+                    type: number
+                  lastUpdate:
+                    $ref: '#/components/schemas/timestamp'
+                  indexes:
+                    type: object
+                    properties:
+                      indexUid:
+                        $ref: '#/components/schemas/stats'
+                required:
+                  - databaseSize
+                  - lastUpdate
+                  - indexes
+              examples:
+                Stats Of All Indexes:
+                  value:
+                    databaseSize: 567
+                    lastUpdate: '2019-11-20T09:40:33.711324Z'
+                    indexes:
+                      movies:
+                        numberOfDocuments: 10
+                        isIndexing: true
+                        fieldDistribution:
+                          genre: 10
+                          author: 9
+        '401':
+          $ref: '#/components/responses/401'
+  /version:
+    get:
+      operationId: version.get
+      summary: Get version of MeiliSearch
+      description: Get version of MeiliSearch.
+      tags:
+        - Version
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  commitSha:
+                    type: string
+                    example: b46889b5f0f2f8b91438a08a358ba8f05fc09fc1
+                  buildDate:
+                    type: string
+                    example: '2019-11-15T09:51:54.278247+00:00'
+                  pkgVersion:
+                    type: string
+                    example: 0.1.1
+                additionalProperties: false
+                required:
+                  - commitSha
+                  - buildDate
+                  - pkgVersion
+              examples:
+                Example:
+                  value:
+                    commitSha: b46889b5f0f2f8b91438a08a358ba8f05fc09fc1
+                    buildDate: '2019-11-15T09:51:54.278247+00:00'
+                    pkgVersion: 0.21.0
+        '401':
+          $ref: '#/components/responses/401'
+security: []
