@@ -37,18 +37,23 @@ components:
           primaryKey: movie_id
           createdAt: '2019-11-20T09:40:33.711324Z'
           updatedAt: '2019-11-20T09:40:33.711324Z'
+      description: ''
+      title: ''
       properties:
         uid:
           type: string
           example: movies
+          description: Unique identifier for the index
         name:
           type: string
+          description: Name of the index
         primaryKey:
           type:
             - string
             - 'null'
           nullable: true
           example: movie_id
+          description: Custom primaryKey for documents
         createdAt:
           $ref: '#/components/schemas/timestamp'
         updatedAt:
@@ -58,8 +63,6 @@ components:
         - name
         - createdAt
         - updatedAt
-      description: ''
-      title: ''
     document:
       type: object
       additionalProperties: true
@@ -264,6 +267,7 @@ components:
           additionalProperties: false
           required:
             - name
+          description: Type object for the update task
           properties:
             name:
               type: string
@@ -391,28 +395,36 @@ components:
         - synonyms
         - stopWords
         - rankingRules
-        - attributesForFaceting
+        - filterableAttributes
         - distinctAttribute
         - searchableAttributes
         - displayedAttributes
     stats:
       type: object
       additionalProperties: false
+      title: ''
+      examples:
+        - numberOfDocuments: 10
+          isIndexing: true
+          fieldDistribution:
+            genre: 10
+            author: 9
       properties:
         numberOfDocuments:
           type: integer
+          description: Number of documents contained in the index.
         isIndexing:
           type: boolean
+          description: Whether or not the index is currently ingesting document
         fieldDistribution:
           type: object
           additionalProperties:
             type: integer
+          description: How many documents contains a field
       required:
         - numberOfDocuments
         - isIndexing
         - fieldDistribution
-      title: ''
-      examples: []
     dumps:
       type: object
       additionalProperties: false
@@ -427,6 +439,7 @@ components:
         uid:
           type: string
           example: 20200929-114144097
+          description: ' Unique identifier for the dump'
         status:
           type: string
           enum:
@@ -434,6 +447,7 @@ components:
             - failed
             - done
           example: in_progress
+          description: Status of the dump
         startedAt:
           $ref: '#/components/schemas/timestamp'
         finishedAt:
@@ -548,6 +562,10 @@ components:
             additionalProperties: false
             required:
               - updateId
+          examples:
+            Example:
+              value:
+                updateId: 1
     '204':
       description: No Content
     '401':
@@ -785,6 +803,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/index'
+              examples: {}
         '400':
           description: Bad Request
           content:
@@ -914,6 +933,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/document'
+              examples:
+                Example:
+                  value:
+                    - id: 25684
+                      title: American Ninja 5
+                      poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
+                      overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
+                      release_date: '1993-01-01'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -1059,6 +1086,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/document'
+              examples: {}
         '401':
           $ref: '#/components/responses/401'
         '404':
