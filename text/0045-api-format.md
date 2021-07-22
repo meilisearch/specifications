@@ -17,6 +17,7 @@ The specification will address in the following order:
 [Request parameters format](#request-parameters-format)
 [Response body format](#response-body-format)
 [Enumeration convention](#enumeration-convention)
+[Custom Headers](#custom-headers)
 
 ### II. Motivation
 
@@ -366,6 +367,12 @@ We propose to have a common status enum definition to each object displaying an 
 ```
 
 We can make this status evolve in the future but it is important that all APIs share the same naming convention for a similar state.
+
+### Custom Headers
+
+MeiliSearch will use custom headers prefixed with `X-Meili-` to follow the [RFC 2047](https://www.ietf.org/rfc/rfc2047.txt).
+
+E.g. `X-Meili-API-Key`
 
 ## 2. Technical Aspects
 N/A
