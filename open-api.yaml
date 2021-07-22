@@ -2070,22 +2070,22 @@ paths:
                   commitSha:
                     type: string
                     example: b46889b5f0f2f8b91438a08a358ba8f05fc09fc1
-                  buildDate:
+                  commitDate:
                     type: string
-                    example: '2019-11-15T09:51:54.278247+00:00'
+                    example: '2021-07-08'
                   pkgVersion:
                     type: string
                     example: 0.1.1
                 additionalProperties: false
                 required:
                   - commitSha
-                  - buildDate
+                  - commitDate
                   - pkgVersion
               examples:
                 Example:
                   value:
                     commitSha: b46889b5f0f2f8b91438a08a358ba8f05fc09fc1
-                    buildDate: '2019-11-15T09:51:54.278247+00:00'
+                    commitDate: '2021-07-08'
                     pkgVersion: 0.21.0
         '401':
           $ref: '#/components/responses/401'
