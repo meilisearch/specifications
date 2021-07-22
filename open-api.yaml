@@ -23,6 +23,8 @@ servers:
       port:
         default: '7700'
     description: 'https://example.meilisearch.com:7700'
+  - description: Development
+    url: 'http://localhost:7700'
 components:
   schemas:
     timestamp:
@@ -600,51 +602,15 @@ components:
       in: header
       name: X-Meili-API-Key
 tags:
-  - name: Indexes
-    description: |
-      An index is an entity that gathers a set of [documents](/learn/core_concepts/documents.html) with its own settings.
-      [Learn more about indexes](/learn/core_concepts/indexes.html).
-  - name: Documents
-    description: |
-      Documents are objects composed of fields that can store any type of data.
-      Each field contains an attribute and its associated value.
-      Documents are stored inside [indexes](/learn/core_concepts/indexes.html).
-      [Learn more about documents](/learn/core_concepts/documents.html).
-  - name: Search
-    description: |
-      MeiliSearch exposes 2 routes to perform searches:
-      * A POST route: this is the preferred route when using API authentication, as it allows [preflight request](https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request) caching and better performances.
-      * A GET route: the usage of this route is discouraged, unless you have good reason to do otherwise (specific caching abilities for example).
-      Other than the differences mentioned above, the two routes are strictly equivalent.
-  - name: Updates
-    description: |
-      The `updates` route gives information about the progress of the [asynchronous processes](/learn/advanced/asynchronous_updates.html).
-  - name: Keys
-    description: |
-      Each instance of MeiliSearch has three keys: a master, a private, and a public. Each key has a given set of permissions on the API routes.
-      You must have the master key to access the `keys` route.
-      [More information about the keys and their rights](/reference/features/authentication.html).
-  - name: Settings
-    description: |
-      `Settings` is a list of all the __customization__ possible for an index.
-      It is possible to update all the settings in one go or individually with the dedicated routes. Updates in the settings route are __partial__. This means that any parameters not provided in the body will be left unchanged.
-      Updating the settings means overwriting the default settings of MeiliSearch. You can reset to default values using the `DELETE` routes.
-  - name: Stats
-    description: |
-      `Stats` gives extended information and metrics about indexes and the MeiliSearch database.
-  - name: Health
-    description: |
-      The health check endpoint enables you to periodically test the health of your MeiliSearch instance.
-  - name: Version
-    description: |
-      Current version of Meilisearch.
   - name: Dumps
-    description: |
-      The `dumps` route allows the creation of database dumps. Dumps are `.dump` files that can be used to launch MeiliSearch. Dumps are compatible between MeiliSearch versions.
-      Creating a dump is also referred to as exporting it, whereas launching MeiliSearch with a dump is referred to as importing it.
-      During a [dump export](/reference/api/dump.html#create-a-dump), all indexes of the current instance are exported—together with their documents and settings—and saved as a single `.dump` file.
-      During a dump import, all indexes contained in the indicated `.dump` file are imported along with their associated documents and settings. Any existing index with the same uid as an index in the dump file will be overwritten.
-      Dump imports are [performed at launch](/reference/features/configuration.html#import-dump) using an option. [Batch size](/reference/features/configuration.html#dump-batch-size) can also be set at this time.
+  - name: Health
+  - name: Indexes
+  - name: Keys
+  - name: Search
+  - name: Settings
+  - name: Stats
+  - name: Updates
+  - name: Version
 paths:
   /dumps:
     post:
@@ -2070,22 +2036,22 @@ paths:
                   commitSha:
                     type: string
                     example: b46889b5f0f2f8b91438a08a358ba8f05fc09fc1
-                  buildDate:
+                  commitDate:
                     type: string
-                    example: '2019-11-15T09:51:54.278247+00:00'
+                    example: '2021-07-08'
                   pkgVersion:
                     type: string
                     example: 0.1.1
                 additionalProperties: false
                 required:
                   - commitSha
-                  - buildDate
+                  - commitDate
                   - pkgVersion
               examples:
                 Example:
                   value:
                     commitSha: b46889b5f0f2f8b91438a08a358ba8f05fc09fc1
-                    buildDate: '2019-11-15T09:51:54.278247+00:00'
+                    commitDate: '2021-07-08'
                     pkgVersion: 0.21.0
         '401':
           $ref: '#/components/responses/401'
