@@ -580,7 +580,7 @@ components:
       schema:
         type: boolean
         default: 'false'
-      description: Return _matchesInfo.
+      description: Defines whether an `_matchesInfo` object that contains information about the matches should be returned or not.
     filter:
       name: filter
       in: query
@@ -1172,6 +1172,7 @@ paths:
         - $ref: '#/components/parameters/filter'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/matches'
       responses:
         '200':
           description: Ok
