@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: MeiliSearch Core API
-  description: ''
+  description: 'Search documents, configure and manage the MeiliSearch engine.'
   version: 0.21.0
   contact:
     name: MeiliSearch
@@ -519,35 +519,75 @@ components:
       schema:
         type: number
         default: 0
+    q:
+      name: q
+      in: query
+      description: Query string.
+      schema:
+        type: string
+        example: back to the future
+        default: '""'
     attributesToRetrieve:
       name: attributesToRetrieve
       in: query
-      description: |
-        Comma-separated list of attributes whose fields will be present in the returned documents.
-        Defaults to to the [displayedAttributes list](/reference/features/settings.html#displayed-attributes) which contains by default all attributes found in the documents.
+      description: 'Comma-separated list of attributes whose fields will be present in the returned documents. Defaults to to the [displayedAttributes list](/reference/features/settings.html#displayed-attributes) which contains by default all attributes found in the documents.'
       schema:
-        type: array
+        type: string
         items:
           type: string
         default:
           - '*'
+        example: 'title,description'
     attributesToHighlight:
       name: attributesToHighlight
       in: query
-      description: Attributes whose values will contain highlighted matching terms.
+      description: Comma-separated list of attributes whose values will contain highlighted matching terms. Highlighted attributes are returned in `_formatted` response object.
       schema:
-        type: array
+        type: string
         items:
           type: string
           default:
             - ''
+        example: 'title,description'
     attributesToCrop:
       name: attributesToCrop
       in: query
       required: false
       schema:
-        type: array
-      description: Attributes whose values have to be cropped
+        type: string
+        example: 'overview:10'
+      description: Comma-separated list of attributes whose values have to be cropped. Cropped attributes are returned in `_formatted` response object.
+    cropLength:
+      name: cropLength
+      in: query
+      required: false
+      schema:
+        type: integer
+        example: 5
+        default: 200
+      description: Length used to crop field values.
+    facetsDistribution:
+      name: facetsDistribution
+      in: query
+      schema:
+        type: string
+        example: 'genres,author'
+      description: 'Comma-separated list of attributes whose fields will be distributed as a facet. If you have [set up filterableAttributes](/reference/features/settings.html#filterable-attributes), you can retrieve the count of matching terms for each [facets](/reference/features/faceted_search.html).[Learn more about facet distribution in the dedicated guide](/reference/features/faceted_search.html#the-facets-distribution)'
+    matches:
+      name: matches
+      in: query
+      required: false
+      schema:
+        type: boolean
+        default: 'false'
+      description: Return _matchesInfo.
+    filter:
+      name: filter
+      in: query
+      required: false
+      schema:
+        example: something > 1 AND genre=comedy AND (genre=horror OR title=batman)
+      description: 'Attribute(s) to filter on. Accepts array, string.'
   responses:
     '202':
       description: Accepted
@@ -599,6 +639,7 @@ components:
       type: apiKey
       in: header
       name: X-Meili-API-Key
+  examples: {}
 tags:
   - name: Indexes
     description: |
@@ -1122,40 +1163,15 @@ paths:
       security:
         - apiKey: []
       parameters:
-        - name: q
-          in: query
-          description: Query string.
-          schema:
-            type: string
-            default: '""'
-        - name: filter
-          in: query
-          description: 'Specify what to filter on. See our [dedicated guide](/reference/features/filtering.html).'
-          schema:
-            type: string
-            example: '("genres:Horror" OR "genres:Mystery") AND "director:Jordan Peele"'
-        - name: facetsDistribution
-          in: query
-          description: 'If you have [set up filterableAttributes](/reference/features/settings.html#filterable-attributes), you can retrieve the count of matching terms for each [facets](/reference/features/faceted_search.html).[Learn more about facet distribution in the dedicated guide](/reference/features/faceted_search.html#the-facets-distribution)'
-          schema:
-            type: array
-            items:
-              type: string
-        - name: cropLength
-          in: query
-          description: Length used to crop field values
-          schema:
-            type: number
+        - $ref: '#/components/parameters/q'
         - $ref: '#/components/parameters/attributesToRetrieve'
         - $ref: '#/components/parameters/attributesToHighlight'
         - $ref: '#/components/parameters/attributesToCrop'
-        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/cropLength'
+        - $ref: '#/components/parameters/facetsDistribution'
+        - $ref: '#/components/parameters/filter'
         - $ref: '#/components/parameters/offset'
-        - schema:
-            type: boolean
-          in: query
-          name: matches
-          description: Return _matchesInfo.
+        - $ref: '#/components/parameters/limit'
       responses:
         '200':
           description: Ok
@@ -1215,40 +1231,47 @@ paths:
               properties:
                 q:
                   type: string
-                  description: Query string _(mandatory)_.
+                  description: Query string.
+                  default: '""'
+                  example: '"Back to the future"'
                 attributesToRetrieve:
                   type: array
-                  description: Attributes to display in the returned documents.
+                  description: 'Array of attributes whose fields will be present in the returned documents. Defaults to the [displayedAttributes list](/reference/features/settings.html#displayed-attributes) which contains by default all attributes found in the documents.'
                   default:
                     - '*'
                   items:
                     type: string
+                    default: '["*"]'
                 attributesToHighlight:
                   type: array
-                  description: Attributes whose values will contain highlighted matching terms.
+                  description: Array of attributes whose values will contain highlighted matching terms. Highlighted attributes are returned in `_formatted` response object.
                   items:
                     type: string
+                    example: '["title", "overview"]'
+                    default: '[]'
                 attributesToCrop:
                   type: array
-                  description: Attributes whose values have to be cropped.
+                  description: Array of attributes whose values have to be cropped. Cropped attributes are returned in `_formatted` response object.
                   items:
                     type: string
+                    example: '["overview", "author"]'
+                    default: '[]'
                 cropLength:
                   type: number
                   description: Length used to crop field values.
                   default: 200
                 matches:
                   type: boolean
-                  description: Defines whether an object that contains information about the matches should be returned or not.
+                  description: Defines whether an `_matchesInfo` object that contains information about the matches should be returned or not.
+                  default: false
                 filter:
-                  type: string
-                  description: Filter queries by an attribute value.
-                  example: '("genres:Horror" OR "genres:Mystery") AND "director:Jordan Peele"'
+                  $ref: '#/components/schemas/filter'
                 facetsDistribution:
                   type: array
-                  description: Facets for which to retrieve the matching count.
+                  description: 'Array of attributes whose fields will be distributed as a facet. If you have [set up filterableAttributes](/reference/features/settings.html#filterable-attributes), you can retrieve the count of matching terms for each [facets](/reference/features/faceted_search.html).[Learn more about facet distribution in the dedicated guide](/reference/features/faceted_search.html#the-facets-distribution)'
                   items:
                     type: string
+                    example: '["genres", "author"]'
                 offset:
                   type: number
                   description: Number of documents to skip.
@@ -1263,16 +1286,18 @@ paths:
                   q: Harry
                   offset: 0
                   limit: 20
-                  filter: '("genres:Horror" OR "genres:Mystery") AND "director:Jordan Peele"'
+                  filter: (genres = Horror AND genres = Mystery) OR release_date > 523242000
                   facetsDistribution:
-                    - string
+                    - genres
+                    - author
                   attributesToRetrieve:
-                    - '*'
+                    - title
+                    - overview
                   attributesToCrop:
-                    - my_attribute
-                  cropLength: 200
+                    - overview
+                  cropLength: 20
                   attributesToHighlight:
-                    - my_attribute
+                    - overview
                   matches: true
       responses:
         '200':
