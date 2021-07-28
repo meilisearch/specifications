@@ -152,9 +152,12 @@ components:
 
         Can be made of 3 syntaxes
 
-        - Nested Array: `["something > 1", "genre=comedy", ["genre=horror", "title=batman"]]`
-        - String: `"something > 1 AND genre=comedy AND (genre=horror OR title=batman)"`
-        - Mixed: `["something > 1 AND genre=comedy", "genre=horror OR title=batman"]`
+        - Nested Array: `["something > 1", "genres=comedy", ["genres=horror", "title=batman"]]`
+        - String: `"something > 1 AND genres=comedy AND (genres=horror OR title=batman)"`
+        - Mixed: `["something > 1 AND genres=comedy", "genres=horror OR title=batman"]`
+
+        > warn
+        > Attribute(s) used in `filter` should be declared as filterable attributes. See [Filtering and Faceted Search](/reference/features/filtering_and_faceted_search.md).
       example:
         - 'director:Mati Diop'
         - - 'genres:Comedy'
@@ -535,9 +538,8 @@ components:
         type: string
         items:
           type: string
-        default:
-          - '*'
         example: 'title,description'
+        default: '*'
     attributesToHighlight:
       name: attributesToHighlight
       in: query
@@ -586,8 +588,18 @@ components:
       in: query
       required: false
       schema:
-        example: something > 1 AND genre=comedy AND (genre=horror OR title=batman)
-      description: 'Attribute(s) to filter on. Accepts array, string.'
+        example: something > 1 AND genres=comedy AND (genres=horror OR title=batman)
+      description: |
+        Attribute(s) to filter on.
+
+        Can be made of 3 syntaxes
+
+        - Nested Array: `["something > 1", "genres=comedy", ["genres=horror", "title=batman"]]`
+        - String: `something > 1 AND genres=comedy AND (genres=horror OR title=batman)`
+        - Mixed: `["something > 1 AND genres=comedy", "genres=horror OR title=batman"]`
+
+        > warn
+        > Attribute(s) used in `filter` should be declared as filterable attributes. See [Filtering and Faceted Search](/reference/features/filtering_and_faceted_search.md).
   responses:
     '202':
       description: Accepted
@@ -993,14 +1005,15 @@ paths:
     post:
       operationId: indexes.documents.create
       summary: Add or replace documents
-      description: |
-        Add a list of [documents](/learn/core_concepts/documents.html) or replace them if they already exist. If the provided index does not exist, it will be created.
+      description: |-
+        Add a list of [documents](/learn/core_concepts/documents.html) or replace them if they already exist.
 
         If you send an already existing document (same [id](/learn/core_concepts/documents.html#primary-key)) the whole existing document will be overwritten by the new document. Fields previously in the document not present in the new document are removed.
 
-        For a partial update of the document see add or update documents.
+        For a partial update of the document see Add or update documents route.
 
-        If the provided index does not exist, it will be created.
+        > info
+        > If the provided index does not exist, it will be created.
       tags:
         - Documents
       security:
@@ -1022,14 +1035,15 @@ paths:
     put:
       operationId: indexes.documents.upsert
       summary: Add or update documents
-      description: |
-        Add a list of documents or update them if they already exist. If the provided index does not exist, it will be created.
+      description: |-
+        Add a list of documents or update them if they already exist.
 
         If you send an already existing document (same [id](/learn/core_concepts/documents.html#primary-key)) the old document will be only partially updated according to the fields of the new document. Thus, any fields not present in the new document are kept and remained unchanged.
 
-        To completely overwrite a document, check out the add or replace documents route.
+        To completely overwrite a document, see Add or replace documents route.
 
-        If the provided index does not exist, it will be created.
+        > info
+        > If the provided index does not exist, it will be created.
       tags:
         - Documents
       security:
@@ -1238,10 +1252,9 @@ paths:
                 attributesToRetrieve:
                   type: array
                   description: 'Array of attributes whose fields will be present in the returned documents. Defaults to the [displayedAttributes list](/reference/features/settings.html#displayed-attributes) which contains by default all attributes found in the documents.'
-                  default:
-                    - '*'
                   items:
                     type: string
+                    example: '["title", "overview"]'
                     default: '["*"]'
                 attributesToHighlight:
                   type: array
@@ -1273,6 +1286,7 @@ paths:
                   items:
                     type: string
                     example: '["genres", "author"]'
+                    default: '[]'
                 offset:
                   type: number
                   description: Number of documents to skip.
