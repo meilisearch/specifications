@@ -9,7 +9,7 @@
 
 ### I. Summary
 
-The purpose of this specification is to add the **geo-search** first iteration feature to filter and sort the search results as an end-user. This first iteration allows to filter the documents in a geo circle shape and sort them around a geographical point.
+The purpose of this specification is to add a first iteration of the **geo-search** feature to give geo-filtering and geo-sorting capabilities at search time.
 
 #### Summary Key points
 
@@ -21,4 +21,10 @@ The purpose of this specification is to add the **geo-search** first iteration f
 
 ### II. Motivation
 
-According to our user feedback, the lack of a geo-search feature is mentioned as one of the biggest deal-breakers for choosing MeiliSearch as a search engine. A search engine must offer this feature. Some use cases specifically require integrated geo-search capabilities. Moreover, a lot of direct competitors offer it. Users today must find workarounds like using `geohash` to be able to geo-search documents. We hope to better serve the needs of users by implementing this feature. It allows multiplying the use-cases to which MeiliSearch can respond.
+According to our user feedback, the lack of a geo-search feature is mentioned as one of the biggest deal-breakers for choosing MeiliSearch as a search engine. A search engine must offer this feature. Some use cases specifically require integrated geo-search capabilities. Moreover, a lot of direct competitors offer it. Users today must find workarounds like using geohash to be able to geo-search documents. We hope to better serve the needs of users by implementing this feature. It allows multiplying the use-cases to which MeiliSearch can respond.
+
+## 3. Future Possibilities
+
+- Handling array of geo points in the document object.
+- Handling multiple geo formats for the `_geo` field. e.g. "{lat},{lng}", a geo-hash etc..
+- Filter documents in polygon and bounding-box.
