@@ -18,6 +18,8 @@ The purpose of this specification is to add a first iteration of the **geo-searc
 - Filter documents by a given geo radius using the built-in filter `_geoRadius({lat}, {lng}, {distance_in_meters})`. It is possible to cumulate several geo-search filters within the `filter` field.
 - Sort documents in ascending/descending order around a geo point. e.g. `_geoPoint({lat}, {lng}):asc`.
 - It is possible to filter and/or sort by geographical criteria of the user's choice.
+- `_geo` must be set as a filterable attribute to use geo filtering capabilities.
+- `_geo` must be set as a sortable attribute to use geo sort capabilities.
 - There is no `geo` ranking rule that can be manipulated by the user. This one is automatically integrated in the ranking rule `sort` by default and activated by sorting using the `_geoPoint({lat}, {lng})` built-in sort rule.
 - Using `_geoPoint({lat}, {lng})` in the `sort` parameter at search leads the engine to return a `_geoDistance` within the search results. This field represents the distance in meters of the document from the specified `_geoPoint`.
 
@@ -126,8 +128,9 @@ csv format example
 - Name: `_geoRadius`
 - Signature: ({lat:float}:required, {lng:float}:required, {distance_in_meters:int}:required)
 - Not required
+- `distance_in_meters` only accepts positive value.
 
->  The `_geo` field does not need to be referred in `sortableAttributes` by the developer.
+>  The `_geo` field has to be set in `filterableAttributes` setting by the developer to activate geo filtering capabilities at search.
 
 #### GET Search `/indexes/{indexUid}/search`
 
@@ -158,11 +161,11 @@ csv format example
 - Not required
 
 Following the [`sort` specification feature](https://github.com/meilisearch/specifications/pull/55):
->The `_geo` field does not need to be referred in `sortableAttributes` by the developer.
+> The `_geo` field has to be set in `sortableAttributes` setting by the developer to activate geo fsorting capabilities at search.
 >
 >There is no `geo` ranking rule as such. It is in fact within the `sort` ranking rule in an obfuscated way.
 >
->`_geoRadius` built-in sort rule can sort documents in ascending or descending order.
+>`_geoPoint` built-in sort rule can sort documents in ascending or descending order. See Technical Aspects part.
 
 #### GET Search `/indexes/{indexUid}/search`
 
@@ -177,7 +180,7 @@ Following the [`sort` specification feature](https://github.com/meilisearch/spec
     "sort": "_geoPoint({lat, lng}):asc,price:desc"
 }
 ```
-> 🔴 Specifying parameters that do not conform to the `_geoPoint` signature causes the API to return an `invalid_sort` error. The error message should indicate how `_geoPoint` should be used. See `_geoRadius` built-in sort rule definition part.
+> 🔴 Specifying parameters that do not conform to the `_geoPoint` signature causes the API to return an `invalid_sort` error. The error message should indicate how `_geoPoint` should be used. See `_geoPoint` built-in sort rule definition part.
 
 ---
 
@@ -188,20 +191,31 @@ Following the [`sort` specification feature](https://github.com/meilisearch/spec
 **`_geoDistance` field definition**
 
 - Name: `_geoDistance`
-- Description: Return document distance when the end-user sorts documents from a `_geoPoint` in meters.
+- Description: Return document distance when the end-user sorts document from a `_geoPoint` in meters.
 - Type: int
 - Not required
 
-> 💡 `_geoDistance` response field is only computed and shown when the end-user have sorted documents around a `_geoPoint`.
+> 💡 `_geoDistance` response field is only computed and shown when the end-user have sorted documents around a `_geoPoint`. So if the end-user filter documents using a `_geoRadius` built-in filter without sorting them around a `_geoPoint`, this field `_geoDistance` will not appear in the search response.
 
 ### IV. Finalized Key Changes
 
-### V. Measuring
-
--
--
+- Add a `_geo` reserved field on JSON and CSV format to index a geo point coordinates for a document.
+- Add a `_geoPoint(lat, lng)` built-in sort rule.
+- Add a `_geoRadius(lat, lng, distance_in_meters)` built-in filter rule.
+- Return a `_geoDistance` in `hits` objects representing the distance in meters computed from the `_geoPoint` built-in sort rule.
 
 ## 2. Technical Aspects
+
+### I. :desc case - Sorting documents around a geo point
+
+We may encounter technical difficulties to implement a descending order capability for the geo sorting. This first iteration will allow us to identify if this is a real technical problem. If we verify the existence of this problem, we will think at this moment of the best solution to bring on the table.
+
+> 💡 In a first step, we could not allow `:desc` on a geoPoint if it's a complex technical issue.
+
+### II. Measuring
+
+- `filterableAttribute` setting definition to evaluate `_geo` presence.
+- `sortableAttribute` setting definition to evaluate `_geo` presence.
 
 ## 3. Future Possibilities
 
