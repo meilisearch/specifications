@@ -1,6 +1,7 @@
 - Title: Geo-search
 - Start Date: 2021-08-02
 - Specification PR: [#59](https://github.com/meilisearch/specifications/pull/59)
+- Discovery Issue: [#42](https://github.com/meilisearch/product/issues/42)
 - MeiliSearch Tracking-issues:
 
 # Geo-search
@@ -14,7 +15,7 @@ The purpose of this specification is to add a first iteration of the **geo-searc
 #### Summary Key points
 
 - Documents MUST have a `_geo` reserved object to be geo-searchable.
-- Filter documents by a given geo radius using the built-in filter `_geoRadius({lat}, {lng}, {distance_in_meters})`. It is possible to cumulate several geo-search filters within the `filter` field. .
+- Filter documents by a given geo radius using the built-in filter `_geoRadius({lat}, {lng}, {distance_in_meters})`. It is possible to cumulate several geo-search filters within the `filter` field.
 - Sort documents in ascending/descending order around a geo point. e.g. `_geoPoint({lat}, {lng}):asc`.
 - It is possible to filter and/or sort by geographical criteria of the user's choice.
 - There is no `geo` ranking rule that can be manipulated by the user. This one is automatically integrated in the ranking rule `sort` by default and activated by sorting using the `_geoPoint({lat}, {lng})` built-in sort rule.
@@ -40,14 +41,14 @@ According to our user feedback, the lack of a geo-search feature is mentioned as
 - Format: `{lat:float, lng:float}`
 - Not required
 
-💡 if `_geo` is found in the document payload, `lat` and `lng` are required.
-💡 `lat` and `lng` must be of float value.
+> 💡 if `_geo` is found in the document payload, `lat` and `lng` are required.
+> 💡 `lat` and `lng` must be of float value.
 
 ##### **CSV Format**
 
 Following the format already defined in the https://github.com/meilisearch/specifications/pull/28/files specification for document indexing from a CSV format. A reserved column `_geo` can be added to specify the geographical coordinates of a document.
 
-e.g.
+csv format example
 ```
 "id:number","label","brand","_geo"
 "1","F40","Ferrari","48.862725,2.287592"
@@ -110,7 +111,13 @@ e.g.
 }
 ```
 
-### **As a end-user, I want to filter documents by a geo radius.**
+> 🔴 Giving a bad formed `_geo` that do not conform to the format causes the `update` payload to fail. An `invalid_request_error` description is given in the `update` object.
+>
+> The `_geo` field does not need to be referred in `filterableAttributes` and `sortableAttributes` by the developer.
+
+---
+
+### **As an end-user, I want to filter documents within a geo radius.**
 
 - Introduce a `_geoRadius({lat}, {lng}, {distance_in_meters})` built-in filter rule  to `filter` documents in a geo radius.shape.
 
@@ -119,6 +126,8 @@ e.g.
 - Name: `_geoRadius`
 - Signature: ({lat:float}:required, {lng:float}:required, {distance_in_meters:int}:required)
 - Not required
+
+>  The `_geo` field does not need to be referred in `sortableAttributes` by the developer.
 
 #### GET Search `/indexes/{indexUid}/search`
 
@@ -136,7 +145,9 @@ e.g.
 
 > 🔴 Specifying parameters that do not conform to the `_geoRadius` signature causes the API to return an `invalid_filter` error. The error message should indicate how `_geoRadius` should be used. See `_geoRadius` built-in filter rule definition part.
 
-### **As a end-user, I want to sort documents around a geo point.**
+---
+
+### **As an end-user, I want to sort documents around a geo point.**
 
 - Introduce a `_geoPoint({lat}, {lng})` function parameter to `sort` documents around a central point.
 
@@ -147,9 +158,11 @@ e.g.
 - Not required
 
 Following the [`sort` specification feature](https://github.com/meilisearch/specifications/pull/55):
-- The `_geo` field does not need to be referred to as `sortableAttributes` by the developer.
-- There is no `geo` ranking rule as such. It is in fact within the `sort` ranking rule in an obfuscated way.
-- `_geoRadius` built-in sort rule can sort documents in ascending or descending order.
+>The `_geo` field does not need to be referred in `sortableAttributes` by the developer.
+>
+>There is no `geo` ranking rule as such. It is in fact within the `sort` ranking rule in an obfuscated way.
+>
+>`_geoRadius` built-in sort rule can sort documents in ascending or descending order.
 
 #### GET Search `/indexes/{indexUid}/search`
 
@@ -166,26 +179,32 @@ Following the [`sort` specification feature](https://github.com/meilisearch/spec
 ```
 > 🔴 Specifying parameters that do not conform to the `_geoPoint` signature causes the API to return an `invalid_sort` error. The error message should indicate how `_geoPoint` should be used. See `_geoRadius` built-in sort rule definition part.
 
-### **As a end-user, I want to know the document distance when I am sorting around a geo point.**
+---
+
+### **As an end-user, I want to know the document distance when I am sorting around a geo point.**
 
 - Introduce a `_geoDistance` parameter to the search result `hit` object.
 
 **`_geoDistance` field definition**
 
 - Name: `_geoDistance`
-- Description: Return document distance from a `_geoPoint` in meters.
+- Description: Return document distance when the end-user sorts documents from a `_geoPoint` in meters.
 - Type: int
 - Not required
 
-> 💡 `_geoDistance` response field is only computed and shown when the end-user have sorted documents around a `_geoPoint`. Filtering documents by a `_geoRadius` does not calculate and display the `_geoDistance` field within the search results.
-
+> 💡 `_geoDistance` response field is only computed and shown when the end-user have sorted documents around a `_geoPoint`.
 
 ### IV. Finalized Key Changes
+
+### V. Measuring
+
+-
+-
 
 ## 2. Technical Aspects
 
 ## 3. Future Possibilities
 
+- Add built-in filter to filter documents within `polygon` and `bounding-box`.
 - Handling array of geo points in the document object.
 - Handling multiple geo formats for the `_geo` field. e.g. "{lat},{lng}", a geo-hash etc..
-- Filter documents in polygon and bounding-box.
