@@ -114,8 +114,6 @@ csv format example
 ```
 
 > 🔴 Giving a bad formed `_geo` that do not conform to the format causes the `update` payload to fail. An `invalid_request_error` description is given in the `update` object.
->
-> The `_geo` field does not need to be referred in `filterableAttributes` and `sortableAttributes` by the developer.
 
 ---
 
