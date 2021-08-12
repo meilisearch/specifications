@@ -324,6 +324,15 @@ components:
         - of
         - the
         - to
+    sortableAttributes:
+      type: array
+      description: List of attributes to sort on at search.
+      items:
+        type: string
+      example:
+        - price
+        - author
+        - title
     rankingRules:
       type: array
       description: |
@@ -335,11 +344,11 @@ components:
       example:
         - words
         - typo
+        - sort
         - proximity
         - attribute
         - exactness
-        - asc(release_date)
-        - desc(rank)
+        - 'released_date:asc'
       examples: []
     filterableAttributes:
       type: array
@@ -406,6 +415,12 @@ components:
       type: object
       additionalProperties: false
       title: ''
+      examples:
+        - numberOfDocuments: 10
+          isIndexing: true
+          fieldDistribution:
+            genre: 10
+            author: 9
       properties:
         numberOfDocuments:
           type: integer
@@ -422,12 +437,6 @@ components:
         - numberOfDocuments
         - isIndexing
         - fieldDistribution
-      examples:
-        - numberOfDocuments: 10
-          isIndexing: true
-          fieldDistribution:
-            genre: 10
-            author: 9
     dumps:
       type: object
       additionalProperties: false
@@ -583,6 +592,14 @@ components:
         type: boolean
         default: 'false'
       description: Defines whether an `_matchesInfo` object that contains information about the matches should be returned or not.
+    sort:
+      name: sort
+      in: query
+      required: false
+      schema:
+        type: string
+        example: 'price:asc'
+      description: Fields on which you want to sort the results.
     filter:
       name: filter
       in: query
@@ -1185,6 +1202,7 @@ paths:
         - $ref: '#/components/parameters/facetsDistribution'
         - $ref: '#/components/parameters/filter'
         - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/matches'
       responses:
@@ -1295,6 +1313,11 @@ paths:
                   type: number
                   description: Maximum number of documents returned.
                   default: 20
+                sort:
+                  type: array
+                  description: Fields on which you want to sort the results.
+                  items:
+                    type: string
             examples:
               Example:
                 value:
@@ -1388,6 +1411,8 @@ paths:
                     $ref: '#/components/schemas/synonyms'
                   filterableAttributes:
                     $ref: '#/components/schemas/filterableAttributes'
+                  sortableAttributes:
+                    $ref: '#/components/schemas/sortableAttributes'
                 required:
                   - rankingRules
                   - distinctAttribute
@@ -1396,6 +1421,48 @@ paths:
                   - stopWords
                   - synonyms
                   - filterableAttributes
+                  - sortableAttributes
+              examples:
+                Example:
+                  value:
+                    rankingRules:
+                      - words
+                      - typo
+                      - sort
+                      - proximity
+                      - attribute
+                      - exactness
+                      - 'released_date:asc'
+                    distinctAttribute: ean13
+                    searchableAttributes:
+                      - title
+                      - description
+                      - genre
+                    displayedAttributes:
+                      - title
+                      - description
+                      - genre
+                      - released_date
+                    stopWords:
+                      - of
+                      - the
+                      - to
+                    synonyms:
+                      wolverine:
+                        - xmen
+                        - logan
+                      logan:
+                        - wolverine
+                        - xmen
+                      wow:
+                        - world of warcraft
+                    filterableAttributes:
+                      - genres
+                      - director
+                    sortableAttributes:
+                      - price
+                      - author
+                      - title
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -1437,6 +1504,44 @@ paths:
                   $ref: '#/components/schemas/displayedAttributes'
                 filterableAttributes:
                   $ref: '#/components/schemas/filterableAttributes'
+                sortableAttributes:
+                  $ref: '#/components/schemas/sortableAttributes'
+            examples:
+              Example:
+                value:
+                  synonyms:
+                    wolverine:
+                      - xmen
+                      - logan
+                    logan:
+                      - wolverine
+                      - xmen
+                    wow:
+                      - world of warcraft
+                  stopWords:
+                    - of
+                    - the
+                    - to
+                  rankingRules:
+                    - words
+                    - typo
+                    - proximity
+                    - attribute
+                    - exactness
+                    - 'released_date:asc'
+                    - sort
+                  distinctAttribute: ean13
+                  searchableAttributes:
+                    - title
+                    - description
+                    - genre
+                  displayedAttributes:
+                    - title
+                    - description
+                    - genre
+                    - release_date
+                  filterableAttributes: []
+                  sortableAttributes: null
       responses:
         '202':
           $ref: '#/components/responses/202'
@@ -1530,6 +1635,75 @@ paths:
           description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
+  '/indexes/{indexUid}/settings/sortable-attributes':
+    get:
+      operationId: indexes.settings.sortable-attributes.get
+      summary: Get sortable attributes
+      description: |
+        Get the list of [sortableAttributes](/reference/features/sortableAttributes.html) of an index.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sortableAttributes'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    post:
+      operationId: indexes.settings.sortable-attributes.update
+      summary: Update sortable attributes
+      description: |
+        Update the list of [sortableAttributes](/reference/features/sortableAttributes.html) of an index.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/sortableAttributes'
+            examples: {}
+        description: ''
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    delete:
+      operationId: indexes.settings.sortable-attributes.reset
+      summary: Reset sortable attributes
+      description: |
+        Reset the list of [sortableAttributes](/reference/features/sortablrAttributes.html) of an index to its default value (`[]`).
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    parameters:
+      - name: indexUid
+        in: path
+        description: Index Unique Identifier
+        required: true
+        schema:
+          type: string
+          example: movies
   '/indexes/{indexUid}/settings/stop-words':
     get:
       operationId: indexes.settings.stopWords.get
