@@ -362,7 +362,6 @@ components:
         - sort
         - exactness
         - release_date:asc
-      examples: []
     filterableAttributes:
       type: array
       description: |
