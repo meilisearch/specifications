@@ -22,6 +22,7 @@ The purpose of this specification is to add a first iteration of the **geo-searc
 - `_geo` must be set as a sortable attribute to use geo sort capabilities.
 - There is no `geo` ranking rule that can be manipulated by the user. This one is automatically integrated in the ranking rule `sort` by default and activated by sorting using the `_geoPoint({lat}, {lng})` built-in sort rule.
 - Using `_geoPoint({lat}, {lng})` in the `sort` parameter at search leads the engine to return a `_geoDistance` within the search results. This field represents the distance in meters of the document from the specified `_geoPoint`.
+- Add an `invalid_geo_field` error.
 
 ### II. Motivation
 
@@ -113,7 +114,16 @@ csv format example
 }
 ```
 
-> 🔴 Giving a bad formed `_geo` that do not conform to the format causes the `update` payload to fail. An `invalid_request_error` description is given in the `update` object.
+> 🔴 Giving a bad formed `_geo` that do not conform to the format causes the `update` payload to fail. A new `invalid_geo_field` error is given in the `update` object.
+
+##### `invalid_geo_field` error
+
+| field     | value                                                                                                                |
+|-----------|----------------------------------------------------------------------------------------------------------------------|
+| message   | The _geo field is invalid.                                                                                           |
+| errorCode | invalid_geo_field                                                                                                    |
+| errorType | invalid_request_error                                                                                                |
+| errorLink | *Link to the dedicated error page. This page should give further links to indicate the expected JSON and CSV format* |
 
 ---
 
