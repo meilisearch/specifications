@@ -383,9 +383,9 @@ Allows users to list tasks of a particular index.
 | field     | value                                                                                                                |
 |-----------|----------------------------------------------------------------------------------------------------------------------|
 | message   | Task *:taskUid* not found.                                                                                           |
-| errorCode | task_not_found                                                                                                       |
-| errorType | invalid_request_error                                                                                                |
-| errorLink | *Link to the dedicated error page*                                                                                   |
+| code      | task_not_found                                                                                                       |
+| type      | invalid_request_error                                                                                                |
+| mink      | *Link to the dedicated error page*                                                                                   |
 
 ### IV. Finalized Key Changes
 
