@@ -382,7 +382,7 @@ Allows users to list tasks of a particular index.
 
 | field     | value                                                                                                                |
 |-----------|----------------------------------------------------------------------------------------------------------------------|
-| message   | Task *task uid* not found.                                                                                           |
+| message   | Task *:taskUid* not found.                                                                                           |
 | errorCode | task_not_found                                                                                                       |
 | errorType | invalid_request_error                                                                                                |
 | errorLink | *Link to the dedicated error page*                                                                                   |
