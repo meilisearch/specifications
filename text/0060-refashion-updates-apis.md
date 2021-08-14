@@ -20,6 +20,8 @@ Two new API endpoints are added. Although quite simple, they allow to consult th
 #### Summary Key Points
 
 -  The `update` resource is renamed `task`. The names of existing API routes are also changed to reflect this change.
+- 2 API endpoints are added. `/tasks` and `tasks/{taskUid}`.
+- A `task_not_found` error is introduced.
 -  The format of the `task` object is updated.
     - `updateId` becomes `uid`.
     - Attributes of an error appearing in a `failed` `task` are now contained in a dedicated `error` object.
@@ -31,6 +33,7 @@ Two new API endpoints are added. Although quite simple, they allow to consult th
     - `startedProcessingAt` is updated to `startedAt`.
     - `processedAt` is updated to `finishedAt`.
 - `202 Accepted` requests previously returning an `updateId` are now returning a summarized `task` object.
+
 
 ### II. Motivation
 
@@ -50,31 +53,28 @@ The main motivation is to stabilize the current `update` resource to a version t
 | indexUid | string | Unique index identifier |
 | status  | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`                                |
 | type    | string  | Type of the task. Possible values are `documentsAddition`, `documentsPartial`, `documentsDeletion`, `settingsUpdate` |
-| details    | object  |  Details information of the type payload. See examples. |
+| details | object |  Details information of the task payload. See `details` definition. |
 | error | object | Error object containing error details and context when a task has a `failed` status. See https://github.com/meilisearch/specifications/pull/61|
-| duration | number | Total elasped seconds the engine was in `processing` state. Default is set to `null`  |
+| duration | float | Total elasped seconds the engine was in `processing` state. Represented as a fractional number of seconds. Default is set to `null`  |
 | enqueuedAt | string | Represent the date and time as `ISO-8601` format when the task has been enqueued |
 | startedAt | string | Represent the date and time as `ISO-8601` format when the task has been dequeued and started to be processed. Default is set to `null`|
-| finishedAt | string | Represent the date and time as `ISO-8601` format when the task has `failed` or `succeeded`. Only displayed when the status is `failed` or `succeeded`. Default is set to `null` |
+| finishedAt | string | Represent the date and time as `ISO-8601` format when the task has `failed` or `succeeded`. Default is set to `null` |
 
 > 💡 The order of the fields must be returned in this order.
->
-> 🔮 Future consideration - `task` object contained in a list could have a `link` attribute allowing direct access to the resource.
 
 ##### Summarized `task` Object for `202 Accepted`
 
-| field   | type    | description                     |
-|---------|---------|---------------------------------|
-| uid      | integer | Unique sequential identifier           |
-| indexUid | string | Unique index identifier |
-| status  | string  | Status of the task. Value is `enqueued` |
+| field      | type    | description                     |
+|------------|---------|---------------------------------|
+| uid        | integer | Unique sequential identifier           |
+| indexUid   | string | Unique index identifier |
+| status     | string  | Status of the task. Value is `enqueued` |
 | enqueuedAt | string | Represent the date and time as `ISO-8601` format when the task has been enqueued |
+
 
 > 💡 The order of the fields must be returned in this order.
 >
 > 💡 This summarized version appears only in `202 Accepted` responses.
->
-> 🔮 Future consideration - `task` object contained in a list of `tasks` could have a `link` attribute allowing direct access to the resource.
 
 #### 2. `status` field enum
 
@@ -85,7 +85,7 @@ The main motivation is to stabilize the current `update` resource to a version t
 | processed  | **succeeded** |
 | failed     | -             |
 
-> 👍 Better semantic differentiation than `processing` and `processed`. The final status of a processed task is `succeeded` or `failed`.
+> 👍 Better semantic differentiation between `processing` and `processed`. The final status of a *processed* task is `succeeded` or `failed`.
 
 #### 3. `type` field Enum changes
 
@@ -99,14 +99,12 @@ The main motivation is to stabilize the current `update` resource to a version t
 > 👍 Type values follow a `camelCase` naming convention.
 >
 > 💡 `Settings` is updated to be more precise with the name `settingsUpdate`.
->
-> 🔮 Future consideration - Dedicated type name for sub-settings endpoints usage `SearchableAttributesUpdate`.
 
 #### 4. Examples
 
 e.g. A fully qualified `task` object in `enqueued` state.
 
-```json=
+```json
 {
         "uid": 0,
         "indexUid": "movies",
@@ -132,7 +130,7 @@ e.g. A fully qualified `task` object in `enqueued` state.
 
 e.g. A fully qualified `task` object in `processing` state.
 
-```json=
+```json
 {
         "uid": 0,
         "indexUid": "movies",
@@ -158,7 +156,7 @@ e.g. A fully qualified `task` object in `processing` state.
 
 e.g. A fully qualified `task` object in `succeeded` state.
 
-```json=
+```json
 {
         "uid": 0,
         "indexUid": "movies",
@@ -184,7 +182,7 @@ e.g. A fully qualified `task` object in `succeeded` state.
 
 e.g. A fully qualified `task` object in `failed` state.
 
-```json=
+```json
 {
         "uid": 0,
         "indexUid": "movies",
@@ -216,7 +214,7 @@ e.g. A fully qualified `task` object in `failed` state.
 
 e.g. A summarized `task` object as a response for a `202 Accepted` HTTP code.
 
-```json=
+```json
 {
     "uid": 0,
     "indexUid": "movies",
@@ -227,20 +225,97 @@ e.g. A summarized `task` object as a response for a `202 Accepted` HTTP code.
 
 ---
 
-### GET `/tasks`
+#### 5. APIs endpoints
 
-#### Goal
+**Get all tasks** | `GET` - `/tasks`
+
+##### Goals
 
 Allows users to list tasks globally regardless of the indexes involved. Particularly useful to visualize all the tasks.
 
-#### Response Definition
+`200` - Response body - `/tasks`
 
-- `task` objects are contained in a `data` array.
-- By default, objects are sorted by desc order on `uid` field. So the most recent tasks appear first.
+```json
+{
+    "data": [
+        {
+            "uid": 1,
+            "status": "enqueued",
+            "indexUid": "movies_reviews",
+            "type": "documentsAddition",
+            "duration": null,
+            "enqueuedAt": "2021-08-12T10:00:00.000000Z",
+            "startedProcessingAt": null,
+            "finishedAt": null
+        },
+        {
+            "uid": 0,
+            "status": "succeeded",
+            "indexUid": "movies",
+            "type": "documentsAddition",
+            "details": {
+                "number": 100
+            },
+            "duration": 16.000,
+            "enqueuedAt": "2021-08-11T09:25:53.000000Z",
+            "startedAt": "2021-08-11T10:03:00.000000Z",
+            "finishedAt": "2021-08-11T10:03:16.000000Z"
+        }
+    ]
+}
+```
 
-#### Response Example
+##### Requirements
 
-```json=
+> 💡`task` objects are contained in a `data` array.
+>
+> 💡 By default, objects are sorted by `desc` order on `uid` field. So the most recent tasks appear first.
+
+##### Errors
+
+- 🔴 If a master key is configured on the server side but missing from the client in the `X-MEILI-API-KEY` header, the API returns a `401 Unauthorized` - `missing_authorization_header` error.
+- 🔴 If a master key is sent by the client but does not match the value configured on the server side, the API returns a `403 Forbidden` - `invalid_token`.
+
+---
+
+**Get a task by uid** | `GET` - `/tasks/{uid}`
+
+##### Goals
+
+Allows users to get a detailed `task` object retrieved by the `uid` field regardless of the index involved.
+
+`200` - Response body -  `/tasks/1`
+
+```json
+{
+    "uid": 1,
+    "status": "enqueued",
+    "indexUid": "movies",
+    "type": "documentsAddition",
+    "duration": null,
+    "enqueuedAt": "2021-08-12T10:00:00.000000Z",
+    "startedProcessingAt": null,
+    "finishedAt": null
+}
+```
+
+##### Errors
+
+- 🔴 If a master key is configured on the server side but missing from the client in the `X-MEILI-API-KEY` header, the API returns a `401 Unauthorized` - `missing_authorization_header` error.
+- 🔴 If a master key is sent by the client but does not match the value configured on the server side, the API returns a `403 Forbidden` - `invalid_token`.
+- 🔴 If the task does not exists, the API returns a `404 Not Found` - `task_not_found` error.
+
+---
+
+**Get all tasks of an index** | `GET` - `/indexes/{indexUid}/tasks`
+
+##### Goals
+
+Allows users to list tasks of a particular index.
+
+`200` - Response body - `/indexes/movies/tasks`
+
+```json
 {
     "data": [
         {
@@ -270,47 +345,47 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
 }
 ```
 
-> 🔮 Future consideration - Add a keyset pagination
->
-> 🔮 Future consideration - Add dedicated query parameters for filtering
+##### Errors
 
-### GET `/tasks/{uid}`
-
-#### Goal
-
-Allows users to get a detailed `task` object retrieved by the `uid` field regardless of the index involved.
-
-> 🔮 Future consideration -  Reconsider usage of `/indexes/indexUId/tasks/{uid}` route since the two routes are stricly similar.
-
-#### Response Example
-
-e.g. `/tasks/1`
-
-```json=
-{
-
-    {
-        "uid": 1,
-        "status": "enqueued",
-        "indexUid": "movies",
-        "type": "documentsAddition",
-        "duration": null,
-        "enqueuedAt": "2021-08-12T10:00:00.000000Z",
-        "startedProcessingAt": null,
-        "finishedAt": null
-    }
-}
-```
+- 🔴 If a master key is configured on the server side but missing from the client in the `X-MEILI-API-KEY` header, the API returns a `401 Unauthorized` - `missing_authorization_header` error.
+- 🔴 If a master key is sent by the client but does not match the value configured on the server side, the API returns a `403 Forbidden` - `invalid_token`.
+- 🔴 If the index does not exists, the API returns a `404 Not Found` - `index_not_found` error.
 
 ---
 
-### GET `/indexes/{indexUid}/tasks`
+**Get a task of an index** | `GET` - `/indexes/{indexUid}/tasks/{tasksUid}`
 
-TBD
+`200` - Response body - `/indexes/movies/tasks/1`
 
-### GET `/indexes/{indexUid}/tasks/{tasksUid}`
+```json
+{
 
-TBD
+    "uid": 1,
+    "status": "enqueued",
+    "indexUid": "movies",
+    "type": "documentsAddition",
+    "duration": null,
+    "enqueuedAt": "2021-08-12T10:00:00.000000Z",
+    "startedProcessingAt": null,
+    "finishedAt": null
+}
+```
+
+##### Errors
+
+- 🔴 If a master key is configured on the server side but missing from the client in the `X-MEILI-API-KEY` header, the API returns a `401 Unauthorized` - `missing_authorization_header` error.
+- 🔴 If a master key is sent by the client but does not match the value configured on the server side, the API returns a `403 Forbidden` - `invalid_token`.
+- 🔴 If the index does not exists, the API returns a `404 Not Found` - `index_not_found` error.
+- 🔴 If the task does not exists, the API returns a `404 Not Found` - `task_not_found` error.
+
+#### 5. `task_not_found` error definition
+
+| field     | value                                                                                                                |
+|-----------|----------------------------------------------------------------------------------------------------------------------|
+| message   | Task *task uid* not found.                                                                                           |
+| errorCode | task_not_found                                                                                                       |
+| errorType | invalid_request_error                                                                                                |
+| errorLink | *Link to the dedicated error page*                                                                                   |
 
 ### IV. Finalized Key Changes
 
@@ -318,9 +393,14 @@ TBD
 
 ### I. Measuring
 
-TBD
+N/A
+
+###
 
 ## 3. Future Possibilities
 
-- Add pagination on `task` lists.
-- Add filtering capabilities.
+- Add a pagination system for on `/tasks` and `indexes/:indexUid/tasks` lists.
+- Add enhanced filtering capabilities.
+- Use Hateoas capability to give direct access to a `task` resource.
+- Add dedicated task type names modifying a sub-setting. e.g. `SearchableAttributesUpdate`.
+- Reconsider existence of `/indexes/:indexUid/tasks/:taskUid` route it is similar to `/tasks/:taskUid`.
