@@ -59,8 +59,6 @@ The main motivation is to stabilize the current `update` resource to a version t
 
 > 💡 The order of the fields must be returned in this order.
 >
-> 💡 This summarized version appears only in `202 Accepted` responses.
->
 > 🔮 Future consideration - `task` object contained in a list could have a `link` attribute allowing direct access to the resource.
 
 ##### Summarized `task` Object for `202 Accepted`
