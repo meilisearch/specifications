@@ -50,7 +50,7 @@ The main motivation is to stabilize the current `update` resource to a version t
 | indexUid | string | Unique index identifier |
 | status  | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`                                |
 | type    | string  | Type of the task. Possible values are `documentsAddition`, `documentsPartial`, `documentsDeletion`, `settingsUpdate` |
-| details    | object  |  Details information of the type payload. See examples |
+| details    | object  |  Details information of the type payload. See examples. |
 | error | object | Error object containing error details and context when a task has a `failed` status. See https://github.com/meilisearch/specifications/pull/61|
 | duration | number | Total elasped seconds the engine was in `processing` state. Default is set to `null`  |
 | enqueuedAt | string | Represent the date and time as `ISO-8601` format when the task has been enqueued |
@@ -85,7 +85,7 @@ The main motivation is to stabilize the current `update` resource to a version t
 | processed  | **succeeded** |
 | failed     | -             |
 
-> Better semantic differentiation than `processing` and `processed`. The final status of a processed task is `succeeded` or `failed`.
+> 👍 Better semantic differentiation than `processing` and `processed`. The final status of a processed task is `succeeded` or `failed`.
 
 #### 3. `type` field Enum changes
 
@@ -96,11 +96,11 @@ The main motivation is to stabilize the current `update` resource to a version t
 | DocumentsDeletion  | documentsDeletion |
 | Settings     | settingsUpdate |
 
-> Type values follow a `camelCase` naming convention.
+> 👍 Type values follow a `camelCase` naming convention.
 >
-> `Settings` is updated to be more precise with the name `settingsUpdate`.
+> 💡 `Settings` is updated to be more precise with the name `settingsUpdate`.
 >
-> Future consideration - Dedicated type name for sub-settings endpoints usage `SearchableAttributesUpdate`.
+> 🔮 Future consideration - Dedicated type name for sub-settings endpoints usage `SearchableAttributesUpdate`.
 
 #### 4. Examples
 
@@ -130,7 +130,7 @@ e.g. A fully qualified `task` object in `enqueued` state.
 }
 ```
 
-e.g. A fully qualified `task` object in `processing`.
+e.g. A fully qualified `task` object in `processing` state.
 
 ```json=
 {
