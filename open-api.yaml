@@ -1640,7 +1640,7 @@ paths:
       operationId: indexes.settings.sortable-attributes.get
       summary: Get sortable attributes
       description: |
-        Get the list of [sortableAttributes](/reference/features/sortableAttributes.html) of an index.
+        Get the list of [sortableAttributes](https://docs.meilisearch.com/reference/features/sortableAttributes.html) of an index.
       tags:
         - Settings
       security:
@@ -1660,7 +1660,7 @@ paths:
       operationId: indexes.settings.sortable-attributes.update
       summary: Update sortable attributes
       description: |
-        Update the list of [sortableAttributes](/reference/features/sortableAttributes.html) of an index.
+        Update the list of [sortableAttributes](https://docs.meilisearch.com/reference/features/sortableAttributes.html) of an index.
       tags:
         - Settings
       security:
@@ -1684,7 +1684,7 @@ paths:
       operationId: indexes.settings.sortable-attributes.reset
       summary: Reset sortable attributes
       description: |
-        Reset the list of [sortableAttributes](/reference/features/sortablrAttributes.html) of an index to its default value (`[]`).
+        Reset the list of [sortableAttributes](https://docs.meilisearch.com/reference/features/sortablrAttributes.html) of an index to its default value (`[]`).
       tags:
         - Settings
       security:
