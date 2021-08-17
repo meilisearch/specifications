@@ -29,6 +29,7 @@ Two new API endpoints are added. Although quite simple, they allow to consult th
     - The possible values for the `type` field are reworked to be more clear and consistent with our naming rules.
     - A `details` object is added to contain specific information related to a `task` payload that was previously displayed in the `type` nested object.
     - An `indexUid` field is added to give information about the related index on which the task is performed.
+    - `duration` format has been updated to express an `ISO 8601` duration.
     - `processed` status changes to `succeeded`.
     - `startedProcessingAt` is updated to `startedAt`.
     - `processedAt` is updated to `finishedAt`.
@@ -52,10 +53,10 @@ The main motivation is to stabilize the current `update` resource to a version t
 | uid      | integer | Unique sequential identifier           |
 | indexUid | string | Unique index identifier |
 | status  | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`                                |
-| type    | string  | Type of the task. Possible values are `documentsAddition`, `documentsPartial`, `documentsDeletion`, `settingsUpdate` |
-| details | object |  Details information of the task payload. See `details` definition. |
+| type    | string  | Type of the task. Possible values are `documentsAddition`, `documentsPartial`, `documentsDeletion`, `settingsUpdate`, `clearAll` |
+| details | object |  Details information of the task payload. See `details` object definition by `type` part. |
 | error | object | Error object containing error details and context when a task has a `failed` status. See https://github.com/meilisearch/specifications/pull/61|
-| duration | float | Total elasped seconds the engine was in `processing` state. Represented as a fractional number of seconds. Default is set to `null`  |
+| duration | string | Total elasped time the engine was in processing state expressed as a `ISO-8601` duration format. Default is set to `null`.  |
 | enqueuedAt | string | Represent the date and time as `ISO-8601` format when the task has been enqueued |
 | startedAt | string | Represent the date and time as `ISO-8601` format when the task has been dequeued and started to be processed. Default is set to `null`|
 | finishedAt | string | Represent the date and time as `ISO-8601` format when the task has `failed` or `succeeded`. Default is set to `null` |
@@ -92,9 +93,10 @@ The main motivation is to stabilize the current `update` resource to a version t
 | old        | new           |
 |------------|---------------|
 | DocumentsAddition | documentsAddition     |
-| DocumentsPartial | documentsPartial   |
+| DocumentsPartial | documentsPartial  |
 | DocumentsDeletion  | documentsDeletion |
 | Settings     | settingsUpdate |
+| ClearAll | clearAll |
 
 > 👍 Type values follow a `camelCase` naming convention.
 >
@@ -380,12 +382,12 @@ Allows users to list tasks of a particular index.
 
 #### 5. `task_not_found` error definition
 
-| field     | value                                                                                                                |
-|-----------|----------------------------------------------------------------------------------------------------------------------|
-| message   | Task *:taskUid* not found.                                                                                           |
-| code      | task_not_found                                                                                                       |
-| type      | invalid_request_error                                                                                                |
-| mink      | *Link to the dedicated error page*                                                                                   |
+| field     | type   | value                                                                                                          |
+|-----------|--------|----------------------------------------------------------------------------------------------------------------|
+| message   | string | Task *:taskUid* not found.                                                                                     |
+| code      | string | task_not_found                                                                                                 |
+| type      | string | invalid_request_error                                                                                          |
+| link      | url    | https://docs.meilisearch.com/errors/#task_not_found                                                            |
 
 ### IV. Finalized Key Changes
 
@@ -393,7 +395,10 @@ Allows users to list tasks of a particular index.
 
 ### I. Measuring
 
-N/A
+- Number of call on `indexes/:indexUid/tasks` per instance
+- Number of call on `indexes/:indexUid/tasks/:taskUid` per instance
+- Number of call on `tasks` per instance
+- Number of call on `tasks/:taskUid` per instance
 
 ###
 
