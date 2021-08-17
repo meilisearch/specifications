@@ -388,8 +388,6 @@ components:
           $ref: '#/components/schemas/rankingRules'
         filterableAttributes:
           $ref: '#/components/schemas/filterableAttributes'
-        sortableAttributes:
-          $ref: '#/components/schema/sortableAttributes'
         distinctAttribute:
           $ref: '#/components/schemas/distinctAttribute'
         searchableAttributes:
@@ -401,7 +399,6 @@ components:
         - stopWords
         - rankingRules
         - filterableAttributes
-        - sortableAttributes
         - distinctAttribute
         - searchableAttributes
         - displayedAttributes
