@@ -506,17 +506,17 @@ components:
       properties:
         message:
           type: string
-        errorCode:
+        code:
           type: string
-        errorType:
+        type:
           type: string
-        errorLink:
+        link:
           type: string
       required:
         - message
-        - errorCode
-        - errorType
-        - errorLink
+        - code
+        - type
+        - link
       description: ''
   parameters:
     indexUid:
@@ -713,9 +713,9 @@ components:
             Unauthorized:
               value:
                 message: You must have an authorization token
-                errorCode: missing_authorization_header
-                errorType: authentication_error
-                errorLink: 'https://docs.meilisearch.com/errors#missing_authorization_header'
+                code: missing_authorization_header
+                type: authentication_error
+                link: 'https://docs.meilisearch.com/errors#missing_authorization_header'
     '413':
       description: Payload Too Large
       content:
@@ -726,9 +726,9 @@ components:
             Payload Too Large:
               value:
                 message: Payload reached size limit.
-                errorCode: payload_too_large
-                errorType: invalid_request_error
-                errorLink: 'https://docs.meilisearch.com/errors#payload_too_large'
+                code: payload_too_large
+                type: invalid_request_error
+                link: 'https://docs.meilisearch.com/errors#payload_too_large'
   securitySchemes:
     apiKey:
       type: apiKey
@@ -846,9 +846,9 @@ paths:
                 Not Found:
                   value:
                     message: Dump `20201001-110357260` not found
-                    errorCode: not_found
-                    errorType: invalid_request_error
-                    errorLink: 'https://docs.meilisearch.com/errors#not_found'
+                    code: not_found
+                    type: invalid_request_error
+                    link: 'https://docs.meilisearch.com/errors#not_found'
     parameters:
       - schema:
           type: string
@@ -954,15 +954,15 @@ paths:
                 Index already exists:
                   value:
                     message: Index already exists.
-                    errorCode: index_already_exists
-                    errorType: invalid_request_error
-                    errorLink: 'https://docs.meilisearch.com/errors#index_already_exists'
+                    code: index_already_exists
+                    type: invalid_request_error
+                    link: 'https://docs.meilisearch.com/errors#index_already_exists'
                 Invalid Index Uid:
                   value:
                     message: 'Index must have a valid uid; Index uid can be of type integer or string only composed of alphanumeric characters, hyphens (-) and underscores (_).'
-                    errorCode: invalid_index_uid
-                    errorType: invalid_request_error
-                    errorLink: 'https://docs.meilisearch.com/errors#invalid_index_uid'
+                    code: invalid_index_uid
+                    type: invalid_request_error
+                    link: 'https://docs.meilisearch.com/errors#invalid_index_uid'
         '401':
           $ref: '#/components/responses/401'
       parameters:
@@ -1032,9 +1032,9 @@ paths:
                 Primary Key Already Present:
                   value:
                     message: A primary key is already present. It's impossible to update it
-                    errorCode: primary_key_already_present
-                    errorType: invalid_request_error
-                    errorLink: 'https://docs.meilisearch.com/errors#primary_key_already_present'
+                    code: primary_key_already_present
+                    type: invalid_request_error
+                    link: 'https://docs.meilisearch.com/errors#primary_key_already_present'
         '401':
           $ref: '#/components/responses/401'
         '404':
