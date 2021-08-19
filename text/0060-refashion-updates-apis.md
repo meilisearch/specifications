@@ -34,6 +34,8 @@ Two new API endpoints are added. Although quite simple, they allow to consult th
     - `startedProcessingAt` is updated to `startedAt`.
     - `processedAt` is updated to `finishedAt`.
 - `202 Accepted` requests previously returning an `updateId` are now returning a summarized `task` object.
+- `MEILI_MAX_UDB_SIZE` env var is updated `MEILI_MAX_TASK_DB_SIZE`.
+- `--max-udb-size` cli option is updated to `--max-task-db-size`.
 
 
 ### II. Motivation
@@ -380,7 +382,7 @@ Allows users to list tasks of a particular index.
 - 🔴 If the index does not exists, the API returns a `404 Not Found` - `index_not_found` error.
 - 🔴 If the task does not exists, the API returns a `404 Not Found` - `task_not_found` error.
 
-#### 5. `task_not_found` error definition
+#### 6. `task_not_found` error definition
 
 | field     | type   | value                                                                                                          |
 |-----------|--------|----------------------------------------------------------------------------------------------------------------|
@@ -389,7 +391,12 @@ Allows users to list tasks of a particular index.
 | type      | string | invalid_request_error                                                                                          |
 | link      | url    | https://docs.meilisearch.com/errors/#task_not_found                                                            |
 
-### IV. Finalized Key Changes
+#### 7. `MEILI_MAX_UDB_SIZE` env var and `--max-udb-size` cli option
+
+As the notion of `update` no longer exists. The acronym `UDB` is changed by `TASK_DB`.
+
+- `MEILI_MAX_UDB_SIZE` env var is updated to `MEILI_MAX_TASK_DB_SIZE`.
+- `--max-udb-size` cli option is updated to `--max-task-db-size`.
 
 ## 2. Technical details
 
@@ -399,8 +406,6 @@ Allows users to list tasks of a particular index.
 - Number of call on `indexes/:indexUid/tasks/:taskUid` per instance
 - Number of call on `tasks` per instance
 - Number of call on `tasks/:taskUid` per instance
-
-###
 
 ## 3. Future Possibilities
 
