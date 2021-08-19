@@ -19,8 +19,8 @@ Two new API endpoints are added. Although quite simple, they allow to consult th
 
 #### Summary Key Points
 
--  The `update` resource is renamed `task`. The names of existing API routes are also changed to reflect this change.
-- 2 API endpoints are added. `/tasks` and `tasks/{taskUid}`.
+- The `update` resource is renamed `task`. The names of existing API routes are also changed to reflect this change.
+- Tasks are now also accessible as an independent resource of an index. `GET - /tasks`; `GET - /tasks/:taskUid`
 - A `task_not_found` error is introduced.
 -  The format of the `task` object is updated.
     - `updateId` becomes `uid`.
