@@ -1,21 +1,21 @@
-- Title: Geo-search
+- Title: Geosearch
 - Start Date: 2021-08-02
 - Specification PR: [#59](https://github.com/meilisearch/specifications/pull/59)
 - Discovery Issue: [#42](https://github.com/meilisearch/product/issues/42)
 - MeiliSearch Tracking-issues:
 
-# Geo-search
+# Geosearch
 
 ## 1. Functional Specification
 
 ### I. Summary
 
-The purpose of this specification is to add a first iteration of the **geo-search** feature to give geo-filtering and geo-sorting capabilities at search time.
+The purpose of this specification is to add a first iteration of the **geosearch** feature to give geo-filtering and geosorting capabilities at search time.
 
 #### Summary Key points
 
-- Documents MUST have a `_geo` reserved object to be geo-searchable.
-- Filter documents by a given geo radius using the built-in filter `_geoRadius({lat}, {lng}, {distance_in_meters})`. It is possible to cumulate several geo-search filters within the `filter` field.
+- Documents MUST have a `_geo` reserved object to be geosearchable.
+- Filter documents by a given geo radius using the built-in filter `_geoRadius({lat}, {lng}, {distance_in_meters})`. It is possible to cumulate several geosearch filters within the `filter` field.
 - Sort documents in ascending/descending order around a geo point. e.g. `_geoPoint({lat}, {lng}):asc`.
 - It is possible to filter and/or sort by geographical criteria of the user's choice.
 - `_geo` must be set as a filterable attribute to use geo filtering capabilities.
@@ -26,11 +26,11 @@ The purpose of this specification is to add a first iteration of the **geo-searc
 
 ### II. Motivation
 
-According to our user feedback, the lack of a geo-search feature is mentioned as one of the biggest deal-breakers for choosing MeiliSearch as a search engine. A search engine must offer this feature. Some use cases specifically require integrated geo-search capabilities. Moreover, a lot of direct competitors offer it. Users today must find workarounds like using geohash to be able to geo-search documents. We hope to better serve the needs of users by implementing this feature. It allows multiplying the use-cases to which MeiliSearch can respond.
+According to our user feedback, the lack of a geosearch feature is mentioned as one of the biggest deal-breakers for choosing MeiliSearch as a search engine. A search engine must offer this feature. Some use cases specifically require integrated geosearch capabilities. Moreover, a lot of direct competitors offer it. Users today must find workarounds like using geohash to be able to geosearch documents. We hope to better serve the needs of users by implementing this feature. It allows multiplying the use-cases to which MeiliSearch can respond.
 
 ### III. Technical Explanations
 
-#### **As a developer, I want to add geo-spatial coordinates to a document so that the document can be geo-searchable.**
+#### **As a developer, I want to add geospatial coordinates to a document so that the document can be geosearchable.**
 
 - Introduce a reserved field `_geo` for documents to store geo spatial data from an **object** made of `lat` and `lng` fields for a **JSON format**.
 - Introduce a reserved column `_geo` for documents to store geo spatial data from a **string** made of `lat,lng` for a **CSV format**.
@@ -229,4 +229,4 @@ We may encounter technical difficulties to implement a descending order capabili
 
 - Add built-in filter to filter documents within `polygon` and `bounding-box`.
 - Handling array of geo points in the document object.
-- Handling multiple geo formats for the `_geo` field. e.g. "{lat},{lng}", a geo-hash etc..
+- Handling multiple geo formats for the `_geo` field. e.g. "{lat},{lng}", a geohash etc..
