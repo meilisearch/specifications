@@ -169,7 +169,7 @@ csv format example
 - Not required
 
 Following the [`sort` specification feature](https://github.com/meilisearch/specifications/pull/55):
-> The `_geo` field has to be set in `sortableAttributes` setting by the developer to activate geo fsorting capabilities at search.
+> The `_geo` field has to be set in `sortableAttributes` setting by the developer to activate geo sorting capabilities at search.
 >
 >There is no `geo` ranking rule as such. It is in fact within the `sort` ranking rule in an obfuscated way.
 >
@@ -203,7 +203,7 @@ Following the [`sort` specification feature](https://github.com/meilisearch/spec
 - Type: int
 - Not required
 
-> 💡 `_geoDistance` response field is only computed and shown when the end-user have sorted documents around a `_geoPoint`. So if the end-user filter documents using a `_geoRadius` built-in filter without sorting them around a `_geoPoint`, this field `_geoDistance` will not appear in the search response.
+> 💡 `_geoDistance` response field is only computed and shown when the end-user have sorted documents around a `_geoPoint`. So if the end-user filters documents using a `_geoRadius` built-in filter without sorting them around a `_geoPoint`, this field `_geoDistance` will not appear in the search response.
 
 ### IV. Finalized Key Changes
 
