@@ -1,17 +1,22 @@
 - Title: Indexing NDJSON
 - Start Date: 2021-04-12
 - Specification PR: [PR-#29](https://github.com/meilisearch/specifications/pull/29)
-- MeiliSearch Tracking-Issues: TBD
+- Discovery Issue: n/a
 
 # Indexing NDJSON
 
-## 1. Feature Description and Interaction
+## 1. Functional Specification
 
 ### I. Summary
 
 To index documents, the body of the add documents request has to match a specific format. That specific format is then parsed and tokenized inside MeiliSearch. After which, the documents added are in the pool of searchable and returnable documents.
 
 An [NDJSON](http://ndjson.org/) data format is easier to use than a CSV format because it propose a convenient format for storing structured data.
+
+#### Summary Key Points
+
+- `application/x-ndjson` Content-Type header is now supported.
+- The error cases have been strengthened and completed. See Errors part.
 
 ### II. Motivation
 
@@ -23,11 +28,7 @@ While we give the ability to Meilisearch to ingest CSV data for indexing in this
 
 Representing nested structures in a JSON object is easy and convenient.
 
-### III. Additional Materials
-
-TBD
-
-### IV. Explanation
+### III. Explanation
 
 Newline-delimited JSON (`ndjson`), line-delimited JSON (`ldjson`), JSON lines (`jsonl`) are three terms expressing the same formats primarily intended for JSON streaming.
 
@@ -74,11 +75,12 @@ the search result should be displayed as
 #### API Endpoints
 
 > Each API endpoints mentioned above will now require a `application/x-ndjson` as `Content-Type` header to be processed as NDJSON data.
-> ⚠ A missing Content-Type will be interpreted as `application/json` since it's the current behavior. Giving an `application/json` Content-Type leads to the same behavior.
 
-#### Add or Replace Documents [📎](https://docs.meilisearch.com/reference/api/documents.html#add-or-replace-documents)
+**As a developer, I want to upload a NDJSON payload of documents so that end-user can search them**
 
-```curl
+**POST documents** `/indexes/:indexUid/documents`
+
+```bash
 curl \
   -X POST 'http://localhost:7700/indexes/movies/documents' \
   -H 'Content-Type: application/x-ndjson' \
@@ -87,18 +89,11 @@ curl \
     {"id":499, "label": "hoodie", "price": 19.99, "colors": ["purple"]}
   '
 ```
-> Response code: 202 Accepted
+> 202 Accepted - Response
 
-##### Error codes
+**PUT documents** `/indexes/:indexUid/documents`
 
-> - Sending a different payload than the `Content-Type` header should return a `400 bad_request` error.
-> - Too large payload according to the limit should return a `413 payload_too_large` error
-> - Wrong encoding should return a `400 bad_request` error
-> - Invalid NDJSON data should return a `400 bad_request` error
-
-### Add or Update Documents [📎](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents)
-
-```curl
+```bash
 curl \
   -X PUT 'http://localhost:7700/indexes/movies/documents' \
   -H 'Content-Type: application/x-ndjson' \
@@ -107,30 +102,23 @@ curl \
     {"id":499, "label": "hoodie", "price": 19.99, "colors": ["purple"]}
   '
 ```
-> Response code: 202 Accepted
+> 202 Accepted - Response
 
-##### Errors handling
+##### Errors
 
-> - Sending a different payload than the `Content-Type` header should return a `400 bad_request` error.
-> - Too large payload according to the limit should return a `413 payload_too_large` error
-> - Wrong encoding should return a `400 bad_request` error
-> - Invalid NDJSON data should return a `400 bad_request` error
+- 🔴 Sending a different `Content-Type` than `application/json` or `application/x-ndjson` will lead to 415 Unsupported Media Type - **unsupported_media_type** error code.
+- 🔴 Sending an empty `Content-Type` will lead to a 415 Unsupported Media Type - **unsupported_media_type** error code.
+- 🔴 Omitted `Content-Type` header will lead to a 415 Unsupported Media Type - **unsupported_media_type** error code.
+- 🔴 Sending a different payload type than the `Content-Type` header should return a 400 Bad Request - **invalid_payload_type** error code.
+- 🔴 Sending a payload excessing the limit will lead to a 413 Payload Too Large - **payload_too_large** error code.
+- 🔴 Sending an empty payload will lead to a 400 Bad Request - **missing_payload** error code.
+- 🔴 Sending an invalid NDJSON format will lead to a 400 bad_request - **invalid_payload** error code.
+- 🔴 A payload encoding different from `utf-8` will lead to a 400 Bad Request **invalid_payload** error code.
 
-### V. Impact on documentation
-
-This feature should impact MeiliSearch users documentation by adding the possibility to use `ndjson` as an accepted format in the  Documents scope at [Add or replace documents](https://docs.meilisearch.com/reference/api/documents.html#add-or-replace-documents) and [Add or update documents](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents). It should also mention that a missing Content-Type will be interpreted as `application/json` since it's the current behavior. Giving an `application/json` Content-Type leads to the same behavior.
-
-We should also not only mention JSON format in `unsupported_media_type` section on the [errors page](https://docs.meilisearch.com/errors/#unsupported_media_type) and add `ndjson` format. The documentation says "Currently, MeiliSearch supports only JSON payloads."
-
-Documentation should also guide the user in the correct way to properly format and send ndjson data. Adding a dedicated page for the purpose of formatting and sending ndjson data should be considered.
-
-### VI. Impact on SDKs
-
-This feature should impact MeiliSearch SDK's in the future by adding the possibility to send ndjson data to MeiliSearch on the previous explicited endpoints.
-
-## 2. Technical Aspects
-N/A
+## 2. Technical details
+n/a
 
 ## 3. Future possibilities
+
 - Provide an interface in the future dashboard to upload NDJSON data into an index.
 - Set a payload limit directly related to the type of data format. Currently, the payload size is equivalent to [JSON payload size](https://docs.meilisearch.com/reference/features/configuration.html#payload-limit-size). Metrics on feature usage and configuration update should help to choose a better suited value for this type of data.

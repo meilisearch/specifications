@@ -1,11 +1,11 @@
 - Title: Indexing CSV
 - Start Date: 2021-04-9
 - Specification PR: [PR-#28](https://github.com/meilisearch/specifications/pull/28)
-- MeiliSearch Tracking-Issues:
+- Discovery Issue: n/a
 
 # Indexing CSV
 
-## 1. Feature Description and Interaction
+## 1. Functional Specification
 
 ### I. Summary
 
@@ -15,6 +15,12 @@ A [CSV](https://en.wikipedia.org/wiki/Comma-separated_values) data format is bro
 
 Also, in order to boost write performance CSV data format is more suited than JSON for consequent datasets, as keys are not duplicated for every document.
 
+#### Summary Key Points
+
+- The header of the csv payload allows to name the attributes and type them.
+- `text/csv` Content-Type header is now supported.
+- The error cases have been strengthened and completed. See Errors part.
+
 ### II. Motivation
 
 We want to provide our users with an always improved usage experience. Currently, the engine only accepts JSON format as a data source. We want to give users the possibility of another simple data format, well known, to use. Thus, give them more versatility at the data source choices for the indexing (add and update) step.
@@ -23,12 +29,9 @@ Since most SQL engines or SQL clients can easily dump data as CSV, it will facil
 
 Writing performance is also considered as a motivation since CSV parsing is less CPU and memory intensive than parsing Json due to the streamable capability of the CSV format.
 
-### III. Additional Materials
-N/A
+### III.Explanation
 
-### IV.Explanation
-
-#### Csv Formatting Rules
+#### CSV Formatting Rules
 
 While there's [RFC 4180](https://tools.ietf.org/html/rfc4180) as a try to add a specification for CSV format, we will find a lot of variations from that. MeiliSearch features capabilities requires CSV data to be formatted the proper way to be parsable by the engine.
 
@@ -95,10 +98,11 @@ the search result should be displayed as
 
 #### API Endpoints
 
-> Each API endpoints mentioned above will now require a `text/csv` as `Content-Type` header to process CSV data.
-> ⚠ A missing Content-Type will be interpreted as `application/json` since it's the current behavior. Giving an `application/json` Content-Type leads to the same behavior.
+> Each API endpoints mentioned above will now require a `text/csv` as `Content-Type` header to be processed as CSV data.
 
-#### Add or Replace Documents [📎](https://docs.meilisearch.com/reference/api/documents.html#add-or-replace-documents)
+**As a developer, I want to upload a CSV payload of documents so that end-user can search them**
+
+**POST documents** `/indexes/:indexUid/documents`
 
 ```bash
 curl \
@@ -109,16 +113,9 @@ curl \
     "1","hoodie","19.99","purple","Hey, you will rock at summer time."
   '
 ```
-> Response code: 202 Accepted
+> 202 Accepted - Response
 
-##### Error codes
-
-> - Sending a different payload than the `Content-Type` header should return a `400 bad_request` error.
-> - Too large payload according to the limit should return a `413 payload_too_large` error
-> - Wrong encoding should return a `400 bad_request` error
-> - Invalid CSV data should return a `400 bad_request` error
-
-### Add or Update Documents [📎](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents)
+**PUT documents** `/indexes/:indexUid/documents`
 
 ```bash
 curl \
@@ -129,29 +126,21 @@ curl \
     "1","hoodie","19.99","purple","Hey, you will rock at summer time."
   '
 ```
-> Response code: 202 Accepted
+> 202 Accepted - Response
 
-##### Errors handling
+##### Errors
 
-> - Sending a different payload than the `Content-Type` header should return a `400 bad_request` error.
-> - Too large payload according to the limit should return a `413 payload_too_large` error
-> - Wrong encoding should return a `400 bad_request` error
-> - Invalid CSV data should return a `400 bad_request` error
+- 🔴 Sending a different `Content-Type` than `application/json` or `text/csv` will lead to 415 Unsupported Media Type - **unsupported_media_type** error code.
+- 🔴 Sending an empty `Content-Type` will lead to a 415 Unsupported Media Type - **unsupported_media_type** error code.
+- 🔴 Omitted `Content-Type` header will lead to a 415 Unsupported Media Type - **unsupported_media_type** error code.
+- 🔴 Sending a different payload type than the `Content-Type` header should return a 400 Bad Request - **invalid_payload_type** error code.
+- 🔴 Sending a payload excessing the limit will lead to a 413 Payload Too Large - **payload_too_large** error code.
+- 🔴 Sending an empty payload will lead to a 400 Bad Request - **missing_payload** error code.
+- 🔴 Sending an invalid CSV format will lead to a 400 bad_request - **invalid_payload** error code.
+- 🔴 A payload encoding different from `utf-8` will lead to a 400 Bad Request **invalid_payload** error code.
 
-### V. Impact on documentation
-
-This feature should impact MeiliSearch users documentation by adding mention of csv capability inside Documents scope at [Add or replace documents](https://docs.meilisearch.com/reference/api/documents.html#add-or-replace-documents) and [Add or update documents](https://docs.meilisearch.com/reference/api/documents.html#add-or-update-documents). It should also mention that a missing Content-Type will be interpreted as `application/json` since it's the current behavior. Giving an `application/json` Content-Type leads to the same behavior.
-
-We should also not only mention JSON format in `unsupported_media_type` section on the [errors page](https://docs.meilisearch.com/errors/#unsupported_media_type) and add CSV format. The documentation says "Currently, MeiliSearch supports only JSON payloads."
-
-Documentation should also guide the user in the correct way to properly format and send csv data. Adding a dedicated page for the purpose of formatting and sending CSV data should be considered.
-
-### VI. Impact on SDKs
-
-This feature should impact MeiliSearch SDKs in the future by adding the possibility to send a CSV to MeiliSearch on the previous explicit endpoints. Simplifying the typing of the headers could also be handled by the SDKs.
-
-## 2. Technical Aspects
-N/A
+## 2. Technical details
+n/a
 
 ## 3. Future possibilities
 
