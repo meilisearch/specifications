@@ -271,7 +271,7 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
 
 ##### Requirements
 
-> 💡`task` objects are contained in a `data` array.
+> 💡 `task` objects are contained in a `data` array.
 >
 > 💡 By default, objects are sorted by `desc` order on `uid` field. So the most recent tasks appear first.
 
@@ -382,14 +382,26 @@ Allows users to list tasks of a particular index.
 - 🔴 If the index does not exists, the API returns a `404 Not Found` - `index_not_found` error.
 - 🔴 If the task does not exists, the API returns a `404 Not Found` - `task_not_found` error.
 
-#### 6. `task_not_found` error definition
+#### 6. `task_not_found` error
 
-| field     | type   | value                                                                                                          |
-|-----------|--------|----------------------------------------------------------------------------------------------------------------|
-| message   | string | Task *:taskUid* not found.                                                                                     |
-| code      | string | task_not_found                                                                                                 |
-| type      | string | invalid_request_error                                                                                          |
-| link      | url    | https://docs.meilisearch.com/errors/#task_not_found                                                            |
+##### Context
+
+This error happens when a requested task can't be found.
+
+##### Error Definition
+
+HTTP Code: `404 Not Found`
+
+```json
+{
+    "message": "Task :taskUid not found.",
+    "code": "task_not_found",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#task_not_found"
+}
+```
+
+- The `:taskUid` is inferred when the message is generated.
 
 #### 7. `MEILI_MAX_UDB_SIZE` env var and `--max-udb-size` cli option
 
