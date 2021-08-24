@@ -2,7 +2,6 @@
 - Start Date: 2021-08-02
 - Specification PR: [#59](https://github.com/meilisearch/specifications/pull/59)
 - Discovery Issue: [#42](https://github.com/meilisearch/product/issues/42)
-- MeiliSearch Tracking-issues:
 
 # Geosearch
 
@@ -116,14 +115,26 @@ csv format example
 
 > 🔴 Giving a bad formed `_geo` that do not conform to the format causes the `update` payload to fail. A new `invalid_geo_field` error is given in the `update` object.
 
-##### `invalid_geo_field` error
+##### Errors Definition
 
-| field     | value                                                                                                                |
-|-----------|----------------------------------------------------------------------------------------------------------------------|
-| message   | The _geo field is invalid.                                                                                           |
-| errorCode | invalid_geo_field                                                                                                    |
-| errorType | invalid_request_error                                                                                                |
-| errorLink | *Link to the dedicated error page. This page should give further links to indicate the expected JSON and CSV format* |
+## invalid_geo_field
+
+### Context
+
+This error occurs when the `_geo` field of a document payload is not valid.
+
+### Error Definition
+
+```json
+{
+    "message": "The _geo field is invalid. :syntaxErrorHelper.",
+    "code": "invalid_geo_field",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
+}
+```
+
+- The `:syntaxErrorHelper` is inferred when a syntax error is encountered.
 
 ---
 
