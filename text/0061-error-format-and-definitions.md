@@ -254,7 +254,7 @@ HTTP Code: `400 Bad Request`
 }
 ```
 
-- The `:syntaxErrorHelper` is inferred when an a syntax error is encountered.
+- The `:syntaxErrorHelper` is inferred when a syntax error is encountered.
 - The `:attribute` is inferred when the message is generated.
 
 ---
@@ -278,8 +278,30 @@ HTTP Code: `400 Bad Request`
 }
 ```
 
-- The `:syntaxErrorHelper` is inferred when an a syntax error is encountered.
+- The `:syntaxErrorHelper` is inferred when a syntax error is encountered.
 - The `:attribute` is inferred when the message is generated.
+
+---
+
+## invalid_geo_field
+
+### Context
+
+This error occurs when the `_geo` field of a document payload is not valid.
+
+### Error Definition
+
+```json
+{
+    "message": "The _geo field is invalid. :syntaxErrorHelper.",
+    "code": "invalid_geo_field",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
+}
+
+```
+
+- The `:syntaxErrorHelper` is inferred when a syntax error is encountered.
 
 ---
 
