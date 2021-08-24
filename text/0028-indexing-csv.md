@@ -138,6 +138,99 @@ curl \
 - 🔴 Sending an empty payload will lead to a 400 Bad Request - **missing_payload** error code.
 - 🔴 Sending an invalid CSV format will lead to a 400 bad_request - **malformed_payload** error code.
 
+##### Errors Definition
+
+## missing_content_type
+
+### Context
+
+This error occurs when the Content-Type header is missing.
+
+### Error Definition
+
+HTTP Code: `415 Unsupported Media Type`
+
+```json
+{
+    "message": "A Content-Type header is missing. Accepted values for Content-Type are: :contentTypeList",
+    "code": "missing_content_type",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#missing_content_type"
+}
+```
+
+- The `:contentTypeList` is inferred when the message is generated. The values are separated by a `,` char. e.g. `application/json`, `text/csv`.
+
+---
+
+## invalid_content_type
+
+### Context
+
+This error occurs when the provided content-type is not handled by the API method.
+
+### Error Definition
+
+HTTP Code: `415 Unsupported Media Type`
+
+```json
+{
+    "message": "The Content-Type :contentType is invalid. Accepted values for Content-Type are: :contentTypeList",
+    "code": "invalid_content_type",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_content_type"
+}
+```
+
+- The `:contentTypeList` is inferred when the message is generated. The values are separated by a `,` char. e.g. `application/json`, `text/csv`.
+
+---
+
+## missing_payload
+
+### Context
+
+This error occurs when the client does not provide a mandatory payload to the request.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "A :payloadType payload is missing.",
+    "code": "missing_payload",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#missing_payload"
+}
+```
+
+- The `:payloadType` is inferred when the message is generated. e.g. `json`, `ndjson`, `csv`
+
+---
+
+## malformed_payload
+
+### Context
+
+This error occurs when the format sent in the payload is malformed. The payload contains a syntax error.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+    "message": ":syntaxErrorHelper. The :payloadType payload provided is malformed.",
+    "code": "malformed_payload",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#malformed_payload"
+```
+
+- The `:payloadType` is inferred when the message is generated. e.g. `json`, `ndjson`, `csv`
+- The `:syntaxErrorHelper` is inferred when the message is generated.
+
+---
+
 ## 2. Technical details
 n/a
 
