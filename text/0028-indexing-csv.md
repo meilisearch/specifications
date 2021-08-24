@@ -130,14 +130,13 @@ curl \
 
 ##### Errors
 
-- 🔴 Sending a different `Content-Type` than `application/json` or `text/csv` will lead to 415 Unsupported Media Type - **unsupported_media_type** error code.
-- 🔴 Sending an empty `Content-Type` will lead to a 415 Unsupported Media Type - **unsupported_media_type** error code.
-- 🔴 Omitted `Content-Type` header will lead to a 415 Unsupported Media Type - **unsupported_media_type** error code.
-- 🔴 Sending a different payload type than the `Content-Type` header should return a 400 Bad Request - **invalid_payload_type** error code.
+- 🔴 Sending a different `Content-Type` than `application/json` or `text/csv` will lead to 415 Unsupported Media Type - **invalid_content_type** error code.
+- 🔴 Sending an empty `Content-Type` will lead to a 415 Unsupported Media Type - **invalid_content_type** error code.
+- 🔴 Omitted `Content-Type` header will lead to a 415 Unsupported Media Type - **missing_content_type** error code.
+- 🔴 Sending a different payload type than the `Content-Type` header should return a 400 Bad Request - **malformed_payload** error code.
 - 🔴 Sending a payload excessing the limit will lead to a 413 Payload Too Large - **payload_too_large** error code.
 - 🔴 Sending an empty payload will lead to a 400 Bad Request - **missing_payload** error code.
-- 🔴 Sending an invalid CSV format will lead to a 400 bad_request - **invalid_payload** error code.
-- 🔴 A payload encoding different from `utf-8` will lead to a 400 Bad Request **invalid_payload** error code.
+- 🔴 Sending an invalid CSV format will lead to a 400 bad_request - **malformed_payload** error code.
 
 ## 2. Technical details
 n/a
