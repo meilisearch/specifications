@@ -405,6 +405,29 @@ HTTP Code: `404 Not Found`
 
 ---
 
+## task_not_found
+
+#### Context
+
+This error happens when a requested task can't be found.
+
+#### Error Definition
+
+HTTP Code: `404 Not Found`
+
+```json
+{
+    "message": "Task :taskUid not found.",
+    "code": "task_not_found",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#task_not_found"
+}
+```
+
+- The `:taskUid` is inferred when the message is generated.
+
+---
+
 ## dump_already_processing
 
 ### Context
