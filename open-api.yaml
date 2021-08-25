@@ -124,6 +124,7 @@ components:
                 length: 5
               - start: 155
                 length: 5
+      description: ''
       properties:
         _formatted:
           type: object
@@ -140,7 +141,9 @@ components:
             - string
             - number
           description: Retrieve attributes of the document. `attributesToRetrieve` controls these fields.
-      description: ''
+        _geoDistance:
+          type: number
+          description: 'Using _geoPoint({lat}, {lng}) built-in sort rule at search leads the engine to return a _geoDistance within the search results. This field represents the distance in meters of the document from the specified _geoPoint.'
     documentId:
       oneOf:
         - type: number
@@ -155,6 +158,9 @@ components:
         - Nested Array: `["something > 1", "genres=comedy", ["genres=horror", "title=batman"]]`
         - String: `"something > 1 AND genres=comedy AND (genres=horror OR title=batman)"`
         - Mixed: `["something > 1 AND genres=comedy", "genres=horror OR title=batman"]`
+
+        > info
+        > _geoRadius({lat}, {lng}, {distance_in_meters}) built-in filter rule can be used to filter documents within a geo circle.
 
         > warn
         > Attribute(s) used in `filter` should be declared as filterable attributes. See [Filtering and Faceted Search](https://docs.meilisearch.com/reference/features/filtering_and_faceted_search.html).
@@ -599,7 +605,11 @@ components:
       schema:
         type: string
         example: 'price:asc'
-      description: Fields on which you want to sort the results.
+      description: |
+        Fields on which you want to sort the results.
+
+        > info
+        > _geoPoint({lat}, {long}) built-in sort rule can be used to sort documents around a geo point.
     filter:
       name: filter
       in: query
@@ -614,6 +624,9 @@ components:
         - Nested Array: `["something > 1", "genres=comedy", ["genres=horror", "title=batman"]]`
         - String: `something > 1 AND genres=comedy AND (genres=horror OR title=batman)`
         - Mixed: `["something > 1 AND genres=comedy", "genres=horror OR title=batman"]`
+
+        > info
+        > _geoRadius({lat}, {lng}, {distance_in_meters}) built-in filter rule can be used to filter documents within a geo circle.
 
         > warn
         > Attribute(s) used in `filter` should be declared as filterable attributes. See [Filtering and Faceted Search](https://docs.meilisearch.com/reference/features/filtering_and_faceted_search.html).
@@ -668,6 +681,13 @@ components:
       type: apiKey
       in: header
       name: X-Meili-API-Key
+      description: |-
+        An API key is a token that you provide when making API calls. Include the token in a header parameter called `X-Meili-API-Key`.
+
+        Example: `X-Meili-API-Key: 123`
+
+        > info
+        > test
   examples: {}
 tags:
   - name: Indexes
@@ -1031,6 +1051,9 @@ paths:
 
         > info
         > If the provided index does not exist, it will be created.
+
+        > info
+        > Use the reserved `_geo` object to add geo coordinates to a document. `_geo` is an object made of `lat` and `lng` field.
       tags:
         - Documents
       security:
@@ -1042,6 +1065,7 @@ paths:
             schema:
               type: array
               items: null
+            examples: {}
       responses:
         '202':
           $ref: '#/components/responses/202'
@@ -1052,7 +1076,7 @@ paths:
     put:
       operationId: indexes.documents.upsert
       summary: Add or update documents
-      description: |
+      description: |-
         Add a list of documents or update them if they already exist.
 
         If you send an already existing document (same [id](https://docs.meilisearch.com/learn/core_concepts/documents.html#primary-key)) the old document will be only partially updated according to the fields of the new document. Thus, any fields not present in the new document are kept and remained unchanged.
@@ -1061,6 +1085,9 @@ paths:
 
         > info
         > If the provided index does not exist, it will be created.
+
+        > info
+        > Use the reserved `_geo` object to add geo coordinates to a document. `_geo` is an object made of `lat` and `lng` field.
       tags:
         - Documents
       security:
@@ -1661,6 +1688,9 @@ paths:
       summary: Update sortable attributes
       description: |
         Update the list of [sortableAttributes](https://docs.meilisearch.com/reference/features/sortableAttributes.html) of an index.
+
+        > info
+        > In order to enable sorting capabilities on geographic data, the `_geo` field must be added as a sortableAttribute.
       tags:
         - Settings
       security:
@@ -1873,6 +1903,9 @@ paths:
       summary: Update Filterable Attributes
       description: |
         Update the [filterable attributes](https://docs.meilisearch.com/reference/features/settings.html#filterable-attributes) of an index.
+
+        > info
+        > In order to enable filtering capabilities on geographic data, the `_geo` field must be added as a filterableAttribute.
 
         > info
         > If the provided index does not exist, it will be created.
