@@ -57,7 +57,7 @@ e.g. 401 Unauthorized Response example
 | type            | description                                                                                       |
 |-----------------|---------------------------------------------------------------------------------------------------|
 | invalid_request | This type of error is usually due to a user input error. It is accompanied by an HTTP code `4xx`. |
-| internal        | Usually this type of error is returned because the search engine can't perform the operation due to machine or configuration constraints. It can be due to limits being reached such as the size of the disk, the size limit of an index etc.. It can also be an unexpected error. It is accompanied by an HTTP code `5xx`.  |
+| internal        | Usually this type of error is returned because the search engine can't perform the operation due to machine or configuration constraints. It can be due to limits being reached such as the size of the disk, the size limit of an index etc. It can also be an unexpected error. It is accompanied by an HTTP code `5xx`.  |
 | auth   | This type of error is returned when it comes to authentication and authorization. It is accompanied by an HTTP code `4xx`. |
 
 ---
@@ -66,7 +66,7 @@ e.g. 401 Unauthorized Response example
 
 Following this format here is the exhaustive list of errors that can be returned by MeiliSearch to an API consumer. This list is updated as MeiliSearch evolves.
 
-💡 Errors returned asynchronously in a `task` object, does not include a definition of the http code.
+💡 Errors returned asynchronously in a `task` object do not include a definition of the HTTP code.
 
 # invalid_request type
 
@@ -126,7 +126,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "Index :uid is not a valid uid. Index uid can be of type integer or string only composed of alphanumeric characters, hyphens (-) and underscores (_).",
+     "message": ":uid is not a valid index uid. Index uid can be an integer or a string containing only alphanumeric characters, hyphens (-) and underscores (_).",
     "code": "invalid_index_uid",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_index_uid"
@@ -149,7 +149,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "A primary key already exists for the index :uid.",
+    "message": "Index :uid already has a primary key.",
     "code": "index_primary_key_already_exists",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#primary_key_already_exists"
@@ -295,7 +295,7 @@ This error occurs when the `_geo` field of a document payload is not valid.
 
 ```json
 {
-    "message": "The _geo field is invalid. :syntaxErrorHelper.",
+    "message": ":syntaxErrorHelper. The _geo field is invalid.",
     "code": "invalid_geo_field",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
@@ -442,7 +442,7 @@ Http Code: `409 Conflict`
 
 ```json
 {
-    "message": "A dump is already processing. You must wait until the current dump being processed is finished before requesting another dump creation.",
+    "message": "A dump is already processing. You must wait until the current process is finished before requesting another dump.",
     "code": "dump_already_processing",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#dump_already_processing"
@@ -602,7 +602,7 @@ HTTP Code: `500 Internal Server Error`
 
 ### Context
 
-This error occurs when an index can be accessed for various reasons.
+ This error occurs when an index cannot be accessed for various reasons.
 
 ### Error Definition
 
@@ -672,7 +672,7 @@ HTTP Code: `500 Internal Server Error`
 
 This error occurs during the dump creation process. The dump creation was interrupted for various reasons.
 
-💡 Errors returned asynchronously in a `dump` object, does not include a definition of the http code.
+💡 Errors returned asynchronously in a `dump` object do not include a definition of the HTTP code.
 
 ### Error Definition
 
@@ -701,7 +701,7 @@ HTTP code `500 Internal Server Error`
 
 ```json
 {
-    "message": "The maximum size of :databaseSizeLimit for the database has been reached.",
+    "message": "Maximum database size of :databaseSizeLimit has been reached.",
     "code": "database_size_limit_reached",
     "type": "internal",
     "link": "https://docs.meilisearch.com/errors#database_size_limit_reached"
