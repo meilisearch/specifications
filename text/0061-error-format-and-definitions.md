@@ -50,6 +50,8 @@ e.g. 401 Unauthorized Response example
 }
 ```
 
+- 💡 The error object fields order must conform to the example.
+
 ##### type enum
 
 | type            | description                                                                                       |
