@@ -84,7 +84,7 @@ the search result should be displayed as
 curl \
   -X POST 'http://localhost:7700/indexes/movies/documents' \
   -H 'Content-Type: application/x-ndjson' \
-  --binary-data '
+  --data-binary '
     {"id":1, "label": "t-shirt", "price": 4.99, "colors": ["red", "green", "blue"]}\n
     {"id":499, "label": "hoodie", "price": 19.99, "colors": ["purple"]}
   '
@@ -97,7 +97,7 @@ curl \
 curl \
   -X PUT 'http://localhost:7700/indexes/movies/documents' \
   -H 'Content-Type: application/x-ndjson' \
-  --binary-data '
+  --data-binary '
     {"id":1, "label": "t-shirt", "price": 4.99, "colors": ["red", "green", "blue"]}\n
     {"id":499, "label": "hoodie", "price": 19.99, "colors": ["purple"]}
   '
@@ -106,13 +106,13 @@ curl \
 
 ##### Errors
 
-- 🔴 Sending a different `Content-Type` than `application/json` or `text/csv` will lead to 415 Unsupported Media Type - **invalid_content_type** error code.
-- 🔴 Sending an empty `Content-Type` will lead to a 415 Unsupported Media Type - **invalid_content_type** error code.
 - 🔴 Omitted `Content-Type` header will lead to a 415 Unsupported Media Type - **missing_content_type** error code.
+- 🔴 Sending an empty `Content-Type` will lead to a 415 Unsupported Media Type - **invalid_content_type** error code.
+- 🔴 Sending a different `Content-Type` than `application/json`, `application/x-ndjson` or `text/csv` will lead to 415 Unsupported Media Type  **invalid_content_type** error code.
+- 🔴 Sending an empty payload will lead to a 400 Bad Request - **missing_payload** error code.
 - 🔴 Sending a different payload type than the `Content-Type` header should return a 400 Bad Request - **malformed_payload** error code.
 - 🔴 Sending a payload excessing the limit will lead to a 413 Payload Too Large - **payload_too_large** error code.
-- 🔴 Sending an empty payload will lead to a 400 Bad Request - **missing_payload** error code.
-- 🔴 Sending an invalid CSV format will lead to a 400 bad_request - **malformed_payload** error code.
+- 🔴 Sending an invalid ndjson format will lead to a 400 bad_request - **malformed_payload** error code.
 
 ##### Errors Definition
 
@@ -128,7 +128,7 @@ HTTP Code: `415 Unsupported Media Type`
 
 ```json
 {
-    "message": "A Content-Type header is missing. Accepted values for Content-Type are: :contentTypeList",
+    "message": "A Content-Type header is missing. Accepted values for the Content-Type header are: :contentTypeList",
     "code": "missing_content_type",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#missing_content_type"
@@ -151,7 +151,7 @@ HTTP Code: `415 Unsupported Media Type`
 
 ```json
 {
-    "message": "The Content-Type :contentType is invalid. Accepted values for Content-Type are: :contentTypeList",
+    "message": "The Content-Type :contentType is invalid. Accepted values for the Content-Type header are: :contentTypeList",
     "code": "invalid_content_type",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_content_type"
