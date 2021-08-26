@@ -27,7 +27,7 @@ Two new API endpoints are added. Although quite simple, they allow to consult th
     - Attributes of an error appearing in a `failed` `task` are now contained in a dedicated `error` object.
     - `type` is no longer an object. It now becomes a string containing the values of its `name` field previously defined in the `type` object.
     - The possible values for the `type` field are reworked to be more clear and consistent with our naming rules.
-    - A `details` object is added to contain specific information related to a `task` payload that was previously displayed in the `type` nested object.
+    - A `details` object is added to contain specific information related to a `task` payload that was previously displayed in the `type` nested object. Previous `number` key is renamed `numberOfDocuments`.
     - An `indexUid` field is added to give information about the related index on which the task is performed.
     - `duration` format has been updated to express an `ISO 8601` duration.
     - `processed` status changes to `succeeded`.
@@ -36,6 +36,7 @@ Two new API endpoints are added. Although quite simple, they allow to consult th
 - `202 Accepted` requests previously returning an `updateId` are now returning a summarized `task` object.
 - `MEILI_MAX_UDB_SIZE` env var is updated `MEILI_MAX_TASK_DB_SIZE`.
 - `--max-udb-size` cli option is updated to `--max-task-db-size`.
+- `task` object list are now returned under a `results` array.
 
 
 ### II. Motivation
@@ -56,7 +57,7 @@ The main motivation is to stabilize the current `update` resource to a version t
 | indexUid | string | Unique index identifier |
 | status  | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`                                |
 | type    | string  | Type of the task. Possible values are `documentsAddition`, `documentsPartial`, `documentsDeletion`, `settingsUpdate`, `clearAll` |
-| details | object |  Details information of the task payload. See `details` object definition by `type` part. |
+| details | object |  Details information of the task payload. `numberOfDocuments` represent the number of deduplicated documents processed for `documentsAddition`, `documentsPartial` and `documentsDeletion`. Details can also contains any settings object depending of the `task` payload for a `settingsUpdate`. `clearAll` does not provide a `details`. |
 | error | object | Error object containing error details and context when a task has a `failed` status. See https://github.com/meilisearch/specifications/pull/61|
 | duration | string | Total elasped time the engine was in processing state expressed as a `ISO-8601` duration format. Default is set to `null`.  |
 | enqueuedAt | string | Represent the date and time as `ISO-8601` format when the task has been enqueued |
@@ -110,25 +111,25 @@ e.g. A fully qualified `task` object in `enqueued` state.
 
 ```json
 {
-        "uid": 0,
-        "indexUid": "movies",
-        "status": "enqueued",
-        "type": "settingsUpdate",
-        "details": {
-            "rankingRules": [
-                "typo",
-                "desc(ranking)",
-                "words",
-                "proximity",
-                "attribute",
-                "wordsPosition",
-                "exactness"
-            ]
-        },
-        "duration": null,
-        "enqueuedAt": "2021-08-10T14:29:17.000000Z",
-        "startedAt": null,
-        "finishedAt": null
+    "uid": 0,
+    "indexUid": "movies",
+    "status": "enqueued",
+    "type": "settingsUpdate",
+    "details": {
+        "rankingRules": [
+            "typo",
+            "desc(ranking)",
+            "words",
+            "proximity",
+            "attribute",
+            "wordsPosition",
+            "exactness"
+        ]
+    },
+    "duration": null,
+    "enqueuedAt": "2021-08-10T14:29:17.000000Z",
+    "startedAt": null,
+    "finishedAt": null
 }
 ```
 
@@ -162,25 +163,25 @@ e.g. A fully qualified `task` object in `succeeded` state.
 
 ```json
 {
-        "uid": 0,
-        "indexUid": "movies",
-        "status": "succeeded",
-        "type": "settingsUpdate",
-        "details": {
-            "rankingRules": [
-                "typo",
-                "desc(ranking)",
-                "words",
-                "proximity",
-                "attribute",
-                "wordsPosition",
-                "exactness"
-            ]
-        },
-        "duration": 1.0,
-        "enqueuedAt": "2021-08-10T14:29:17.000000Z",
-        "startedAt": "2021-08-10T14:29:18.000000Z",
-        "finishedAt": "2021-08-10T14:29:19.000000Z"
+    "uid": 0,
+    "indexUid": "movies",
+    "status": "succeeded",
+    "type": "settingsUpdate",
+    "details": {
+        "rankingRules": [
+            "typo",
+            "desc(ranking)",
+            "words",
+            "proximity",
+            "attribute",
+            "wordsPosition",
+            "exactness"
+        ]
+    },
+    "duration": "PT1S",
+    "enqueuedAt": "2021-08-10T14:29:17.000000Z",
+    "startedAt": "2021-08-10T14:29:18.000000Z",
+    "finishedAt": "2021-08-10T14:29:19.000000Z"
 }
 ```
 
@@ -188,31 +189,31 @@ e.g. A fully qualified `task` object in `failed` state.
 
 ```json
 {
-        "uid": 0,
-        "indexUid": "movies",
-        "status": "failed",
-        "type": "settingsUpdate",
-        "details": {
-            "rankingRules": [
-                "typo",
-                "desc(ranking)",
-                "words",
-                "proximity",
-                "attribute",
-                "wordsPosition",
-                "exactness"
-            ]
-        },
-        "error": {
-            "message": "invalid criterion wordsPosition",
-            "code": "internal",
-            "type": "internal_error",
-            "link": "https://docs.meilisearch.com/errors#internal",
-        },
-        "duration": 1.0,
-        "enqueuedAt": "2021-08-10T14:29:17.000000Z",
-        "startedAt": "2021-08-10T14:29:18.000000Z",
-        "finishedAt": "2021-08-10T14:29:19.000000Z",
+    "uid": 0,
+    "indexUid": "movies",
+    "status": "failed",
+    "type": "settingsUpdate",
+    "details": {
+        "rankingRules": [
+            "typo",
+            "desc(ranking)",
+            "words",
+            "proximity",
+            "attribute",
+            "wordsPosition",
+            "exactness"
+        ]
+    },
+    "error": {
+        "message": "invalid criterion wordsPosition",
+        "code": "internal",
+        "type": "internal_error",
+        "link": "https://docs.meilisearch.com/errors#internal",
+    },
+    "duration": 1.0,
+    "enqueuedAt": "2021-08-10T14:29:17.000000Z",
+    "startedAt": "2021-08-10T14:29:18.000000Z",
+    "finishedAt": "2021-08-10T14:29:19.000000Z"
 }
 ```
 
@@ -241,7 +242,7 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
 
 ```json
 {
-    "data": [
+    "results": [
         {
             "uid": 1,
             "status": "enqueued",
@@ -258,9 +259,9 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
             "indexUid": "movies",
             "type": "documentsAddition",
             "details": {
-                "number": 100
+                "numberOfDocuments": 100
             },
-            "duration": 16.000,
+            "duration": "PT16S",
             "enqueuedAt": "2021-08-11T09:25:53.000000Z",
             "startedAt": "2021-08-11T10:03:00.000000Z",
             "finishedAt": "2021-08-11T10:03:16.000000Z"
@@ -271,7 +272,7 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
 
 ##### Requirements
 
-> 💡 `task` objects are contained in a `data` array.
+> 💡 `task` objects are contained in a `results` array.
 >
 > 💡 By default, objects are sorted by `desc` order on `uid` field. So the most recent tasks appear first.
 
@@ -293,12 +294,12 @@ Allows users to get a detailed `task` object retrieved by the `uid` field regard
 ```json
 {
     "uid": 1,
-    "status": "enqueued",
     "indexUid": "movies",
+    "status": "enqueued",
     "type": "documentsAddition",
     "duration": null,
     "enqueuedAt": "2021-08-12T10:00:00.000000Z",
-    "startedProcessingAt": null,
+    "startedAt": null,
     "finishedAt": null
 }
 ```
@@ -321,26 +322,26 @@ Allows users to list tasks of a particular index.
 
 ```json
 {
-    "data": [
+    "results": [
         {
             "uid": 1,
-            "status": "enqueued",
             "indexUid": "movies",
+            "status": "enqueued",
             "type": "documentsAddition",
             "duration": null,
             "enqueuedAt": "2021-08-12T10:00:00.000000Z",
-            "startedProcessingAt": null,
+            "startedAt": null,
             "finishedAt": null
         },
         {
             "uid": 0,
-            "status": "succeeded",
             "indexUid": "movies",
+            "status": "succeeded",
             "type": "documentsAddition",
             "details": {
-                "number": 100
+                "numberofDocuments": 100
             },
-            "duration": 16.000,
+            "duration": "PT16S",
             "enqueuedAt": "2021-08-11T09:25:53.000000Z",
             "startedAt": "2021-08-11T10:03:00.000000Z",
             "finishedAt": "2021-08-11T10:03:16.000000Z"
@@ -365,12 +366,12 @@ Allows users to list tasks of a particular index.
 {
 
     "uid": 1,
-    "status": "enqueued",
     "indexUid": "movies",
+    "status": "enqueued",
     "type": "documentsAddition",
     "duration": null,
     "enqueuedAt": "2021-08-12T10:00:00.000000Z",
-    "startedProcessingAt": null,
+    "startedAt": null,
     "finishedAt": null
 }
 ```
