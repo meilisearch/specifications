@@ -118,11 +118,10 @@ e.g. A fully qualified `task` object in `enqueued` state.
     "details": {
         "rankingRules": [
             "typo",
-            "desc(ranking)",
+            "ranking:desc",
             "words",
             "proximity",
             "attribute",
-            "wordsPosition",
             "exactness"
         ]
     },
@@ -137,25 +136,24 @@ e.g. A fully qualified `task` object in `processing` state.
 
 ```json
 {
-        "uid": 0,
-        "indexUid": "movies",
-        "status": "processing",
-        "type": "settingsUpdate",
-        "details": {
-            "rankingRules": [
-                "typo",
-                "desc(ranking)",
-                "words",
-                "proximity",
-                "attribute",
-                "wordsPosition",
-                "exactness"
-            ]
-        },
-        "duration": null,
-        "enqueuedAt": "2021-08-10T14:29:17.000000Z",
-        "startedAt": "2021-08-10T14:29:18.000000Z",
-        "finishedAt": null,
+    "uid": 0,
+    "indexUid": "movies",
+    "status": "processing",
+    "type": "settingsUpdate",
+    "details": {
+        "rankingRules": [
+            "typo",
+            "ranking:desc",
+            "words",
+            "proximity",
+            "attribute",
+            "exactness"
+        ]
+    },
+    "duration": null,
+    "enqueuedAt": "2021-08-10T14:29:17.000000Z",
+    "startedAt": "2021-08-10T14:29:18.000000Z",
+    "finishedAt": null
 }
 ```
 
@@ -170,11 +168,10 @@ e.g. A fully qualified `task` object in `succeeded` state.
     "details": {
         "rankingRules": [
             "typo",
-            "desc(ranking)",
+            "ranking:desc",
             "words",
             "proximity",
             "attribute",
-            "wordsPosition",
             "exactness"
         ]
     },
@@ -196,7 +193,7 @@ e.g. A fully qualified `task` object in `failed` state.
     "details": {
         "rankingRules": [
             "typo",
-            "desc(ranking)",
+            "ranking:desc",
             "words",
             "proximity",
             "attribute",
@@ -210,7 +207,7 @@ e.g. A fully qualified `task` object in `failed` state.
         "type": "internal_error",
         "link": "https://docs.meilisearch.com/errors#internal",
     },
-    "duration": 1.0,
+    "duration": "PT1S",
     "enqueuedAt": "2021-08-10T14:29:17.000000Z",
     "startedAt": "2021-08-10T14:29:18.000000Z",
     "finishedAt": "2021-08-10T14:29:19.000000Z"
