@@ -34,7 +34,7 @@ The second motivation is to describe in an exhaustive way all the errors that th
 |------------|--------|--------------------------------------------------------------------------|
 | message    | string |  A human-readable message providing context and details about the error. |
 | code       | string |  A short string indicating the error code reported.                      |
-| type       | string |  The type of error returned. `invalid_request`, `internal`, `auth`.       |
+| type       | string |  The type of error returned. `invalid_request`, `internal`, `auth`.      |
 | link       | string |  An URL to the related error-page details for further information.       |
 
 ##### Json Response Example
@@ -152,26 +152,26 @@ HTTP Code: `400 Bad Request`
     "message": "Index :uid already has a primary key.",
     "code": "index_primary_key_already_exists",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#primary_key_already_exists"
+    "link": "https://docs.meilisearch.com/errors#index_primary_key_already_exists"
 }
 ```
 
 ---
 
-## missing_document_primary_key
+## primary_key_inference_failed
 
 ### Context
 
-This error occurs when the engine does not find an identifier to infer in the documents to be inserted during the first ingestion.
+This error occurs when the engine does not find an identifier in the payload documents to define it as the primary key of the index during the inference process when no document has already been inserted.
 
 ### Error Definition
 
 ```json
 {
-    "message": "",
-    "code": "missing_document_primary_key",
+    "message": "The primary key inference process failed because the engine did not find any fields containing `id` substring in their name. If your document identifier does not contain any `id` substring, you can set the primary key of the index.",
+    "code": "primary_key_inference_failed",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#missing_document_primary_key"
+    "link": "https://docs.meilisearch.com/errors#primary_key_inference_failed"
 }
 ```
 
@@ -187,12 +187,15 @@ This error occurs when the engine does not find the primary key previously defin
 
 ```json
 {
-    "message": "",
+    "message": "Document doesn't have a :primaryKey attribute: :escapedJsonDocumentRepresentation",
     "code": "missing_document_id",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#missing_document_id"
 }
 ```
+
+- The `:primaryKey` is inferred when the message is generated. This is the value of the primaryKey attribute of the related index object.
+- The `:escapedJsonDocumentRepresentation` is inferred when the message is generated.
 
 ---
 
@@ -471,7 +474,7 @@ HTTP Code: `415 Unsupported Media Type`
 
 ```json
 {
-    "message": "The Content-Type :contentType is invalid. Accepted values for Content-Type are: :contentTypeList",
+    "message": "The Content-Type :contentType is invalid. Accepted values for the Content-Type header are: :contentTypeList",
     "code": "invalid_content_type",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_content_type"
@@ -494,7 +497,7 @@ HTTP Code: `415 Unsupported Media Type`
 
 ```json
 {
-    "message": "A Content-Type header is missing. Accepted values for Content-Type are: :contentTypeList",
+    "message": "A Content-Type header is missing. Accepted values for the Content-Type header are: :contentTypeList",
     "code": "missing_content_type",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#missing_content_type"
@@ -685,7 +688,7 @@ This error occurs during the dump creation process. The dump creation was interr
 }
 ```
 
-- The `:reason` is inferred when the message is generated.
+- The `:reason` is inferred when the message is generated. e.g. `Permission denied`
 
 ---
 
