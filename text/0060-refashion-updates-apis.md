@@ -1,6 +1,6 @@
 - Title: Refashion Updates APIs
 - Start Date: 2021-08-13
-- Specification PR: [#55](https://github.com/meilisearch/specifications/pull/60)
+- Specification PR: [#60](https://github.com/meilisearch/specifications/pull/60)
 - Discovery Issue: [#48](https://github.com/meilisearch/product/issues/48)
 
 # Refashion Updates APIs
