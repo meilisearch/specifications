@@ -21,8 +21,9 @@ Two new API endpoints are added. Although quite simple, they allow to consult th
 
 - The `update` resource is renamed `task`. The names of existing API routes are also changed to reflect this change.
 - Tasks are now also accessible as an independent resource of an index. `GET - /tasks`; `GET - /tasks/:taskUid`
+- The task `uid` is not incremented by index anymore. The sequence is generated globally.
 - A `task_not_found` error is introduced.
--  The format of the `task` object is updated.
+- The format of the `task` object is updated.
     - `updateId` becomes `uid`.
     - Attributes of an error appearing in a `failed` `task` are now contained in a dedicated `error` object.
     - `type` is no longer an object. It now becomes a string containing the values of its `name` field previously defined in the `type` object.
@@ -270,6 +271,8 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
 ##### Requirements
 
 > 💡 `task` objects are contained in a `results` array.
+>
+> 💡 `task` uid is generated globally. The `uid` of the tasks are no longer scoped to an index.
 >
 > 💡 By default, objects are sorted by `desc` order on `uid` field. So the most recent tasks appear first.
 
