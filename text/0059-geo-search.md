@@ -15,7 +15,7 @@ The purpose of this specification is to add a first iteration of the **geosearch
 
 - Documents MUST have a `_geo` reserved object to be geosearchable.
 - Filter documents by a given geo radius using the built-in filter `_geoRadius({lat}, {lng}, {distance_in_meters})`. It is possible to cumulate several geosearch filters within the `filter` field.
-- Sort documents in ascending/descending order around a geo point. e.g. `_geoPoint({lat}, {lng}):asc`.
+- Sort documents in ascending order around a geo point. e.g. `_geoPoint({lat}, {lng}):asc`. Descending order will not be supported for this first iteration.
 - It is possible to filter and/or sort by geographical criteria of the user's choice.
 - `_geo` must be set as a filterable attribute to use geo filtering capabilities.
 - `_geo` must be set as a sortable attribute to use geo sort capabilities.
@@ -185,6 +185,8 @@ Following the [`sort` specification feature](https://github.com/meilisearch/spec
 >There is no `geo` ranking rule as such. It is in fact within the `sort` ranking rule in an obfuscated way.
 >
 >`_geoPoint` built-in sort rule can sort documents in ascending or descending order. See Technical Aspects part.
+>
+> The `:desc` order is not supported due to a technical limit. See Technical Aspects part for more details.
 
 #### GET Search `/indexes/{indexUid}/search`
 
@@ -200,6 +202,8 @@ Following the [`sort` specification feature](https://github.com/meilisearch/spec
 }
 ```
 > 🔴 Specifying parameters that do not conform to the `_geoPoint` signature causes the API to return an `invalid_sort` error. The error message should indicate how `_geoPoint` should be used. See `_geoPoint` built-in sort rule definition part.
+>
+> 🔴 Specifying `:desc` for a `_geoPoint` sort rule will raise an `invalid_sort` error with a message explaining that `_geoPoint` can only be used with `:asc` order.
 
 ---
 
@@ -230,6 +234,24 @@ Following the [`sort` specification feature](https://github.com/meilisearch/spec
 We may encounter technical difficulties to implement a descending order capability for the geo sorting. This first iteration will allow us to identify if this is a real technical problem. If we verify the existence of this problem, we will think at this moment of the best solution to bring on the table.
 
 > 💡 In a first step, we could not allow `:desc` on a geoPoint if it's a complex technical issue.
+
+---
+
+Edit-date: 2021-08-31
+
+As imagined during the first phases of discovery we encounter a technical difficulty to compute a descending order around a `_geoPoint`.
+
+The technical team will have to do some preparatory work to overcome this limitation. For the time being, it is not planned to spend more time on this as it is not a primary use case. The impact may be very small, so it's not worth the effort at this point.
+
+### Decision taken
+
+It was decided after a discussion with @irevoire and @Kerollmops that when the user specifies the sort rule `_geoPoint(lat, lng):desc` an error `invalid_sort` will be returned with a message explaining that `:desc` is not available.
+
+#### Why keep the :asc if :desc is not valid?
+
+To keep consistency and not to introduce a different syntax among the `sort` search parameter. This is something we'll re-evaluate later.
+
+---
 
 ### II. Measuring
 
