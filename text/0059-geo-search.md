@@ -261,5 +261,6 @@ To keep consistency and not to introduce a different syntax among the `sort` sea
 ## 3. Future Possibilities
 
 - Add built-in filter to filter documents within `polygon` and `bounding-box`.
+- Handling `:desc` order around a geoPoint
 - Handling array of geo points in the document object.
 - Handling multiple geo formats for the `_geo` field. e.g. "{lat},{lng}", a geohash etc..
