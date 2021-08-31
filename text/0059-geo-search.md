@@ -15,7 +15,7 @@ The purpose of this specification is to add a first iteration of the **geosearch
 
 - Documents MUST have a `_geo` reserved object to be geosearchable.
 - Filter documents by a given geo radius using the built-in filter `_geoRadius({lat}, {lng}, {distance_in_meters})`. It is possible to cumulate several geosearch filters within the `filter` field.
-- Sort documents in ascending/descending order around a geo point. e.g. `_geoPoint({lat}, {lng}):asc`.
+- Sort documents in ascending order around a geo point. e.g. `_geoPoint({lat}, {lng}):asc`. Descending order will not be supported for this first iteration.
 - It is possible to filter and/or sort by geographical criteria of the user's choice.
 - `_geo` must be set as a filterable attribute to use geo filtering capabilities.
 - `_geo` must be set as a sortable attribute to use geo sort capabilities.
@@ -270,6 +270,7 @@ This error is raised asynchronously when the user tries to specify an invalid ra
 ## 3. Future Possibilities
 
 - Add built-in filter to filter documents within `polygon` and `bounding-box`.
+- Handling `:desc` order around a geoPoint
 - Handling array of geo points in the document object.
 - Handling multiple geo formats for the `_geo` field. e.g. "{lat},{lng}", a geohash etc.
 - Handling distance in other formats (like the imperial format). **It's easy to implement on the user side though.**
