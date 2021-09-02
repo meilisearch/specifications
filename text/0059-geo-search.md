@@ -130,14 +130,15 @@ This error occurs when the `_geo` field of a document payload is not valid.
 
 ```json
 {
-    "message": "The _geo field is invalid. :syntaxErrorHelper.",
+    "message": "The document with the id: `:documentId` contains an invalid _geo field: :syntaxErrorHelper.",
     "code": "invalid_geo_field",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
 }
 ```
 
-- The `:syntaxErrorHelper` is inferred when a syntax error is encountered.
+- The `:documentId` is inferred when the message is generated.
+- The `:syntaxErrorHelper` is inferred when the message is generated.
 
 ---
 
