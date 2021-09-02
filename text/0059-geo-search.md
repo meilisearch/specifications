@@ -22,6 +22,8 @@ The purpose of this specification is to add a first iteration of the **geosearch
 - There is no `geo` ranking rule that can be manipulated by the user. This one is automatically integrated in the ranking rule `sort` by default and activated by sorting using the `_geoPoint({lat}, {lng})` built-in sort rule.
 - Using `_geoPoint({lat}, {lng})` in the `sort` parameter at search leads the engine to return a `_geoDistance` within the search results. This field represents the distance in meters of the document from the specified `_geoPoint`.
 - Add an `invalid_geo_field` error.
+- Add an alternative message for `invalid_sort` and `invalid_filter` error to handle reserved keywords.
+- `invalid_criterion` is renamed to `invalid_ranking_rule` and add an alternative message to handle reserved keywords.
 
 ### II. Motivation
 
@@ -66,7 +68,7 @@ csv format example
 #### POST Add or replace documents `/indexes/{indexUid}/documents`
 
 ##### Request body
-```
+```json
 [
     {
         "id": 1,
@@ -82,7 +84,7 @@ csv format example
 
 ##### 202 Accepted - Response body
 
-```
+```json
 {
     "updateId": 1
 }
@@ -91,7 +93,8 @@ csv format example
 #### PUT Add or replace documents `/indexes/{indexUid}/documents`
 
 ##### Request body
-```
+
+```json
 [
     {
         "id": 1,
@@ -107,13 +110,13 @@ csv format example
 
 ##### 202 Accepted - Response body
 
-```
+```json
 {
     "updateId": 2
 }
 ```
 
-> 🔴 Giving a bad formed `_geo` that do not conform to the format causes the `update` payload to fail. A new `invalid_geo_field` error is given in the `update` object.
+- 🔴 Giving a bad formed `_geo` that do not conform to the format causes the `update` payload to fail. A new `invalid_geo_field` error is given in the `update` object.
 
 ##### Errors Definition
 
@@ -159,13 +162,14 @@ This error occurs when the `_geo` field of a document payload is not valid.
 
 #### POST Search `/indexes/{indexUid}/search`
 
-```
+```json
 {
     "filter": ["brand = Ferrari", "_geoRadius(48.862725, 2.287592, 2000)"]
 }
 ```
 
-> 🔴 Specifying parameters that do not conform to the `_geoRadius` signature causes the API to return an `invalid_filter` error. The error message should indicate how `_geoRadius` should be used. See `_geoRadius` built-in filter rule definition part.
+- 🔴 Specifying parameters that do not conform to the `_geoRadius` signature causes the API to return an `invalid_filter` error. The error message should indicate how `_geoRadius` should be used. See `_geoRadius` built-in filter rule definition part.
+- 🔴 Using `_geo`, `_geoDistance`, `_geoPoint` in a filter expression cause the API to return an `invalid_filter` error. `message` should be `:reservedKeyword is a reserved keyword and thus can't be used as a filter expression.`
 
 ---
 
@@ -184,7 +188,7 @@ Following the [`sort` specification feature](https://github.com/meilisearch/spec
 >
 >There is no `geo` ranking rule as such. It is in fact within the `sort` ranking rule in an obfuscated way.
 >
->`_geoPoint` built-in sort rule can sort documents in ascending or descending order. See Technical Aspects part.
+>`_geoPoint` built-in sort rule can sort documents in ascending order only.
 >
 > The `:desc` order is not supported due to a technical limit. See Technical Aspects part for more details.
 
@@ -196,14 +200,14 @@ Following the [`sort` specification feature](https://github.com/meilisearch/spec
 
 #### POST Search `/indexes/{indexUid}/search`
 
-```
+```json
 {
     "sort": "_geoPoint({lat, lng}):asc,price:desc"
 }
 ```
-> 🔴 Specifying parameters that do not conform to the `_geoPoint` signature causes the API to return an `invalid_sort` error. The error message should indicate how `_geoPoint` should be used. See `_geoPoint` built-in sort rule definition part.
->
-> 🔴 Specifying `:desc` for a `_geoPoint` sort rule will raise an `invalid_sort` error with a message explaining that `_geoPoint` can only be used with `:asc` order.
+- 🔴 Specifying parameters that do not conform to the `_geoPoint` signature causes the API to return an `invalid_sort` error. The error message should indicate how `_geoPoint` should be used. See `_geoPoint` built-in sort rule definition part.
+- 🔴 Specifying `:desc` for a `_geoPoint` sort rule will raise an `invalid_sort` error with a message explaining that `_geoPoint` can only be used with `:asc` order.
+- 🔴 Using `_geo`, `_geoDistance`, `_geoRadius` in a sort expression cause the API to return an `invalid_sort` error. `message` should be `:reservedKeyword is a reserved keyword and thus can't be used as a sort expression.`
 
 ---
 
@@ -219,6 +223,32 @@ Following the [`sort` specification feature](https://github.com/meilisearch/spec
 - Not required
 
 > 💡 `_geoDistance` response field is only computed and shown when the end-user have sorted documents around a `_geoPoint`. So if the end-user filters documents using a `_geoRadius` built-in filter without sorting them around a `_geoPoint`, this field `_geoDistance` will not appear in the search response.
+
+---
+
+### `invalid_criterion` error changes
+
+The error is currently marked as an internal error thus the name is not explicit and consistent with the term `Ranking Rule` a user can encounter in the documentation and in the API resource name. A new definition of this error is proposed.
+
+#### invalid_ranking_rule
+
+#### Context
+
+This error is raised asynchronously when the user try to specify an invalid ranking rule in the ranking rules setting.
+
+#### Error Definition
+
+```json
+    "message": ":rankingRule ranking rule is invalid. Valid ranking rules are Words, Typo, Sort, Proximity, Attribute, Exactness and custom ranking rules."
+    "code": "invalid_ranking_rule"
+    "type": "invalid_request"
+    "link": "https://docs.meilisearch.com/errors#invalid_field"
+```
+
+- 🔴 Specifying an invalid ranking rule name raises an `invalid_ranking_rule` error. See `message` defined in the error definition part.
+- 🔴 Specifying a custom ranking rule with `_geo` or `_geoDistance` raises an `invalid_ranking_rule` error. The message is `:reservedKeyword is a reserved keyword and thus can't be used as a ranking rule.`.
+
+---
 
 ### IV. Finalized Key Changes
 
@@ -263,4 +293,4 @@ To keep consistency and not to introduce a different syntax among the `sort` sea
 - Add built-in filter to filter documents within `polygon` and `bounding-box`.
 - Handling `:desc` order around a geoPoint
 - Handling array of geo points in the document object.
-- Handling multiple geo formats for the `_geo` field. e.g. "{lat},{lng}", a geohash etc..
+- Handling multiple geo formats for the `_geo` field. e.g. "{lat},{lng}", a geohash etc.
