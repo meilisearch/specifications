@@ -242,7 +242,7 @@ This error is raised asynchronously when the user try to specify an invalid rank
     "message": ":rankingRule ranking rule is invalid. Valid ranking rules are Words, Typo, Sort, Proximity, Attribute, Exactness and custom ranking rules."
     "code": "invalid_ranking_rule"
     "type": "invalid_request"
-    "link": "https://docs.meilisearch.com/errors#invalid_field"
+    "link": "https://docs.meilisearch.com/errors#invalid_ranking_rule"
 ```
 
 - 🔴 Specifying an invalid ranking rule name raises an `invalid_ranking_rule` error. See `message` defined in the error definition part.
