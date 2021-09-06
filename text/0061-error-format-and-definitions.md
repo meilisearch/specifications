@@ -15,14 +15,14 @@ This specification also serves as a reference point for the complete list of API
 
 #### Summary Key Points
 
-- `error` is removed from the attributes name and `type`values.
-- An exhaustive list of API errors is defined. See Errors List part.
+- `error` is removed from the attributes name and `type` values.
+- An exhaustive list of API errors is defined with their message variants. See Errors List part.
 
 ### II. Motivation
 
 The main motivation is to stabilize the current `error` resource to a version that conforms to our API convention and thus allows future evolutions on a more solid base. This specification avoids adding unnecessary information in the error object's attribute names.
 
-The second motivation is to describe in an exhaustive way all the errors that the user may encounter during his use of the API.
+The second motivation is to describe in an exhaustive way all the errors that the user may encounter during his use of the API. This list will be kept up to date.
 
 ### III. Explanation
 
@@ -66,7 +66,7 @@ e.g. 401 Unauthorized Response example
 
 Following this format here is the exhaustive list of errors that can be returned by MeiliSearch to an API consumer. This list is updated as MeiliSearch evolves.
 
-💡 Errors returned asynchronously in a `task` object do not include a definition of the HTTP code.
+💡 Errors returned asynchronously in a `task` object do not include a definition of the HTTP code and mention Async instead of the HTTP code. An asynchronous error is returned in the payload of the update task.
 
 # invalid_request type
 
@@ -74,7 +74,7 @@ Following this format here is the exhaustive list of errors that can be returned
 
 ### Context
 
-This error code is generic. It should not be used. Instead, a clear and precise error code should be determined.
+This error code is generic. It should not be used. Instead, a clear and precise error code should be determined to guide the user efficiently.
 
 ### Error Definition
 
@@ -166,6 +166,8 @@ This error occurs when the engine does not find an identifier in the payload doc
 
 ### Error Definition
 
+Async
+
 ```json
 {
     "message": "The primary key inference process failed because the engine did not find any fields containing `id` substring in their name. If your document identifier does not contain any `id` substring, you can set the primary key of the index.",
@@ -185,9 +187,11 @@ This error occurs when the engine does not find the primary key previously defin
 
 ### Error Definition
 
+Async
+
 ```json
 {
-    "message": "Document doesn't have a :primaryKey attribute: :escapedJsonDocumentRepresentation",
+    "message": "Document doesn't have a :primaryKey attribute: :documentRepresentation",
     "code": "missing_document_id",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#missing_document_id"
@@ -195,7 +199,7 @@ This error occurs when the engine does not find the primary key previously defin
 ```
 
 - The `:primaryKey` is inferred when the message is generated. This is the value of the primaryKey attribute of the related index object.
-- The `:escapedJsonDocumentRepresentation` is inferred when the message is generated.
+- The `:documentRepresentation` is inferred when the message is generated.
 
 ---
 
@@ -206,6 +210,8 @@ This error occurs when the engine does not find the primary key previously defin
 The maximum number of fields for a document is `65,535`. When this number is exceeded, this error is returned. This error is returned within a `task` for a `documentsAddition` or `documentsPartial` operation.
 
 ### Error Definition
+
+Async
 
 ```json
 {
@@ -222,11 +228,14 @@ The maximum number of fields for a document is `65,535`. When this number is exc
 
 ### Context
 
-This error occurs when the user specifies a non-existent ranking rule or a malformed custom ranking rule in the settings payload.
+This error occurs when the user specifies a non-existent ranking rule, a malformed custom ranking rule in the settings payload or tries to specicy a custom ranking rule on the reserved keywords `_geo` and `_geoDistance`.
 
 ### Error Definition
 
-HTTP Code: `400 Bad Request`
+Async
+
+
+#### Variant: Sending an inexistent ranking rule or an invalid custom ranking rule syntax.
 
 ```json
 {
@@ -236,7 +245,20 @@ HTTP Code: `400 Bad Request`
     "link": "https://docs.meilisearch.com/errors#invalid_ranking_rule"
 }
 ```
-- The `:rankingRule` is inferred when the message is generated. It could be a misspelled ranking rule like `Wards` instead of `Words` or a custom ranking rule expressed with a `price::asc` syntax error.
+
+- The `:rankingRule` is inferred when the message is generated. It could be a misspelled ranking rule like `Wards` instead of `Words` or a custom ranking rule expressed with a syntax error.
+
+
+#### Variant: Specifying a custom ranking rule on reserved fields `_geo` or `_geoDistance`
+
+```json
+{
+    "message": ":reservedKeyword is a reserved keyword and thus can't be used as a ranking rule.",
+    ...
+}
+```
+
+- The `:reservedKeyword` is inferred when the message is generated.
 
 ---
 
@@ -244,23 +266,47 @@ HTTP Code: `400 Bad Request`
 
 ### Context
 
-This error occurs at search time when there is a syntax error in the `filter` parameter or when an attribute expressed in the filter is not defined in the `filterableAttributes` list.
+This error occurs at search time when there is a syntax error in the `filter` parameter, when an attribute expressed in the filter is not defined in the `filterableAttributes` list or when a reserved keywords like `_geo`, `_geoDistance` and `_geoPoint` is used as a filter.
 
 ### Error Definition
 
 HTTP Code: `400 Bad Request`
 
+#### Variant: Filtering on a non filterable attribute
+
 ```json
 {
-    "message": ":syntaxErrorHelper. Attribute :attribute is not filterable. Available filterable attributes are ..., ..., ...",
+    "message": "Attribute :attribute is not filterable. Available filterable attributes are: :filterableAttributes.",
     "code": "invalid_filter",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_filter"
 }
 ```
 
-- The `:syntaxErrorHelper` is inferred when a syntax error is encountered.
 - The `:attribute` is inferred when the message is generated.
+- The `:filterableAttributes` is inferred when the message is generated. It contains the list of filterable attributes separated by a comma. `filterableAttribute1, filterableAttribute2, ...`
+
+#### Variant: Using `_geo`, `_geoDistance`, `_geoPoint` as a filter expression
+
+```json
+{
+    "message": ":reservedKeyword is a reserved keyword and thus can't be used as a filter expression.",
+    ...
+}
+```
+
+- The `:reservedKeyword` is inferred when the message is generated.
+
+#### Variant: Invalid syntax for the `filter` parameter
+
+```json
+{
+    "message": "Invalid syntax for the filter parameter: :syntaxErrorHelper.",
+    ...
+}
+```
+
+- The `:syntaxErrorHelper` is inferred when the message is generated.
 
 ---
 
@@ -268,23 +314,65 @@ HTTP Code: `400 Bad Request`
 
 ### Context
 
-This error occurs at search time when there is a syntax error in the `sort` parameter or when an attribute expressed in the sort is not defined in the `sortableAttributes` list.
+This error occurs at search time when there is a syntax error in the `sort` parameter, when an attribute expressed in the sort is not defined in the `sortableAttributes` list, sort at search time while the `sort` ranking rule is missing from the settings, sort on _geoPoint in descending order or using a reserved keywords like `_geo`, `_geoDistance` and `_geoRadius` as a sort expression.
 
-### Error Definition
+### Error Definition:
 
 HTTP Code: `400 Bad Request`
 
+#### Variant: Sorting on a non sortable attribute
+
 ```json
 {
-    "message": ":syntaxErrorHelper. Attribute :attribute is not sortable. Available sortable attributes are ..., ..., ...",
+    "message": "Attribute :attribute is not sortable. Available sortable attributes are: :sortableAttributes.",
     "code": "invalid_sort",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_sort"
 }
 ```
 
-- The `:syntaxErrorHelper` is inferred when a syntax error is encountered.
 - The `:attribute` is inferred when the message is generated.
+- The `:sortableAttributes` is inferred when the message is generated. It contains the list of sortable attributes separated by a comma. `sortableAttribute1, sortableAttribute2, ...`
+
+#### Variant: Using `_geo`, `_geoDistance`, `_geoRadius` as a sort expression
+
+```json
+{
+    "message": ":reservedKeyword is a reserved keyword and thus can't be used as a sort expression.",
+    ...
+}
+```
+
+- The `:reservedKeyword` is inferred when the message is generated.
+
+#### Variant: Trying to sort in descending order around a `_geoPoint`
+
+```json
+{
+    "message": "Sorting by descending order around a _geoPoint is not supported. Only ascending order is supported.",
+    ...
+}
+```
+
+#### Variant: Invalid syntax for the `sort`parameter
+
+```json
+{
+    "message": "Invalid syntax for the sort parameter: :syntaxErrorHelper.",
+    ...
+}
+```
+
+- The `:syntaxErrorHelper` is inferred when the message is generated.
+
+#### Variant: Specifying `sort` at search time while the sort ranking rule isn't set in the ranking rules settings
+
+```json
+{
+    "message": "The sort ranking rule must be specified in the ranking rules settings to use the sort parameter at search time.",
+    ...
+}
+```
 
 ---
 
@@ -298,7 +386,7 @@ This error occurs when the `_geo` field of a document payload is not valid.
 
 ```json
 {
-    "message": ":syntaxErrorHelper. The _geo field is invalid.",
+    "message": "The document with the id: `:documentId` contains an invalid _geo field: :syntaxErrorHelper.",
     "code": "invalid_geo_field",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
@@ -306,7 +394,8 @@ This error occurs when the `_geo` field of a document payload is not valid.
 
 ```
 
-- The `:syntaxErrorHelper` is inferred when a syntax error is encountered.
+- The `:documentId` is inferred when the error message is generated.
+- The `:syntaxErrorHelper` is inferred when the error message is generated.
 
 ---
 
@@ -474,7 +563,7 @@ HTTP Code: `415 Unsupported Media Type`
 
 ```json
 {
-    "message": "The Content-Type :contentType is invalid. Accepted values for the Content-Type header are: :contentTypeList",
+    "message": "The Content-Type :contentType is invalid. Accepted values for the Content-Type header are: :contentTypeList.",
     "code": "invalid_content_type",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_content_type"
@@ -497,7 +586,7 @@ HTTP Code: `415 Unsupported Media Type`
 
 ```json
 {
-    "message": "A Content-Type header is missing. Accepted values for the Content-Type header are: :contentTypeList",
+    "message": "A Content-Type header is missing. Accepted values for the Content-Type header are: :contentTypeList.",
     "code": "missing_content_type",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#missing_content_type"
@@ -542,10 +631,12 @@ This error occurs when the format sent in the payload is malformed. The payload 
 HTTP Code: `400 Bad Request`
 
 ```json
-    "message": ":syntaxErrorHelper. The :payloadType payload provided is malformed.",
+{
+    "message": "The :payloadType payload provided is malformed. :syntaxErrorHelper.",
     "code": "malformed_payload",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#malformed_payload"
+}
 ```
 
 - The `:payloadType` is inferred when the message is generated. e.g. `json`, `ndjson`, `csv`
@@ -563,7 +654,7 @@ This error code occurs when an unknown and undetermined error has occurred at th
 
 ### Error Definition
 
-HTTP Code: `500 Internal Server Error``
+HTTP Code: `500 Internal Server Error`
 
 ```json
 {
@@ -675,9 +766,9 @@ HTTP Code: `500 Internal Server Error`
 
 This error occurs during the dump creation process. The dump creation was interrupted for various reasons.
 
-💡 Errors returned asynchronously in a `dump` object do not include a definition of the HTTP code.
-
 ### Error Definition
+
+Async
 
 ```json
 {
