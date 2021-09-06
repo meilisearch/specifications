@@ -235,7 +235,7 @@ The error is currently marked as an internal error thus the name is not explicit
 
 #### Context
 
-This error is raised asynchronously when the user try to specify an invalid ranking rule in the ranking rules setting.
+This error is raised asynchronously when the user tries to specify an invalid ranking rule in the ranking rules setting.
 
 #### Error Definition
 
