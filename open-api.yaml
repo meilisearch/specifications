@@ -357,9 +357,9 @@ components:
       example:
         - words
         - typo
-        - sort
         - proximity
         - attribute
+        - sort
         - exactness
         - release_date:asc
       examples: []
@@ -1442,9 +1442,9 @@ paths:
                     rankingRules:
                       - words
                       - typo
-                      - sort
                       - proximity
                       - attribute
+                      - sort
                       - exactness
                       - release_date:asc
                     distinctAttribute: ean13
@@ -1540,8 +1540,8 @@ paths:
                     - words
                     - typo
                     - proximity
-                    - sort
                     - attribute
+                    - sort
                     - exactness
                     - release_date:asc
                   distinctAttribute: ean13
@@ -1844,7 +1844,7 @@ paths:
 
         Default Value:
         ```json
-        ["words", "typo", "proximity", "attribute", "exactness"]
+        ["words", "typo", "proximity", "attribute", "sort", "exactness"]
         ```
 
         To remove all ranking rules, which is not recommended in any case, you would send an empty array to the add or replace ranking rules route.
