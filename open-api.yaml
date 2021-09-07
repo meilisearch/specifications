@@ -177,6 +177,19 @@ components:
               - type: array
                 items: {}
               - type: string
+    sort:
+      description: |
+        Fields on which you want to sort the results.
+
+        > warn
+        > Attribute(s) used in `sort` should be declared as sortable attributes. See [Sorting](https://docs.meilisearch.com/reference/features/sorting.html).
+      example:
+        - 'price:desc'
+      title: sort
+      oneOf:
+        - type: array
+          items:
+            type: string
     searchResponse:
       type: object
       additionalProperties: false
@@ -599,7 +612,11 @@ components:
       schema:
         type: string
         example: 'price:asc'
-      description: Fields on which you want to sort the results.
+      description: |
+        Fields on which you want to sort the results.
+
+        > warn
+        > Attribute(s) used in `sort` should be declared as sortable attributes. See [Sorting](https://docs.meilisearch.com/reference/features/sorting.html).
     filter:
       name: filter
       in: query
@@ -1314,10 +1331,7 @@ paths:
                   description: Maximum number of documents returned.
                   default: 20
                 sort:
-                  type: array
-                  description: Fields on which you want to sort the results.
-                  items:
-                    type: string
+                  $ref: '#/components/schemas/sort'
             examples:
               Example:
                 value:
@@ -1526,10 +1540,10 @@ paths:
                     - words
                     - typo
                     - proximity
+                    - sort
                     - attribute
                     - exactness
                     - 'released_date:asc'
-                    - sort
                   distinctAttribute: ean13
                   searchableAttributes:
                     - title
@@ -1640,7 +1654,7 @@ paths:
       operationId: indexes.settings.sortable-attributes.get
       summary: Get sortable attributes
       description: |
-        Get the list of [sortableAttributes](https://docs.meilisearch.com/reference/features/sortableAttributes.html) of an index.
+        Get the list of [sortableAttributes](https://docs.meilisearch.com//reference/features/settings.html#sortable-attributes) of an index.
       tags:
         - Settings
       security:
@@ -1660,7 +1674,7 @@ paths:
       operationId: indexes.settings.sortable-attributes.update
       summary: Update sortable attributes
       description: |
-        Update the list of [sortableAttributes](https://docs.meilisearch.com/reference/features/sortableAttributes.html) of an index.
+        Update the list of [sortableAttributes](https://docs.meilisearch.com//reference/features/settings.html#sortable-attributes) of an index.
       tags:
         - Settings
       security:
@@ -1684,7 +1698,7 @@ paths:
       operationId: indexes.settings.sortable-attributes.reset
       summary: Reset sortable attributes
       description: |
-        Reset the list of [sortableAttributes](https://docs.meilisearch.com/reference/features/sortablrAttributes.html) of an index to its default value (`[]`).
+        Reset the list of [sortableAttributes](https://docs.meilisearch.com//reference/features/settings.html#sortable-attributes) of an index to its default value (`[]`).
       tags:
         - Settings
       security:
@@ -1800,8 +1814,8 @@ paths:
 
         To add your own ranking rule, you have to communicate either `asc` for ascending order or `desc` for descending order followed by the field name in brackets.
 
-        * To apply an ascending sorting (results sorted by increasing value of the attribute): `asc(attribute_name)`
-        * To apply a descending sorting (results sorted by decreasing value of the attribute): `desc(attribute_name)`
+        * To apply an ascending custom ranking rule: `asc(attribute_name)`
+        * To apply a descending custom ranking rule: `desc(attribute_name)`
 
         > info
         > If the provided index does not exist, it will be created.
