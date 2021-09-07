@@ -361,7 +361,7 @@ components:
         - proximity
         - attribute
         - exactness
-        - 'released_date:asc'
+        - release_date:asc
       examples: []
     filterableAttributes:
       type: array
@@ -1446,7 +1446,7 @@ paths:
                       - proximity
                       - attribute
                       - exactness
-                      - 'released_date:asc'
+                      - release_date:asc
                     distinctAttribute: ean13
                     searchableAttributes:
                       - title
@@ -1456,7 +1456,7 @@ paths:
                       - title
                       - description
                       - genre
-                      - released_date
+                      - release_date
                     stopWords:
                       - of
                       - the
@@ -1543,7 +1543,7 @@ paths:
                     - sort
                     - attribute
                     - exactness
-                    - 'released_date:asc'
+                    - release_date:asc
                   distinctAttribute: ean13
                   searchableAttributes:
                     - title
@@ -1814,8 +1814,8 @@ paths:
 
         To add your own ranking rule, you have to communicate either `asc` for ascending order or `desc` for descending order followed by the field name in brackets.
 
-        * To apply an ascending custom ranking rule: `asc(attribute_name)`
-        * To apply a descending custom ranking rule: `desc(attribute_name)`
+        * To apply an ascending custom ranking rule: `attribute_name:asc`
+        * To apply a descending custom ranking rule: `attribute_name:desc`
 
         > info
         > If the provided index does not exist, it will be created.
