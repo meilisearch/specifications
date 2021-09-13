@@ -503,6 +503,7 @@ New task types are also added for these operations. `indexCreation`, `indexUpdat
 
 - Add a pagination system for on `/tasks` and `indexes/:indexUid/tasks` lists.
 - Add enhanced filtering capabilities.
+- Simplify `documentsAddition` and `documentsPartial` type and elaborate on metadata.
 - Use Hateoas capability to give direct access to a `task` resource.
 - Add dedicated task type names modifying a sub-setting. e.g. `SearchableAttributesUpdate`.
 - Reconsider existence of `/indexes/:indexUid/tasks/:taskUid` route it is similar to `/tasks/:taskUid`.
