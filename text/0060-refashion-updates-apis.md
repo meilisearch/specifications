@@ -13,9 +13,11 @@ The term `update` is not the best choice as it can be confused with document upd
 
 As an additional change, we have reworked the format of an update to make it more in line with our expectations of an API that is supposed to be easily understandable and developer-oriented.
 
-The changes we will make to the response format of the `task` object lists will make it easier to add more functionality in a future iteration. See the Future Possibilities section for a brief overview.
+Changing the format of `task` object lists makes adding more functionality in a future iteration easier. See the Future Possibilities section for a brief overview.
 
-Two new API endpoints are added. Although quite simple, they allow to consult the list of tasks or a specific task without being forced to know the related index.
+The specification adds two new API endpoints. Although quite simple, they allow consulting the list of tasks or a specific task without being forced to know the related index.
+
+The specification makes any writing operation on an index asynchronous to serve consistency and facilitate future evolutions.
 
 #### Summary Key Points
 
@@ -37,12 +39,13 @@ Two new API endpoints are added. Although quite simple, they allow to consult th
 - `202 Accepted` requests previously returning an `updateId` are now returning a summarized `task` object.
 - `MEILI_MAX_UDB_SIZE` env var is updated `MEILI_MAX_TASK_DB_SIZE`.
 - `--max-udb-size` cli option is updated to `--max-task-db-size`.
-- `task` object list are now returned under a `results` array.
+- `task` object lists are now returned under a `results` array.
+- Each operation on an index (creation, update, deletion) is now asynchronous and represented by a `task`.
 
 
 ### II. Motivation
 
-The main motivation is to stabilize the current `update` resource to a version that conforms to our API convention and thus allow future evolutions on a more solid base. We would like to modify the name `update`, its format is also to be reviewed because some attributes are not immediately clear, either in the possible values or in the chosen names.
+The motivation is to stabilize the current `update` resource to a version that conforms to our API convention, thus developing future evolutions on a more solid base. We want to modify the name `update`, the format is also changed because some attributes are not immediately explicit, either in the possible values or in the chosen names.
 
 ### III. Explanation
 
@@ -50,7 +53,7 @@ The main motivation is to stabilize the current `update` resource to a version t
 
 ##### **Fully Qualified `task` object**
 
-> This fully qualified version appears as response object on `task` dedicated endpoints.
+> This fully qualified version appears as a response object on `task` dedicated endpoints.
 
 | field   | type    | description                     |
 |---------|---------|---------------------------------|
@@ -58,9 +61,9 @@ The main motivation is to stabilize the current `update` resource to a version t
 | indexUid | string | Unique index identifier |
 | status  | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`                                |
 | type    | string  | Type of the task. Possible values are `documentsAddition`, `documentsPartial`, `documentsDeletion`, `settingsUpdate`, `clearAll` |
-| details | object |  Details information of the task payload. `numberOfDocuments` represent the number of deduplicated documents processed for `documentsAddition`, `documentsPartial` and `documentsDeletion` type. Details contains any settings object depending of the `task` payload for a `settingsUpdate`. `clearAll` does not provide a `details`. |
+| details | object |  Details information of the task payload. `numberOfDocuments` represent the number of deduplicated documents processed for `documentsAddition`, `documentsPartial` and `documentsDeletion` type. Details contains any settings object depending of the `task` payload for a `settingsUpdate`. `clearAll`, `indexCreation`, `indexUpdate`, `indexDeletion` does not provide a `details` object. |
 | error | object | Error object containing error details and context when a task has a `failed` status. See https://github.com/meilisearch/specifications/pull/61|
- | duration | string | Total elapsed time the engine was in processing state expressed as a `ISO-8601` duration format. Default is set to `null`.  |
+ | duration | string | Total elapsed time the engine was in processing state expressed as an `ISO-8601` duration format. Default is set to `null`.  |
 | enqueuedAt | string | Represent the date and time as `ISO-8601` format when the task has been enqueued |
 | startedAt | string | Represent the date and time as `ISO-8601` format when the task has been dequeued and started to be processed. Default is set to `null`|
 | finishedAt | string | Represent the date and time as `ISO-8601` format when the task has `failed` or `succeeded`. Default is set to `null` |
@@ -92,11 +95,14 @@ The main motivation is to stabilize the current `update` resource to a version t
 
 > 👍 Better semantic differentiation between `processing` and `processed`. The final status of a *processed* task is `succeeded` or `failed`.
 
-#### 3. `type` field Enum changes
+#### 3. `type` field enum
 
 | old        | new           |
 |------------|---------------|
-| DocumentsAddition | documentsAddition     |
+|  -          | indexCreation |
+|  -         | indexUpdate   |
+|  -          | indexDeletion |
+| DocumentsAddition | documentsAddition  |
 | DocumentsPartial | documentsPartial  |
 | DocumentsDeletion  | documentsDeletion |
 | Settings     | settingsUpdate |
@@ -108,7 +114,7 @@ The main motivation is to stabilize the current `update` resource to a version t
 
 #### 4. Examples
 
-e.g. A fully qualified `task` object in `enqueued` state.
+e.g. A fully qualified `task` object in an `enqueued` state.
 
 ```json
 {
@@ -133,7 +139,7 @@ e.g. A fully qualified `task` object in `enqueued` state.
 }
 ```
 
-e.g. A fully qualified `task` object in `processing` state.
+e.g. A fully qualified `task` object in a `processing` state.
 
 ```json
 {
@@ -158,7 +164,7 @@ e.g. A fully qualified `task` object in `processing` state.
 }
 ```
 
-e.g. A fully qualified `task` object in `succeeded` state.
+e.g. A fully qualified `task` object in a `succeeded` state.
 
 ```json
 {
@@ -183,7 +189,7 @@ e.g. A fully qualified `task` object in `succeeded` state.
 }
 ```
 
-e.g. A fully qualified `task` object in `failed` state.
+e.g. A fully qualified `task` object in a `failed` state.
 
 ```json
 {
@@ -215,13 +221,14 @@ e.g. A fully qualified `task` object in `failed` state.
 }
 ```
 
-e.g. A summarized `task` object as a response for a `202 Accepted` HTTP code.
+e.g. A summarized `task` object in a `202 Accepted` HTTP response returned at index creation.
 
 ```json
 {
     "uid": 0,
     "indexUid": "movies",
     "status": "enqueued",
+    "type": "createIndex",
     "enqueuedAt": "2021-08-11T09:25:53.000000Z"
 }
 ```
@@ -243,8 +250,8 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
     "results": [
         {
             "uid": 1,
-            "status": "enqueued",
             "indexUid": "movies_reviews",
+            "status": "enqueued",
             "type": "documentsAddition",
             "duration": null,
             "enqueuedAt": "2021-08-12T10:00:00.000000Z",
@@ -253,8 +260,8 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
         },
         {
             "uid": 0,
-            "status": "succeeded",
             "indexUid": "movies",
+            "status": "succeeded",
             "type": "documentsAddition",
             "details": {
                 "numberOfDocuments": 100
@@ -278,8 +285,8 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
 
 ##### Errors
 
-- 🔴 If a master key is configured on the server side but missing from the client in the `X-MEILI-API-KEY` header, the API returns a `401 Unauthorized` - `missing_authorization_header` error.
-- 🔴 If a master key is sent by the client but does not match the value configured on the server side, the API returns a `403 Forbidden` - `invalid_token`.
+- 🔴 If a master key is configured on the server-side but missing from the client in the `X-MEILI-API-KEY` header, the API returns a `401 Unauthorized` - `missing_authorization_header` error.
+- 🔴 If a master key is sent by the client but does not match the value configured on the server-side, the API returns a `403 Forbidden` - `invalid_token`.
 
 ---
 
@@ -306,9 +313,9 @@ Allows users to get a detailed `task` object retrieved by the `uid` field regard
 
 ##### Errors
 
-- 🔴 If a master key is configured on the server side but missing from the client in the `X-MEILI-API-KEY` header, the API returns a `401 Unauthorized` - `missing_authorization_header` error.
-- 🔴 If a master key is sent by the client but does not match the value configured on the server side, the API returns a `403 Forbidden` - `invalid_token`.
-- 🔴 If the task does not exists, the API returns a `404 Not Found` - `task_not_found` error.
+- 🔴 If a master key is configured on the server-side but missing from the client in the `X-MEILI-API-KEY` header, the API returns a `401 Unauthorized` - `missing_authorization_header` error.
+- 🔴 If a master key is sent by the client but does not match the value configured on the server-side, the API returns a `403 Forbidden` - `invalid_token`.
+- 🔴 If the task does not exist, the API returns a `404 Not Found` - `task_not_found` error.
 
 ---
 
@@ -352,9 +359,9 @@ Allows users to list tasks of a particular index.
 
 ##### Errors
 
-- 🔴 If a master key is configured on the server side but missing from the client in the `X-MEILI-API-KEY` header, the API returns a `401 Unauthorized` - `missing_authorization_header` error.
-- 🔴 If a master key is sent by the client but does not match the value configured on the server side, the API returns a `403 Forbidden` - `invalid_token`.
-- 🔴 If the index does not exists, the API returns a `404 Not Found` - `index_not_found` error.
+- 🔴 If a master key is configured on the server-side but missing from the client in the `X-MEILI-API-KEY` header, the API returns a `401 Unauthorized` - `missing_authorization_header` error.
+- 🔴 If a master key is sent by the client but does not match the value configured on the server-side, the API returns a `403 Forbidden` - `invalid_token`.
+- 🔴 If the index does not exist, the API returns a `404 Not Found` - `index_not_found` error.
 
 ---
 
@@ -378,10 +385,10 @@ Allows users to list tasks of a particular index.
 
 ##### Errors
 
-- 🔴 If a master key is configured on the server side but missing from the client in the `X-MEILI-API-KEY` header, the API returns a `401 Unauthorized` - `missing_authorization_header` error.
-- 🔴 If a master key is sent by the client but does not match the value configured on the server side, the API returns a `403 Forbidden` - `invalid_token`.
-- 🔴 If the index does not exists, the API returns a `404 Not Found` - `index_not_found` error.
-- 🔴 If the task does not exists, the API returns a `404 Not Found` - `task_not_found` error.
+- 🔴 If a master key is configured on the server-side but missing from the client in the `X-MEILI-API-KEY` header, the API returns a `401 Unauthorized` - `missing_authorization_header` error.
+- 🔴 If a master key is sent by the client but does not match the value configured on the server-side, the API returns a `403 Forbidden` - `invalid_token`.
+- 🔴 If the index does not exist, the API returns a `404 Not Found` - `index_not_found` error.
+- 🔴 If the task does not exist, the API returns a `404 Not Found` - `task_not_found` error.
 
 #### 6. `task_not_found` error
 
@@ -410,6 +417,76 @@ As the notion of `update` no longer exists. The acronym `UDB` is changed by `TAS
 
 - `MEILI_MAX_UDB_SIZE` env var is updated to `MEILI_MAX_TASK_DB_SIZE`.
 - `--max-udb-size` cli option is updated to `--max-task-db-size`.
+
+#### 8. Asynchronous Write Operations on Index resource
+
+To consolidate the writing behavior between an index and document modifications, configuration changes of settings, the creation, modification, and deletion of an index resource are now asynchronous.
+
+Initially, the index creation, update, and deletion operations were synchronous, which could cause problems like race conditions.
+
+For example, when updating documents on an index while an index is being deleted synchronously in parallel. It also improves the consistency for the understanding of writes within a MeiliSearch index among an identical behavior.
+
+This structure allows us to facilitate communications and write propagations in a high availability context in the future.
+
+The main change in the API is that the routes response described below now becomes a `202 Accepted` response with the summarized task response payload.
+
+Errors are now part of the `task` as for other asynchronous operations.
+
+New task types are also added for these operations.
+
+**Create an index** | `POST` - `/indexes`
+
+```json
+{
+    "uid": "movies"
+}
+```
+
+`202` - Accepted Response body
+
+```json
+{
+    "uid": 0,
+    "indexUid": "movies",
+    "status": "enqueued",
+    "type": "indexCreation",
+    "enqueuedAt": "2021-08-12T10:00:00.000000Z"
+}
+```
+
+**Update an index** | `PUT` - `/indexes/:indexUid`
+
+```json
+{
+    "primaryKey": "uid"
+}
+```
+
+`202` - Accepted Response body
+
+```json
+{
+    "uid": 1,
+    "indexUid": "movies",
+    "status": "enqueued",
+    "type": "indexUpdate",
+    "enqueuedAt": "2021-08-12T10:00:00.000000Z"
+}
+```
+
+**Delete an index** | `DELETE` - `/indexes/:indexUid`
+
+`202` - Accepted Response body
+
+```json
+{
+    "uid": 1,
+    "indexUid": "movies",
+    "status": "enqueued",
+    "type": "indexDeletion",
+    "enqueuedAt": "2021-08-12T10:00:00.000000Z"
+}
+```
 
 ## 2. Technical details
 
