@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: MeiliSearch Core API
   description: 'Search documents, configure and manage the MeiliSearch engine.'
-  version: 0.21.0
+  version: 0.22.0
   contact:
     name: MeiliSearch
     email: bonjour@meilisearch.com
@@ -2336,7 +2336,7 @@ paths:
                   value:
                     commitSha: b46889b5f0f2f8b91438a08a358ba8f05fc09fc1
                     commitDate: '2021-07-08'
-                    pkgVersion: 0.21.0
+                    pkgVersion: 0.22.0
         '401':
           $ref: '#/components/responses/401'
 security: []
