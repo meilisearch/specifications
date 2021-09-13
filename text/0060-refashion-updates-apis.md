@@ -432,7 +432,7 @@ The main change in the API is that the routes response described below now becom
 
 Errors are now part of the `task` as for other asynchronous operations.
 
-New task types are also added for these operations.
+New task types are also added for these operations. `indexCreation`, `indexUpdate`, and `indexDeletion`.
 
 **Create an index** | `POST` - `/indexes`
 
@@ -453,6 +453,8 @@ New task types are also added for these operations.
     "enqueuedAt": "2021-08-12T10:00:00.000000Z"
 }
 ```
+
+- 💡 Automatic index creation using the `/indexes/:indexToCreate/documents` route generates only one `documentAdditions` task that also handles index creation.
 
 **Update an index** | `PUT` - `/indexes/:indexUid`
 
