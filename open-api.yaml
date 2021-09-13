@@ -375,7 +375,6 @@ components:
       example:
         - words
         - typo
-        - sort
         - proximity
         - attribute
         - sort
