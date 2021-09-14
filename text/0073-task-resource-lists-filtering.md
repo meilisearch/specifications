@@ -201,3 +201,4 @@ n/a
 ## 3. Future Possibilities
 
 - Filter `task` lists according to multiple types or statuses by separating several values with the `,` character.  This character would be interpreted as an `OR`. e.g. `?status=documentsAddition,settingsUpdate&type=failed,enqueued`
+- Add a date range filter for `enqueuedAt`, `startedAt` and `finishedAt` attributes.
