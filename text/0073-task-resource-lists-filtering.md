@@ -31,7 +31,7 @@ Following the specification aiming to stabilize the `task` API resource, we want
 
 ### Usages examples
 
-This specification demonstrates filetring on `/tasks`, but it should be equivalent for `indexes/:uid/tasks`.
+This specification demonstrates filtering on `/tasks`, it should be equivalent for `indexes/:uid/tasks`.
 
 ---
 
