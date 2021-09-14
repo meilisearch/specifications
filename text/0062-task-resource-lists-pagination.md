@@ -62,8 +62,15 @@ Being consistent in our design makes our API easier to use and makes its design 
 
 | field | type | description                         |
 |------|------|--------------------------------------|
-| limit | int  | Default `30`. Limit on the number of tasks to be returned, between `1` and `100`. |
+| limit | int  | Default `30`. |
 | startAfter  | int - nullable  | Represents the query parameter to send to fetch the next slice of the results. The first item for the next slice starts at `startAfter+1`. When the returned value is null, it means that all the data have been browsed in the given order. |
+
+### GET query parameters for cursor-based pagination
+
+| field | type | required | description |
+|------|------|----------|--------------|
+| limit | int  | No | Default `30`. Limit on the number of tasks to be returned, between `1` and `100`. |
+| startAfter  | int | No | Limit results to tasks with uids greater/lower than the specified uid. It depends of the sort order. |
 
 ###  Usages examples
 
@@ -71,7 +78,7 @@ This specification demonstrates cursor paging on `/tasks`, but it should be equi
 
 ---
 
-**Request intiial default slice of `tasks`**
+**Initial default slice of `tasks`**
 
 `GET` - `/tasks`
 
@@ -99,7 +106,7 @@ This specification demonstrates cursor paging on `/tasks`, but it should be equi
 }
 ```
 
-**Request the next slice of `tasks` with a size of `50` tasks items**
+**Request the next slice of `tasks` items with a limit of `50` tasks**
 
 `GET` - `/tasks?startAfter=1330&limit=50`
 
@@ -127,7 +134,7 @@ This specification demonstrates cursor paging on `/tasks`, but it should be equi
 }
 ```
 
-**End of cursor pagination demonstration**
+**End of cursor pagination**
 
 `GET` - `/tasks?startAfter=20`
 
@@ -156,6 +163,20 @@ This specification demonstrates cursor paging on `/tasks`, but it should be equi
 ```
 
 - 💡 `startAfter` response parameter is null because there are no more `tasks` to fetch. It means that the response represents the last slice of results for the given resource list.
+
+---
+
+### Behaviors for `limit` and `startAfter`
+
+#### `limit`
+
+- If `limit` is not set, the default value is chosen.
+- If `limit` is sent and it is not between the minimum and maximum values, the default value is chosen.
+- If `limit` is not an integer, the default value is chosen.
+
+#### `startAfter`
+
+- If `startAfter` is set with an out of bounds task `uid`, the response returns an empty `results` array and `startAfter` is set to `null`.
 
 ## 2. Technical Aspects
 n/a
