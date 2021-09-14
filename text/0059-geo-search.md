@@ -295,3 +295,5 @@ To keep consistency and not to introduce a different syntax among the `sort` sea
 - Handling `:desc` order around a geoPoint
 - Handling array of geo points in the document object.
 - Handling multiple geo formats for the `_geo` field. e.g. "{lat},{lng}", a geohash etc.
+- Handling distance in other formats (like the imperial format). **It's easy to implement on the user side though.**
+- Handling position in other formats. It seems that [degrees and minutes](https://www.pacioos.hawaii.edu/voyager-news/lat-long-formats/) are also used a lot. **It's easy to implement on the user side though.**
