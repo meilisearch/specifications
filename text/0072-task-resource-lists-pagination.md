@@ -13,9 +13,8 @@
 
 #### Summary Key Points
 
-- Add a `pagination` metadata object to task list response.
+- Add `limit` and `after` response attibutes to task list response.
 - It concerns `/tasks` and `/indexes/:uid/tasks`.
-- `task` items are sorted from most recent to oldest.
 
 ### II. Motivation
 
@@ -50,27 +49,19 @@ The main drawback of this type of pagination is that it does not navigate within
 
 ---
 
-#### `pagination` definition
-
-Rather than injecting the pagination metadata into the root of the response, we can describe a `pagination` object that allows clients to find this information more clearly in responses. It's a common practice to guide consumers by providing metadata objects through a Rest API.
-
-Being consistent in our design makes our API easier to use and makes its design simpler.
-
-> 💡 This `pagination` metadata object can also contain the necessary attributes for other types of pagination that could be implemented for specific endpoints, such as per-page pagination in the future.
-
-### Cursor based `pagination` object definition for the `task` lists.
+### Response attributes.
 
 | field | type | description                         |
 |------|------|--------------------------------------|
 | limit | int  | Default `30`. |
-| startAfter  | int - nullable  | Represents the query parameter to send to fetch the next slice of the results. The first item for the next slice starts at `startAfter+1`. When the returned value is null, it means that all the data have been browsed in the given order. |
+| after  | int - nullable  | Represents the query parameter to send to fetch the next slice of the results. The first item for the next slice starts at `after+1`. When the returned value is null, it means that all the data have been browsed in the given order. |
 
 ### GET query parameters for cursor-based pagination
 
 | field | type | required | description |
 |------|------|----------|--------------|
 | limit | int  | No | Default `30`. Limit on the number of tasks to be returned, between `1` and `100`. |
-| startAfter  | int | No | Limit results to tasks with uids greater/lower than the specified uid. It depends of the sort order. |
+| after  | int | No | Limit results to tasks with uids greater/lower than the specified uid. |
 
 ###  Usages examples
 
@@ -99,16 +90,14 @@ This specification demonstrates cursor paging on `/tasks`, but it should be equi
             ...,
         }
     ],
-    "pagination": {
-        "limit": 20,
-        "startAfter": 1330
-    }
+    "limit": 20,
+    "after": 1330
 }
 ```
 
 **Request the next slice of `tasks` items with a limit of `50` tasks**
 
-`GET` - `/tasks?startAfter=1330&limit=50`
+`GET` - `/tasks?after=1330&limit=50`
 
 ```json
 {
@@ -127,16 +116,14 @@ This specification demonstrates cursor paging on `/tasks`, but it should be equi
             ...,
         }
     ],
-    "pagination": {
-        "limit": 50,
-        "startAfter": 1279
-    }
+    "limit": 50,
+    "after": 1279
 }
 ```
 
 **End of cursor pagination**
 
-`GET` - `/tasks?startAfter=20`
+`GET` - `/tasks?after=20`
 
 ```json
 {
@@ -155,18 +142,16 @@ This specification demonstrates cursor paging on `/tasks`, but it should be equi
             ...,
         }
     ],
-    "pagination": {
-        "limit": 10,
-        "startAfter": null
-    }
+    "limit": 10,
+    "after": null
 }
 ```
 
-- 💡 `startAfter` response parameter is null because there are no more `tasks` to fetch. It means that the response represents the last slice of results for the given resource list.
+- 💡 `after` response parameter is null because there are no more `tasks` to fetch. It means that the response represents the last slice of results for the given resource list.
 
 ---
 
-### Behaviors for `limit` and `startAfter`
+### Behaviors for `limit` and `after` query parameters
 
 #### `limit`
 
@@ -174,9 +159,9 @@ This specification demonstrates cursor paging on `/tasks`, but it should be equi
 - If `limit` is sent and it is not between the minimum and maximum values, the default value is chosen.
 - If `limit` is not an integer, the default value is chosen.
 
-#### `startAfter`
+#### `after`
 
-- If `startAfter` is set with an out of bounds task `uid`, the response returns an empty `results` array and `startAfter` is set to `null`.
+- If `after` is set with an out of bounds task `uid`, the response returns an empty `results` array and `after` is set to `null`.
 
 ## 2. Technical Aspects
 n/a
@@ -187,7 +172,7 @@ n/a
 
 We might decide to implement the ability to reverse the list traversal using the query parameter `sort` in the future. e.g. `&sort=uid:asc`.
 
-The use of pagination would remain the same except that the first element of the results would start with the oldest `uid` for the given resource.
+The use of the cursor-based pagination would remain the same except that the first element of the results would start with the oldest `uid` for the given resource.
 
 ### Filtering capabilities
 
