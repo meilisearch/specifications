@@ -314,7 +314,7 @@ HTTP Code: `400 Bad Request`
 
 ### Context
 
-This error occurs at search time when there is a syntax error in the `sort` parameter, when an attribute expressed in the sort is not defined in the `sortableAttributes` list, sort at search time while the `sort` ranking rule is missing from the settings, sort on _geoPoint in descending order or using a reserved keywords like `_geo`, `_geoDistance` and `_geoRadius` as a sort expression.
+This error occurs at search time when there is a syntax error in the `sort` parameter, when an attribute expressed in the sort is not defined in the `sortableAttributes` list, sort at search time while the `sort` ranking rule is missing from the settings, or using a reserved keywords like `_geo`, `_geoDistance` and `_geoRadius` as a sort expression.
 
 ### Error Definition:
 
@@ -344,15 +344,6 @@ HTTP Code: `400 Bad Request`
 ```
 
 - The `:reservedKeyword` is inferred when the message is generated.
-
-#### Variant: Trying to sort in descending order around a `_geoPoint`
-
-```json
-{
-    "message": "Sorting by descending order around a _geoPoint is not supported. Only ascending order is supported.",
-    ...
-}
-```
 
 #### Variant: Invalid syntax for the `sort`parameter
 
