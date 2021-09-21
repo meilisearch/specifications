@@ -9,7 +9,7 @@
 
 ### I. Summary
 
-The error format is updated to no longer contain unnecessary `error` prefix terms in the names of these attributes. e.g. `errorType`. The context is clear enough to understand that this is an `error` object.
+The error format is updated to no longer contain unnecessary `error` prefix terms in the names of these attributes. e.g. `errorType` becomes `type`. The context is clear enough to understand that this is an `error` object.
 
 This specification also serves as a reference point for the complete list of API errors that the user may encounter.
 
@@ -20,7 +20,7 @@ This specification also serves as a reference point for the complete list of API
 
 ### II. Motivation
 
-The main motivation is to stabilize the current `error` resource to a version that conforms to our API convention and thus allows future evolutions on a more solid base. This specification avoids adding unnecessary information in the error object's attribute names.
+The motivation is to stabilize the current `error` resource to a version that conforms to our API convention and thus allows future evolutions on a more solid base. This specification avoids adding unnecessary information in the error object's attribute names.
 
 The second motivation is to describe in an exhaustive way all the errors that the user may encounter during his use of the API. This list will be kept up to date.
 
@@ -57,14 +57,14 @@ e.g. 401 Unauthorized Response example
 | type            | description                                                                                       |
 |-----------------|---------------------------------------------------------------------------------------------------|
 | invalid_request | This type of error is usually due to a user input error. It is accompanied by an HTTP code `4xx`. |
-| internal        | Usually this type of error is returned because the search engine can't perform the operation due to machine or configuration constraints. It can be due to limits being reached such as the size of the disk, the size limit of an index etc. It can also be an unexpected error. It is accompanied by an HTTP code `5xx`.  |
+| internal        | Usually, this type of error is returned because the search engine can't operate due to machine or configuration constraints. It can be due to limits being reached, such as the size of the disk, the size limit of an index, etc. It can also be an unexpected error. It is accompanied by an HTTP code `5xx`.  |
 | auth   | This type of error is returned when it comes to authentication and authorization. It is accompanied by an HTTP code `4xx`. |
 
 ---
 
 #### Error list
 
-Following this format here is the exhaustive list of errors that can be returned by MeiliSearch to an API consumer. This list is updated as MeiliSearch evolves.
+Following this format, here is the exhaustive list of errors that MeiliSearch can return to an API consumer. This list is updated as MeiliSearch evolves.
 
 💡 Errors returned asynchronously in a `task` object do not include a definition of the HTTP code and mention Async instead of the HTTP code. An asynchronous error is returned in the payload of the update task.
 
@@ -141,7 +141,7 @@ HTTP Code: `400 Bad Request`
 
 ### Context
 
-This error happens when a user try to update an index primary key while the index already has one primary key.
+This error happens when a user tries to update an index primary key while the index already has one primary key.
 
 ### Error Definition
 
@@ -228,7 +228,7 @@ Async
 
 ### Context
 
-This error occurs when the user specifies a non-existent ranking rule, a malformed custom ranking rule in the settings payload or tries to specicy a custom ranking rule on the reserved keywords `_geo` and `_geoDistance`.
+This error occurs when the user specifies a non-existent ranking rule, a malformed custom ranking rule in the settings payload, or tries to specify a custom ranking rule on the reserved keywords `_geo` and `_geoDistance`.
 
 ### Error Definition
 
@@ -314,7 +314,7 @@ HTTP Code: `400 Bad Request`
 
 ### Context
 
-This error occurs at search time when there is a syntax error in the `sort` parameter, when an attribute expressed in the sort is not defined in the `sortableAttributes` list, sort at search time while the `sort` ranking rule is missing from the settings, or using a reserved keywords like `_geo`, `_geoDistance` and `_geoRadius` as a sort expression.
+This error occurs at search time when there is a syntax error in the `sort` parameter, when an attribute expressed in the sort is not defined in the `sortableAttributes` list, sort at search time while the `sort` ranking rule is missing from the settings, or using reserved keywords like `_geo`, `_geoDistance` and `_geoRadius` as a sort expression.
 
 ### Error Definition:
 
@@ -801,7 +801,7 @@ HTTP code `500 Internal Server Error`
 
 ### Context
 
-This error occurs when the host system partition has reached its maximum capacity and is no longer accepting writes.
+This error occurs when the host system partition has reached its maximum capacity and no longer accepts writes.
 
 ### Error Definition
 
@@ -822,7 +822,7 @@ HTTP Code: `500 Internal Server Error`
 
 ### Context
 
-This error occurs when the data.ms folder is in an inconsistent state. It can happen for various reasons. An .mdb file can be corrupted, the data.ms folder has been replaced by a file...
+This error occurs when the `data.ms` folder is in an inconsistent state. It can happen for various reasons. An .mdb file can be corrupted, the data.ms folder has been replaced by a file, etc.
 
 ### Error Definition
 
@@ -845,7 +845,7 @@ HTTP Code: `500 Internal Server Error`
 
 ### Context
 
-This error occurs when the route is protected and the `X-MEILI-API-KEY` header is not provided.
+This error occurs when the route is protected, and the `X-MEILI-API-KEY` header is not provided.
 
 ### Error Definition
 
@@ -866,7 +866,7 @@ HTTP Code: `401 Unauthorized`
 
 ### Context
 
-This error occurs when the route is protected and the value of the `X-MEILI-API-KEY` header does not allow access to the resource.
+This error occurs when the route is protected, and the value of the `X-MEILI-API-KEY` header does not allow access to the resource.
 
 ### Error Definition
 
@@ -874,7 +874,7 @@ HTTP Code: `403 Forbidden`
 
 ```json
 {
-    "message": "The provided API Key is invalid.",
+    "message": "The provided API key is invalid.",
     "code": "invalid_api_key",
     "type": "auth",
     "link": "https://docs.meilisearch.com/errors#invalid_api_key"
@@ -888,5 +888,5 @@ N/A
 
 ## 3. Future Possibilities
 
-- Add a `parameter` attribute in the `error` object to indicate which parameter of the request caused an error.
+- Add a `parameter` attribute in the `error` object to indicate which request parameter caused an error.
 - Add more specific error types. For example, explode internal errors into several distinct types.
