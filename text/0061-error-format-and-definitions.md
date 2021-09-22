@@ -260,6 +260,28 @@ Async
 
 - The `:reservedKeyword` is inferred when the message is generated.
 
+#### Variant: Specifying a custom ranking rule on reserved expression `_geoPoint`
+
+```json
+{
+    "message": ":reservedKeyword is a reserved keyword and thus can't be used as a ranking rule. :reservedKeyword can only be used for sorting at search time.",
+    ...
+}
+```
+
+- The `:reservedKeyword` is inferred when the message is generated.
+
+#### Variant: Specifying a custom ranking rule on reserved expression `_geoRadius`
+
+```json
+{
+    "message": ":reservedKeyword is a reserved keyword and thus can't be used as a ranking rule. :reservedKeyword can only be used for filtering at search time.",
+    ...
+}
+```
+
+- The `:reservedKeyword` is inferred when the message is generated.
+
 ---
 
 ## invalid_filter
