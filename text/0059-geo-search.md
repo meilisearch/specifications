@@ -245,7 +245,8 @@ This error is raised asynchronously when the user tries to specify an invalid ra
 
 - 🔴 Specifying an invalid ranking rule name raises an `invalid_ranking_rule` error. See `message` defined in the error definition part.
 - 🔴 Specifying a custom ranking rule with `_geo` or `_geoDistance` raises an `invalid_ranking_rule` error. The message is `:reservedKeyword is a reserved keyword and thus can't be used as a ranking rule.`.
-
+- 🔴 Specifying a custom ranking rule with `_geoPoint` raises an `invalid_ranking_rule` error. The message is `_geoPoint is a reserved keyword and thus can't be used as a ranking rule. _geoPoint can only be used for sorting at search time`.
+- 🔴 Specifying a custom ranking rule with `_geoRadius` raises an `invalid_ranking_rule` error. The message is `_geoRadius is a reserved keyword and thus can't be used as a ranking rule. _geoRadius can only be used for filtering at search time`.
 ---
 
 ### IV. Finalized Key Changes
