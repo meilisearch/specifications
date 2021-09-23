@@ -27,6 +27,7 @@ components:
   schemas:
     timestamp:
       type: string
+      description: An `ISO-8601` format for date/time/duration.
       example: '2019-11-20T09:40:33.711324Z'
     index:
       type: object
@@ -256,75 +257,86 @@ components:
         - exhaustiveNbHits
         - processingTimeMs
         - query
-    update:
+    task:
       type: object
       description: |
         MeiliSearch is an asynchronous API. It means that the API does not behave as you would typically expect when handling the request's responses.
 
         Some operations are put in a queue and will be executed in turn (asynchronously). In this case, the server response contains the identifier to track the execution of the operation.
 
-        [Learn More](https://docs.meilisearch.com/learn/advanced/asynchronous_updates.html).
+        [Learn More](https://docs.meilisearch.com/learn/advanced/asynchronous_tasks.html).
       additionalProperties: false
       examples:
-        - status: processed
-          updateId: 0
-          type:
-            name: DocumentAddition
-            number: 10
-          enqueuedAt: '2019-11-20T09:40:33.711324Z'
-          processedAt: '2019-11-20T09:40:33.711324Z'
-          duration: 5
+        - uid: 0
+          indexUid: movies
+          status: succeeded
+          type: documentsAddition
+          details:
+            numberOfDocuments: 10
+          duration: PT5S
+          enqueuedAt: '2021-01-01T09:39:00.000000Z'
+          startedAt: '2021-01-01T09:40:00.000000Z'
+          finishedAt: '2021-01-01T09:40:05.000000Z'
       properties:
+        uid:
+          type: integer
+          description: The unique sequential identifier of the task
+        indexUid:
+          type: string
+          description: The unique identifier of the index where this task is operated
         status:
           type: string
-          description: The status of the operation.
+          description: The status of the task
           enum:
             - enqueued
             - processing
-            - processed
+            - succeeded
             - failed
-          example: processed
-        updateId:
-          type: integer
-          description: The id of the update.
+          example: succeeded
         type:
+          type: string
+          description: The type of the task
+          enum:
+            - documentsAdditions
+            - documentsPartial
+            - documentsDeletion
+            - settingsUpdate
+            - clearAll
+        details:
           type: object
-          additionalProperties: false
-          required:
-            - name
-          description: Type object for the update task
+          description: Details information of the task payload.
           properties:
-            name:
-              type: string
-              description: Name of operation
-              example: DocumentAddition
-              enum:
-                - DocumentAddition
-                - Settings
-                - DocumentsDeletion
-                - ClearAll
-                - DocumentsPartial
-            number:
+            numberOfDocuments:
               type: integer
-              description: Number of documents impacted when the information can be given.
+              description: Number of documents impacted when the information can be given for the task.
             settings:
               $ref: '#/components/schemas/settings'
-        enqueuedAt:
-          $ref: '#/components/schemas/timestamp'
-        processedAt:
-          $ref: '#/components/schemas/timestamp'
-        duration:
-          type: number
-          description: The number of seconds taken to complete the operation.
         error:
+          description: Error object containing error details and context when a task has a failed status.
+          $ref: '#/components/schemas/error'
+        duration:
           type: string
-          description: |
-            A string describing [the error that occurred](https://docs.meilisearch.com/errors).
+          description: Total elasped time the engine was in processing state expressed as a `ISO-8601` duration format. Default is set to `null`
+          nullable: true
+        enqueuedAt:
+          description: Represent the date and time as a `ISO-8601` format when the task has been enqueued
+          $ref: '#/components/schemas/timestamp'
+        startedAt:
+          $ref: '#/components/schemas/timestamp'
+          description: Represent the date and time as a `ISO-8601` format when the task has been dequeued and started to be processed. Default is set to `null`
+          nullable: true
+        finishedAt:
+          $ref: '#/components/schemas/timestamp'
+          description: Represent the date and time as a `ISO-8601` format when the task has failed or succeeded. Default is set to `null`
+          nullable: true
       required:
+        - uid
+        - indexUid
         - status
-        - updateId
         - type
         - enqueuedAt
+        - startedAt
+        - finishedAt
     synonyms:
       type: object
       description: List of associated words treated similarly. A word associated to an array of word as synonyms.
@@ -524,10 +536,10 @@ components:
       required: true
       schema:
         type: any
-    updateId:
-      name: updateId
+    taskUid:
+      name: taskUid
       in: path
-      description: The update unique identifier
+      description: The task unique identifier
       required: true
       schema:
         type: number
@@ -666,16 +678,32 @@ components:
           schema:
             type: object
             properties:
-              updateId:
+              uid:
                 type: number
-                description: 'This `updateId` allows you to [track the current update](https://docs.meilisearch.com/reference/api/updates.html).'
+                description: 'This `uid` allows you to [track the current task](https://docs.meilisearch.com/reference/api/tasks.html).'
+              indexUid:
+                type: string
+                description: The unique identifier of the index where this task is operated
+              status:
+                type: string
+                description: The status of the task
+                example: enqueued
+              enqueuedAt:
+                $ref: '#/components/schemas/timestamp'
+                description: Represent the date and time as `ISO-8601` format when the task has been enqueued
             additionalProperties: false
             required:
-              - updateId
+              - uid
+              - indexUid
+              - status
+              - enqueuedAt
           examples:
             Example:
               value:
-                updateId: 1
+                uid: 0
+                indexUid: movies
+                status: enqueued
+                enqueuedAt: '2021-07-19T14:31:16.920473Z'
     '204':
       description: No Content
     '401':
@@ -731,9 +759,9 @@ tags:
       * A POST route: this is the preferred route when using API authentication, as it allows [preflight request](https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request) caching and better performances.
       * A GET route: the usage of this route is discouraged, unless you have good reason to do otherwise (specific caching abilities for example).
       Other than the differences mentioned above, the two routes are strictly equivalent.
-  - name: Updates
+  - name: Tasks
     description: |
-      The `updates` route gives information about the progress of the [asynchronous processes](https://docs.meilisearch.com/learn/advanced/asynchronous_updates.html).
+      The `tasks` route gives information about the progress of the [asynchronous tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_tasks.html).
   - name: Keys
     description: |
       Each instance of MeiliSearch has three keys: a master, a private, and a public. Each key has a given set of permissions on the API routes.
@@ -2229,14 +2257,14 @@ paths:
           description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
-  '/indexes/{indexUid}/updates':
+  '/indexes/{indexUid}/tasks':
     get:
-      operationId: indexes.updates.list
-      summary: Get all update status
+      operationId: indexes.tasks.list
+      summary: Get all tasks of an index
       description: |
-        Get the status of all [updates](https://docs.meilisearch.com/learn/advanced/asynchronous_updates.html) in a given [index](https://docs.meilisearch.com/learn/core_concepts/indexes.html).
+        Get all [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_tasks.html) of an [index](https://docs.meilisearch.com/learn/core_concepts/indexes.html).
       tags:
-        - Updates
+        - Tasks
       security:
         - apiKey: []
       responses:
@@ -2245,62 +2273,53 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/update'
+                type: object
+                properties:
+                  '':
+                    $ref: '#/components/schemas/task'
               examples:
                 Example:
                   value:
-                    - status: processed
-                      updateId: 0
-                      type:
-                        name: DocumentsAddition
-                        number: 6
-                      duration: 0.031
-                      enqueuedAt: '2021-07-05T12:59:17.035788Z'
-                      processedAt: '2021-07-05T12:59:17.067453Z'
-                    - status: processed
-                      updateId: 1
-                      type:
-                        name: DocumentsAddition
-                        number: 6
-                      duration: 0.043
-                      enqueuedAt: '2021-07-06T07:45:49.883179Z'
-                      processedAt: '2021-07-06T07:45:49.927102Z'
-                    - status: processed
-                      updateId: 2
-                      type:
-                        name: Settings
-                        settings:
-                          searchableAttributes:
-                            - name
-                            - genre
-                          stopWords:
-                            - of
-                            - the
-                          synonyms:
-                            HP:
-                              - Harry Potter
-                            harry potter:
-                              - HP
-                          distinctAttribute: name
-                      duration: 0.042
-                      enqueuedAt: '2021-07-19T15:21:44.984611Z'
-                      processedAt: '2021-07-19T15:21:45.027818Z'
+                    data:
+                      - uid: 1
+                        indexUid: movies
+                        status: succeeded
+                        type: documentsAddition
+                        details:
+                          numberOfDocuments: 79000
+                        duration: PT2S
+                        enqueuedAt: '2021-01-01T09:39:00.000000Z'
+                        startedAt: '2021-01-01T09:39:01.000000Z'
+                        finishedAt: '2021-01-01T09:39:02.000000Z'
+                      - uid: 0
+                        indexUid: movies
+                        status: failed
+                        type: documentsAddition
+                        details:
+                          numberOfDocuments: 67493
+                        error:
+                          message: missing primary key
+                          errorCode: missing_primary_key
+                          errorType: invalid_request_error
+                          errorLink: 'https://docs.meilisearch.com/errors#missing_primary_key'
+                        duration: PT5S
+                        enqueuedAt: '2021-01-01T09:38:00.000000Z'
+                        startedAt: '2021-01-01T09:38:02.000000Z'
+                        finishedAt: '2021-01-01T09:38:07.000000Z'
         '401':
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
-  '/indexes/{indexUid}/updates/{updateId}':
+  '/indexes/{indexUid}/tasks/{taskUid}':
     get:
-      operationId: indexes.updates.get
-      summary: Get an update status
+      operationId: indexes.tasks.get
+      summary: Get a task of an index
       description: |
-        Get the status of an [update](https://docs.meilisearch.com/learn/advanced/asynchronous_updates.html) in a given [index](https://docs.meilisearch.com/learn/core_concepts/indexes.html).
+        Get a [task](https://docs.meilisearch.com/learn/advanced/asynchronous_tasks.html) of an [index](https://docs.meilisearch.com/learn/core_concepts/indexes.html).
       tags:
-        - Updates
+        - Tasks
       security:
         - apiKey: []
       responses:
@@ -2309,15 +2328,27 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/update'
-              examples: {}
+                $ref: '#/components/schemas/task'
+              examples:
+                Example:
+                  value:
+                    uid: 1
+                    indexUid: movies
+                    status: succeeded
+                    type: DocumentsAddition
+                    details:
+                      numberOfDocuments: 79000
+                    duration: PT1S
+                    enqueuedAt: '2021-01-01T09:39:00.000000Z'
+                    startedAt: '2021-01-01T09:39:01.000000Z'
+                    finishedAt: '2021-01-01T09:39:02.000000Z'
         '401':
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
-      - $ref: '#/components/parameters/updateId'
+      - $ref: '#/components/parameters/taskUid'
   /keys:
     get:
       operationId: keys.get
@@ -2428,4 +2459,102 @@ paths:
                     pkgVersion: 0.23.0
         '401':
           $ref: '#/components/responses/401'
+  /tasks:
+    get:
+      summary: Get all tasks
+      description: 'Get all [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_tasks.html)'
+      tags:
+        - tasks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/task'
+              examples:
+                Example:
+                  value:
+                    data:
+                      - uid: 1
+                        indexUid: movies
+                        status: succeeded
+                        type: documentsAddition
+                        details:
+                          numberOfDocuments: 79000
+                        duration: PT1S
+                        enqueuedAt: '2021-01-01T09:39:00.000000Z'
+                        startedAt: '2021-01-01T09:39:01.000000Z'
+                        finishedAt: '2021-01-01T09:39:02.000000Z'
+                      - uid: 0
+                        indexUid: movies_Review
+                        status: failed
+                        type: documentsAddition
+                        details:
+                          numberOfDocuments: 67493
+                        error:
+                          message: missing primary key
+                          errorCode: missing_primary_key
+                          errorType: invalid_request_error
+                          errorLink: 'https://docs.meilisearch.com/errors#missing_primary_key'
+                        duration: PT5S
+                        enqueuedAt: '2021-01-01T09:38:00.000000Z'
+                        startedAt: '2021-01-01T09:38:02.000000Z'
+                        finishedAt: '2021-01-01T09:38:07.000000Z'
+      operationId: tasks.list
+      parameters: []
+      security:
+        - apiKey: []
+  '/tasks/:taskUid':
+    get:
+      summary: Get a task
+      description: 'Get a [task](https://docs.meilisearch.com/learn/advanced/asynchronous_tasks.html) '
+      tags:
+        - tasks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/task'
+              examples:
+                Example:
+                  value:
+                    uid: 1
+                    indexUid: movies
+                    status: succeeded
+                    type: documentsAddition
+                    details:
+                      numberOfDocuments: 79000
+                    duration: PT1S
+                    enqueuedAt: '2021-01-01T09:39:00.000000Z'
+                    startedAt: '2021-01-01T09:39:01.000000Z'
+                    finishedAt: '2021-01-01T09:39:02.000000Z'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                Example:
+                  value:
+                    message: 'Task :taskUid not found.'
+                    errorCode: task_not_found
+                    errorType: invalid_requet_error
+                    link: 'https://docs.meilisearch.com/errors/#task_not_found'
+      operationId: tasks.get
+      parameters: []
+      security:
+        - apiKey: []
+    parameters:
+      - $ref: '#/components/parameters/taskUid'
 security: []
