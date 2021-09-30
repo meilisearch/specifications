@@ -308,11 +308,22 @@ HTTP Code: `400 Bad Request`
 - The `:attribute` is inferred when the message is generated.
 - The `:filterableAttributes` is inferred when the message is generated. It contains the list of filterable attributes separated by a comma. `filterableAttribute1, filterableAttribute2, ...`
 
-#### Variant: Using `_geo`, `_geoDistance`, `_geoPoint` as a filter expression
+#### Variant: Using `_geoDistance` as a filter expression
 
 ```json
 {
     "message": ":reservedKeyword is a reserved keyword and thus can't be used as a filter expression.",
+    ...
+}
+```
+
+- The `:reservedKeyword` is inferred when the message is generated.
+
+#### Variant: Using `_geo` or `_geoPoint` as a filter expression
+
+```json
+{
+    "message": ":reservedKeyword is a reserved keyword and thus can't be used as a filter expression. Use the _geoRadius(latitude, longitude, distance) built-in rule to filter on _geo field coordinates.",
     ...
 }
 ```
@@ -356,11 +367,21 @@ HTTP Code: `400 Bad Request`
 - The `:attribute` is inferred when the message is generated.
 - The `:sortableAttributes` is inferred when the message is generated. It contains the list of sortable attributes separated by a comma. `sortableAttribute1, sortableAttribute2, ...`
 
-#### Variant: Using `_geo`, `_geoDistance`, `_geoRadius` as a sort expression
+#### Variant: Using `_geoDistance` as a sort expression
 
 ```json
 {
     "message": ":reservedKeyword is a reserved keyword and thus can't be used as a sort expression.",
+    ...
+}
+```
+
+- The `:reservedKeyword` is inferred when the message is generated.
+
+#### Variant: Using `_geo` or `_geoRadius` as a sort expression
+```json
+{
+    "message": ":reservedKeyword is a reserved keyword and thus can't be used as a sort expression. Use the _geoPoint(latitude, longitude) built-in rule to sort on _geo field coordinates.",
     ...
 }
 ```
