@@ -191,7 +191,7 @@ Async
 
 ```json
 {
-    "message": "Document doesn't have a :primaryKey attribute: :documentRepresentation",
+    "message": "Document doesn't have a :primaryKey attribute: :documentRepresentation.",
     "code": "missing_document_id",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#missing_document_id"
@@ -233,7 +233,6 @@ This error occurs when the user specifies a non-existent ranking rule, a malform
 ### Error Definition
 
 Async
-
 
 #### Variant: Sending an inexistent ranking rule or an invalid custom ranking rule syntax.
 
@@ -577,14 +576,6 @@ Http Code: `409 Conflict`
 
 ---
 
-## unsupported_media_type
-
-### Context
-
-This error code is generic. It should not be used. Instead, a clear and precise error code should be determined.
-
----
-
 ## invalid_content_type
 
 ### Context
@@ -715,7 +706,7 @@ HTTP Code: `500 Internal Server Error`
 
 ```json
 {
-    "message": "The creation of the :uid index has failed due to :reason",
+    "message": "The creation of the :uid index has failed due to :reason.",
     "code": "index_creation_failed",
     "type": "internal",
     "link": "https://docs.meilisearch.com/errors#index_creation_failed"
@@ -738,7 +729,7 @@ HTTP Code: `500 Internal Server Error`
 
 ```json
 {
-    "message": "The index :uid can't be accessed due to :reason",
+    "message": "The index :uid can't be accessed due to :reason.",
     "code": "index_not_accessible",
     "type": "internal",
     "link": "https://docs.meilisearch.com/errors#index_not_accessible"
