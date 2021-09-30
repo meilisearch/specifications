@@ -170,7 +170,9 @@ This error occurs when the `_geo` field of a document payload is not valid.
 ```
 
 - 🔴 Specifying parameters that do not conform to the `_geoRadius` signature causes the API to return an `invalid_filter` error. The error message should indicate how `_geoRadius` should be used. See `_geoRadius` built-in filter rule definition part.
-- 🔴 Using `_geo`, `_geoDistance`, `_geoPoint` in a filter expression cause the API to return an `invalid_filter` error. `message` should be `:reservedKeyword is a reserved keyword and thus can't be used as a filter expression.`
+- 🔴 Using `_geoDistance` in a filter expression causes the API to return an `invalid_filter` error. `message` should be `:reservedKeyword is a reserved keyword and thus can't be used as a filter expression.`
+- 🔴 Using `_geo` in a filter expression causes the API to return an `invalid_filter` error. `message` should be `:reservedKeyword is a reserved keyword and thus can't be used as a filter expression. Use the _geoRadius(latitude, longitude, distance) built-in rule to filter on _geo field coordinates.`
+- 🔴 Using `_geoPoint` in a filter expression causes the API to return an `invalid_filter` error. `message` should be `:reservedKeyword is a reserved keyword and thus can't be used as a filter expression. Use the _geoRadius(latitude, longitude, distance) built-in rule to filter on _geo field coordinates.`
 
 ---
 
@@ -205,7 +207,9 @@ Following the [`sort` specification feature](https://github.com/meilisearch/spec
 }
 ```
 - 🔴 Specifying parameters that do not conform to the `_geoPoint` signature causes the API to return an `invalid_sort` error. The error message should indicate how `_geoPoint` should be used. See `_geoPoint` built-in sort rule definition part.
-- 🔴 Using `_geo`, `_geoDistance`, `_geoRadius` in a sort expression cause the API to return an `invalid_sort` error. `message` should be `:reservedKeyword is a reserved keyword and thus can't be used as a sort expression.`
+- 🔴 Using `_geoDistance` in a sort expression causes the API to return an `invalid_sort` error. `message` should be `:reservedKeyword is a reserved keyword and thus can't be used as a sort expression.`
+- 🔴 Using `_geo` in a sort expression causes the API to return an `invalid_sort` error. `message` should be `:reservedKeyword is a reserved keyword and thus can't be used as a sort expression. Use the _geoPoint(latitude, longitude) built-in rule to sort on _geo field coordinates.`
+- 🔴 Using `_geoRadius` in a sort expression causes the API to return an `invalid_sort` error. `message` should be `:reservedKeyword is a reserved keyword and thus can't be used as a sort expression. Use the _geoPoint(latitude, longitude) built-in rule to sort on _geo field coordinates.`
 
 ---
 
