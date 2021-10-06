@@ -24,7 +24,7 @@ n/a
 
 ## 2. Technical Aspects
 
-When MeiliSearch indexes a document, it indexes several words position per field until a limit is reached.
+When MeiliSearch indexes a document, it indexes several word positions per field until a limit is reached.
 
 It is important to note that the limit is not strictly related to the number of words. Indeed, soft separators are also counted as `1` position while hard separators are counted as `8` positions.
 
