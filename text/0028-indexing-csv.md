@@ -42,6 +42,7 @@ While there's [RFC 4180](https://tools.ietf.org/html/rfc4180) as a try to add a 
 > Valid headline example: "id:number","title:string","author","price:number"
 
 - The following CSV lines will represent a document for MeiliSearch.
+- A `,` character must separate each cell.
 - A CSV value should be enclosed in double-quotes when it contains a comma character or a newline to escape it.
 - Using double-quotes to enclose fields, then a double-quote appearing inside a field must be escaped by preceding it with another double quote as mentioned in [RFC 4180](https://tools.ietf.org/html/rfc4180).
 - Float value should be written with a `.` character, like `3.14`.
@@ -239,3 +240,4 @@ n/a
 
 - Provide an interface in the future dashboard to upload CSV data into an index and optionally provide the headers types.
 - Set a payload limit directly related to the type of data format. Currently, the payload size is equivalent to [JSON payload size](https://docs.meilisearch.com/reference/features/configuration.html#payload-limit-size). Metrics on feature usage and configuration update should help to choose a better suited value for this type of data format.
+- Accepts more common CSV separators
