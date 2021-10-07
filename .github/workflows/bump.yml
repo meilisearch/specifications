@@ -3,9 +3,7 @@ name: Diff
 on:
   pull_request:
     branches:
-      - main
       - develop
-
 jobs:
   api-diff:
     if: ${{ github.event_name == 'pull_request' }}
