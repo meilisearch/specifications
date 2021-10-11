@@ -4,18 +4,18 @@ on:
   pull_request:
     branches:
       - main
+      - develop
 
 jobs:
   api-diff:
-    name: Check diff on Bump
+    if: ${{ github.event_name == 'pull_request' }}
+    name: Check API diff on Bump
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Comment pull request with API diff
-        uses: bump-sh/github-action@v1
+      - uses: actions/checkout@v2
+      - uses: bump-sh/github-action@v1
         with:
-          doc: 0772e3a7-2923-4d62-95e3-c4339c525968
+          doc: meilisearch
           token: ${{secrets.BUMP_TOKEN}}
           file: open-api.yaml
           command: diff
