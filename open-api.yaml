@@ -367,7 +367,7 @@ components:
         - attribute
         - sort
         - exactness
-        - release_date:asc
+        - 'release_date:asc'
       examples: []
     filterableAttributes:
       type: array
@@ -645,6 +645,15 @@ components:
 
         > warn
         > Attribute(s) used in `filter` should be declared as filterable attributes. See [Filtering and Faceted Search](https://docs.meilisearch.com/reference/features/filtering_and_faceted_search.html).
+    Content-Type:
+      name: Content-Type
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - application/json
+      description: Payload content-type
   responses:
     '202':
       description: Accepted
@@ -699,10 +708,7 @@ components:
       description: |-
         An API key is a token that you provide when making API calls. Include the token in a header parameter called `X-Meili-API-Key`.
 
-        Example: `X-Meili-API-Key: 123`
-
-        > info
-        > test
+        Example: `X-Meili-API-Key: 8fece4405662dd830e4cb265e7e047aab2e79672a760a12712d2a263c9003509`
   examples: {}
 tags:
   - name: Indexes
@@ -930,6 +936,8 @@ paths:
                     errorLink: 'https://docs.meilisearch.com/errors#invalid_index_uid'
         '401':
           $ref: '#/components/responses/401'
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
   '/indexes/{indexUid}':
     get:
       operationId: indexes.get
@@ -1002,6 +1010,8 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
     delete:
       operationId: indexes.remove
       summary: Delete Index
@@ -1088,6 +1098,17 @@ paths:
           $ref: '#/components/responses/401'
         '413':
           $ref: '#/components/responses/413'
+      parameters:
+        - schema:
+            type: string
+            enum:
+              - application/json
+              - text/csv
+              - application/x-ndjson
+          in: header
+          name: Content-Type
+          required: true
+          description: The content-type associated with the format to be indexed
     put:
       operationId: indexes.documents.upsert
       summary: Add or update documents
@@ -1131,6 +1152,17 @@ paths:
           $ref: '#/components/responses/401'
         '413':
           $ref: '#/components/responses/413'
+      parameters:
+        - schema:
+            type: string
+            enum:
+              - application/json
+              - text/csv
+              - application/x-ndjson
+          in: header
+          name: Content-Type
+          description: The content-type associated with the format to be indexed
+          required: true
     delete:
       operationId: indexes.documents.removeAll
       summary: Delete all documents
@@ -1182,6 +1214,8 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
     parameters:
       - $ref: '#/components/parameters/indexUid'
   '/indexes/{indexUid}/documents/{documentId}':
@@ -1414,6 +1448,8 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
     parameters:
       - $ref: '#/components/parameters/indexUid'
   '/indexes/{indexUid}/settings':
@@ -1471,7 +1507,7 @@ paths:
                       - attribute
                       - sort
                       - exactness
-                      - release_date:asc
+                      - 'release_date:asc'
                     distinctAttribute: ean13
                     searchableAttributes:
                       - title
@@ -1568,7 +1604,7 @@ paths:
                     - attribute
                     - sort
                     - exactness
-                    - release_date:asc
+                    - 'release_date:asc'
                   distinctAttribute: ean13
                   searchableAttributes:
                     - title
@@ -1588,6 +1624,8 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
     delete:
       operationId: indexes.settings.reset
       summary: Reset settings
@@ -1656,6 +1694,8 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
     delete:
       operationId: indexes.settings.synonyms.reset
       summary: Reset synonyms
@@ -1722,6 +1762,8 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
     delete:
       operationId: indexes.settings.sortable-attributes.reset
       summary: Reset sortable attributes
@@ -1795,6 +1837,8 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
     delete:
       operationId: indexes.settings.stopWords.reset
       summary: Reset stop-words
@@ -1864,6 +1908,8 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
     delete:
       operationId: indexes.settings.rankingRules.reset
       summary: Reset ranking rules
@@ -1938,6 +1984,8 @@ paths:
             schema:
               $ref: '#/components/schemas/filterableAttributes'
         description: ''
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
     delete:
       operationId: indexes.settings.filterableAttributes.reset
       summary: Reset Filterable Attributes
@@ -2003,6 +2051,8 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
     delete:
       operationId: indexes.settings.distinctAttribute.reset
       summary: Reset distinct attribute
@@ -2067,6 +2117,8 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
     delete:
       operationId: indexes.settings.searchableAttributes.reset
       summary: Reset searchable attributes
@@ -2131,6 +2183,8 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
     delete:
       operationId: indexes.settings.displayedAttributes.reset
       summary: Reset displayed attributes
@@ -2367,7 +2421,7 @@ paths:
                   value:
                     commitSha: b46889b5f0f2f8b91438a08a358ba8f05fc09fc1
                     commitDate: '2021-07-08'
-                    pkgVersion: 0.22.0
+                    pkgVersion: 0.23.0
         '401':
           $ref: '#/components/responses/401'
 security: []
