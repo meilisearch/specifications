@@ -3,6 +3,7 @@ name: Diff
 on:
   pull_request:
     branches:
+      - main
       - develop
 jobs:
   api-diff:
