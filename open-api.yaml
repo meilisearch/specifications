@@ -711,9 +711,9 @@ components:
           examples:
             Unauthorized:
               value:
-                message: You must have an authorization token
+                message: The X-MEILI-API-KEY header is missing.
                 code: missing_authorization_header
-                type: authentication_error
+                type: auth
                 link: 'https://docs.meilisearch.com/errors#missing_authorization_header'
     '413':
       description: Payload Too Large
@@ -724,9 +724,9 @@ components:
           examples:
             Payload Too Large:
               value:
-                message: Payload reached size limit.
+                message: The payload cannot exceed `:payloadSizeLimit`.
                 code: payload_too_large
-                type: invalid_request_error
+                type: invalid_request
                 link: 'https://docs.meilisearch.com/errors#payload_too_large'
   securitySchemes:
     apiKey:
@@ -845,9 +845,9 @@ paths:
                 Not Found:
                   value:
                     message: Dump `20201001-110357260` not found
-                    code: not_found
-                    type: invalid_request_error
-                    link: 'https://docs.meilisearch.com/errors#not_found'
+                    code: dump_not_found
+                    type: invalid_request
+                    link: 'https://docs.meilisearch.com/errors#dump_not_found'
     parameters:
       - schema:
           type: string
@@ -952,15 +952,15 @@ paths:
               examples:
                 Index already exists:
                   value:
-                    message: Index already exists.
+                    message: Index `:indexUid` already exists.
                     code: index_already_exists
-                    type: invalid_request_error
+                    type: invalid_request
                     link: 'https://docs.meilisearch.com/errors#index_already_exists'
                 Invalid Index Uid:
                   value:
-                    message: 'Index must have a valid uid; Index uid can be of type integer or string only composed of alphanumeric characters, hyphens (-) and underscores (_).'
+                    message: 'Index `:indexUid` is not a valid index uid. Index uid can be an integer or a string containing only alphanumeric characters, hyphens (-) and underscores (_).'
                     code: invalid_index_uid
-                    type: invalid_request_error
+                    type: invalid_request
                     link: 'https://docs.meilisearch.com/errors#invalid_index_uid'
         '401':
           $ref: '#/components/responses/401'
@@ -1030,10 +1030,10 @@ paths:
               examples:
                 Primary Key Already Present:
                   value:
-                    message: A primary key is already present. It's impossible to update it
-                    code: primary_key_already_present
-                    type: invalid_request_error
-                    link: 'https://docs.meilisearch.com/errors#primary_key_already_present'
+                    message: Index `:indexUid` already has a primary key.
+                    code: index_primary_key_already_exists
+                    type: invalid_request
+                    link: 'https://docs.meilisearch.com/errors#index_primary_key_already_exists'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2294,10 +2294,10 @@ paths:
                         details:
                           numberOfDocuments: 67493
                         error:
-                          message: missing primary key
-                          errorCode: missing_primary_key
-                          errorType: invalid_request_error
-                          errorLink: 'https://docs.meilisearch.com/errors#missing_primary_key'
+                          message: 'Document does not have a `:primaryKey` attribute: `:documentRepresentation`.'
+                          code: missing_document_id
+                          type: invalid_request
+                          link: 'https://docs.meilisearch.com/errors#missing_document_id'
                         duration: PT5S
                         enqueuedAt: '2021-01-01T09:38:00.000000Z'
                         startedAt: '2021-01-01T09:38:02.000000Z'
@@ -2494,10 +2494,10 @@ paths:
                         details:
                           numberOfDocuments: 67493
                         error:
-                          message: missing primary key
-                          errorCode: missing_primary_key
-                          errorType: invalid_request_error
-                          errorLink: 'https://docs.meilisearch.com/errors#missing_primary_key'
+                          message: 'Document does not have a `:primaryKey` attribute: `:documentRepresentation`.'
+                          code: missing_document_id
+                          type: invalid_request
+                          link: 'https://docs.meilisearch.com/errors#missing_document_id'
                         duration: PT5S
                         enqueuedAt: '2021-01-01T09:38:00.000000Z'
                         startedAt: '2021-01-01T09:38:02.000000Z'
@@ -2545,7 +2545,7 @@ paths:
                   value:
                     message: 'Task :taskUid not found.'
                     errorCode: task_not_found
-                    errorType: invalid_requet_error
+                    errorType: invalid_requet
                     link: 'https://docs.meilisearch.com/errors/#task_not_found'
       operationId: tasks.get
       parameters: []
