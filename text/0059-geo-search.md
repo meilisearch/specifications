@@ -47,6 +47,7 @@ According to our user feedback, the lack of a geosearch feature is mentioned as 
 
 > 💡 if `_geo` is found in the document payload, `lat` and `lng` are required.
 > 💡 `lat` and `lng` must be of float value.
+> 💡 `lat` and `lng` field type can be mixed. e.g. `lat` can be a string while `lng` is a number in the same `_geo` object.
 
 ##### **CSV Format**
 
