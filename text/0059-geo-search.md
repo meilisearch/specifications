@@ -42,11 +42,12 @@ According to our user feedback, the lack of a geosearch feature is mentioned as 
 
 - Name: `_geo`
 - Type: Object
-- Format: `{lat:float, lng:float}`
+- Format: `{lat:number|string, lng:number|string}`
 - Not required
 
 > 💡 if `_geo` is found in the document payload, `lat` and `lng` are required.
 > 💡 `lat` and `lng` must be of float value.
+> 💡 `lat` and `lng` field type can be mixed. e.g. `lat` can be a string while `lng` is a number in the same `_geo` object.
 
 ##### **CSV Format**
 
@@ -101,8 +102,8 @@ csv format example
         "brand": "F40 LM",
         "brand": "Ferrari",
         "_geo": {
-            "lat": 48.862725,
-            "lng": 2.287592
+            "lat": "48.862725",
+            "lng": "2.287592"
         }
     }
 ]
