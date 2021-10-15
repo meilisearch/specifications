@@ -8,13 +8,13 @@
 
 ### I. Summary
 
-This specification describes an exhaustive list of anonymous metrics collected by the MeiliSearch binary as well as all the tools we use. The specification must evolve as soon as a collection is added or removed. It also describes the behavior of the engine towards this data collection, the identification of a machine and the set of tools provided to the user to disable this data collection and demand a right to be forgotten about the collected data.
+This specification describes an exhaustive list of anonymous metrics collected by the MeiliSearch binary. It also described the tools we use regarding this collect. The specification must evolve as soon as a collection is added or removed. It also describes the behavior of the engine with respect to this data collection, the identification of a machine, and the information provided to the user to disable this data collection and send us a request to delete the collected data.
 
 ### II. Motivation
 
 At MeiliSearch our vision is to provide an easy to use search solution that meets the most important needs of our users. At all times, we strive to better understand our users and meet their expectations in the best possible way.
 
-Although we can gather needs and understand our users through several channels such as Github, Slack, surveys, interviews or roadmap votes, we realize that this is not enough to have a complete view of MeiliSearch usage and features adoption. By cross-referencing our product discovery phases with aggregated quantitative data, we want to make the product much better than what it is today. Our decision making will be able to take a step further and allow us to make a product that users love.
+Although we can gather needs and understand our users through several channels such as Github, Slack, surveys, interviews or roadmap votes, we realize that this is not enough to have a complete view of MeiliSearch usage and features adoption. By cross-referencing our product discovery phases with aggregated quantitative data, we want to make the product much better than what it is today. Our decision-making will be taken a step further to make a product that users love.
 
 ### III. Explanation
 
@@ -22,7 +22,7 @@ Although we can gather needs and understand our users through several channels s
 
 The metrics collected are non-sensitive, non-personal and do not identify an individual or a group of individuals using MeiliSearch. The data collected is secured and anonymized. We do not collect any data from the values stored in the documents.
 
-An email address has been created so that users can request the removal of their data. By providing us with the unique identifier generated for their MeiliSearch installation, we are able to remove the data from all the tools we describe below. Any questions regarding the management of the data collected should be sent to `privacy@meilisearch.com`
+An email address has been created so that users can request the removal of their data. By providing us with the unique identifier generated for their MeiliSearch installation, we can remove the data from all the tools we describe below. Any questions regarding the management of the data collected should be sent to `privacy@meilisearch.com`
 
 #### Tools
 
@@ -122,7 +122,7 @@ This property allows us to gather essential information to better understand on 
 | Property name | Description | Example |
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered for this API call. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
-| qp.primary_key   | The name of the field used as primary key if set, otherwise `null`. | `id` |
+| primary_key   | The name of the field used as primary key if set, otherwise `null`. | `id` |
 
 ---
 
@@ -134,7 +134,7 @@ This property allows us to gather essential information to better understand on 
 |---------------|-------------|---------|
 | user_agent    | Represents all the user-agents encountered on this endpoint during one hour. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
 | payload_type | Represents all the payload_type encountered on this endpoint during one hour. `json`/ `ndjson`/ `csv` | `csv` |
-| qp.primary_key   | The value of the `primaryKey`query parameter if encountered, otherwise `null`. | `id` |
+| primary_key   | The value of the `primaryKey`query parameter if encountered, otherwise `null`. | `id` |
 | index_creation | Does an index creation happened? | `false`|
 
 ---
@@ -237,9 +237,9 @@ The unique identifier of the instance remains displayed even if analytics are di
 
 #### User-Agent case
 
-The `User-Agent` header is tracked on the events listed below. Our offical SDKs/Integration should always contain `MeiliSearch` in their names.
+The `User-Agent` header is tracked on the events listed below. Our official SDKs/Integration should always contain `MeiliSearch` in their names.
 
-Each endpoint API tracked send the `User-Agent` as a `user_agent` event property as an array. If several values are contained in the `User-Agent` header they are split by the `;` character.
+Each endpoint API tracked sends the `User-Agent` as a `user_agent` event property as an array. If several values are contained in the `User-Agent` header, they are split by the `;` character.
 
 #### Identifying MeiliSearch installation
 
@@ -250,7 +250,7 @@ To uniquely identify instances, we generate a uuid at first launch if analytics 
 
 #### Segment Identify Call
 
-The `identify` method of Segment permits to identify an instance by sending a unique identifier and it's related instance properties. It group the information of a MeiliSearch binary such as `system`, `stats`, and `configuration` properties related below in this specification.
+The `identify` method of Segment permits identifying an instance by sending a unique identifier. It groups the information of a MeiliSearch binary such as `system`, `stats`, and general properties related below in this specification.
 
 #### Segment Track Call
 
@@ -264,11 +264,11 @@ This batch contains an identify payload and all tracked events that occurred dur
 
 #### Logging
 
-Errors when sending metrics to Segment should be silent. In general, the impact of data collection should be minimized as much as possible concerning performance and be entirely transparent for the user during its use.
+Errors occuring when sending metrics to Segment should be silent. In general, the impact of data collection should be minimized as much as possible concerning performance and be entirely transparent for the user during its use.
 
 #### Debug build
 
-In debug build, no telemetry are collected.
+In debug build, no analytics are collected.
 
 ## 3. Future possibilities
 n/a
