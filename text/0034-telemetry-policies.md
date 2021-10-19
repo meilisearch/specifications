@@ -137,7 +137,7 @@ This property allows us to gather essential information to better understand on 
 
 #### `Documents Searched POST`
 
-> The Documents Searched event is sent once an hour or when a batch reaches the maximum size of `500kb`. The event's properties are averaged over all search operations during that time so as not to track everything and generate unnecessary noise.
+> The Documents Searched event is sent once an hour or when a batch reaches the maximum size of `500kb`. The event's properties are averaged over all requests on `POST` - `/indexes/:indexUid/search`.
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
@@ -159,7 +159,7 @@ This property allows us to gather essential information to better understand on 
 
 #### `Documents Searched GET`
 
-> The Documents Searched event is sent once an hour or when a batch reaches the maximum size of `500kb`. The event's properties are averaged over all search operations during that time so as not to track everything and generate unnecessary noise.
+> The Documents Searched event is sent once an hour or when a batch reaches the maximum size of `500kb`. The event's properties are averaged over all requests on `GET` - `/indexes/:indexUid/search`.
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
@@ -199,7 +199,7 @@ This property allows us to gather essential information to better understand on 
 
 ## `Documents Added`
 
-> The Documents Added event is sent once an hour or when a batch reaches the maximum size of `500kb`. The event's properties are averaged over all POST `/documents` additions operations during that time to not track everything and generate unnecessary noise.
+> The Documents Added event is sent once an hour or when a batch reaches the maximum size of `500kb`. The event's properties are averaged over all requests on `POST` - `/indexes/:indexUid/documents`.
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
@@ -212,7 +212,7 @@ This property allows us to gather essential information to better understand on 
 
 ## `Documents Updated`
 
-> The Documents Updated event is sent once an hour or when a batch reaches the maximum size of `500kb`. The event's properties are averaged over all PUT `/documents` additions operations during that time to not track everything and generate unnecessary noise.
+> The Documents Updated event is sent once an hour or when a batch reaches the maximum size of `500kb`. The event's properties are averaged over all requests on `PUT` - `/indexes/:indexUid/documents`.
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
