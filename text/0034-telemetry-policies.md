@@ -50,13 +50,13 @@ This property allows us to gather essential information to better understand on 
 | system.disk_size | Total capacity of the biggest disk. Expressed in `Kb` | 336042103 |
 | system.server_provider | Users can tell us on which provider MeiliSearch is hosted by filling the `MEILI_SERVER_PROVIDER` env var. This is also filled by our providers deploy scripts. e.g. [GCP cloud-config.yaml](https://github.com/meilisearch/cloud-scripts/blob/56a7c2630c1a508e5ad0c0ba1d8cfeb8d2fa9ae0/scripts/providers/gcp/cloud-config.yaml#L33)| gcp |
 
-##### MeiliSearch Configuration
+##### MeiliSearch Configuration `context` and `infos`
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| app.version  | MeiliSearch version number. Sent in a `context` object instead of `properties` to match Amplitude requirement. | 0.23.0 |
-| env | `production` / `development` | `production` |
-| has_snapshot| Does the MeiliSearch instance has snapshot activated. | `true` |
+| context.app.version  | MeiliSearch version number. Sent in a `context` object instead of `properties` to match Amplitude requirement. | 0.23.0 |
+| infos.env | `production` / `development` | `production` |
+| infos.has_snapshot| Does the MeiliSearch instance has snapshot activated. | `true` |
 
 ##### MeiliSearch Statistics `stats`
 
