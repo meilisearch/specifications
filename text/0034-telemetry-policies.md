@@ -8,11 +8,11 @@
 
 ### I. Summary
 
-This specification describes an exhaustive list of anonymous metrics collected by the MeiliSearch binary. It also described the tools we use regarding this collect. The specification must evolve as soon as a collection is added or removed. It also describes the behavior of the engine with respect to this data collection, the identification of a machine, and the information provided to the user to disable this data collection and send us a request to delete the collected data.
+This specification describes an exhaustive list of anonymous metrics collected by the MeiliSearch binary. It also describes the tools we use for this collection and how we identify a Meilisearch instance.
 
 ### II. Motivation
 
-At MeiliSearch our vision is to provide an easy to use search solution that meets the most important needs of our users. At all times, we strive to better understand our users and meet their expectations in the best possible way.
+At MeiliSearch, our vision is to provide an easy-to-use search solution that meets the essential needs of our users. At all times, we strive to understand our users better and meet their expectations in the best possible way.
 
 Although we can gather needs and understand our users through several channels such as Github, Slack, surveys, interviews or roadmap votes, we realize that this is not enough to have a complete view of MeiliSearch usage and features adoption. By cross-referencing our product discovery phases with aggregated quantitative data, we want to make the product much better than what it is today. Our decision-making will be taken a step further to make a product that users love.
 
@@ -54,7 +54,7 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| version  | MeiliSearch version. | 0.23.0 |
+| app.version  | MeiliSearch version number. Sent in a `context` object instead of `properties` to match Amplitude requirement. | 0.23.0 |
 | env | `production` / `development` | `production` |
 | has_snapshot| Does the MeiliSearch instance has snapshot activated. | `true` |
 
@@ -75,17 +75,20 @@ This property allows us to gather essential information to better understand on 
 
 #### `Documents Searched POST`
 
-> The Documents Searched event is sent once an hour. The event's properties are averaged over all search operations during that time so as not to track everything and generate unnecessary noise.
+> The Documents Searched event is sent once an hour or when a batch reaches the maximum size of `500kb`. The event's properties are averaged over all search operations during that time so as not to track everything and generate unnecessary noise.
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents all the user-agents encountered on this endpoint during one hour.| ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
-| time.99th_response_time | The maximum latency, in `ms`, for the fastest 99% of requests. | `57ms` |
+| user_agent    | Represents all the user-agents encountered on this endpoint for a batch.| ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+| requests.99th_response_time | The maximum latency, in `ms`, for the fastest 99% of succeeded requests. | `57ms` |
+| requests.total_succeeded | The total number of succeeded search requests. | `3456` |
+| requests.total_failed | The total number of failed search requests. | `24` |
+| requests.total_received | The total number of received search requests. | `3480` |
 | sort.with_geoPoint | Does the built-in sort rule _geoPoint rule has been used? | `true` |
-| sort.avg_criteria_number | The average number of sort criteria among all the requests. | `2` |
+| sort.avg_criteria_number | The average number of sort criteria among all the requests containing the `sort` parameter. `"sort": []` equals to `0` while not sending `sort` does not influence the average. | `2` |
 | filter.with_geoRadius | Does the built-in filter rule _geoRadius has been used? | `false` |
-| filter.avg_criteria_number | The average number of filter criteria among all the requests. | `4` |
-| filter.most_used_syntax | The most used filter syntax among all the requests. `string` / `array` / `mixed` | `mixed` |
+| filter.avg_criteria_number | The average number of filter criteria among all the requests containing the `filter` parameter. `"filter": []` equals to `0` while not sending `filter` does not influence the average. | `4` |
+| filter.most_used_syntax | The most used filter syntax among all the requests containing the requests containing the `filter` parameter. `string` / `array` / `mixed` | `mixed` |
 | q.avg_terms_number | The average number of terms for the `q` parameter among all requests. | `5` |
 | pagination.max_limit | The maximum limit encountered among all requests. | `20` |
 | pagination.max_offset | The maxium offset encountered among all requests. | `1000` |
@@ -94,20 +97,24 @@ This property allows us to gather essential information to better understand on 
 
 #### `Documents Searched GET`
 
-> The Documents Searched event is sent once an hour. The event's properties are averaged over all search operations during that time so as not to track everything and generate unnecessary noise.
+> The Documents Searched event is sent once an hour or when a batch reaches the maximum size of `500kb`. The event's properties are averaged over all search operations during that time so as not to track everything and generate unnecessary noise.
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents all the user-agents encountered on this endpoint during one hour | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
-| time.99th_response_time | The maximum latency, in `ms`, for the fastest 99% of requests. | `57ms` |
+| user_agent    | Represents all the user-agents encountered on this endpoint for a batch.| ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+| requests.99th_response_time | The maximum latency, in `ms`, for the fastest 99% of succeeded requests. | `57ms` |
+| requests.total_succeeded | The total number of succeeded search requests. | `3456` |
+| requests.total_failed | The total number of failed search requests. | `24` |
+| requests.total_received | The total number of received search requests. | `3480` |
 | sort.with_geoPoint | Does the built-in sort rule _geoPoint rule has been used? | `true` |
-| sort.avg_criteria_number | The average number of sort criteria among all the requests | `2` |
+| sort.avg_criteria_number | The average number of sort criteria among all the requests containing the `sort` parameter. `"sort": []` equals to `0` while not sending `sort` does not influence the average. | `2` |
 | filter.with_geoRadius | Does the built-in filter rule _geoRadius has been used? | `false` |
-| filter.avg_criteria_number | The average number of filter criteria among all the requests | `4` |
-| filter.most_used_syntax | The most used filter syntax among all the requests. `string` / `array` / `mixed` | `mixed` |
+| filter.avg_criteria_number | The average number of filter criteria among all the requests containing the `filter` parameter. `"filter": []` equals to `0` while not sending `filter` does not influence the average. | `4` |
+| filter.most_used_syntax | The most used filter syntax among all the requests containing the requests containing the `filter` parameter. `string` / `array` / `mixed` | `mixed` |
 | q.avg_terms_number | The average number of terms for the `q` parameter among all requests. | `5` |
 | pagination.max_limit | The maximum limit encountered among all requests. | `20` |
 | pagination.max_offset | The maxium offset encountered among all requests. | `1000` |
+
 ---
 
 ## `Index Created`
@@ -115,7 +122,7 @@ This property allows us to gather essential information to better understand on 
 | Property name | Description | Example |
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered for this API call. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
-| primary_key   | The name of the field used as primary key if set, otherwise `null`. | `id` |
+| primary_key   | The field's name used as a primary key if set, otherwise `null`. | `id` |
 ---
 
 ## `Index Updated`
@@ -123,18 +130,18 @@ This property allows us to gather essential information to better understand on 
 | Property name | Description | Example |
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered for this API call. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
-| primary_key   | The name of the field used as primary key if set, otherwise `null`. | `id` |
+| primary_key   | The field's name used as a primary key if set, otherwise `null`. | `id` |
 
 ---
 
 ## `Documents Added`
 
-> The Documents Added event is sent once an hour. The event's properties are averaged over all POST `/documents` additions operations during that time to not track everything and generate unnecessary noise.
+> The Documents Added event is sent once an hour or when a batch reaches the maximum size of `500kb`. The event's properties are averaged over all POST `/documents` additions operations during that time to not track everything and generate unnecessary noise.
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents all the user-agents encountered on this endpoint during one hour. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
-| payload_type | Represents all the payload_type encountered on this endpoint during one hour. `json`/ `ndjson`/ `csv` | [`csv`, `json`] |
+| user_agent    | Represents all the user-agents encountered on this endpoint for a batch. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+| payload_type | Represents all the payload_type encountered on this endpoint for a batch. `json`/ `ndjson`/ `csv` | [`csv`, `json`] |
 | primary_key   | The value of the `primaryKey`query parameter if encountered, otherwise `null`. | `id` |
 | index_creation | Does an index creation happened? | `false`|
 
@@ -142,12 +149,12 @@ This property allows us to gather essential information to better understand on 
 
 ## `Documents Updated`
 
-> The Documents Updated event is sent once an hour. The event's properties are averaged over all PUT `/documents` additions operations during that time to not track everything and generate unnecessary noise.
+> The Documents Updated event is sent once an hour or when a batch reaches the maximum size of `500kb`. The event's properties are averaged over all PUT `/documents` additions operations during that time to not track everything and generate unnecessary noise.
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents all the user-agents encountered on this endpoint during one hour. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
-| payload_type | Represents all the payload_type encountered on this endpoint during one hour. `json`/ `ndjson`/ `csv` | `csv` |
+| user_agent    | Represents all the user-agents encountered on this endpoint for a batch. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+| payload_type | Represents all the payload_type encountered on this endpoint for a batch. `json`/ `ndjson`/ `csv` | `csv` |
 | primary_key   | The value of the `primaryKey`query parameter if encountered, otherwise `null`. | `id` |
 | index_creation | Does an index creation happened? | `false`|
 
@@ -194,6 +201,13 @@ This property allows us to gather essential information to better understand on 
 | filterable_attributes.total   | Number of filterable attributes. | `3` |
 | filterable_attributes.has_geo | Indicate if `_geo` is set as a filterable attribute. | `false`|
 
+## `SearchableAttributes Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+| searchable_attributes.total   | Number of searchable attributes. | `3` |
+
 ## `Dump Created`
 
 | Property name | Description | Example |
@@ -216,21 +230,15 @@ Analytics are enabled by default while leaving the option for users to disable i
 >
 > Instance uuid: ":uuidGeneratedAtFirstLaunch"
 
-**Message displayed on the CLI at launch if analytics have been disabled but previously enabled**
+**Message displayed on the CLI at launch if analytics are disabled**
 
-The unique identifier of the instance remains displayed even if analytics are disabled so that it does not reactivate the analytics to obtain it after having stopped it. The user can still ask us to remove its data previously collected by giving us his `Instance uuid`.
+The unique identifier of the instance remains displayed even if analytics are disabled so that it does not reactivate the analytics to obtain it after having stopped it. The user can still ask us to remove the data previously collected by giving us his `Instance uuid`.
 
 > Thank you for using MeiliSearch!
 >
 > Anonymous telemetry:	"Disabled"
 >
 > Instance uuid: ":uuidGeneratedAtFirstLaunch"
-
-**Message displayed on the CLI at launch if analytics have always been disabled**
-
-> Thank you for using MeiliSearch!
->
-> Anonymous telemetry:	"Disabled"
 
 ## 2. Technical Aspects
 
@@ -255,17 +263,17 @@ The `identify` method of Segment permits identifying an instance by sending a un
 
 #### Segment Track Call
 
-The `track` calls of Segment allow to track the events passed on the instance.
+The `track` calls of Segment allow tracking the events passed on the instance.
 
 #### Batching
 
-A batch is sent every hour to avoid sending analytics in real time and preserve network exchanges.
+A batch is sent every hour or when it reaches the maximum size of `500Kb` to avoid sending analytics in real-time and preserve network exchanges.
 
 This batch contains an identify payload and all tracked events that occurred during this hour.
 
 #### Logging
 
-Errors occuring when sending metrics to Segment should be silent. In general, the impact of data collection should be minimized as much as possible concerning performance and be entirely transparent for the user during its use.
+Errors occurring when sending metrics to Segment should be silent. In general, the impact of data collection should be minimized as much as possible concerning performance and be entirely transparent for the user during its use.
 
 #### Debug build
 
