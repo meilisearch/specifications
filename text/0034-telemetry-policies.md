@@ -22,7 +22,8 @@ Although we can gather needs and understand our users through several channels s
 
 The metrics collected are non-sensitive, non-personal and do not identify an individual or a group of individuals using MeiliSearch. The data collected is secured and anonymized. We do not collect any data from the values stored in the documents.
 
-An email address has been created so that users can request the removal of their data. By providing us with the unique identifier generated for their MeiliSearch installation, we can remove the data from all the tools we describe below. Any questions regarding the management of the data collected should be sent to `privacy@meilisearch.com`
+We, the MeiliSearch team, provide an email address so that users can request the removal of their data: privacy@meilisearch.com.<br>
+Thanks to the unique identifier generated for their MeiliSearch installation (`Instance uuid` when launching MeiliSearch), we can remove the corresponding data from all the tools we describe below. Any questions regarding the management of the data collected can be sent to the email address as well.
 
 #### Tools
 
@@ -133,7 +134,7 @@ This property allows us to gather essential information to better understand on 
 | Property name | Description | Example |
 |---------------|-------------|---------|
 | user_agent    | Represents all the user-agents encountered on this endpoint during one hour. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
-| payload_type | Represents all the payload_type encountered on this endpoint during one hour. `json`/ `ndjson`/ `csv` | `csv` |
+| payload_type | Represents all the payload_type encountered on this endpoint during one hour. `json`/ `ndjson`/ `csv` | [`csv`, `json`] |
 | primary_key   | The value of the `primaryKey`query parameter if encountered, otherwise `null`. | `id` |
 | index_creation | Does an index creation happened? | `false`|
 
@@ -237,7 +238,7 @@ The unique identifier of the instance remains displayed even if analytics are di
 
 #### User-Agent case
 
-The `User-Agent` header is tracked on the events listed below. Our official SDKs/Integration should always contain `MeiliSearch` in their names.
+The `User-Agent` header is tracked on the events listed below. Our official SDKs/integrations should always contain `MeiliSearch` in their names.
 
 Each endpoint API tracked sends the `User-Agent` as a `user_agent` event property as an array. If several values are contained in the `User-Agent` header, they are split by the `;` character.
 
