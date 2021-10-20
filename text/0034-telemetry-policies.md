@@ -61,18 +61,18 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 
 | Metric name                             | Description                                             | Example           | Triggered by |
 |-----------------------------------------|---------------------------------------------------------|-------------------|--------------|
-| `context.app.version`                   | MeiliSearch version number                              | 0.23.0            | `Launched` and every hour |
-| `infos.env`                             | MeiliSearch env                                         | production        | `Launched` and every hour |
-| `infos.has_snapshot`                    | Does the MeiliSearch instance has snapshot activated?   | true              | `Launched` and every hour |
-| `system.distribution`                   | On which distribution MeiliSearch is launched?          | Arch Linux        | `Launched` and every hour |
-| `system.kernel_version`                 | On which kernel version MeiliSearch is launched?        | 5.14.10           | `Launched` and every hour |
-| `system.cores`                          | How many cores does the machine have?                   | 24                | `Launched` and every hour |
-| `system.ram_size`                       | Total capacity of the machine's RAM. Expressed in `Kb`. | 16777216          | `Launched` and every hour |
-| `system.disk_size`                      | Total capacity of the biggest disk. Expressed in `Kb`.  | 1048576000         | `Launched` and every hour |
-| `system.server_prodiver`                | Users can tell us on which provider MeiliSearch is hosted by filling the `MEILI_SERVER_PROVIDER` env var. This is also filled by our providers deploy scripts. e.g. [GCP cloud-config.yaml](https://github.com/meilisearch/cloud-scripts/blob/56a7c2630c1a508e5ad0c0ba1d8cfeb8d2fa9ae0/scripts/providers/gcp/cloud-config.yaml#L33)                                                        | gcp               | `Launched` and every hour |
-| `stats.database_size`                   | Database size. Expressed in `Kb`.                       | 2621440           | `Launched` and every hour |
-| `stats.indexes_number`                  | Number of indexes                                       | 2                 | `Launched` and every hour |
-| `stats.start_since_days`                | How many days ago was the instance launched?            | 365               | `Launched` and every hour |
+| `context.app.version`                   | MeiliSearch version number                              | 0.23.0            | Every hour |
+| `infos.env`                             | MeiliSearch env                                         | production        | Every hour |
+| `infos.has_snapshot`                    | Does the MeiliSearch instance has snapshot activated?   | true              | Every hour |
+| `system.distribution`                   | On which distribution MeiliSearch is launched?          | Arch Linux        | Every hour |
+| `system.kernel_version`                 | On which kernel version MeiliSearch is launched?        | 5.14.10           | Every hour |
+| `system.cores`                          | How many cores does the machine have?                   | 24                | Every hour |
+| `system.ram_size`                       | Total capacity of the machine's RAM. Expressed in `Kb`. | 16777216          | Every hour |
+| `system.disk_size`                      | Total capacity of the biggest disk. Expressed in `Kb`.  | 1048576000         | Every hour |
+| `system.server_prodiver`                | Users can tell us on which provider MeiliSearch is hosted by filling the `MEILI_SERVER_PROVIDER` env var. This is also filled by our providers deploy scripts. e.g. [GCP cloud-config.yaml](https://github.com/meilisearch/cloud-scripts/blob/56a7c2630c1a508e5ad0c0ba1d8cfeb8d2fa9ae0/scripts/providers/gcp/cloud-config.yaml#L33)                                                        | gcp               | Every hour |
+| `stats.database_size`                   | Database size. Expressed in `Kb`.                       | 2621440           | Every hour |
+| `stats.indexes_number`                  | Number of indexes                                       | 2                 | Every hour |
+| `stats.start_since_days`                | How many days ago was the instance launched?            | 365               | Every hour |
 | `user_agent`                            | User-agent header encountered for an API call or API calls in the aggregated events. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `Dump Created` |
 | `requests.99th_response_time`           | The maximum latency, for the fastest 99% of succeeded requests in the aggregated events. | `57ms`    | `Documents Searched POST`, `Documents Searched GET`|
 | `requests.total_succeeded`              | The total number of succeeded search requests in the aggregated events. | 3456 | `Documents Searched POST`, `Documents Searched GET` |
