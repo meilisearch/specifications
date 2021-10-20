@@ -45,15 +45,15 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | Launched   | Occurs when MeiliSearch is launched the first time. |
 | Documents Searched POST | Aggregated event on all received requests via the `POST` - `indexes/:indexUid/search` route during one hour or until a batch size reaches `500Kb`. |
 | Documents Searched GET | Aggregated event on all received requests via the `GET` - `/indexes/:indexUid/search` route during one hour or until a batch size reaches `500Kb`. |
-| Documents Added | Aggregated event on all received requests via the `POST` - /indexes/:indexUid/documents` route during one hour or until a batch size reaches `500Kb`. |
-| Documents Updated | Aggregated event on all received requests via the `PUT` - /indexes/:indexUid/documents` route during one hour or until a batch size reaches `500Kb`. |
+| Documents Added | Aggregated event on all received requests via the `POST` - `/indexes/:indexUid/documents` route during one hour or until a batch size reaches `500Kb`. |
+| Documents Updated | Aggregated event on all received requests via the `PUT` - `/indexes/:indexUid/documents` route during one hour or until a batch size reaches `500Kb`. |
 | Index Created | Occurs when an index is created via `POST` - `/indexes`. |
 | Index Updated | Occurs when an index is updated via `PUT` - `/indexes/:indexUid`. |
 | Settings Updated | Occurs when the settings are updated via `POST` - `/indexes/:indexUid/settings`. |
-| SearchableAttributes Updated | Occurs when the settings are updated via `POST` - `/indexes/:indexUid/settings/searchable-attributes`. |
-| RankingRules Updated | Occurs when the settings are updated via `POST` - `/indexes/:indexUid/settings/ranking-rules`. |
-| FilterableAttributes Updated | Occurs when the settings are updated via `POST` - `/indexes/:indexUid/settings/filterable-attributes`. |
-| SortableAttributes Updated | Occurs when the settings are updated via `POST` - `/indexes/:indexUid/settings/sortable-attributes`. |
+| SearchableAttributes Updated | Occurs when searchable attributes are updated via `POST` - `/indexes/:indexUid/settings/searchable-attributes`. |
+| RankingRules Updated | Occurs when ranking rules are updated via `POST` - `/indexes/:indexUid/settings/ranking-rules`. |
+| FilterableAttributes Updated | Occurs when filterable attributes are updated via `POST` - `/indexes/:indexUid/settings/filterable-attributes`. |
+| SortableAttributes Updated | Occurs when sortable attributes are updated via `POST` - `/indexes/:indexUid/settings/sortable-attributes`. |
 | Dump Created | Occurs when a dump is created via `POST` - `/dumps`. |
 ----
 
@@ -63,37 +63,37 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 |-----------------------------------------|---------------------------------------------------------|-------------------|--------------|
 | `context.app.version`                   | MeiliSearch version number                              | 0.23.0            | Every hour |
 | `infos.env`                             | MeiliSearch env                                         | production        | Every hour |
-| `infos.has_snapshot`                    | Does the MeiliSearch instance has snapshot activated?   | true              | Every hour |
-| `system.distribution`                   | On which distribution MeiliSearch is launched?          | Arch Linux        | Every hour |
-| `system.kernel_version`                 | On which kernel version MeiliSearch is launched?        | 5.14.10           | Every hour |
-| `system.cores`                          | How many cores does the machine have?                   | 24                | Every hour |
-| `system.ram_size`                       | Total capacity of the machine's RAM. Expressed in `Kb`. | 16777216          | Every hour |
-| `system.disk_size`                      | Total capacity of the biggest disk. Expressed in `Kb`.  | 1048576000         | Every hour |
-| `system.server_prodiver`                | Users can tell us on which provider MeiliSearch is hosted by filling the `MEILI_SERVER_PROVIDER` env var. This is also filled by our providers deploy scripts. e.g. [GCP cloud-config.yaml](https://github.com/meilisearch/cloud-scripts/blob/56a7c2630c1a508e5ad0c0ba1d8cfeb8d2fa9ae0/scripts/providers/gcp/cloud-config.yaml#L33)                                                        | gcp               | Every hour |
-| `stats.database_size`                   | Database size. Expressed in `Kb`.                       | 2621440           | Every hour |
+| `infos.has_snapshot`                    | `true` if snapshots are activated, otherwise `false`    | true              | Every hour |
+| `system.distribution`                   | Distribution on which MeiliSearch is launched           | Arch Linux        | Every hour |
+| `system.kernel_version`                 | Kernel version on which MeiliSearch is launched         | 5.14.10           | Every hour |
+| `system.cores`                          | Number of cores                                         | 24                | Every hour |
+| `system.ram_size`                       | Total RAM capacity. Expressed in `Kb`                   | 16777216          | Every hour |
+| `system.disk_size`                      | Total capacity of the largest disk. Expressed in `Kb`   | 1048576000        | Every hour |
+| `system.server_prodiver`                | Users can tell us on which provider MeiliSearch is hosted by filling the `MEILI_SERVER_PROVIDER` env var. This is also filled by our cloud deploy scripts, e.g. [GCP cloud-config.yaml](https://github.com/meilisearch/cloud-scripts/blob/56a7c2630c1a508e5ad0c0ba1d8cfeb8d2fa9ae0/scripts/providers/gcp/cloud-config.yaml#L33)                                                                              | gcp               | Every hour |
+| `stats.database_size`                   | Database size. Expressed in `Kb`                        | 2621440           | Every hour |
 | `stats.indexes_number`                  | Number of indexes                                       | 2                 | Every hour |
-| `stats.start_since_days`                | How many days ago was the instance launched?            | 365               | Every hour |
-| `user_agent`                            | User-agent header encountered for an API call or API calls in the aggregated events. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `Dump Created` |
-| `requests.99th_response_time`           | The maximum latency, for the fastest 99% of succeeded requests in the aggregated events. | `57ms`    | `Documents Searched POST`, `Documents Searched GET`|
-| `requests.total_succeeded`              | The total number of succeeded search requests in the aggregated events. | 3456 | `Documents Searched POST`, `Documents Searched GET` |
-| `requests.total_failed`                 | The total number of failed search requests in the aggregated events.    | 24   | `Documents Searched POST`, `Documents Searched GET` |
-| `requests.total_received`               | The total number of received search requests in the aggregated events.  | 3480 | `Documents Searched POST`, `Documents Searched GET` |
-| `sort.with_geoPoint`                    | Does the built-in sort rule _geoPoint rule has been used in the aggregated events? | true | `Documents Searched POST`, `Documents Searched GET` |
-| `sort.avg_criteria_number`              | The average number of sort criteria among all the requests containing the `sort` parameter in the aggregated events. | 2 | `Documents Searched POST`, `Documents Searched GET` |
-| `filter.with_geoRadius`                 | Does the built-in filter rule _geoRadius has been used in the aggregated events? | false | `Documents Searched POST`, `Documents Searched GET` |
-| `filter.most_used_syntax`               | The most used filter syntax among all the requests containing the requests containing the `filter` parameter in the aggregated events. | string | `Documents Searched POST`, `Documents Searched GET` |
-| `q.avg_terms_number`                    | The average number of terms for the `q` parameter among all requests in the aggregated events. | 5 | `Documents Searched POST`, `Documents Searched GET` |
-| `pagination.max_limit`                  | The maximum limit encountered among all requests in the aggregated events. | 60 | `Documents Searched POST`, `Documents Searched GET` |
-| `pagination.max_offset`                 | The maxium offset encountered among all requests in the aggregated events. | 1000 | `Documents Searched POST`, `Documents Searched GET` |
-| `primary_key`                           | The field or query parameter name used for primary key if set, otherwise `null` | id | `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`|
-| `payload_type`                          | Represents all the payload_type encountered among all requests in the aggregated events. | ["csv", "json"] | `Documents Added`, `Documents Updated` |
-| `index_creation`                        | Does an index creation happened among all requests in the aggregated events? | true | `Documents Added`, `Documents Updated` |
+| `stats.start_since_days`                | Number of days since instance was launched              | 365               | Every hour |
+| `user_agent`                            | User-agent header encountered during one or more API calls | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `Dump Created` |
+| `requests.99th_response_time`           | Highest latency from among the fastest 99% of successful search requests | 57ms    | `Documents Searched POST`, `Documents Searched GET`|
+| `requests.total_succeeded`              | Total number of successful search requests in this batch | 3456 | `Documents Searched POST`, `Documents Searched GET` |
+| `requests.total_failed`                 | Total number of failed search requests in this batch    | 24   | `Documents Searched POST`, `Documents Searched GET` |
+| `requests.total_received`               | Total number of received search requests in this batch  | 3480 | `Documents Searched POST`, `Documents Searched GET` |
+| `sort.with_geoPoint`                    | `true` if the sort rule `_geoPoint` was used in this batch, otherwise `false` | true | `Documents Searched POST`, `Documents Searched GET` |
+| `sort.avg_criteria_number`              | Average number of sort criteria among all requests containing the `sort` parameter in this batch | 2 | `Documents Searched POST`, `Documents Searched GET` |
+| `filter.with_geoRadius`                 | `true` if the filter rule `_geoRadius` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
+| `filter.most_used_syntax`               | Most used filter syntax among all requests containing the `filter` parameter in this batch | string | `Documents Searched POST`, `Documents Searched GET` |
+| `q.avg_terms_number`                    | Average number of terms given for the `q` parameter in this batch | 5 | `Documents Searched POST`, `Documents Searched GET` |
+| `pagination.max_limit`                  | Highest value given for the `limit` parameter in this batch | 60 | `Documents Searched POST`, `Documents Searched GET` |
+| `pagination.max_offset`                 | Highest value given for the `offset` parameter in this batch | 1000 | `Documents Searched POST`, `Documents Searched GET` |
+| `primary_key`                           | Value given for the `primaryKey` parameter if used, otherwise `null` | id | `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`|
+| `payload_type`                          | All `payload_type` encountered in this batch | ["csv", "json"] | `Documents Added`, `Documents Updated` |
+| `index_creation`                        | `true` if a document addition or update request triggered index creation in this batch, otherwise `false` | true | `Documents Added`, `Documents Updated` |
 | `ranking_rules.sort_position`           | Position of the `sort` ranking rule | 5 | `Settings Updated`, `Ranking Rules Updated` |
-| `sortable_attributes.total`             | Number of sortable attributes. | 3 | `Settings Updated`, `SortableAttributes Updated`|
-| `sortable_attributes.has_geo`           | Indicate if `_geo` is set as a sortable attribute. | true | `Settings Updated`, `SortableAttributes Updated` |
-| `filterable_attributes.total`           | Number of filterable attributes. | 3 | `Settings Updated`, `FilterableAttributes Updated` |
-| `filterable_attributes.has_geo`         | Indicate if `_geo` is set as a filterable attribute. | false | `Settings Updated`, `FilterableAttributes Updated`|
-| `searchable_attributes.total`           | Number of searchable attributes. | 4 | `Settings Updated`, `SearchableAttributes Update` |
+| `sortable_attributes.total`             | Number of sortable attributes | 3 | `Settings Updated`, `SortableAttributes Updated`|
+| `sortable_attributes.has_geo`           | `true` if `_geo` is set as a sortable attribute, otherwise `false` | true | `Settings Updated`, `SortableAttributes Updated` |
+| `filterable_attributes.total`           | Number of filterable attributes | 3 | `Settings Updated`, `FilterableAttributes Updated` |
+| `filterable_attributes.has_geo`         | `true` if `_geo` is set as a filterable attribute, otherwise `false` | false | `Settings Updated`, `FilterableAttributes Updated`|
+| `searchable_attributes.total`           | Number of searchable attributes | 4 | `Settings Updated`, `SearchableAttributes Update` |
 
 ----
 
