@@ -203,6 +203,29 @@ Async
 
 ---
 
+## invalid_document_id
+
+### Context
+
+This error occurs when the value of a document identifier does not meet the requirements of the engine.
+
+### Error Definition
+
+Async
+
+```json
+{
+    "message": "Document identifier :documentId is invalid. A document identifier can be of type integer or string, only composed of alphanumeric characters (a-z A-Z 0-9), hyphens (-) and underscores (_).",
+    "code": "invalid_document_id",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_document_id"
+}
+```
+
+- The `:documentId` is inferred when the message is generated.
+
+---
+
 ## document_fields_limit_reached
 
 ### Context
