@@ -239,9 +239,9 @@ Async
 ```json
 {
     "message": "A document cannot contain more than 65,535 fields.",
-    "code": "document_fields_limit",
+    "code": "document_fields_limit_reached",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#documents_fields_limit"
+    "link": "https://docs.meilisearch.com/errors#documents_fields_limit_reached"
 }
 ```
 
