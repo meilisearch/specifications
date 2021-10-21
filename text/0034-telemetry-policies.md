@@ -205,7 +205,7 @@ This property allows us to gather essential information to better understand on 
 |---------------|-------------|---------|
 | user_agent    | Represents all the user-agents encountered on this endpoint in the aggregated event. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
 | payload_type | Represents all the payload_type encountered on this endpoint in the aggregated event. `json`/ `ndjson`/ `csv` | [`csv`, `json`] |
-| primary_key   | The value of the `primaryKey`query parameter if encountered in the aggregated event, otherwise `null`. | `id` |
+| primary_key   | Represents all the `primaryKey` query parameters encountered in the aggregated event, otherwise `null`. | [`"id"`] |
 | index_creation | Does an index creation happened among all requests in the aggregated event? | `false`|
 
 ---
@@ -218,7 +218,7 @@ This property allows us to gather essential information to better understand on 
 |---------------|-------------|---------|
 | user_agent    | Represents all the user-agents encountered on this endpoint in the aggregated event. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
 | payload_type | Represents all the payload_type encountered on this endpoint in the aggregated event. `json`/ `ndjson`/ `csv` | [`csv`, `json`] |
-| primary_key   | The value of the `primaryKey`query parameter if encountered in the aggregated event, otherwise `null`. | `id` |
+| primary_key   | Represents all the `primaryKey` query parameters encountered in the aggregated event, otherwise `null`. | [`id`] |
 | index_creation | Does an index creation happened among all requests in the aggregated event? | `false`|
 
 ---
