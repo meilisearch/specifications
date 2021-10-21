@@ -105,29 +105,29 @@ This property allows us to gather essential information to better understand on 
 
 | Property name          | Description                                            | Example         |
 |------------------------|--------------------------------------------------------|-----------------|
-| system.distribution    | On which distribution MeiliSearch is launched?         | Arch Linux      |
-| system.kernel_version  | On which kernel version MeiliSearch is launched?       | 5.14.10-arch1-1 |
-| system.cores           | How many cores does the machine have?                  | 24              |
-| system.ram_size        | Total capacity of the machine's RAM. Expressed in `Kb`.| 33604210        |
-| system.disk_size       | Total capacity of the biggest disk. Expressed in `Kb`. | 336042103       |
+| system.distribution    | Distribution on which MeiliSearch is launched          | Arch Linux      |
+| system.kernel_version  | Kernel version on which MeiliSearch is launched        | 5.14.10-arch1-1 |
+| system.cores           | Number of cores                                        | 24              |
+| system.ram_size        | Total RAM capacity. Expressed in `Kb`                  | 33604210        |
+| system.disk_size       | Total capacity of the largest disk. Expressed in `Kb`  | 336042103       |
 | system.server_provider | Users can tell us on which provider MeiliSearch is hosted by filling the `MEILI_SERVER_PROVIDER` env var. This is also filled by our providers deploy scripts. e.g. [GCP cloud-config.yaml](https://github.com/meilisearch/cloud-scripts/blob/56a7c2630c1a508e5ad0c0ba1d8cfeb8d2fa9ae0/scripts/providers/gcp/cloud-config.yaml#L33) | gcp |
 
 ##### MeiliSearch Configuration `context` and `infos`
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| context.app.version  | MeiliSearch version number. Sent in a `context` object instead of `properties` to match Amplitude requirement. | 0.23.0 |
+| context.app.version  | MeiliSearch version number.  Sent in a `context` object instead of `properties` to match Amplitude requirement | 0.23.0 |
 | infos.env | MeiliSearch env. `production` / `development` | `production` |
-| infos.has_snapshot| Does the MeiliSearch instance has snapshot activated? | `true` |
+| infos.has_snapshot| `true` if snapshots are activated, otherwise `false` | `true` |
 
 ##### MeiliSearch Statistics `stats`
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| stats.database_size  | Size of indexed data. Expressed in `Kb`. | 180230 |
-| stats.indexes_number | Number of indexes. | 2 |
-| stats.documents_number | Number of indexed documents. | 165847 |
-| stats.start_since_days | How many days ago was the instance launched? | 328 |
+| stats.database_size  | Database size. Expressed in `Kb` | 180230 |
+| stats.indexes_number | Number of indexes | 2 |
+| stats.documents_number | Number of indexed documents | 165847 |
+| stats.start_since_days | Number of days since instance was launched | 328 |
 
 ---
 
@@ -164,7 +164,7 @@ This property allows us to gather essential information to better understand on 
 | Property name | Description | Example |
 |---------------|-------------|---------|
 | user_agent    | Represents all the user-agents encountered on this endpoint in the aggregated event.| ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
-| requests.99th_response_time | The maximum latency, in `ms`, for the fastest 99% of succeeded requests in the aggregated event. | `57ms` |
+| requests.99th_response_time | Highest latency from among the fastest 99% of successful search requests. | `57ms` |
 | requests.total_succeeded | The total number of succeeded search requests in the aggregated event. | `3456` |
 | requests.total_failed | The total number of failed search requests in the aggregated event. | `24` |
 | requests.total_received | The total number of received search requests in the aggregated event. | `3480` |
