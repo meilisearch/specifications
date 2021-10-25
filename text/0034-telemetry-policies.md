@@ -293,7 +293,7 @@ Analytics are enabled by default while leaving the option for users to disable i
 >
 > Instance uuid: ":uuidGeneratedAtFirstLaunch"
 
-**Message displayed on the CLI at launch if analytics are disabled**
+**Message displayed on the CLI at launch if analytics are disabled after being activated**
 
 The unique identifier of the instance remains displayed even if analytics are disabled so that it does not reactivate the analytics to obtain it after having stopped it. The user can still ask us to remove the data previously collected by giving us his `Instance uuid`.
 
@@ -302,6 +302,12 @@ The unique identifier of the instance remains displayed even if analytics are di
 > Anonymous telemetry:	"Disabled"
 >
 > Instance uuid: ":uuidGeneratedAtFirstLaunch"
+
+**Message displayed on the CLI at launch if analytics are disabled at first launch**
+
+> Thank you for using MeiliSearch!
+>
+> Anonymous telemetry:	"Disabled"
 
 ## 2. Technical Aspects
 
@@ -318,7 +324,11 @@ Each endpoint API tracked sends the `User-Agent` as a `user_agent` event propert
 To uniquely identify instances, we generate a uuid at first launch if analytics are not disabled.
 
 - This unique identifier is inserted in data.ms to be kept in case of version upgrades.
-- A file containing the unique identifier is also generated in `/tmp` with the name `{:dataMsPath}-meilisearch-instance-uuid` to be able to recover this identifier in case of corruption of the data.ms causing it to be deleted and recreated.
+- A file named following the given pattern `:MeiliSearchData.msPath-:instanceUid` is generated in a `MeiliSearch` folder to be able to recover an identifier in case of corruption of the data.ms causing it to be deleted and recreated. This `MeiliSearch` folder is created in the `config_dir` of each platform.
+
+| Directory	| Windows |	Linux/*BSD | macOS |
+|-----------|---------|------------|-------|
+|config_dir	| %APPDATA% (C:\Users\%USERNAME%\AppData\Roaming) |	$XDG_CONFIG_HOME (~/.config) |	~/Library/Application Support |
 
 #### Segment Identify Call
 
