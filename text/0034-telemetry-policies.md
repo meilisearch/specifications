@@ -323,8 +323,8 @@ Each endpoint API tracked sends the `User-Agent` as a `user_agent` event propert
 
 To uniquely identify instances, we generate a uuid at first launch if analytics are not disabled.
 
-- This unique identifier is inserted in data.ms to be kept in case of version upgrades.
-- A file named following the given pattern `:MeiliSearchData.msPath-:instanceUid` is generated in a `MeiliSearch` folder to be able to recover an identifier in case of corruption of the data.ms causing it to be deleted and recreated. This `MeiliSearch` folder is created in the `config_dir` of each platform.
+- This unique identifier is inserted in the data.ms folder to be kept in case of version upgrades.
+- A file named following the given pattern `:MeiliSearchData.msPath-:instanceUid` is generated in a `MeiliSearch` folder to recover an identifier in case of corruption of the data.ms folder, causing it to be deleted and recreated. This `MeiliSearch` folder is created in the `config_dir` of each platform.
 
 | Directory	| Windows |	Linux/*BSD | macOS |
 |-----------|---------|------------|-------|
