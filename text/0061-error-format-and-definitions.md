@@ -149,7 +149,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "Index `:uid` already has a primary key.",
+    "message": "Index `:uid` already has a primary key: `:primaryKey`.",
     "code": "index_primary_key_already_exists",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#index_primary_key_already_exists"
@@ -157,6 +157,7 @@ HTTP Code: `400 Bad Request`
 ```
 
 - The `:uid` is inferred when the message is generated.
+- The `:primaryKey` is inferred when the message is generated.
 
 ---
 
@@ -680,6 +681,8 @@ This error occurs when the format sent in the payload is malformed. The payload 
 
 HTTP Code: `400 Bad Request`
 
+#### Variant: Syntax error
+
 ```json
 {
     "message": "The `:payloadType` payload provided is malformed. `:syntaxErrorHelper`.",
@@ -691,6 +694,19 @@ HTTP Code: `400 Bad Request`
 
 - The `:payloadType` is inferred when the message is generated. e.g. `json`, `ndjson`, `csv`
 - The `:syntaxErrorHelper` is inferred when the message is generated.
+
+#### Variant: Sending a valid but empty `[]`/`{}` payload on `POST`/`PUT` - `indexes/:indexUid/documents`.
+
+```json
+{
+    "message": "The `:payloadType` payload must contain at least one document.",
+    "code": "malformed_payload",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#malformed_payload"
+}
+```
+
+- The `:payloadType` is inferred when the message is generated. e.g. `json`, `csv`.
 
 ---
 
