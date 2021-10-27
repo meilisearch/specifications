@@ -149,14 +149,13 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "Index `:uid` already has a primary key: `:primaryKey`.",
+    "message": "The primary key of the index cannot be updated. Documents already exist with a primary key `:primaryKey`.",
     "code": "index_primary_key_already_exists",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#index_primary_key_already_exists"
 }
 ```
 
-- The `:uid` is inferred when the message is generated.
 - The `:primaryKey` is inferred when the message is generated.
 
 ---
