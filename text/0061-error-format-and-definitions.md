@@ -469,14 +469,12 @@ HTTP Code: `413 Payload Too Large`
 
 ```json
 {
-    "message": "The payload cannot exceed `:payloadSizeLimit`.",
+    "message": "The payload size is too large.",
     "code": "payload_too_large",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#payload_too_large"
 }
 ```
-
-- The `:payloadSizeLimit` is inferred when the message is generated. e.g. `100Mb` by default.
 
 ---
 
