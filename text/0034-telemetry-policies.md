@@ -72,7 +72,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `system.server_prodiver`                | Users can tell us on which provider MeiliSearch is hosted by filling the `MEILI_SERVER_PROVIDER` env var. This is also filled by our cloud deploy scripts, e.g. [GCP cloud-config.yaml](https://github.com/meilisearch/cloud-scripts/blob/56a7c2630c1a508e5ad0c0ba1d8cfeb8d2fa9ae0/scripts/providers/gcp/cloud-config.yaml#L33)                                                                              | gcp               | Every hour |
 | `stats.database_size`                   | Database size. Expressed in `Kb`                        | 2621440           | Every hour |
 | `stats.indexes_number`                  | Number of indexes                                       | 2                 | Every hour |
-| `stats.start_since_days`                | Number of days since instance was launched              | 365               | Every hour |
+| `start_since_days`                      | Number of days since instance was launched              | 365               | Every hour |
 | `user_agent`                            | User-agent header encountered during one or more API calls | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `Dump Created` |
 | `requests.99th_response_time`           | Highest latency from among the fastest 99% of successful search requests | 57ms    | `Documents Searched POST`, `Documents Searched GET`|
 | `requests.total_succeeded`              | Total number of successful search requests in this batch | 3456 | `Documents Searched POST`, `Documents Searched GET` |
@@ -127,7 +127,7 @@ This property allows us to gather essential information to better understand on 
 | stats.database_size  | Database size. Expressed in `Kb` | 180230 |
 | stats.indexes_number | Number of indexes | 2 |
 | stats.documents_number | Number of indexed documents | 165847 |
-| stats.start_since_days | Number of days since instance was launched | 328 |
+| start_since_days | Number of days since instance was launched | 328 |
 
 ---
 
