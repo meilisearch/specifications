@@ -23,7 +23,7 @@ Although we can gather needs and understand our users through several channels s
 The metrics collected are non-sensitive, non-personal and do not identify an individual or a group of individuals using MeiliSearch. The data collected is secured and anonymized. We do not collect any data from the values stored in the documents.
 
 We, the MeiliSearch team, provide an email address so that users can request the removal of their data: privacy@meilisearch.com.<br>
-Thanks to the unique identifier generated for their MeiliSearch installation (`Instance uuid` when launching MeiliSearch), we can remove the corresponding data from all the tools we describe below. Any questions regarding the management of the data collected can be sent to the email address as well.
+Thanks to the unique identifier generated for their MeiliSearch installation (`Instance UID` when launching MeiliSearch), we can remove the corresponding data from all the tools we describe below. Any questions regarding the management of the data collected can be sent to the email address as well.
 
 #### Tools
 
@@ -291,17 +291,17 @@ Analytics are enabled by default while leaving the option for users to disable i
 >
 > Anonymous telemetry:	"Enabled"
 >
-> Instance uuid: ":uuidGeneratedAtFirstLaunch"
+> Instance UID: ":uidGeneratedAtFirstLaunch"
 
 **Message displayed on the CLI at launch if analytics are disabled after being activated**
 
-The unique identifier of the instance remains displayed even if analytics are disabled so that it does not reactivate the analytics to obtain it after having stopped it. The user can still ask us to remove the data previously collected by giving us his `Instance uuid`.
+The unique identifier of the instance remains displayed even if analytics are disabled so that it does not reactivate the analytics to obtain it after having stopped it. The user can still ask us to remove the data previously collected by giving us his `Instance UID`.
 
 > Thank you for using MeiliSearch!
 >
 > Anonymous telemetry:	"Disabled"
 >
-> Instance uuid: ":uuidGeneratedAtFirstLaunch"
+> Instance UID: ":uidGeneratedAtFirstLaunch"
 
 **Message displayed on the CLI at launch if analytics are disabled at first launch**
 
@@ -321,7 +321,7 @@ Each endpoint API tracked sends the `User-Agent` as a `user_agent` event propert
 
 #### Identifying MeiliSearch installation
 
-To uniquely identify instances, we generate a uuid at first launch if analytics are not disabled.
+To identify instances, we generate a unique identifier at first launch if analytics are not disabled.
 
 - This unique identifier is inserted in the data.ms folder to be kept in case of version upgrades.
 - A file named following the given pattern `:MeiliSearchData.msPath-:instanceUid` is generated in a `MeiliSearch` folder to recover an identifier in case of corruption of the data.ms folder, causing it to be deleted and recreated. This `MeiliSearch` folder is created in the `config_dir` of each platform.
