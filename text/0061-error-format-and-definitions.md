@@ -103,7 +103,7 @@ HTTP Code: `409 Conflict`
 
 ```json
 {
-    "message": "Index :uid already exists.",
+    "message": "Index `:uid` already exists.",
     "code": "index_already_exists",
     "type": "invalid_request",
     "link":"https://docs.meilisearch.com/errors#index_already_exists"
@@ -126,7 +126,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-     "message": ":uid is not a valid index uid. Index uid can be an integer or a string containing only alphanumeric characters, hyphens (-) and underscores (_).",
+     "message": "`uid` is not a valid index uid. Index uid can be an integer or a string containing only alphanumeric characters, hyphens (-) and underscores (_).",
     "code": "invalid_index_uid",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_index_uid"
@@ -149,12 +149,14 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "Index :uid already has a primary key.",
+    "message": "Index already has a primary key: `:primaryKey`.",
     "code": "index_primary_key_already_exists",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#index_primary_key_already_exists"
 }
 ```
+
+- The `:primaryKey` is inferred when the message is generated.
 
 ---
 
@@ -191,7 +193,7 @@ Async
 
 ```json
 {
-    "message": "Document doesn't have a :primaryKey attribute: :documentRepresentation.",
+    "message": "Document doesn't have a `:primaryKey` attribute: `:documentRepresentation`.",
     "code": "missing_document_id",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#missing_document_id"
@@ -200,6 +202,29 @@ Async
 
 - The `:primaryKey` is inferred when the message is generated. This is the value of the primaryKey attribute of the related index object.
 - The `:documentRepresentation` is inferred when the message is generated.
+
+---
+
+## invalid_document_id
+
+### Context
+
+This error occurs when the value of a document identifier does not meet the requirements of the engine.
+
+### Error Definition
+
+Async
+
+```json
+{
+    "message": "Document identifier `:documentId` is invalid. A document identifier can be of type integer or string, only composed of alphanumeric characters (a-z A-Z 0-9), hyphens (-) and underscores (_).",
+    "code": "invalid_document_id",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_document_id"
+}
+```
+
+- The `:documentId` is inferred when the message is generated.
 
 ---
 
@@ -216,9 +241,9 @@ Async
 ```json
 {
     "message": "A document cannot contain more than 65,535 fields.",
-    "code": "document_fields_limit",
+    "code": "document_fields_limit_reached",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#documents_fields_limit"
+    "link": "https://docs.meilisearch.com/errors#documents_fields_limit_reached"
 }
 ```
 
@@ -238,7 +263,7 @@ Async
 
 ```json
 {
-    "message": ":rankingRule ranking rule is invalid. Valid ranking rules are Words, Typo, Sort, Proximity, Attribute, Exactness and custom ranking rules.",
+    "message": "`:rankingRule` ranking rule is invalid. Valid ranking rules are Words, Typo, Sort, Proximity, Attribute, Exactness and custom ranking rules.",
     "code": "invalid_ranking_rule",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_ranking_rule"
@@ -252,7 +277,7 @@ Async
 
 ```json
 {
-    "message": ":reservedKeyword is a reserved keyword and thus can't be used as a ranking rule.",
+    "message": "`:reservedKeyword` is a reserved keyword and thus can't be used as a ranking rule.",
     ...
 }
 ```
@@ -263,7 +288,7 @@ Async
 
 ```json
 {
-    "message": ":reservedKeyword is a reserved keyword and thus can't be used as a ranking rule. :reservedKeyword can only be used for sorting at search time.",
+    "message": "`:reservedKeyword` is a reserved keyword and thus can't be used as a ranking rule. `:reservedKeyword` can only be used for sorting at search time.",
     ...
 }
 ```
@@ -274,7 +299,7 @@ Async
 
 ```json
 {
-    "message": ":reservedKeyword is a reserved keyword and thus can't be used as a ranking rule. :reservedKeyword can only be used for filtering at search time.",
+    "message": "`:reservedKeyword` is a reserved keyword and thus can't be used as a ranking rule. `:reservedKeyword` can only be used for filtering at search time.",
     ...
 }
 ```
@@ -297,7 +322,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "Attribute :attribute is not filterable. Available filterable attributes are: :filterableAttributes.",
+    "message": "Attribute `:attribute` is not filterable. Available filterable attributes are: `:filterableAttributes`.",
     "code": "invalid_filter",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_filter"
@@ -311,7 +336,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": ":reservedKeyword is a reserved keyword and thus can't be used as a filter expression.",
+    "message": "`:reservedKeyword` is a reserved keyword and thus can't be used as a filter expression.",
     ...
 }
 ```
@@ -322,7 +347,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": ":reservedKeyword is a reserved keyword and thus can't be used as a filter expression. Use the _geoRadius(latitude, longitude, distance) built-in rule to filter on _geo field coordinates.",
+    "message": "`:reservedKeyword` is a reserved keyword and thus can't be used as a filter expression. Use the _geoRadius(latitude, longitude, distance) built-in rule to filter on _geo field coordinates.",
     ...
 }
 ```
@@ -333,7 +358,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "Invalid syntax for the filter parameter: :syntaxErrorHelper.",
+    "message": "Invalid syntax for the filter parameter: `:syntaxErrorHelper`.",
     ...
 }
 ```
@@ -356,7 +381,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "Attribute :attribute is not sortable. Available sortable attributes are: :sortableAttributes.",
+    "message": "Attribute `:attribute` is not sortable. Available sortable attributes are: `:sortableAttributes`.",
     "code": "invalid_sort",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_sort"
@@ -370,7 +395,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": ":reservedKeyword is a reserved keyword and thus can't be used as a sort expression.",
+    "message": "`:reservedKeyword` is a reserved keyword and thus can't be used as a sort expression.",
     ...
 }
 ```
@@ -380,7 +405,7 @@ HTTP Code: `400 Bad Request`
 #### Variant: Using `_geo` or `_geoRadius` as a sort expression
 ```json
 {
-    "message": ":reservedKeyword is a reserved keyword and thus can't be used as a sort expression. Use the _geoPoint(latitude, longitude) built-in rule to sort on _geo field coordinates.",
+    "message": "`:reservedKeyword` is a reserved keyword and thus can't be used as a sort expression. Use the _geoPoint(latitude, longitude) built-in rule to sort on _geo field coordinates.",
     ...
 }
 ```
@@ -391,7 +416,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "Invalid syntax for the sort parameter: :syntaxErrorHelper.",
+    "message": "Invalid syntax for the sort parameter: `:syntaxErrorHelper`.",
     ...
 }
 ```
@@ -419,7 +444,7 @@ This error occurs when the `_geo` field of a document payload is not valid.
 
 ```json
 {
-    "message": "The document with the id: `:documentId` contains an invalid _geo field: :syntaxErrorHelper.",
+    "message": "The document with the id: `:documentId` contains an invalid _geo field: `:syntaxErrorHelper`.",
     "code": "invalid_geo_field",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
@@ -444,14 +469,12 @@ HTTP Code: `413 Payload Too Large`
 
 ```json
 {
-    "message": "The payload cannot exceed :payloadSizeLimit.",
+    "message": "The provided payload reached the size limit.",
     "code": "payload_too_large",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#payload_too_large"
 }
 ```
-
-- The `:payloadSizeLimit` is inferred when the message is generated. e.g. `100Mb` by default.
 
 ---
 
@@ -475,7 +498,7 @@ HTTP Code: `404 Not Found`
 
 ```json
 {
-    "message": "Index :indexUid not found.",
+    "message": "Index `:indexUid` not found.",
     "code": "index_not_found",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#index_not_found"
@@ -498,7 +521,7 @@ HTTP Code: `404 Not Found`
 
 ```json
 {
-    "message": "Document :documentId not found.",
+    "message": "Document `:documentId` not found.",
     "code": "document_not_found",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#document_not_found"
@@ -521,7 +544,7 @@ HTTP Code: `404 Not Found`
 
 ```json
 {
-    "message": "Dump :dumpId not found.",
+    "message": "Dump `:dumpId` not found.",
     "code": "dump_not_found",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#dump_not_found"
@@ -544,7 +567,7 @@ HTTP Code: `404 Not Found`
 
 ```json
 {
-    "message": "Task :taskUid not found.",
+    "message": "Task `:taskUid` not found.",
     "code": "task_not_found",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#task_not_found"
@@ -588,7 +611,7 @@ HTTP Code: `415 Unsupported Media Type`
 
 ```json
 {
-    "message": "The Content-Type :contentType is invalid. Accepted values for the Content-Type header are: :contentTypeList.",
+    "message": "The Content-Type `:contentType` is invalid. Accepted values for the Content-Type header are: `:contentTypeList`.",
     "code": "invalid_content_type",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_content_type"
@@ -611,7 +634,7 @@ HTTP Code: `415 Unsupported Media Type`
 
 ```json
 {
-    "message": "A Content-Type header is missing. Accepted values for the Content-Type header are: :contentTypeList.",
+    "message": "A Content-Type header is missing. Accepted values for the Content-Type header are: `:contentTypeList`.",
     "code": "missing_content_type",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#missing_content_type"
@@ -634,7 +657,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "A :payloadType payload is missing.",
+    "message": "A `:payloadType` payload is missing.",
     "code": "missing_payload",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#missing_payload"
@@ -655,9 +678,11 @@ This error occurs when the format sent in the payload is malformed. The payload 
 
 HTTP Code: `400 Bad Request`
 
+#### Variant: Syntax error
+
 ```json
 {
-    "message": "The :payloadType payload provided is malformed. :syntaxErrorHelper.",
+    "message": "The `:payloadType` payload provided is malformed. `:syntaxErrorHelper`.",
     "code": "malformed_payload",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#malformed_payload"
@@ -666,6 +691,19 @@ HTTP Code: `400 Bad Request`
 
 - The `:payloadType` is inferred when the message is generated. e.g. `json`, `ndjson`, `csv`
 - The `:syntaxErrorHelper` is inferred when the message is generated.
+
+#### Variant: Sending a valid but empty `[]`/`{}` payload on `POST`/`PUT` - `indexes/:indexUid/documents`.
+
+```json
+{
+    "message": "The `:payloadType` payload must contain at least one document.",
+    "code": "malformed_payload",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#malformed_payload"
+}
+```
+
+- The `:payloadType` is inferred when the message is generated. e.g. `json`, `csv`.
 
 ---
 
@@ -683,7 +721,7 @@ HTTP Code: `500 Internal Server Error`
 
 ```json
 {
-    "message": "An internal error has occurred. :reason.",
+    "message": "An internal error has occurred. `:reason`.",
     "code": "internal",
     "type": "internal",
     "link": "https://docs.meilisearch.com/errors#internal"
@@ -706,7 +744,7 @@ HTTP Code: `500 Internal Server Error`
 
 ```json
 {
-    "message": "The creation of the :uid index has failed due to :reason.",
+    "message": "The creation of the `:uid` index has failed due to `:reason`.",
     "code": "index_creation_failed",
     "type": "internal",
     "link": "https://docs.meilisearch.com/errors#index_creation_failed"
@@ -729,7 +767,7 @@ HTTP Code: `500 Internal Server Error`
 
 ```json
 {
-    "message": "The index :uid can't be accessed due to :reason.",
+    "message": "The index `:uid` can't be accessed due to `:reason`.",
     "code": "index_not_accessible",
     "type": "internal",
     "link": "https://docs.meilisearch.com/errors#index_not_accessible"
@@ -752,7 +790,7 @@ HTTP Code: `500 Internal Server Error`
 
 ```json
 {
-    "message": "The document :documentId is unretrievable due to :reason.",
+    "message": "The document `:documentId` is unretrievable due to `:reason`.",
     "code": "unretrievable_document",
     "type": "internal",
     "link": "https://docs.meilisearch.com/errors#unretrievable_document"
@@ -797,7 +835,7 @@ Async
 
 ```json
 {
-    "message": "The creation of the dump :dumpId failed due to :reason.",
+    "message": "The creation of the dump `:dumpId` failed due to `:reason`.",
     "code": "dump_process_failed",
     "type": "internal",
     "link": "https://docs.meilisearch.com/errors#dump_process_failed"
@@ -820,7 +858,7 @@ HTTP code `500 Internal Server Error`
 
 ```json
 {
-    "message": "Maximum database size of :databaseSizeLimit has been reached.",
+    "message": "Maximum database size of `:databaseSizeLimit` has been reached.",
     "code": "database_size_limit_reached",
     "type": "internal",
     "link": "https://docs.meilisearch.com/errors#database_size_limit_reached"
