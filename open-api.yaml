@@ -696,7 +696,7 @@ components:
           examples:
             Payload Too Large:
               value:
-                message: The payload cannot exceed `:payloadSizeLimit`.
+                message: The provided payload reached the size limit.
                 code: payload_too_large
                 type: invalid_request
                 link: 'https://docs.meilisearch.com/errors#payload_too_large'
@@ -930,7 +930,7 @@ paths:
                     link: 'https://docs.meilisearch.com/errors#index_already_exists'
                 Invalid Index Uid:
                   value:
-                    message: 'Index `:indexUid` is not a valid index uid. Index uid can be an integer or a string containing only alphanumeric characters, hyphens (-) and underscores (_).'
+                    message: '`:indexUid` is not a valid index uid. Index uid can be an integer or a string containing only alphanumeric characters, hyphens (-) and underscores (_).'
                     code: invalid_index_uid
                     type: invalid_request
                     link: 'https://docs.meilisearch.com/errors#invalid_index_uid'
