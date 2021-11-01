@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: MeiliSearch Core API
   description: 'Search documents, configure and manage the MeiliSearch engine.'
-  version: 0.23.0
+  version: 0.24.0
   contact:
     name: MeiliSearch
     email: bonjour@meilisearch.com
