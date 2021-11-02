@@ -145,27 +145,25 @@ Only the master key allows managing the API keys.
 - `actions` is mandatory and should be an array of valid `actions`.
 - `indexes` is mandatory and should be an array of string.
 - `expiresAt` is mandatory and must be a valid `ISO 8601` datetime in the future or `null`.
-- If set, `description` should be a string or null.
+- If set, `description` should be a string or `null`.
 
 ##### Errors
 
 - 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#invalid_api_key) error.
-- 🔴 Sending a description with a value other than null or a string returns a `invalid_api_key_description` error.
-- 🔴 Omitting `actions` field from the payload returns a `missing_parameter` error.
-- 🔴 Omitting `indexes` field from the payload returns a `missing_parameter` error.
-- 🔴 Omitting `expiresAt` field from the payload returns a `missing_parameter` error.
-- 🔴 Sending an invalid value for the `actions` field returns an `invalid_api_key_actions` error.
-- 🔴 Sending an invalid value for the `indexes` field returns an `invalid_api_key_indexes`.
-- 🔴 Sending an invalid value for the `expiresAt` field returns an `invalid_api_key_expires_at`.
-- 🔴 Sending an invalid value for the `description` field returns an `invalid_api_key_description`.
-- 🔴 Omitted Content-Type header will lead to a 415 Unsupported Media Type - missing_content_type error code.
-- 🔴 Sending an empty Content-Type will lead to a 415 Unsupported Media Type - invalid_content_type error code.
-- 🔴 Sending a different Content-Type than application/json, application/x-ndjson or text/csv will lead to 415 Unsupported Media Type invalid_content_type error code.
-- 🔴 Sending an empty payload will lead to a 400 Bad Request - missing_payload error code.
-- 🔴 Sending a different payload type than the Content-Type header should return a 400 Bad Request - malformed_payload error code.
-- 🔴 Sending a payload excessing the limit will lead to a 413 Payload Too Large - payload_too_large error code.
-- 🔴 Sending an invalid ndjson format will lead to a 400 bad_request - malformed_payload error code.
+- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Omitted Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
+- 🔴 Sending an empty Content-Type returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
+- 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
+- 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
+- 🔴 Sending a different payload type than the Content-Type header returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
+- 🔴 Sending an invalid json format returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
+- 🔴 Omitting `actions` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
+- 🔴 Omitting `indexes` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
+- 🔴 Omitting `expiresAt` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
+- 🔴 Sending an invalid value for the `actions` field returns an [invalid_api_key_actions](0061-error-format-and-definitions.md#invalid_api_key_actions) error.
+- 🔴 Sending an invalid value for the `indexes` field returns an [invalid_api_key_indexes](0061-error-format-and-definitions.md#invalid_api_key_indexes) error.
+- 🔴 Sending an invalid value for the `expiresAt` field returns an [invalid_api_key_expires_at](0061-error-format-and-definitions.md#invalid_api_key_expires_at) error.
+- 🔴 Sending an invalid value for the `description` field returns an [invalid_api_key_description](0061-error-format-and-definitions.md#invalid_api_key_description) error.
 
 ---
 
@@ -203,9 +201,9 @@ Only the master key allows managing the API keys.
 
 ##### Errors
 
-- 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#invalid_api_key) error.
-- 🔴 Attempting to access an API key that does not exist returns a `api_key_not_found`.
+- 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Attempting to access an API key that does not exist returns an [api_key_not_found](0061-error-format-and-definitions.md#api_key_not_found) error.
 
 ---
 
@@ -213,7 +211,7 @@ Only the master key allows managing the API keys.
 
 ##### Request Definition
 
-`PUT/PATCH` - `/keys/:key`
+`PUT` - `/keys/:key`
 
 ##### Headers
 
@@ -235,8 +233,6 @@ Only the master key allows managing the API keys.
 }
 ```
 
-> ⚠️ PUT - Any omitted fields are restored to his default value. See `POST`/`PUT` - `/keys` - API Key object payload definition part. Only `description` field is concerned so far on the `PUT` method.
-
 ##### Response
 
 `200 Success`
@@ -250,14 +246,23 @@ Only the master key allows managing the API keys.
 
 ##### Errors
 
-- 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#invalid_api_key) error.
-- 🔴 Attempting to access an API key that does not exist returns a `api_key_not_found`.
-
-- `actions` is mandatory and should be an array of valid `actions`.
-- `indexes` is mandatory and should be an array of string.
-- `expiresAt` is mandatory and must be a valid `ISO 8601` datetime in the future or `null`.
-- If set, `description` should be a string or null.
+- 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Attempting to access an API key that does not exist returns a [api_key_not_found](0061-error-format-and-definitions.md#api_key_not_found) error.
+- 🔴 Omitted Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
+- 🔴 Sending an empty Content-Type returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
+- 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
+- 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
+- 🔴 Sending a different payload type than the Content-Type header returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
+- 🔴 Sending an invalid json format returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
+- 🔴 Omitting `actions` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
+- 🔴 Omitting `indexes` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
+- 🔴 Omitting `expiresAt` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
+- 🔴 Omitting `description` field while his value is different than `null` on the server-side returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
+- 🔴 Sending an invalid value for the `actions` field returns an [invalid_api_key_actions](0061-error-format-and-definitions.md#invalid_api_key_actions) error.
+- 🔴 Sending an invalid value for the `indexes` field returns an [invalid_api_key_indexes](0061-error-format-and-definitions.md#invalid_api_key_indexes) error.
+- 🔴 Sending an invalid value for the `expiresAt` field returns an [invalid_api_key_expires_at](0061-error-format-and-definitions.md#invalid_api_key_expires_at) error.
+- 🔴 Sending an invalid value for the `description` field returns an [invalid_api_key_description](0061-error-format-and-definitions.md#invalid_api_key_description) error.
 
 ---
 
@@ -320,18 +325,18 @@ Only the master key allows managing the API keys.
             "createdAt": "2021-08-11T10:00:00Z",
             "updatedAt": null
         }
-    ],
+    ]
 }
 ```
 
 > Expired API keys cannot be found on the `/keys` endpoints. This can be handled in the future with an archiving system or something else. See Future Possibilities part.
 
-> 👉 Note the two default generated API keys here. When a master key is set at MeiliSearch's first launch, it generates two pre-configured `API Keys`. A Default Search API Key restricted to the search action on all indexes and a Default Admin API Key on all indexes to handle all operations (except managing API Keys).
+> 👉 Note the two default generated API keys here. When a master key is set at MeiliSearch's launch, it generates two pre-configured `API Keys`. A Default Search API Key restricted to the search action on all indexes and a Default Admin API Key on all indexes to handle all operations (except managing API Keys).
 
 ##### List details
 
 - `API Key` objects are returned in a `results` array.
-- `API Keys` are ordered by createdAt in desc order. (Most recent first)
+- `API Keys` are ordered by `createdAt` in `desc` order. (Most recent first)
 - Expired `API Keys` are omitted and no longer accessible. See Future Possibilities part.
 - No pagination yet. See Future Possibilities part.
 
@@ -387,16 +392,7 @@ Only the master key allows managing the API keys.
 
 #### Response
 
-`403 Forbidden`
-
-```json
-{
-    "message": "The provided API key is invalid.",
-    "code": "invalid_api_key",
-    "type": "auth",
-    "link": "https://docs.meilisearch.com/errors#invalid_api_key"
-}
-```
+- 🔴 Accessing this route with an `API Key` that has expired or, been deleted returns an [invalid_api_key](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#invalid_api_key) error.
 
 ---
 
@@ -412,18 +408,10 @@ Only the master key allows managing the API keys.
     "X-MEILI-API-KEY": ":apiKey"
     "Content-Type: application/json"
 ```
+
 #### Response
 
-`403 Forbidden`
-
-```json
-{
-    "message": "The provided API key is invalid.",
-    "code": "invalid_api_key",
-    "type": "auth",
-    "link": "https://docs.meilisearch.com/errors#invalid_api_key"
-}
-```
+- 🔴 Accessing this route with an `API Key` that don't have sufficient permissions to access it returns an [invalid_api_key](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#invalid_api_key) error.
 
 ### V. `Scoped API Key` Explanations
 
