@@ -76,8 +76,8 @@ Only the master key allows managing the API keys.
 | field       | type    | required |description                     |
 |-------------|---------|----------|--------------------------------|
 | actions     | array   | Required | A list of actions permitted for the API key. `["*"]` for all actions. **See Actions list definition part**. `*` character can be used as a wildcard. e.g. `documents.*` to authorize access on all documents endpoints. **Default**: `No default` |
-| expiresAt   | string  | Required | The expiration date and time as `ISO-8601` format. `null` equals to no expiration time. **Default**: `No Default` |
-| indexes     | array   |  Required | `[*]` for all indexes.  **Default**: `No Default` |
+| expiresAt   | string  | Required | The expiration date and time as `ISO-8601` format. `null` equals to no expiration time. Sending only the date part e.g `2021-12-01` leads to having an `expiresAt` value set to `2021-12-01T00:00:00`. **Default**: `No Default` |
+| indexes     | array   | Required | `[*]` for all indexes. **Default**: `No Default` |
 | description | string  | Optional | A description for the API key. **Default**: `null` |
 
 #### Actions List Definition
@@ -103,7 +103,7 @@ Only the master key allows managing the API keys.
 
 ---
 
-#### **As `Anna 👩`, I want to create an `API key` for `Mark 👨🏻` client-code, so that he can index  some documents into MeiliSearch**
+#### **As `Anna 👩`, I want to create an `API key` for `Mark 👨🏻` client-code, so that he can index some documents into MeiliSearch**
 
 ##### Request Definition
 
@@ -515,7 +515,7 @@ It would be much more straightforward in terms of developer experience and quali
 ### `API Keys`
 
 - Add a generated id field to paginate the list of API Key.
-- Hard limit the number of API keys that can be stored by MeiliSearch.
+- Hard limit the number of API keys that MeiliSearch can store.
 - Have an "archive" state where manually deleted API Keys can be restored for a certain amount of time.
 - Add rate-limiting per API Key.
 - A restriction on the maximum offset/limit.
@@ -524,4 +524,4 @@ It would be much more straightforward in terms of developer experience and quali
 ### `Scoped API Keys`
 
 - Handle more search parameters restrictions.
-- Extends `SCoped API Keys` to more than `search` action.
+- Extends `Scoped API Keys` to more than `search` action.
