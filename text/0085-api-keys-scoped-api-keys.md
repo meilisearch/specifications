@@ -131,7 +131,7 @@ Only the master key allows managing the API keys.
 
 ##### Response
 
-`200 Success`
+`201 Created`
 
 ```json
 {
@@ -146,6 +146,26 @@ Only the master key allows managing the API keys.
 - `indexes` is mandatory and should be an array of string.
 - `expiresAt` is mandatory and must be a valid `ISO 8601` datetime in the future or `null`.
 - If set, `description` should be a string or null.
+
+##### Errors
+
+- 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Sending a description with a value other than null or a string returns a `invalid_api_key_description` error.
+- 🔴 Omitting `actions` field from the payload returns a `missing_parameter` error.
+- 🔴 Omitting `indexes` field from the payload returns a `missing_parameter` error.
+- 🔴 Omitting `expiresAt` field from the payload returns a `missing_parameter` error.
+- 🔴 Sending an invalid value for the `actions` field returns an `invalid_api_key_actions` error.
+- 🔴 Sending an invalid value for the `indexes` field returns an `invalid_api_key_indexes`.
+- 🔴 Sending an invalid value for the `expiresAt` field returns an `invalid_api_key_expires_at`.
+- 🔴 Sending an invalid value for the `description` field returns an `invalid_api_key_description`.
+- 🔴 Omitted Content-Type header will lead to a 415 Unsupported Media Type - missing_content_type error code.
+- 🔴 Sending an empty Content-Type will lead to a 415 Unsupported Media Type - invalid_content_type error code.
+- 🔴 Sending a different Content-Type than application/json, application/x-ndjson or text/csv will lead to 415 Unsupported Media Type invalid_content_type error code.
+- 🔴 Sending an empty payload will lead to a 400 Bad Request - missing_payload error code.
+- 🔴 Sending a different payload type than the Content-Type header should return a 400 Bad Request - malformed_payload error code.
+- 🔴 Sending a payload excessing the limit will lead to a 413 Payload Too Large - payload_too_large error code.
+- 🔴 Sending an invalid ndjson format will lead to a 400 bad_request - malformed_payload error code.
 
 ---
 
@@ -183,7 +203,9 @@ Only the master key allows managing the API keys.
 
 ##### Errors
 
-- `404 API Key Not Found`
+- 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Attempting to access an API key that does not exist returns a `api_key_not_found`.
 
 ---
 
@@ -228,7 +250,10 @@ Only the master key allows managing the API keys.
 
 ##### Errors
 
-- `404 API Key Not Found`.
+- 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Attempting to access an API key that does not exist returns a `api_key_not_found`.
+
 - `actions` is mandatory and should be an array of valid `actions`.
 - `indexes` is mandatory and should be an array of string.
 - `expiresAt` is mandatory and must be a valid `ISO 8601` datetime in the future or `null`.
@@ -312,7 +337,8 @@ Only the master key allows managing the API keys.
 
 ##### Errors
 
-- TBD
+- 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#invalid_api_key) error.
 
 ---
 
@@ -334,7 +360,9 @@ Only the master key allows managing the API keys.
 
 ##### Errors
 
-- `404 API Key Not Found`.
+- 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Attempting to access an API key that does not exist returns a `api_key_not_found`.
 
 ---
 
@@ -354,6 +382,7 @@ Only the master key allows managing the API keys.
 
 ```
     "X-MEILI-API-KEY": ":apiKey"
+    "Content-Type: application/json"
 ```
 
 #### Response
@@ -362,7 +391,7 @@ Only the master key allows managing the API keys.
 
 ```json
 {
-    "message": "The API Key provided is invalid.",
+    "message": "The provided API key is invalid.",
     "code": "invalid_api_key",
     "type": "auth",
     "link": "https://docs.meilisearch.com/errors#invalid_api_key"
@@ -379,16 +408,20 @@ Only the master key allows managing the API keys.
 
 #### Headers
 
+```
+    "X-MEILI-API-KEY": ":apiKey"
+    "Content-Type: application/json"
+```
 #### Response
 
 `403 Forbidden`
 
 ```json
 {
-    "message": "The API Key provided does not have sufficient permissions to access the requested resource.",
-    "code": "insufficient_permissions",
+    "message": "The provided API key is invalid.",
+    "code": "invalid_api_key",
     "type": "auth",
-    "link": "https://docs.meilisearch.com/errors#insufficient_permission"
+    "link": "https://docs.meilisearch.com/errors#invalid_api_key"
 }
 ```
 
