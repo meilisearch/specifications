@@ -9,7 +9,7 @@
 
 ### I. Summary
 
-The SDKs can generate `Scoped API Keys` inheriting from a MeiliSearch's `API key` generated to force filters during a search for an end-user. It allows users to have multi-tenant indexes and thus restricts access to documents depending on the end-user making the search request.
+The SDKs can generate `Scoped API Keys` inheriting from a MeiliSearch's `API key` generated to force filters during a search for an end-user. A `Scoped API Key` is generated on the user server-side code to be used by an end-user. It allows users to have multi-tenant indexes and thus restricts access to documents depending on the end-user making the search request.
 
 ### II. Motivation
 
@@ -21,9 +21,9 @@ Users regularly request Multi-Tenant API keys over time. Users today need to set
 
 | Term               | Definition |
 |--------------------|------------|
-| Master Key         | This is the master key that allows to the creation of other API keys. The master key is defined by the user when launching MeiliSearch. |
+| Master Key         | This is the master key that allows the creation of other API keys. The master key is defined by the user when launching MeiliSearch. |
 | API Key            | API keys are stored and managed from the endpoint `/keys` by the master key holder. These are the keys used by the technical teams to interact with MeiliSearch at the level of the client code. |
-| Scoped API Key | These keys are not stored and managed by a MeiliSearch instance. They are generated for each end-user by the backend code from a MeiliSearch API Key. They are used by the end-users to only search the documents belonging to them. |
+| Scoped API Key     | These keys are not stored and managed by a MeiliSearch instance. They are generated for each end-user by the backend code from a MeiliSearch API Key. They are used by the end-users to only search the documents belonging to them. |
 | Multi-Tenancy      | By multi-tenancy, we mean that an end-user only accesses data belonging to him within an index shared with other end-users. |
 
 ### IV. Personas
