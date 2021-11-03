@@ -91,7 +91,7 @@ Only the master key allows managing the API keys.
 | documents.get | Provides access to `GET` methods on `/indexes/:authorizedIndexes/documents/` and `/indexes/:authorizedIndexes/documents/:documentId` routes. |
 | documents.delete | Provides access to `DELETE` method on `indexes/:authorizedIndexes/documents/:documentId`, `indexes/:authorizedIndexes/documents/:documentId` and `POST` method on `indexes/:authorizedIndexes/documents/delete-batch` routes. |
 | indexes.add | Provides access to `POST` `/indexes`. **⚠️ The newly created `index` is added to the `indexes` array for this key and all others keys having `[*]` as a value for `indexes`**. |
-| indexes.get | Provides access to `GET` `/indexes` and `/indexes/:authorizedIndexes`. **⚠️Non-authorized `indexes` are ommited from the response on `/indexes`**. |
+| indexes.get | Provides access to `GET` `/indexes` and `/indexes/:authorizedIndexes`. **⚠️Non-authorized `indexes` are omitted from the response on `/indexes`**. |
 | indexes.update | Provides access to `PUT` `/indexes/:authorizedIndexes` |
 | indexes.delete | Provides access to `DELETE` `/indexes/:authorizedIndexes` |
 | tasks.get | Provides access to `GET` `/tasks` and `/indexes/:indexUid/tasks` routes. |
@@ -151,7 +151,7 @@ Only the master key allows managing the API keys.
 
 - 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
 - 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
-- 🔴 Omitted Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
+- 🔴 Omitting Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
 - 🔴 Sending an empty Content-Type returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
@@ -211,7 +211,7 @@ Only the master key allows managing the API keys.
 
 ##### Request Definition
 
-`PUT` - `/keys/:key`
+`PATCH` - `/keys/:key`
 
 ##### Headers
 
@@ -221,6 +221,8 @@ Only the master key allows managing the API keys.
 ```
 
 ##### Body Payload
+
+> PATCH method allows making partial changes to an existing resource. Thus the user is not obliged to send the complete API resource for each update.
 
 ```json
 {
@@ -249,16 +251,12 @@ Only the master key allows managing the API keys.
 - 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
 - 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 - 🔴 Attempting to access an API key that does not exist returns a [api_key_not_found](0061-error-format-and-definitions.md#api_key_not_found) error.
-- 🔴 Omitted Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
+- 🔴 Omitting Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
 - 🔴 Sending an empty Content-Type returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending a different payload type than the Content-Type header returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
 - 🔴 Sending an invalid json format returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
-- 🔴 Omitting `actions` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
-- 🔴 Omitting `indexes` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
-- 🔴 Omitting `expiresAt` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
-- 🔴 Omitting `description` field while his value is different than `null` on the server-side returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
 - 🔴 Sending an invalid value for the `actions` field returns an [invalid_api_key_actions](0061-error-format-and-definitions.md#invalid_api_key_actions) error.
 - 🔴 Sending an invalid value for the `indexes` field returns an [invalid_api_key_indexes](0061-error-format-and-definitions.md#invalid_api_key_indexes) error.
 - 🔴 Sending an invalid value for the `expiresAt` field returns an [invalid_api_key_expires_at](0061-error-format-and-definitions.md#invalid_api_key_expires_at) error.
