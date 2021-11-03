@@ -15,7 +15,7 @@ The SDKs can generate `Scoped API Keys` inheriting from a MeiliSearch's `API key
 
 ### II. Motivation
 
-To make MeiliSearch more reliable for teams, we extend the management and the possibilities of restrictions of the `API Key` resource. Security is a critical need, often tricky to negotiate as the stakes are high for a company.
+To make MeiliSearch more reliable for teams, we extend the management and the possibilities of restrictions for the management of a MeiliSearch instance by introducing a concrete API resource (`API Key`). Security is a critical need, often tricky to negotiate as the stakes are high for a company.
 
 We solve the use of multi-tenant indexes with the help of `Scoped API Keys`. By managing this, we reduce one of the last major deal-breakers that makes users not choose MeiliSearch as a solution despite all our advantages.
 
@@ -42,10 +42,10 @@ Users regularly request Multi-Tenant API keys over time. Users today need to set
 
 #### Summary Key Points
 
-- /keys endpoints become restricted to the master key.
-- When a master key is set at MeiliSearch first-launch, we generate two pre-configured `API Key`. A `Default Search API Key` restricted to the search action and a `Default Admin API Key` to handle all operations (except managing API Keys) on MeiliSearch.
+- `/keys` management is restricted to the master key.
+- When a master key is set at MeiliSearch first-launch, we generate two pre-configured `API Key` resources. A `Default Search API Key` restricted to the search action and a `Default Admin API Key` to handle all operations (except managing API Keys) on MeiliSearch.
 - New endpoints are added to manage the `API Key` resource.
-- `API keys` can have restrictions on which methods can be accessed via an `actions` list; they can also `expireAt` a specific datetime and be restricted to a specific set of `indexes`.
+- `API keys` can have restrictions on which methods can be accessed via an `actions` list; they can also `expiresAt` a specific date time and be restricted to a specific set of `indexes`.
 
 #### Managing `API Key`
 
@@ -415,7 +415,7 @@ Only the master key allows managing the API keys.
 
 #### Summary Key Points
 
-- `Scoped API keys` are generated from a MeiliSearch `API key` on the client's server code to resolve multi-tenancy use-case by restricting access to data within an index according to the criteria chosen by the team managing a MeiliSearch instance.
+- `Scoped API keys` are generated from a MeiliSearch parent `API key` on the client's server code to resolve multi-tenancy use-case by restricting access to data within an index according to the criteria chosen by the team managing a MeiliSearch instance.
 - These `Scoped API keys` can't be less restrictive than a parent `API key` and can only be used for the search action with a predefined forced filter field.
 - These `Scoped API keys` are not stored and thus retrievable on MeiliSearch. This is why we highly advise setting an expiration time on that type of API key for security reasons.
 
