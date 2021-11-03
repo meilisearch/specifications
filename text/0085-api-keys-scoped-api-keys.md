@@ -88,9 +88,9 @@ Only the master key allows managing the API keys.
 |---------|-------------|
 | search  | Provides access to `GET` and `POST` methods on `/indexes/:authorizedIndexes/search` routes. |
 | documents.add | Provides access to `POST` and `PUT` on `/indexes/:authorizedIndexes/documents` routes. |
-| documents.get | Provides access to `GET` methods on `/indexes/:authorizedIndexes/documents/` and `/indexes/:authorizedIndexes/documents/:documentId` routes. |
-| documents.delete | Provides access to `DELETE` method on `indexes/:authorizedIndexes/documents/:documentId`, `indexes/:authorizedIndexes/documents/:documentId` and `POST` method on `indexes/:authorizedIndexes/documents/delete-batch` routes. |
-| indexes.add | Provides access to `POST` `/indexes`. **⚠️ The newly created `index` is added to the `indexes` array for this key and all others keys having `[*]` as a value for `indexes`**. |
+| documents.get | Provides access to `GET` methods on `/indexes/:authorizedIndexes/documents` and `/indexes/:authorizedIndexes/documents/:documentId` routes. |
+| documents.delete | Provides access to `DELETE` method on `/indexes/:authorizedIndexes/documents/:documentId`, `indexes/:authorizedIndexes/documents/:documentId` and `POST` method on `/indexes/:authorizedIndexes/documents/delete-batch` routes. |
+| indexes.add | Provides access to `POST` `/indexes`. **⚠️ A newly created `index` is added to the `indexes` array for the API key making the operation and all others keys having `[*]` as a value for `indexes`**. |
 | indexes.get | Provides access to `GET` `/indexes` and `/indexes/:authorizedIndexes`. **⚠️Non-authorized `indexes` are omitted from the response on `/indexes`**. |
 | indexes.update | Provides access to `PUT` `/indexes/:authorizedIndexes` |
 | indexes.delete | Provides access to `DELETE` `/indexes/:authorizedIndexes` |
@@ -98,7 +98,7 @@ Only the master key allows managing the API keys.
 | settings.get | Provides access to `GET` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes. |
 | settings.update | Provides access to `POST` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes. |
 | settings.reset | Provides access to `DELETE` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes. |
-| stats | Provides access to `GET` `/stats/`. **⚠️Non-authorized `indexes` are ommited from the response on `/stats`**. Also add access to `GET` `indexes/:authorizedIndexes/stats`. |
+| stats | Provides access to `GET` `/stats/`. **⚠️Non-authorized `indexes` are ommited from the response on `/stats`**. Also add access to `GET` `/indexes/:authorizedIndexes/stats`. |
 | dumps | Provides access to `POST` `/dumps` and `GET` `/dumps/:dumpUid` routes. |
 
 ---
