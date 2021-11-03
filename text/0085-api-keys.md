@@ -402,6 +402,14 @@ Only the master key allows managing the API keys.
 
 - 🔴 Accessing this route with an `API Key` that don't have sufficient permissions to access it returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
+## 2. Technical Aspects
+
+### Synchronous write of `API Key` resources
+
+Synchronous writing would make it possible to dissociate key management from the update store, which handles asynchronous writing.
+
+It would be much more straightforward in terms of developer experience and quality of life for the person managing the `API Key` resources.
+
 ## 3. Future Possibilities
 
 - Add a generated id field to paginate the list of API Key.
