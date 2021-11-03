@@ -1,6 +1,6 @@
 - Title: Scoped API Keys
 - Start Date: 2021-10-15
-- Specification PR: [#]()
+- Specification PR: [#89](https://github.com/meilisearch/specifications/pull/89)
 - Discovery Issue: [#51](https://github.com/meilisearch/product/issues/51)
 
 # Scoped API Keys
