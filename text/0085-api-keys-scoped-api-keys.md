@@ -340,8 +340,8 @@ Only the master key allows managing the API keys.
 
 ##### Errors
 
-- 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
 ---
 
@@ -363,8 +363,8 @@ Only the master key allows managing the API keys.
 
 ##### Errors
 
-- 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 - 🔴 Attempting to access an API key that does not exist returns a `api_key_not_found`.
 
 ---
@@ -390,7 +390,7 @@ Only the master key allows managing the API keys.
 
 #### Response
 
-- 🔴 Accessing this route with an `API Key` that has expired or, been deleted returns an [invalid_api_key](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Accessing this route with an `API Key` that has expired or, been deleted returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
 ---
 
@@ -409,7 +409,7 @@ Only the master key allows managing the API keys.
 
 #### Response
 
-- 🔴 Accessing this route with an `API Key` that don't have sufficient permissions to access it returns an [invalid_api_key](https://github.com/meilisearch/specifications/blob/develop/text/0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Accessing this route with an `API Key` that don't have sufficient permissions to access it returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
 ### V. `Scoped API Key` Explanations
 
