@@ -2638,7 +2638,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/key'
-      operationId: keys-get
+      operationId: keys.get
       description: Get an API Key
     parameters:
       - schema:
