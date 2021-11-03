@@ -311,7 +311,7 @@ Only the master key allows managing the API keys.
             "updatedAt": null
         },
         {
-            "description": "Default Admin API Key (Do not expose it on frontend side)",
+            "description": "Default Admin API Key (Use it for all other operations. Caution! Do not share it on the client side)",
             "key": "380689dd379232519a54d15935750cc7625620a2ea2fc06907cb40ba5b421b6f",
             "actions": [
                 "*"
