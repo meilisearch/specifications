@@ -2434,9 +2434,66 @@ paths:
                       $ref: '#/components/schemas/key'
         '401':
           $ref: '#/components/responses/401'
+  '/keys/{key}':
+    get:
+      summary: Your GET endpoint
+      tags:
+        - Keys
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/key'
+      operationId: keys.get
+      description: Get an API Key
+    parameters:
+      - schema:
+          type: string
+        name: key
+        in: path
+        required: true
+        description: The API key value
+    delete:
+      summary: ''
+      operationId: keys.delete
+      tags:
+        - Keys
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+      description: ''
+    patch:
+      summary: ''
+      operationId: keys.update
+      tags:
+        - Keys
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  updatedAt:
+                    type: string
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
+      description: Update an API Key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/key'
     post:
       summary: Create an API Key
       operationId: keys.create
+      tags:
+        - Keys
       responses:
         '200':
           description: OK
@@ -2627,54 +2684,4 @@ paths:
         - apiKey: []
     parameters:
       - $ref: '#/components/parameters/taskUid'
-  '/keys/{key}':
-    get:
-      summary: Your GET endpoint
-      tags: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/key'
-      operationId: keys.get
-      description: Get an API Key
-    parameters:
-      - schema:
-          type: string
-        name: key
-        in: path
-        required: true
-        description: The API key value
-    delete:
-      summary: ''
-      operationId: keys.delete
-      responses:
-        '204':
-          $ref: '#/components/responses/204'
-      description: ''
-    patch:
-      summary: ''
-      operationId: keys.update
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  key:
-                    type: string
-                  updatedAt:
-                    type: string
-      parameters:
-        - $ref: '#/components/parameters/Content-Type'
-      description: Update an API Key
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/key'
 security: []
