@@ -13,7 +13,7 @@
 
 #### Summary Key Points
 
-- Add `limit` and `after` response attibutes to task list response.
+- Add `limit` and `after` response attributes to task list response.
 - It concerns `/tasks` and `/indexes/:uid/tasks`.
 
 ### II. Motivation
@@ -35,7 +35,7 @@ The objectives set during the discovery's exploration phase for the pagination o
 
 As seen in the [Rest API Format Convention](https://github.com/meilisearch/product/issues/44#issuecomment-895888679), cursor-based pagination is more appropriate when the data can grow or shrink quickly in terms of magnitude.
 
-####  Pros
+#### Pros
 
 The performance is better than the not-so-good but old pagination with `offset`/`limit`.
 
@@ -43,7 +43,7 @@ Cursor pagination keeps the results consistent between each page as the data evo
 
 Moreover, the performance is superior to traditional pagination since the computational complexity remains constant to reach the identifier marking the beginning of the new slice to be returned from a hash table.
 
-####  Cons
+#### Cons
 
 The main drawback of this type of pagination is that it does not navigate within a finite number of pages. It is also limited to a precise sorting criterion on unique identifiers ordered sequentially.
 
@@ -51,19 +51,19 @@ The main drawback of this type of pagination is that it does not navigate within
 
 ### Response attributes.
 
-| field | type | description                         |
-|------|------|--------------------------------------|
+| field | type | description                          |
+|-------|------|--------------------------------------|
 | limit | int  | Default `30`. |
-| after  | int - nullable  | Represents the query parameter to send to fetch the next slice of the results. The first item for the next slice starts at `after+1`. When the returned value is null, it means that all the data have been browsed in the given order. |
+| after | int - nullable  | Represents the query parameter to send to fetch the next slice of the results. The first item for the next slice starts at `after+1`. When the returned value is null, it means that all the data have been browsed in the given order. |
 
 ### GET query parameters for cursor-based pagination
 
-| field | type | required | description |
-|------|------|----------|--------------|
-| limit | int  | No | Default `30`. Limit on the number of tasks to be returned, between `1` and `100`. |
-| after  | int | No | Limit results to tasks with uids greater/lower than the specified uid. |
+| field | type | required | description  |
+|-------|------|----------|--------------|
+| limit | int  | No       | Default `30`. Limit on the number of tasks to be returned, between `1` and `100`. |
+| after | int  | No       | Limit results to tasks with uids greater/lower than the specified uid. |
 
-###  Usages examples
+### Usages examples
 
 This specification demonstrates cursor paging on `/tasks`, but it should be equivalent for `indexes/:uid/tasks`. Although the uids can be "holey" on the `/indexes/:uid/tasks` endpoint if several indexes are managed within the instance. The items uid remains sorted sequentially and can be used to navigate a list of `tasks` objects.
 
@@ -156,7 +156,7 @@ This specification demonstrates cursor paging on `/tasks`, but it should be equi
 #### `limit`
 
 - If `limit` is not set, the default value is chosen.
-- If `limit` is sent and it is not between the minimum and maximum values, the default value is chosen.
+- If `limit` is set and it is not between the minimum and maximum values, the default value is chosen.
 - If `limit` is not an integer, the default value is chosen.
 
 #### `after`
