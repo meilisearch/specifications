@@ -1,9 +1,9 @@
-- Title: API Keys & Scoped API Keys
+- Title: API Keys
 - Start Date: 2021-10-15
 - Specification PR: [#85](https://github.com/meilisearch/specifications/pull/85)
 - Discovery Issue: [#51](https://github.com/meilisearch/product/issues/51)
 
-# API Keys & Scoped API Keys
+# API Keys
 
 ## 1. Functional Specification
 
@@ -11,15 +11,9 @@
 
 Granular management of API keys is added to MeiliSearch. It is possible to restrict the access of an API key to certain actions on specific indexes.
 
-The SDKs can generate `Scoped API Keys` inheriting from a MeiliSearch's `API key` generated to force filters during a search for an end-user. It allows users to have multi-tenant indexes and thus restricts access to documents depending on the end-user making the search request.
-
 ### II. Motivation
 
 To make MeiliSearch more reliable for teams, we extend the management and the possibilities of restrictions for the management of a MeiliSearch instance by introducing a concrete API resource (`API Key`). Security is a critical need, often tricky to negotiate as the stakes are high for a company.
-
-We solve the use of multi-tenant indexes with the help of `Scoped API Keys`. By managing this, we reduce one of the last major deal-breakers that makes users not choose MeiliSearch as a solution despite all our advantages.
-
-Users regularly request Multi-Tenant API keys over time. Users today need to set up workarounds to meet this need. Some of them implement reverse-proxy or managed authentication systems like Hasura or Kong to filter what can and cannot be read. Others decide to use server code as a facade to implement the access restriction logic before requesting MeiliSearch. It is difficult to maintain, less efficient, and requires necessary skills that not everyone has.
 
 ### III. Glossary
 
@@ -27,8 +21,6 @@ Users regularly request Multi-Tenant API keys over time. Users today need to set
 |--------------------|------------|
 | Master Key         | This is the master key that allows you to create other API keys. The master key is defined by the user when launching MeiliSearch. |
 | API Key            | API keys are stored and managed from the endpoint `/keys` by the master key holder. These are the keys used by the technical teams to interact with MeiliSearch at the level of the client code. |
-| Scoped API Key | These keys are not stored and managed by a MeiliSearch instance. They are generated for each end-user by the backend code from a MeiliSearch API Key. They are used by the end-users to only search the documents belonging to them. |
-| Multi-Tenancy      | By multi-tenancy, we mean that an end-user only accesses data belonging to him within an index shared with other end-users. |
 
 ### IV. Personas
 
@@ -36,7 +28,6 @@ Users regularly request Multi-Tenant API keys over time. Users today need to set
 |---------|------|
 | Anna    | Anna has an `ssh` access to the MeiliSearch instance and manages it on a daily basis. |
 | Mark    | Mark is a developer from the same company as Anna. He will implement the code to communicate with MeiliSearch to solve technical/product needs. |
-| UserX   | UserX represents any end-user searching from the frontend interfaces provided by Anna and Mark's company. |
 
 ### V. `API Key` Explanations
 
@@ -411,106 +402,7 @@ Only the master key allows managing the API keys.
 
 - 🔴 Accessing this route with an `API Key` that don't have sufficient permissions to access it returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
-### V. `Scoped API Key` Explanations
-
-#### Summary Key Points
-
-- `Scoped API keys` are generated from a MeiliSearch parent `API key` on the client's server code to resolve multi-tenancy use-case by restricting access to data within an index according to the criteria chosen by the team managing a MeiliSearch instance.
-- These `Scoped API keys` can't be less restrictive than a parent `API key` and can only be used for the search action with a predefined forced filter field.
-- These `Scoped API keys` are not stored and thus retrievable on MeiliSearch. This is why we highly advise setting an expiration time on that type of API key for security reasons.
-
-#### Solving Multi-Tenancy with `Scoped API Keys`
-
-![](https://i.imgur.com/J4jVe1n.png)
-
-Now imagine that `Mark` is a developer for a SaaS platform. He would like to ensure that an end-user can only access his documents at search time. **His database contains many users and he hopes to have many more in the future.**
-
-When a user registers, the backend-side client code generates a `Scoped API Key` specifically for that end-user so he can only access his documents.
-
-A `filter` parameter is set to restrict the search for documents having a `user_id` attribute. This `filter` parameter is contained in the `Scoped API key` payload and cannot be modified during the search by the end-user making the request. `filter` can be made of any valid filters. e.g. `user_id = 10 and category = Romantic`
-
-This `Scoped API Key` is generated from a parent `API key` used to cipher the `Scoped API Key`. On the MeiliSearch side, this permits checking permissions and authorizing an end-user using this `Scoped API Key` during a search request.
-
----
-
-#### Generating a `Scoped API Key`
-
-```javascript
-const scopedApiKeyRestrictions = {
-     "indexesPolicy": {
-         "products": {
-             "filter": "user_id = 1"
-         },
-         "reviews": {
-             "filter": "user_id = 1 AND published = true"
-         }
-     },
-    "expiresIn": 3600
-}
-
-export const generateScopedApiKey = () => {
-  return (parentApiKey: string, restrictions: scopedApiKeyRestrictions): string => {
-    //hash the parentApiKey and keep a prefix of 4 chars of the hashed parentApiKey
-    const prefixKey = crypto
-        .createHmac('sha256', parentApiKey)
-        .digest('hex')
-        .substr(0, 4);
-
-    //serialize restrictions (indexesPolicies object and expiresIn)
-    const queryParameters = serializeQueryParameters(restrictions);
-
-    //create the secured part (parentApiKey + queryParameters)
-    const securedKey = crypto
-      .createHmac('sha256', parentApiKey)
-      .update(queryParameters)
-      .digest('hex');
-
-    //return the generated `Scoped Api Key`
-    return Buffer.from(prefixKey + securedKey + queryParameters).toString('base64');
-  };
-};
-```
-
-##### scopedApiKeyRestrictions
-
-The format allows defining specific enforced search filters for accessible indexes (these indexes must be defined in the parent `Api Key` used to generate the `Scoped API key` and have the search action).
-
-If the user does not want to define specific filters for each index accessible to the end-user, he can use the `*` index wildcard rule.
-
-A policy per index allows overriding the `"*"` behavior.
-
-The `scoped API Keys` also accept a number of seconds in the `expiresIn` field until it expires. This field should be mandatory and explicitly set to `null` if no expiration time is needed.
-
-
-```javascript
-const scopedApiKeyRestrictions = {
-     "indexesPolicy": {
-         "*": { //all search on indexes different than reviews will have the enforced filter `user_id`
-             "filter": "user_id = 1"
-         },
-         "reviews": {
-             "filter": "user_id = 1 AND published = true"
-         }
-     },
-    "expiresIn": null //No expiration time ⚠️ Is not recommended for security and quality of life reasons because the only way to revoke it is to delete the parent key
-}
-```
-
-#### Validity
-
-`Scoped API Keys` expire or are revoked when the parent `API Key` is deleted or expires.
-
-## 2. Technical Aspects
-
-### Synchronous write of `API Key` resources
-
-Synchronous writing would make it possible to dissociate key management from the update store, which handles asynchronous writing.
-
-It would be much more straightforward in terms of developer experience and quality of life for the person managing the `API Key` resources.
-
 ## 3. Future Possibilities
-
-### `API Keys`
 
 - Add a generated id field to paginate the list of API Key.
 - Hard limit the number of API keys that MeiliSearch can store.
@@ -518,8 +410,3 @@ It would be much more straightforward in terms of developer experience and quali
 - Add rate-limiting per API Key.
 - A restriction on the maximum offset/limit.
 - Add search parameters restrictions for an API Key.
-
-### `Scoped API Keys`
-
-- Handle more search parameters restrictions.
-- Extends `Scoped API Keys` to more than `search` action.
