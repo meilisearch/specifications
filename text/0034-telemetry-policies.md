@@ -1,151 +1,356 @@
-- Title: Analytics Policy
-- Start Date: 2021-04-16
-- Specification PR: [#34](https://github.com/meilisearch/specifications/pull/34)
-- MeiliSearch Tracking-Issues: [transplant/#181](https://github.com/meilisearch/transplant/issues/181)
+- Title: Anonymous Analytics Policy
+- Started At: 2021-04-16
+- Updated At: 2021-10-13
 
-# Analytics Policy
+# Anonymous Analytics Policy
 
-## 1. Feature Description and Interaction
+## 1. Functional Specification
 
 ### I. Summary
 
-Analytics concerns the possibility of depositing markers within a system in order to make segments of it. Quantitative data as data metrics are used to discover and verify user behavior.
-
-We would like to have more analytics to better understand our users in order to improve their usage and feel with MeiliSearch.
-
-We also use Sentry to trace the errors that occur when using MeiliSearch.
+This specification describes an exhaustive list of anonymous metrics collected by the MeiliSearch binary. It also describes the tools we use for this collection and how we identify a Meilisearch instance.
 
 ### II. Motivation
 
-We need to make informed decisions based on data instead of instincts and gut feel. Lack of data does not say anything about how correct or wrong are our intuitions. Lack of data means we did not make testable hypotheses. We will now support our decisions with data.
+At MeiliSearch, our vision is to provide an easy-to-use search solution that meets the essential needs of our users. At all times, we strive to understand our users better and meet their expectations in the best possible way.
 
-> 🔒 Note that we strictly don't want to collect private information by default (ip address, email, website url, etc..).
+Although we can gather needs and understand our users through several channels such as Github, Slack, surveys, interviews or roadmap votes, we realize that this is not enough to have a complete view of MeiliSearch usage and features adoption. By cross-referencing our product discovery phases with aggregated quantitative data, we want to make the product much better than what it is today. Our decision-making will be taken a step further to make a product that users love.
 
-We want to simplify the disabling of analytics collect and better inform users about what we want to track.
+### III. Explanation
 
-### III. Additional Materials
-N/A
+#### General Data Protection Regulation (GDPR)
 
-### IV.Explanation
+The metrics collected are non-sensitive, non-personal and do not identify an individual or a group of individuals using MeiliSearch. The data collected is secured and anonymized. We do not collect any data from the values stored in the documents.
 
-Following this issue and with the beginning of a product Team we asked ourselves what we wanted to do about analytics. https://github.com/meilisearch/transplant/issues/141.
+We, the MeiliSearch team, provide an email address so that users can request the removal of their data: privacy@meilisearch.com.<br>
+Thanks to the unique identifier generated for their MeiliSearch installation (`Instance UID` when launching MeiliSearch), we can remove the corresponding data from all the tools we describe below. Any questions regarding the management of the data collected can be sent to the email address as well.
 
-We will keep analyctis enabled by default while leaving the option for users to disable it. See Impact on Documentation part.
+#### Tools
 
-> Some new features will have analytic data points to check the assumptions and measure objectives achievements.
+##### Segment
 
-Each new feature specification should list data points to be collected and measured. Obviously the specification must explain why these data points are necessary for relation to the feature.
+The collected data is sent to [Segment](https://segment.com/). Segment is a platform for data collection and provides data management tools.
 
-We will simplify the deactivation of all our analytics telemetry in one action. To do that, we will remove the Sentry specific flag `MEILI_NO_SENTRY` to merge its use into the `MEILI_NO_ANALYTICS` flag. This means that its activation and deactivation will be shared with analytics within the `MEILI_NO_ANALYTICS` flag. By default, Sentry metrics will stay activated.
+##### Amplitude
 
-#### Current stack for analytics
+[Amplitude](https://amplitude.com/) is a tool for graphing and highlighting collected data. Segment feeds Amplitude so that we can build visualizations according to our needs.
 
-We are currently using Amplitude as a quantitative analytic tool to measure usage as a big picture.
 
-E.g.
-- Cohort: Servers that are running for more than seven days with the old version of MS (< v0.10.1)
-- Cohort: Servers that are running for more than seven days with the new version of MS (> v0.10.1)
-- Cohort: Servers that are running for more than 30 days with the old version of MS (< v0.10.1)
-- Cohort: Servers that are running for more than 30 days with the new version of MS (> v0.10.1)
-- Graph: The total of every telemetry messages received
-- Graph: The total of every unique id seen
-- Graph: The number of servers that are running at least since 7 days
-- Graph: The number of servers that are running at least since 30 days
-- User Composition: Device composition
-- User Composition: Version composition
-- Indexes size distribution for more than seven days (<200k not taken into account)
-- Indexes size distribution for the others
+----
 
-#### Future Metrics
+#### Events table
 
-##### Number of indexes per instance
-Discovery metric for federated search feature.
+| Event name | Description |
+|------------|-------------|
+| Launched   | Occurs when MeiliSearch is launched the first time. |
+| Documents Searched POST | Aggregated event on all received requests via the `POST` - `indexes/:indexUid/search` route during one hour or until a batch size reaches `500Kb`. |
+| Documents Searched GET | Aggregated event on all received requests via the `GET` - `/indexes/:indexUid/search` route during one hour or until a batch size reaches `500Kb`. |
+| Documents Added | Aggregated event on all received requests via the `POST` - `/indexes/:indexUid/documents` route during one hour or until a batch size reaches `500Kb`. |
+| Documents Updated | Aggregated event on all received requests via the `PUT` - `/indexes/:indexUid/documents` route during one hour or until a batch size reaches `500Kb`. |
+| Index Created | Occurs when an index is created via `POST` - `/indexes`. |
+| Index Updated | Occurs when an index is updated via `PUT` - `/indexes/:indexUid`. |
+| Settings Updated | Occurs when the settings are updated via `POST` - `/indexes/:indexUid/settings`. |
+| SearchableAttributes Updated | Occurs when searchable attributes are updated via `POST` - `/indexes/:indexUid/settings/searchable-attributes`. |
+| RankingRules Updated | Occurs when ranking rules are updated via `POST` - `/indexes/:indexUid/settings/ranking-rules`. |
+| FilterableAttributes Updated | Occurs when filterable attributes are updated via `POST` - `/indexes/:indexUid/settings/filterable-attributes`. |
+| SortableAttributes Updated | Occurs when sortable attributes are updated via `POST` - `/indexes/:indexUid/settings/sortable-attributes`. |
+| Dump Created | Occurs when a dump is created via `POST` - `/dumps`. |
+----
 
-##### Number of documents per index
-Discovery metric to know the average number of documents stored in an index.
+#### Summarized Metrics/Events table
 
-##### Geographical server distribution, CPU server distribution, RAM server distribution, Disk server distribution
-Discovery metrics to choose more relevant data centers over the world for the SaaS cloud platform. Will also be used in order to perform price studies analysis.
+| Metric name                             | Description                                             | Example           | Triggered by |
+|-----------------------------------------|---------------------------------------------------------|-------------------|--------------|
+| `context.app.version`                   | MeiliSearch version number                              | 0.23.0            | Every hour |
+| `infos.env`                             | MeiliSearch env                                         | production        | Every hour |
+| `infos.has_snapshot`                    | `true` if snapshots are activated, otherwise `false`    | true              | Every hour |
+| `system.distribution`                   | Distribution on which MeiliSearch is launched           | Arch Linux        | Every hour |
+| `system.kernel_version`                 | Kernel version on which MeiliSearch is launched         | 5.14.10           | Every hour |
+| `system.cores`                          | Number of cores                                         | 24                | Every hour |
+| `system.ram_size`                       | Total RAM capacity. Expressed in `KB`                   | 16777216          | Every hour |
+| `system.disk_size`                      | Total capacity of the largest disk. Expressed in `Bytes` | 1048576000        | Every hour |
+| `system.server_prodiver`                | Users can tell us on which provider MeiliSearch is hosted by filling the `MEILI_SERVER_PROVIDER` env var. This is also filled by our cloud deploy scripts, e.g. [GCP cloud-config.yaml](https://github.com/meilisearch/cloud-scripts/blob/56a7c2630c1a508e5ad0c0ba1d8cfeb8d2fa9ae0/scripts/providers/gcp/cloud-config.yaml#L33)                                                                              | gcp               | Every hour |
+| `stats.database_size`                   | Database size. Expressed in `Bytes`                     | 2621440           | Every hour |
+| `stats.indexes_number`                  | Number of indexes                                       | 2                 | Every hour |
+| `start_since_days`                      | Number of days since instance was launched              | 365               | Every hour |
+| `user_agent`                            | User-agent header encountered during one or more API calls | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `Dump Created` |
+| `requests.99th_response_time`           | Highest latency from among the fastest 99% of successful search requests | 57ms    | `Documents Searched POST`, `Documents Searched GET`|
+| `requests.total_succeeded`              | Total number of successful search requests in this batch | 3456 | `Documents Searched POST`, `Documents Searched GET` |
+| `requests.total_failed`                 | Total number of failed search requests in this batch    | 24   | `Documents Searched POST`, `Documents Searched GET` |
+| `requests.total_received`               | Total number of received search requests in this batch  | 3480 | `Documents Searched POST`, `Documents Searched GET` |
+| `sort.with_geoPoint`                    | `true` if the sort rule `_geoPoint` was used in this batch, otherwise `false` | true | `Documents Searched POST`, `Documents Searched GET` |
+| `sort.avg_criteria_number`              | Average number of sort criteria among all requests containing the `sort` parameter in this batch | 2 | `Documents Searched POST`, `Documents Searched GET` |
+| `filter.with_geoRadius`                 | `true` if the filter rule `_geoRadius` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
+| `filter.most_used_syntax`               | Most used filter syntax among all requests containing the `filter` parameter in this batch | string | `Documents Searched POST`, `Documents Searched GET` |
+| `q.avg_terms_number`                    | Average number of terms given for the `q` parameter in this batch | 5 | `Documents Searched POST`, `Documents Searched GET` |
+| `pagination.max_limit`                  | Highest value given for the `limit` parameter in this batch | 60 | `Documents Searched POST`, `Documents Searched GET` |
+| `pagination.max_offset`                 | Highest value given for the `offset` parameter in this batch | 1000 | `Documents Searched POST`, `Documents Searched GET` |
+| `primary_key`                           | Value given for the `primaryKey` parameter if used, otherwise `null` | id | `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`|
+| `payload_type`                          | All `payload_type` encountered in this batch | ["application/json", "text/plain", "application/x-ndjson"] | `Documents Added`, `Documents Updated` |
+| `index_creation`                        | `true` if a document addition or update request triggered index creation in this batch, otherwise `false` | true | `Documents Added`, `Documents Updated` |
+| `ranking_rules.sort_position`           | Position of the `sort` ranking rule | 5 | `Settings Updated`, `Ranking Rules Updated` |
+| `sortable_attributes.total`             | Number of sortable attributes | 3 | `Settings Updated`, `SortableAttributes Updated`|
+| `sortable_attributes.has_geo`           | `true` if `_geo` is set as a sortable attribute, otherwise `false` | true | `Settings Updated`, `SortableAttributes Updated` |
+| `filterable_attributes.total`           | Number of filterable attributes | 3 | `Settings Updated`, `FilterableAttributes Updated` |
+| `filterable_attributes.has_geo`         | `true` if `_geo` is set as a filterable attribute, otherwise `false` | false | `Settings Updated`, `FilterableAttributes Updated`|
+| `searchable_attributes.total`           | Number of searchable attributes | 4 | `Settings Updated`, `SearchableAttributes Update` |
 
-For the Geographical Server Distribution we need to make a call to a third-party like http://ip-api.com/json/113.14.168.85 to get `Country`, `City` and `Provider` at MeiliSearch launch.
+----
 
-Staying transparent is important to us, which is why the metrics will be explained in detail in a change log, blog post and a dedicated documentation page.
+#### Detailed list of Instance metrics and, events with their metrics
 
-For the CPU, RAM and DISK metrics, we can use an internal system stat method to get this information.
+##### System Configuration `system`
 
-##### SDK distribution
-Discovery metric to check adoption of our new sdks and the use of existing ones
+This property allows us to gather essential information to better understand on which type of machine MeiliSearch is used. This allows us to better advise users on the machines to choose according to their data volume and their use-cases.
 
-##### Feature metrics
-E.g. We want to know more about feature usage like how many times the `ranking_rules` order are changed, which is the top most used `ranking_rules` in first position etc.. What is the average `response body` size, what is the average number of `filter` used for the search endpoint.
+| Property name          | Description                                            | Example         |
+|------------------------|--------------------------------------------------------|-----------------|
+| system.distribution    | Distribution on which MeiliSearch is launched          | Arch Linux      |
+| system.kernel_version  | Kernel version on which MeiliSearch is launched        | 5.14.10-arch1-1 |
+| system.cores           | Number of cores                                        | 24              |
+| system.ram_size        | Total RAM capacity. Expressed in `KB`                  | 33604210        |
+| system.disk_size       | Total capacity of the largest disk. Expressed in `Bytes`| 336042103       |
+| system.server_provider | Users can tell us on which provider MeiliSearch is hosted by filling the `MEILI_SERVER_PROVIDER` env var. This is also filled by our providers deploy scripts. e.g. [GCP cloud-config.yaml](https://github.com/meilisearch/cloud-scripts/blob/56a7c2630c1a508e5ad0c0ba1d8cfeb8d2fa9ae0/scripts/providers/gcp/cloud-config.yaml#L33) | gcp |
 
-❗️ Asking for new data points should be specified in the feature specification, and accompanied by an explanation of what these data points will be used for.
+##### MeiliSearch Configuration `context` and `infos`
 
-### V. Impact on documentation
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| context.app.version  | MeiliSearch version number.  Sent in a `context` object instead of `properties` to match Amplitude requirement | 0.23.0 |
+| infos.env | MeiliSearch env. `production` / `development` | `production` |
+| infos.has_snapshot| `true` if snapshots are activated, otherwise `false` | `true` |
 
-Create a dedicated page aimed to explain why and how we collect anonymous data while being exhaustive on the metrics we collect. Related to https://github.com/meilisearch/documentation/issues/908.
-Remove the [Sentry part](https://docs.meilisearch.com/reference/features/configuration.html#disable-sentry) and mention it on the future dedicated page and in the [Analytics part](https://docs.meilisearch.com/reference/features/configuration.html#analytics).
+##### MeiliSearch Statistics `stats`
 
-### VI. Impact on SDKs
-N/A
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| stats.database_size  | Database size. Expressed in `Bytes` | 180230 |
+| stats.indexes_number | Number of indexes | 2 |
+| stats.documents_number | Number of indexed documents | 165847 |
+| start_since_days | Number of days since instance was launched | 328 |
 
-### VII. Impact on CLI
+---
 
-Currently, MeiliSearch only says if `Anonymous telemetry` is enabled or not on the launch message. It should also provide a message explaining in a few words that we are collecting anonymized MeiliSearch behavior metrics to enhance the product for future releases. Thus, displaying a link to the analytics documentation page.
+#### `Launched`
 
-Message to display on the CLI at launch if analytics are enabled:
+> This is the first event sent to mark that MeiliSearch is launched a first time.
 
+#### `Documents Searched POST`
+
+> The Documents Searched event is sent once an hour or when a batch reaches the maximum size of `500kb`. The event's properties are averaged over all requests on `POST` - `/indexes/:indexUid/search`.
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents all the user-agents encountered on this endpoint in the aggregated event.| ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+| requests.99th_response_time | The maximum latency, in `ms`, for the fastest 99% of succeeded requests in the aggregated event. | `57ms` |
+| requests.total_succeeded | The total number of succeeded search requests in the aggregated event. | `3456` |
+| requests.total_failed | The total number of failed search requests in the aggregated event. | `24` |
+| requests.total_received | The total number of received search requests in the aggregated event. | `3480` |
+| sort.with_geoPoint | Does the built-in sort rule _geoPoint rule has been used in the aggregated event? | `true` |
+| sort.avg_criteria_number | The average number of sort criteria among all the requests containing the `sort` parameter in the aggregated event. `"sort": []` equals to `0` while not sending `sort` does not influence the average. | `2` |
+| filter.with_geoRadius | Does the built-in filter rule _geoRadius has been used in the aggregated event? | `false` |
+| filter.avg_criteria_number | The average number of filter criteria among all the requests containing the `filter` parameter in the aggregated event. `"filter": []` equals to `0` while not sending `filter` does not influence the average in the aggregated event. | `4` |
+| filter.most_used_syntax | The most used filter syntax among all the requests containing the requests containing the `filter` parameter in the aggregated event. `string` / `array` / `mixed` | `mixed` |
+| q.avg_terms_number | The average number of terms for the `q` parameter among all requests in the aggregated event. | `5` |
+| pagination.max_limit | The maximum limit encountered among all requests in the aggregated event. | `20` |
+| pagination.max_offset | The maxium offset encountered among all requests in the aggregated event. | `1000` |
+
+---
+
+#### `Documents Searched GET`
+
+> The Documents Searched event is sent once an hour or when a batch reaches the maximum size of `500kb`. The event's properties are averaged over all requests on `GET` - `/indexes/:indexUid/search`.
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents all the user-agents encountered on this endpoint in the aggregated event.| ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+| requests.99th_response_time | Highest latency from among the fastest 99% of successful search requests. | `57ms` |
+| requests.total_succeeded | The total number of succeeded search requests in the aggregated event. | `3456` |
+| requests.total_failed | The total number of failed search requests in the aggregated event. | `24` |
+| requests.total_received | The total number of received search requests in the aggregated event. | `3480` |
+| sort.with_geoPoint | Does the built-in sort rule _geoPoint rule has been used in the aggregated event? | `true` |
+| sort.avg_criteria_number | The average number of sort criteria among all the requests containing the `sort` parameter in the aggregated event. `"sort": []` equals to `0` while not sending `sort` does not influence the average. | `2` |
+| filter.with_geoRadius | Does the built-in filter rule _geoRadius has been used in the aggregated event? | `false` |
+| filter.avg_criteria_number | The average number of filter criteria among all the requests containing the `filter` parameter in the aggregated event. `"filter": []` equals to `0` while not sending `filter` does not influence the average in the aggregated event. | `4` |
+| filter.most_used_syntax | The most used filter syntax among all the requests containing the requests containing the `filter` parameter in the aggregated event. `string` / `array` / `mixed` | `mixed` |
+| q.avg_terms_number | The average number of terms for the `q` parameter among all requests in the aggregated event. | `5` |
+| pagination.max_limit | The maximum limit encountered among all requests in the aggregated event. | `20` |
+| pagination.max_offset | The maxium offset encountered among all requests in the aggregated event. | `1000` |
+
+---
+
+## `Index Created`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered for this API call. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+| primary_key   | The field's name used as a primary key if set, otherwise `null`. | `id` |
+
+---
+
+## `Index Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered for this API call. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+| primary_key   | The field's name used as a primary key if set, otherwise `null`. | `id` |
+
+---
+
+## `Documents Added`
+
+> The Documents Added event is sent once an hour or when a batch reaches the maximum size of `500kb`. The event's properties are averaged over all requests on `POST` - `/indexes/:indexUid/documents`.
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents all the user-agents encountered on this endpoint in the aggregated event. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+| payload_type | Represents all the payload_type encountered on this endpoint in the aggregated event as a set. `application/json`/ `application/x-ndjson`/ `text/plain` or any non-supported content-type. | [`text/plain`, `application/json`] |
+| primary_key   | Represents all the `primaryKey` query parameters encountered in the aggregated event as a set, otherwise `null`. | ["id"] |
+| index_creation | Does an index creation happened among all requests in the aggregated event? | `false`|
+
+---
+
+## `Documents Updated`
+
+> The Documents Updated event is sent once an hour or when a batch reaches the maximum size of `500kb`. The event's properties are averaged over all requests on `PUT` - `/indexes/:indexUid/documents`.
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents all the user-agents encountered on this endpoint in the aggregated event. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+| payload_type | Represents all the payload_type encountered on this endpoint in the aggregated event as a set. `application/json`/ `application/x-ndjson`/ `text/plain` or any non-supported content-type. | [`text/plain`, `application/json`] |
+| primary_key   | Represents all the `primaryKey` query parameters encountered in the aggregated event as a set, otherwise `null`. | ["id"] |
+| index_creation | Does an index creation happened among all requests in the aggregated event? | `false`|
+
+---
+
+## `Settings Updated`
+
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+| ranking_rules.sort_position | Position of the `sort` ranking rule if any, otherwise `null`. | `5` |
+| sortable_attributes.total   | Number of sortable attributes. | `3` |
+| sortable_attributes.has_geo | Indicate if `_geo` is set as a sortable attribute. | `false`|
+| filterable_attributes.total   | Number of filterable attributes. | `3` |
+| filterable_attributes.has_geo | Indicate if `_geo` is set as a filterable attribute. | `false`|
+| searchable_attributes.total | Number of searchable attributes. | `3`|
+---
+
+## `RankingRules Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+| ranking_rules.sort_position | Position of the `sort` ranking rule if any, otherwise `null`. | `5` |
+
+---
+
+## `SortableAttributes Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+| sortable_attributes.total   | Number of sortable attributes. | `3` |
+| sortable_attributes.has_geo | Indicate if `_geo` is set as a sortable attribute. | `false`|
+
+---
+
+## `FilterableAttributes Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+| filterable_attributes.total   | Number of filterable attributes. | `3` |
+| filterable_attributes.has_geo | Indicate if `_geo` is set as a filterable attribute. | `false`|
+
+## `SearchableAttributes Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+| searchable_attributes.total   | Number of searchable attributes. | `3` |
+
+## `Dump Created`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+
+---
+
+#### User-interface
+
+Analytics are enabled by default while leaving the option for users to disable it with the `--no-analytics` option.
+
+**Message displayed on the CLI at launch if analytics are enabled**
 
 > Thank you for using MeiliSearch!
-
-> We collect anonymized analytics to improve our product and your experience. To learn more, including how to turn off analytics, visit our dedicated documentation page: [Link of the new dedicated page]()."
-
+>
+> We collect anonymized analytics to improve our product and your experience. To learn more, including how to turn off analytics, visit our dedicated documentation page: https://docs.meilisearch.com/learn/what_is_meilisearch/telemetry.html.
+>
 > Anonymous telemetry:	"Enabled"
+>
+> Instance UID: ":uidGeneratedAtFirstLaunch"
 
+**Message displayed on the CLI at launch if analytics are disabled after being activated**
+
+The unique identifier of the instance remains displayed even if analytics are disabled so that it does not reactivate the analytics to obtain it after having stopped it. The user can still ask us to remove the data previously collected by giving us his `Instance UID`.
+
+> Thank you for using MeiliSearch!
+>
+> Anonymous telemetry:	"Disabled"
+>
+> Instance UID: ":uidGeneratedAtFirstLaunch"
+
+**Message displayed on the CLI at launch if analytics are disabled at first launch**
+
+> Thank you for using MeiliSearch!
+>
+> Anonymous telemetry:	"Disabled"
 
 ## 2. Technical Aspects
 
-### I. Abstract
+### I. Technical Details
 
-⚠ Analytics telemetry should not impact performance for our users.
+#### User-Agent case
 
-### II. Technical Details
+The `User-Agent` header is tracked on the events listed below. Our official SDKs/integrations should always contain `MeiliSearch` in their names.
 
-#### Amplitude HTTP V2 Endpoint
+Each endpoint API tracked sends the `User-Agent` as a `user_agent` event property as an array. If several values are contained in the `User-Agent` header, they are split by the `;` character.
 
-Currently MeiliSearch uses a deprecated endpoint to send data to Amplitude. A new endpoint exists and could better suit our needs. [See here](https://developers.amplitude.com/docs/http-api-v2).
+#### Identifying MeiliSearch installation
 
-We want to use the `http-api-v2` endpoint.
+To identify instances, we generate a unique identifier at first launch if analytics are not disabled.
+
+- This unique identifier is inserted in the data.ms folder to be kept in case of version upgrades.
+- A file named following the given pattern `:MeiliSearchData.msPath-:instanceUid` is generated in a `MeiliSearch` folder to recover an identifier in case of corruption of the data.ms folder, causing it to be deleted and recreated. This `MeiliSearch` folder is created in the `config_dir` of each platform.
+
+| Directory	| Windows |	Linux/*BSD | macOS |
+|-----------|---------|------------|-------|
+|config_dir	| %APPDATA% (C:\Users\%USERNAME%\AppData\Roaming) |	$XDG_CONFIG_HOME (~/.config) |	~/Library/Application Support |
+
+#### Segment Identify Call
+
+The `identify` method of Segment permits identifying an instance by sending a unique identifier. It groups the information of a MeiliSearch binary such as `system`, `stats`, and general properties related below in this specification.
+
+#### Segment Track Call
+
+The `track` calls of Segment allow tracking the events passed on the instance.
+
+#### Batching
+
+A batch is sent every hour or when it reaches the maximum size of `500Kb` to avoid sending analytics in real-time and preserve network exchanges.
+
+This batch contains an identify payload and all tracked events that occurred during this hour.
 
 #### Logging
 
-Errors when sending metrics to Amplitude or Sentry should be silent.
+Errors occurring when sending metrics to Segment should be silent. In general, the impact of data collection should be minimized as much as possible concerning performance and be entirely transparent for the user during its use.
 
 #### Debug build
 
-In debug build, no telemetry either Amplitude or Sentry will be collected.
+In debug build, no analytics are collected.
 
 ## 3. Future possibilities
-
-### Segment to collect data
-
-Why we consider using Segment to collect and send data ?
-
-- Segment will represent our unique source of collecting data. It permits to change on the fly and fill data to new analytics products without losing data.
-- It seems to offer smarter mechanisms for collect. Thus, having a very low impact on performance of the system on which it collects data. [See the rust docs here](https://segment.com/docs/connections/sources/catalog/libraries/server/rust/)
-
-## 4. Planned Changes
-
-### 0.21 Release
-
-- Use `http-api-v2` endpoint to send data to Amplitude.
-- Display a CLI message at Meilisearch start explaining why we collect analytics and how to deactivate it when the telemetry is enabled.
-- Merge Sentry activation/deactivation in Analytics activation/deactivation flag.
-- Remove the Sentry DSN override possibility.
-- Make errors when sending analytics to Amplitude and Sentry silents.
-- Make a dedicated documentation page to explain why we collect analytics, what we are collecting, how to disable it. This dedicated documentation page will be linked into the new CLI message.
-- Deactivate the collect of analytics in debug build.
-
-### 0.22 Release
-
-- Branch Analytics telemetry at feature level.
+n/a
