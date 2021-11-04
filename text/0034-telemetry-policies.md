@@ -67,10 +67,10 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `system.distribution`                   | Distribution on which MeiliSearch is launched           | Arch Linux        | Every hour |
 | `system.kernel_version`                 | Kernel version on which MeiliSearch is launched         | 5.14.10           | Every hour |
 | `system.cores`                          | Number of cores                                         | 24                | Every hour |
-| `system.ram_size`                       | Total RAM capacity. Expressed in `Kb`                   | 16777216          | Every hour |
-| `system.disk_size`                      | Total capacity of the largest disk. Expressed in `Kb`   | 1048576000        | Every hour |
+| `system.ram_size`                       | Total RAM capacity. Expressed in `KB`                   | 16777216          | Every hour |
+| `system.disk_size`                      | Total capacity of the largest disk. Expressed in `Bytes` | 1048576000        | Every hour |
 | `system.server_prodiver`                | Users can tell us on which provider MeiliSearch is hosted by filling the `MEILI_SERVER_PROVIDER` env var. This is also filled by our cloud deploy scripts, e.g. [GCP cloud-config.yaml](https://github.com/meilisearch/cloud-scripts/blob/56a7c2630c1a508e5ad0c0ba1d8cfeb8d2fa9ae0/scripts/providers/gcp/cloud-config.yaml#L33)                                                                              | gcp               | Every hour |
-| `stats.database_size`                   | Database size. Expressed in `Kb`                        | 2621440           | Every hour |
+| `stats.database_size`                   | Database size. Expressed in `Bytes`                     | 2621440           | Every hour |
 | `stats.indexes_number`                  | Number of indexes                                       | 2                 | Every hour |
 | `start_since_days`                      | Number of days since instance was launched              | 365               | Every hour |
 | `user_agent`                            | User-agent header encountered during one or more API calls | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `Dump Created` |
@@ -108,8 +108,8 @@ This property allows us to gather essential information to better understand on 
 | system.distribution    | Distribution on which MeiliSearch is launched          | Arch Linux      |
 | system.kernel_version  | Kernel version on which MeiliSearch is launched        | 5.14.10-arch1-1 |
 | system.cores           | Number of cores                                        | 24              |
-| system.ram_size        | Total RAM capacity. Expressed in `Kb`                  | 33604210        |
-| system.disk_size       | Total capacity of the largest disk. Expressed in `Kb`  | 336042103       |
+| system.ram_size        | Total RAM capacity. Expressed in `KB`                  | 33604210        |
+| system.disk_size       | Total capacity of the largest disk. Expressed in `Bytes`| 336042103       |
 | system.server_provider | Users can tell us on which provider MeiliSearch is hosted by filling the `MEILI_SERVER_PROVIDER` env var. This is also filled by our providers deploy scripts. e.g. [GCP cloud-config.yaml](https://github.com/meilisearch/cloud-scripts/blob/56a7c2630c1a508e5ad0c0ba1d8cfeb8d2fa9ae0/scripts/providers/gcp/cloud-config.yaml#L33) | gcp |
 
 ##### MeiliSearch Configuration `context` and `infos`
@@ -124,7 +124,7 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| stats.database_size  | Database size. Expressed in `Kb` | 180230 |
+| stats.database_size  | Database size. Expressed in `Bytes` | 180230 |
 | stats.indexes_number | Number of indexes | 2 |
 | stats.documents_number | Number of indexed documents | 165847 |
 | start_since_days | Number of days since instance was launched | 328 |
