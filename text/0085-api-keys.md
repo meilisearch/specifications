@@ -142,8 +142,15 @@ If MeiliSearch is launched with the `production` value for the `MEILI_ENV` envir
 
 ```json
 {
+    "description": "Indexing Products API key",
     "key": "d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4",
-    "createdAt": "2021-11-12T10:00:00Z"
+    "indexes": ["products"],
+    "actions": [
+        "documents.add"
+    ],
+    "expiresAt": "2021-11-13T00:00:00Z",
+    "createdAt": "2021-11-12T10:00:00Z",
+    "updatedAt": null
 }
 ```
 
@@ -248,7 +255,14 @@ If MeiliSearch is launched with the `production` value for the `MEILI_ENV` envir
 
 ```json
 {
+    "description": "Manage Products/Reviews Documents API key",
     "key": "d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4",
+    "indexes": ["products", "reviews"],
+    "actions": [
+        "documents.*"
+    ],
+    "expiresAt": "2021-12-31T23:59:59Z",
+    "createdAt": "2021-11-12T10:00:00Z",
     "updatedAt": "2021-10-12T15:00:00Z"
 }
 ```
