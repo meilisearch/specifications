@@ -19,7 +19,7 @@ To make MeiliSearch more reliable for teams, we extend the management and the po
 
 | Term               | Definition |
 |--------------------|------------|
-| Master Key         | This is the master key that allows you to create other API keys. The master key is defined by the user when launching MeiliSearch. |
+| Master Key         | This is the master key that allows you to create other API keys. The master key is defined by the user when launching MeiliSearch, thus give access to the `/keys` API endpoints. |
 | API Key            | API keys are stored and managed from the endpoint `/keys` by the master key holder. These are the keys used by the technical teams to interact with MeiliSearch at the level of the client code. |
 
 ### IV. Personas
@@ -47,6 +47,22 @@ To make MeiliSearch more reliable for teams, we extend the management and the po
 `Anna` can define access rights to certain indexes to define an expiration date and also authorized `actions` for an `API Key` (See API Key Actions List Definition Part).
 
 Only the master key allows managing the API keys.
+
+#### Master Key
+
+The master key exists to secure a MeiliSearch instance. As soon as a master key is set via the  `MEILI_MASTER_KEY` environment variable or the `--master-key` CLI option , the endpoint `/keys` is accessible only for the master key holder. It can be seen as a super admin key; It must be shared only with people who have to manage the security of a MeiliSearch instance.
+
+This master key is not an API Key, thus is not stored and fetchable from an API endpoint. It must be seen as a runtime lock that activates the security of MeiliSearch as soon as an instance is launched with it.
+
+At the first launch of MeiliSearch with a master key, MeiliSearch automatically generate two default API keys (See the `GET - /keys` example) to cover many of the most basic needs. It generates a `Default Search API Key` dedicated to the search that can be used on the client-side and a `Default Admin API Key` to manipulate a MeiliSearch instance from a backend side.
+
+If the value of the master key changes, the previously generated `API Keys` do not change or expire. Thus, MeiliSearch does not re-generate the previous generated default API keys.
+
+If the master key is removed at MeiliSearch launch, the previously generated API keys no longer secure the MeiliSearch instance.
+
+If MeiliSearch is launched with the `production` value for the `MEILI_ENV` environement variable or the `--env` CLI option, a master key is mandatory to force the user to secure his instance. If the master key is omitted in that particular case, MeiliSearch launch is aborted and display the `Error: In production mode, the environment variable MEILI_MASTER_KEY is mandatory` error in stdout.
+
+> Note that the master key does not appear on the `/keys` endpoints.
 
 ---
 
