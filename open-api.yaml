@@ -581,7 +581,7 @@ components:
         - actions
         - indexes
         - expiresAt
-      description: API keys are stored and managed by the master key holder. These are the keys used by the technical teams to interact with MeiliSearch at the level of the client/server code. API keys can have restrictions on which methods can be accessed via an actions list; they can also expiresAt a specific date time and be restricted to a specific set of indexes.
+      description: API keys are stored and managed by the main key holder. These are the keys used by the technical teams to interact with MeiliSearch at the level of the client/server code. API keys can have restrictions on which methods can be accessed via an actions list; they can also expiresAt a specific date time and be restricted to a specific set of indexes.
   parameters:
     indexUid:
       name: indexUid
