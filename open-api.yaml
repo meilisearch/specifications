@@ -826,7 +826,7 @@ tags:
   - name: Keys
     description: |
       Manage API `keys` for a MeiliSearch instance. Each key has a given set of permissions.
-      You must have the master key to access the `keys` route.
+      You must have the main key to access the `keys` route.
       [More information about the keys and their rights](https://docs.meilisearch.com/reference/features/authentication.html).
   - name: Settings
     description: |
