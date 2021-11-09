@@ -19,7 +19,7 @@ To make MeiliSearch more reliable for teams, we extend the management and the po
 
 | Term               | Definition |
 |--------------------|------------|
-| Master Key         | This is the master key that allows you to create other API keys. The master key is defined by the user when launching MeiliSearch, thus give access to the `/keys` API endpoints. |
+| Master Key         | This is the master key that allows you to create other API keys. The master key is defined by the user when launching MeiliSearch, thus gives access to the `/keys` API endpoint. |
 | API Key            | API keys are stored and managed from the endpoint `/keys` by the master key holder. These are the keys used by the technical teams to interact with MeiliSearch at the level of the client code. |
 
 ### IV. Personas
