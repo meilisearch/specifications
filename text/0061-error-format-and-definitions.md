@@ -683,7 +683,7 @@ This error happens when a requested api key can't be found.
 HTTP Code: `404 Not Found`
 
 ```json
-    "message": "Api key :apiKey not found.",
+    "message": "API key :apiKey not found.",
     "code": "api_key_not_found",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#api_key_not_found"

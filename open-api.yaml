@@ -825,7 +825,7 @@ tags:
       The `tasks` route gives information about the progress of the [asynchronous tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_tasks.html).
   - name: Keys
     description: |
-      Manage api `keys` for a MeiliSearch instance. Each key has a given set of permissions.
+      Manage API `keys` for a MeiliSearch instance. Each key has a given set of permissions.
       You must have the master key to access the `keys` route.
       [More information about the keys and their rights](https://docs.meilisearch.com/reference/features/authentication.html).
   - name: Settings

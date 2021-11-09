@@ -57,13 +57,13 @@ The main key exists to secure a MeiliSearch instance. As soon as a main key is s
 
 This main key is not an API Key, thus is not stored and fetchable from an API endpoint. It must be seen as a runtime lock that activates the security of MeiliSearch as soon as an instance is launched with it.
 
-At the first launch of MeiliSearch with a main key, MeiliSearch automatically generate two default API keys (See the `GET - /keys` example) to cover many of the most basic needs. It generates a `Default Search API Key` dedicated to the search that can be used on the client-side and a `Default Admin API Key` to manipulate a MeiliSearch instance from a backend side.
+At the first launch of MeiliSearch with a main key, MeiliSearch automatically generates two default API keys (See the `GET - /keys` example) to cover many of the most basic needs. It generates a `Default Search API Key` dedicated to the search that can be used on the client-side and a `Default Admin API Key` to manipulate a MeiliSearch instance from a backend side.
 
 If the value of the main key changes, the previously generated `API Keys` do not change or expire. Thus, MeiliSearch does not re-generate the previous generated default API keys.
 
 If the main key is removed at MeiliSearch launch, the previously generated API keys no longer secure the MeiliSearch instance.
 
-If MeiliSearch is launched with the `production` value for the `MEILI_ENV` environement variable or the `--env` CLI option, a main key is mandatory to force the user to secure his instance. If the main key is omitted in that particular case, MeiliSearch launch is aborted and display the `Error: In production mode, the environment variable MEILI_MAIN_KEY is mandatory` error in stdout.
+If MeiliSearch is launched with the `production` value for the `MEILI_ENV` environment variable or the `--env` CLI option, a main key is mandatory to force the user to secure his instance. If the main key is omitted in that particular case, MeiliSearch launch is aborted and displays the `Error: In production mode, the environment variable MEILI_MAIN_KEY is mandatory` error in stdout.
 
 > Note that the main key does not appear on the `/keys` endpoints.
 
