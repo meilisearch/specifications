@@ -19,8 +19,8 @@ To make MeiliSearch more reliable for teams, we extend the management and the po
 
 | Term               | Definition |
 |--------------------|------------|
-| Master Key         | This is the master key that allows you to create other API keys. The master key is defined by the user when launching MeiliSearch, thus gives access to the `/keys` API endpoint. |
-| API Key            | API keys are stored and managed from the endpoint `/keys` by the master key holder. These are the keys used by the technical teams to interact with MeiliSearch at the level of the client code. |
+| Main Key         | This is the main key that allows you to create other API keys. The main key is defined by the user when launching MeiliSearch, thus gives access to the `/keys` API endpoint. |
+| API Key            | API keys are stored and managed from the endpoint `/keys` by the main key holder. These are the keys used by the technical teams to interact with MeiliSearch at the level of the client code. |
 
 ### IV. Personas
 
@@ -33,8 +33,11 @@ To make MeiliSearch more reliable for teams, we extend the management and the po
 
 #### Summary Key Points
 
-- `/keys` management is restricted to the master key.
-- When a master key is set at MeiliSearch first-launch, we generate two pre-configured `API Key` resources. A `Default Search API Key` restricted to the search action and a `Default Admin API Key` to handle all operations (except managing API Keys) on MeiliSearch.
+- Occurrences of `master key` are changed by `main key`.
+- `MEILI_MASTER_KEY` environment variable is renamed `MEILI_MAIN_KEY`.
+- `--master-key` CLI option is renamed `--main-key`.
+- `/keys` management is restricted to the main key.
+- When a main key is set at MeiliSearch first-launch, we generate two pre-configured `API Key` resources. A `Default Search API Key` restricted to the search action and a `Default Admin API Key` to handle all operations (except managing API Keys) on MeiliSearch.
 - New endpoints are added to manage the `API Key` resource.
 - `API keys` can have restrictions on which methods can be accessed via an `actions` list; they can also `expiresAt` a specific date time and be restricted to a specific set of `indexes`.
 
@@ -42,27 +45,27 @@ To make MeiliSearch more reliable for teams, we extend the management and the po
 
 ![](https://i.imgur.com/mAUFnNb.png)
 
-`Anna` manages the MeiliSearch instance; she uses the master key she defined at startup to generate an `API Key` resource for `Mark` to use in his client code to communicate with the MeiliSearch instance.
+`Anna` manages the MeiliSearch instance; she uses the main key she defined at startup to generate an `API Key` resource for `Mark` to use in his client code to communicate with the MeiliSearch instance.
 
 `Anna` can define access rights to certain indexes to define an expiration date and also authorized `actions` for an `API Key` (See API Key Actions List Definition Part).
 
-Only the master key allows managing the API keys.
+Only the main key allows managing the API keys.
 
-#### Master Key
+#### Main Key
 
-The master key exists to secure a MeiliSearch instance. As soon as a master key is set via the  `MEILI_MASTER_KEY` environment variable or the `--master-key` CLI option , the endpoint `/keys` is accessible only for the master key holder. It can be seen as a super admin key; It must be shared only with people who have to manage the security of a MeiliSearch instance.
+The main key exists to secure a MeiliSearch instance. As soon as a main key is set via the  `MEILI_MAIN_KEY` environment variable or the `--main-key` CLI option , the endpoint `/keys` is accessible only for the main key holder. It can be seen as a super admin key; It must be shared only with people who have to manage the security of a MeiliSearch instance.
 
-This master key is not an API Key, thus is not stored and fetchable from an API endpoint. It must be seen as a runtime lock that activates the security of MeiliSearch as soon as an instance is launched with it.
+This main key is not an API Key, thus is not stored and fetchable from an API endpoint. It must be seen as a runtime lock that activates the security of MeiliSearch as soon as an instance is launched with it.
 
-At the first launch of MeiliSearch with a master key, MeiliSearch automatically generate two default API keys (See the `GET - /keys` example) to cover many of the most basic needs. It generates a `Default Search API Key` dedicated to the search that can be used on the client-side and a `Default Admin API Key` to manipulate a MeiliSearch instance from a backend side.
+At the first launch of MeiliSearch with a main key, MeiliSearch automatically generate two default API keys (See the `GET - /keys` example) to cover many of the most basic needs. It generates a `Default Search API Key` dedicated to the search that can be used on the client-side and a `Default Admin API Key` to manipulate a MeiliSearch instance from a backend side.
 
-If the value of the master key changes, the previously generated `API Keys` do not change or expire. Thus, MeiliSearch does not re-generate the previous generated default API keys.
+If the value of the main key changes, the previously generated `API Keys` do not change or expire. Thus, MeiliSearch does not re-generate the previous generated default API keys.
 
-If the master key is removed at MeiliSearch launch, the previously generated API keys no longer secure the MeiliSearch instance.
+If the main key is removed at MeiliSearch launch, the previously generated API keys no longer secure the MeiliSearch instance.
 
-If MeiliSearch is launched with the `production` value for the `MEILI_ENV` environement variable or the `--env` CLI option, a master key is mandatory to force the user to secure his instance. If the master key is omitted in that particular case, MeiliSearch launch is aborted and display the `Error: In production mode, the environment variable MEILI_MASTER_KEY is mandatory` error in stdout.
+If MeiliSearch is launched with the `production` value for the `MEILI_ENV` environement variable or the `--env` CLI option, a main key is mandatory to force the user to secure his instance. If the main key is omitted in that particular case, MeiliSearch launch is aborted and display the `Error: In production mode, the environment variable MEILI_MAIN_KEY is mandatory` error in stdout.
 
-> Note that the master key does not appear on the `/keys` endpoints.
+> Note that the main key does not appear on the `/keys` endpoints.
 
 ---
 
@@ -119,7 +122,7 @@ If MeiliSearch is launched with the `production` value for the `MEILI_ENV` envir
 ##### Headers
 
 ```
-"X-MEILI-API-KEY: :masterKey"
+"X-MEILI-API-KEY: :mainKey"
 "Content-Type: application/json"
 ```
 
@@ -164,7 +167,7 @@ If MeiliSearch is launched with the `production` value for the `MEILI_ENV` envir
 ##### Errors
 
 - 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the main-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 - 🔴 Omitting Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
 - 🔴 Sending an empty Content-Type returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
@@ -190,7 +193,7 @@ If MeiliSearch is launched with the `production` value for the `MEILI_ENV` envir
 ##### Headers
 
 ```
-"X-MEILI-API-KEY: :masterKey"
+"X-MEILI-API-KEY: :mainKey"
 ```
 
 ##### Response
@@ -216,7 +219,7 @@ If MeiliSearch is launched with the `production` value for the `MEILI_ENV` envir
 ##### Errors
 
 - 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the main-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 - 🔴 Attempting to access an API key that does not exist returns an [api_key_not_found](0061-error-format-and-definitions.md#api_key_not_found) error.
 
 ---
@@ -230,7 +233,7 @@ If MeiliSearch is launched with the `production` value for the `MEILI_ENV` envir
 ##### Headers
 
 ```
-"X-MEILI-API-KEY: :masterKey"
+"X-MEILI-API-KEY: :mainKey"
 "Content-Type: application/json"
 ```
 
@@ -270,7 +273,7 @@ If MeiliSearch is launched with the `production` value for the `MEILI_ENV` envir
 ##### Errors
 
 - 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the main-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 - 🔴 Attempting to access an API key that does not exist returns a [api_key_not_found](0061-error-format-and-definitions.md#api_key_not_found) error.
 - 🔴 Omitting Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
 - 🔴 Sending an empty Content-Type returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
@@ -294,7 +297,7 @@ If MeiliSearch is launched with the `production` value for the `MEILI_ENV` envir
 ##### Headers
 
 ```
-"X-MEILI-API-KEY: :masterKey"
+"X-MEILI-API-KEY: :mainKey"
 ```
 
 ##### Response
@@ -350,7 +353,7 @@ If MeiliSearch is launched with the `production` value for the `MEILI_ENV` envir
 
 > Expired API keys cannot be found on the `/keys` endpoints. This can be handled in the future with an archiving system or something else. See Future Possibilities part.
 
-> 👉 Note the two default generated API keys here. When a master key is set at MeiliSearch's launch, it generates two pre-configured `API Keys`. A Default Search API Key restricted to the search action on all indexes and a Default Admin API Key on all indexes to handle all operations (except managing API Keys).
+> 👉 Note the two default generated API keys here. When a main key is set at MeiliSearch's launch, it generates two pre-configured `API Keys`. A Default Search API Key restricted to the search action on all indexes and a Default Admin API Key on all indexes to handle all operations (except managing API Keys).
 
 ##### List details
 
@@ -362,7 +365,7 @@ If MeiliSearch is launched with the `production` value for the `MEILI_ENV` envir
 ##### Errors
 
 - 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the main-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
 ---
 
@@ -375,7 +378,7 @@ If MeiliSearch is launched with the `production` value for the `MEILI_ENV` envir
 ##### Headers
 
 ```
-"X-MEILI-API-KEY: :masterKey"
+"X-MEILI-API-KEY: :mainKey"
 ```
 
 ##### Response
@@ -385,7 +388,7 @@ If MeiliSearch is launched with the `production` value for the `MEILI_ENV` envir
 ##### Errors
 
 - 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the main-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 - 🔴 Attempting to access an API key that does not exist returns a `api_key_not_found`.
 
 ---
