@@ -104,11 +104,12 @@ If MeiliSearch is launched with the `production` value for the `MEILI_ENV` envir
 | indexes.get | Provides access to `GET` `/indexes` and `/indexes/:authorizedIndexes`. **⚠️Non-authorized `indexes` are omitted from the response on `/indexes`**. |
 | indexes.update | Provides access to `PUT` `/indexes/:authorizedIndexes`. |
 | indexes.delete | Provides access to `DELETE` `/indexes/:authorizedIndexes`. |
-| tasks | Provides access to `GET` `/tasks`. **⚠️Non-authorized `indexes` are omitted from the response on `/tasks`**. Also add access to `GET` `/indexes/:authorizedIndexes/tasks` routes. |
+| tasks.get | Provides access to `GET` `/tasks`. **⚠️Non-authorized `indexes` are omitted from the response on `/tasks`**. Also add access to `GET` `/indexes/:authorizedIndexes/tasks` routes. |
 | settings.get | Provides access to `GET` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes. |
 | settings.update | Provides access to `POST / DELETE` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes. |
-| stats | Provides access to `GET` `/stats/`. **⚠️Non-authorized `indexes` are omitted from the response on `/stats`**. Also add access to `GET` `/indexes/:authorizedIndexes/stats`. |
-| dumps | Provides access to `POST` `/dumps` and `GET` `/dumps/:dumpUid` routes. **As dumps are not scoped by indexes, a restriction on `indexes` does not affect this action.** |
+| stats.get | Provides access to `GET` `/stats/`. **⚠️Non-authorized `indexes` are omitted from the response on `/stats`**. Also add access to `GET` `/indexes/:authorizedIndexes/stats`. |
+| dumps.create | Provides access to `POST` `/dumps` route. **As dumps are not scoped by indexes, a restriction on `indexes` does not affect this action.** |
+| dumps.get | Provides access to `GET` `/dumps/:dumpUid` route. **As dumps are not scoped by indexes, a restriction on `indexes` does not affect this action.** |
 
 ---
 
