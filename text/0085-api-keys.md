@@ -102,14 +102,13 @@ If MeiliSearch is launched with the `production` value for the `MEILI_ENV` envir
 | documents.delete | Provides access to `DELETE` method on `/indexes/:authorizedIndexes/documents/:documentId`, `indexes/:authorizedIndexes/documents/:documentId` and `POST` method on `/indexes/:authorizedIndexes/documents/delete-batch` routes. |
 | indexes.add | Provides access to `POST` `/indexes`. **⚠️ A newly created `index` is added to the `indexes` array for the API key making the operation and all others keys having `[*]` as a value for `indexes`**. |
 | indexes.get | Provides access to `GET` `/indexes` and `/indexes/:authorizedIndexes`. **⚠️Non-authorized `indexes` are omitted from the response on `/indexes`**. |
-| indexes.update | Provides access to `PUT` `/indexes/:authorizedIndexes` |
-| indexes.delete | Provides access to `DELETE` `/indexes/:authorizedIndexes` |
-| tasks.get | Provides access to `GET` `/tasks` and `/indexes/:indexUid/tasks` routes. |
+| indexes.update | Provides access to `PUT` `/indexes/:authorizedIndexes`. |
+| indexes.delete | Provides access to `DELETE` `/indexes/:authorizedIndexes`. |
+| tasks | Provides access to `GET` `/tasks`. **⚠️Non-authorized `indexes` are omitted from the response on `/tasks`**. Also add access to `GET` `/indexes/:authorizedIndexes/tasks` routes. |
 | settings.get | Provides access to `GET` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes. |
-| settings.update | Provides access to `POST` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes. |
-| settings.reset | Provides access to `DELETE` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes. |
-| stats | Provides access to `GET` `/stats/`. **⚠️Non-authorized `indexes` are ommited from the response on `/stats`**. Also add access to `GET` `/indexes/:authorizedIndexes/stats`. |
-| dumps | Provides access to `POST` `/dumps` and `GET` `/dumps/:dumpUid` routes. |
+| settings.update | Provides access to `POST / DELETE` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes. |
+| stats | Provides access to `GET` `/stats/`. **⚠️Non-authorized `indexes` are omitted from the response on `/stats`**. Also add access to `GET` `/indexes/:authorizedIndexes/stats`. |
+| dumps | Provides access to `POST` `/dumps` and `GET` `/dumps/:dumpUid` routes. **As dumps are not scoped by indexes, a restriction on `indexes` does not affect this action.** |
 
 ---
 
