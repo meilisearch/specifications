@@ -190,6 +190,9 @@ components:
 
         > warn
         > Attribute(s) used in `sort` should be declared as sortable attributes. See [Sorting](https://docs.meilisearch.com/reference/features/sorting.html).
+
+        > info
+        > _geoPoint({lat}, {long}) built-in sort rule can be used to sort documents around a geo point.
       example:
         - 'price:desc'
       title: sort
@@ -635,6 +638,7 @@ components:
 
         > warn
         > Attribute(s) used in `sort` should be declared as sortable attributes. See [Sorting](https://docs.meilisearch.com/reference/features/sorting.html).
+
         > info
         > _geoPoint({lat}, {long}) built-in sort rule can be used to sort documents around a geo point.
     filter:
