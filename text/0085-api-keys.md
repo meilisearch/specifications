@@ -447,9 +447,7 @@ Only the main key allows managing the API keys.
 
 ### 2.1 Synchronous write of `API Key` resources
 
-Synchronous writing would make it possible to dissociate key management from the update store, which handles asynchronous writing.
-
-It would be much more straightforward in terms of developer experience and quality of life for the person managing the `API Key` resources.
+Writing to `/keys` endpoints are synchronous in order to return errors directly to the user when he performs an operation on them.
 
 ## 3. Future Possibilities
 
