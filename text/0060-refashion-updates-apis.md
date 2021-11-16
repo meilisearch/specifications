@@ -30,7 +30,7 @@ The specification makes any writing operation on an index asynchronous to serve 
     - Attributes of an error appearing in a `failed` `task` are now contained in a dedicated `error` object.
     - `type` is no longer an object. It now becomes a string containing the values of its `name` field previously defined in the `type` object.
     - The possible values for the `type` field are reworked to be more clear and consistent with our naming rules.
-    - A `details` object is added to contain specific information related to a `task` payload that was previously displayed in the `type` nested object. Previous `number` key is renamed `numberOfDocuments`.
+    - A `details` object is added to contain specific information related to a `task` payload that was previously displayed in the `type` nested object.
     - An `indexUid` field is added to give information about the related index on which the task is performed.
     - `duration` format has been updated to express an `ISO 8601` duration.
     - `processed` status changes to `succeeded`.
@@ -61,7 +61,7 @@ The motivation is to stabilize the current `update` resource to a version that c
 | indexUid | string | Unique index identifier |
 | status  | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`                                |
 | type    | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `documentsAddition`, `documentsPartial`, `documentsDeletion`, `settingsUpdate`, `clearAll` |
-| details | object |  Details information of the task payload. `numberOfDocuments` represent the number of deduplicated documents processed for `documentsAddition`, `documentsPartial` and `documentsDeletion` type. Details contains any settings object depending of the `task` payload for a `settingsUpdate`. `clearAll`, `indexCreation`, `indexUpdate`, `indexDeletion` does not provide a `details` object. |
+| details | object |  Details information for a task payload. See Task Details part. |
 | error | object | Error object containing error details and context when a task has a `failed` status. See https://github.com/meilisearch/specifications/pull/61|
  | duration | string | Total elapsed time the engine was in processing state expressed as an `ISO-8601` duration format. Times below the second can be expressed with the `.` notation, e.g., `PT0.5S` to express `500ms`. Default is set to `null`.   |
 | enqueuedAt | string | Represent the date and time as `ISO-8601` format when the task has been enqueued |
@@ -99,9 +99,9 @@ The motivation is to stabilize the current `update` resource to a version that c
 
 | old        | new           |
 |------------|---------------|
-|  -          | indexCreation |
+|  -         | indexCreation |
 |  -         | indexUpdate   |
-|  -          | indexDeletion |
+|  -         | indexDeletion |
 | DocumentsAddition | documentsAddition  |
 | DocumentsPartial | documentsPartial  |
 | DocumentsDeletion  | documentsDeletion |
@@ -112,7 +112,70 @@ The motivation is to stabilize the current `update` resource to a version that c
 >
 > 💡 `Settings` is updated to be more precise with the name `settingsUpdate`.
 
-#### 4. Examples
+#### 4. `details` field object
+
+##### documentsAddition
+
+| name     | description |
+| -------- | --------    |
+| receivedDocuments | Number of documents received. |
+| indexedDocuments  | Number of documents finally indexed. |
+
+
+##### documentsPartial
+
+| name     | description |
+| -------- | --------    |
+| receivedDocuments | Number of documents received. |
+| indexedDocuments  | Number of documents finally indexed. |
+
+
+##### documentsDeleted
+
+| name     | description |
+| -------- | --------    |
+| receivedDocuments | Number of documents received.  |
+| deletedDocuments | Number of documents finally deleted. |
+
+##### indexCreation
+
+| name     | description |
+| -------- | --------    |
+| primaryKey  | Value for the `primaryKey` field into the POST index payload.|
+
+
+##### indexUpdate
+
+| name     | description |
+| -------- | --------    |
+| primaryKey | Value for the `primaryKey` field into the PUT index payload. |
+
+##### indexDeletion
+
+| name     | description |
+| -------- | --------    |
+| deletedDocuments    | Number of deleted documents. Should be all documents contained in the deleted index. |
+
+##### clearAll
+
+| name     | description |
+| -------- | --------    |
+| deletedDocuments    | Number of deleted documents. Should be all documents contained in cleared index. |
+
+##### settingsUpdate
+
+| name     | description |
+| -------- | --------    |
+| rankingRules     | `rankingRules` payload array |
+| searchableAttributes | `searchableAttributes` payload array |
+| filterableAttributes | `filterableAttributes` payload array |
+| sortableAttributes | `sortableAttributes` payload array | 
+| stopWords | `stopWords` payload array |
+| synonyms  | `synonyms` payload object |
+| distinctAttribute | `distrinctAttribute` payload string |
+| displayedAttributes | `displayedAttributes` payload array |
+
+#### 5. Examples
 
 e.g. A fully qualified `task` object in an `enqueued` state.
 
@@ -235,7 +298,7 @@ e.g. A summarized `task` object in a `202 Accepted` HTTP response returned at in
 
 ---
 
-#### 5. APIs endpoints
+#### 6. APIs endpoints
 
 **Get all tasks** | `GET` - `/tasks`
 
@@ -264,7 +327,8 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
             "status": "succeeded",
             "type": "documentsAddition",
             "details": {
-                "numberOfDocuments": 100
+                "receivedDocuments": 100,
+                "indexedDocuments": 100
             },
             "duration": "PT16S",
             "enqueuedAt": "2021-08-11T09:25:53.000000Z",
@@ -282,11 +346,13 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
 > 💡 `task` uid is generated globally. The `uid` of the tasks are no longer scoped to an index.
 >
 > 💡 By default, objects are sorted by `desc` order on `uid` field. So the most recent tasks appear first.
+>
+> 💡 When an index is deleted, its tasks remain accessible on the global `/tasks` endpoint.
 
 ##### Errors
 
 - 🔴 If a master key is configured on the server-side but missing from the client in the `X-MEILI-API-KEY` header, the API returns a `401 Unauthorized` - `missing_authorization_header` error.
-- 🔴 If a master key is sent by the client but does not match the value configured on the server-side, the API returns a `403 Forbidden` - `invalid_token`.
+- 🔴 If a master key is sent by the client but does not match the value configured on the server-side, the API returns a `403 Forbidden` - `invalid_api_key`.
 
 ---
 
@@ -314,7 +380,7 @@ Allows users to get a detailed `task` object retrieved by the `uid` field regard
 ##### Errors
 
 - 🔴 If a master key is configured on the server-side but missing from the client in the `X-MEILI-API-KEY` header, the API returns a `401 Unauthorized` - `missing_authorization_header` error.
-- 🔴 If a master key is sent by the client but does not match the value configured on the server-side, the API returns a `403 Forbidden` - `invalid_token`.
+- 🔴 If a master key is sent by the client but does not match the value configured on the server-side, the API returns a `403 Forbidden` - `invalid_api_key`.
 - 🔴 If the task does not exist, the API returns a `404 Not Found` - `task_not_found` error.
 
 ---
@@ -346,7 +412,8 @@ Allows users to list tasks of a particular index.
             "status": "succeeded",
             "type": "documentsAddition",
             "details": {
-                "numberofDocuments": 100
+                "receivedDocuments": 100,
+                "indexedDocuments": 100
             },
             "duration": "PT16S",
             "enqueuedAt": "2021-08-11T09:25:53.000000Z",
@@ -360,7 +427,7 @@ Allows users to list tasks of a particular index.
 ##### Errors
 
 - 🔴 If a master key is configured on the server-side but missing from the client in the `X-MEILI-API-KEY` header, the API returns a `401 Unauthorized` - `missing_authorization_header` error.
-- 🔴 If a master key is sent by the client but does not match the value configured on the server-side, the API returns a `403 Forbidden` - `invalid_token`.
+- 🔴 If a master key is sent by the client but does not match the value configured on the server-side, the API returns a `403 Forbidden` - `invalid_api_key`.
 - 🔴 If the index does not exist, the API returns a `404 Not Found` - `index_not_found` error.
 
 ---
@@ -386,7 +453,7 @@ Allows users to list tasks of a particular index.
 ##### Errors
 
 - 🔴 If a master key is configured on the server-side but missing from the client in the `X-MEILI-API-KEY` header, the API returns a `401 Unauthorized` - `missing_authorization_header` error.
-- 🔴 If a master key is sent by the client but does not match the value configured on the server-side, the API returns a `403 Forbidden` - `invalid_token`.
+- 🔴 If a master key is sent by the client but does not match the value configured on the server-side, the API returns a `403 Forbidden` - `invalid_api_key`.
 - 🔴 If the index does not exist, the API returns a `404 Not Found` - `index_not_found` error.
 - 🔴 If the task does not exist, the API returns a `404 Not Found` - `task_not_found` error.
 
@@ -503,7 +570,9 @@ New task types are also added for these operations. `indexCreation`, `indexUpdat
 
 - Add a pagination system for on `/tasks` and `indexes/:indexUid/tasks` lists.
 - Add enhanced filtering capabilities.
-- Simplify `documentsAddition` and `documentsPartial` type and elaborate on metadata.
+- Simplify `documentsAddition` and `documentsPartial` type and elaborate on `details` metadata.
 - Use Hateoas capability to give direct access to a `task` resource.
 - Add dedicated task type names modifying a sub-setting. e.g. `SearchableAttributesUpdate`.
-- Reconsider existence of `/indexes/:indexUid/tasks/:taskUid` route it is similar to `/tasks/:taskUid`.
+- Reconsider existence of `/indexes/:indexUid/tasks/:taskUid` route since it is similar to `/tasks/:taskUid`.
+- Add an archived state for old `tasks`.
+- Indicate the `API Key` identity that added a `task`. It should not permits to
