@@ -38,8 +38,10 @@ To make MeiliSearch more reliable for teams, we extend the management and the po
 - `--master-key` CLI option is renamed `--main-key`.
 - `/keys` management is restricted to the main key.
 - When a main key is set at MeiliSearch first-launch, we generate two pre-configured `API Key` resources. A `Default Search API Key` restricted to the search action and a `Default Admin API Key` to handle all operations (except managing API Keys) on MeiliSearch.
+- These default API Key can be modified/deleted with the `/keys` endpoint but are not regenerated if MeiliSearch has already generated them at some point.
 - New endpoints are added to manage the `API Key` resource.
 - `API keys` can have restrictions on which methods can be accessed via an `actions` list; they can also `expiresAt` a specific date time and be restricted to a specific set of `indexes`.
+- There is no possibility to regenerate the value of the `key` field for an `API key` in this first iteration.
 
 #### 1.5.2 Main Key
 
@@ -55,7 +57,65 @@ If the main key is removed at MeiliSearch launch, the previously generated API k
 
 If MeiliSearch is launched with the `production` value for the `MEILI_ENV` environment variable or the `--env` CLI option, a main key is mandatory to force the user to secure his instance. If the main key is omitted in that particular case, MeiliSearch launch is aborted and displays the `Error: In production mode, the environment variable MEILI_MAIN_KEY is mandatory` error in stdout.
 
+> A user coming from a version prior upgrading to v0.25.0 who has a master-key will just have to change the name to main-key. See 1.5.3 Defaults API Key section.
+
 > Note that the main key does not appear on the `/keys` endpoints.
+
+All occurences of `MASTER`/`master` related to the security are changed by `MAIN`/`main`.
+
+#### 1.5.3 Defaults API Key
+
+When the user accessing the machine launches MeiliSearch with a `main` key the first time, MeiliSearch will generate two API keys described below, as it did before with the `public` and `private` key.
+
+If the user changes the value of the `main` key later, these two default keys are not modified. However, these two API keys can be changed using the `/keys' endpoints. Previously, changing the `master` key involved having to update all client applications using the `public` or `private` key because they were generated from the `master` key at each launch.
+
+The value of the `key` field of these default keys is cascaded from the value of the main key as before for the generation of the `public` and `private` from the `master`. Therefore, users coming from a version prior to v0.25.0 are not impacted and it will be completely transparent for them. They will just have to change the `MEILI_MASTER_KEY` / `--master-key` to `MEILI_MAIN_KEY` or `--main-key.
+
+MeiliSearch must know that it has already generated these Default API Keys internally so if the user delete them, the engine should not regenerate them again when MeiliSearch is launched again with a `main` key.
+
+##### 1.5.3.1 Default Search API Key
+
+The `Default Search API key` gives access to the same rights as the old `public` key.
+
+Here is how the `Default Search API Key` is represented after its generation.
+
+```json
+{
+    "description": "Default Search API Key (Use it to search from the frontend code)",
+    "key": "0a6e572506c52ab0bd6195921575d23092b7f0c284ab4ac86d12346c33057f99", //example
+    "actions": [
+        "search"
+    ],
+    "indexes": [
+        "*"
+    ],
+    "expiresInSeconds": null,
+    "createdAt": "2021-08-11T10:00:00Z", //example
+    "updatedAt": null
+}
+```
+
+##### 1.5.3.2 Default Admin API Key
+
+The `Default Admin API key` gives access to the same rights as the old `private` key.
+
+Here is how the `Default Admin API Key` is represented after its generation.
+
+```json
+{
+    "description": "Default Admin API Key (Use it for all other operations. Caution! Do not share it on the client side)",
+    "key": "380689dd379232519a54d15935750cc7625620a2ea2fc06907cb40ba5b421b6f", //example
+    "actions": [
+        "*"
+    ],
+    "indexes": [
+        "*"
+    ],
+    "expiresInSeconds": null,
+    "createdAt": "2021-08-11T10:00:00Z", //example
+    "updatedAt": null
+}
+```
 
 #### 1.5.3 Managing `API Key`
 
@@ -109,6 +169,7 @@ Only the main key allows managing the API keys.
 | stats.get | Provides access to `GET` `/stats/`. **⚠️Non-authorized `indexes` are omitted from the response on `/stats`**. Also add access to `GET` `/indexes/:authorizedIndexes/stats`. |
 | dumps.create | Provides access to `POST` `/dumps` route. **As dumps are not scoped by indexes, a restriction on `indexes` does not affect this action.** |
 | dumps.get | Provides access to `GET` `/dumps/:dumpUid` route. **As dumps are not scoped by indexes, a restriction on `indexes` does not affect this action.** |
+| version | Provides access to `GET` `/version` route.
 
 ---
 
