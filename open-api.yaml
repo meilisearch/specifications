@@ -528,7 +528,7 @@ components:
           readOnly: true
         actions:
           type: array
-          description: 'A list of indexes permitted for the key. ["*"] for all indexes.'
+          description: 'A list of actions permitted for the key. ["*"] for all actions.'
           uniqueItems: false
           items:
             type: string
@@ -546,11 +546,13 @@ components:
               - settings.get
               - settings.update
               - settings.reset
-              - stats
-              - dumps
+              - stats.get
+              - dumps.create
+              - dumps.get
+              - version
         indexes:
           type: array
-          description: 'A list of actions permitted for the key. ["*"] for all actions.'
+          description: 'A list of accesible indexes permitted for the key. ["*"] for all indexes.'
           items:
             type: string
             example: movies
