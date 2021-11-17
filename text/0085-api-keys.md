@@ -63,7 +63,7 @@ If MeiliSearch is launched with the `production` value for the `MEILI_ENV` envir
 
 All occurences of `MASTER`/`master` related to the security are changed by `MAIN`/`main`.
 
-#### 1.5.3 Defaults API Key
+#### 1.5.3 Default API Keys
 
 When the user accessing the machine launches MeiliSearch with a `main` key the first time, MeiliSearch will generate two API keys described below, as it did before with the `public` and `private` key.
 
