@@ -512,6 +512,12 @@ The generated API keys must also transit within a dump to facilitate the upgrade
 
 > 🚨 As a reminder, dumps must be stored in secure areas not accessible to the public or unaccredited persons. In general, you should avoid moving them off the host machine or do so via a secure channel as a security measure.
 
+### 2.2 Propagating `API Key` to snapshots.
+
+The generated API keys must also transit within a snapshot to facilitate the recovery of a MeiliSearch instance.
+
+> 🚨 As a reminder, snapshots must be stored in secure areas not accessible to the public or unaccredited persons. In general, you should avoid moving them off the host machine or do so via a secure channel as a security measure.
+
 ## 3. Future Possibilities
 
 - Add a generated id field to paginate the list of API Key.
