@@ -87,7 +87,7 @@ Here is how the `Default Search API Key` is represented after its generation.
     "indexes": [
         "*"
     ],
-    "expiresInSeconds": null,
+    "expiresAt": null,
     "createdAt": "2021-08-11T10:00:00Z", //example
     "updatedAt": null
 }
@@ -109,7 +109,7 @@ Here is how the `Default Admin API Key` is represented after its generation.
     "indexes": [
         "*"
     ],
-    "expiresInSeconds": null,
+    "expiresAt": null,
     "createdAt": "2021-08-11T10:00:00Z", //example
     "updatedAt": null
 }
@@ -397,7 +397,7 @@ Only the master key allows managing the API keys.
             "indexes": [
                 "*"
             ],
-            "expiresInSeconds": null,
+            "expiresAt": null,
             "createdAt": "2021-08-11T10:00:00Z",
             "updatedAt": null
         },
@@ -410,7 +410,7 @@ Only the master key allows managing the API keys.
             "indexes": [
                 "*"
             ],
-            "expiresInSeconds": null,
+            "expiresAt": null,
             "createdAt": "2021-08-11T10:00:00Z",
             "updatedAt": null
         }
