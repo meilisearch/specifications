@@ -40,6 +40,8 @@ To make MeiliSearch more reliable for teams, we extend the management and the po
 - New endpoints are added to manage the `API Key` resource.
 - `API keys` can have restrictions on which methods can be accessed via an `actions` list; they can also `expiresAt` a specific date time and be restricted to a specific set of `indexes`.
 - There is no possibility to regenerate the value of the `key` field for an `API key` in this first iteration.
+- New errors are added and the `missing_authorization_header` message is updated.
+- The current state of the `API Keys` resource is propagated to snapshots and dumps.
 
 #### 1.5.2 Master Key
 
