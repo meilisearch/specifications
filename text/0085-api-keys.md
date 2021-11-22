@@ -67,7 +67,7 @@ If MeiliSearch is launched with the `production` value for the `MEILI_ENV` envir
 
 When the user accessing the machine launches MeiliSearch with a `master` key the first time, MeiliSearch will generate two API keys described below, as it did before with the `public` and `private` key.
 
-If the user changes the value of the `master` key later, these two default keys are not modified. However, these two API keys can be changed using the `/keys' endpoints.
+If the user changes the value of the `master` key later, these two default keys are not modified. However, these two API keys can be changed using the `/keys` endpoints.
 
 MeiliSearch must know that it has already generated these Default API Keys internally so if the user delete them, the engine should not regenerate them again when MeiliSearch is launched again with a `master` key.
 
