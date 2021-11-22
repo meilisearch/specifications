@@ -1017,7 +1017,7 @@ HTTP Code: `500 Internal Server Error`
 
 ### Context
 
-This error occurs when the route is protected, and the `X-MEILI-API-KEY` header is not provided.
+This error occurs when the route is protected, and the `Authorization` header is not provided.
 
 ### Error Definition
 
@@ -1025,7 +1025,7 @@ HTTP Code: `401 Unauthorized`
 
 ```json
 {
-    "message": "The X-MEILI-API-KEY header is missing.",
+    "message": "The Authorization header is missing. It must use the bearer authorization method.",
     "code": "missing_authorization_header",
     "type": "auth",
     "link": "https://docs.meilisearch.com/errors#missing_authorization_header"
@@ -1038,7 +1038,7 @@ HTTP Code: `401 Unauthorized`
 
 ### Context
 
-This error occurs when the route is protected, and the value of the `X-MEILI-API-KEY` header does not allow access to the resource.
+This error occurs when the route is protected, and the value of the `Authorization` header does not allow access to the resource.
 
 ### Error Definition
 

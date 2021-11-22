@@ -33,6 +33,7 @@ To make MeiliSearch more reliable for teams, we extend the management and the po
 
 #### 1.5.1 Summary Key Points
 
+- `X-MEILI-API-KEY` header is replaced by the `Authorization` header. `API keys` must be specified with the bearer authorization method. See examples.
 - `/keys` management is restricted to the master key.
 - When a master key is set at MeiliSearch first-launch, we generate two pre-configured default `API Key` resources. A `Default Search API Key` restricted to the search action and a `Default Admin API Key` to handle all operations (except managing `/keys` resource) on MeiliSearch.
 - These default API Keys can be modified/deleted with the `/keys` endpoint but are not regenerated if MeiliSearch has already generated them at some point.
@@ -177,7 +178,7 @@ Only the master key allows managing the API keys.
 ##### Headers
 
 ```
-"X-MEILI-API-KEY: :masterKey"
+"Authorization: Bearer :masterKey"
 "Content-Type: application/json"
 ```
 
@@ -221,7 +222,7 @@ Only the master key allows managing the API keys.
 
 ##### Errors
 
-- 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
 - 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 - 🔴 Omitting Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
 - 🔴 Sending an empty Content-Type returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
@@ -248,7 +249,7 @@ Only the master key allows managing the API keys.
 ##### Headers
 
 ```
-"X-MEILI-API-KEY: :masterKey"
+"Authorization: Bearer :masterKey"
 ```
 
 ##### Response
@@ -273,7 +274,7 @@ Only the master key allows managing the API keys.
 
 ##### Errors
 
-- 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
 - 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 - 🔴 Attempting to access an API key that does not exist returns an [api_key_not_found](0061-error-format-and-definitions.md#api_key_not_found) error.
 
@@ -288,7 +289,7 @@ Only the master key allows managing the API keys.
 ##### Headers
 
 ```
-"X-MEILI-API-KEY: :masterKey"
+"Authorization: Bearer :masterKey"
 "Content-Type: application/json"
 ```
 
@@ -335,7 +336,7 @@ Only the master key allows managing the API keys.
 
 ##### Errors
 
-- 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
 - 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 - 🔴 Attempting to access an API key that does not exist returns a [api_key_not_found](0061-error-format-and-definitions.md#api_key_not_found) error.
 - 🔴 Omitting Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
@@ -360,7 +361,7 @@ Only the master key allows managing the API keys.
 ##### Headers
 
 ```
-"X-MEILI-API-KEY: :masterKey"
+"Authorization: Bearer :masterKey"
 ```
 
 ##### Response
@@ -428,7 +429,7 @@ Only the master key allows managing the API keys.
 
 ##### Errors
 
-- 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
 - 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
 ---
@@ -442,7 +443,7 @@ Only the master key allows managing the API keys.
 ##### Headers
 
 ```
-"X-MEILI-API-KEY: :masterKey"
+"Authorization: Bearer :masterKey"
 ```
 
 ##### Response
@@ -451,7 +452,7 @@ Only the master key allows managing the API keys.
 
 ##### Errors
 
-- 🔴 Accessing this route without the `X-MEILI-API-KEY` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
 - 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 - 🔴 Attempting to access an API key that does not exist returns a `api_key_not_found`.
 
@@ -472,7 +473,7 @@ Only the master key allows managing the API keys.
 #### Headers
 
 ```
-    "X-MEILI-API-KEY": ":apiKey"
+    "Authorization: Bearer :apiKey"
     "Content-Type: application/json"
 ```
 
@@ -491,7 +492,7 @@ Only the master key allows managing the API keys.
 #### Headers
 
 ```
-    "X-MEILI-API-KEY": ":apiKey"
+    "Authorization: Bearer :apiKey"
     "Content-Type: application/json"
 ```
 
