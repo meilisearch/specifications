@@ -514,16 +514,19 @@ The generated API keys must also transit within a dump to facilitate the upgrade
 
 > 🚨 As a reminder, dumps must be stored in secure areas not accessible to the public or unaccredited persons. In general, you should avoid moving them off the host machine or do so via a secure channel as a security measure.
 
-### 2.2 Propagating `API Key` to snapshots.
+### 2.3 Propagating `API Key` to snapshots.
 
 The generated API keys must also transit within a snapshot to facilitate the recovery of a MeiliSearch instance.
 
 > 🚨 As a reminder, snapshots must be stored in secure areas not accessible to the public or unaccredited persons. In general, you should avoid moving them off the host machine or do so via a secure channel as a security measure.
 
+### 2.4 API Keys storage size limit
+
+The maximum size of the API key storage is `100GB`.
+
 ## 3. Future Possibilities
 
 - Add a generated id field to paginate the list of API Key.
-- Hard limit the number of API keys that MeiliSearch can store.
 - Have an "archive" state where manually deleted API Keys can be restored for a certain amount of time.
 - Add rate-limiting per API Key.
 - A restriction on the maximum offset/limit.
