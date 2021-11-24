@@ -55,6 +55,8 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | FilterableAttributes Updated | Occurs when filterable attributes are updated via `POST` - `/indexes/:indexUid/settings/filterable-attributes`. |
 | SortableAttributes Updated | Occurs when sortable attributes are updated via `POST` - `/indexes/:indexUid/settings/sortable-attributes`. |
 | Dump Created | Occurs when a dump is created via `POST` - `/dumps`. |
+| Tasks Seen | Occurs when tasks are fetched globally via `GET` - `/tasks`. |
+| Index Tasks Seen | Occurs when tasks are filtered by index via `GET` - `/indexes/:indexUid/tasks`. |
 ----
 
 #### Summarized Metrics/Events table
@@ -94,6 +96,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `filterable_attributes.total`           | Number of filterable attributes | 3 | `Settings Updated`, `FilterableAttributes Updated` |
 | `filterable_attributes.has_geo`         | `true` if `_geo` is set as a filterable attribute, otherwise `false` | false | `Settings Updated`, `FilterableAttributes Updated`|
 | `searchable_attributes.total`           | Number of searchable attributes | 4 | `Settings Updated`, `SearchableAttributes Update` |
+| `per_task_uid`                          | `true` if an uid is used to fetch a particular task resource, otherwise `false` | true | `Tasks Seen`, `Index Tasks Seen` |
 
 ----
 
@@ -276,6 +279,20 @@ This property allows us to gather essential information to better understand on 
 | Property name | Description | Example |
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+
+## `Tasks Seen`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+| per_task_uid  | `true` if an uid is used to fetch a particular task resource, otherwise `false` | `true` |
+
+## `Index Tasks Seen`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+| per_task_uid  | `true` if an uid is used to fetch a particular task resource, otherwise `false` | `true` |
 
 ---
 
