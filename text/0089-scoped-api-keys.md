@@ -21,8 +21,8 @@ Users regularly request Multi-Tenant indexes. Users today need to set up workaro
 
 | Term               | Definition |
 |--------------------|------------|
-| Main Key         | This is the main key that allows the creation of other API keys. The main key is defined by the user when launching MeiliSearch. |
-| API Key            | API keys are stored and managed from the endpoint `/keys` by the main key holder. These are the keys used by the technical teams to interact with MeiliSearch at the level of the client code. |
+| Master Key         | This is the master key that allows the creation of other API keys. The master key is defined by the user when launching MeiliSearch. |
+| API Key            | API keys are stored and managed from the endpoint `/keys` by the master key holder. These are the keys used by the technical teams to interact with MeiliSearch at the level of the client code. |
 | Scoped API Key     | These keys are not stored and managed by a MeiliSearch instance. They are generated for each end-user by the backend code from a MeiliSearch API Key. They are used by the end-users to only search the documents belonging to them. |
 | Multi-Tenancy      | By multi-tenancy, we mean that an end-user only accesses data belonging to him within an index shared with other end-users. |
 
