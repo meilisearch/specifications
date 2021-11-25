@@ -778,7 +778,7 @@ components:
           examples:
             Unauthorized:
               value:
-                message: The X-MEILI-API-KEY header is missing.
+                message: The Authorization header is missing. It must use the bearer authorization method.
                 code: missing_authorization_header
                 type: auth
                 link: 'https://docs.meilisearch.com/errors#missing_authorization_header'
@@ -797,13 +797,13 @@ components:
                 link: 'https://docs.meilisearch.com/errors#payload_too_large'
   securitySchemes:
     apiKey:
-      type: apiKey
+      type: http
       in: header
-      name: X-Meili-API-Key
+      scheme: bearer
       description: |-
-        An API key is a token that you provide when making API calls. Include the token in a header parameter called `X-Meili-API-Key`.
+        An API key is a token that you provide when making API calls. Include the token in a header parameter called `Authorization`.
 
-        Example: `X-Meili-API-Key: 8fece4405662dd830e4cb265e7e047aab2e79672a760a12712d2a263c9003509`
+        Example: `Authorization: Bearer 8fece4405662dd830e4cb265e7e047aab2e79672a760a12712d2a263c9003509`
   examples: {}
 tags:
   - name: Indexes
