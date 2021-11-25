@@ -72,11 +72,8 @@ const scopedApiKeyRestrictions = {
 
 export const generateScopedApiKey = () => {
   return (parentApiKey: string, restrictions: scopedApiKeyRestrictions): string => {
-    //hash the parentApiKey and keep a prefix of 4 chars of the hashed parentApiKey
-    const prefixKey = crypto
-        .createHmac('sha256', parentApiKey)
-        .digest('hex')
-        .substr(0, 4);
+    //extract the 8 first characters of the parentApiKey
+    const prefix = parentApiKey.substring(0,8);
 
     //serialize restrictions (indexesPolicies object and expiresIn)
     const queryParameters = serializeQueryParameters(restrictions);
@@ -88,7 +85,7 @@ export const generateScopedApiKey = () => {
       .digest('hex');
 
     //return the generated `Scoped Api Key`
-    return Buffer.from(prefixKey + securedKey + queryParameters).toString('base64');
+    return Buffer.from(prefix + securedKey + queryParameters).toString('base64');
   };
 };
 ```
@@ -101,7 +98,7 @@ If the user does not want to define specific filters for each index accessible t
 
 A policy per index allows overriding the `"*"` behavior.
 
-The `scoped API Keys` also accept a number of seconds in the `expiresIn` field until it expires. This field should be mandatory and explicitly set to `null` if no expiration time is needed.
+`Scoped API Keys` also accept a number of seconds in the `expiresIn` field until it expires. This field should be mandatory and explicitly set to `null` if no expiration time is needed.
 
 
 ```javascript
