@@ -49,7 +49,7 @@ Let's say that `Mark` is a developer for a SaaS platform. He would like to ensur
 
 When a user registers, the backend-side client code generates a `Scoped API Key` specifically for that end-user so he can only access his documents.
 
-A `filter` parameter is set to restrict the search for documents having a `user_id` attribute. This `filter` parameter is contained in the `Scoped API key` payload and cannot be modified during the search by the end-user making the request. `filter` can be made of any valid filters. e.g. `user_id = 10 and category = Romantic`
+The `filter` parameter is set to restrict the search for documents having an `user_id` attribute. This `filter` parameter is contained in the `Scoped API key` payload and cannot be modified during the search by the end-user making the request. `filter` can be made of any valid filters. e.g. `user_id = 10 and category = Romantic`
 
 This `Scoped API Key` is generated from a parent `API key` used to cipher the `Scoped API Key`. On the MeiliSearch side, this permits checking permissions and authorizing the `UserX` search request using this `Scoped API Key`.
 
