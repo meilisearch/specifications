@@ -45,7 +45,7 @@ Users regularly request Multi-Tenant indexes. Users today need to set up workaro
 
 ![](https://i.imgur.com/J4jVe1n.png)
 
-Let's say that `Mark` is a developer for a SaaS platform. He would like to ensure that an end-user can only access his documents at search time. **His database contains many users and he hopes to have many more in the future.**
+Let's say that `Mark` is a developer for a SaaS platform. He would like to ensure that an end-user can only access their documents at search time. **His database contains many users and he hopes to have many more in the future.**
 
 When a user registers, the backend code generates a `Scoped API Key` specifically for that end-user so he can only access his documents.
 
