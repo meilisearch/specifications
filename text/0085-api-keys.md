@@ -80,7 +80,7 @@ Here is how the `Default Search API Key` is represented after its generation.
 
 ```json
 {
-    "description": "Default Search API Key (Use it to search from the frontend code)",
+    "description": "Default Search API Key (Use it to search from the frontend)",
     "key": "0a6e572506c52ab0bd6195921575d23092b7f0c284ab4ac86d12346c33057f99", //example
     "actions": [
         "search"
