@@ -56,7 +56,7 @@ If the master key is removed at MeiliSearch launch, the previously generated API
 
 If MeiliSearch is launched with the `production` value for the `MEILI_ENV` environment variable or the `--env` CLI option, a master key is mandatory to force the user to secure his instance. If the master key is omitted in that particular case, MeiliSearch launch is aborted and displays the `Error: In production mode, the environment variable MEILI_MASTER_KEY is mandatory` error in stdout.
 
-> 🚨 A user coming from a version prior to v0.25.0 and having a master-key will have to update his code to use the newly generated default keys replacing the public and private, since we changed the previous `public` and `private` API Key generation, is it mandatory for that specific version upgrade. Now, a prefix of an API Key is generated uniquely and the final value of the `key` field is a hash of that randomized prefix with the master-key. See 2.1 API Key Generation part.
+> 🚨 A user coming from a version prior to v0.25.0 and having a master-key will have to update their code to use the newly generated default keys replacing the public and private, since we changed the previous `public` and `private` API Key generation, is it mandatory for that specific version upgrade. Now, a prefix of an API Key is generated uniquely and the final value of the `key` field is a hash of that randomized prefix with the master-key. See 2.1 API Key Generation part.
 
 > 🚨 The master-key should never be exposed to the public or bad-intentioned persons for security measures as it may compromise a MeiliSearch instance.
 
