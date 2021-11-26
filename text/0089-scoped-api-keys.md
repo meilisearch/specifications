@@ -13,7 +13,7 @@ The SDKs can generate `Scoped API Keys` inheriting from a MeiliSearch's `API key
 
 ### II. Motivation
 
-`Scoped API Keys` are introduced to solve multi-tenant use-case. By managing this, we reduce one of the last major deal-breakers that makes users not choose MeiliSearch as a solution despite all our advantages.
+`Scoped API Keys` are introduced to solve multi-tenant use-cases. By providing the management of API Keys, we remove one of the last major deal-breakers that makes users not choose MeiliSearch as a solution despite all our advantages.
 
 Users regularly request Multi-Tenant indexes. Users today need to set up workarounds to meet this need. Some of them implement reverse-proxy or managed authentication systems like Hasura or Kong to filter what can and cannot be read. Others decide to use server code as a facade to implement the access restriction logic before requesting MeiliSearch. It is difficult to maintain, less efficient, and requires necessary skills that not everyone has.
 
