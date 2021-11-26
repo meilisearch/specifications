@@ -51,7 +51,7 @@ When a user registers, the backend code generates a `Scoped API Key` specificall
 
 The `filter` parameter is set to restrict the search for documents having an `user_id` attribute. This `filter` parameter is contained in the `Scoped API key` payload and cannot be modified during the search by the end-user making the request. `filter` can be made of any valid filters. e.g. `user_id = 10 and category = Romantic`
 
-This `Scoped API Key` is generated from a parent `API key` used to cipher the `Scoped API Key`. On the MeiliSearch side, this permits checking permissions and authorizing the `UserX` search request using this `Scoped API Key`.
+This `Scoped API Key` is generated from a parent `API key` used to cipher the `Scoped API Key`. On the MeiliSearch side, the payload of the `scoped API key` defines what data the user is allowed to retrieve, in order words, MeiliSearch grants authorization based on the permission defined in the Scoped API key payload.
 
 ---
 
