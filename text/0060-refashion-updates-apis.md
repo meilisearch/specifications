@@ -130,25 +130,25 @@ The motivation is to stabilize the current `update` resource to a version that c
 | indexedDocuments  | Number of documents finally indexed. |
 
 
-##### documentsDeleted
+##### documentsDeletion
 
 | name     | description |
 | -------- | --------    |
-| receivedDocuments | Number of documents received.  |
-| deletedDocuments | Number of documents finally deleted. |
+| receivedDocumentIds | Number of document ids received.  |
+| deletedDocuments    | Number of documents finally deleted. |
 
 ##### indexCreation
 
 | name     | description |
 | -------- | --------    |
-| primaryKey  | Value for the `primaryKey` field into the POST index payload.|
+| primaryKey  | Value for the `primaryKey` field into the POST index payload. `null` if no `primaryKey` has been specified at the time of the index creation. |
 
 
 ##### indexUpdate
 
 | name     | description |
 | -------- | --------    |
-| primaryKey | Value for the `primaryKey` field into the PUT index payload. |
+| primaryKey | Value for the `primaryKey` field into the PUT index payload. `null` if no `primaryKey` has been specified at the time of the index update. |
 
 ##### indexDeletion
 
@@ -160,7 +160,7 @@ The motivation is to stabilize the current `update` resource to a version that c
 
 | name     | description |
 | -------- | --------    |
-| deletedDocuments    | Number of deleted documents. Should be all documents contained in cleared index. |
+| deletedDocuments    | Number of deleted documents. Should be all documents contained in the cleared index. |
 
 ##### settingsUpdate
 
