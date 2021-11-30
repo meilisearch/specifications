@@ -351,6 +351,8 @@ To identify instances, we generate a unique identifier at first launch if analyt
 
 The `identify` method of Segment permits identifying an instance by sending a unique identifier. It groups the information of a MeiliSearch binary such as `system`, `stats`, and general properties related below in this specification.
 
+The segment identify call is only sent after the first hour if the instance is still running. At the first launch, MeiliSearch sends a `Launched` event on an instance ID equal to `total_launch` in order to avoid tracking instances usage for nothing when they could be shut down and never restarted.
+
 #### Segment Track Call
 
 The `track` calls of Segment allow tracking the events passed on the instance.
