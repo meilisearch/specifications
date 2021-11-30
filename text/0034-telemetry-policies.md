@@ -84,7 +84,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `sort.avg_criteria_number`              | Average number of sort criteria among all requests containing the `sort` parameter in this batch | 2 | `Documents Searched POST`, `Documents Searched GET` |
 | `filter.with_geoRadius`                 | `true` if the filter rule `_geoRadius` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
 | `filter.most_used_syntax`               | Most used filter syntax among all requests containing the `filter` parameter in this batch | string | `Documents Searched POST`, `Documents Searched GET` |
-| `q.avg_terms_number`                    | Average number of terms given for the `q` parameter in this batch | 5 | `Documents Searched POST`, `Documents Searched GET` |
+| `q.max_terms_number`                    | Highest number of terms given for the `q` parameter in this batch | 5 | `Documents Searched POST`, `Documents Searched GET` |
 | `pagination.max_limit`                  | Highest value given for the `limit` parameter in this batch | 60 | `Documents Searched POST`, `Documents Searched GET` |
 | `pagination.max_offset`                 | Highest value given for the `offset` parameter in this batch | 1000 | `Documents Searched POST`, `Documents Searched GET` |
 | `primary_key`                           | Value given for the `primaryKey` parameter if used, otherwise `null` | id | `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`|
@@ -154,7 +154,7 @@ This property allows us to gather essential information to better understand on 
 | filter.with_geoRadius | Does the built-in filter rule _geoRadius has been used in the aggregated event? | `false` |
 | filter.avg_criteria_number | The average number of filter criteria among all the requests containing the `filter` parameter in the aggregated event. `"filter": []` equals to `0` while not sending `filter` does not influence the average in the aggregated event. | `4` |
 | filter.most_used_syntax | The most used filter syntax among all the requests containing the requests containing the `filter` parameter in the aggregated event. `string` / `array` / `mixed` | `mixed` |
-| q.avg_terms_number | The average number of terms for the `q` parameter among all requests in the aggregated event. | `5` |
+| q.max_terms_number | The maximum number of terms for the `q` parameter among all requests in the aggregated event. | `5` |
 | pagination.max_limit | The maximum limit encountered among all requests in the aggregated event. | `20` |
 | pagination.max_offset | The maxium offset encountered among all requests in the aggregated event. | `1000` |
 
@@ -176,7 +176,7 @@ This property allows us to gather essential information to better understand on 
 | filter.with_geoRadius | Does the built-in filter rule _geoRadius has been used in the aggregated event? | `false` |
 | filter.avg_criteria_number | The average number of filter criteria among all the requests containing the `filter` parameter in the aggregated event. `"filter": []` equals to `0` while not sending `filter` does not influence the average in the aggregated event. | `4` |
 | filter.most_used_syntax | The most used filter syntax among all the requests containing the requests containing the `filter` parameter in the aggregated event. `string` / `array` / `mixed` | `mixed` |
-| q.avg_terms_number | The average number of terms for the `q` parameter among all requests in the aggregated event. | `5` |
+| q.max_terms_number | The maximum number of terms for the `q` parameter among all requests in the aggregated event. | `5` |
 | pagination.max_limit | The maximum limit encountered among all requests in the aggregated event. | `20` |
 | pagination.max_offset | The maxium offset encountered among all requests in the aggregated event. | `1000` |
 
