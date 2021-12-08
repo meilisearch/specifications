@@ -545,3 +545,4 @@ The maximum size of the API key storage is `100GB`.
 - Add rate-limiting per API Key.
 - A restriction on the maximum offset/limit.
 - Add search parameters restrictions for an API Key.
+- Add rfc2822 format expression for `expiredAt` field. e.g. `Wed, 18 Feb 2022 23:16:09 GMT`
