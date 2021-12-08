@@ -158,7 +158,7 @@ Only the master key allows managing the API keys.
 | documents.add | Provides access to `POST` and `PUT` on `/indexes/:authorizedIndexes/documents` routes. |
 | documents.get | Provides access to `GET` methods on `/indexes/:authorizedIndexes/documents` and `/indexes/:authorizedIndexes/documents/:documentId` routes. |
 | documents.delete | Provides access to `DELETE` method on `/indexes/:authorizedIndexes/documents/:documentId`, `indexes/:authorizedIndexes/documents/:documentId` and `POST` method on `/indexes/:authorizedIndexes/documents/delete-batch` routes. |
-| indexes.add | Provides access to `POST` `/indexes`. **⚠️ A newly created `index` is added to the `indexes` array for the API key making the operation and all others keys having `[*]` as a value for `indexes`**. |
+| indexes.add | Provides access to `POST` `/indexes`. **⚠️ `indexes` field should indicate the newly created index or having `[*]` to permits access on it.**. |
 | indexes.get | Provides access to `GET` `/indexes` and `/indexes/:authorizedIndexes`. **⚠️Non-authorized `indexes` are omitted from the response on `/indexes`**. |
 | indexes.update | Provides access to `PUT` `/indexes/:authorizedIndexes`. |
 | indexes.delete | Provides access to `DELETE` `/indexes/:authorizedIndexes`. |
