@@ -42,7 +42,7 @@ The more similar consecutives tasks the user sends in a row, the more likely the
 When a batch is opened and gathering tasks, it can be closed and sent to be processed according to several criteria.
 
 - All other incoming tasks not of type `documentAdditions` or concerning a different index close the current batching process.
-- The batch closes and is written if a previously running task ends.
+- The batch closes and is sent to the indexer if a previously running task ends.
 - ...
 
 #### 1.3.4 Tweaking the scheduler behaviors
