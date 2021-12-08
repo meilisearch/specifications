@@ -31,7 +31,7 @@ This is to avoid having multiple incompressible computation time by grouping the
 
 #### 1.3.2 Scheduling tasks to a batch
 
-The scheduling program that group document additions tasks within a single batch will only be triggered when a `task' is already being processed.
+The scheduling program that group document additions tasks within a single batch will only be triggered when an asynchronous `task` is already being processed.
 
 In other words, consecutive `documentsAddition` tasks on the same index will only be grouped together to be processed within the same batch when a waiting time is already present because MeiliSearch is already processing a task.
 
