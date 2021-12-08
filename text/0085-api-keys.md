@@ -40,7 +40,7 @@ To make MeiliSearch more reliable for teams, we extend the management and the po
 - These default API Keys can be modified/deleted with the `/keys` endpoint but are not re-created if MeiliSearch has already generated them at some point.
 - New endpoints are added to manage the `API Key` resource.
 - `API keys` can have restrictions on which methods can be accessed via an `actions` list; they can also `expiresAt` a specific date time and be restricted to a specific set of `indexes`.
-- There is no possibility to regenerate the value of the `key` field for an `API key` in this first iteration.
+- There is no possibility to regenerate the value of the `key` field for a specific `API key` in this first iteration.
 - New errors are added and the `missing_authorization_header` message is updated.
 - The current state of the `API Keys` resource is propagated to snapshots and dumps.
 
@@ -419,7 +419,7 @@ Only the master key allows managing the API keys.
 }
 ```
 
-> Expired API keys cannot be found on the `/keys` endpoints. This can be handled in the future with an archiving system or something else. See Future Possibilities part.
+> Expired API keys can be found on the `/keys` endpoints. An archiving system or a filter could allow to not display them by default. See Future Possibilities part.
 
 > 👉 Note the two default generated API keys here. When a master key is set at MeiliSearch's launch, it generates two pre-configured `API Keys`. A Default Search API Key restricted to the search action on all indexes and a Default Admin API Key on all indexes to handle all operations (except managing API Keys).
 
@@ -427,7 +427,6 @@ Only the master key allows managing the API keys.
 
 - `API Key` objects are returned in a `results` array.
 - `API Keys` are ordered by `createdAt` in `desc` order. (Most recent first)
-- Expired `API Keys` are omitted and no longer accessible. See Future Possibilities part.
 - No pagination yet. See Future Possibilities part.
 
 ##### Errors
@@ -541,6 +540,7 @@ The maximum size of the API key storage is `100GB`.
 
 - Regenerate a specific `API Key`.
 - Add a generated id field to paginate the list of API Key.
+- Have a filer/dedicated route to fetch expired key if MeiliSearch do not display them by default on `/keys` in the future.
 - Have an "archive" state where manually deleted API Keys can be restored for a certain amount of time.
 - Add rate-limiting per API Key.
 - A restriction on the maximum offset/limit.
