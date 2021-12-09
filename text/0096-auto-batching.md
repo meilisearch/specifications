@@ -7,14 +7,14 @@
 
 ## 1. Functional Specification
 
-### 1. Summary
+### 1.1 Summary
 
 MeiliSearch can automatically group consecutive asynchronous `documentsAddition` / `documentsPartial` tasks for the same index into a single batch via an automatic batching mechanism.
 
 #### Summary Key points
 
 - A `batchUid` field is added on a fully qualified `task` API object.
-- An auto-batching group consecutive `documentsAddition` / `documentsPartial` enqueued tasks for a similar index when a task is fetched from the FIFO task queue to be processed.
+- An auto-batching mechanism groups consecutive `documentsAddition` / `documentsPartial` enqueued tasks for a similar index when a task is fetched from the FIFO task queue to be processed.
 
 ### 1.2 Motivation
 
