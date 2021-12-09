@@ -9,7 +9,7 @@
 
 ### 1. Summary
 
-MeiliSearch can automatically group consecutive asynchronous `documentAdditions` tasks into a single batch for an index.
+MeiliSearch can automatically group consecutive asynchronous `documentsAddition` / `documentsPartial` tasks for the same index into a single batch via an automatic batching mechanism.
 
 #### Summary Key points
 
@@ -17,42 +17,36 @@ MeiliSearch can automatically group consecutive asynchronous `documentAdditions`
 
 ### 1.2 Motivation
 
-We regularly tell users to batch their documents to speed up the indexing speed. We decided to integrate a simple scheduler to automatically batch consecutive document additions for an index to make it transparent for the users and enhance their quality of life using MeiliSearch.
+We regularly tell users to batch their documents to speed up the indexing speed. We decided to integrate a simple scheduler to automatically batch consecutive tasks for an index to make it transparent for the users and enhance their quality of life using MeiliSearch.
 
 ### 1.3 Explanations
 
 #### 1.3.1 Overall
 
-All `tasks` are linked to specific a `batchUid` field. This `batchUid` field permits to identify that several identical, consecutive tasks have been grouped in the same batch.
+All `tasks` are linked to a specific `batchUid` field. This `batchUid` field permits to identify that several identical, consecutive tasks have been grouped in the same batch.
 
-Only consecutive `documentsAddition` `tasks` for the same index can have a shared `batchUid` since the scheduler will be able to group them together. This means that all `tasks` concerning other operations will also be part of a `batchUid` having only one task. This could be easily extended in the future by enhancing the scheduler capabilities.
+Only consecutive `documentsAddition` and `documentsPartial` `tasks` for the same index can have a shared `batchUid` since the scheduler will be able to group them together. This means that all `tasks` concerning other operations will also be part of a `batchUid` having only one task. This could be extended in the future by enhancing the scheduler capabilities.
 
 This is to avoid having multiple incompressible computation time by grouping them together to increase performance when applied to a maximum number of documents.
 
-#### 1.3.2 Scheduling tasks to a batch
+#### 1.3.2 Grouping tasks to a single batch
 
-The scheduling program that group document additions tasks within a single batch will only be triggered when an asynchronous `task` is already being processed.
+The scheduling program that groups tasks within a single batch is triggered when an asynchronous `task` currently processed reaches a terminal state as `succeeded` or `failed`.
 
-In other words, consecutive `documentsAddition` tasks on the same index will only be grouped together to be processed within the same batch when a waiting time is already present because MeiliSearch is already processing a task.
+In other words, when the next `task` should be picked from the FIFO task queue. The scheduler fetch and group all consecutive `documentsAddition` for a similar index in a batch until it encounters another task type or a similar task type but for a different index.
 
-The more similar consecutives tasks the user sends in a row, the more likely the batching mechanism will be triggered.
+> Note that we are considering implementing a configurable limit of maximum documents to process for a batch and a flag to activate the auto-batching mechanism.
 
-#### 1.3.3 Closing a batch and processing it
+The more similar consecutive tasks the user sends in a row, the more likely the batching mechanism will be able to group these tasks in a batch. It can be seen as an automatic back-pressure mechanism.
 
-When a batch is opened and gathering tasks, it can be closed and sent to be processed according to several criteria.
+#### 1.3.3 Impacts on `task` API object format
 
-- All other incoming tasks not of type `documentAdditions` or concerning a different index close the current batching process.
-- The batch closes and is sent to the indexer if a previously running task ends.
-- ...
-
-#### 1.3.4 Tweaking the scheduler behaviors
-tbd
-
-#### 1.3.5 Impacts on `task` API object format
-
-- The different tasks grouped in a batch will be processed within the same transaction. That is to say that if a task fails within a batch. All the tasks fail or succeed.
+- The different tasks grouped in a batch will be processed within the same transaction. That is to say that if a task fails within a batch, all the tasks fail or succeed.
 - A `batchUid` field is added on fully-qualified `task` API objects.
-- Tasks within the same batch share the same values for the `startedAt`, `finishedAt`, `duration` fields and the same error object in case an error occurs during the batch processing.
+- Tasks within the same batch share the same values for the `startedAt`, `finishedAt`, `duration` fields, and the same `error` object if an error occurs for a `task` during the batch processing.
+
+#### 1.3.4 Tweaking the auto-batching mechanism
+tbd
 
 ## 2. Technical Aspects
 tbd
