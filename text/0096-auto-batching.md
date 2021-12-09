@@ -14,6 +14,7 @@ MeiliSearch can automatically group consecutive asynchronous `documentsAddition`
 #### Summary Key points
 
 - A `batchUid` field is added on a fully qualified `task` API object.
+- An auto-batching group consecutive `documentsAddition` / `documentsPartial` enqueued tasks for a similar index when a task is fetched from the FIFO task queue to be processed.
 
 ### 1.2 Motivation
 
@@ -38,6 +39,10 @@ In other words, when the next `task` should be picked from the FIFO task queue. 
 > Note that we are considering implementing a configurable limit of maximum documents to process for a batch and a flag to activate the auto-batching mechanism.
 
 The more similar consecutive tasks the user sends in a row, the more likely the batching mechanism will be able to group these tasks in a batch. It can be seen as an automatic back-pressure mechanism.
+
+##### 1.3.2.1 `batchUid` generation
+
+The identifier chosen for the `batchUid`field corresponds to the `uid` value of the first task grouped within a batch. The batch identifiers are therefore unique and consecutive.
 
 #### 1.3.3 Impacts on `task` API object format
 
