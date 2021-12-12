@@ -37,7 +37,7 @@ To make MeiliSearch more reliable for teams, we extend the management and the po
 - `/keys` management is restricted to the master key.
 - When a master key is set at MeiliSearch first-launch, we generate two pre-configured default `API Key` resources. A `Default Search API Key` restricted to the search action and a `Default Admin API Key` to handle all operations (except managing `/keys` resource) on MeiliSearch.
 - If the master-key changes, all `API Keys` are re-generated.
-- These default API Keys can be modified/deleted with the `/keys` endpoint but are not re-created if MeiliSearch has already generated them at some point.
+- These default API Keys can be modified/deleted with the `/keys` endpoint but are not re-created if MeiliSearch has already created them.
 - New endpoints are added to manage the `API Key` resource.
 - `API keys` can have restrictions on which methods can be accessed via an `actions` list; they can also `expiresAt` a specific date time and be restricted to a specific set of `indexes`.
 - There is no possibility to regenerate the value of the `key` field for a specific `API key` in this first iteration.
