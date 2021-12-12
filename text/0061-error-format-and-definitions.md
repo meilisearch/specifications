@@ -89,6 +89,123 @@ HTTP code `400 Bad Request`
 }
 ```
 
+- The `:errorMessage` is inferred when the message is generated.
+
+---
+
+## missing_parameter
+
+### Context
+
+This error happens when a field is mandatory and missing in the given payload.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "`:fieldName` field is mandatory.",
+    "code": "missing_parameter",
+    "type": "invalid_request",
+    "link":"https://docs.meilisearch.com/errors#missing_parameter"
+}
+```
+
+- The `:fieldname` is inferred when the message is generated.
+
+---
+
+## invalid_api_key_description
+
+### Context
+
+This error happens when the `description` field for an `API Key` resource is invalid.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "description field value `:value` is invalid. It should be a string or specified as a null value.",
+    "code": "invalid_api_key_description",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_api_key_description"
+}
+```
+
+- The `:value` is inferred when the message is generated.
+
+---
+
+## invalid_api_key_actions
+
+### Context
+
+This error happens when the `actions` field for an `API Key` resource is invalid.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "actions field value `:value` is invalid. It should be an array of string representing action names.",
+    "code": "invalid_api_key_actions",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_api_key_actions"
+}
+```
+
+- The `:value` is inferred when the message is generated.
+
+---
+
+## invalid_api_key_indexes
+
+### Context
+
+This error happens when the `indexes` field for an `API Key` resource is invalid.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "indexes field value `:value` is invalid. It should be an array of string representing index names.",
+    "code": "invalid_api_key_indexes",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_api_key_indexes"
+}
+```
+
+- The `:value` is inferred when the message is generated.
+
+---
+
+## invalid_api_key_expires_at
+
+### Context
+
+This error happens when the `expiresAt` field for an `API Key` resource is invalid.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "expiresAt field value `:value` is invalid. It should be in ISO-8601 format to represents a date or datetime in the future or specified as a null value. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DDTHH:MM:SS'.",
+    "code": "invalid_api_key_expires_at",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_api_key_expires_at"
+}
+```
+
+- The `:value` is inferred when the message is generated.
+
 ---
 
 ## index_already_exists
@@ -578,6 +695,27 @@ HTTP Code: `404 Not Found`
 
 ---
 
+## api_key_not_found
+
+### Context
+
+This error happens when a requested api key can't be found.
+
+#### Error Definition
+
+HTTP Code: `404 Not Found`
+
+```json
+    "message": "API key :apiKey not found.",
+    "code": "api_key_not_found",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#api_key_not_found"
+```
+
+- The `:apiKey` is inferred when the message is generated.
+
+---
+
 ## dump_already_processing
 
 ### Context
@@ -917,7 +1055,7 @@ HTTP Code: `500 Internal Server Error`
 
 ### Context
 
-This error occurs when the route is protected, and the `X-MEILI-API-KEY` header is not provided.
+This error occurs when the route is protected, and the `Authorization` header is not provided.
 
 ### Error Definition
 
@@ -925,7 +1063,7 @@ HTTP Code: `401 Unauthorized`
 
 ```json
 {
-    "message": "The X-MEILI-API-KEY header is missing.",
+    "message": "The Authorization header is missing. It must use the bearer authorization method.",
     "code": "missing_authorization_header",
     "type": "auth",
     "link": "https://docs.meilisearch.com/errors#missing_authorization_header"
@@ -938,7 +1076,7 @@ HTTP Code: `401 Unauthorized`
 
 ### Context
 
-This error occurs when the route is protected, and the value of the `X-MEILI-API-KEY` header does not allow access to the resource.
+This error occurs when the route is protected, and the value of the `Authorization` header does not allow access to the resource.
 
 ### Error Definition
 
