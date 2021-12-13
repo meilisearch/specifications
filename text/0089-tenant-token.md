@@ -23,7 +23,7 @@ Users regularly request Multi-Tenant indexes. Users today need to set up workaro
 |--------------------|------------|
 | Master Key         | This is the master key that allows the creation of other API keys. The master key is defined by the user when launching MeiliSearch. |
 | API Key            | API keys are stored and managed from the endpoint `/keys` by the master key holder. These are the keys used by the technical teams to interact with MeiliSearch at the level of the frontend/backend code. |
-| Tenant Token     | These keys are not stored and managed by a MeiliSearch instance. They are generated for each end-user by the backend code from a MeiliSearch API Key. They are used by the end-users to only search the documents belonging to them. |
+| Tenant Token     | These tokens are not stored and managed by a MeiliSearch instance. They are generated for each end-user by the backend code from a MeiliSearch API Key. They are used by the end-users to only search the documents belonging to them. |
 | Multi-Tenancy      | By multi-tenancy, we mean that an end-user only accesses data belonging to him within an index shared with other end-users. |
 
 ### IV. Personas
@@ -37,9 +37,9 @@ Users regularly request Multi-Tenant indexes. Users today need to set up workaro
 
 #### Summary Key Points
 
-- `Tenant tokens` are generated from a MeiliSearch parent `API key` on the user's backend code to resolve multi-tenancy use-case by restricting access to data within an index according to the criteria chosen by the team managing a MeiliSearch instance.
-- These `Tenant tokens` can't be less restrictive than a parent `API key` and can only be used for the search action with a predefined forced filter field.
-- These `Tenant tokens` are not stored and thus retrievable on MeiliSearch. This is why we highly advise setting an expiration time on that type of API key for security reasons.
+- `Tenant tokens` are generated from a MeiliSearch parent `API key` on the user's backend code. They are meant to resolve multi-tenancy by restricting access to data within an index according to the criteria chosen by the team managing the MeiliSearch instance.
+- `Tenant tokens` cannot be less restrictive than their respective parent `API key` and can only be used for searching with a predefined forced filter field.
+- `Tenant tokens` are not stored and thus not retrievable on MeiliSearch. This is why we highly advise setting an expiration time on them for security reasons.
 
 #### Solving Multi-Tenancy with `Tenant tokens`
 
@@ -47,7 +47,7 @@ Users regularly request Multi-Tenant indexes. Users today need to set up workaro
 
 Let's say that `Mark` is a developer for a SaaS platform. He would like to ensure that an end-user can only access their documents at search time. **His database contains many users and he hopes to have many more in the future.**
 
-When a user registers, the backend code generates a `Tenant token` specifically for that end-user so he can only access his documents.
+When a user registers, the backend code generates a `Tenant token` specifically for that end-user so they can only access their documents.
 
 The `filter` parameter is set to restrict the search for documents having an `user_id` attribute. This `filter` parameter is contained in the `Tenant token` payload and cannot be modified during the search by the end-user making the request. `filter` can be made of any valid filters. e.g. `user_id = 10 and category = Romantic`
 
