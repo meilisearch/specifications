@@ -40,7 +40,11 @@ In other words, when the next `task` should be picked from the FIFO task queue. 
 
 The more similar consecutive tasks the user sends in a row, the more likely the batching mechanism will be able to group these tasks in a batch. It can be seen as an automatic back-pressure mechanism.
 
-##### 1.3.2.1 `batchUid` generation
+##### 1.3.2.1 Schema
+
+![Auto-batching Process](https://user-images.githubusercontent.com/3692335/145787054-4cb07b5e-c80e-498a-8843-d0cc46329e9b.png)
+
+##### 1.3.2.2 `batchUid` generation
 
 The identifier chosen for the `batchUid`field corresponds to the `uid` value of the first task grouped within a batch. The batch identifiers are therefore unique and consecutive.
 
