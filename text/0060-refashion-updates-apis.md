@@ -60,7 +60,7 @@ The motivation is to stabilize the current `update` resource to a version that c
 | uid      | integer | Unique sequential identifier           |
 | indexUid | string | Unique index identifier |
 | status  | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`                                |
-| type    | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `documentsAddition`, `documentsPartial`, `documentsDeletion`, `settingsUpdate`, `clearAll` |
+| type    | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `documentAddition`, `documentPartial`, `documentDeletion`, `settingsUpdate`, `clearAll` |
 | details | object |  Details information for a task payload. See Task Details part. |
 | error | object | Error object containing error details and context when a task has a `failed` status. See https://github.com/meilisearch/specifications/pull/61|
  | duration | string | Total elapsed time the engine was in processing state expressed as an `ISO-8601` duration format. Times below the second can be expressed with the `.` notation, e.g., `PT0.5S` to express `500ms`. Default is set to `null`.   |
@@ -102,9 +102,9 @@ The motivation is to stabilize the current `update` resource to a version that c
 |  -         | indexCreation |
 |  -         | indexUpdate   |
 |  -         | indexDeletion |
-| DocumentsAddition | documentsAddition  |
-| DocumentsPartial | documentsPartial  |
-| DocumentsDeletion  | documentsDeletion |
+| DocumentsAddition | documentAddition  |
+| DocumentsPartial | documentPartial  |
+| DocumentsDeletion  | documentDeletion |
 | Settings     | settingsUpdate |
 | ClearAll | clearAll |
 
@@ -114,7 +114,7 @@ The motivation is to stabilize the current `update` resource to a version that c
 
 #### 4. `details` field object
 
-##### documentsAddition
+##### documentAddition
 
 | name     | description |
 | -------- | --------    |
@@ -122,7 +122,7 @@ The motivation is to stabilize the current `update` resource to a version that c
 | indexedDocuments  | Number of documents finally indexed. |
 
 
-##### documentsPartial
+##### documentPartial
 
 | name     | description |
 | -------- | --------    |
@@ -130,7 +130,7 @@ The motivation is to stabilize the current `update` resource to a version that c
 | indexedDocuments  | Number of documents finally indexed. |
 
 
-##### documentsDeletion
+##### documentDeletion
 
 | name     | description |
 | -------- | --------    |
@@ -315,7 +315,7 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
             "uid": 1,
             "indexUid": "movies_reviews",
             "status": "enqueued",
-            "type": "documentsAddition",
+            "type": "documentAddition",
             "duration": null,
             "enqueuedAt": "2021-08-12T10:00:00.000000Z",
             "startedProcessingAt": null,
@@ -325,7 +325,7 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
             "uid": 0,
             "indexUid": "movies",
             "status": "succeeded",
-            "type": "documentsAddition",
+            "type": "documentAddition",
             "details": {
                 "receivedDocuments": 100,
                 "indexedDocuments": 100
@@ -369,7 +369,7 @@ Allows users to get a detailed `task` object retrieved by the `uid` field regard
     "uid": 1,
     "indexUid": "movies",
     "status": "enqueued",
-    "type": "documentsAddition",
+    "type": "documentAddition",
     "duration": null,
     "enqueuedAt": "2021-08-12T10:00:00.000000Z",
     "startedAt": null,
@@ -400,7 +400,7 @@ Allows users to list tasks of a particular index.
             "uid": 1,
             "indexUid": "movies",
             "status": "enqueued",
-            "type": "documentsAddition",
+            "type": "documentAddition",
             "duration": null,
             "enqueuedAt": "2021-08-12T10:00:00.000000Z",
             "startedAt": null,
@@ -410,7 +410,7 @@ Allows users to list tasks of a particular index.
             "uid": 0,
             "indexUid": "movies",
             "status": "succeeded",
-            "type": "documentsAddition",
+            "type": "documentAddition",
             "details": {
                 "receivedDocuments": 100,
                 "indexedDocuments": 100
@@ -442,7 +442,7 @@ Allows users to list tasks of a particular index.
     "uid": 1,
     "indexUid": "movies",
     "status": "enqueued",
-    "type": "documentsAddition",
+    "type": "documentAddition",
     "duration": null,
     "enqueuedAt": "2021-08-12T10:00:00.000000Z",
     "startedAt": null,
@@ -570,7 +570,7 @@ New task types are also added for these operations. `indexCreation`, `indexUpdat
 
 - Add a pagination system for on `/tasks` and `indexes/:indexUid/tasks` lists.
 - Add enhanced filtering capabilities.
-- Simplify `documentsAddition` and `documentsPartial` type and elaborate on `details` metadata.
+- Simplify `documentAddition` and `documentPartial` type and elaborate on `details` metadata.
 - Use Hateoas capability to give direct access to a `task` resource.
 - Add dedicated task type names modifying a sub-setting. e.g. `SearchableAttributesUpdate`.
 - Reconsider existence of `/indexes/:indexUid/tasks/:taskUid` route since it is similar to `/tasks/:taskUid`.
