@@ -541,7 +541,7 @@ components:
               - documents.add
               - documents.get
               - documents.delete
-              - indexes.add
+              - indexes.create
               - indexes.get
               - indexes.update
               - indexes.delete
