@@ -66,7 +66,11 @@ e.g. 401 Unauthorized Response example
 
 Following this format, here is the exhaustive list of errors that MeiliSearch can return to an API consumer. This list is updated as MeiliSearch evolves.
 
-💡 Errors returned asynchronously in a `task` object do not include a definition of the HTTP code and mention Async instead of the HTTP code. An asynchronous error is returned in the payload of the update task.
+Errors can be returned in two different ways: `Synchronous` or `Asynchronous`.
+
+💡 `Synchronous` errors are returned directly by the API in response to a user's request.
+
+💡 Errors returned asynchronously in a `task` object do not include a definition of the HTTP code. An asynchronous error is returned in the payload of a `task` under the `error` object.
 
 # invalid_request type
 
@@ -95,6 +99,8 @@ HTTP code `400 Bad Request`
 
 ## missing_parameter
 
+`Synchronous`
+
 ### Context
 
 This error happens when a field is mandatory and missing in the given payload.
@@ -117,6 +123,8 @@ HTTP Code: `400 Bad Request`
 ---
 
 ## invalid_api_key_description
+
+`Synchronous`
 
 ### Context
 
@@ -141,6 +149,8 @@ HTTP Code: `400 Bad Request`
 
 ## invalid_api_key_actions
 
+`Synchronous`
+
 ### Context
 
 This error happens when the `actions` field for an `API Key` resource is invalid.
@@ -163,6 +173,8 @@ HTTP Code: `400 Bad Request`
 ---
 
 ## invalid_api_key_indexes
+
+`Synchronous`
 
 ### Context
 
@@ -187,6 +199,8 @@ HTTP Code: `400 Bad Request`
 
 ## invalid_api_key_expires_at
 
+`Synchronous`
+
 ### Context
 
 This error happens when the `expiresAt` field for an `API Key` resource is invalid.
@@ -210,13 +224,13 @@ HTTP Code: `400 Bad Request`
 
 ## index_already_exists
 
+`Asynchronous`
+
 ### Context
 
 This error happens when a user tries to create an index that already exists.
 
 ### Error Definition
-
-HTTP Code: `409 Conflict`
 
 ```json
 {
@@ -232,6 +246,8 @@ HTTP Code: `409 Conflict`
 ---
 
 ## invalid_index_uid
+
+`Synchronous`
 
 ### Context
 
@@ -256,13 +272,13 @@ HTTP Code: `400 Bad Request`
 
 ## index_primary_key_already_exists
 
+`Asynchronous`
+
 ### Context
 
 This error happens when a user tries to update an index primary key while the index already has one primary key.
 
 ### Error Definition
-
-HTTP Code: `400 Bad Request`
 
 ```json
 {
@@ -279,13 +295,13 @@ HTTP Code: `400 Bad Request`
 
 ## primary_key_inference_failed
 
+`Asynchronous`
+
 ### Context
 
 This error occurs when the engine does not find an identifier in the payload documents to define it as the primary key of the index during the inference process when no document has already been inserted.
 
 ### Error Definition
-
-Async
 
 ```json
 {
@@ -300,13 +316,13 @@ Async
 
 ## missing_document_id
 
+`Asynchronous`
+
 ### Context
 
 This error occurs when the engine does not find the primary key previously defined for the index in the document payload.
 
 ### Error Definition
-
-Async
 
 ```json
 {
@@ -324,13 +340,13 @@ Async
 
 ## invalid_document_id
 
+`Asynchronous`
+
 ### Context
 
 This error occurs when the value of a document identifier does not meet the requirements of the engine.
 
 ### Error Definition
-
-Async
 
 ```json
 {
@@ -347,13 +363,15 @@ Async
 
 ## document_fields_limit_reached
 
+`Synchronous` — The error can be synchronous if a document with a number higher than the allowed field limit is sent.
+
+`Asynchronous` — The error can be asynchronous if the limit is reached when adding one or many fields during a document update.
+
 ### Context
 
 The maximum number of fields for a document is `65,535`. When this number is exceeded, this error is returned. This error is returned within a `task` for a `documentsAddition` or `documentsPartial` operation.
 
 ### Error Definition
-
-Async
 
 ```json
 {
@@ -368,13 +386,13 @@ Async
 
 ## invalid_ranking_rule
 
+`Asynchronous`
+
 ### Context
 
 This error occurs when the user specifies a non-existent ranking rule, a malformed custom ranking rule in the settings payload, or tries to specify a custom ranking rule on the reserved keywords `_geo` and `_geoDistance`.
 
 ### Error Definition
-
-Async
 
 #### Variant: Sending an inexistent ranking rule or an invalid custom ranking rule syntax.
 
@@ -388,7 +406,6 @@ Async
 ```
 
 - The `:rankingRule` is inferred when the message is generated. It could be a misspelled ranking rule like `Wards` instead of `Words` or a custom ranking rule expressed with a syntax error.
-
 
 #### Variant: Specifying a custom ranking rule on reserved fields `_geo` or `_geoDistance`
 
@@ -426,6 +443,8 @@ Async
 ---
 
 ## invalid_filter
+
+`Synchronous`
 
 ### Context
 
@@ -485,6 +504,8 @@ HTTP Code: `400 Bad Request`
 ---
 
 ## invalid_sort
+
+`Synchronous`
 
 ### Context
 
@@ -553,6 +574,8 @@ HTTP Code: `400 Bad Request`
 
 ## invalid_geo_field
 
+`Asynchronous`
+
 ### Context
 
 This error occurs when the `_geo` field of a document payload is not valid.
@@ -575,6 +598,8 @@ This error occurs when the `_geo` field of a document payload is not valid.
 ---
 
 ## payload_too_large
+
+`Synchronous`
 
 ### Context
 
@@ -605,6 +630,8 @@ This error code is generic. It should not be used. Instead, a clear and precise 
 
 ## index_not_found
 
+`Synchronous`
+
 ### Context
 
 This error happens when a requested index can't be found.
@@ -627,6 +654,8 @@ HTTP Code: `404 Not Found`
 ---
 
 ## document_not_found
+
+`Synchronous`
 
 ## Context
 
@@ -651,6 +680,8 @@ HTTP Code: `404 Not Found`
 
 ## dump_not_found
 
+`Synchronous`
+
 ### Context
 
 This error happens when a requested dump can't be found.
@@ -673,6 +704,8 @@ HTTP Code: `404 Not Found`
 ---
 
 ## task_not_found
+
+`Synchronous`
 
 #### Context
 
@@ -697,6 +730,8 @@ HTTP Code: `404 Not Found`
 
 ## api_key_not_found
 
+`Synchronous`
+
 ### Context
 
 This error happens when a requested api key can't be found.
@@ -718,6 +753,8 @@ HTTP Code: `404 Not Found`
 
 ## dump_already_processing
 
+`Synchronous`
+
 ### Context
 
 This error occurs when the user tries to launch the creation of a new dump while a creation is already being processed.
@@ -738,6 +775,8 @@ Http Code: `409 Conflict`
 ---
 
 ## invalid_content_type
+
+`Synchronous`
 
 ### Context
 
@@ -762,6 +801,8 @@ HTTP Code: `415 Unsupported Media Type`
 
 ## missing_content_type
 
+`Synchronous`
+
 ### Context
 
 This error occurs when the Content-Type header is missing.
@@ -785,6 +826,8 @@ HTTP Code: `415 Unsupported Media Type`
 
 ## missing_payload
 
+`Synchronous`
+
 ### Context
 
 This error occurs when the client does not provide a mandatory payload to the request.
@@ -807,6 +850,8 @@ HTTP Code: `400 Bad Request`
 ---
 
 ## malformed_payload
+
+`Synchronous`
 
 ### Context
 
@@ -849,6 +894,8 @@ HTTP Code: `400 Bad Request`
 
 ## internal
 
+`Asynchronous` / `Synchronous`
+
 ### Context
 
 This error code occurs when an unknown and undetermined error has occurred at the server. This is a error that should not happen.
@@ -872,13 +919,13 @@ HTTP Code: `500 Internal Server Error`
 
 ## index_creation_failed
 
+`Asynchronous`
+
 ### Context
 
 This error occurs when an index creation could not be completed for various reasons.
 
 ### Error Definition
-
-HTTP Code: `500 Internal Server Error`
 
 ```json
 {
@@ -894,6 +941,8 @@ HTTP Code: `500 Internal Server Error`
 ---
 
 ## index_not_accessible
+
+`Asynchronous` / `Synchronous`
 
 ### Context
 
@@ -917,6 +966,8 @@ HTTP Code: `500 Internal Server Error`
 ---
 
 ## unretrievable_document
+
+`Asynchronous` / `Synchronous`
 
 ### Context
 
@@ -942,6 +993,8 @@ HTTP Code: `500 Internal Server Error`
 
 ## invalid_state
 
+`Asynchronous` / `Synchronous`
+
 ### Context
 
 This error occurs when the database is in an inconsistent state due to an uncontrolled internal error.
@@ -963,13 +1016,13 @@ HTTP Code: `500 Internal Server Error`
 
 ## dump_process_failed
 
+`Asynchronous`
+
 ### Context
 
 This error occurs during the dump creation process. The dump creation was interrupted for various reasons.
 
 ### Error Definition
-
-Async
 
 ```json
 {
@@ -986,13 +1039,13 @@ Async
 
 ## database_size_limit_reached
 
+`Asynchronous`
+
 ### Context
 
 This error occurs when the user tries to add documents and the maximum size of the database reaches the limit. The user can correct this error by increasing the database size limit.
 
 ### Error Definition
-
-HTTP code `500 Internal Server Error`
 
 ```json
 {
@@ -1008,6 +1061,8 @@ HTTP code `500 Internal Server Error`
 ---
 
 ## no_space_left_on_device
+
+`Asynchronous` / `Synchronous`
 
 ### Context
 
@@ -1029,6 +1084,8 @@ HTTP Code: `500 Internal Server Error`
 ---
 
 ## invalid_store_file
+
+`Asynchronous` / `Synchronous`
 
 ### Context
 
@@ -1053,6 +1110,8 @@ HTTP Code: `500 Internal Server Error`
 
 ## missing_authorization_header
 
+`Synchronous`
+
 ### Context
 
 This error occurs when the route is protected, and the `Authorization` header is not provided.
@@ -1073,6 +1132,8 @@ HTTP Code: `401 Unauthorized`
 ---
 
 ## invalid_api_key
+
+`Synchronous`
 
 ### Context
 
