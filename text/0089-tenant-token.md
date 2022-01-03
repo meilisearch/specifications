@@ -45,7 +45,7 @@ Users regularly request Multi-Tenant indexes. Users today need to set up workaro
 
 ![](https://i.imgur.com/J4jVe1n.png)
 
-Let's say that `Mark` is a developer for a SaaS platform. He would like to ensure that an end-user can only access their documents at search time. **His database contains many users and he hopes to have many more in the future.**
+Let's say that `Mark` is a developer for a SaaS platform. He would like to ensure that end-user can only access their documents at search time. **His database contains many users and he hopes to have many more in the future.**
 
 When a user registers, the backend code generates a `Tenant token` specifically for that end-user so they can only access their documents.
 
@@ -94,11 +94,11 @@ export const generateTenantToken = () => {
 
 The format allows defining specific enforced search filters for accessible indexes (these indexes must be defined in the parent `Api Key` used to generate the `Tenant Token` and have the search action).
 
-If the user does not want to define specific filters for each index accessible to the end-user, he can use the `*` index wildcard rule.
+If the user does not want to define specific filters for each index accessible to the parent API Key, he can use the `*` index wildcard rule.
 
 A policy per index allows overriding the `"*"` behavior.
 
-A `Tenant token` also accept a number of seconds in the `expiresIn` field until it expires. This field should be mandatory and explicitly set to `null` if no expiration time is needed.
+A `Tenant token` also accepts a number of seconds in the `expiresIn` field until it expires. This field should be mandatory and explicitly set to `null` if no expiration time is needed.
 
 
 ```javascript
