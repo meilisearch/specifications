@@ -9,12 +9,12 @@
 
 ### 1.1 Summary
 
-MeiliSearch can automatically group consecutive asynchronous `documentsAddition` or `documentsPartial` tasks for the same index into a single batch via an automatic batching mechanism.
+MeiliSearch can automatically group consecutive asynchronous `documentAddition` or `documentPartial` tasks for the same index into a single batch via an automatic batching mechanism.
 
 #### Summary Key points
 
 - A `batchUid` field is added on a fully qualified `task` API object.
-- An auto-batching mechanism groups consecutive `documentsAddition` or consecutive `documentsPartial` enqueued tasks for a similar index when a task is fetched from the FIFO task queue to be processed.
+- An auto-batching mechanism groups consecutive `documentAddition` or consecutive `documentPartial` enqueued tasks for a similar index when a task is fetched from the FIFO task queue to be processed.
 
 ### 1.2 Motivation
 
@@ -26,7 +26,7 @@ We regularly tell users to batch their documents to speed up the indexing speed.
 
 All `tasks` are linked to a specific `batchUid` field. This `batchUid` field permits to identify that several identical, consecutive tasks have been grouped in the same batch.
 
-Only consecutive `documentsAddition` and `documentsPartial` `tasks` for the same index can have a shared `batchUid` since the scheduler will be able to group them together. This means that all `tasks` concerning other operations will also be part of a `batchUid` having only one task. This could be extended in the future by enhancing the scheduler capabilities.
+Only consecutive `documentAddition` and `documentPartial` `tasks` for the same index can have a shared `batchUid` since the scheduler will be able to group them together. This means that all `tasks` concerning other operations will also be part of a `batchUid` having only one task. This could be extended in the future by enhancing the scheduler capabilities.
 
 This is to avoid having multiple incompressible computation time by grouping them together to increase performance when applied to a maximum number of documents.
 
@@ -34,7 +34,7 @@ This is to avoid having multiple incompressible computation time by grouping the
 
 The scheduling program that groups tasks within a single batch is triggered when an asynchronous `task` currently processed reaches a terminal state as `succeeded` or `failed`.
 
-In other words, when the next `task` should be picked from the FIFO task queue. The scheduler fetch and group all consecutive `documentsAddition` for a similar index in a batch until it encounters another task type or a similar task type but for a different index.
+In other words, when the next `task` should be picked from the FIFO task queue. The scheduler fetches and groups all consecutive `documentAddition` for a similar index in a batch until it encounters another task type or a similar task type but for a different index.
 
 > Note that we are considering implementing a configurable limit of maximum documents to process for a batch and a flag to activate the auto-batching mechanism.
 
@@ -46,7 +46,7 @@ The more similar consecutive tasks the user sends in a row, the more likely the 
 
 ##### 1.3.2.2 `batchUid` generation
 
-The identifier chosen for the `batchUid`field corresponds to the `uid` value of the first task grouped within a batch. The batch identifiers are therefore unique and consecutive.
+The identifier chosen for the `batchUid` field corresponds to the `uid` value of the first task grouped within a batch. The batch identifiers are therefore unique and consecutive.
 
 #### 1.3.3 Impacts on `task` API object format
 
