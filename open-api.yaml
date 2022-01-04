@@ -2357,8 +2357,10 @@ paths:
               schema:
                 type: object
                 properties:
-                  '':
-                    $ref: '#/components/schemas/task'
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/task'
               examples:
                 Example:
                   value:
@@ -2463,6 +2465,8 @@ paths:
       summary: Get an API key
       tags:
         - Keys
+      security:
+        - apiKey: []
       responses:
         '200':
           description: OK
@@ -2484,6 +2488,8 @@ paths:
       operationId: keys.delete
       tags:
         - Keys
+      security:
+        - apiKey: []
       responses:
         '204':
           $ref: '#/components/responses/204'
@@ -2493,6 +2499,8 @@ paths:
       operationId: keys.update
       tags:
         - Keys
+      security:
+        - apiKey: []
       responses:
         '200':
           description: OK
@@ -2518,6 +2526,8 @@ paths:
       operationId: keys.create
       tags:
         - Keys
+      security:
+        - apiKey: []
       responses:
         '200':
           description: OK
@@ -2580,6 +2590,8 @@ paths:
       description: Get version of MeiliSearch.
       tags:
         - Version
+      security:
+        - apiKey: []
       responses:
         '200':
           description: Ok
