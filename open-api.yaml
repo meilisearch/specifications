@@ -264,7 +264,7 @@ components:
 
         Some operations are put in a queue and will be executed in turn (asynchronously). In this case, the server response contains the identifier to track the execution of the operation.
 
-        [Learn More](https://docs.meilisearch.com/learn/advanced/asynchronous_tasks.html).
+        [Learn More](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html).
       additionalProperties: false
       examples:
         - uid: 0
@@ -828,7 +828,7 @@ tags:
       Other than the differences mentioned above, the two routes are strictly equivalent.
   - name: Tasks
     description: |
-      The `tasks` route gives information about the progress of the [asynchronous tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_tasks.html).
+      The `tasks` route gives information about the progress of the [asynchronous operations](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html).
   - name: Keys
     description: |
       Manage API `keys` for a MeiliSearch instance. Each key has a given set of permissions.
@@ -2329,7 +2329,7 @@ paths:
       operationId: indexes.tasks.list
       summary: Get all tasks of an index
       description: |
-        Get all [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_tasks.html) of an [index](https://docs.meilisearch.com/learn/core_concepts/indexes.html).
+        Get all [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) of an [index](https://docs.meilisearch.com/learn/core_concepts/indexes.html).
       tags:
         - Tasks
       security:
@@ -2384,7 +2384,7 @@ paths:
       operationId: indexes.tasks.get
       summary: Get a task of an index
       description: |
-        Get a [task](https://docs.meilisearch.com/learn/advanced/asynchronous_tasks.html) of an [index](https://docs.meilisearch.com/learn/core_concepts/indexes.html).
+        Get a [task](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) of an [index](https://docs.meilisearch.com/learn/core_concepts/indexes.html).
       tags:
         - Tasks
       security:
@@ -2595,7 +2595,7 @@ paths:
   /tasks:
     get:
       summary: Get all tasks
-      description: 'Get all [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_tasks.html)'
+      description: 'Get all [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html)'
       tags:
         - tasks
       responses:
@@ -2646,7 +2646,7 @@ paths:
   '/tasks/:taskUid':
     get:
       summary: Get a task
-      description: 'Get a [task](https://docs.meilisearch.com/learn/advanced/asynchronous_tasks.html) '
+      description: 'Get a [task](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) '
       tags:
         - tasks
       responses:
