@@ -564,7 +564,6 @@ components:
               - tasks.get
               - settings.get
               - settings.update
-              - settings.reset
               - stats.get
               - dumps.create
               - dumps.get
