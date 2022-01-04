@@ -833,7 +833,7 @@ tags:
     description: |
       Manage API `keys` for a MeiliSearch instance. Each key has a given set of permissions.
       You must have the master key to access the `keys` route.
-      [More information about the keys and their rights](https://docs.meilisearch.com/reference/features/authentication.html).
+      [More information about the keys and their rights](https://docs.meilisearch.com/reference/features/security.html).
   - name: Settings
     description: |
       `Settings` is a list of all the __customization__ possible for an index.
