@@ -2347,7 +2347,7 @@ paths:
               examples:
                 Example:
                   value:
-                    data:
+                    results:
                       - uid: 1
                         indexUid: movies
                         status: succeeded
@@ -2606,14 +2606,14 @@ paths:
               schema:
                 type: object
                 properties:
-                  data:
+                  results:
                     type: array
                     items:
                       $ref: '#/components/schemas/task'
               examples:
                 Example:
                   value:
-                    data:
+                    results:
                       - uid: 1
                         indexUid: movies
                         status: succeeded
