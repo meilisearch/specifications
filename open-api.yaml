@@ -270,9 +270,10 @@ components:
         - uid: 0
           indexUid: movies
           status: succeeded
-          type: documentsAddition
+          type: documentAddition
           details:
-            numberOfDocuments: 10
+            receivedDocuments: 10
+            indexedDocuments: 10
           duration: PT5S
           enqueuedAt: '2021-01-01T09:39:00.000000Z'
           startedAt: '2021-01-01T09:40:00.000000Z'
@@ -297,18 +298,33 @@ components:
           type: string
           description: The type of the task
           enum:
-            - documentsAdditions
-            - documentsPartial
-            - documentsDeletion
+            - documentAddition
+            - documentPartial
+            - documentDeletion
+            - indexCreation
+            - indexUpdate
+            - indexDeletion
             - settingsUpdate
             - clearAll
         details:
           type: object
           description: Details information of the task payload.
           properties:
-            numberOfDocuments:
+            receivedDocuments:
               type: integer
-              description: Number of documents impacted when the information can be given for the task.
+              description: Number of documents received for documentAddition or documentPartial task.
+            indexedDocuments:
+              type: integer
+              description: Number of documents finally indexed for documentAddition or documentPartial task.
+            receivedDocumentsIds:
+              type: integer
+              description: Number of document ids received for documentDeletion task.
+            deletedDocuments:
+              type: integer
+              description: Number of documents finally deleted for documentDeletion, indexDeletion or clearAll task.
+            primaryKey:
+              type: string
+              description: Value for the primaryKey field encountered if any for indexCreation or indexUpdate task.
             settings:
               $ref: '#/components/schemas/settings'
         error:
@@ -2351,9 +2367,10 @@ paths:
                       - uid: 1
                         indexUid: movies
                         status: succeeded
-                        type: documentsAddition
+                        type: documentAddition
                         details:
-                          numberOfDocuments: 79000
+                          receivedDocuments: 79000
+                          indexedDocuments: 79000
                         duration: PT2S
                         enqueuedAt: '2021-01-01T09:39:00.000000Z'
                         startedAt: '2021-01-01T09:39:01.000000Z'
@@ -2361,9 +2378,10 @@ paths:
                       - uid: 0
                         indexUid: movies
                         status: failed
-                        type: documentsAddition
+                        type: documentAddition
                         details:
-                          numberOfDocuments: 67493
+                          receivedDocuments: 67493
+                          indexedDocuments: 0
                         error:
                           message: missing primary key
                           errorCode: missing_primary_key
@@ -2402,9 +2420,10 @@ paths:
                     uid: 1
                     indexUid: movies
                     status: succeeded
-                    type: DocumentsAddition
+                    type: documentAddition
                     details:
-                      numberOfDocuments: 79000
+                      receivedDocuments: 79000
+                      indexedDocuments: 79000
                     duration: PT1S
                     enqueuedAt: '2021-01-01T09:39:00.000000Z'
                     startedAt: '2021-01-01T09:39:01.000000Z'
@@ -2617,9 +2636,10 @@ paths:
                       - uid: 1
                         indexUid: movies
                         status: succeeded
-                        type: documentsAddition
+                        type: documentAddition
                         details:
-                          numberOfDocuments: 79000
+                          receivedDocuments: 79000
+                          indexedDocuments: 79000
                         duration: PT1S
                         enqueuedAt: '2021-01-01T09:39:00.000000Z'
                         startedAt: '2021-01-01T09:39:01.000000Z'
@@ -2627,9 +2647,10 @@ paths:
                       - uid: 0
                         indexUid: movies_Review
                         status: failed
-                        type: documentsAddition
+                        type: documentAddition
                         details:
-                          numberOfDocuments: 67493
+                          receivedDocuments: 67493
+                          indexedDocuments: 0
                         error:
                           message: missing primary key
                           errorCode: missing_primary_key
@@ -2662,9 +2683,10 @@ paths:
                     uid: 1
                     indexUid: movies
                     status: succeeded
-                    type: documentsAddition
+                    type: documentAddition
                     details:
-                      numberOfDocuments: 79000
+                      receivedDocuments: 79000
+                      indexedDocuments: 79000
                     duration: PT1S
                     enqueuedAt: '2021-01-01T09:39:00.000000Z'
                     startedAt: '2021-01-01T09:39:01.000000Z'
