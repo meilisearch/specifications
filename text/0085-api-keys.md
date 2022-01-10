@@ -13,7 +13,7 @@ Granular management of API keys is added to MeiliSearch. It is possible to restr
 
 ### 1.2 Motivation
 
-To make MeiliSearch more reliable for teams, we extend the management and the possibilities of restrictions for the management of a MeiliSearch instance by introducing a concrete API reséource (`API Key`). Security is a critical need, often tricky to negotiate as the stakes are high for a company.
+To make MeiliSearch more reliable for teams, we extend the management and the possibilities of restrictions for the management of a MeiliSearch instance by introducing a concrete API resource (`API Key`). Security is a critical need, often tricky to negotiate as the stakes are high for a company.
 
 ### 1.3 Glossary
 
