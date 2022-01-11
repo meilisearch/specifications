@@ -321,7 +321,7 @@ components:
               description: Number of document ids received for documentDeletion task.
             deletedDocuments:
               type: integer
-              description: Number of documents finally deleted for documentDeletion, indexDeletion or clearAll task.
+              description: 'Number of documents finally deleted for documentDeletion, indexDeletion or clearAll task.'
             primaryKey:
               type: string
               description: Value for the primaryKey field encountered if any for indexCreation or indexUpdate task.
@@ -1038,7 +1038,7 @@ paths:
               examples:
                 Index already exists:
                   value:
-                    message: Index `:indexUid` already exists.
+                    message: 'Index `:indexUid` already exists.'
                     code: index_already_exists
                     type: invalid_request
                     link: 'https://docs.meilisearch.com/errors#index_already_exists'
@@ -1116,7 +1116,7 @@ paths:
               examples:
                 Primary Key Already Present:
                   value:
-                    message: Index `:indexUid` already has a primary key.
+                    message: 'Index `:indexUid` already has a primary key.'
                     code: index_primary_key_already_exists
                     type: invalid_request
                     link: 'https://docs.meilisearch.com/errors#index_primary_key_already_exists'
@@ -2458,6 +2458,19 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/key'
+              examples:
+                example-1:
+                  value:
+                    results:
+                      - key: d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4
+                        actions:
+                          - documents.add
+                        indexes:
+                          - movies
+                        description: An API Key
+                        expiresAt: '2022-11-12T10:00:00Z'
+                        createdAt: '2021-11-12T10:00:00Z'
+                        updatedAt: '2021-11-12T10:00:00Z'
         '401':
           $ref: '#/components/responses/401'
   '/keys/{key}':
@@ -2474,6 +2487,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/key'
+              examples:
+                Fetch an API Key details:
+                  value:
+                    description: Indexing Products API key
+                    key: d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4
+                    actions:
+                      - documents.add
+                    indexes:
+                      - products
+                    expiresAt: '2021-11-13T00:00:00Z'
+                    createdAt: '2021-11-12T10:00:00Z'
+                    updatedAt: '2021-11-12T10:00:00Z'
       operationId: keys.get
       description: Get an API Key
     parameters:
@@ -2507,12 +2532,19 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  key:
-                    type: string
-                  updatedAt:
-                    type: string
+                $ref: '#/components/schemas/key'
+              examples:
+                Patch an API Key Response:
+                  value:
+                    description: Indexing Products API key
+                    key: d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4
+                    actions:
+                      - documents.add
+                    indexes:
+                      - products
+                    expiresAt: '2021-11-13T00:00:00Z'
+                    createdAt: '2021-11-12T10:00:00Z'
+                    updatedAt: '2021-11-12T15:00:00Z'
       parameters:
         - $ref: '#/components/parameters/Content-Type'
       description: Update an API Key
@@ -2521,6 +2553,10 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/key'
+            examples:
+              Patch an API Key Request:
+                value:
+                  description: Indexing Products API key
     post:
       summary: Create an API Key
       operationId: keys.create
@@ -2531,6 +2567,22 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/key'
+              examples:
+                Create an API Key:
+                  value:
+                    description: Indexing Products API key
+                    key: d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4
+                    actions:
+                      - documents.add
+                    indexes:
+                      - products
+                    expiresAt: '2021-11-13T00:00:00Z'
+                    createdAt: '2021-11-12T10:00:00Z'
+                    updatedAt: '2021-11-12T10:00:00Z'
       parameters:
         - $ref: '#/components/parameters/Content-Type'
       requestBody:
@@ -2538,6 +2590,15 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/key'
+            examples:
+              API Key Creation:
+                value:
+                  description: Indexing Products API key
+                  actions:
+                    - documents.add
+                  indexes:
+                    - products
+                  expiresAt: '2021-11-13T00:00:00Z'
   /stats:
     get:
       operationId: stats.list
