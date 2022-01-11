@@ -264,15 +264,16 @@ components:
 
         Some operations are put in a queue and will be executed in turn (asynchronously). In this case, the server response contains the identifier to track the execution of the operation.
 
-        [Learn More](https://docs.meilisearch.com/learn/advanced/asynchronous_tasks.html).
+        [Learn More](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html).
       additionalProperties: false
       examples:
         - uid: 0
           indexUid: movies
           status: succeeded
-          type: documentsAddition
+          type: documentAddition
           details:
-            numberOfDocuments: 10
+            receivedDocuments: 10
+            indexedDocuments: 10
           duration: PT5S
           enqueuedAt: '2021-01-01T09:39:00.000000Z'
           startedAt: '2021-01-01T09:40:00.000000Z'
@@ -297,18 +298,33 @@ components:
           type: string
           description: The type of the task
           enum:
-            - documentsAdditions
-            - documentsPartial
-            - documentsDeletion
+            - documentAddition
+            - documentPartial
+            - documentDeletion
+            - indexCreation
+            - indexUpdate
+            - indexDeletion
             - settingsUpdate
             - clearAll
         details:
           type: object
           description: Details information of the task payload.
           properties:
-            numberOfDocuments:
+            receivedDocuments:
               type: integer
-              description: Number of documents impacted when the information can be given for the task.
+              description: Number of documents received for documentAddition or documentPartial task.
+            indexedDocuments:
+              type: integer
+              description: Number of documents finally indexed for documentAddition or documentPartial task.
+            receivedDocumentsIds:
+              type: integer
+              description: Number of document ids received for documentDeletion task.
+            deletedDocuments:
+              type: integer
+              description: 'Number of documents finally deleted for documentDeletion, indexDeletion or clearAll task.'
+            primaryKey:
+              type: string
+              description: Value for the primaryKey field encountered if any for indexCreation or indexUpdate task.
             settings:
               $ref: '#/components/schemas/settings'
         error:
@@ -548,7 +564,6 @@ components:
               - tasks.get
               - settings.get
               - settings.update
-              - settings.reset
               - stats.get
               - dumps.create
               - dumps.get
@@ -795,7 +810,7 @@ components:
           examples:
             Payload Too Large:
               value:
-                message: The payload cannot exceed `:payloadSizeLimit`.
+                message: The provided payload reached the size limit.
                 code: payload_too_large
                 type: invalid_request
                 link: 'https://docs.meilisearch.com/errors#payload_too_large'
@@ -828,12 +843,12 @@ tags:
       Other than the differences mentioned above, the two routes are strictly equivalent.
   - name: Tasks
     description: |
-      The `tasks` route gives information about the progress of the [asynchronous tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_tasks.html).
+      The `tasks` route gives information about the progress of the [asynchronous operations](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html).
   - name: Keys
     description: |
       Manage API `keys` for a MeiliSearch instance. Each key has a given set of permissions.
       You must have the master key to access the `keys` route.
-      [More information about the keys and their rights](https://docs.meilisearch.com/reference/features/authentication.html).
+      [More information about the keys and their rights](https://docs.meilisearch.com/reference/features/security.html).
   - name: Settings
     description: |
       `Settings` is a list of all the __customization__ possible for an index.
@@ -1023,13 +1038,13 @@ paths:
               examples:
                 Index already exists:
                   value:
-                    message: Index `:indexUid` already exists.
+                    message: 'Index `:indexUid` already exists.'
                     code: index_already_exists
                     type: invalid_request
                     link: 'https://docs.meilisearch.com/errors#index_already_exists'
                 Invalid Index Uid:
                   value:
-                    message: 'Index `:indexUid` is not a valid index uid. Index uid can be an integer or a string containing only alphanumeric characters, hyphens (-) and underscores (_).'
+                    message: '`:indexUid` is not a valid index uid. Index uid can be an integer or a string containing only alphanumeric characters, hyphens (-) and underscores (_).'
                     code: invalid_index_uid
                     type: invalid_request
                     link: 'https://docs.meilisearch.com/errors#invalid_index_uid'
@@ -1101,7 +1116,7 @@ paths:
               examples:
                 Primary Key Already Present:
                   value:
-                    message: Index `:indexUid` already has a primary key.
+                    message: 'Index `:indexUid` already has a primary key.'
                     code: index_primary_key_already_exists
                     type: invalid_request
                     link: 'https://docs.meilisearch.com/errors#index_primary_key_already_exists'
@@ -2329,7 +2344,7 @@ paths:
       operationId: indexes.tasks.list
       summary: Get all tasks of an index
       description: |
-        Get all [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_tasks.html) of an [index](https://docs.meilisearch.com/learn/core_concepts/indexes.html).
+        Get all [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) of an [index](https://docs.meilisearch.com/learn/core_concepts/indexes.html).
       tags:
         - Tasks
       security:
@@ -2342,18 +2357,21 @@ paths:
               schema:
                 type: object
                 properties:
-                  '':
-                    $ref: '#/components/schemas/task'
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/task'
               examples:
                 Example:
                   value:
-                    data:
+                    results:
                       - uid: 1
                         indexUid: movies
                         status: succeeded
-                        type: documentsAddition
+                        type: documentAddition
                         details:
-                          numberOfDocuments: 79000
+                          receivedDocuments: 79000
+                          indexedDocuments: 79000
                         duration: PT2S
                         enqueuedAt: '2021-01-01T09:39:00.000000Z'
                         startedAt: '2021-01-01T09:39:01.000000Z'
@@ -2361,14 +2379,15 @@ paths:
                       - uid: 0
                         indexUid: movies
                         status: failed
-                        type: documentsAddition
+                        type: documentAddition
                         details:
-                          numberOfDocuments: 67493
+                          receivedDocuments: 67493
+                          indexedDocuments: 0
                         error:
-                          message: 'Document does not have a `:primaryKey` attribute: `:documentRepresentation`.'
-                          code: missing_document_id
-                          type: invalid_request
-                          link: 'https://docs.meilisearch.com/errors#missing_document_id'
+                          message: missing primary key
+                          errorCode: missing_primary_key
+                          errorType: invalid_request_error
+                          errorLink: 'https://docs.meilisearch.com/errors#missing_primary_key'
                         duration: PT5S
                         enqueuedAt: '2021-01-01T09:38:00.000000Z'
                         startedAt: '2021-01-01T09:38:02.000000Z'
@@ -2384,7 +2403,7 @@ paths:
       operationId: indexes.tasks.get
       summary: Get a task of an index
       description: |
-        Get a [task](https://docs.meilisearch.com/learn/advanced/asynchronous_tasks.html) of an [index](https://docs.meilisearch.com/learn/core_concepts/indexes.html).
+        Get a [task](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) of an [index](https://docs.meilisearch.com/learn/core_concepts/indexes.html).
       tags:
         - Tasks
       security:
@@ -2402,9 +2421,10 @@ paths:
                     uid: 1
                     indexUid: movies
                     status: succeeded
-                    type: DocumentsAddition
+                    type: documentAddition
                     details:
-                      numberOfDocuments: 79000
+                      receivedDocuments: 79000
+                      indexedDocuments: 79000
                     duration: PT1S
                     enqueuedAt: '2021-01-01T09:39:00.000000Z'
                     startedAt: '2021-01-01T09:39:01.000000Z'
@@ -2438,6 +2458,19 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/key'
+              examples:
+                example-1:
+                  value:
+                    results:
+                      - key: d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4
+                        actions:
+                          - documents.add
+                        indexes:
+                          - movies
+                        description: An API Key
+                        expiresAt: '2022-11-12T10:00:00Z'
+                        createdAt: '2021-11-12T10:00:00Z'
+                        updatedAt: '2021-11-12T10:00:00Z'
         '401':
           $ref: '#/components/responses/401'
   '/keys/{key}':
@@ -2445,6 +2478,8 @@ paths:
       summary: Get an API key
       tags:
         - Keys
+      security:
+        - apiKey: []
       responses:
         '200':
           description: OK
@@ -2452,6 +2487,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/key'
+              examples:
+                Fetch an API Key details:
+                  value:
+                    description: Indexing Products API key
+                    key: d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4
+                    actions:
+                      - documents.add
+                    indexes:
+                      - products
+                    expiresAt: '2021-11-13T00:00:00Z'
+                    createdAt: '2021-11-12T10:00:00Z'
+                    updatedAt: '2021-11-12T10:00:00Z'
       operationId: keys.get
       description: Get an API Key
     parameters:
@@ -2466,6 +2513,8 @@ paths:
       operationId: keys.delete
       tags:
         - Keys
+      security:
+        - apiKey: []
       responses:
         '204':
           $ref: '#/components/responses/204'
@@ -2475,18 +2524,27 @@ paths:
       operationId: keys.update
       tags:
         - Keys
+      security:
+        - apiKey: []
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  key:
-                    type: string
-                  updatedAt:
-                    type: string
+                $ref: '#/components/schemas/key'
+              examples:
+                Patch an API Key Response:
+                  value:
+                    description: Indexing Products API key
+                    key: d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4
+                    actions:
+                      - documents.add
+                    indexes:
+                      - products
+                    expiresAt: '2021-11-13T00:00:00Z'
+                    createdAt: '2021-11-12T10:00:00Z'
+                    updatedAt: '2021-11-12T15:00:00Z'
       parameters:
         - $ref: '#/components/parameters/Content-Type'
       description: Update an API Key
@@ -2495,14 +2553,36 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/key'
+            examples:
+              Patch an API Key Request:
+                value:
+                  description: Indexing Products API key
     post:
       summary: Create an API Key
       operationId: keys.create
       tags:
         - Keys
+      security:
+        - apiKey: []
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/key'
+              examples:
+                Create an API Key:
+                  value:
+                    description: Indexing Products API key
+                    key: d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4
+                    actions:
+                      - documents.add
+                    indexes:
+                      - products
+                    expiresAt: '2021-11-13T00:00:00Z'
+                    createdAt: '2021-11-12T10:00:00Z'
+                    updatedAt: '2021-11-12T10:00:00Z'
       parameters:
         - $ref: '#/components/parameters/Content-Type'
       requestBody:
@@ -2510,6 +2590,15 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/key'
+            examples:
+              API Key Creation:
+                value:
+                  description: Indexing Products API key
+                  actions:
+                    - documents.add
+                  indexes:
+                    - products
+                  expiresAt: '2021-11-13T00:00:00Z'
   /stats:
     get:
       operationId: stats.list
@@ -2562,6 +2651,8 @@ paths:
       description: Get version of MeiliSearch.
       tags:
         - Version
+      security:
+        - apiKey: []
       responses:
         '200':
           description: Ok
@@ -2595,7 +2686,7 @@ paths:
   /tasks:
     get:
       summary: Get all tasks
-      description: 'Get all [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_tasks.html)'
+      description: 'Get all [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html)'
       tags:
         - tasks
       responses:
@@ -2606,20 +2697,21 @@ paths:
               schema:
                 type: object
                 properties:
-                  data:
+                  results:
                     type: array
                     items:
                       $ref: '#/components/schemas/task'
               examples:
                 Example:
                   value:
-                    data:
+                    results:
                       - uid: 1
                         indexUid: movies
                         status: succeeded
-                        type: documentsAddition
+                        type: documentAddition
                         details:
-                          numberOfDocuments: 79000
+                          receivedDocuments: 79000
+                          indexedDocuments: 79000
                         duration: PT1S
                         enqueuedAt: '2021-01-01T09:39:00.000000Z'
                         startedAt: '2021-01-01T09:39:01.000000Z'
@@ -2627,14 +2719,15 @@ paths:
                       - uid: 0
                         indexUid: movies_Review
                         status: failed
-                        type: documentsAddition
+                        type: documentAddition
                         details:
-                          numberOfDocuments: 67493
+                          receivedDocuments: 67493
+                          indexedDocuments: 0
                         error:
-                          message: 'Document does not have a `:primaryKey` attribute: `:documentRepresentation`.'
-                          code: missing_document_id
-                          type: invalid_request
-                          link: 'https://docs.meilisearch.com/errors#missing_document_id'
+                          message: missing primary key
+                          errorCode: missing_primary_key
+                          errorType: invalid_request_error
+                          errorLink: 'https://docs.meilisearch.com/errors#missing_primary_key'
                         duration: PT5S
                         enqueuedAt: '2021-01-01T09:38:00.000000Z'
                         startedAt: '2021-01-01T09:38:02.000000Z'
@@ -2646,7 +2739,7 @@ paths:
   '/tasks/:taskUid':
     get:
       summary: Get a task
-      description: 'Get a [task](https://docs.meilisearch.com/learn/advanced/asynchronous_tasks.html) '
+      description: 'Get a [task](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) '
       tags:
         - tasks
       responses:
@@ -2662,9 +2755,10 @@ paths:
                     uid: 1
                     indexUid: movies
                     status: succeeded
-                    type: documentsAddition
+                    type: documentAddition
                     details:
-                      numberOfDocuments: 79000
+                      receivedDocuments: 79000
+                      indexedDocuments: 79000
                     duration: PT1S
                     enqueuedAt: '2021-01-01T09:39:00.000000Z'
                     startedAt: '2021-01-01T09:39:01.000000Z'
@@ -2682,7 +2776,7 @@ paths:
                   value:
                     message: 'Task :taskUid not found.'
                     errorCode: task_not_found
-                    errorType: invalid_requet
+                    errorType: invalid_requet_error
                     link: 'https://docs.meilisearch.com/errors/#task_not_found'
       operationId: tasks.get
       parameters: []
