@@ -2384,10 +2384,10 @@ paths:
                           receivedDocuments: 67493
                           indexedDocuments: 0
                         error:
-                          message: missing primary key
-                          errorCode: missing_primary_key
-                          errorType: invalid_request_error
-                          errorLink: 'https://docs.meilisearch.com/errors#missing_primary_key'
+                          message: 'Document does not have a `:primaryKey` attribute: `:documentRepresentation`.'
+                          code: missing_document_id
+                          type: invalid_request
+                          link: 'https://docs.meilisearch.com/errors#missing_document_id'
                         duration: PT5S
                         enqueuedAt: '2021-01-01T09:38:00.000000Z'
                         startedAt: '2021-01-01T09:38:02.000000Z'
@@ -2724,10 +2724,10 @@ paths:
                           receivedDocuments: 67493
                           indexedDocuments: 0
                         error:
-                          message: missing primary key
-                          errorCode: missing_primary_key
-                          errorType: invalid_request_error
-                          errorLink: 'https://docs.meilisearch.com/errors#missing_primary_key'
+                          message: 'Document does not have a `:primaryKey` attribute: `:documentRepresentation`.'
+                          code: missing_document_id
+                          type: invalid_request
+                          link: 'https://docs.meilisearch.com/errors#missing_document_id'
                         duration: PT5S
                         enqueuedAt: '2021-01-01T09:38:00.000000Z'
                         startedAt: '2021-01-01T09:38:02.000000Z'
@@ -2775,8 +2775,8 @@ paths:
                 Example:
                   value:
                     message: 'Task :taskUid not found.'
-                    errorCode: task_not_found
-                    errorType: invalid_requet_error
+                    code: task_not_found
+                    type: invalid_request
                     link: 'https://docs.meilisearch.com/errors/#task_not_found'
       operationId: tasks.get
       parameters: []
