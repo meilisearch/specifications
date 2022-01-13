@@ -9,16 +9,15 @@
 
 ### 1.1 Summary
 
-MeiliSearch can automatically group consecutive asynchronous `documentAddition` or `documentPartial` tasks for the same index into a single batch via an automatic batching mechanism.
+MeiliSearch can automatically group consecutive asynchronous documentsAddition or documentsPartial tasks for the same index into a single batch via an automatic batching mechanism.
 
-#### Summary Key points
-
-- A `batchUid` field is added on a fully qualified `task` API object.
-- An auto-batching mechanism groups consecutive `documentAddition` or consecutive `documentPartial` enqueued tasks for a similar index when a task is fetched from the FIFO task queue to be processed.
+This auto-batching behavior is enabled by the user through various command flag options.
 
 ### 1.2 Motivation
 
-We regularly tell users to batch their documents to speed up the indexing speed. We decided to integrate a simple scheduler to automatically batch consecutive tasks for an index to make it transparent for the users and enhance their quality of life using MeiliSearch.
+We have been collecting user pain points regularly over the last year, pointing out the slow indexing. We have explained several times to users to make batches containing a maximum of documents to be updated/added to compress the indexing time of specific data structures.
+
+To make MeiliSearch easier to use, we explored the idea of automatically creating these batches within MeiliSearch before indexing users’ documents.
 
 ### 1.3 Explanations
 
@@ -36,9 +35,7 @@ The scheduling program that groups tasks within a single batch is triggered when
 
 In other words, when the next `task` should be picked from the FIFO task queue. The scheduler fetches and groups all consecutive `documentAddition` for a similar index in a batch until it encounters another task type or a similar task type but for a different index.
 
-> Note that we are considering implementing a configurable limit of maximum documents to process for a batch and a flag to activate the auto-batching mechanism.
-
-The more similar consecutive tasks the user sends in a row, the more likely the batching mechanism will be able to group these tasks in a batch. It can be seen as an automatic back-pressure mechanism.
+The more similar consecutive tasks the user sends in a row, the more likely the batching mechanism is able to group these tasks in a batch. It can be seen as an automatic back-pressure mechanism.
 
 ##### 1.3.2.1 Schema
 
@@ -46,22 +43,47 @@ The more similar consecutive tasks the user sends in a row, the more likely the 
 
 ##### 1.3.2.2 `batchUid` generation
 
-The identifier chosen for the `batchUid` field corresponds to the `uid` value of the first task grouped within a batch. The batch identifiers are therefore unique and consecutive.
+The identifier chosen for the `task` batchUid` field corresponds to the `uid` value of the first task grouped within a batch. The batch identifiers are therefore unique and consecutive.
 
 #### 1.3.3 Impacts on `task` API object format
 
-- The different tasks grouped in a batch will be processed within the same transaction. That is to say that if a task fails within a batch, all the tasks fail or succeed.
-- A `batchUid` field is added on fully-qualified `task` API objects.
+- The different tasks grouped in a batch are processed within the same transaction. If a task fails within a batch, all the tasks fail or succeed.
+- A `batchUid` field is added on fully-qualified `task` API objects. It corresponds to the `task` `uid` value of the first task grouped within a batch. `batchUid` values are therefore unique and consecutive.
 - Tasks within the same batch share the same values for the `startedAt`, `finishedAt`, `duration` fields, and the same `error` object if an error occurs for a `task` during the batch processing.
+- If a batch contains many `tasks`, the `task` `details` `indexedDocuments` is identical in all `tasks` belonging to the same processed `batch`.
 
-#### 1.3.4 Tweaking the auto-batching mechanism
-tbd
+#### 1.3.4 Activate auto-batching feature with `--enable-auto-batching`
+
+The auto-batching feature is activated by passing the command flag `--enable-auto-batching` to MeiliSearch when it is launched.
+
+#### 1.3.5 Auto-batching mechanisms options
+
+##### 1.3.5.1  `--max-batch-size`
+
+`--max-batch-size <NUM>` allows to set the maximum number `NUM` of tasks that can be processed together within a single batch.
+
+If `0` is set it will replaced by `1`, since such a value would prevent any task from ever being processed.
+
+If not specified, this is unlimited.
+
+##### 1.3.5.2 `--max-documents-per-batch`
+
+`--max-documents-per-batch <NUM>` allows to set a limit to the maximum number `NUM` of documents  that can be indexed together within a single batch.
+
+Since the batch must contain at least one update, this value can be exceeded. If not specified, this is unlimited.
+
+##### 1.3.5.3 `--debounce-duration-secs`
+
+`--debounce-duration-secs <SECS>` allow to wait at least `SECS` seconds before processing a scheduled batch.
+
+Defaults to `0`secs (process immediately).
 
 ## 2. Technical Aspects
-tbd
+n/a
 
 ## 3. Future Possibilities
 
 - Extends it for all consecutive payload types.
-- Add a filter capability by `batchUid` on the /tasks endpoints.
+- Add a filter capability by `batchUid` on the `/tasks` endpoints.
 - Schedule non-consecutive tasks.
+- Do not fail the entire transaction if a document is not valid. We must find a way to log the documents that could not be indexed.
