@@ -26,7 +26,7 @@ The dumps exists to upgrade from a previous version to a more recent version. It
 - The `dumps` directory can be customized using the `--dumps-dir` configuration option. If the dump directory does not already exist when the dump creation process is called, MeiliSearch will create it.
 - If MeiliSearch is restarted after a dump creation, the dump's status will not appear on the `GET - /dumps/:uid/status` endpoint.
 - A `.dump` file can be imported using the `--import-dump` command-line flag.
-- The MeiliSearch server will started when the dump has been fully imported.
+- The MeiliSearch server starts when the dump is fully imported and indexed.
 - By default, importing a dump when a database already exists (a non-empty data.ms folder in the same directory as the MeiliSearch binary) will stop the process and throw an error.
 - When using the command-line flag `--ignore-dump-if-db-exists=true`, MeiliSearch will use the existing database to start an instance instead of throwing an error. The dump will be ignored.
 - By default, trying to import a dump that do not exists, will stop the process and throw an error.
