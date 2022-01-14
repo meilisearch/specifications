@@ -25,7 +25,9 @@ A Tenant Token is a JWT containing the information necessary for MeiliSearch to 
 
 ### 1.2 Motivation
 
-`Tenant tokens` are introduced to solve multi-tenant use-cases.
+`Tenant tokens` are introduced to solve multi-tenant indexes use-case.
+
+> Multi-Tenant Indexes Definition: It is an index that stores documents that may belong to different tenants. In our case, a tenant within an index can be a user or a company, etc.. In general, the data of one tenant should not be accessible by other tenants.
 
 Users today need to set up workarounds to have multi-tenant indexes. Most of the time, they have to use server code to implement the access restriction logic before requesting MeiliSearch. It is difficult to maintain, to implement, and the performance is degraded because the frontend code does not communicate directly with MeiliSearch.
 
