@@ -149,7 +149,7 @@ is equivalent to
 
 ---
 
-> In this case, if the medical_records index is searchable from the signing API Key, the tenant token can only search in the medical_records index without applying specific rules.
+> In this case, if the medical_records index is searchable from the signing API Key, the tenant token can only search in the medical_records index without applying specific rules before applying the search parameters added by the end user.
 
 ```json
 {
@@ -161,7 +161,7 @@ is equivalent to
 
 ---
 
-> In this case, if the medical_records index is searchable from the signing API Key, the tenant token can only search in the medical_records index and specific rules will be applied at search time.
+> In this case, if the medical_records index is searchable from the signing API Key, the tenant token can only search in the medical_records index and specific rules will be applied at search time before applying the search parameters added by the end user.
 
 ```json
 {
@@ -175,7 +175,7 @@ is equivalent to
 
 ---
 
-> In this case, if the medical_records and medical_appointments indexes are searchable from the signing API Key, the tenant token can only search in those indexes and will apply specific rules given the searched index.
+> In this case, if the medical_records and medical_appointments indexes are searchable from the signing API Key, the tenant token can only search in those indexes and will apply specific rules given the searched index before applying the search parameters added by the end user.
 
 ```json
 {
