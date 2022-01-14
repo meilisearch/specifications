@@ -9,25 +9,25 @@
 
 ### 1.1 Summary
 
-A `Tenant token` is generated on the user server-side code to be used by an end-user. It allows users to have multi-tenant indexes and thus restricts access to documents depending on the end-user making the search request.
+A `Tenant token` is generated on the user code to be used by an end-user. It allows users to have multi-tenant indexes and thus restricts access to documents depending on the end-user making the search request given enforced rules specified from the user business logic.
 
 A Tenant Token is a JWT containing the information necessary for MeiliSearch to verify it and extract permission/rules to apply it to the end user's search.
 
 #### 1.1.1 Summary Key Points
 
-- `Tenant tokens` are meant to solve multi-tenancy in an elegant way.
-- `Tenant tokens` contains rules that ensure that a `Tenant token` holder (e.g an end-user), only access to documents matching rules chosen at the `tenant token` creation.
-- `Tenant tokens` are JWTs.
-- `Tenant tokens` are signed from a MeiliSearch `API key` on the user's backend code.
-- `Tenant tokens` cannot be less restrictive than the signing `API key` and can only be used for searching. It  mean that a Tenant Token cannot search within more indexes than the API Key that signed that token.
-- `Tenant tokens` can have different filters for each index accessible by the signing API key. These filters rule per index are described in an `indexesPolicy` json object
-- `Tenant tokens` are not stored and thus not retrievable on MeiliSearch.
+- `Tenant tokens` are JWTs generated on the user side. Thus not stored or retrievable on MeiliSearch side.
+- `Tenant tokens` contain rules that ensure that a `Tenant token` holder (e.g an end-user) only has access documents matching rules chosen at the `tenant token` creation.
+- `Tenant tokens` are signed from a MeiliSearch `API key` on the user's code.
+- `Tenant tokens` cannot be less restrictive than the signing `API key` and can only be used for searching. A Tenant Token cannot search within more indexes than the API Key that signed that Tenant Token.
+- `Tenant tokens` can have different rules for each index accessible by the signing API key. These filters rule per index are described in an `indexesPolicy` json object.
+- The only rule at the moment is the search parameter `filter`. Other rules may be added in the future.
+- When a request is made with the Tenant Token, MeiliSearch checks if this Tenant Token is authorized to make the request and in this case injects the rules at search time.
 
 ### 1.2 Motivation
 
 `Tenant tokens` are introduced to solve multi-tenant use-cases.
 
-Users today need to set up workarounds to have multi-tenant indexes. Most of the time, they have to use server code as a frontend to implement the access restriction logic before requesting MeiliSearch. It is difficult to maintain, to implement, and the performance is degraded because the frontend code does not communicate directly with MeiliSearch.
+Users today need to set up workarounds to have multi-tenant indexes. Most of the time, they have to use server code to implement the access restriction logic before requesting MeiliSearch. It is difficult to maintain, to implement, and the performance is degraded because the frontend code does not communicate directly with MeiliSearch.
 
 ### 1.3 `Tenant Token` Explanations
 
@@ -39,19 +39,17 @@ Users today need to set up workarounds to have multi-tenant indexes. Most of the
 
 When an end-user registers, the Mark's backend code generates a `Tenant token` for that end-user so they can only access their documents.
 
-This tenant-token is signed with a MeiliSearch API Key so that MeiliSearch can ensure that the token is valid when search requests have to be authorized.
+This tenant-token is signed with a MeiliSearch API Key so that MeiliSearch can ensure that the tenant-token has been generated from a known entity.
 
-The `filter` parameter is set to restrict the search for documents having an `user_id` attribute. This `filter` parameter is part of the Tenant Token payload and cannot be modified.
+MeiliSearch check if the Tenant Token is authorized to make the search request.
 
-`filter` can be made of any valid filters. e.g. `user_id = 10 and category = Romantic`
-
-On the MeiliSearch side, the payload of the `tenant token` defines what data the user is allowed to retrieve, in order words, MeiliSearch grants authorization based on the permission defined in the Tenant token payload and force the `filter` field on top of any other filters that might have been set on the front-end;
+Then MeiliSearch extract the Tenant Token's rules to apply for the search request.
 
 ## 2. Technical Details
 
 ### 2.1 `Tenant Token` details
 
-A Tenant Token generated for MeiliSearch must respect several conditions. A Tenant Token is a JWT.
+A Tenant Token generated for MeiliSearch must respect several conditions.
 
 #### 2.1.1 Header: Algorithm and token type
 
@@ -68,9 +66,9 @@ e.g.
 
 #### 2.1.2 Payload: Data
 
-MeiliSearch needs information within the token to check its validity and use it to perform end-user requests.
+MeiliSearch needs information within the tenant token to check its validity and use it to authorize and perform end-user requests.
 
-This information can be separated into two parts, on one hand, the information allows to check the validity of the Tenant Token, on the other hand, the business logic information allows to have a token with pre-defined search parameters / rules for the end user's search.
+This information can be separated into two parts, on one hand, the information allows to check the validity of the Tenant Token, on the other hand, the business logic information allows to apply search parameters / rules for the end user's search request.
 
 ##### 2.1.2.1 Validity related
 
@@ -83,11 +81,11 @@ This information can be separated into two parts, on one hand, the information a
 
 | Fields   | Description | Comments |
 | -------- | -------- | -------- |
-| `indexesPolicy` | This field contains descriptions of the rules applied for search queries performed with the JWT for all and specific indexes accessible by the signing API key used to generate the JWT. | Let's say an index uses a different field to separate documents belonging to one user from another one, but another index that needs to be accessible uses a different field in its schema. Being able to define specific rules per accessible index avoids having to generate several tenant tokens for an end-user.|
+| `indexesPolicy` | This JSON object contains rules description to apply for search queries performed with the JWT depending the searched index. | Let's say an index uses a field to separate documents belonging to one user from another one, but another index needs to separate belonging using a different field in its schema. Defining specific rules per accessible index avoids having to generate several tenant tokens for an end-user. |
 
 ##### 2.1.2.3 Payload example
 
-Given a MeiliSearch API Key used to sign the JWT from the user backend code. Here is a valid payload data for a JWT.
+Given a MeiliSearch API Key used to sign the JWT from the user code. Here is an example of a valid payload for a tenant token.
 
 e.g `MeiliSearch API key: rkDxFUHd02193e120218f72cc51a9db62729fdb4003e271f960d1631b54f3426fa8b2595`
 
@@ -105,7 +103,7 @@ e.g `MeiliSearch API key: rkDxFUHd02193e120218f72cc51a9db62729fdb4003e271f960d16
 
 > In this example, `indexesPolicy` allows to specify, that no matter which index is searched (among all those accessible by the signing API key that generated the tenant token), this filter will be applied on all search requests.
 
-### 2.3 `Tenant Token` Javascript Code Sample
+### 2.2 `Tenant Token` Javascript Code Sample
 
 ```javascript
 
@@ -119,7 +117,7 @@ header = {
 base64Header = base64Encode(header)
 
 payload = {
-    "iss": meiliSearchApiKey.substr(8),
+    "iss": meiliSearchApiKey.slice(0,8),
     "exp": 1641835850,
     "indexesPolicy": {
         "*": {
@@ -137,5 +135,5 @@ TenantToken = base64Header + '.' + base64Payload + '.' + signature
 
 ## 3. Future Possibilities
 
-- Handle more signing method on MeiliSearch side.
-- Handle more search parameters restictions in `indexesPolicy`.
+- Handle more signing method for the Tenant Token.
+- Handle more search parameters restrictions in `indexesPolicy`.
