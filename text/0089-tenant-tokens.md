@@ -103,6 +103,112 @@ e.g `MeiliSearch API key: rkDxFUHd02193e120218f72cc51a9db62729fdb4003e271f960d16
 
 > In this example, `indexesPolicy` allows to specify, that no matter which index is searched (among all those accessible by the signing API key that generated the tenant token), this filter will be applied on all search requests.
 
+##### 2.1.2.4 `iss` field
+
+##### 2.1.2.5 `exp` field
+
+##### 2.1.2.6 `indexesPolicy` object
+
+`indexesPolicy` is a description of the possible rules for each index.
+
+Here are some valid examples in an attempt to cover all possible use cases.
+
+---
+
+> In this case, all indexes searchable from the signing API Key will be searchable by the tenant token without specific rules.
+
+```json
+{
+    "indexesPolicy": {}
+}
+```
+
+is equivalent to
+
+```json
+{
+    "indexesPolicy": {
+        "*": {}
+    }
+}
+```
+
+---
+
+> In this case, all indexes searchable from the signing API Key will be searchable by the tenant token and MeiliSearch will apply the filter definition before applying the search parameters added by the end user.
+
+```json
+{
+    "indexesPolicy": {
+        "*": {
+            "filter": "user_id = 1"
+        }
+    }
+}
+```
+
+---
+
+> In this case, if the medical_records index is searchable from the signing API Key, the tenant token can only search in the medical_records index without applying specific rules.
+
+```json
+{
+    "indexesPolicy": {
+        "medical_records": {}
+    }
+}
+```
+
+---
+
+> In this case, if the medical_records index is searchable from the signing API Key, the tenant token can only search in the medical_records index and specific rules will be applied at search time.
+
+```json
+{
+    "indexesPolicy": {
+        "medical_records": {
+            "filter": "user_id = 1"
+        }
+    }
+}
+```
+
+---
+
+> In this case, if the medical_records and medical_appointments indexes are searchable from the signing API Key, the tenant token can only search in those indexes and will apply specific rules given the searched index.
+
+```json
+{
+    "indexesPolicy": {
+        "medical_records": {
+            "filter": "user_id = 1"
+        },
+        "medical_appointments": {
+            "filter": "user_id = 1 AND accepted = true"
+        }
+    }
+}
+```
+
+---
+
+> In this case, if all indexes searchable from the signing API Key will be searchable and the rules under `*` will be applied at search time. The medical_appointments index policy will replace the `*` rules specifically when this index is searched.
+
+```json
+{
+    "indexesPolicy": {
+        "*": {
+            "filter": "user_id = 1"
+        },
+        "medical_appointments": {
+            "filter": "user_id = 1 AND accepted = true"
+        }
+    }
+}
+```
+
+---
+
 ### 2.2 `Tenant Token` Javascript Code Sample
 
 ```javascript
