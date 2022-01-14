@@ -107,7 +107,7 @@ e.g `MeiliSearch API key: rkDxFUHd02193e120218f72cc51a9db62729fdb4003e271f960d16
 
 ##### 2.1.2.5 `exp` field
 
-##### 2.1.2.6 `indexesPolicy` object
+##### 2.1.2.6 `indexesPolicy` JSON object
 
 `indexesPolicy` is a description of the possible rules for each index.
 
@@ -115,7 +115,7 @@ Here are some valid examples in an attempt to cover all possible use cases.
 
 ---
 
-> In this case, all indexes searchable from the signing API Key will be searchable by the tenant token without specific rules.
+> In this case, all searchable indexes from the signing API Key will be searchable by the tenant token without specific rules.
 
 ```json
 {
@@ -135,7 +135,7 @@ is equivalent to
 
 ---
 
-> In this case, all indexes searchable from the signing API Key will be searchable by the tenant token and MeiliSearch will apply the filter definition before applying the search parameters added by the end user.
+> In this case, all searchable indexes from the signing API Key will be searchable by the tenant token and MeiliSearch will apply the filter definition before applying the search parameters added by the end user.
 
 ```json
 {
