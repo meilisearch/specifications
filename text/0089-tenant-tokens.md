@@ -192,7 +192,7 @@ is equivalent to
 
 ---
 
-> In this case, if all indexes searchable from the signing API Key will be searchable and the rules under `*` will be applied at search time. The medical_appointments index policy will replace the `*` rules specifically when this index is searched.
+> In this case, all searchable indexes from the signing API Key will be searchable and the rules under `*` will be applied at search time. The medical_appointments index policy will replace the `*` rules specifically when this index is searched by those specified for that index.
 
 ```json
 {
