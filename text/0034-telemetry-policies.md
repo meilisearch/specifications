@@ -63,9 +63,27 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 
 | Metric name                             | Description                                             | Example           | Triggered by |
 |-----------------------------------------|---------------------------------------------------------|-------------------|--------------|
-| `context.app.version`                   | MeiliSearch version number                              | 0.23.0            | Every hour |
-| `infos.env`                             | MeiliSearch env                                         | production        | Every hour |
-| `infos.has_snapshot`                    | `true` if snapshots are activated, otherwise `false`    | true              | Every hour |
+| `context.app.version`                   | MeiliSearch version number                              | 0.23.0            | Every hour   |
+| `infos.env`                             | MeiliSearch env                                         | production        | Every hour   |
+| `infos.db_path`                         | `true` if `--db-path`/`MEILI_DB_PATH` is specified, otherwise `false` | true | Every Hour |
+| `infos.import_dump`                     | `true` if `--import-dump` is specified`, otherwise `false` | true | Every Hour |
+| `infos.dumps_dir`                       | `true` if `--dumps-dir`/`MEILI_DUMPS_DIR` is specified, otherwise `false` | true | Every Hour |
+| `infos.ignore_missing_dump`             | `true` if `--ignore-missing-dump` is specified to true, otherwise `false` | true | Every Hour |
+| `infos.ignore_dump_if_db_exists`        | `true` if `--ignore-dump-if-db-exists` is specified to true, otherwise `false` | true | Every Hour |
+| `infos.import_snapshot`                 | `true` if `--import-snapshot` is specified`, otherwise `false` | true | Every Hour |
+| `infos.schedule_snapshot`               | `true` if `--schedule_snapshot`/`MEILI_SCHEDULE_SNAPSHOT` is specified to true, otherwise `false` | true | Every hour |
+| `infos.snapshot_dir`                    | `true` if `--snapshot-dir`/`MEILI_SNAPSHOT_DIR` is specified to true, otherwise `false` | true | Every Hour |
+| `infos.snapshot_interval_sec`           | Value of `--snapshot_interval_sec`/`MEILI_SNAPSHOT_INTERVAL_SEC` in seconds | 86400 | Every Hour |
+| `infos.ignore_missing_snapshot`         | `true` if `--ignore_missing_snapshot` is specified to true, otherwise `false` | true | Every Hour |
+| `infos.ignore_snapshot_if_db_exists`    | `true` if `--ignore_snapshot_if_db_exists` is specified to true, otherwise `false` | true | Every Hour |
+| `infos.http_addr`                       | `true` if `--http-addr`/`MEILI_HTTP_ADDR` is specified, otherwise `false` | true| Every Hour |
+| `infos.max_index_size`                  | Value of `--max-index-size`/`MEILI_INDEX_SIZE` in bytes | 336042103 | Every Hour |
+| `infos.max_task_db_size`                | Value of `--max-task-db-size`/`MEILI_MAX_TASK_DB_SIZE` in bytes | 336042103 | Every Hour |
+| `infos.http_payload_size_limit`         | Value of `--http-payload-size-limit`/`MEILI_HTTP_PAYLOAD_SIZE_LIMIT` in bytes | 336042103 | Every Hour |
+| `infos.enable_autobatching`             | `true` if `--enable-autobatching` is specified to true, otherwise `false` | `true` | Every Hour |
+| `infos.max_batch_size`                  | Value of `--max-batch-size` in integer, otherwise `null` | 1000 | Every Hour |
+| `infos.max_documents_per_batch`         | Value of `--max-documents-per-batch` in integer, otherwise `null` | 1000 | Every Hour |
+| `infos.debounce_duration_secs`          | Value of `--debounce-duration-secs`in seconds, otherwise `0` | 3600 | Every Hour |
 | `system.distribution`                   | Distribution on which MeiliSearch is launched           | Arch Linux        | Every hour |
 | `system.kernel_version`                 | Kernel version on which MeiliSearch is launched         | 5.14.10           | Every hour |
 | `system.cores`                          | Number of cores                                         | 24                | Every hour |
@@ -97,6 +115,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `filterable_attributes.has_geo`         | `true` if `_geo` is set as a filterable attribute, otherwise `false` | false | `Settings Updated`, `FilterableAttributes Updated`|
 | `searchable_attributes.total`           | Number of searchable attributes | 4 | `Settings Updated`, `SearchableAttributes Update` |
 | `per_task_uid`                          | `true` if an uid is used to fetch a particular task resource, otherwise `false` | true | `Tasks Seen`, `Index Tasks Seen` |
+|
 
 ----
 
@@ -120,8 +139,26 @@ This property allows us to gather essential information to better understand on 
 | Property name | Description | Example |
 |---------------|-------------|---------|
 | context.app.version  | MeiliSearch version number.  Sent in a `context` object instead of `properties` to match Amplitude requirement | 0.23.0 |
-| infos.env | MeiliSearch env. `production` / `development` | `production` |
-| infos.has_snapshot| `true` if snapshots are activated, otherwise `false` | `true` |
+| infos.env | Value of `--env`/`MEILI_ENV` | `production` |
+| infos.db_path | `true` if `--db-path`/`MEILI_DB_PATH` is specified, otherwise `false` | `true`|
+| infos.import_dump | `true` if `--import-dump` is specified`, otherwise `false` | true |
+| infos.dumps_dir | `true` if `--dumps-dir`/`MEILI_DUMPS_DIR` is specified, otherwise `false` | `true` |
+| infos.ignore_missing_dump | `true` if `--ignore-missing-dump` is specified to true, otherwise `false` | `true` |
+| infos.ignore_dump_if_db_exists | `true` if `--ignore-dump-if-db-exists` is specified to true, otherwise `false` | `true` |
+| infos.import_snapshot | `true` if `--import-snapshot` is specified`, otherwise `false` | true |
+| infos.schedule_snapshot | `true` if `--schedule_snapshot`/`MEILI_SCHEDULE_SNAPSHOT` is specified to true, otherwise `false` | `true` |
+| infos.snapshot_dir | `true` if `--snapshot-dir`/`MEILI_SNAPSHOT_DIR` is specified to true, otherwise `false` | `true` |
+| infos.snapshot_interval_sec | Value of `--snapshot_interval_sec`/`MEILI_SNAPSHOT_INTERVAL_SEC` in seconds | `86400` |
+| infos.ignore_missing_snapshot | `true` if `--ignore_missing_snapshot` is specified to true, otherwise `false` | `true` |
+| infos.ignore_snapshot_if_db_exists | `true` if `--ignore_snapshot_if_db_exists` is specified to true, otherwise `false` | `true` |
+| infos.http_addr | `true` if `--http-addr`/`MEILI_HTTP_ADDR` is specified, otherwise `false` | `true`|
+| infos.max_index_size | Value of `--max-index-size`/`MEILI_INDEX_SIZE` in bytes | 336042103 |
+| infos.max_task_db_size | Value of `--max-task-db-size`/`MEILI_MAX_TASK_DB_SIZE` in bytes | 336042103 |
+| infos.http_payload_size_limit | Value of `--http-payload-size-limit`/`MEILI_HTTP_PAYLOAD_SIZE_LIMIT` in bytes | 336042103 |
+| infos.enable_autobatching | `true` if `--enable-autobatching` is specified to true, otherwise `false` | `true` |
+| infos.max-batch-size | Value of `--max-batch-size` in integer, otherwise `null` | 1000 |
+| infos.max-documents-per-batch | Value of `--max-documents-per-batch` in integer, otherwise `null` | 1000 |
+| infos.debounce-duration-secs | Value of `--debounce-duration-secs`in seconds, otherwise `0` | 3600 |
 
 ##### MeiliSearch Statistics `stats`
 
