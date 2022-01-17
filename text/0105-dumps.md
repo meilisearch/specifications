@@ -8,11 +8,11 @@
 
 ### 1.1 Summary
 
-A dump is a compressed file containing an export of a MeiliSearch instance. It contains all indexes, documents, settings, tasks, and api keys but in a raw unprocessed form. A dump isn't an exact copy of a database—it is closer to a blueprint that allows to create an identical dataset.
+A dump is a compressed file containing an export of a MeiliSearch instance. It contains all indexes, documents, settings, tasks, and api keys but in a raw unprocessed form. A dump isn't an exact copy of a database—it is closer to a blueprint that allows creating of an identical dataset.
 
 ### 1.2 Motivation
 
-The dumps exists to upgrade from a previous version to a more recent version. It can also be a useful tool for loading a production state on a staging server to make changes and test them before propagating them to production.
+The dumps exist to upgrade from a previous version to a more recent version. It can also be a helpful tool for loading a production state on a staging server to make changes and test them before propagating them to production.
 
 ### 1.3 Explanations
 
@@ -107,14 +107,39 @@ N/A
 #### 1.3.4 CLI Definition
 
 ##### 1.3.5 `--dumps-dir`
+
+By default, MeiliSearch creates dumps in a directory called `dumps` at the root of your MeiliSearch.
+
+The destination can be modified with the `--dumps-dir` flag. e.g. `--dumps-dir myDumps`
+
 ##### 1.3.6 `--import-dump`
+
+Using the CLI flag `--import-dump`, MeiliSearch will replace the data.ms with the dump data and start the server using the provided dump. e.g. `--import-dump dumps/20220117-144855452.dump`.
+
+If the `--import-dump` flag is specified when a database exists, an error occurs in the CLI.
+
+```
+Error: database already exists at ":pathToDataMs/data.ms", try to delete it or rename it
+```
+
 ##### 1.3.7 `--ignore-dump-if-db-exists`
+
+To avoid MeiliSearch to throw an error when finding that a database already exists, the following flag: `--ignore-dump-if-db-exists` can be used. When using this flag, MeiliSearch will use the existing database to start an instance instead of throwing an error. The dump will be ignored.
+
 ##### 1.3.8 `--ignore-missing-dump`
+
+To avoid MeiliSearch to throw an error when there is no dump at the given path, the following flag: `--ignore-missing-dump` can be used. MeiliSearch will then continue its process and not import any dump.
+
+If the `--ignore-missing-dump` flag is not specified and the file cannot be found, an error occurs in the CLI.
+
+```
+Error: dump doesn't exist at ":pathToDumps/:missingFile"
+```
 
 ---
 
 ## 2. Technical Aspects
-TBD
+n/a
 
 ## 3. Future Possibilities
-TBD
+n/a
