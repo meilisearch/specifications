@@ -8,11 +8,11 @@
 
 ### 1.1 Summary
 
-A dump is a compressed file containing an export of a MeiliSearch instance. It contains all indexes, documents, settings, tasks, and api keys but in a raw unprocessed form. A dump isn't an exact copy of a database—it is closer to a blueprint that allows creating of an identical dataset.
+A dump is a compressed file containing an export of a MeiliSearch instance. It contains all indexes, documents, settings, tasks, and API keys but in a raw unprocessed form. A dump isn't an exact copy of a database—it is closer to a blueprint that allows creating of an identical dataset.
 
 ### 1.2 Motivation
 
-The dumps exist to upgrade from a previous version to a more recent version. It can also be a helpful tool for loading a production state on a staging server to make changes and test them before propagating them to production.
+The dumps exist to upgrade a MeiliSearch instance from a previous version to a more recent version. It can also be a helpful tool for loading a production state on a staging server to make changes and test them before propagating them to production.
 
 ### 1.3 Explanations
 
@@ -29,7 +29,7 @@ The dumps exist to upgrade from a previous version to a more recent version. It 
 - The MeiliSearch server starts when the dump is fully imported and indexed.
 - By default, importing a dump when a database already exists (a non-empty data.ms folder in the same directory as the MeiliSearch binary) will stop the process and throw an error.
 - When using the command-line flag `--ignore-dump-if-db-exists=true`, MeiliSearch will use the existing database to start an instance instead of throwing an error. The dump will be ignored.
-- By default, trying to import a dump that do not exists, will stop the process and throw an error.
+- By default, trying to import a dump that does not exist, will stop the process and throw an error.
 - When using the command-line flag `--ignore-missing-dump`, MeiliSearch will continue its process and not throw an error.
 
 ---
