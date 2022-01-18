@@ -269,6 +269,7 @@ components:
       examples:
         - uid: 0
           indexUid: movies
+          batchUid: 0
           status: succeeded
           type: documentAddition
           details:
@@ -285,6 +286,9 @@ components:
         indexUid:
           type: string
           description: The unique identifier of the index where this task is operated
+        batchUid:
+          type: integer
+          description: Identify in which batch a task has been grouped by auto-batching. It corresponds to the first task uid grouped within a batch.
         status:
           type: string
           description: The status of the task
@@ -315,7 +319,7 @@ components:
               description: Number of documents received for documentAddition or documentPartial task.
             indexedDocuments:
               type: integer
-              description: Number of documents finally indexed for documentAddition or documentPartial task.
+              description: Number of documents finally indexed for documentAddition or documentPartial task or if batched, in the batchUid.
             receivedDocumentsIds:
               type: integer
               description: Number of document ids received for documentDeletion task.
@@ -348,6 +352,7 @@ components:
       required:
         - uid
         - indexUid
+        - batchUid
         - status
         - type
         - enqueuedAt
@@ -2366,7 +2371,8 @@ paths:
                   value:
                     results:
                       - uid: 1
-                        indexUid: movies
+                        indexUid: movies,
+                        batchUid: 1
                         status: succeeded
                         type: documentAddition
                         details:
@@ -2378,6 +2384,7 @@ paths:
                         finishedAt: '2021-01-01T09:39:02.000000Z'
                       - uid: 0
                         indexUid: movies
+                        batchUid: 0
                         status: failed
                         type: documentAddition
                         details:
@@ -2420,6 +2427,7 @@ paths:
                   value:
                     uid: 1
                     indexUid: movies
+                    batchUid: 1
                     status: succeeded
                     type: documentAddition
                     details:
@@ -2707,6 +2715,7 @@ paths:
                     results:
                       - uid: 1
                         indexUid: movies
+                        batchUid: 1
                         status: succeeded
                         type: documentAddition
                         details:
@@ -2718,6 +2727,7 @@ paths:
                         finishedAt: '2021-01-01T09:39:02.000000Z'
                       - uid: 0
                         indexUid: movies_Review
+                        batchUid: 0
                         status: failed
                         type: documentAddition
                         details:
@@ -2754,6 +2764,7 @@ paths:
                   value:
                     uid: 1
                     indexUid: movies
+                    batchUid: 1
                     status: succeeded
                     type: documentAddition
                     details:
