@@ -59,6 +59,7 @@ The motivation is to stabilize the current `update` resource to a version that c
 |---------|---------|---------------------------------|
 | uid      | integer | Unique sequential identifier           |
 | indexUid | string | Unique index identifier |
+| batchUid | integer | Identify in which batch a task has been grouped by auto-batching. It corresponds to the first task uid grouped within a batch. See [auto-batching specification](0096-auto-batching.md) |
 | status  | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`                                |
 | type    | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `documentAddition`, `documentPartial`, `documentDeletion`, `settingsUpdate`, `clearAll` |
 | details | object |  Details information for a task payload. See Task Details part. |
@@ -183,6 +184,7 @@ e.g. A fully qualified `task` object in an `enqueued` state.
 {
     "uid": 0,
     "indexUid": "movies",
+    "batchUid": 0,
     "status": "enqueued",
     "type": "settingsUpdate",
     "details": {
@@ -208,6 +210,7 @@ e.g. A fully qualified `task` object in a `processing` state.
 {
     "uid": 0,
     "indexUid": "movies",
+    "batchUid": 0,
     "status": "processing",
     "type": "settingsUpdate",
     "details": {
@@ -233,6 +236,7 @@ e.g. A fully qualified `task` object in a `succeeded` state.
 {
     "uid": 0,
     "indexUid": "movies",
+    "batchUid": 0,
     "status": "succeeded",
     "type": "settingsUpdate",
     "details": {
@@ -258,6 +262,7 @@ e.g. A fully qualified `task` object in a `failed` state.
 {
     "uid": 0,
     "indexUid": "movies",
+    "batchUid": 0,
     "status": "failed",
     "type": "settingsUpdate",
     "details": {
@@ -314,6 +319,7 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
         {
             "uid": 1,
             "indexUid": "movies_reviews",
+            "batchUid": 1,
             "status": "enqueued",
             "type": "documentAddition",
             "duration": null,
@@ -324,6 +330,7 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
         {
             "uid": 0,
             "indexUid": "movies",
+            "batchUid": 0,
             "status": "succeeded",
             "type": "documentAddition",
             "details": {
@@ -368,6 +375,7 @@ Allows users to get a detailed `task` object retrieved by the `uid` field regard
 {
     "uid": 1,
     "indexUid": "movies",
+    "batchUid": 1,
     "status": "enqueued",
     "type": "documentAddition",
     "duration": null,
@@ -399,6 +407,7 @@ Allows users to list tasks of a particular index.
         {
             "uid": 1,
             "indexUid": "movies",
+            "batchUid": 1,
             "status": "enqueued",
             "type": "documentAddition",
             "duration": null,
@@ -409,6 +418,7 @@ Allows users to list tasks of a particular index.
         {
             "uid": 0,
             "indexUid": "movies",
+            "batchUid": 0,
             "status": "succeeded",
             "type": "documentAddition",
             "details": {
@@ -441,6 +451,7 @@ Allows users to list tasks of a particular index.
 
     "uid": 1,
     "indexUid": "movies",
+    "batchUid": 1,
     "status": "enqueued",
     "type": "documentAddition",
     "duration": null,
