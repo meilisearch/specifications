@@ -43,9 +43,9 @@ When an end-user registers, Mark's backend code generates a `Tenant token` for t
 
 This tenant-token is signed with a MeiliSearch API Key so that MeiliSearch can ensure that the tenant-token has been generated from a known entity.
 
-MeiliSearch check if the Tenant Token is authorized to make the search request.
+MeiliSearch checks if the Tenant Token is authorized to make the search request.
 
-Then MeiliSearch extract the Tenant Token's rules to apply for the search request.
+Then MeiliSearch extracts the Tenant Token's rules to apply for the search request.
 
 ## 2. Technical Details
 
