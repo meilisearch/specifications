@@ -157,9 +157,9 @@ This property allows us to gather essential information to better understand on 
 | infos.max_task_db_size | Value of `--max-task-db-size`/`MEILI_MAX_TASK_DB_SIZE` in bytes | 336042103 |
 | infos.http_payload_size_limit | Value of `--http-payload-size-limit`/`MEILI_HTTP_PAYLOAD_SIZE_LIMIT` in bytes | 336042103 |
 | infos.enable_autobatching | `true` if `--enable-autobatching` is specified to true, otherwise `false` | `true` |
-| infos.max-batch-size | Value of `--max-batch-size` in integer, otherwise `null` | 1000 |
-| infos.max-documents-per-batch | Value of `--max-documents-per-batch` in integer, otherwise `null` | 1000 |
-| infos.debounce-duration-secs | Value of `--debounce-duration-secs`in seconds, otherwise `0` | 3600 |
+| infos.max_batch_size | Value of `--max-batch-size` in integer, otherwise `null` | 1000 |
+| infos.max_documents_per_batch | Value of `--max-documents-per-batch` in integer, otherwise `null` | 1000 |
+| infos.debounce_duration_secs | Value of `--debounce-duration-secs`in seconds, otherwise `0` | 3600 |
 | infos.log_level | Value of `--log-level`/`MEILI_LOG_LEVEL`  | debug |
 
 ##### MeiliSearch Statistics `stats`
