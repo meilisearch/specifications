@@ -39,7 +39,7 @@ Users today need to set up workarounds to have multi-tenant indexes. Most of the
 
 `Mark` is a developer for a SaaS platform. He would like to ensure that every end-user can only access their documents at search time.
 
-When an end-user registers, the Mark's backend code generates a `Tenant token` for that end-user so they can only access their documents.
+When an end-user registers, Mark's backend code generates a `Tenant token` for that end-user so they can only access their documents.
 
 This tenant-token is signed with a MeiliSearch API Key so that MeiliSearch can ensure that the tenant-token has been generated from a known entity.
 
