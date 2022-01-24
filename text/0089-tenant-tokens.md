@@ -123,7 +123,7 @@ e.g `MeiliSearch API key: rkDxFUHd02193e120218f72cc51a9db62729fdb4003e271f960d16
 
 ##### 2.1.2.5 `exp` field
 
-`exp` permits to specify the expiration date of the Tenant Token if needed. The format is a JSON numeric value representing the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds.
+`exp` is used to specify the expiration date of the Tenant Token if needed. The format is a JSON numeric value representing the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds.
 
 ##### 2.1.2.6 `searchRules` JSON object
 
