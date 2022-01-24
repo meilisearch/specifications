@@ -19,7 +19,7 @@ A Tenant Token is a JWT containing the information necessary for MeiliSearch to 
 - `Tenant tokens` contain rules that ensure that a `Tenant token` holder (e.g an end-user) only has access documents matching rules chosen at the `tenant token` creation.
 - `Tenant tokens` are signed from a MeiliSearch `API key` on the user's code.
 - `Tenant tokens` cannot be less restrictive than the signing `API key` and can only be used for searching. A Tenant Token cannot search within more indexes than the API Key that signed that Tenant Token.
-- `Tenant tokens` can have different rules for each index accessible by the signing API key. These filters rule per index are described in an `indexesPolicy` json object.
+- `Tenant tokens` can have different rules for each index accessible by the signing API key. These filters rule per index are described in an `searchRules` json object.
 - The only rule at the moment is the search parameter `filter`. Other rules may be added in the future.
 - When a request is made with the Tenant Token, MeiliSearch checks if this Tenant Token is authorized to make the request and in this case injects the rules at search time.
 
@@ -55,9 +55,21 @@ A Tenant Token generated for MeiliSearch must respect several conditions.
 
 #### 2.1.1 Header: Algorithm and token type
 
-Tenant Token MUST be signed with the combination of `HMAC + SHA256`.
+The Tenant Token MUST be signed with one of the following algorithms:
 
-e.g.
+- `HS256`
+- `HS384`
+- `HS512`
+- `RS256`
+- `RS384`
+- `RS512`
+- `PS256`
+- `PS384`
+- `PS512`
+- `ES256`
+- `ES384`
+
+e.g. With `HS256`
 
 ```json
 {
@@ -83,7 +95,7 @@ This information can be separated into two parts, on one hand, the information a
 
 | Fields   | Required? | Description | Comments |
 | -------- | --------- |------------ | -------- |
-| `indexesPolicy` | Required | This JSON object contains rules description to apply for search queries performed with the JWT depending the searched index. A Tenant Token cannot access more indexes at search time than those defined as accessible by the signing API key. | Let's say an index uses a field to separate documents belonging to one user from another one, but another index needs to separate belonging using a different field in its schema. Defining specific rules per accessible index avoids having to generate several tenant tokens for an end-user. |
+| `searchRules` | Required | This JSON object contains rules description to apply for search queries performed with the JWT depending the searched index. A Tenant Token cannot access more indexes at search time than those defined as accessible by the signing API key. | Let's say an index uses a field to separate documents belonging to one user from another one, but another index needs to separate belonging using a different field in its schema. Defining specific rules per accessible index avoids having to generate several tenant tokens for an end-user. |
 
 ##### 2.1.2.3 Payload example
 
@@ -95,7 +107,7 @@ e.g `MeiliSearch API key: rkDxFUHd02193e120218f72cc51a9db62729fdb4003e271f960d16
 {
     "apiKeyPrefix": "rkDxFUHd", <- The first 8 characters of the signing MeiliSearch API Key
     "exp": 1641835850, <- An expiration date in seconds from 1970-01-01T00:00:00Z UTC
-    "indexesPolicy": { <- The indexesPolicy Json Object.
+    "searchRules": { <- The searchRules Json Object.
         "*": {
             "filter": "user_id = 1"
         }
@@ -103,7 +115,7 @@ e.g `MeiliSearch API key: rkDxFUHd02193e120218f72cc51a9db62729fdb4003e271f960d16
 }
 ```
 
-> In this example, `indexesPolicy` allows to specify, that no matter which index is searched (among all those accessible by the signing API key that generated the tenant token), this filter will be applied on all search requests.
+> In this example, `searchRules` allows to specify, that no matter which index is searched (among all those accessible by the signing API key that generated the tenant token), this filter will be applied on all search requests.
 
 ##### 2.1.2.4 `apiKeyPrefix` field
 
@@ -113,9 +125,9 @@ e.g `MeiliSearch API key: rkDxFUHd02193e120218f72cc51a9db62729fdb4003e271f960d16
 
 `exp` permits to specify the expiration date of the Tenant Token if needed. The format is a JSON numeric value representing the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds.
 
-##### 2.1.2.6 `indexesPolicy` JSON object
+##### 2.1.2.6 `searchRules` JSON object
 
-`indexesPolicy` is a description of the possible rules for each index.
+`searchRules` is a description of the possible rules for each index.
 
 Here are some valid examples in an attempt to cover all possible use cases.
 
@@ -126,7 +138,7 @@ Here are some valid examples in an attempt to cover all possible use cases.
 
 ```json
 {
-    "indexesPolicy": {
+    "searchRules": {
         "*": {}
     }
 }
@@ -136,7 +148,7 @@ is equivalent to
 
 ```json
 {
-    "indexesPolicy": {
+    "searchRules": {
         "*": null
     }
 }
@@ -146,7 +158,7 @@ is equivalent to
 
 ```json
 {
-    "indexesPolicy": ["*"] //This notation does not allow the addition of specific rules. The search will just be accessible on all accessibles indexes from the signing API Key for the Tenant Token without specific rules.
+    "searchRules": ["*"] //This notation does not allow the addition of specific rules. The search will just be accessible on all accessibles indexes from the signing API Key for the Tenant Token without specific rules.
 }
 ```
 
@@ -156,7 +168,7 @@ is equivalent to
 
 ```json
 {
-    "indexesPolicy": {
+    "searchRules": {
         "*": {
             "filter": "user_id = 1"
         }
@@ -170,7 +182,7 @@ is equivalent to
 
 ```json
 {
-    "indexesPolicy": {
+    "searchRules": {
         "medical_records": {}
     }
 }
@@ -179,7 +191,7 @@ is equivalent to
 
 ```json
 {
-    "indexesPolicy": {
+    "searchRules": {
         "medical_records": null
     }
 }
@@ -189,7 +201,7 @@ is equivalent to
 
 ```json
 {
-    "indexesPolicy": ["medical_records"]
+    "searchRules": ["medical_records"]
 }
 ```
 
@@ -199,7 +211,7 @@ is equivalent to
 
 ```json
 {
-    "indexesPolicy": {
+    "searchRules": {
         "medical_records": {
             "filter": "user_id = 1"
         }
@@ -213,7 +225,7 @@ is equivalent to
 
 ```json
 {
-    "indexesPolicy": {
+    "searchRules": {
         "medical_records": {
             "filter": "user_id = 1"
         },
@@ -230,7 +242,7 @@ is equivalent to
 
 ```json
 {
-    "indexesPolicy": {
+    "searchRules": {
         "*": {
             "filter": "user_id = 1"
         },
@@ -240,6 +252,9 @@ is equivalent to
     }
 }
 ```
+---
+
+Note: The `filter` field accepts array, string and the mixed syntax as described in the [filter and facet specification](0027-filter-and-facet-behavior.md).
 
 ---
 
@@ -259,7 +274,7 @@ base64Header = base64Encode(header)
 payload = {
     "apiKeyPrefix": meiliSearchApiKey.slice(0,8),
     "exp": 1641835850,
-    "indexesPolicy": {
+    "searchRules": {
         "*": {
             "filter": "user_id = 1"
         }
@@ -276,4 +291,4 @@ TenantToken = base64Header + '.' + base64Payload + '.' + signature
 ## 3. Future Possibilities
 
 - Handle more signing method for the Tenant Token.
-- Handle more search parameters restrictions in `indexesPolicy`.
+- Handle more search parameters restrictions in `searchRules`.
