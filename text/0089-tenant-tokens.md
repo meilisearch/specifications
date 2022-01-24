@@ -127,7 +127,7 @@ e.g `MeiliSearch API key: rkDxFUHd02193e120218f72cc51a9db62729fdb4003e271f960d16
 
 ##### 2.1.2.6 `searchRules` JSON object
 
-`searchRules` is a description of the possible rules for each index.
+`searchRules` contains the rules to be enforced at search time for all or specific accessible indexes for the signing API Key.
 
 Here are some valid examples in an attempt to cover all possible use cases.
 
