@@ -133,8 +133,7 @@ Here are some valid examples in an attempt to cover all possible use cases.
 
 ---
 
-> In this case, all searchable indexes from the signing API Key will be searchable by the tenant token without specific rules.
-
+> In this case, all indexes on which the signing API Key has permissions are searchable by the tenant token without any restrictions.
 
 ```json
 {
@@ -164,7 +163,7 @@ is equivalent to
 
 ---
 
-> In this case, all searchable indexes from the signing API Key will be searchable by the tenant token and MeiliSearch will apply the filter definition before applying the search parameters added by the end user.
+> In this case, all searchable indexes from the signing API Key are searchable by the tenant token and MeiliSearch will apply the filter rule before applying the search parameters added by the end user.
 
 ```json
 {
@@ -178,7 +177,7 @@ is equivalent to
 
 ---
 
-> In this case, if the medical_records index is searchable from the signing API Key, the tenant token can only search in the medical_records index without applying specific rules before applying the search parameters added by the end user.
+> In this case, if the `medical_records` index is searchable from the signing API Key, the tenant token can only search in the `medical_records` index. No further rules impact search results on `medical_records`.
 
 ```json
 {
@@ -207,7 +206,7 @@ is equivalent to
 
 ---
 
-> In this case, if the medical_records index is searchable from the signing API Key, the tenant token can only search in the medical_records index, plus specific rules limits their search results. These rules are always applied and cannot be overwritten by the users search parameters.
+> In this case, if the `medical_records` index is searchable from the signing API Key, the tenant token can only search in the `medical_records` index, MeiliSearch will apply the filter rule before applying the search parameters added by the end user.
 
 ```json
 {
@@ -221,7 +220,7 @@ is equivalent to
 
 ---
 
-> In this case, if the medical_records and medical_appointments indexes are searchable from the signing API Key, the tenant token can only search in those indexes and specific rules limits their search results. These rules are always applied and cannot be overwritten by the users search parameters.
+> In this case, if the `medical_records` and `medical_appointments` indexes are searchable from the signing API Key, the tenant token can only search in those indexes. MeiliSearch will apply the filter rule before applying the search parameters added by the end user.
 
 ```json
 {
@@ -238,7 +237,7 @@ is equivalent to
 
 ---
 
-> In this case, all searchable indexes from the signing API Key will be searchable and the rules under `*` will be applied at search time. The medical_appointments index policy will replace the `*` rules specifically when this index is searched by those specified for that index.
+> In this case, all searchable indexes from the signing API Key are searchable and search requests will apply specific rules defined in the wildcard field: `*`. The `medical_appointments` index rules, defined in the field of the same name, overwrites the rules defined in the wildcard field `*` for this specific index.
 
 ```json
 {
