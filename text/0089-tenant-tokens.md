@@ -123,13 +123,6 @@ Here are some valid examples in an attempt to cover all possible use cases.
 
 > In this case, all searchable indexes from the signing API Key will be searchable by the tenant token without specific rules.
 
-```json
-{
-    "indexesPolicy": {}
-}
-```
-
-is equivalent to
 
 ```json
 {
@@ -143,9 +136,18 @@ is equivalent to
 
 ```json
 {
-    "indexesPolicy": ["*"] //In array notation
+    "indexesPolicy": {
+        "*": null
+    }
 }
+```
 
+is equivalent to
+
+```json
+{
+    "indexesPolicy": ["*"] //This notation does not allow the addition of specific rules. The search will just be accessible on all accessibles indexes from the signing API Key for the Tenant Token without specific rules.
+}
 ```
 
 ---
@@ -170,6 +172,15 @@ is equivalent to
 {
     "indexesPolicy": {
         "medical_records": {}
+    }
+}
+```
+is equivalent to
+
+```json
+{
+    "indexesPolicy": {
+        "medical_records": null
     }
 }
 ```
