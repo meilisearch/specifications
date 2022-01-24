@@ -74,16 +74,16 @@ This information can be separated into two parts, on one hand, the information a
 
 ##### 2.1.2.1 Validity related
 
-| Fields   | Description | Comments |
-| -------- | -------- | -------- |
-| `iss` (Issuer claim) | Must contain the first 8 characters of the signing `MeiliSearch API key` used to generate the JWT |  | |
-| `exp` (Expiration Time claim) | A JSON numeric value representing the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds. | This value is optional. |
+| Fields   | Required?  | Description | Comments |
+| -------- |----------- | ----------- | -------- |
+| `apiKeyPrefix` (Custom claim) | Required  | Must contain the first 8 characters of the signing `MeiliSearch API key` used to generate the JWT | |
+| `exp` (Expiration Time claim) | Optional  | A JSON numeric value representing the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time. | If the signing API key expires, the Tenant Token also expires. Thus said, the `exp` can't be greater than the expiration date of the signing API key. |
 
 ##### 2.1.2.2 Business logic related
 
-| Fields   | Description | Comments |
-| -------- | -------- | -------- |
-| `indexesPolicy` | This JSON object contains rules description to apply for search queries performed with the JWT depending the searched index. | Let's say an index uses a field to separate documents belonging to one user from another one, but another index needs to separate belonging using a different field in its schema. Defining specific rules per accessible index avoids having to generate several tenant tokens for an end-user. |
+| Fields   | Required? | Description | Comments |
+| -------- | --------- |------------ | -------- |
+| `indexesPolicy` | Required | This JSON object contains rules description to apply for search queries performed with the JWT depending the searched index. A Tenant Token cannot access more indexes at search time than those defined as accessible by the signing API key. | Let's say an index uses a field to separate documents belonging to one user from another one, but another index needs to separate belonging using a different field in its schema. Defining specific rules per accessible index avoids having to generate several tenant tokens for an end-user. |
 
 ##### 2.1.2.3 Payload example
 
@@ -93,7 +93,7 @@ e.g `MeiliSearch API key: rkDxFUHd02193e120218f72cc51a9db62729fdb4003e271f960d16
 
 ```json
 {
-    "iss": "rkDxFUHd", <- The first 8 characters of the signing API Key
+    "apiKeyPrefix": "rkDxFUHd", <- The first 8 characters of the signing MeiliSearch API Key
     "exp": 1641835850, <- An expiration date in seconds from 1970-01-01T00:00:00Z UTC
     "indexesPolicy": { <- The indexesPolicy Json Object.
         "*": {
@@ -105,9 +105,13 @@ e.g `MeiliSearch API key: rkDxFUHd02193e120218f72cc51a9db62729fdb4003e271f960d16
 
 > In this example, `indexesPolicy` allows to specify, that no matter which index is searched (among all those accessible by the signing API key that generated the tenant token), this filter will be applied on all search requests.
 
-##### 2.1.2.4 `iss` field
+##### 2.1.2.4 `apiKeyPrefix` field
+
+`apiKeyPrefix` permits to verify that the signing API key of the Token is known and valid within MeiliSearch. It must contain the first 8 characters of the MeiliSearch API key that generates and signs the Tenant Token.
 
 ##### 2.1.2.5 `exp` field
+
+`exp` permits to specify the expiration date of the Tenant Token if needed. The format is a JSON numeric value representing the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds.
 
 ##### 2.1.2.6 `indexesPolicy` JSON object
 
@@ -135,6 +139,15 @@ is equivalent to
 }
 ```
 
+is equivalent to
+
+```json
+{
+    "indexesPolicy": ["*"] //In array notation
+}
+
+```
+
 ---
 
 > In this case, all searchable indexes from the signing API Key will be searchable by the tenant token and MeiliSearch will apply the filter definition before applying the search parameters added by the end user.
@@ -158,6 +171,14 @@ is equivalent to
     "indexesPolicy": {
         "medical_records": {}
     }
+}
+```
+
+is equivalent to
+
+```json
+{
+    "indexesPolicy": ["medical_records"]
 }
 ```
 
@@ -225,7 +246,7 @@ header = {
 base64Header = base64Encode(header)
 
 payload = {
-    "iss": meiliSearchApiKey.slice(0,8),
+    "apiKeyPrefix": meiliSearchApiKey.slice(0,8),
     "exp": 1641835850,
     "indexesPolicy": {
         "*": {
