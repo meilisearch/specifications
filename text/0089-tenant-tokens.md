@@ -221,7 +221,7 @@ is equivalent to
 
 ---
 
-> In this case, if the medical_records and medical_appointments indexes are searchable from the signing API Key, the tenant token can only search in those indexes and will apply specific rules given the searched index before applying the search parameters added by the end user.
+> In this case, if the medical_records and medical_appointments indexes are searchable from the signing API Key, the tenant token can only search in those indexes and specific rules limits their search results. These rules are always applied and cannot be overwritten by the users search parameters.
 
 ```json
 {
