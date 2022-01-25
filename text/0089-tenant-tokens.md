@@ -35,7 +35,7 @@ Users today need to set up workarounds to have multi-tenant indexes. Most of the
 
 #### 1.3.1 Example: Solving Multi-Tenancy with `Tenant tokens`
 
-![](https://user-images.githubusercontent.com/3692335/149373631-de6f3c5f-a514-4c8d-b018-ee09ccaeaf4d.png)
+![](https://user-images.githubusercontent.com/3692335/151013496-d33ab507-f972-465d-b942-899fc2bd0a22.png)
 
 `Mark` is a developer for a SaaS platform. He would like to ensure that every end-user can only access their documents at search time.
 
