@@ -279,7 +279,20 @@ signature = HS256(base64Header + '.' + base64Payload, meiliSearchApiKey)
 TenantToken = base64Header + '.' + base64Payload + '.' + signature
 ```
 
+### 2.2 Revoking a Tenant Token
+
+This is not possible at the moment to revoke a Tenant Token on the MeiliSearch side but may be added in the future.
+
+For the moment the only way is to **delete the API key that signed it** using the `DELETE - /keys/:apiKey` endpoints of MeiliSearch.
+
+🚨 **Doing this will revoke all tenant tokens signed by this API Key.**
+
+Another much more drastic method is to modify the `master key` of the MeiliSearch instance.
+
+🚨🚨 **Doing this will regenerate all the API Keys and thus revoke all the tenant tokens generated regardless of the signing API Key.**
+
 ## 3. Future Possibilities
 
 - Handle more signing method for the Tenant Token.
 - Handle more search parameters restrictions in `searchRules`.
+- Find a solution to invalidate a specific Tenant Token.
