@@ -1,8 +1,8 @@
 # Specifications
 
-This repository provides a template for creating **feature specifications** for MeiliSearch. A feature specification is a written description of a feature that serves as a basis for development, design, and inter-team synchronization. 
+This repository provides a template for creating **feature specifications** for Meilisearch. A feature specification is a written description of a feature that serves as a basis for development, design, and inter-team synchronization.
 
-A **Merged specification** represents a MeiliSearch feature that is implemented or ready to be.
+A **Merged specification** represents a Meilisearch feature that is implemented or ready to be.
 
 ---
 
@@ -12,11 +12,11 @@ When a new feature or product is to be developed, a new pull request is created,
 
 The person in charge of the PR (the owner) is the person assigned to the PR. This allows for changing ownership. When the PR assignee changes, both new and old assignees should be notified.
 
-MeiliSearch's feature specifications flow is made up of 5 states, described below.
+Meilisearch's feature specifications flow is made up of 5 states, described below.
 
 ### Introduction State
 
-To start a new specification, it is recommended to write the first draft by filling in only the `Summary` and `Motivation` parts. 
+To start a new specification, it is recommended to write the first draft by filling in only the `Summary` and `Motivation` parts.
 
 The name of the spec file must follow the pattern: `PR_number-feature-name.md`. After the pull request creation, the owner should update the specification filename. For example, if PR number 12 is about facetting, its spec will be named `0012-facetting.md`.
 
@@ -28,7 +28,7 @@ Once the file is created with the two parts, `Summary` and `Motivation` filled i
 
 ### Open State
 
-Once the specification is ready for comments in the owner's eyes, the owner can then switch the PR to open. At that time, it can be commented on, modified, challenged by these peers. If there is the slightest friction during this process, a discussion will be recommended offline within MeiliSearch. The PR owner will organize this discussion, and at the end of this interview, the owner will make any necessary changes.
+Once the specification is ready for comments in the owner's eyes, the owner can then switch the PR to open. At that time, it can be commented on, modified, challenged by these peers. If there is the slightest friction during this process, a discussion will be recommended offline within Meilisearch. The PR owner will organize this discussion, and at the end of this interview, the owner will make any necessary changes.
 
 At this step, the PR should be primarily tagged as `In Progress`.
 
@@ -50,18 +50,18 @@ Note that if the specification does not satisfy the merging conditions, it will 
 
 The differents tracking-issues could be created on concerned repositories.
 
-Created issues should:  
+Created issues should:
 - `Spec Related` label has to be added to the issues.
 - Issues have to mention the spec in their description.
 - Issues must absolutely link to the PRs that resolve the spec, so that we can easily track them.
 
-In order to keep track of technical changes concerning the specification, delivery team should update the `MeiliSearch Tracking-issues` part of the specification. 
+In order to keep track of technical changes concerning the specification, delivery team should update the `Meilisearch Tracking-issues` part of the specification.
 
 Once it's done, the specification is accepted and merged to the main branch.
 
 ## Specification Revision
 
-Any MeiliSearch's specification can change over time due to diverse factors. Sometimes related to change made on another specification concerning core engine code that could impact it, or simply product enhancement.
+Any Meilisearch's specification can change over time due to diverse factors. Sometimes related to change made on another specification concerning core engine code that could impact it, or simply product enhancement.
 
 In this precise case, a new PR is created and should follow the specification workflow described above.
 
@@ -69,7 +69,7 @@ In this precise case, a new PR is created and should follow the specification wo
 
 ## Specification Description and Interaction
 
-MeiliSearch's feature specifications are made up of three sections, described below.
+Meilisearch's feature specifications are made up of three sections, described below.
 
 ### 1. Functional Specification
 
@@ -91,12 +91,12 @@ This section is intended to provide readers of your pull request with a fuller p
 
 #### IV. Explanation
 
-Thoroughly explain your feature as if it was already implemented in MeiliSearch and you were teaching another user how to use it. That generally means:
+Thoroughly explain your feature as if it was already implemented in Meilisearch and you were teaching another user how to use it. That generally means:
 
 - Introducing (and naming) any new concepts.
 - Explaining the feature largely through examples.
 - Noting the API for this feature, HTTP, CLI or config.
-- Explaining how the user should _think_ about the feature and how it will impact the way they use MeiliSearch (provide concrete examples).
+- Explaining how the user should _think_ about the feature and how it will impact the way they use Meilisearch (provide concrete examples).
 - If applicable, provide sample error messages, deprecation warnings, or migration guidance.
 
 If the changes modify the HTTP API, provide a description of the method, URL, parameters, body, status code, errors, etc...
@@ -125,4 +125,4 @@ When writing technical details, we recommend describing practical aspects of imp
 
 ### 3. Future Possibilities
 
-This last section includes any related topics or features which are not currently in MeiliSearch and will not be added at this time, but which may affect the proposed feature in the future.
+This last section includes any related topics or features which are not currently in Meilisearch and will not be added at this time, but which may affect the proposed feature in the future.
