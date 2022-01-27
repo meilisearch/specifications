@@ -186,7 +186,7 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents the user-agent encountered for this API call. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+| user_agent    | Represents the user-agent encountered for this API call. | ["Meilisearch Ruby (2.1)", "Ruby (3.0)"] |
 | primary_key   | The field's name used as a primary key if set, otherwise `null`. | `id` |
 
 ---
@@ -195,7 +195,7 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents the user-agent encountered for this API call. | ["MeiliSearch Ruby (2.1)", "Ruby (3.0)"] |
+| user_agent    | Represents the user-agent encountered for this API call. | ["Meilisearch Ruby (2.1)", "Ruby (3.0)"] |
 | primary_key   | The field's name used as a primary key if set, otherwise `null`. | `id` |
 
 ---
