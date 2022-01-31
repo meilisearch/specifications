@@ -21,7 +21,6 @@ The dumps exist to upgrade a MeiliSearch instance from a previous version to a m
 - A dump creation can be scheduled from the MeiliSearch API using the `POST - /dumps` endpoint.
 - A dump creation status can be tracked using the `GET - /dumps/{uid}/status` endpoint.
 - MeiliSearch can only create one dump at a time.
-- While a dump is in creation, the task queue is paused and no write operations can occur on the database.
 - By default, dumps are created in a folder named `dumps`, and can be found in the same directory as the MeiliSearch binary.
 - The `dumps` directory can be customized using the `--dumps-dir` configuration option. If the dump directory does not already exist when the dump creation process is called, MeiliSearch will create it.
 - If MeiliSearch is restarted after a dump creation, the dump's status will not appear on the `GET - /dumps/:uid/status` endpoint.
