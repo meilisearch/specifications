@@ -51,7 +51,7 @@ While there's [RFC 4180](https://tools.ietf.org/html/rfc4180) as a try to add a 
 
 ##### `null` value
 
-- If a field is of type `string`, then an empty cell is considered as a `null` value (e.g. `,,`), anything other is turned into a string value (e.g. `, ,` is a single whitespace string)
+- If a field is of type `string`, then an empty cell is considered as a `null` value (e.g. `,,`), anything else is turned into a string value (e.g. `, ,` is a single whitespace string)
 - If a field is of type `number`, when the trimmed field is empty, it's considered as a `null` value (e.g. `,,` `, ,`); otherwise Meilisearch try to parse the number.
 
 ##### Example with a comma inside a cell
