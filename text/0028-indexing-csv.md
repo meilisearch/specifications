@@ -49,6 +49,11 @@ While there's [RFC 4180](https://tools.ietf.org/html/rfc4180) as a try to add a 
 - CSV text should be encoded in UTF8.
 - The format can't handle array cell values. We are providing `nd-json` format to deal with theses types of attribute in a easier way.
 
+##### `null` value
+
+- If a field is of type `string`, then an empty cell is considered as a `null` value (e.g. `,,`), anything other is turned into a string value (e.g. `, ,` is a single whitespace string)
+- If a field is of type `number`, when the trimmed field is empty, it's considered as a `null` value (e.g. `,,` `, ,`); otherwise Meilisearch try to parse the number.
+
 ##### Example with a comma inside a cell
 
 Given the CSV payload
@@ -96,6 +101,28 @@ the search result should be displayed as
 ```
 
 > Note that the price attribute was not typed as a number. By default, MeiliSearch type it as a string.
+
+##### Example with an empty cell
+
+Given the CSV payload
+```
+id:number,label,price:number,colors
+1,t-shirt,,red
+```
+the search result should be displayed as
+```json
+{
+  "hits": [
+    {
+      "id": 1,
+      "label": "t-shirt",
+      "price": null,
+      "colors": "red"
+    }
+  ],
+  ...
+}
+```
 
 #### API Endpoints
 
