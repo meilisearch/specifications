@@ -238,10 +238,12 @@ Only the master key allows managing the API keys.
 - 🔴 Omitting `actions` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
 - 🔴 Omitting `indexes` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
 - 🔴 Omitting `expiresAt` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
-- 🔴 Sending an invalid value for the `actions` field returns an [invalid_api_key_actions](0061-error-format-and-definitions.md#invalid_api_key_actions) error.
-- 🔴 Sending an invalid value for the `indexes` field returns an [invalid_api_key_indexes](0061-error-format-and-definitions.md#invalid_api_key_indexes) error.
+- 🔴 Sending an invalid value for the `actions` field (not an array of strings) returns an [invalid_api_key_actions](0061-error-format-and-definitions.md#invalid_api_key_actions) error.
+- 🔴 Sending an invalid value for the `indexes` field (not an array of strings) returns an [invalid_api_key_indexes](0061-error-format-and-definitions.md#invalid_api_key_indexes) error.
+- 🔴 Sending a value that is not a valid `index` (e.g. regarding the index uid format) in the `indexes` field returns an [invalid_api_key_indexes](0061-error-format-and-definitions.md#invalid_api_key_indexes) with a variant error message similar to [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error message.
 - 🔴 Sending an invalid value for the `expiresAt` field returns an [invalid_api_key_expires_at](0061-error-format-and-definitions.md#invalid_api_key_expires_at) error.
 - 🔴 Sending an invalid value for the `description` field returns an [invalid_api_key_description](0061-error-format-and-definitions.md#invalid_api_key_description) error.
+
 
 ---
 
@@ -350,10 +352,12 @@ Only the master key allows managing the API keys.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending a different payload type than the Content-Type header returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
 - 🔴 Sending an invalid json format returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
-- 🔴 Sending an invalid value for the `actions` field returns an [invalid_api_key_actions](0061-error-format-and-definitions.md#invalid_api_key_actions) error.
-- 🔴 Sending an invalid value for the `indexes` field returns an [invalid_api_key_indexes](0061-error-format-and-definitions.md#invalid_api_key_indexes) error.
+- 🔴 Sending an invalid value for the `actions` field (not an array of strings) returns an [invalid_api_key_actions](0061-error-format-and-definitions.md#invalid_api_key_actions) error.
+- 🔴 Sending an invalid value for the `indexes` field (not an array of strings) returns an [invalid_api_key_indexes](0061-error-format-and-definitions.md#invalid_api_key_indexes) error.
+- 🔴 Sending a value that is not a valid `index` (e.g. regarding the index uid format) in the `indexes` field returns an [invalid_api_key_indexes](0061-error-format-and-definitions.md#invalid_api_key_indexes) with a variant error message similar to [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error message.
 - 🔴 Sending an invalid value for the `expiresAt` field returns an [invalid_api_key_expires_at](0061-error-format-and-definitions.md#invalid_api_key_expires_at) error.
 - 🔴 Sending an invalid value for the `description` field returns an [invalid_api_key_description](0061-error-format-and-definitions.md#invalid_api_key_description) error.
+
 
 ---
 

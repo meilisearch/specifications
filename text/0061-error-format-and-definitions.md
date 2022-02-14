@@ -195,6 +195,19 @@ HTTP Code: `400 Bad Request`
 
 - The `:value` is inferred when the message is generated.
 
+#### Variant: Sending an invalid index uid format in `indexes` field.
+
+```json
+{
+    "message": "`uid` is not a valid index uid. Index uid can be an integer or a string containing only alphanumeric characters, hyphens (-) and underscores (_).",
+    "code": "invalid_api_key_indexes",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_api_key_indexes"
+}
+```
+
+- The `:uid` is inferred when the message is generated.
+
 ---
 
 ## invalid_api_key_expires_at
