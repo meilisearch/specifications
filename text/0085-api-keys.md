@@ -358,7 +358,6 @@ Only the master key allows managing the API keys.
 - 🔴 Sending an invalid value for the `expiresAt` field returns an [invalid_api_key_expires_at](0061-error-format-and-definitions.md#invalid_api_key_expires_at) error.
 - 🔴 Sending an invalid value for the `description` field returns an [invalid_api_key_description](0061-error-format-and-definitions.md#invalid_api_key_description) error.
 
-
 ---
 
 #### **As `Anna 👩`, I want to list the API Keys**
