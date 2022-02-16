@@ -136,7 +136,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "description field value `:value` is invalid. It should be a string or specified as a null value.",
+    "message": "`description` field value `:value` is invalid. It should be a string or specified as a null value.",
     "code": "invalid_api_key_description",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_api_key_description"
@@ -161,7 +161,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "actions field value `:value` is invalid. It should be an array of string representing action names.",
+    "message": "`actions` field value `:value` is invalid. It should be an array of string representing action names.",
     "code": "invalid_api_key_actions",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_api_key_actions"
@@ -186,7 +186,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "indexes field value `:value` is invalid. It should be an array of string representing index names.",
+    "message": "`indexes` field value `:value` is invalid. It should be an array of string representing index names.",
     "code": "invalid_api_key_indexes",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_api_key_indexes"
@@ -211,7 +211,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "expiresAt field value `:value` is invalid. It should be in ISO-8601 format to represents a date or datetime in the future or specified as a null value. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DDTHH:MM:SS'.",
+    "message": "`expiresAt` field value `{0}` is invalid. It should follow the RFC 3339 format to represents a date or datetime in the future or specified as a null value. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
     "code": "invalid_api_key_expires_at",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_api_key_expires_at"
