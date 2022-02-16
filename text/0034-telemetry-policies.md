@@ -66,11 +66,11 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `context.app.version`                   | MeiliSearch version number                              | 0.23.0            | Every hour   |
 | `infos.env`                             | MeiliSearch env                                         | production        | Every hour   |
 | `infos.db_path`                         | `true` if `--db-path`/`MEILI_DB_PATH` is specified, otherwise `false` | true | Every Hour |
-| `infos.import_dump`                     | `true` if `--import-dump` is specified`, otherwise `false` | true | Every Hour |
+| `infos.import_dump`                     | `true` if `--import-dump` is specified, otherwise `false` | true | Every Hour |
 | `infos.dumps_dir`                       | `true` if `--dumps-dir`/`MEILI_DUMPS_DIR` is specified, otherwise `false` | true | Every Hour |
 | `infos.ignore_missing_dump`             | `true` if `--ignore-missing-dump` is specified to true, otherwise `false` | true | Every Hour |
 | `infos.ignore_dump_if_db_exists`        | `true` if `--ignore-dump-if-db-exists` is specified to true, otherwise `false` | true | Every Hour |
-| `infos.import_snapshot`                 | `true` if `--import-snapshot` is specified`, otherwise `false` | true | Every Hour |
+| `infos.import_snapshot`                 | `true` if `--import-snapshot` is specified, otherwise `false` | true | Every Hour |
 | `infos.schedule_snapshot`               | `true` if `--schedule_snapshot`/`MEILI_SCHEDULE_SNAPSHOT` is specified to true, otherwise `false` | true | Every hour |
 | `infos.snapshot_dir`                    | `true` if `--snapshot-dir`/`MEILI_SNAPSHOT_DIR` is specified to true, otherwise `false` | true | Every Hour |
 | `infos.snapshot_interval_sec`           | Value of `--snapshot_interval_sec`/`MEILI_SNAPSHOT_INTERVAL_SEC` in seconds | 86400 | Every Hour |
@@ -83,7 +83,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `infos.enable_autobatching`             | `true` if `--enable-autobatching` is specified to true, otherwise `false` | `true` | Every Hour |
 | `infos.max_batch_size`                  | Value of `--max-batch-size` in integer, otherwise `null` | 1000 | Every Hour |
 | `infos.max_documents_per_batch`         | Value of `--max-documents-per-batch` in integer, otherwise `null` | 1000 | Every Hour |
-| `infos.debounce_duration_secs`          | Value of `--debounce-duration-secs`in seconds, otherwise `0` | 3600 | Every Hour |
+| `infos.debounce_duration_secs`          | Value of `--debounce-duration-secs` in seconds, otherwise `0` | 3600 | Every Hour |
 | `infos.log_level`                       | Value of `--log-level`/`MEILI_LOG_LEVEL`                | debug             | Every Hour |
 | `system.distribution`                   | Distribution on which MeiliSearch is launched           | Arch Linux        | Every hour |
 | `system.kernel_version`                 | Kernel version on which MeiliSearch is launched         | 5.14.10           | Every hour |
@@ -147,11 +147,11 @@ This property allows us to gather essential information to better understand on 
 | infos.ignore_missing_dump | `true` if `--ignore-missing-dump` is specified to true, otherwise `false` | `true` |
 | infos.ignore_dump_if_db_exists | `true` if `--ignore-dump-if-db-exists` is specified to true, otherwise `false` | `true` |
 | infos.import_snapshot | `true` if `--import-snapshot` is specified, otherwise `false` | `true` |
-| infos.schedule_snapshot | `true` if `--schedule_snapshot`/`MEILI_SCHEDULE_SNAPSHOT` is specified to true, otherwise `false` | `true` |
+| infos.schedule_snapshot | `true` if `--schedule-snapshot`/`MEILI_SCHEDULE_SNAPSHOT` is specified to true, otherwise `false` | `true` |
 | infos.snapshot_dir | `true` if `--snapshot-dir`/`MEILI_SNAPSHOT_DIR` is specified to true, otherwise `false` | `true` |
-| infos.snapshot_interval_sec | Value of `--snapshot_interval_sec`/`MEILI_SNAPSHOT_INTERVAL_SEC` in seconds | `86400` |
-| infos.ignore_missing_snapshot | `true` if `--ignore_missing_snapshot` is specified to true, otherwise `false` | `true` |
-| infos.ignore_snapshot_if_db_exists | `true` if `--ignore_snapshot_if_db_exists` is specified to true, otherwise `false` | `true` |
+| infos.snapshot_interval_sec | Value of `--snapshot-interval-sec`/`MEILI_SNAPSHOT_INTERVAL_SEC` in seconds | `86400` |
+| infos.ignore_missing_snapshot | `true` if `--ignore-missing-snapshot` is specified to true, otherwise `false` | `true` |
+| infos.ignore_snapshot_if_db_exists | `true` if `--ignore-snapshot-if-db-exists` is specified to true, otherwise `false` | `true` |
 | infos.http_addr | `true` if `--http-addr`/`MEILI_HTTP_ADDR` is specified, otherwise `false` | `true`|
 | infos.max_index_size | Value of `--max-index-size`/`MEILI_INDEX_SIZE` in bytes | `336042103` |
 | infos.max_task_db_size | Value of `--max-task-db-size`/`MEILI_MAX_TASK_DB_SIZE` in bytes | `336042103` |
