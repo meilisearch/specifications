@@ -15,13 +15,14 @@ A Tenant Token is a JWT containing the information necessary for MeiliSearch to 
 
 #### 1.1.1 Summary Key Points
 
-- `Tenant tokens` are JWTs generated on the user side. Thus not stored or retrievable on MeiliSearch side.
+- `Tenant tokens` are JWTs generated on the user side by using our SDKs or their own custom code. Thus not stored or retrievable on MeiliSearch side.
 - `Tenant tokens` contain rules that ensure that a `Tenant token` holder (e.g an end-user) only has access documents matching rules chosen at the `tenant token` creation.
 - `Tenant tokens` are signed from a MeiliSearch `API key` on the user's code.
 - `Tenant tokens` cannot be less restrictive than the signing `API key` and can only be used for searching. A Tenant Token cannot search within more indexes than the API Key that signed that Tenant Token.
 - `Tenant tokens` can have different rules for each index accessible by the signing API key. These filters rule per index are described in an `searchRules` json object.
 - The only rule at the moment is the search parameter `filter`. Other rules may be added in the future.
-- When a request is made with the Tenant Token, MeiliSearch checks if this Tenant Token is authorized to make the request and in this case injects the rules at search time.
+- `Tenant tokens` are sent to Meilisearch via the `Authorization` header.
+- When a search request is made with a Tenant Token, MeiliSearch decodes it to checks if the tenant token is authorized to make the request and then extract and inject the search rules for the search request being made.
 
 ### 1.2 Motivation
 
