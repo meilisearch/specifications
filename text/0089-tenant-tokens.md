@@ -96,11 +96,11 @@ Given a MeiliSearch API Key used to sign the JWT from the user code. Here is an 
 
 e.g `MeiliSearch API key: rkDxFUHd02193e120218f72cc51a9db62729fdb4003e271f960d1631b54f3426fa8b2595`
 
-```json
+```jsonc
 {
-    "apiKeyPrefix": "rkDxFUHd", <- The first 8 characters of the signing MeiliSearch API Key
-    "exp": 1641835850, <- An expiration date in seconds from 1970-01-01T00:00:00Z UTC
-    "searchRules": { <- The searchRules Json Object.
+    "apiKeyPrefix": "rkDxFUHd", // The first 8 characters of the signing MeiliSearch API Key
+    "exp": 1641835850, // An expiration date in seconds from 1970-01-01T00:00:00Z UTC
+    "searchRules": { // The searchRules Json Object.
         "*": {
             "filter": "user_id = 1"
         }
@@ -148,7 +148,7 @@ is equivalent to
 
 is equivalent to
 
-```json
+```jsonc
 {
     "searchRules": ["*"] //This notation does not allow the addition of specific rules. The search will just be accessible on all accessibles indexes from the signing API Key for the Tenant Token without specific rules.
 }
@@ -275,7 +275,9 @@ payload = {
 
 base64Payload = base64Encode(payload)
 
-signature = HS256(base64Header + '.' + base64Payload, meiliSearchApiKey)
+hashedSignature = HS256(base64Header + '.' + base64Payload, meiliSearchApiKey)
+signature = base64Encode(hashedSignature)
+
 
 TenantToken = base64Header + '.' + base64Payload + '.' + signature
 ```
