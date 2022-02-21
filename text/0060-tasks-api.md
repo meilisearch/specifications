@@ -707,6 +707,192 @@ This part demonstrates keyset paging in action on `/tasks`. The items `uid` rema
 - 🔴 Sending a value with a different type than `Integer` for `limit` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 - 🔴 Sending a value with a different type than `Integer` for `from` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
+---
+
+#### 10. Filtering task resources
+
+The `/tasks` endpoint is filterable by `indexUid`, `type` and `status` query parameters.
+
+##### 10.1. Query parameters definition
+
+| parameter | type   | required | description                                                                                                                                                                                                                             |
+|-----------|--------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| indexUid  | string | No       | Permits to filter tasks by their related index. By default, when `indexUid` query parameter is not set, the tasks of all the indexes are returned. It is possible to specify several indexes by separating them with the `,` character. |
+| status    | string | No       | Permits to filter tasks by their status. By default, when `status` query parameter is not set, all task statuses are returned. It's possible to specify several types by separating them with the `,` character.                        |
+| type      | string | No       | Permits to filter tasks by their related type. By default, when `type` query parameter is not set, all task types are returned. It's possible to specify several types by separating them with the `,` character.                       |
+
+##### 10.2. Usages examples
+
+This part demonstrates filtering on `/tasks`.
+
+---
+
+**No filtering**
+
+`GET` - `/tasks`
+
+```json
+{
+    "results": [
+        {
+            "uid": 1350,
+            "indexUid": "movies",
+            "status": "failed",
+            "type": "documentAdditionOrUpdate",
+            ...,
+        },
+        ...,
+        {
+            "uid": 1330,
+            "indexUid": "movies_reviews",
+            "status": "succeeded",
+            "type": "documentDeletion",
+            ...
+        }
+    ],
+    ...
+}
+```
+
+**Filter `tasks` that have a `failed` `status`**
+
+`GET` - `/tasks?status=failed`
+
+```json
+{
+    "results": [
+        {
+            "uid": 1350,
+            "indexUid": "movies",
+            "status": "failed",
+            "type": "documentAdditionOrUpdate",
+            ...,
+        },
+        ...,
+        {
+            "uid": 1279,
+            "indexUid": "movies",
+            "status": "failed",
+            "type": "settingsUpdate",
+            ...,
+        }
+    ],
+    ...
+}
+```
+
+**Filter `tasks` that are of `documentAdditionOrUpdate` type**
+
+`GET` - `/tasks?type=documentAdditionOrUpdate`
+
+```json
+{
+    "results": [
+        {
+            "uid": 1350,
+            "indexUid": "movies",
+            "status": "failed",
+            "type": "documentAdditionOrUpdate",
+            ...,
+        },
+        ...,
+        {
+            "uid": 1343,
+            "indexUid": "movies",
+            "type": "succeeded",
+            "type": "documentAdditionOrUpdate",
+            ...,
+        }
+    ],
+    ...
+}
+```
+
+**Filter `tasks` that are of `documentAdditionOrUpdate` type and have a `failed` status**
+
+`GET` - `/tasks?type=documentAdditionOrUpdate&status=failed`
+
+```json
+{
+    "results": [
+        {
+            "uid": 1350,
+            "indexUid": "movies",
+            "status": "failed",
+            "type": "documentAdditionOrUpdate",
+            ...,
+        },
+        ...,
+        {
+            "uid": 1346,
+            "indexUid": "movies",
+            "status": "failed",
+            "type": "documentAdditionOrUpdate",
+            ...,
+        }
+    ],
+    ...
+}
+```
+
+- 💡 Filters can be used together. The two parameters are cumulated and a `AND` operation is performed between the two filters. An OR operation between filters is not supported.
+- `type` and `status` query parameters can be read as is `type=documentsAdditionOrUpdate AND status=failed`.
+
+**Filter `tasks` by an non-existent `indexUid`**
+
+`GET` - `/tasks?indexUid=aaaaa`
+
+```json
+{
+    "results": [],
+    ...
+}
+```
+
+- If the `indexUid` parameter value contains an inexistent index, it returns an empty `results` array.
+
+---
+
+##### 10.3. Behaviors for `indexUid`, `status` and `type` query parameters.
+
+###### 10.3.1. `indexUid`
+
+- Type: String
+- Required: False
+- Default: `*`
+
+`indexUid` is **case-sensitive**.
+
+###### 10.3.2. `status`
+
+- Type: String
+- Required: False
+- Default: `*`
+
+`status ` is **case-insensitive**.
+
+- 🔴 If the `status` parameter value is not consistent with one of the task statuses, an [`invalid_task_status`](0061-error-format-and-definitions.md#invalidtaskstatus) error is returned.
+
+###### 10.3.3. `type`
+
+- Type: String
+- Required: False
+- Default: `*`
+
+`type` is **case-insensitive**.
+
+- 🔴 If the `type` parameter value is not consistent with one of the task types, an [`invalid_task_type`](0061-error-format-and-definitions.md#invalidtasktype) error is returned.
+
+###### 10.3.4. Select multiple values for the same filter
+
+It is possible to specify multiple values for a filter using the `,` character.
+
+For example, to select the `enqueued` and `processing` tasks of the `movies` and `movie_reviews` indexes, it is possible to express it like this: `/tasks?indexUid=movies,movie_reviews&status=enqueued,processing`
+
+##### 10.4. Empty `results`
+
+If no results match the filters. A response is returned with an empty `results` array.
+
 ## 2. Technical details
 
 ### I. Measuring
