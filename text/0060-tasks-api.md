@@ -568,6 +568,138 @@ New task types are also added for these operations. `indexCreation`, `indexUpdat
 }
 ```
 
+#### 9. Paginate `task` resource lists
+
+The API endpoints `/tasks` and `indexes/{indexUid}/tasks` are browsable using a cursor based pagination.
+
+##### 9.1 Why a cursor based pagination?
+
+As seen in the [Rest API Format Convention](https://github.com/meilisearch/product/issues/44#issuecomment-895888679), cursor-based pagination is more appropriate when the data can grow or shrink quickly in terms of magnitude.
+
+###### 9.1.1 Pros
+
+The performance is better than the not-so-good but old pagination with `offset`/`limit`.
+
+Cursor pagination keeps the results consistent between each page as the data evolves. It avoids the [Page Drift effect](https://use-the-index-luke.com/sql/partial-results/fetch-next-page), especially when the data is sorted from the most recent to the oldest.
+
+Moreover, the performance is superior to traditional pagination since the computational complexity remains constant to reach the identifier marking the beginning of the new slice to be returned from a hash table.
+
+###### 9.1.2 Cons
+
+The main drawback of this type of pagination is that it does not navigate within a finite number of pages. It is also limited to a precise sorting criterion on unique identifiers ordered sequentially.
+
+##### 9.2 Response attributes
+
+| field | type | description                          |
+|-------|------|--------------------------------------|
+| limit | integer  | Default `30`. |
+| after | integer - nullable  | Represents the query parameter to send to fetch the next slice of the results. The first item for the next slice starts at `after+1`. When the returned value is null, it means that all the data have been browsed in the given order. |
+
+##### 9.3 GET query parameters
+
+| field | type | required | description  |
+|-------|------|----------|--------------|
+| limit | integer  | No       | Default `30`. Limit on the number of tasks to be returned, between `1` and `100`. |
+| after | integer  | No       | Limit results to tasks with uids greater/lower than the specified uid. |
+
+##### 9.4 Usage examples
+
+This part demonstrates cursor paging on `/tasks`, but it should be equivalent for `indexes/:uid/tasks`. Although the uids can be "holey" on the `/indexes/:uid/tasks` endpoint if several indexes are managed within the instance. The items uid remains sorted sequentially and can be used to navigate a list of `tasks` objects.
+
+---
+
+**Initial default slice of `tasks`**
+
+`GET` - `/tasks`
+
+```json
+{
+    "results": [
+        {
+            "uid": 1350,
+            "indexUid": "movies",
+            "type": "documentAddition",
+            ...,
+        },
+        ...,
+        {
+            "uid": 1330,
+            "indexUid": "movies_reviews",
+            "type": "documentAddition",
+            ...,
+        }
+    ],
+    "limit": 20,
+    "after": 1330
+}
+```
+
+**Request the next slice of `tasks` items with a limit of `50` tasks**
+
+`GET` - `/tasks?after=1330&limit=50`
+
+```json
+{
+    "results": [
+        {
+            "uid": 1329,
+            "indexUid": "movies",
+            "type": "documentAddition",
+            ...,
+        },
+        ...,
+        {
+            "uid": 1279,
+            "indexUid": "movies",
+            "type": "settingsUpdate",
+            ...,
+        }
+    ],
+    "limit": 50,
+    "after": 1279
+}
+```
+
+**End of cursor pagination**
+
+`GET` - `/tasks?after=20`
+
+```json
+{
+    "results": [
+        {
+            "uid": 19,
+            "indexUid": "movies",
+            "type": "documentsAddition",
+            ...,
+        },
+        ...,
+        {
+            "uid": 0,
+            "indexUid": "movies",
+            "type": "documentsAddition",
+            ...,
+        }
+    ],
+    "limit": 10,
+    "after": null
+}
+```
+
+- 💡 `after` response parameter is null because there are no more `tasks` to fetch. It means that the response represents the last slice of results for the given resource list.
+
+##### 9.5 Behaviors for `limit` and `after` query parameters
+
+###### 9.5.1 `limit`
+
+- If `limit` is not set, the default value is chosen.
+- If `limit` is set and it is not between the minimum and maximum values, the default value is chosen.
+- If `limit` is not an integer, the default value is chosen.
+
+###### 9.5.2 `after`
+
+- If `after` is set with an out of bounds task `uid`, the response returns an empty `results` array and `after` is set to `null`.
+
 ## 2. Technical details
 
 ### I. Measuring
