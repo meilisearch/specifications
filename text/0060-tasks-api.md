@@ -711,11 +711,10 @@ This part demonstrates cursor paging on `/tasks`, but it should be equivalent fo
 
 ## 3. Future Possibilities
 
-- Add a pagination system for on `/tasks` and `indexes/:indexUid/tasks` lists.
 - Add enhanced filtering capabilities.
 - Simplify `documentAddition` and `documentPartial` type and elaborate on `details` metadata.
 - Use Hateoas capability to give direct access to a `task` resource.
 - Add dedicated task type names modifying a sub-setting. e.g. `SearchableAttributesUpdate`.
 - Reconsider existence of `/indexes/:indexUid/tasks/:taskUid` route since it is similar to `/tasks/:taskUid`.
 - Add an archived state for old `tasks`.
-- Indicate the `API Key` identity that added a `task`. It should not permits to
+- Indicate the `API Key` identity that added a `task`.
