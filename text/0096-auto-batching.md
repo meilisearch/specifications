@@ -72,9 +72,9 @@ If not specified, this is unlimited.
 
 Since the batch must contain at least one update, this value can be exceeded. If not specified, this is unlimited.
 
-##### 1.3.5.3 `--debounce-duration-secs`
+##### 1.3.5.3 `--debounce-duration-sec`
 
-`--debounce-duration-secs <SECS>` allow to wait at least `SECS` seconds before processing a scheduled batch.
+`--debounce-duration-sec <SECS>` allow to wait at least `SECS` seconds before processing a scheduled batch.
 
 Defaults to `0`secs (process immediately).
 
