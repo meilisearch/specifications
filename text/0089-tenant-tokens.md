@@ -17,7 +17,7 @@ A Tenant Token is a JWT containing the information necessary for MeiliSearch to 
 
 - `Tenant tokens` are JWTs generated on the user side by using our SDKs or their own custom code. Thus not stored or retrievable on MeiliSearch side.
 - `Tenant tokens` contain rules that ensure that a `Tenant token` holder (e.g an end-user) only has access documents matching rules chosen at the `tenant token` creation.
-- `Tenant tokens` are signed from a MeiliSearch `API key` on the user's code.
+- `Tenant tokens` are signed from a MeiliSearch `API key` resource on the user's code.
 - `Tenant tokens` cannot be less restrictive than the signing `API key` and can only be used for searching. A Tenant Token cannot search within more indexes than the API Key that signed that Tenant Token.
 - `Tenant tokens` can have different rules for each index accessible by the signing API key. These filters rule per index are described in an `searchRules` json object.
 - The only rule at the moment is the search parameter `filter`. Other rules may be added in the future.
@@ -113,6 +113,8 @@ e.g `MeiliSearch API key: rkDxFUHd02193e120218f72cc51a9db62729fdb4003e271f960d16
 ##### 2.1.2.4 `apiKeyPrefix` field
 
 `apiKeyPrefix` permits to verify that the signing API key of the Token is known and valid within MeiliSearch. It must contain the first 8 characters of the MeiliSearch API key that generates and signs the Tenant Token.
+
+The `apiKeyPrefix` can't be generated from a master-key.
 
 ##### 2.1.2.5 `exp` field
 
@@ -299,3 +301,4 @@ Another much more drastic method is to modify the `master key` of the MeiliSearc
 - Handle more signing method for the Tenant Token.
 - Handle more search parameters restrictions in `searchRules`.
 - Find a solution to invalidate a specific Tenant Token.
+- Find a solution to help error resolution / error making for a tenant token payload when a search request occurs. E.g. Help to locate that the error is coming from the `searchRules` `filter` field from a tenant token and not from the search request  `filter` parameter.
