@@ -83,7 +83,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `infos.enable_autobatching`             | `true` if `--enable-autobatching` is specified to true, otherwise `false` | `true` | Every Hour |
 | `infos.max_batch_size`                  | Value of `--max-batch-size` in integer, otherwise `null` | 1000 | Every Hour |
 | `infos.max_documents_per_batch`         | Value of `--max-documents-per-batch` in integer, otherwise `null` | 1000 | Every Hour |
-| `infos.debounce_duration_secs`          | Value of `--debounce-duration-secs` in seconds, otherwise `0` | 3600 | Every Hour |
+| `infos.debounce_duration_sec`          | Value of `--debounce-duration-sec` in seconds, otherwise `0` | 3600 | Every Hour |
 | `infos.log_level`                       | Value of `--log-level`/`MEILI_LOG_LEVEL`                | debug             | Every Hour |
 | `system.distribution`                   | Distribution on which MeiliSearch is launched           | Arch Linux        | Every hour |
 | `system.kernel_version`                 | Kernel version on which MeiliSearch is launched         | 5.14.10           | Every hour |
@@ -159,7 +159,7 @@ This property allows us to gather essential information to better understand on 
 | infos.enable_autobatching | `true` if `--enable-autobatching` is specified to true, otherwise `false` | `true` |
 | infos.max_batch_size | Value of `--max-batch-size` in integer, otherwise `null` | `1000` |
 | infos.max_documents_per_batch | Value of `--max-documents-per-batch` in integer, otherwise `null` | `1000` |
-| infos.debounce_duration_secs | Value of `--debounce-duration-secs`in seconds, otherwise `0` | `3600` |
+| infos.debounce_duration_sec | Value of `--debounce-duration-sec`in seconds, otherwise `0` | `3600` |
 | infos.log_level | Value of `--log-level`/`MEILI_LOG_LEVEL`  | `debug` |
 
 ##### MeiliSearch Statistics `stats`
