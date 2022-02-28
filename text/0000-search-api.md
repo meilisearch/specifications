@@ -343,4 +343,4 @@ The beginning of a matching term within a field is indicated by start, and its l
 n/a
 
 ## 3. Future Possibilities
-n/a
+- Add dedicated errors to replace `bad_request` error.
