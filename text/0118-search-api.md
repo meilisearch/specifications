@@ -65,7 +65,7 @@ If the instance is secured by a master-key, the auth layer will return the follo
 
 ##### 1.2.1.2 `filter`
 
-- Type: Array of String (POST) | String (GET)
+- Type: Array of String (POST) | String (POST/GET)
 - Required: False
 - Default: `[]|null`
 
