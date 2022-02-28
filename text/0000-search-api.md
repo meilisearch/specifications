@@ -16,21 +16,36 @@ Meilisearch exposes 2 routes to perform searches:
 - GET `indexes/:index_uid/search`
 - POST `indexes/:index_uid/search`
 
+- 🔴 If the index does not exist, the API returns a [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
+
+If the instance is secured by a master-key, the auth layer will return the following errors:
+
+- 🔴 Accessing these routes without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+
+`POST` HTTP verb errors:
+
+- 🔴 Omitting Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
+- 🔴 Sending an empty Content-Type returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
+- 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
+- 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
+- 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
+
 #### 1.2.1. Search payload parameters
 
-| Field                   | Type                   | Required |
-|-------------------------|------------------------|----------|
-| q                       | String                 | False    |
-| filter                  | Array[String] - String | False    |
-| sort                    | Array[String] - String | False    |
-| facetsDistribution      | Array[String] - String | False    |
-| limit                   | Integer                | False    |
-| offset                  | Integer                | False    |
-| attributesToRetrieve    | Array[String] - String | False    |
-| attributesToHighlight   | Array[String] - String | False    |
-| attributesToCrop        | Array[String] - String | False    |
-| cropLength              | Integer                | False    |
-| matches                 | Boolean                | False    |
+| Field                   | Type                      | Required |
+|-------------------------|---------------------------|----------|
+| q                       | String                    | False    |
+| filter                  | Array of String - String  | False    |
+| sort                    | Array of String - String  | False    |
+| facetsDistribution      | Array:String - String     | False    |
+| limit                   | Integer                   | False    |
+| offset                  | Integer                   | False    |
+| attributesToRetrieve    | Array of String - String  | False    |
+| attributesToHighlight   | Array of String - String  | False    |
+| attributesToCrop        | Array of String - String  | False    |
+| cropLength              | Integer                   | False    |
+| matches                 | Boolean                   | False    |
 
 ##### 1.2.1.1 `q`
 
@@ -40,6 +55,8 @@ Meilisearch exposes 2 routes to perform searches:
 
 `q` contains the terms to search within the index documents.
 
+- 🔴 Sending a value with a different type than `String` or `null` for `q` will returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+
 > When q isn't specified, Meilisearch performs a **placeholder search**. A placeholder search returns all searchable documents in an index, modified by any search parameters used and sorted by that index's custom ranking rules. Since there is no query term, the built-in ranking rules do not apply. If the index has no sort or custom ranking rules, the results are returned in the order of their internal database position.
 
 > Meilisearch only considers the first ten words of any given search query to deliver a fast search-as-you-type experience.
@@ -48,7 +65,7 @@ Meilisearch exposes 2 routes to perform searches:
 
 ##### 1.2.1.2 `filter`
 
-- Type: Array[String]|String
+- Type: Array of String (POST) | String (GET)
 - Required: False
 - Default: `[]|null`
 
@@ -56,11 +73,15 @@ Meilisearch exposes 2 routes to perform searches:
 
 Attributes used as filter criteria must be added to the `filterableAttributes` list of an index settings.
 
+- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `filter` will returns an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
+- 🔴 Sending an invalid syntax for `filter` will returns an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
+- 🔴 Sending a field not defined as a `filterableAttributes` for `filter` will returns an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
+
 > See [Filter And Facet Behavior](0027-filter-and-facet-behavior.md)
 
 ##### 1.2.1.3 `sort`
 
-- Type: Array[String]|String
+- Type: Array of String (POST) | String (GET)
 - Required: False
 - Default: `[]|null`
 
@@ -68,11 +89,15 @@ Attributes used as filter criteria must be added to the `filterableAttributes` l
 
 Attributes used a sort criteria must be added to the `sortableAttributes list of an index settings.
 
+- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `sort` will returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending an invalid syntax for `sort` will returns an [invalid_sort](0061-error-format-and-definitions.md#invalid_sort) error.
+- 🔴 Sending a field not defined as a `sortableAttributes` for `sort` will returns an [invalid_sort](0061-error-format-and-definitions.md#invalid_sort) error.
+
 > See [Sort](0055-sort.md)
 
 ##### 1.2.1.4 `facetsDistribution`
 
-- Type: Array[String]|String
+- Type: Array of String (POST) | String (GET)
 - Required: False
 - Default: `[]|null`
 
@@ -87,6 +112,9 @@ This parameter can take two values:
 
 Attributes used in `facetsDistribution` must be added to the `filterableAttributes` list of an index settings.
 
+- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `facetsDistribution` will returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a field not defined as a `filterableAttributes` for `facetsDistribution` will returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+
 > See [Filter And Facet Behavior](0027-filter-and-facet-behavior.md)
 
 ##### 1.2.1.5 `limit`
@@ -97,6 +125,8 @@ Attributes used in `facetsDistribution` must be added to the `filterableAttribut
 
 Sets the maximum number of documents to be returned by the current search query.
 
+- 🔴 Sending a value with a different type than `Integer` or `null` for `limit` will returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+
 ##### 1.2.1.6 `offset`
 
 - Type: Integer
@@ -105,9 +135,11 @@ Sets the maximum number of documents to be returned by the current search query.
 
 Sets the starting point in the search results, effectively skipping over a given number of documents.
 
+- 🔴 Sending a value with a different type than `Integer` or `null` for `offset` will returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+
 ##### 1.2.1.7 `attributesToRetrieve`
 
-- Type: Array[String]|String
+- Type: Array of String (POST) | String (GET)
 - Required: False
 - Default: `[]|null`
 
@@ -117,9 +149,11 @@ If no value is specified, `attributesToRetrieve` uses the `displayedAttributes` 
 
 > If an attribute has been removed from `displayedAttributes` index settings, `attributesToRetrieve` will silently ignore it and the field will not appear in the returned documents.
 
+- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `attributesToRetrieve` will returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+
 ##### 1.2.1.8 `attributesToHighlight`
 
-- Type: Array[String]|String
+- Type: Array[String](POST)|String(GET)
 - Required: False
 - Default: `[]|null`
 
@@ -128,6 +162,8 @@ Highlights matching query terms in the specified attributes by enclosing them in
 When this parameter is set, returned documents include a `_formatted` object containing the highlighted terms.
 
 If `"*"` is provided as a value: `attributesToHighlight=["*"]` all the attributes present in `attributesToRetrieve` will be assigned to `attributesToHighlight`.
+
+- 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToHighlight` will returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 > See [_Formatted Field Behavior](0039-_formatted-field-behavior_.md)
 
@@ -145,6 +181,8 @@ Optionally, indicating a custom crop length for any of the listed attributes is 
 
 Instead of supplying individual attributes, it is possible to provide `["*"]` as a value: `attributesToCrop=["*"]`. This will crop the values of all attributes present in `attributesToRetrieve`.
 
+- 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToCrop` will returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+
 > See [_Formatted Field Behavior](0039-_formatted-field-behavior_.md)
 
 ##### 1.2.1.10 `cropLength`
@@ -157,6 +195,8 @@ Configures the number of characters to keep on each side of the matching query t
 
 If `attributesToCrop` is not configured, `cropLength` has no effect on the returned results.
 
+- 🔴 Sending a value with a different type than `Integer` or `null` for `cropLength` will returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+
 ##### 1.2.1.11 `matches`
 
 - Type: Boolean
@@ -164,6 +204,8 @@ If `attributesToCrop` is not configured, `cropLength` has no effect on the retur
 - Default: `false`
 
 Adds a `_matchesInfo` object to the search response that contains the location of each occurrence of queried terms across all fields. This is useful when more control is needed than offered by the built-in highlighting/cropping.
+
+- 🔴 Sending a value with a different type than `Boolean` or `null` for `matches` will returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 #### 1.2.2. Search response
 
