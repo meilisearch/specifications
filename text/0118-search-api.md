@@ -16,7 +16,7 @@ Meilisearch exposes 2 routes to perform searches:
 - GET `indexes/:index_uid/search`
 - POST `indexes/:index_uid/search`
 
-- 🔴 If the index does not exist, the API returns a [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
+- 🔴 If the index does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
 If the instance is secured by a master-key, the auth layer will return the following errors:
 
