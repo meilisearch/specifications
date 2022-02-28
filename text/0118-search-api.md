@@ -38,7 +38,7 @@ If the instance is secured by a master-key, the auth layer will return the follo
 | q                       | String                    | False    |
 | filter                  | Array of String - String  | False    |
 | sort                    | Array of String - String  | False    |
-| facetsDistribution      | Array:String - String     | False    |
+| facetsDistribution      | Array of String - String  | False    |
 | limit                   | Integer                   | False    |
 | offset                  | Integer                   | False    |
 | attributesToRetrieve    | Array of String - String  | False    |
@@ -57,7 +57,7 @@ If the instance is secured by a master-key, the auth layer will return the follo
 
 - 🔴 Sending a value with a different type than `String` or `null` for `q` will returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-> When q isn't specified, Meilisearch performs a **placeholder search**. A placeholder search returns all searchable documents in an index, modified by any search parameters used and sorted by that index's custom ranking rules. Since there is no query term, the built-in ranking rules do not apply. If the index has no sort or custom ranking rules, the results are returned in the order of their internal database position.
+> When q isn't specified, Meilisearch performs a **placeholder search**. A placeholder search returns all searchable documents in an index, modified by any search parameters used and sorted by that index's custom ranking rules. If the index has no sort or custom ranking rules, the results are returned in the order of their internal database position.
 
 > Meilisearch only considers the first ten words of any given search query to deliver a fast search-as-you-type experience.
 
@@ -175,7 +175,7 @@ If `"*"` is provided as a value: `attributesToHighlight=["*"]` all the attribute
 
 Crops the selected attributes' values in the returned results to the length indicated by the `cropLength` parameter.
 
-When this parameter is set, a field called `_formatted` will be added to search results. The cropped version of each document will be available there.
+When this parameter is set, returned documents include a `_formatted` object containing the cropped terms.
 
 Optionally, indicating a custom crop length for any of the listed attributes is possible: `attributesToCrop=["attributeNameA:25", "attributeNameB:150"]`. The custom crop length set in this way has priority over the `cropLength` parameter.
 
@@ -203,7 +203,7 @@ If `attributesToCrop` is not configured, `cropLength` has no effect on the retur
 - Required: False
 - Default: `false`
 
-Adds a `_matchesInfo` object to the search response that contains the location of each occurrence of queried terms across all fields. This is useful when more control is needed than offered by the built-in highlighting/cropping.
+Adds a `_matchesInfo` object to the search response that contains the location of each occurrence of queried terms across all fields. This is useful when more control is needed than offered by the built-in highlighting/cropping features.
 
 - 🔴 Sending a value with a different type than `Boolean` or `null` for `matches` will returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
