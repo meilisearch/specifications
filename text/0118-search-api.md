@@ -7,7 +7,7 @@
 
 ### 1.1. Summary
 
-The search endpoints permits to retrieve documents within an index that are the most relevant given a set of parameters forming a search query.
+The search endpoints permit to retrieve documents within an index that are the most relevant given a set of parameters forming a search query.
 
 ### 1.2. Explanation
 
@@ -255,7 +255,7 @@ Gives the `offset` search parameter used for the query.
 - Type: Integer
 - Required: True
 
-Return the total number of candidates for the search query.
+Returns the total number of candidates for the search query.
 
 ##### 1.2.2.5 `exhaustiveNbHits`
 
@@ -281,9 +281,9 @@ Added to the search response when `facetsDistribution` is set for a search query
 - Type: Boolean
 - Required: False
 
-Whether `facetsDistribution` count are exhaustive. The field `exhaustiveFacetsCount` is added when `facetsDistribution` is set as a search parameter.
+Whether `facetsDistribution` count is exhaustive. The field `exhaustiveFacetsCount` is added when `facetsDistribution` is set as a search parameter.
 
-> Always return `false`.
+> Always returns `false`.
 
 ##### 1.2.2.7 `processingTimeMs`
 
