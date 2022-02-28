@@ -69,7 +69,7 @@ If the instance is secured by a master-key, the auth layer will return the follo
 - Required: True
 - Default: `[]`
 
-`disabledOnWords` permits to disable the typo tolerance feature on a set of query terms given during a search query.
+`disabledOnWords` permits to disable the typo tolerance feature for a set of query terms given during a search query.
 
 ### 1.2.1.4 `minWordSizeFor1Typo`
 
