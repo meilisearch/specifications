@@ -422,7 +422,7 @@ components:
           default: []
           nullable: false
         disableOnWords:
-          description: Disable the typo tolerance feature for a set of query terms given during a search query.
+          description: Disable the typo tolerance feature for a set of query terms given for a search query.
           type: array
           items:
             type: string
