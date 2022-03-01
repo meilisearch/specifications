@@ -2140,7 +2140,7 @@ paths:
           description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
-  '/indexes/{indexUid}/settings/typoTolerance':
+  '/indexes/{indexUid}/settings/typo-tolerance':
     get:
       operationId: indexes.settings.typoTolerance.get
       summary: Get typo tolerance configuration
