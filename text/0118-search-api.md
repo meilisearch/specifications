@@ -46,6 +46,7 @@ If the instance is secured by a master-key, the auth layer will return the follo
 | attributesToCrop        | Array of String - String  | False    |
 | cropLength              | Integer                   | False    |
 | matches                 | Boolean                   | False    |
+| typoTolerance           | Object[typoTolerance]     | False    |
 
 ##### 1.2.1.1 `q`
 
@@ -206,6 +207,18 @@ If `attributesToCrop` is not configured, `cropLength` has no effect on the retur
 Adds a `_matchesInfo` object to the search response that contains the location of each occurrence of queried terms across all fields. This is useful when more control is needed than offered by the built-in highlighting/cropping features.
 
 - 🔴 Sending a value with a different type than `Boolean` or `null` for `matches` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+
+##### 1.2.1.12 `typoTolerance`
+
+- Type: Object[typoTolerance]
+- Required: False
+- Default: `null`
+
+Override typo tolerance settings at search time.
+
+The attributes of the `typoTolerance` object are not mandatory at search time.
+
+> See [Typo Tolerance](0117-typo-tolerance.md)
 
 #### 1.2.2. Search response
 
