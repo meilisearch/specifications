@@ -1,6 +1,6 @@
 - Title: Indexing CSV
 - Start Date: 2021-04-9
-- Specification PR: [PR-#28](https://github.com/meilisearch/specifications/pull/28)
+- Specification PR: [PR-#28](https://github.com/Meilisearch/specifications/pull/28)
 - Discovery Issue: n/a
 
 # Indexing CSV
@@ -9,7 +9,7 @@
 
 ### I. Summary
 
-To index documents, the body of the add documents request has to match a specific format. That specific format is then parsed and tokenized inside MeiliSearch. After which, the documents added are in the pool of searchable and returnable documents.
+To index documents, the body of the add documents request has to match a specific format. That specific format is then parsed and tokenized inside Meilisearch. After which, the documents added are in the pool of searchable and returnable documents.
 
 A [CSV](https://en.wikipedia.org/wiki/Comma-separated_values) data format is broadly used to store and exchange data in a simple format.
 
@@ -25,7 +25,7 @@ Also, in order to boost write performance CSV data format is more suited than JS
 
 We want to provide our users with an always improved usage experience. Currently, the engine only accepts JSON format as a data source. We want to give users the possibility of another simple data format, well known, to use. Thus, give them more versatility at the data source choices for the indexing (add and update) step.
 
-Since most SQL engines or SQL clients can easily dump data as CSV, it will facilitate MeiliSearch adoption by extending the indexing step on a wider range of customer cases than before.
+Since most SQL engines or SQL clients can easily dump data as CSV, it will facilitate Meilisearch adoption by extending the indexing step on a wider range of customer cases than before.
 
 Writing performance is also considered as a motivation since CSV parsing is less CPU and memory intensive than parsing Json due to the streamable capability of the CSV format.
 
@@ -33,7 +33,7 @@ Writing performance is also considered as a motivation since CSV parsing is less
 
 #### CSV Formatting Rules
 
-While there's [RFC 4180](https://tools.ietf.org/html/rfc4180) as a try to add a specification for CSV format, we will find a lot of variations from that. MeiliSearch features capabilities requires CSV data to be formatted the proper way to be parsable by the engine.
+While there's [RFC 4180](https://tools.ietf.org/html/rfc4180) as a try to add a specification for CSV format, we will find a lot of variations from that. Meilisearch features capabilities requires CSV data to be formatted the proper way to be parsable by the engine.
 
 - CSV data format needs to contain a first line representing the list of attributes with the optionally chosen type separated from the attribute name by `:` character. The type is case insensitive.
 
@@ -41,13 +41,18 @@ While there's [RFC 4180](https://tools.ietf.org/html/rfc4180) as a try to add a 
 >
 > Valid headline example: "id:number","title:string","author","price:number"
 
-- The following CSV lines will represent a document for MeiliSearch.
+- The following CSV lines will represent a document for Meilisearch.
 - A `,` character must separate each cell.
 - A CSV value should be enclosed in double-quotes when it contains a comma character or a newline to escape it.
 - Using double-quotes to enclose fields, then a double-quote appearing inside a field must be escaped by preceding it with another double quote as mentioned in [RFC 4180](https://tools.ietf.org/html/rfc4180).
 - Float value should be written with a `.` character, like `3.14`.
 - CSV text should be encoded in UTF8.
 - The format can't handle array cell values. We are providing `nd-json` format to deal with theses types of attribute in a easier way.
+
+##### `null` value
+
+- If a field is of type `string`, then an empty cell is considered as a `null` value (e.g. `,,`), anything else is turned into a string value (e.g. `, ,` is a single whitespace string)
+- If a field is of type `number`, when the trimmed field is empty, it's considered as a `null` value (e.g. `,,` `, ,`); otherwise Meilisearch try to parse the number.
 
 ##### Example with a comma inside a cell
 
@@ -95,7 +100,29 @@ the search result should be displayed as
 }
 ```
 
-> Note that the price attribute was not typed as a number. By default, MeiliSearch type it as a string.
+> Note that the price attribute was not typed as a number. By default, Meilisearch type it as a string.
+
+##### Example with an empty cell
+
+Given the CSV payload
+```
+id:number,label,price:number,colors
+1,t-shirt,,red
+```
+the search result should be displayed as
+```json
+{
+  "hits": [
+    {
+      "id": 1,
+      "label": "t-shirt",
+      "price": null,
+      "colors": "red"
+    }
+  ],
+  ...
+}
+```
 
 #### API Endpoints
 
