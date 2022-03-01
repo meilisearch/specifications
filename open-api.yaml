@@ -1546,6 +1546,8 @@ paths:
                   default: 20
                 sort:
                   $ref: '#/components/schemas/sort'
+                typoTolerance:
+                  $ref: '#/components/schemas/typoTolerance'
             examples:
               Example:
                 value:
