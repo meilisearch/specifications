@@ -18,14 +18,14 @@ Meilisearch exposes 2 routes to perform searches:
 
 - 🔴 If the index does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
-If the instance is secured by a master-key, the auth layer will return the following errors:
+If the instance is secured by a master-key, the auth layer returns the following errors:
 
 - 🔴 Accessing these routes without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
 - 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
 `POST` HTTP verb errors:
 
-- 🔴 Omitting Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
+- 🔴 Omitting the Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
 - 🔴 Sending an empty Content-Type returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
@@ -56,7 +56,7 @@ If the instance is secured by a master-key, the auth layer will return the follo
 
 `q` contains the terms to search within the index documents.
 
-- 🔴 Sending a value with a different type than `String` or `null` for `q` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `String` or `null` for `q` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 > When q isn't specified, Meilisearch performs a **placeholder search**. A placeholder search returns all searchable documents in an index, modified by any search parameters used and sorted by that index's custom ranking rules. If the index has no sort or custom ranking rules, the results are returned in the order of their internal database position.
 
@@ -74,9 +74,9 @@ If the instance is secured by a master-key, the auth layer will return the follo
 
 Attributes used as filter criteria must be added to the `filterableAttributes` list of an index settings. See [Filterable Attributes Setting API](0123-filterable-attributes-setting-api.md).
 
-- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `filter` will return an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
-- 🔴 Sending an invalid syntax for `filter` will return an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
-- 🔴 Sending a field not defined as a `filterableAttributes` for `filter` will return an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
+- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `filter` returns an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
+- 🔴 Sending an invalid syntax for `filter` returs an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
+- 🔴 Sending a field not defined as a `filterableAttributes` for `filter` returns an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
 
 > See [Filter And Facet Behavior](0027-filter-and-facet-behavior.md)
 
@@ -90,9 +90,9 @@ Attributes used as filter criteria must be added to the `filterableAttributes` l
 
 Attributes used as sort criteria must be added to the `sortableAttributes list of an index settings. See [Sortable Attributes Setting API](0123-sortable-attributes-setting-api.md).
 
-- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `sort` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
-- 🔴 Sending an invalid syntax for `sort` will return an [invalid_sort](0061-error-format-and-definitions.md#invalid_sort) error.
-- 🔴 Sending a field not defined as a `sortableAttributes` for `sort` will return an [invalid_sort](0061-error-format-and-definitions.md#invalid_sort) error.
+- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `sort` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending an invalid syntax for `sort` returns an [invalid_sort](0061-error-format-and-definitions.md#invalid_sort) error.
+- 🔴 Sending a field not defined as a `sortableAttributes` for `sort` returns an [invalid_sort](0061-error-format-and-definitions.md#invalid_sort) error.
 
 > See [Sort](0055-sort.md)
 
@@ -104,17 +104,17 @@ Attributes used as sort criteria must be added to the `sortableAttributes list o
 
 `facetsDistribution` permits to specify facets to be computed for the current search query.
 
-It returns the number of documents matching the current search query for each given specified facet.
+It returns the number of documents matching the current search query for each specified facet.
 
 This parameter can take two values:
 
 - An array of attributes: `facetsDistribution=["attributeA", "attributeB", …]`
-- An asterisk `"*"` — this will return a count for all facets present in `filterableAttributes`
+- An asterisk `"*"` — this returns a count for all facets present in `filterableAttributes`
 
 Attributes used in `facetsDistribution` must be added to the `filterableAttributes` list of an index settings. See [Filterable Attributes Setting API](0123-filterable-attributes-setting-api.md).
 
-- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `facetsDistribution` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
-- 🔴 Sending a field not defined as a `filterableAttributes` for `facetsDistribution` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `facetsDistribution` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a field not defined as a `filterableAttributes` for `facetsDistribution` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 > See [Filter And Facet Behavior](0027-filter-and-facet-behavior.md)
 
@@ -126,7 +126,7 @@ Attributes used in `facetsDistribution` must be added to the `filterableAttribut
 
 Sets the maximum number of documents to be returned by the current search query.
 
-- 🔴 Sending a value with a different type than `Integer` or `null` for `limit` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Integer` or `null` for `limit` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 ##### 1.2.1.6 `offset`
 
@@ -136,7 +136,7 @@ Sets the maximum number of documents to be returned by the current search query.
 
 Sets the starting point in the search results, effectively skipping over a given number of documents.
 
-- 🔴 Sending a value with a different type than `Integer` or `null` for `offset` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Integer` or `null` for `offset` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 ##### 1.2.1.7 `attributesToRetrieve`
 
@@ -150,7 +150,7 @@ If no value is specified, `attributesToRetrieve` uses the `displayedAttributes` 
 
 > If an attribute has been removed from `displayedAttributes` index settings, `attributesToRetrieve` will silently ignore it and the field will not appear in the returned documents.
 
-- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `attributesToRetrieve` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `attributesToRetrieve` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 ##### 1.2.1.8 `attributesToHighlight`
 
@@ -164,7 +164,7 @@ When this parameter is set, returned documents include a `_formatted` object con
 
 If `"*"` is provided as a value: `attributesToHighlight=["*"]` all the attributes present in `attributesToRetrieve` will be assigned to `attributesToHighlight`.
 
-- 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToHighlight` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToHighlight` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 > See [_Formatted Field Behavior](0039-_formatted-field-behavior_.md)
 
@@ -182,7 +182,7 @@ Optionally, indicating a custom crop length for any of the listed attributes is 
 
 Instead of supplying individual attributes, it is possible to provide `["*"]` as a value: `attributesToCrop=["*"]`. This will crop the values of all attributes present in `attributesToRetrieve`.
 
-- 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToCrop` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToCrop` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 > See [_Formatted Field Behavior](0039-_formatted-field-behavior_.md)
 
@@ -196,7 +196,7 @@ Configures the number of characters to keep on each side of the matching query t
 
 If `attributesToCrop` is not configured, `cropLength` has no effect on the returned results.
 
-- 🔴 Sending a value with a different type than `Integer` or `null` for `cropLength` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Integer` or `null` for `cropLength` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 ##### 1.2.1.11 `matches`
 
@@ -206,7 +206,7 @@ If `attributesToCrop` is not configured, `cropLength` has no effect on the retur
 
 Adds a `_matchesInfo` object to the search response that contains the location of each occurrence of queried terms across all fields. This is useful when more control is needed than offered by the built-in highlighting/cropping features.
 
-- 🔴 Sending a value with a different type than `Boolean` or `null` for `matches` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Boolean` or `null` for `matches` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 ##### 1.2.1.12 `typoTolerance`
 
