@@ -73,6 +73,8 @@ Whether the typo tolerance feature is enabled.
 
 `disableOnWords` disable the typo tolerance feature for a set of query terms given during a search query.
 
+> If `Javascript` is specified in `disableOnWords` the engine will not apply the typo tolerance on the query term `Javascript` if its typed at search time.
+
 ### 1.2.1.4 `minWordSizeFor1Typo`
 
 - Type: Integer
