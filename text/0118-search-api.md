@@ -218,7 +218,7 @@ Override typo tolerance settings at search time.
 
 The attributes of the `typoTolerance` object are not mandatory at search time.
 
-> See [Typo Tolerance](0117-typo-tolerance.md)
+> See [Typo Tolerance](0117-typo-tolerance-api.md)
 
 #### 1.2.2. Search response
 
