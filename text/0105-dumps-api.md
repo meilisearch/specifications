@@ -1,4 +1,4 @@
-- Title: Dumps
+- Title: Dumps API
 - Start Date: 2022-01-12
 - UpdatedAt: 2022-01-12
 
@@ -30,6 +30,8 @@ The dumps exist to upgrade a MeiliSearch instance from a previous version to a m
 - When using the command-line flag `--ignore-dump-if-db-exists=true`, MeiliSearch will use the existing database to start an instance instead of throwing an error. The dump will be ignored.
 - By default, trying to import a dump that does not exist, will stop the process and throw an error.
 - When using the command-line flag `--ignore-missing-dump`, MeiliSearch will continue its process and not throw an error.
+- When a dump is being imported, the http API is not available. Meilisearch can't receive read or write requests.
+- When a dump is being created, the task queue can receive other future operations to perform later but can't process any additional tasks during the dump creation.
 
 ---
 
@@ -68,7 +70,6 @@ N/A
 - 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
 - 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 - 🔴 Attempting to create a dump while a dump is already being created return an [dump_already_in_progress](0061-error-format-and-definitions.md#dump_already_in_progress) error.
-
 ---
 
 ##### **As a user, I want to check a dump status**
@@ -138,7 +139,14 @@ Error: dump doesn't exist at ":pathToDumps/:missingFile"
 ---
 
 ## 2. Technical Aspects
-n/a
+
+### 2.1. Dump Creation
+
+When a dump is being created, the task queue can receive other future operations to perform later but can't process any additional tasks during the dump creation.
+
+### 2.2. Importing a dump
+
+When a dump is being imported, the http API is not available. Meilisearch can't receive read or write requests.
 
 ## 3. Future Possibilities
 - Make dump creation a `task`
