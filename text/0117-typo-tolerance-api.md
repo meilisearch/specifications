@@ -13,8 +13,8 @@ This specification describes the configuration options for the typo tolerance fe
 
 Meilisearch exposes an API to configure the typo tolerance behavior at the level of index settings.
 
-[GET/POST/DEL] -  `indexes/:index_uid/settings`
-[GET/POST/DEL] -  `indexes/:index_uid/settings/typoTolerance`
+[GET/POST/DEL] - `indexes/:index_uid/settings`
+[GET/POST/DEL] - `indexes/:index_uid/settings/typoTolerance`
 
 The [Search API](0118-search-api.md) permits to override those index settings at search time.
 
@@ -55,7 +55,7 @@ If the instance is secured by a master-key, the auth layer will return the follo
 
 Whether the typo tolerance feature is enabled.
 
-> The presence of `typo` in the ranking rules does not influence the activation/deactivation of the typo tolerance feature. If the `rankingRules` parameter of the index settings does not contain the `typo` rule, the results are not sorted according to the number of typos found.
+> The presence of `typo` in the ranking rules setting does not influence the activation/deactivation of the typo tolerance feature. If the `rankingRules` parameter of the index settings does not contain the `typo` rule, the results are not sorted according to the number of typos found.
 
 ### 1.2.1.2 `disableOnAttributes`
 
