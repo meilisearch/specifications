@@ -1,21 +1,24 @@
 - Title: Typo Tolerance API
 - Start Date: 2022-02-22
 
-# Typo Tolerance
+# Typo Tolerance API
 
 ## 1. Functional Specification
 
 ## 1.1. Summary
 
-This specification describes the configuration options for the typo tolerance feature. Both as settings for an index and as overridable parameters at search time.
+This specification describes the configuration options for the typo tolerance feature, both as settings for an index and as overridable parameters at search time.
 
 ## 1.2. Explanations
 
-Meilisearch exposes APIs to configure the typo tolerance behavior at the level of an index settings.
+Meilisearch exposes an API to configure the typo tolerance behavior at the level of index settings.
 
-GET/POST/DEL `indexes/:index_uid/settings/typoTolerance`
+[GET/POST/DEL] -  `indexes/:index_uid/settings`
+[GET/POST/DEL] -  `indexes/:index_uid/settings/typoTolerance`
 
 The [Search API](0118-search-api.md) permits to override those index settings at search time.
+
+[GET/POST] - `indexes/:index_uid/search`
 
 > See [Search API](0118-search-api.md)
 
@@ -39,8 +42,8 @@ If the instance is secured by a master-key, the auth layer will return the follo
 | Field                | Type            | Required |
 |----------------------|-----------------|----------|
 | enabled              | Boolean         | True     |
-| disabledOnAttributes | Array of String | True     |
-| disabledOnWords      | Array of String | True     |
+| disableOnAttributes  | Array of String | True     |
+| disableOnWords       | Array of String | True     |
 | minWordSizeFor1Typo  | Integer         | True     |
 | minWordSizeFor2Typos | Integer         | True     |
 
@@ -50,10 +53,9 @@ If the instance is secured by a master-key, the auth layer will return the follo
 - Required: True
 - Default: `true`
 
-`enabled` allows to disable/enable the typo tolerance feature.
+Whether the typo tolerance feature is enabled.
 
-> The presence of `typo` in the ranking rules does not influence the activation/deactivation of the typo tolerance feature.
-> If the `rankingRules` parameter of the index settings does not contains the `typo` rule, the results are not sorted according to the number of typos found.
+> The presence of `typo` in the ranking rules does not influence the activation/deactivation of the typo tolerance feature. If the `rankingRules` parameter of the index settings does not contain the `typo` rule, the results are not sorted according to the number of typos found.
 
 ### 1.2.1.2 `disableOnAttributes`
 
@@ -61,7 +63,7 @@ If the instance is secured by a master-key, the auth layer will return the follo
 - Required: True
 - Default: `[]`
 
-`disabledOnAttributes` disable the typo tolerance feature on the specified attributes.
+`disableOnAttributes` disable the typo tolerance feature on the specified document attributes.
 
 ### 1.2.1.3 `disableOnWords`
 
@@ -69,7 +71,7 @@ If the instance is secured by a master-key, the auth layer will return the follo
 - Required: True
 - Default: `[]`
 
-`disabledOnWords` permits to disable the typo tolerance feature for a set of query terms given during a search query.
+`disableOnWords` disable the typo tolerance feature for a set of query terms given during a search query.
 
 ### 1.2.1.4 `minWordSizeFor1Typo`
 
@@ -77,9 +79,9 @@ If the instance is secured by a master-key, the auth layer will return the follo
 - Required: True
 - Default: `5`
 
-`minWordSizeFor1Typo` permits to customize the minimum size for a word to tolerate 1 typo.
+`minWordSizeFor1Typo` customize the minimum size for a word to tolerate 1 typo.
 
-> Given the default value `5`, the search engine will start to apply typo tolerance on a query term if its length is at least equals to 5 characters.
+> Given the default value `5`, the search engine starts to apply typo tolerance on a query term if its length is at least equal to 5 characters.
 
 ### 1.2.1.5 `minWordSizeFor2Typos`
 
@@ -87,12 +89,12 @@ If the instance is secured by a master-key, the auth layer will return the follo
 - Required: True
 - Default: `9`
 
-`minWordSizeFor2Typos` permits to customize the minimum size for a word to tolerate 2 typos.
+`minWordSizeFor2Typos` customize the minimum size for a word to tolerate 2 typos.
 
-> Given the default value `9`, the search engine will handle up to 2 typos on a query term if its length is at least equals to 9 characters.
+> Given the default value `9`, the search engine handles up to 2 typos on a query term if its length is at least equal to 9 characters.
 
 ## 2. Technical Details
 tbd
 
 ## 3. Future Possibilities
-n/a
+-
