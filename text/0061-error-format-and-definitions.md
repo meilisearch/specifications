@@ -875,19 +875,6 @@ HTTP Code: `400 Bad Request`
 - The `:payloadType` is inferred when the message is generated. e.g. `json`, `ndjson`, `csv`
 - The `:syntaxErrorHelper` is inferred when the message is generated.
 
-#### Variant: Sending a valid but empty `[]`/`{}` payload on `POST`/`PUT` - `indexes/:indexUid/documents`.
-
-```json
-{
-    "message": "The `:payloadType` payload must contain at least one document.",
-    "code": "malformed_payload",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#malformed_payload"
-}
-```
-
-- The `:payloadType` is inferred when the message is generated. e.g. `json`, `csv`.
-
 ---
 
 # internal type
