@@ -1,5 +1,5 @@
 - Title: Instance options
-- Start Date: 01.03.2022
+- Start Date: 2022-03-01
 - Specification PR:
 - MeiliSearch Tracking-issues:
 
