@@ -9,7 +9,9 @@ This specification describes the configuration options for the typo tolerance fe
 
 ## 2. Motivation
 
-By providing customization options for the typo tolerance feature, Meilisearch better adapts to different use-cases with specific typo tolerance requirements.
+Tolerance to typos is critical when building an enjoyable search experience. Meilisearch ranks typo-free matched documents above others based on default settings that we believe are best for most users.
+
+Meilisearch can adapt to different use-cases with specific requirements by providing customization options for the typo tolerance feature.
 
 ## 3. Functional Specification
 
@@ -23,7 +25,7 @@ By providing customization options for the typo tolerance feature, Meilisearch b
 | minWordSizeFor1Typo  | Integer         | True (Settings) - False (Search) |
 | minWordSizeFor2Typos | Integer         | True (Settings) - False (Search) |
 
-> Every fields of typoTolerance are mandatory when specified as an index setting while no fields are mandatory when specified at search time.
+> Every field of typoTolerance object is mandatory when specified as an index setting. When a property of this setting is overridden during the search time, other resource properties are not required.
 
 #### 3.1.1. `enabled`
 
@@ -33,7 +35,9 @@ By providing customization options for the typo tolerance feature, Meilisearch b
 
 Whether the typo tolerance feature is enabled.
 
-> The presence of `typo` in the ranking rules setting does not influence the activation/deactivation of the typo tolerance feature. If the `rankingRules` parameter of the index settings does not contain the `typo` rule, the results are not sorted according to the number of typos found but the typo tolerance is used to match documents.
+The presence of `typo` in the ranking rules setting does not influence the activation/deactivation of the typo tolerance feature.
+
+If the `rankingRules` parameter of the index settings does not contain the `typo` rule, the results are not sorted according to the number of typos found. However, the typo tolerance feature is still used to match documents.
 
 ### 3.1.2. `disableOnAttributes`
 
@@ -45,13 +49,14 @@ Whether the typo tolerance feature is enabled.
 
 > Any attributes defined in `disableOnAttributes` won't have their values matched by the typo tolerance.
 
+
 ### 3.1.3. `disableOnWords`
 
 - Type: Array of String
 - Required: True (Settings) - False (Search)
 - Default: `[]`
 
-`disableOnWords` disable the typo tolerance feature for a set of query terms given during a search query.
+`disableOnWords` disable the typo tolerance feature for a set of search query terms.
 
 > If `Javascript` is specified in `disableOnWords`, the engine won't apply the typo tolerance on the query term `Javascript` when typed at search time.
 
@@ -79,11 +84,13 @@ Whether the typo tolerance feature is enabled.
 
 ### 3.2.1 `indexes/:index_uid/settings/typo-tolerance`
 
-Specifically manage the typo tolerance configuration for an index.
+Manage the typo tolerance configuration for an index.
+
+> This configuration can be overridden at search time. See 3.4.1 `indexes/:index_uid/search` section.
 
 #### 3.2.1.1 `GET` - `indexes/:index_uid/settings/typo-tolerance`
 
-Allow users to fetch the current definition of the typo tolerance feature for an index.
+Allow fetching the current definition of the typo tolerance feature for an index.
 
 `200` - Response body
 
@@ -105,7 +112,7 @@ Allow users to fetch the current definition of the typo tolerance feature for an
 
 #### 3.2.1.2 `POST` - `indexes/:index_uid/settings/typo-tolerance`
 
-Allow users to customize the default definition of the typo tolerance feature for an index.
+Allow customizing the default settings of the typo tolerance feature for an index.
 
 Request payload
 
@@ -151,7 +158,7 @@ Request payload
 
 #### 3.2.1.3 `DELETE`- `indexes/:index_uid/settings/typo-tolerance`
 
-Allow users to reset the default settings of the typo tolerance feature for an index.
+Allow resetting the default settings of the typo tolerance feature for an index.
 
 > Returns a 202 response. See [Tasks API](0060-tasks-api.md)
 
@@ -167,11 +174,9 @@ Allow users to reset the default settings of the typo tolerance feature for an i
 
 ### 3.4.1 `indexes/:index_uid/search`
 
-The typo tolerance resource is exposed on the search endpoints.
+The typo tolerance resource is exposed on the search endpoints. It lets users build a search experience fastly by testing different configurations while editing the frontend. Thus, defining specific typo tolerance settings at search can be helpful when diverse audiences search in the same index from different clients.
 
-Unlike the settings endpoint previously described, `typoTolerance` properties are not mandatory on the search endpoints.
-
-The properties defined in the `typoTolerance` object payload of the search query override the value defined in the `typoTolerance` index settings.
+If defined for a search query, a `typoTolerance` property overrides its value defined in the `typoTolerance` index settings.
 
 > See [Search API](0118-search-api.md)
 
@@ -179,4 +184,5 @@ The properties defined in the `typoTolerance` object payload of the search query
 tbd
 
 ## 3. Future Possibilities
-n/a
+- Add the possibility to disable typo-tolerance on all numeric fields.
+- Add different modes of result matching for the typo-tolerance feature. e.g. `default`/`min`/`strict`
