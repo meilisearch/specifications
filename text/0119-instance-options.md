@@ -352,7 +352,7 @@ Set the maximum size of the RAM used by Meilisearch. By default, Meilisearch ada
 Value must be given in bytes or explicitly stating a base unit. For example, the default value can be written as `107374182400`, `'107.7Gb'`, or `'107374 Mb'`.
 
 ⚠️ WARNINGS
-- We do not recommend setting the full size of your machine. For example, when running Meilisearch on a machine with 4GB of RAM, do not set this options to `4Gb`
+- We do not recommend setting the full RAM size of your machine. For example, when running Meilisearch on a machine with 4GB of RAM, do not set this options to `4Gb`
 - This command-line option will not perfectly ensure the RAM usage, but will help you manage multiple Meilisearch engines on the same machine (for example, using Kubernetes). The core team cannot guarantee the exact usage of the RAM.
 - If the number set is higher than the real available RAM in the machine, we cannot prevent Meilisearch from crashing.
 
