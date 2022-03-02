@@ -5,7 +5,7 @@
 
 # Instance options
 
-## Summary
+## 1. Summary
 
 The instance options let the users configure Meilisearch when launching the search engine using
 - environment variables
@@ -24,11 +24,11 @@ Same behavior using the command-line option:
 ./meilisearch --db-path ./meilifiles
 ```
 
-## Motivation
+## 2. Motivation
 
 When Meilisearch is launched, the default configuration may not meet the specific needs of users. Meilisearch exposes configurable options to allow users to fine-tune the behavior of the search engine.
 
-## Functional Specification
+## 3. Functional Specification
 
 The users can configure Meilisearch when launching the search engine using
 - **environment variables**. Ex: `--db-path`
@@ -38,7 +38,7 @@ There are 2 categories of CLI (command-line interface) options:
 - the ones that expect a value. Ex: `--db-path`.
 - the ones that does expect any value, called also "flags". Ex: `--no-analytics`. Their implicit values are booleans.
 
-### Some specific behaviors
+### 3.1 Some specific behaviors
 
 #### Priority between CLI options and environment variables
 
@@ -53,7 +53,7 @@ Example with the snapshort creation:
 - `export MEIL_SCHEDULE_SNAPSHOT=off` means the snapshot creation is disabled.
 - No variable set means the snapshot creation is disabled.
 
-### Error behavior
+### 3.2 Error behavior
 
 1. Some configuration options must specify a value to be valid. Using such a command-line option or an environment variable without specifying a value will throw an error and interrupt the launch process.
 
@@ -91,7 +91,7 @@ error: Found argument 'yes' which wasn't expected, or isn't valid in this contex
 
 The expected behavior of each flag is described in the list above.
 
-### Exhaustive list of options
+### 3.3 Exhaustive list of options
 
 - [Database path](#database-path)
 - [Environment](#environment)
@@ -101,6 +101,8 @@ The expected behavior of each flag is described in the list above.
 - [Dumps](#dumps-destination)
 - [Dumps destination](#dumps-destination)
 - [Import dump](#import-dump)
+- [Ignore missing dump](#ignore-missing-dump)
+- [Ignore dump if DB exists](#ignore-dump-if-db-exists)
 - [Log level](#log-level)
 - [Max index size](#max-index-size)
 - [Max TASK_DB size](#max-task-db-size)
@@ -204,6 +206,32 @@ Sets the directory where Meilisearch will create dump files. If the directory do
 Imports the dump file located at the specified path. Path must point to a `.dump` file.
 
 Meilisearch will only launch once the dump data has been fully indexed.
+
+More regarding dump behaviors in this [spec](https://github.com/meilisearch/specifications/blob/develop/text/0105-dumps-api.md).
+
+#### Ignore missing dump
+
+**Environment variable**: N/A
+**CLI option**: `--ignore-missing-dump`
+**Default**: Disabled
+
+⚠️ This command-line option does not take any values. Assigning a value will throw an error.
+
+Prevents a Meilisearch instance from throwing an error when `--import-dump` does not point to a valid dump file.
+
+This command will throw an error if `--import-dump` is not defined.
+
+#### Ignore dump if DB exists
+
+**Environment variable**: N/A
+**CLI option**: `--ignore-dump-if-db-exists`
+**Default**: Disabled
+
+⚠️ This command-line option does not take any values. Assigning a value will throw an error.
+
+Prevents a Meilisearch instance with an existing database from throwing an error when using `--import-dump`. Instead, the dump will be ignored and Meilisearch will launch using the existing database.
+
+This command will throw an error if `--import-dump` is not defined.
 
 #### Log level
 
@@ -418,10 +446,10 @@ Activates SSL session resumption.
 
 Activates SSL tickets.
 
-## 2. Technical Aspects
+## 4. Technical Aspects
 
 N/A
 
-## 3. Future Possibilities
+## 5. Future Possibilities
 
 - Redo the command-line to create a more interactive CLI
