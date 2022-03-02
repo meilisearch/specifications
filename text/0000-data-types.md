@@ -52,7 +52,7 @@ After the tokenizing process, each word is indexed and stored in the global dict
 
 Meilisearch accepts complex data structures, no matter the deepness level.
 
-> See 3.3. Nested structures section.
+> See 3.4. Nested structures section.
 
 #### 2.1.5. Object
 
@@ -60,9 +60,11 @@ JSON objects are written in key/value pairs and surrounded by curly braces. Inte
 
 After the tokenizing process, each word is indexed and stored in the global dictionary of the corresponding index.
 
+> See 3.3. Object section.
+
 Meilisearch accepts complex data structures, no matter the deepness level.
 
-> See 3.3. Nested structures section.
+> See 3.4. Nested structures section.
 
 #### 2.1.6. `null`
 
@@ -142,7 +144,27 @@ The strings above will be separated by soft and hard spaces exactly as explained
 
 > See 3.1.1. Examples section.
 
-### 3.2. Nested Structures
+### 3.3. Object
+
+#### 3.3.1. Example
+
+The following input:
+
+```json
+
+{
+  "movie_id": "1564saqw12ss",
+  "title": "Kung fu Panda"
+}
+```
+
+In the example above, `movie_id`, `1564saqw12ss`, `title`, `Kung fu Panda` are all considered as sentences. The colon `:` and comma `,` characters are used as separators.
+
+`"movie_id. 1564saqw12ss. title. Kung fu Panda."`
+
+These sentences will be separated by soft and hard spaces exactly as explained in the string example.
+
+### 3.4. Nested Structures
 
 Nested structures (e.g. `Object`, `Array of Objects`, etc) are internally flattened to a document's root level.
 
@@ -152,9 +174,9 @@ Meilisearch accepts the `.` notation to express a nested field location.
 
 > See 3.2.1. Examples section.
 
-### 3.2.1. Examples
+### 3.4.1. Examples
 
-#### 3.2.1.1. Object
+#### 3.4.1.1. Object
 
 The following JSON document:
 
@@ -178,7 +200,7 @@ Flattens to:
 }
 ```
 
-#### 3.2.1.2. Array of objects
+#### 3.4.1.2. Array of objects
 
 The following JSON document:
 
@@ -200,7 +222,7 @@ Flattens to:
 }
 ```
 
-#### 3.2.1.3. Array of objects mixed with scalar value
+#### 3.4.1.3. Array of objects mixed with scalar value
 
 The following JSON document:
 
@@ -225,7 +247,7 @@ Flattens to:
 ```
 
 
-#### 3.2.1.4. Array of objects of array of objects of ...
+#### 3.4.1.4. Array of objects of array of objects of ...
 
 The following JSON document:
 
@@ -273,7 +295,7 @@ Flattens to:
 }
 ```
 
-#### 3.2.1.5. Collision between a representation
+#### 3.2.4.5. Collision between a representation
 
 The following JSON document:
 
