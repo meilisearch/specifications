@@ -219,7 +219,7 @@ Deactivates Meilisearch's built-in telemetry collect when enabled.
 **Default value**: `dumps/`
 **Expected value**: a filepath pointing to a valid directory
 
-Sets the directory where Meilisearch will create dump files.
+Sets the directory where Meilisearch will create dump files. If the directory does not exist when a dump is generated it will be created.
 
 ### Import dump
 
