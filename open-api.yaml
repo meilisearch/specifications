@@ -784,26 +784,6 @@ components:
 
         > warn
         > Attribute(s) used in `filter` should be declared as filterable attributes. See [Filtering and Faceted Search](https://docs.meilisearch.com/reference/features/filtering_and_faceted_search.html).
-    typoTolerance.enabled:
-      name: typoTolerance.enabled
-      in: query
-      required: false
-    typoTolerance.disableOnAttributes:
-      name: typoTolerance.disableOnAttributes
-      in: query
-      required: false
-    typoTolerance.disableOnWords:
-      name: typoTolerance.disableOnWords
-      in: query
-      required: false
-    typoTolerance.minWordSizeFor1Typo:
-      name: typoTolerance.minWordSizeFor1Typo
-      in: query
-      required: false
-    typoTolerance.minWordSizeFor2Typos:
-      name: typoTolerance.minWordSizeFor2Typos
-      in: query
-      required: false
     Content-Type:
       name: Content-Type
       in: header
@@ -1456,11 +1436,6 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/matches'
-        - $ref: '#/components/parameters/typoTolerance.enabled'
-        - $ref: '#/components/parameters/typoTolerance.disableOnAttributes'
-        - $ref: '#/components/parameters/typoTolerance.disableOnWords'
-        - $ref: '#/components/parameters/typoTolerance.minWordSizeFor1Typo'
-        - $ref: '#/components/parameters/typoTolerance.minWordSizeFor2Typos'
       responses:
         '200':
           description: Ok
@@ -1571,8 +1546,6 @@ paths:
                   default: 20
                 sort:
                   $ref: '#/components/schemas/sort'
-                typoTolerance:
-                  $ref: '#/components/schemas/typoTolerance'
             examples:
               Example:
                 value:
