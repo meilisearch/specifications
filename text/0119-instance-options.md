@@ -187,7 +187,7 @@ If no master key is provided in a `development` environment, all routes will be 
 
 Deactivates Meilisearch's built-in telemetry collect when enabled.
 
-### Dumps destination
+#### Dumps destination
 
 **Environment variable**: `MEILI_DUMPS_DIR`
 **CLI option**: `--dumps-dir`
