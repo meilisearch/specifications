@@ -55,7 +55,7 @@ Example with the snapshort creation:
 
 ### Error behavior
 
-1. Some configuration options must specify a value. Using a command-line option (that requires a value) or an environment variable without specifying a value will throw an error and interrupt the launch process.
+1. Some configuration options must specify a value to be valid. Using such a command-line option or an environment variable without specifying a value will throw an error and interrupt the launch process.
 
 Example:
 
