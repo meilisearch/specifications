@@ -83,8 +83,10 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `infos.enable_auto_batching`            | `true` if `--enable-auto-batching` is specified to true, otherwise `false` | `true` | Every Hour |
 | `infos.max_batch_size`                  | Value of `--max-batch-size` in integer, otherwise `null` | 1000 | Every Hour |
 | `infos.max_documents_per_batch`         | Value of `--max-documents-per-batch` in integer, otherwise `null` | 1000 | Every Hour |
-| `infos.debounce_duration_sec`          | Value of `--debounce-duration-sec` in seconds, otherwise `0` | 3600 | Every Hour |
+| `infos.debounce_duration_sec`           | Value of `--debounce-duration-sec` in seconds, otherwise `0` | 3600 | Every Hour |
 | `infos.log_level`                       | Value of `--log-level`/`MEILI_LOG_LEVEL`                | debug             | Every Hour |
+| `infos.max_memory`                      | Value of `--max-memory`/`MEILI_MAX_MEMORY` in bytes     | 336042103         | Every Hour |
+| `infos.indexing_jobs`                   | Value of `--indexing-jobs`/`MEILI_INDEXING_JOBS` in integer | 4             | Every Hour |
 | `system.distribution`                   | Distribution on which MeiliSearch is launched           | Arch Linux        | Every hour |
 | `system.kernel_version`                 | Kernel version on which MeiliSearch is launched         | 5.14.10           | Every hour |
 | `system.cores`                          | Number of cores                                         | 24                | Every hour |
@@ -161,6 +163,8 @@ This property allows us to gather essential information to better understand on 
 | infos.max_documents_per_batch | Value of `--max-documents-per-batch` in integer, otherwise `null` | `1000` |
 | infos.debounce_duration_sec | Value of `--debounce-duration-sec`in seconds, otherwise `0` | `3600` |
 | infos.log_level | Value of `--log-level`/`MEILI_LOG_LEVEL`  | `debug` |
+| infos.max_memory  | Value of `--max-memory`/`MEILI_MAX_MEMORY` in bytes     | `336042103` |
+| infos.indexing_jobs  | Value of `--indexing-jobs`/`MEILI_INDEXING_JOBS` in integer | `4` |
 
 ##### MeiliSearch Statistics `stats`
 
