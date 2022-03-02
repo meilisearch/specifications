@@ -289,7 +289,7 @@ Activates scheduled snapshots when enabled. Snapshots are disabled by default.
 **Default value**: `snapshots/`
 **Expected value**: a filepath pointing to a valid directory
 
-Sets the directory where Meilisearch will store snapshots.
+Sets the directory where Meilisearch will store snapshots. If the directory does not exist when a snapshot is generated it will be created.
 
 #### Snapshot interval
 
