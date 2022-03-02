@@ -173,6 +173,8 @@ Allow resetting the typo tolerance feature to the default for an index.
 tbd
 
 ## 3. Future Possibilities
+
 - Expose `typoTolerance` properties at search time.
 - Add the possibility to disable typo-tolerance on all numeric fields.
 - Add different modes of result matching for the typo-tolerance feature. e.g. `default`/`min`/`strict`
+- Replace `POST` to `PATCH` verb to allow partial edit of the settings and embrace REST API convention.
