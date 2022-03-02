@@ -54,7 +54,7 @@ Meilisearch accepts complex data structures, no matter the deepness level.
 
 > See 3.3. Nested structures section.
 
-#### 2.1.5 Object
+#### 2.1.5. Object
 
 JSON objects are written in key/value pairs and surrounded by curly braces. Internally, an object is flattened at the root level of a document.
 
@@ -63,6 +63,10 @@ After the tokenizing process, each word is indexed and stored in the global dict
 Meilisearch accepts complex data structures, no matter the deepness level.
 
 > See 3.3. Nested structures section.
+
+#### 2.1.6. `null`
+
+The null type can be pushed into Meilisearch but it won't be taken into account for indexing.
 
 ## 3. Technical Details
 
@@ -138,8 +142,7 @@ The strings above will be separated by soft and hard spaces exactly as explained
 
 > See 3.1.1. Examples section.
 
-
-### 3.2 Nested Structures
+### 3.2. Nested Structures
 
 Nested structures (e.g. `Object`, `Array of Objects`, etc) are internally flattened to a document's root level.
 
@@ -147,9 +150,9 @@ It allows expressing a nested field in all Meilisearch parameters that accept do
 
 Meilisearch accepts the `.` notation to express a nested field location.
 
-> See 3.2.1 Examples section.
+> See 3.2.1. Examples section.
 
-### 3.2.1 Examples
+### 3.2.1. Examples
 
 #### 3.2.1.1. Object
 
