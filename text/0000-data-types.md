@@ -44,7 +44,7 @@ A `Boolean` value, which is either `true` or `false`, is received and converted 
 
 #### 2.1.4. Array
 
-An array represents a collection of elements that can be strings or arrays for instance. An array is recursively broken into separate string tokens, which means separate words.
+An array represents a collection of elements that can be any other type for instance. An array is recursively broken into separate string tokens, which means separate words.
 
 After the tokenizing process, each word is indexed and stored in the global dictionary of the corresponding index.
 
@@ -305,7 +305,7 @@ The following JSON document:
         "b": "c",
     },
     "a.b": "d"
-}
+}```
 
 Flattens to:
 
