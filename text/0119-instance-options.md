@@ -196,7 +196,7 @@ Deactivates Meilisearch's built-in telemetry collect when enabled.
 
 Sets the directory where Meilisearch will create dump files. If the directory does not exist when a dump is generated it will be created.
 
-### Import dump
+#### Import dump
 
 **Environment variable**: N/A
 **CLI option**: `--import-dump`
