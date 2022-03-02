@@ -106,13 +106,13 @@ N/A
 
 #### 1.3.4 CLI Definition
 
-##### 1.3.5 `--dumps-dir`
+##### `--dumps-dir`
 
 By default, MeiliSearch creates dumps in a directory called `dumps` at the root of your MeiliSearch.
 
 The destination can be modified with the `--dumps-dir` flag. e.g. `--dumps-dir myDumps`
 
-##### 1.3.6 `--import-dump`
+##### `--import-dump`
 
 Using the CLI flag `--import-dump`, MeiliSearch will replace the data.ms with the dump data and start the server using the provided dump. e.g. `--import-dump dumps/20220117-144855452.dump`.
 
@@ -122,11 +122,11 @@ If the `--import-dump` flag is specified when a database exists, an error occurs
 Error: database already exists at ":pathToDataMs/data.ms", try to delete it or rename it
 ```
 
-##### 1.3.7 `--ignore-dump-if-db-exists`
+##### `--ignore-dump-if-db-exists`
 
 To avoid MeiliSearch to throw an error when finding that a database already exists, the following flag: `--ignore-dump-if-db-exists` can be used. When using this flag, MeiliSearch will use the existing database to start an instance instead of throwing an error. The dump will be ignored.
 
-##### 1.3.8 `--ignore-missing-dump`
+##### `--ignore-missing-dump`
 
 To avoid MeiliSearch to throw an error when there is no dump at the given path, the following flag: `--ignore-missing-dump` can be used. MeiliSearch will then continue its process and not import any dump.
 
@@ -135,6 +135,23 @@ If the `--ignore-missing-dump` flag is not specified and the file cannot be foun
 ```
 Error: dump doesn't exist at ":pathToDumps/:missingFile"
 ```
+
+### 1.3.5 Dump version support
+
+To handle dump and Meilisearch version compatibility, it is necessary to also versionize the dumps feature. This
+
+The following table describes which version of the dump correspond to which version of Meilisearch
+
+| Dump version | Meilisearch version                  | Highest compatibility dump version |
+|--------------|--------------------------------------|------------------------------------|
+| `v1`         | `v0.20.0` and below                  | `v3`                               |
+| `v2`         | `v0.21.0` and `v0.21.1`              | `v4`                               |
+| `v3`         | From `v0.22.0` to `v0.24.0` included | `v4`                               |
+| `v4`         | `v0.25.0` and later                  | -                                  |
+
+What does "Highest compatibility dump version" means?
+For maintainance reasons, we cannot guarantee the compatibility from old dump versions to the newest ones.
+Concretely, if the user wants to upgrade from Meilisearch `v0.19.0` (dump `v1`) to `v0.26.0` (dump `v4`), migration should be done in two steps. First, import your `v0.19.0` dump into an instance running any version of Meilisearch between v0.21 and v0.24. Second, export another dump from this instance and import it to a final instance running with `v0.26.0`.
 
 ---
 
