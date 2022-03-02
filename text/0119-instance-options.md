@@ -1,7 +1,5 @@
 - Title: Instance options
 - Start Date: 2022-03-01
-- Specification PR:
-- MeiliSearch Tracking-issues:
 
 # Instance options
 
@@ -38,13 +36,13 @@ There are 2 categories of CLI (command-line interface) options:
 - the ones that expect a value. Ex: `--db-path`.
 - the ones that does expect any value, called also "flags". Ex: `--no-analytics`. Their implicit values are booleans.
 
-### 3.1 Some specific behaviors
+### 3.1. Some specific behaviors
 
-#### Priority between CLI options and environment variables
+#### 3.1.1. Priority between CLI options and environment variables
 
 Command-line options take precedence over environment variables. If the same configuration option is specified both as a command-line option and as an environment variable, Meilisearch will use the command-line option and its respective value.
 
-#### Flags: accepted values for the corresponding environment variable
+#### 3.1.2. Flags: accepted values for the corresponding environment variable
 
 The options that do not expect any value when using the command-line option accepts the following value when using the corresponding environment variable: `n`, `no`, `f`, `false`, `off`, and `0` as `false`. An absent environment variable will also be considered as `false`. Everything else is considered `true`.
 
@@ -53,7 +51,7 @@ Example with the snapshort creation:
 - `export MEIL_SCHEDULE_SNAPSHOT=off` means the snapshot creation is disabled.
 - No variable set means the snapshot creation is disabled.
 
-### 3.2 Error behavior
+### 3.2. Error behavior
 
 1. Some configuration options must specify a value to be valid. Using such a command-line option or an environment variable without specifying a value will throw an error and interrupt the launch process.
 
@@ -91,41 +89,41 @@ error: Found argument 'yes' which wasn't expected, or isn't valid in this contex
 
 The expected behavior of each flag is described in the list above.
 
-### 3.3 Exhaustive list of options
+### 3.3. Exhaustive list of options
 
-- [Database path](#database-path)
-- [Environment](#environment)
-- [HTTP address & port binding](#http-address-port-binding)
-- [Master key](#master-key)
-- [Disable analytics](#disable-analytics)
-- [Dumps](#dumps-destination)
-- [Dumps destination](#dumps-destination)
-- [Import dump](#import-dump)
-- [Ignore missing dump](#ignore-missing-dump)
-- [Ignore dump if DB exists](#ignore-dump-if-db-exists)
-- [Log level](#log-level)
-- [Max index size](#max-index-size)
-- [Max TASK_DB size](#max-task-db-size)
-- [Payload limit size](#payload-limit-size)
-- [Snapshots](#schedule-snapshot-creation)
-- [Schedule snapshot creation](#schedule-snapshot-creation)
-- [Snapshot destination](#snapshot-destination)
-- [Snapshot interval](#snapshot-interval)
-- [Import snapshot](#import-snapshot)
-- [Ignore missing snapshot](#ignore-missing-snapshot)
-- [Ignore snapshot if DB exists](#ignore-snapshot-if-db-exists)
-- [Memory usage](#memory-usage)
-- [Indexing jobs](#indexing-jobs)
-- [SSL configuration](#ssl-authentication-path)
-- [SSL authentication path](#ssl-authentication-path)
-- [SSL certificates path](#ssl-certificates-path)
-- [SSL key path](#ssl-key-path)
-- [SSL OCSP path](#ssl-ocsp-path)
-- [SSL require auth](#ssl-require-auth)
-- [SSL resumption](#ssl-resumption)
-- [SSL tickets](#ssl-tickets)
+- [Database path](#331-database-path)
+- [Environment](#332-environment)
+- [HTTP address & port binding](#333-http-address--port-binding)
+- [Master key](#334-master-key)
+- [Disable analytics](#335-disable-analytics)
+- [Dumps](#336-dumps-destination)
+- [Dumps destination](#336-dumps-destination)
+- [Import dump](#337-import-dump)
+- [Ignore missing dump](#338-ignore-missing-dump)
+- [Ignore dump if DB exists](#339-ignore-dump-if-db-exists)
+- [Log level](#3310-log-level)
+- [Max index size](#3311-max-index-size)
+- [Max TASK_DB size](#3312-max-taskdb-size)
+- [Payload limit size](#3313-payload-limit-size)
+- [Snapshots](#3314-schedule-snapshot-creation)
+- [Schedule snapshot creation](#3314-schedule-snapshot-creation)
+- [Snapshot destination](#3315-snapshot-destination)
+- [Snapshot interval](#3316-snapshot-interval)
+- [Import snapshot](#3317-import-snapshot)
+- [Ignore missing snapshot](#3318-ignore-missing-snapshot)
+- [Ignore snapshot if DB exists](#3319-ignore-snapshot-if-db-exists)
+- [Memory usage](#3320-memory-usage)
+- [Indexing jobs](#3321-indexing-jobs)
+- [SSL configuration](#3322-ssl-authentication-path)
+- [SSL authentication path](#3322-ssl-authentication-path)
+- [SSL certificates path](#3323-ssl-certificates-path)
+- [SSL key path](#3324-ssl-key-path)
+- [SSL OCSP path](#3325-ssl-ocsp-path)
+- [SSL require auth](#3326-ssl-require-auth)
+- [SSL resumption](#3327-ssl-resumption)
+- [SSL tickets](#3328-ssl-tickets)
 
-#### Database path
+#### 3.3.1. Database path
 
 **Environment variable**: `MEILI_DB_PATH`
 **CLI option**: `--db-path`
@@ -134,7 +132,7 @@ The expected behavior of each flag is described in the list above.
 
 Designates the location where database files will be created and retrieved.
 
-#### Environment
+#### 3.3.2. Environment
 
 **Environment variable**: `MEILI_ENV`
 **CLI option**: `--env`
@@ -153,7 +151,7 @@ Configures the instance's environment. Value must be either `production` or `dev
 - Setting a master key is **optional**
 - Search preview is enabled
 
-#### HTTP address & port binding
+#### 3.3.3. HTTP address & port binding
 
 **Environment variable**: `MEILI_HTTP_ADDR`
 **CLI option**: `--http-addr`
@@ -162,7 +160,7 @@ Configures the instance's environment. Value must be either `production` or `dev
 
 Sets the HTTP address and port Meilisearch will use.
 
-#### Master key
+#### 3.3.4. Master key
 
 **Environment variable**: `MEILI_MASTER_KEY`
 **CLI option**: `--master-key`
@@ -177,7 +175,7 @@ Providing a master key is mandatory when `--env` is set to `production`; if none
 
 If no master key is provided in a `development` environment, all routes will be unprotected and publicly accessible.
 
-#### Disable analytics
+#### 3.3.5. Disable analytics
 
 **Environment variable**: `MEILI_NO_ANALYTICS`
 **CLI option**: `--no-analytics`
@@ -187,7 +185,7 @@ If no master key is provided in a `development` environment, all routes will be 
 
 Deactivates Meilisearch's built-in telemetry collect when enabled.
 
-#### Dumps destination
+#### 3.3.6. Dumps destination
 
 **Environment variable**: `MEILI_DUMPS_DIR`
 **CLI option**: `--dumps-dir`
@@ -196,7 +194,7 @@ Deactivates Meilisearch's built-in telemetry collect when enabled.
 
 Sets the directory where Meilisearch will create dump files. If the directory does not exist when a dump is generated it will be created.
 
-#### Import dump
+#### 3.3.7. Import dump
 
 **Environment variable**: N/A
 **CLI option**: `--import-dump`
@@ -209,7 +207,7 @@ Meilisearch will only launch once the dump data has been fully indexed.
 
 More regarding dump behaviors in this [spec](https://github.com/meilisearch/specifications/blob/develop/text/0105-dumps-api.md).
 
-#### Ignore missing dump
+#### 3.3.8. Ignore missing dump
 
 **Environment variable**: N/A
 **CLI option**: `--ignore-missing-dump`
@@ -223,7 +221,7 @@ This command will throw an error if `--import-dump` is not defined.
 
 More information in this [section of the spec](https://github.com/meilisearch/specifications/blob/develop/text/0105-dumps-api.md#138---ignore-missing-dump).
 
-#### Ignore dump if DB exists
+#### 3.3.9. Ignore dump if DB exists
 
 **Environment variable**: N/A
 **CLI option**: `--ignore-dump-if-db-exists`
@@ -237,7 +235,7 @@ This command will throw an error if `--import-dump` is not defined.
 
 More information in this [section of the spec](https://github.com/meilisearch/specifications/blob/develop/text/0105-dumps-api.md#137---ignore-dump-if-db-exists).
 
-#### Log level
+#### 3.3.10. Log level
 
 **Environment variable**: `MEILI_LOG_LEVEL`
 **CLI option**: `--log-level`
@@ -246,7 +244,7 @@ More information in this [section of the spec](https://github.com/meilisearch/sp
 
 Defines how much detail should be present in Meilisearch's logs.
 
-#### Max index size
+#### 3.3.11. Max index size
 
 **Environment variable**: `MEILI_MAX_INDEX_SIZE`
 **CLI option**: `--max-index-size`
@@ -257,7 +255,7 @@ Sets the maximum size of the index. Value must be given in bytes or explicitly s
 
 The `index` stores processed data and is different from the `task` database, which handles pending tasks.
 
-#### Max TASK_DB size
+#### 3.3.12. Max TASK_DB size
 
 **Environment variable**: `MEILI_MAX_TASK_DB_SIZE`
 **CLI option**: `--max-task-db-size`
@@ -268,7 +266,7 @@ Sets the maximum size of the `task` database. Value must be given in bytes or ex
 
 The `task` database handles pending tasks. This is different from the `index` database, which only stores processed data.
 
-#### Payload limit size
+#### 3.3.13. Payload limit size
 
 **Environment variable**: `MEILI_HTTP_PAYLOAD_SIZE_LIMIT`
 **CLI option**: `--http-payload-size-limit`
@@ -277,7 +275,7 @@ The `task` database handles pending tasks. This is different from the `index` da
 
 Sets the maximum size of accepted payloads. Value must be given in bytes or explicitly stating a base unit. For example, the default value can be written as `107374182400`, `'107.7Gb'`, or `'107374 Mb'`.
 
-#### Schedule snapshot creation
+#### 3.3.14. Schedule snapshot creation
 
 **Environment variable**: `MEILI_SCHEDULE_SNAPSHOT`
 **CLI option**: `--schedule-snapshot`
@@ -287,7 +285,7 @@ Sets the maximum size of accepted payloads. Value must be given in bytes or expl
 
 Activates scheduled snapshots when enabled. Snapshots are disabled by default.
 
-#### Snapshot destination
+#### 3.3.15. Snapshot destination
 
 **Environment variable**: `MEILI_SNAPSHOT_DIR`
 **CLI option**: `--snapshot-dir`
@@ -296,7 +294,7 @@ Activates scheduled snapshots when enabled. Snapshots are disabled by default.
 
 Sets the directory where Meilisearch will store snapshots. If the directory does not exist when a snapshot is generated it will be created.
 
-#### Snapshot interval
+#### 3.3.16. Snapshot interval
 
 **Environment variable**: `MEILI_SNAPSHOT_INTERVAL_SEC`
 **CLI option**: `--snapshot-interval-sec`
@@ -305,7 +303,7 @@ Sets the directory where Meilisearch will store snapshots. If the directory does
 
 Defines the interval between each snapshot. Value must be given in seconds.
 
-#### Import snapshot
+#### 3.3.17. Import snapshot
 
 **Environment variable**: N/A
 **CLI option**: `--import-snapshot`
@@ -321,7 +319,7 @@ This command will throw an error if:
 
 This behavior can be modified with the `--ignore-snapshot-if-db-exists` and `--ignore-missing-snapshot` options, respectively.
 
-#### Ignore missing snapshot
+#### 3.3.18. Ignore missing snapshot
 
 **Environment variable**: N/A
 **CLI option**: `--ignore-missing-snapshot`
@@ -333,7 +331,7 @@ Prevents a Meilisearch instance from throwing an error when `--import-snapshot` 
 
 This command will throw an error if `--import-snapshot` is not defined.
 
-#### Ignore snapshot if DB exists
+#### 3.3.19. Ignore snapshot if DB exists
 
 **Environment variable**: N/A
 **CLI option**: `--ignore-snapshot-if-db-exists`
@@ -345,7 +343,7 @@ Prevents a Meilisearch instance with an existing database from throwing an error
 
 This command will throw an error if `--import-snapshot` is not defined.
 
-#### Memory usage
+#### 3.3.20. Memory usage
 
 **Environment variable**: `MEILI_MAX_MEMORY`
 **CLI option**: `--max-memory`
@@ -361,7 +359,7 @@ Value must be given in bytes or explicitly stating a base unit. For example, the
 - This command-line option will not perfectly ensure the RAM usage, but will help you manage multiple Meilisearch engines on the same machine (for example, using Kubernetes). The core team cannot guarantee the exact usage of the RAM.
 - If the number set is higher than the real available RAM in the machine, we cannot prevent Meilisearch from crashing.
 
-#### Indexing jobs
+#### 3.3.21. Indexing jobs
 
 **Environment variable**: `MEILI_INDEXING_JOBS`
 **CLI option**: `--indexing-jobs`
@@ -376,7 +374,7 @@ Obviously, multi-threading is not possible in machines with only one processor c
 
 If the number set is higher than the real number of core available in the machine, Meilisearch will use the maximum number of available cores.
 
-#### SSL authentication path
+#### 3.3.22. SSL authentication path
 
 **Environment variable**: `MEILI_SSL_AUTH_PATH`
 **CLI option**: `--ssl-auth-path`
@@ -385,7 +383,7 @@ If the number set is higher than the real number of core available in the machin
 
 Enables client authentication in the specified path.
 
-#### SSL certificates path
+#### 3.3.23. SSL certificates path
 
 **Environment variable**: `MEILI_SSL_CERT_PATH`
 **CLI option**: `--ssl-cert-path`
@@ -396,7 +394,7 @@ Sets the server's SSL certificates.
 
 Value must be a path to PEM-formatted certificates. The first certificate should certify the KEYFILE supplied by `--ssl-key-path`. The last certificate should be a root CA.
 
-#### SSL key path
+#### 3.3.24. SSL key path
 
 **Environment variable**: `MEILI_SSL_KEY_PATH`
 **CLI option**: `--ssl-key-path`
@@ -407,7 +405,7 @@ Sets the server's SSL keyfiles.
 
 Value must be a path to an RSA private key or PKCS8-encoded private key, both in PEM format.
 
-#### SSL OCSP path
+#### 3.3.25. SSL OCSP path
 
 **Environment variable**: `MEILI_SSL_OCSP_PATH`
 **CLI option**: `--ssl-ocsp-path`
@@ -418,7 +416,7 @@ Sets the server's OCSP file. *Optional*
 
 Reads DER-encoded OCSP response from OCSPFILE and staple to certificate.
 
-#### SSL require auth
+#### 3.3.26. SSL require auth
 
 **Environment variable**: `MEILI_SSL_REQUIRE_AUTH`
 **CLI option**: `--ssl-require-auth`
@@ -430,7 +428,7 @@ Makes SSL authentication mandatory.
 
 Sends a fatal alert if the client does not complete client authentication.
 
-#### SSL resumption
+#### 3.3.27. SSL resumption
 
 **Environment variable**: `MEILI_SSL_RESUMPTION`
 **CLI option**: `--ssl-resumption`
@@ -440,7 +438,7 @@ Sends a fatal alert if the client does not complete client authentication.
 
 Activates SSL session resumption.
 
-#### SSL tickets
+#### 3.3.28. SSL tickets
 
 **Environment variable**: `MEILI_SSL_TICKETS`
 **CLI option**: `--ssl-tickets`
