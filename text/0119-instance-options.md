@@ -210,7 +210,7 @@ If no master key is provided in a `development` environment, all routes will be 
 
 ⚠️ This command-line option does not take any values. Assigning a value will throw an error.
 
-Deactivates Meilisearch's built-in telemetry when enabled.
+Deactivates Meilisearch's built-in telemetry collect when enabled.
 
 ### Dumps destination
 
