@@ -221,6 +221,8 @@ Prevents a Meilisearch instance from throwing an error when `--import-dump` does
 
 This command will throw an error if `--import-dump` is not defined.
 
+More information in this [section of the spec](https://github.com/meilisearch/specifications/blob/develop/text/0105-dumps-api.md#138---ignore-missing-dump).
+
 #### Ignore dump if DB exists
 
 **Environment variable**: N/A
@@ -232,6 +234,8 @@ This command will throw an error if `--import-dump` is not defined.
 Prevents a Meilisearch instance with an existing database from throwing an error when using `--import-dump`. Instead, the dump will be ignored and Meilisearch will launch using the existing database.
 
 This command will throw an error if `--import-dump` is not defined.
+
+More information in this [section of the spec](https://github.com/meilisearch/specifications/blob/develop/text/0105-dumps-api.md#137---ignore-dump-if-db-exists).
 
 #### Log level
 
