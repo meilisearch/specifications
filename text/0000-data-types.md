@@ -50,7 +50,7 @@ After the tokenizing process, each word is indexed and stored in the global dict
 
 > See 3.2. Array Tokenization section.
 
-Meilisearch accepts complex data structures like an array of objects, no matter the deepness level.
+Meilisearch accepts complex data structures, no matter the deepness level.
 
 > See 3.3. Nested structures section.
 
@@ -60,7 +60,7 @@ JSON objects are written in key/value pairs and surrounded by curly braces. Inte
 
 After the tokenizing process, each word is indexed and stored in the global dictionary of the corresponding index.
 
-Meilisearch accepts complex data structures like nested levels of objects.
+Meilisearch accepts complex data structures, no matter the deepness level.
 
 > See 3.3. Nested structures section.
 
