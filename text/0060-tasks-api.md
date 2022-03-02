@@ -64,9 +64,9 @@ The motivation is to stabilize the current `update` resource to a version that c
 | details | object |  Details information for a task payload. See Task Details part. |
 | error | object | Error object containing error details and context when a task has a `failed` status. See https://github.com/meilisearch/specifications/pull/61|
  | duration | string | Total elapsed time the engine was in processing state expressed as an `ISO-8601` duration format. Times below the second can be expressed with the `.` notation, e.g., `PT0.5S` to express `500ms`. Default is set to `null`.   |
-| enqueuedAt | string | Represent the date and time as `ISO-8601` format when the task has been enqueued |
-| startedAt | string | Represent the date and time as `ISO-8601` format when the task has been dequeued and started to be processed. Default is set to `null`|
-| finishedAt | string | Represent the date and time as `ISO-8601` format when the task has `failed` or `succeeded`. Default is set to `null` |
+| enqueuedAt | string | Represent the date and time as `RFC 3339` format when the task has been enqueued |
+| startedAt | string | Represent the date and time as `RFC 3339` format when the task has been dequeued and started to be processed. Default is set to `null`|
+| finishedAt | string | Represent the date and time as `RFC 3339` format when the task has `failed` or `succeeded`. Default is set to `null` |
 
 > 💡 The order of the fields must be returned in this order.
 
@@ -77,7 +77,7 @@ The motivation is to stabilize the current `update` resource to a version that c
 | uid        | integer | Unique sequential identifier           |
 | indexUid   | string | Unique index identifier |
 | status     | string  | Status of the task. Value is `enqueued` |
-| enqueuedAt | string | Represent the date and time as `ISO-8601` format when the task has been enqueued |
+| enqueuedAt | string | Represent the date and time as `RFC 3339` format when the task has been enqueued |
 
 
 > 💡 The order of the fields must be returned in this order.
