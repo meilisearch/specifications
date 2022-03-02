@@ -53,7 +53,7 @@ Example with the snapshort creation:
 - `export MEIL_SCHEDULE_SNAPSHOT=off` means the snapshot creation is disabled.
 - No variable set means the snapshot creation is disabled.
 
-### Error bahavior
+### Error behavior
 
 1. Some configuration options must specify a value. Using a command-line option (that requires a value) or an environment variable without specifying a value will throw an error and interrupt the launch process.
 
