@@ -26,7 +26,7 @@ Same behavior using the command-line option:
 
 ## Motivation
 
-The default behavior of Meilisearch when launching it without any options (`./meilisearch`) is not enough to satisfy all the user needs. We need to provide options to enable (or disable) available features or to customize them.
+When Meilisearch is launched, the default configuration may not meet the specific needs of users. Meilisearch exposes configurable options to allow users to fine-tune the behavior of the search engine.
 
 ## Functional Specification
 
