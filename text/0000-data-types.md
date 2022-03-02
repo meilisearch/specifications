@@ -141,7 +141,7 @@ The strings above will be separated by soft and hard spaces exactly as explained
 
 ### 3.2 Nested Structures
 
-Nested structures (e.g. `Object`, `Array of Objects, etc) are internally flattened to a document's root level.
+Nested structures (e.g. `Object`, `Array of Objects`, etc) are internally flattened to a document's root level.
 
 It allows expressing a nested field in all Meilisearch parameters that accept document attributes.
 
