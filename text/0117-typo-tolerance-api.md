@@ -19,16 +19,16 @@ Meilisearch can adapt to different use-cases by providing customization options 
 
 | Field                                            | Type            | Required |
 |--------------------------------------------------|-----------------|----------|
-| [enabled](#311-enabled)                          | Boolean         | True     |
-| [disableOnAttributes](#312-disableonattributes)  | Array of String | True     |
-| [disableOnWords](#313-disableonwords)            | Array of String | True     |
-| [minWordSizeFor1Typo](#314-minwordsizefor1typo)  | Integer         | True     |
-| [minWordSizeFor2Typos](#315-minwordsizefor2typos)| Integer         | True     |
+| [enabled](#311-enabled)                          | Boolean         | False    |
+| [disableOnAttributes](#312-disableonattributes)  | Array of String | False    |
+| [disableOnWords](#313-disableonwords)            | Array of String | False    |
+| [minWordSizeFor1Typo](#314-minwordsizefor1typo)  | Integer         | False    |
+| [minWordSizeFor2Typos](#315-minwordsizefor2typos)| Integer         | False    |
 
 #### 3.1.1. `enabled`
 
 - Type: Boolean
-- Required: True
+- Required: False
 - Default: `true`
 
 Whether the typo tolerance feature is enabled.
@@ -44,7 +44,7 @@ The typo tolerance feature is still used to match documents.
 ### 3.1.2. `disableOnAttributes`
 
 - Type: Array of String
-- Required: True
+- Required: False
 - Default: `[]`
 
 `disableOnAttributes` disable the typo tolerance feature on the specified attributes set.
@@ -54,7 +54,7 @@ Any attributes defined in `disableOnAttributes` won't have their values matched 
 ### 3.1.3. `disableOnWords`
 
 - Type: Array of String
-- Required: True
+- Required: False
 - Default: `[]`
 
 `disableOnWords` disable the typo tolerance feature for a set of search query terms.
@@ -66,7 +66,7 @@ If `Javascript` is specified in `disableOnWords`, the engine won't apply the typ
 ### 3.1.4. `minWordSizeFor1Typo`
 
 - Type: Integer
-- Required: True
+- Required: False
 - Default: `5`
 
 `minWordSizeFor1Typo` customize the minimum size for a word to tolerate 1 typo.
@@ -78,7 +78,7 @@ If `Javascript` is specified in `disableOnWords`, the engine won't apply the typ
 ### 3.1.5. `minWordSizeFor2Typos`
 
 - Type: Integer
-- Required: True
+- Required: False
 - Default: `9`
 
 `minWordSizeFor2Typos` customize the minimum size for a word to tolerate 2 typos.
@@ -109,6 +109,8 @@ Allow fetching the current definition of the typo tolerance feature for an index
     }
 ```
 
+All properties must be returned when the resource is retrieved.
+
 ##### 3.2.1.1.2. Errors
 
 - 🔴 If the index does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
@@ -117,7 +119,7 @@ Allow fetching the current definition of the typo tolerance feature for an index
 
 #### 3.2.1.2. `POST` - `indexes/:index_uid/settings/typo-tolerance`
 
-Allow customizing the default settings of the typo tolerance feature for an index.
+Allow customizing partially the default settings of the typo tolerance feature for an index.
 
 Request payload
 
