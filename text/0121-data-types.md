@@ -342,6 +342,40 @@ The second representation of `a.b` in its nested form is merged with the first r
 
 Users can't and should not rely on a given document field order when `searchableAttributes` is `[*]`.
 
+#### 3.2.4.7 Dot-notation expression
+
+All Meilisearch parameters that accept document attributes support the dot-notation.
+
+Here is an exhaustive list of parameters supporting this notation:
+
+Index API
+
+- `primaryKey`
+
+Document API
+
+- `attributesToRetrieve`
+- `primaryKey`
+
+Settings API
+
+- `displayedAttributes`
+- `searchableAttributes`
+- `filterableAttributes`
+- `sortableAttributes`
+- `rankingRules` (Custom ranking rule declaration)
+- `distinctAttribute`
+
+Search API
+
+- `attributesToRetrieve`
+- `attributesToHighlight`
+- `attributesToCrop`
+- `filter`
+- `sort`
+- `facetsDistribution`
+
 ## 4. Future Possibilities
 
 - Change the default behavior of `searchableAttributes` so that it is predictable in all cases. We may remove the priority based on a field position in a document.
+- Support the wildcard notation with the dot-notation. e.g. `person.*` or `person.address.*`
