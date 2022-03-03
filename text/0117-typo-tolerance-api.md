@@ -9,22 +9,21 @@ This specification describes the customizable options for the typo tolerance set
 
 ## 2. Motivation
 
-Tolerance to typos is critical when building an enjoyable search experience. Meilisearch ranks typo-free matched documents above others based on default settings that we believe are best for most users.
+Tolerance to typos is critical when building an enjoyable search experience. Meilisearch ranks typo-free matched documents above others based on the default settings that we believe are best for most users.
 
-Meilisearch can adapt to different use-cases with specific requirements by providing customization options for the typo tolerance feature.
+Meilisearch can adapt to different use-cases by providing customization options for the typo tolerance feature.
 
 ## 3. Functional Specification
 
 ### 3.1. `typoTolerance` API resource definition
 
-| Field                | Type            | Required |
-|----------------------|-----------------|----------|
-| enabled              | Boolean         | True     |
-| disableOnAttributes  | Array of String | True     |
-| disableOnWords       | Array of String | True     |
-| minWordSizeFor1Typo  | Integer         | True     |
-| minWordSizeFor2Typos | Integer         | True     |
-
+| Field                                            | Type            | Required |
+|--------------------------------------------------|-----------------|----------|
+| [enabled](#311-enabled)                          | Boolean         | True     |
+| [disableOnAttributes](#312-disableonattributes)  | Array of String | True     |
+| [disableOnWords](#313-disableonwords)            | Array of String | True     |
+| [minWordSizeFor1Typo](#314-minwordsizefor1typo)  | Integer         | True     |
+| [minWordSizeFor2Typos](#315-minwordsizefor2typos)| Integer         | True     |
 
 #### 3.1.1. `enabled`
 
@@ -34,9 +33,13 @@ Meilisearch can adapt to different use-cases with specific requirements by provi
 
 Whether the typo tolerance feature is enabled.
 
+##### 3.1.1.1. Impacts on the `typo` ranking rule
+
 The presence of `typo` in the ranking rules setting does not influence the activation/deactivation of the typo tolerance feature.
 
-If the `rankingRules` parameter of the index settings does not contain the `typo` rule, the results are not sorted according to the number of typos found. However, the typo tolerance feature is still used to match documents.
+If the `rankingRules` parameter of the index settings does not contain the `typo` rule, the results are not sorted according to the number of typos found.
+
+The typo tolerance feature is still used to match documents.
 
 ### 3.1.2. `disableOnAttributes`
 
@@ -46,8 +49,7 @@ If the `rankingRules` parameter of the index settings does not contain the `typo
 
 `disableOnAttributes` disable the typo tolerance feature on the specified attributes set.
 
-> Any attributes defined in `disableOnAttributes` won't have their values matched by the typo tolerance.
-
+Any attributes defined in `disableOnAttributes` won't have their values matched by the typo tolerance.
 
 ### 3.1.3. `disableOnWords`
 
@@ -57,7 +59,9 @@ If the `rankingRules` parameter of the index settings does not contain the `typo
 
 `disableOnWords` disable the typo tolerance feature for a set of search query terms.
 
-> If `Javascript` is specified in `disableOnWords`, the engine won't apply the typo tolerance on the query term `Javascript` when typed at search time.
+#### 3.1.3.4. Example
+
+If `Javascript` is specified in `disableOnWords`, the engine won't apply the typo tolerance on the query term `Javascript` if typed at search time.
 
 ### 3.1.4. `minWordSizeFor1Typo`
 
@@ -69,6 +73,8 @@ If the `rankingRules` parameter of the index settings does not contain the `typo
 
 > Given the default value `5`, the search engine starts to apply typo tolerance on a query term if its length is at least equal to 5 characters.
 
+> See [2.1. Typos calculation section](#21-typos-calculation)
+
 ### 3.1.5. `minWordSizeFor2Typos`
 
 - Type: Integer
@@ -79,13 +85,15 @@ If the `rankingRules` parameter of the index settings does not contain the `typo
 
 > Given the default value `9`, the search engine handles up to 2 typos on a query term if its length is at least equal to 9 characters.
 
+> See [2.1. Typos calculation section](#21-typos-calculation)
+
 ## 3.2. API Endpoints Definition
 
-### 3.2.1 `indexes/:index_uid/settings/typo-tolerance`
+### 3.2.1. `indexes/:index_uid/settings/typo-tolerance`
 
 Manage the typo tolerance configuration for an index.
 
-#### 3.2.1.1 `GET` - `indexes/:index_uid/settings/typo-tolerance`
+#### 3.2.1.1. `GET` - `indexes/:index_uid/settings/typo-tolerance`
 
 Allow fetching the current definition of the typo tolerance feature for an index.
 
@@ -101,13 +109,13 @@ Allow fetching the current definition of the typo tolerance feature for an index
     }
 ```
 
-##### 3.2.1.1.2 Errors
+##### 3.2.1.1.2. Errors
 
 - 🔴 If the index does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
-- 🔴 If secured, accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 If secured, accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 If Meilisearch is secured, accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 If Meilisearch is secured, accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
-#### 3.2.1.2 `POST` - `indexes/:index_uid/settings/typo-tolerance`
+#### 3.2.1.2. `POST` - `indexes/:index_uid/settings/typo-tolerance`
 
 Allow customizing the default settings of the typo tolerance feature for an index.
 
@@ -140,41 +148,49 @@ Request payload
 }
 ```
 
-> Returns a 202 response. See [Tasks API](0060-tasks-api.md)
+> Returns a 202 response. See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted)
 
-##### 3.2.1.2.1 Errors
+##### 3.2.1.2.1. Errors
 
 - 🔴 If the index does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
-- 🔴 If secured, accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 If secured, Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 If Meilisearch is secured, accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 If Meilisearch is secured, Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 - 🔴 Omitting Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
 - 🔴 Sending an empty Content-Type returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
+-
 
-#### 3.2.1.3 `DELETE`- `indexes/:index_uid/settings/typo-tolerance`
+#### 3.2.1.3. `DELETE`- `indexes/:index_uid/settings/typo-tolerance`
 
 Allow resetting the typo tolerance feature to the default for an index.
 
-> Returns a 202 response. See [Tasks API](0060-tasks-api.md)
+> Returns a 202 response. See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted)
 
-##### 3.2.1.3.1 Errors
+##### 3.2.1.3.1. Errors
 
 - 🔴 If the index does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
-- 🔴 If secured, accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 If secured, Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 If Meilisearch is secured, accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 If Meilisearch is secured, Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
-### 3.3.1 `indexes/:index_uid/settings`
+### 3.3.1. `indexes/:index_uid/settings`
 
-> See [Settings API]
+TODO: Global Settings API spec and cross-ref here
 
 ## 2. Technical Details
-tbd
+
+### 2.1. Typos calculation
+
+TODO: Describes how the engine handle typo calculation.
+
+### 2.2. Typo ranking rule
+
+TODO: Describes the impact of the typo ranking rule regarding search results ranking.
 
 ## 3. Future Possibilities
 
-- Expose `typoTolerance` properties at search time.
-- Add the possibility to disable typo-tolerance on all numeric fields.
+- Expose `typoTolerance` resource at search time to override index settings.
+- Add the possibility to disable the typo tolerance feature on all numeric fields.
 - Add different modes of result matching for the typo-tolerance feature. e.g. `default`/`min`/`strict`
 - Replace `POST` to `PATCH` verb to allow partial edit of the settings and embrace REST API convention.
