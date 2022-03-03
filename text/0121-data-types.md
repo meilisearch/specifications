@@ -1,5 +1,4 @@
 - Title: Data Types
-- Start Date: 2022-03-02
 
 # Data Types
 
@@ -13,62 +12,60 @@ No matter the type, the value of a field is unchanged in the returned documents 
 
 For example, if you have a complex field with nested objects, this field is returned with the same complexity upon search.
 
-Based on their type, however, the fields are handled and used in different ways by Meilisearch. The type affects how a field is used for search results.
+However, based on their type, the fields are handled and used in different ways by Meilisearch.
 
 ### 2.1. Supported types
 
-| Type    |
-|---------|
-| String  |
-| Numeric |
-| Boolean |
-| Array   |
-| Object  |
-| null    |
+- [String](#211-string)
+- [Numeric](#212-numeric)
+- [Boolean](#213-boolean)
+- [Array](#214-array)
+- [Object](#215-object)
+- [null](#216-null)
 
 #### 2.1.1. String
 
-`String` is the primary type for indexing data in Meilisearch. It enables to create the content in which to search.
+`string` is the primary type for indexing data in Meilisearch.
 
-> See 3.1. String Tokenization section.
+> See [3.1. String Tokenization section](#31-string-tokenization).
 
 #### 2.1.2. Numeric
 
-A numeric type (`integer`, `float`) is internally converted to a human-readable decimal number string representation. Numeric types can be searched as they are converted to strings.
+The engine internally converts a `numeric` typed value (`integer`/`float`) to a human-readable decimal number string representation to make them searchable.
 
-The `>`, `>=`, `<`, and `<=` opearators of the `filter` search parameter apply only to numerical values.
+The `>`, `>=`, `<`, and `<=` `filter` operators apply only to numerical values.
 
 #### 2.1.3. Boolean
 
-A `Boolean` value, which is either `true` or `false`, is received and converted to a lowercase human-readable text (i.e. `true` and `false`). Booleans can be searched as they are converted to strings.
+The engine internally converts a `boolean` typed value (`true`/`false`) to a lowercase human-readable text to make it searchable.
 
 #### 2.1.4. Array
 
-An array represents a collection of elements that can be any other type for instance. An array is recursively broken into separate string tokens, which means separate words.
+An array is recursively broken into separate string tokens, which means separate words.
 
 After the tokenizing process, each word is indexed and stored in the global dictionary of the corresponding index.
 
-> See 3.2. Array Tokenization section.
+> See [3.2. Array Tokenization section](#32-array-tokenization).
 
 Meilisearch accepts complex data structures, no matter the deepness level.
 
-> See 3.4. Nested structures section.
+> See [3.4. Nested structures section](#34-nested-structures).
 
 #### 2.1.5. Object
 
-JSON objects are written in key/value pairs and surrounded by curly braces. Internally, an object is flattened at the root level of a document.
+The engine flattens JSON objects at the root level of a document.
 
 After the tokenizing process, each word is indexed and stored in the global dictionary of the corresponding index.
 
-> See 3.3. Object section.
+> See [3.3. Object section](#33-object).
 
 Meilisearch accepts complex data structures, no matter the deepness level.
 
-> See 3.4. Nested structures section.
+> See [3.4. Nested structures section](#34-nested-structures).
 
 #### 2.1.6. `null`
 
-The null type can be pushed into Meilisearch but it won't be taken into account for indexing.
+The `null` type is not taken into account at indexing.
 
 ## 3. Technical Details
 
@@ -80,12 +77,12 @@ A string is passed to a tokenizer and is then broken into separate string tokens
 
 For Latin-based languages, the words are separated by space.
 For Kanji characters, the words are separated by character.
-For Latin-based languages, there are two kinds of space separators:
 
+For Latin-based languages, there are two kinds of space separators:
 - **Soft spaces (distance: 1)**: whitespaces, quotes, `-` | `_` | `\` | `:` | `/` | `\\` | `@` | `"` | `+` | `~` | `=` | `^` | `*` | `#`
 - **Hard spaces (distance: 8)**: `.` | `;` | `,` | `!` | `?` | `(` | `)` | `[` | `]` | `{` | `}`| `|`
 
-Distance plays an essential role in determining whether documents are relevant since one of the ranking rules is the proximity rule. The proximity rule sorts the results by increasing distance between matched query terms. Then, two words separated by a soft space are closer and thus considered more relevant than two words separated by a hard space.
+Distance plays an essential role in determining whether documents are relevant. The `proximity` ranking rule sorts the results by increasing distance between matched query terms. Two words separated by a soft space are closer and thus considered more relevant than two words separated by a hard space.
 
 After the tokenizing process, each word is indexed and stored in the global dictionary of the corresponding index.
 
@@ -120,7 +117,7 @@ This will happen because the proximity distance between `Bruce` and `Willis` is 
 
 An array is recursively broken into separate string tokens, which means separate words. After the tokenizing process, each word is indexed and stored in the global dictionary of the corresponding index.
 
-#### 3.2.1 Examples
+#### 3.2.1. Examples
 
 The following input:
 
@@ -142,7 +139,7 @@ Will be processed as if all elements were arranged at the same level:
 
 The strings above will be separated by soft and hard spaces exactly as explained in the string example.
 
-> See 3.1.1. Examples section.
+> See [3.1.1. Examples section](#311-examples).
 
 ### 3.3. Object
 
@@ -151,18 +148,17 @@ The strings above will be separated by soft and hard spaces exactly as explained
 The following input:
 
 ```json
-
 {
-  "movie_id": "1564saqw12ss",
-  "title": "Kung fu Panda"
+    "movie_id": "1564saqw12ss",
+    "title": "Kung fu Panda"
 }
 ```
 
-In the example above, `movie_id`, `1564saqw12ss`, `title`, `Kung fu Panda` are all considered as sentences. The colon `:` and comma `,` characters are used as separators.
+In the example above, `movie_id`, `1564saqw12ss`, `title`, `Kung fu Panda` are all considered sentences. The colon `:` and comma `,` characters are used as separators.
 
 `"movie_id. 1564saqw12ss. title. Kung fu Panda."`
 
-These sentences will be separated by soft and hard spaces exactly as explained in the string example.
+These sentences will be separated by soft and hard spaces precisely as explained in the string example.
 
 ### 3.4. Nested Structures
 
@@ -170,9 +166,7 @@ Nested structures (e.g. `Object`, `Array of Objects`, etc) are internally flatte
 
 It allows expressing a nested field in all Meilisearch parameters that accept document attributes.
 
-Meilisearch accepts the `.` notation to express a nested field location.
-
-> See 3.2.1. Examples section.
+Meilisearch accepts the `.` (dot-notation) to express a nested field location in a document structure.
 
 ### 3.4.1. Examples
 
@@ -315,5 +309,39 @@ Flattens to:
 }
 ```
 
+#### 3.2.4.6. searchableAttributes default value case
+
+By default, `searchableAttributes` is set to `[*]`, making all document fields are searchable.
+
+In that case, `Attribute` ranking rule consider a field higher in the internal representation more important than a lower one.
+
+Field order is lost if the engine flattens identical field values are not co-located in a document payload.
+
+The following JSON document:
+
+```json
+{
+    "a.b": "T-shirt",
+    "price": 2.0,
+    "a": {
+        "b": "Nice T-shirt"
+    }
+}
+```
+
+Is internally represented
+
+```json
+{
+    "a.b": ["T-shirt", "Nice T-shirt"],
+    "price": 2.0
+}
+```
+
+The second representation of `a.b` in its nested form is merged with the first representation of `a.b`.
+
+Users can't and should not rely on a given document field order when `searchableAttributes` is `[*]`.
+
 ## 4. Future Possibilities
-n/a
+
+- Change the default behavior of `searchableAttributes` so that it is predictable in all cases. We may remove the priority based on a field position in a document.
