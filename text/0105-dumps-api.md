@@ -119,7 +119,7 @@ Error: dump doesn't exist at ":pathToDumps/:missingFile"
 
 ### 3.4. Dump version support
 
-To handle dump and Meilisearch version compatibility, it is necessary to also versionize the dumps feature. This
+To handle dump and Meilisearch version compatibility, it is necessary to also versionize the dumps feature.
 
 The following table describes which version of the dump correspond to which version of Meilisearch
 
