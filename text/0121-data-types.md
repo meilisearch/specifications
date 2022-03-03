@@ -342,7 +342,9 @@ The second representation of `a.b` in its nested form is merged with the first r
 
 Users can't and should not rely on a given document field order when `searchableAttributes` is `[*]`.
 
-#### 3.2.4.7 Dot-notation expression
+#### 3.2.4.7. Dot-notation expression
+
+##### 3.2.4.7.1. Concerned API parameters
 
 All Meilisearch parameters that accept document attributes support the dot-notation.
 
@@ -375,7 +377,74 @@ Search API
 - `sort`
 - `facetsDistribution`
 
+##### 3.2.4.7.2. Examples
+
+###### 3.2.4.7.2.1 Expressing a precise nested field
+
+Given this document structure
+
+```json
+{
+    "id": 0,
+    "person": {
+        "firstname": "John",
+        "lastname": "Doe",
+        "address": {
+            "country": "US",
+            "city": "New York"
+        }
+    }
+}
+```
+
+A precise field can be expressed using the dot-notation
+
+```json
+{
+    "attributesToHighlight": ["person.firstname"]
+}
+```
+
+###### 3.2.4.7.2.2 Expressing all object properties
+
+Given this document structure
+
+```json
+{
+    "id": 0,
+    "person": {
+        "firstname": "John",
+        "lastname": "Doe",
+        "address": {
+            "country": "US",
+            "city": "New York"
+        }
+    }
+}
+```
+
+All properties of a document nested object can be expressed using the dot-notation
+
+```json
+{
+    "attributesToHighlight": ["person"]
+}
+```
+
+It's equivalent to
+
+```json
+{
+    "attributesToHighlight": [
+        "person.firstname",
+        "person.lastname",
+        "person.address.country",
+        "person.address.city"
+    ]
+}
+```
+
 ## 4. Future Possibilities
 
-- Change the default behavior of `searchableAttributes` so that it is predictable in all cases. We may remove the priority based on a field position in a document.
+- Change the default behavior of `searchableAttributes` so that it is predictable. We may remove the priority based on a field position in a document.
 - Support the wildcard notation with the dot-notation. e.g. `person.*` or `person.address.*`
