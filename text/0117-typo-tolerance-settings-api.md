@@ -1,4 +1,4 @@
-- Title: Typo Tolerance API
+- Title: Typo Tolerance Settings API
 - Start Date: 2022-02-22
 
 # Typo Tolerance API
