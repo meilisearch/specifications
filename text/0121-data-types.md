@@ -10,7 +10,7 @@ This specification describes the different data types supported for the fields i
 
 No matter the type, the value of a field is unchanged in the returned documents upon search.
 
-For example, if you have a complex field with nested objects, this field is returned with the same complexity upon search.
+For example, if you have a complex document structure with nested objects, the document is returned with the same complexity upon search.
 
 However, based on their type, the fields are handled and used in different ways by Meilisearch.
 
