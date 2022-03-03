@@ -222,6 +222,113 @@ HTTP Code: `400 Bad Request`
 
 ---
 
+## invalid_typo_tolerance_enabled
+
+`Asynchronous`
+
+### Context
+
+This error happens when the `enabled` field of `typoTolerance` resource is invalid.
+
+### Error Definition
+
+```json
+{
+    "message": "`enabled` field value `:value` is invalid. It should be a boolean (`true` or `false`).",
+    "code": "invalid_typo_tolerance_enabled",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_typo_tolerance_enabled"
+}
+```
+
+---
+
+## invalid_typo_tolerance_disable_on_attributes
+
+`Asynchronous`
+
+### Context
+
+This error happens when the `disableOnAttributes` field of `typoTolerance` resource is invalid.
+
+### Error Definition
+
+```json
+{
+    "message": "`disableOnAttributes` field value `:value` is invalid. It should be an array of string representing document attributes.",
+    "code": "invalid_typo_tolerance_disable_on_attributes",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_typo_tolerance_disable_on_attributes"
+}
+```
+
+---
+
+## invalid_typo_tolerance_disable_on_words
+
+`Asynchronous`
+
+### Context
+
+This error happens when the `disableOnWords` field of `typoTolerance` resource is invalid.
+
+### Error Definition
+
+//TODO: Should it check for space in a given string?
+
+```json
+{
+    "message": "`disableOnWords` field value `:value` is invalid. It should be an array of string representing words.",
+    "code": "invalid_typo_tolerance_disable_on_words",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_typo_tolerance_disable_on_words"
+}
+```
+
+---
+
+## invalid_typo_tolerance_min_word_size_for_1_typo
+
+`Asynchronous`
+
+### Context
+
+This error happens when the `minWordSizeFor1Typo` field of `typoTolerance` resource is invalid.
+
+### Error Definition
+
+```json
+{
+    "message": "`minWordSizeFor1Typo` field value `:value` is invalid. It should be an integer superior to `0` and inferior or equals to `minWordSizeFor2Typos`.",
+    "code": "invalid_typo_tolerance_min_word_size_for_1_typo",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_typo_tolerance_min_word_size_for_1_typo"
+}
+```
+
+---
+
+## invalid_typo_tolerance_min_word_size_for_2_typos
+
+`Asynchronous`
+
+### Context
+
+This error happens when the `minWordSizeFor2Typos` field of `typoTolerance` resource is invalid.
+
+### Error Definition
+
+```json
+{
+    "message": "`minWordSizeFor2Typos` field value `:value` is invalid. It should be an integer superior to 0 and superior or equals to `minWordSizeFor1Typo`.",
+    "code": "invalid_typo_tolerance_min_word_size_for_2_typos",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_typo_tolerance_min_word_size_for_2_typos"
+}
+```
+
+---
+
 ## index_already_exists
 
 `Asynchronous`

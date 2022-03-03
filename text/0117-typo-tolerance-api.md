@@ -162,7 +162,11 @@ Request payload
 - 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
--
+- 🔴 Sending an invalid value for the `enabled` field returns an [invalid_typo_tolerance_enabled](0061-error-format-and-definitions.md#invalid_typo_tolerance_enabled) error.
+- 🔴 Sending an invalid value for the `disableOnAttributes` field returns an [invalid_typo_tolerance_disable_on_attributes](0061-error-format-and-definitions.md#invalid_typo_tolerance_disable_on_attributes) error.
+- 🔴 Sending an invalid value for the `disableOnWords` field returns an [invalid_typo_tolerance_disable_on_words](0061-error-format-and-definitions.md#invalid_typo_tolerance_disableOnWords) error.
+- 🔴 Sending an invalid value for the `minWordSizeFor1Typo` field returns an [invalid_typo_tolerance_min_word_size_for_1_typo](0061-error-format-and-definitions.md#invalid_typo_tolerance_min_word_size_for_1_typo) error.
+- 🔴 Sending an invalid value for the `minWordSizeFor2Typos` field returns an [invalid_typo_tolerance_min_word_size_for_2_typos](0061-error-format-and-definitions.md#invalid_typo_tolerance_min_word_size_for_2_typos) error.
 
 #### 3.2.1.3. `DELETE`- `indexes/:index_uid/settings/typo-tolerance`
 
@@ -192,7 +196,7 @@ TODO: Describes the impact of the typo ranking rule regarding search results ran
 
 ## 3. Future Possibilities
 
-- Expose `typoTolerance` resource at search time to override index settings.
+- Expose `typoTolerance` resource as a search parameter to override index settings.
 - Add the possibility to disable the typo tolerance feature on all numeric fields.
 - Add different modes of result matching for the typo-tolerance feature. e.g. `default`/`min`/`strict`
 - Replace `POST` to `PATCH` verb to allow partial edit of the settings and embrace REST API convention.
