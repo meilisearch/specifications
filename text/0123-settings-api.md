@@ -19,7 +19,7 @@ N/A
 | [searchable-attributes](0123-searchable-attributes-setting-api.md) | `searchableAttributes` sub-resource API endpoints definition |
 | [filterable-attributes]()                                          | `filterableAttributes` sub-resource API endpoints definition |
 | [sortable-attributes]()                                            | `sortableAttributes` sub-resource API endpoints definition   |
-| [ranking-rules]()                                                  | `rankingRules` sub-resource API endpoints definition         |
+| [ranking-rules](0123-ranking-rules-setting-api.md)                 | `rankingRules` sub-resource API endpoints definition         |
 | [stop-words](0123-stop-words-setting-api.md)                       | `stopWords` sub-resource API endpoints definition            |
 | [synonyms](0123-synonyms-setting-api.md)                           | `synonyms` sub-resource API endpoints definition             |
 | [distinct-attribute](0123-distinct-attribute-setting-api.md)       | `distinctAttribute` sub-resource API endpoints definition    |
