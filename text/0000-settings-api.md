@@ -20,7 +20,7 @@ N/A
 | [filterable-attributes]()                                          | `filterableAttributes` sub-resource API endpoints definition |
 | [sortable-attributes]()                                            | `sortableAttributes` sub-resource API endpoints definition   |
 | [ranking-rules]()                                                  | `rankingRules` sub-resource API endpoints definition         |
-| [stop-words]()                                                     | `stopWords` sub-resource API endpoints definition            |
+| [stop-words](0000-stop-words-setting-api.md)                       | `stopWords` sub-resource API endpoints definition            |
 | [synonyms]()                                                       | `synonyms` sub-resource API endpoints definition             |
 | [distinct-attribute](0000-distinct-attribute-setting-api.md)       | `distinctAttribute` sub-resource API endpoints definition    |
 
