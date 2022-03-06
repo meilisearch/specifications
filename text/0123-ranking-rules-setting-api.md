@@ -64,6 +64,8 @@ When the `sort` ranking rule is in a **lower** position, sorting is relevant: re
 
 Unlike other ranking rules, `sort` is only active for queries containing the `sort` search parameter ([See Sort Search Parameter](0118-search-api.md#1213-sort)). If a search request does not contain `sort`, this ranking rule will be ignored.
 
+If a field has values of different types across documents, Meilisearch will give precedence to numbers over strings. This means documents with numeric field values will be ranked higher than those with string values.
+
 ##### 3.1.1.6. Exactness Ranking Rule
 
 Results are sorted by the similarity of the matched words with the query words. Ranks documents that contain exactly the same terms as the ones queried first.

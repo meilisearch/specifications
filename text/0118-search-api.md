@@ -71,7 +71,7 @@ If the instance is secured by a master-key, the auth layer will return the follo
 
 `filter` contains a filter expression written as a string or an array of strings. It permits to refine search results.
 
-Attributes used as filter criteria must be added to the `filterableAttributes` list of an index settings.
+Attributes used as filter criteria must be added to the `filterableAttributes` list of an index settings. See [Filterable Attributes Setting API](0123-filterable-attributes-setting-api.md).
 
 - 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `filter` will return an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
 - 🔴 Sending an invalid syntax for `filter` will return an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
@@ -87,7 +87,7 @@ Attributes used as filter criteria must be added to the `filterableAttributes` l
 
 `sort` contains a sort expression written as a string or an array of strings. It permits to sorts search results at query time according to the specified attributes and indicated order.
 
-Attributes used a sort criteria must be added to the `sortableAttributes list of an index settings.
+Attributes used as sort criteria must be added to the `sortableAttributes list of an index settings. See [Sortable Attributes Setting API](0123-sortable-attributes-setting-api.md).
 
 - 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `sort` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 - 🔴 Sending an invalid syntax for `sort` will return an [invalid_sort](0061-error-format-and-definitions.md#invalid_sort) error.
@@ -110,7 +110,7 @@ This parameter can take two values:
 - An array of attributes: `facetsDistribution=["attributeA", "attributeB", …]`
 - An asterisk `"*"` — this will return a count for all facets present in `filterableAttributes`
 
-Attributes used in `facetsDistribution` must be added to the `filterableAttributes` list of an index settings.
+Attributes used in `facetsDistribution` must be added to the `filterableAttributes` list of an index settings. See [Filterable Attributes Setting API](0123-filterable-attributes-setting-api.md).
 
 - 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `facetsDistribution` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 - 🔴 Sending a field not defined as a `filterableAttributes` for `facetsDistribution` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.

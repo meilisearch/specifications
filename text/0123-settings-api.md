@@ -17,18 +17,18 @@ N/A
 |--------------------------------------------------------------------|--------------------------------------------------------------|
 | [displayed-attributes](0123-displayed-attributes-setting-api.md)   | `displayedAttributes` sub-resource API endpoints definition  |
 | [searchable-attributes](0123-searchable-attributes-setting-api.md) | `searchableAttributes` sub-resource API endpoints definition |
-| [filterable-attributes]()                                          | `filterableAttributes` sub-resource API endpoints definition |
-| [sortable-attributes]()                                            | `sortableAttributes` sub-resource API endpoints definition   |
+| [filterable-attributes](0123-filterable-attributes-setting-api.md) | `filterableAttributes` sub-resource API endpoints definition |
+| [sortable-attributes](0123-sortable-attributes-setting-api.md)     | `sortableAttributes` sub-resource API endpoints definition   |
 | [ranking-rules](0123-ranking-rules-setting-api.md)                 | `rankingRules` sub-resource API endpoints definition         |
 | [stop-words](0123-stop-words-setting-api.md)                       | `stopWords` sub-resource API endpoints definition            |
 | [synonyms](0123-synonyms-setting-api.md)                           | `synonyms` sub-resource API endpoints definition             |
 | [distinct-attribute](0123-distinct-attribute-setting-api.md)       | `distinctAttribute` sub-resource API endpoints definition    |
 
+Each setting is exposed as a sub-resource of the `indexes/:index_uid/settings` endpoints. e.g. The ranking rules setting of a Meilisearch index is exposed at `indexes/:index_uid/settings/ranking-rules`.
+
 ### 3.2. API Endpoints Definition
 
 Manipulate all settings of a Meilisearch index.
-
-Each settings is exposed as a sub-resource of the `indexes/:index_uid/settings` endpoints. e.g. The ranking rules setting of a Meilisearch index is exposed at `indexes/:index_uid/settings/ranking-rules`.
 
 #### 3.2.1. `GET` - `indexes/:index_uid/settings`
 
