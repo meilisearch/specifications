@@ -22,7 +22,7 @@ N/A
 | [ranking-rules]()                                             | `rankingRules` sub-resource API endpoints definition         |
 | [stop-words]()                                                | `stopWords` sub-resource API endpoints definition            |
 | [synonyms]()                                                  | `synonyms` sub-resource API endpoints definition             |
-| [distinct-attribute](0000-distinct-attribute-settings-api.md) | `distinctAttribute` sub-resource API endpoints definition    |
+| [distinct-attribute](0000-distinct-attribute-setting-api.md)  | `distinctAttribute` sub-resource API endpoints definition    |
 
 ### 3.2. API Endpoints Definition
 
@@ -32,7 +32,7 @@ Each settings is exposed as a sub-resource of the `indexes/:index_uid/settings` 
 
 #### 3.2.1. `GET` - `indexes/:index_uid/settings`
 
-Fetch the settings of an index.
+Fetch the settings of a Meilisearch index.
 
 ##### 3.2.1.1. Response Definition
 
@@ -55,7 +55,7 @@ The attributes ordering in the response payload is equivalent to the order descr
 
 #### 3.2.2. `POST` - `indexes/:index_uid/settings`
 
-Modify the settings of an index.
+Modify the settings of a Meilisearch index.
 
 ##### 3.2.2.1. Request Payload Definition
 
@@ -74,7 +74,7 @@ The request payload accepts partial definitions.
 
 ##### 3.2.2.2. Response Definition
 
-When the request is in a successful state, Meilisearch returns the HTTP code `202 Accepted`. The content of the response is the summarized representation of the received asynchronous task.
+When the request is in a successful state, Meilisearch returns the HTTP code `202 Accepted`. The response's content is the summarized representation of the received asynchronous task.
 
 See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted).
 
@@ -92,7 +92,7 @@ Errors related to a sub-resource are described in its respective specification. 
 
 - 🔴 When Meilisearch is secured, if the API Key do not have the `indexes.create` action defined, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error in the related asynchronous `task` resource. See [3.2.2.2. Response Definition](#3222-response-definition).
 
-> Otherwise Meilisearch will create the index in a lazy way. See [3.2.2.4. Lazy Index Creation](#3224-lazy-index-creation).
+> Otherwise, Meilisearch will create the index in a lazy way. See [3.2.2.4. Lazy Index Creation](#3224-lazy-index-creation).
 
 ##### 3.2.2.4. Lazy Index Creation
 
@@ -100,11 +100,11 @@ If the requested `index_uid` does not exist, and the authorization layer allows 
 
 #### 3.2.3. `DELETE` - `indexes/:index_uid/settings`
 
-Reset the settings of an index to the default values.
+Reset the settings of a Meilisearch index to the default values.
 
 ##### 3.2.3.1. Response Definition
 
-When the request is in a successful state, Meilisearch returns the HTTP code `202 Accepted`. The content of the response is the summarized representation of the received asynchronous task.
+When the request is in a successful state, Meilisearch returns the HTTP code `202 Accepted`. The response's content is the summarized representation of the received asynchronous task.
 
 See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted).
 
