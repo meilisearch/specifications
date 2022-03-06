@@ -17,9 +17,9 @@ The `stopWords` index setting allows the configuration of a list of words to be 
 
 #### 3.1.1. Usage Example
 
-Suppose a database contains articles written in English. Countless occurrences of `the` and `of` could deteriorate the relevancy of search results. To make `the` and `of` words as stop words it can be specified the following way.
+Suppose a database contains articles written in English. Countless occurrences of `the` and `of` could deteriorate the relevancy of search results. To set `the` and `of` words as stop words, it can be specified the following way.
 
-***Request payload `POST`- `/indexes/products/settings/stop-words`***
+***Request payload `POST`- `/indexes/articles/settings/stop-words`***
 ```json
 ["the", "of"]
 ```
@@ -30,7 +30,7 @@ By adding common English words such as `the` or `of` to the stop-words list, Mei
 
 `stopWords` is a sub-resource of `/indexes/:index_uid/settings`.
 
-See [Settings API](0000-settings-api.md).
+See [Settings API](0123-settings-api.md).
 
 ### 3.3. API Endpoints Definition
 
@@ -42,7 +42,7 @@ Fetch the `stopWords` setting of a Meilisearch index.
 
 ##### 3.3.1.1. Response Definition
 
-- Type: Array of String / `null`
+- Type: Array of String
 - Default: `[]`
 
 ##### 3.3.1.2. Errors
@@ -116,4 +116,4 @@ N/A
 
 ## 5. Future Possibilities
 - Replace `POST` HTTP verb with `PATCH`
-- Add dedicated error to avoid using generic `bad_request` error code.
+- Add dedicated error to avoid using generic `bad_request` error code

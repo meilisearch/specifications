@@ -23,7 +23,7 @@ By default, Meilisearch looks for matches in every field, but the `searchableAtt
 
 Suppose a database of movies with the following fields: `id`, `overview`, `genres`, `title`, `release_date`. These fields all contain useful information; however, some are more useful to search than others. To make the `id` and `release_date` fields non-searchable and re-order the remaining fields by importance, it can be specified in the following way.
 
-***Request payload `POST`- `/indexes/products/settings/searchable-attributes`***
+***Request payload `POST`- `/indexes/movies/settings/searchable-attributes`***
 ```json
 ["overview", "genres", "title"]
 ```
@@ -51,14 +51,14 @@ This default behavior is indicated by a `searchableAttributes` value of `["*"]`.
 
 To make some attributes non-searchable, or change the attribute ranking order. Attributes must be described from most important to least important.
 
-***Request payload `POST`- `/indexes/products/settings/searchable-attributes`***
+***Request payload `POST`- `/indexes/movies/settings/searchable-attributes`***
 ```json
 ["title", "overview", "genres"]
 ```
 
 `title` is considered more important than `overview` while `overview` is considered more important than `genres`.
 
-The [Attribute Ranking Rule]() sort search results by their order defined in `searchableAttributes` setting. Documents that contains query terms in more important searchable attribute will be returned first.
+The [Attribute Ranking Rule]() ranks search results by the order defined in the `searchableAttributes` setting. Documents that contain query terms in the more important searchable attribute will be returned first.
 
 #### 3.1.3. Relationship With Ranking Rules
 
@@ -75,7 +75,7 @@ A document field that is not defined in the list of `searchableAttributes` will 
 
 `searchableAttributes` is a sub-resource of `/indexes/:index_uid/settings`.
 
-See [Settings API](0000-settings-api.md).
+See [Settings API](0123-settings-api.md).
 
 ### 3.3. API Endpoints Definition
 
@@ -87,7 +87,7 @@ Fetch the `searchableAttributes` setting of a Meilisearch index.
 
 ##### 3.3.1.1. Response Definition
 
-- Type: Array of String / `null`
+- Type: Array of String
 - Default: `["*"]`
 
 ##### 3.3.1.2. Errors
@@ -165,5 +165,5 @@ N/A
 
 ## 5. Future Possibilities
 - Replace `POST` HTTP verb with `PATCH`
-- Add dedicated error to avoid using generic `bad_request` error code.
-- Return an error when `searchableAttributes` is defined as an empty array.
+- Add dedicated error to avoid using generic `bad_request` error code
+- Return an error when `searchableAttributes` is defined as an empty array

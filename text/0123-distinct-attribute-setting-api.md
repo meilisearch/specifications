@@ -1,10 +1,10 @@
-- Title: Displayed Attributes Setting API
+- Title: Distinct Attribute Setting API
 
-# Displayed Attributes Setting API
+# Distinct Attribute Setting API
 
 ## 1. Summary
 
-This specification describes the `displayedAttributes` setting API endpoints.
+This specification describes the `distinctAttribute` setting API endpoints.
 
 ## 2. Motivation
 N/A
@@ -13,59 +13,101 @@ N/A
 
 ### 3.1. Explanations
 
-Documents in Meilisearch are composed of multiple fields
-
-When a search query is performed, the fields whose attributes are added to the `displayedAttributes` list are displayable in each matching document.
-
-By default, all document fields are set as displayable.
-
-Therefore, if a document field is not in the `displayedAttributes` list, the field won't be added to the returned documents in the [hits](0118-search-api.md#1221-hits) array for a search query.
+The value of a field whose attribute is set as a distinct attribute will always be unique in the returned documents.
 
 #### 3.1.1. Usage Example
 
-Suppose a database of movies with the following fields: `id`, `overview`, `genres`, `title`, `release_date`. Some of these fields are more useful to be displayed than others. To make the `id` and `genres` fields non-displayed it can be specified in the following way.
+Suppose an e-commerce dataset. For an index that contains information about jackets, a products index may have several identical items in different variations (color or size).
 
-***Request payload `POST`- `/indexes/products/settings/displayed-attributes`***
+As shown below, 2 documents containing the same jacket are defined. One of the jackets is brown and the other one is black.
+
 ```json
-["title", "overview"]
+[
+  {
+    "id": 1,
+    "description": "Leather jacket",
+    "brand": "Lee jeans",
+    "color": "brown",
+    "product_id": "123456"
+  },
+  {
+    "id": 2,
+    "description": "Leather jacket",
+    "brand": "Lee jeans",
+    "color": "black",
+    "product_id": "123456"
+  }
+]
 ```
+
+By default, a search for `Leather jacket` would return all documents. This might not be desired, since displaying nearly identical variations of the same item can make results appear cluttered.
+
+By setting `product_id` as the `distinctAttribute` setting, the different variations of an item will be ignored.
+
+***Request payload `POST`- `/indexes/products/settings/distinct-attribute`***
+
+```json
+"product_id"
+```
+
+After setting the distinct attribute as shown above, querying for `Leather jacket` would only return the **first document** found. The search response would look like this:
+
+```json
+{
+  "hits": [
+    {
+      "id": 1,
+      "description": "Leather jacket",
+      "brand": "Lee jeans",
+      "color": "brown",
+      "product_id": "123456"
+    }
+  ],
+  "offset": 0,
+  "limit": 20,
+  "nbHits": 1,
+  "exhaustiveNbHits": false,
+  "processingTimeMs": 0,
+  "query": "Leather jacket"
+}
+```
+
+Search requests will never return more than one document with the same `product_id`.
 
 ### 3.2. Global Settings API Endpoints Definition
 
-`displayedAttributes` is a sub-resource of `/indexes/:index_uid/settings`.
+`distinctAttribute` is a sub-resource of `/indexes/:index_uid/settings`.
 
-See [Settings API](0000-settings-api.md).
+See [Settings API](0123-settings-api.md).
 
 ### 3.3. API Endpoints Definition
 
-Manipulate the `displayedAttributes` setting of a Meilisearch index.
+Manipulate the `distinctAttribute` setting of a Meilisearch index.
 
-#### 3.3.1. `GET` - `indexes/:index_uid/settings/displayed-attributes`
+#### 3.3.1. `GET` - `indexes/:index_uid/settings/distinct-attribute`
 
-Fetch the `displayedAttributes` setting of a Meilisearch index.
+Fetch the `distinctAttribute` setting of a Meilisearch index.
 
 ##### 3.3.1.1. Response Definition
 
-- Type: Array of String / `null`
-- Default: `["*"]`
+- Type: String / `null`
+- Default: `null`
 
 ##### 3.3.1.2. Errors
 
 - 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
-#### 3.3.2. `POST` - `indexes/:index_uid/settings/displayed-attributes`
+#### 3.3.2. `POST` - `indexes/:index_uid/settings/distinct-attribute`
 
-Modify the `displayedAttributes` setting of a Meilisearch index.
+Modify the `distinctAttribute` setting of a Meilisearch index.
 
 ##### 3.3.2.1. Request Payload Definition
 
-- Type: Array of String / `null`
+- Type: String / `null`
 
-Setting `null` is equivalent to using the [3.3.3. `DELETE` - `indexes/:index_uid/settings/displayed-attributes`](#333-delete---indexesindexuidsettingsdisplayed-attributes) API endpoint.
+Setting `null` is equivalent to using the [3.3.3. `DELETE` - `indexes/:index_uid/settings/distinct-attribute`](#333-delete---indexesindexuidsettingsdistinct-attribute) API endpoint.
 
-Specifying a document attribute that does not exist as a `displayedAttributes` index setting returns no error.
-
-Specifying `[]` for the `displayedAttributes` index setting allows to specify that all fields are non-displayable.
+Specifying a document attribute that does not exist as a `distinctAttribute` index setting returns no error.
 
 ##### 3.3.2.2. Response Definition
 
@@ -80,7 +122,7 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
-- 🔴 Sending a request payload value type different of `Array of String`, `[]`,  or `null` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a request payload value type different of `String` or `null` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 ###### 3.3.2.3.1. Async Errors
 
@@ -92,9 +134,9 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 
 If the requested `index_uid` does not exist, and the authorization layer allows it (See [3.3.2.3.1. Async Errors](#33231-async-errors)), Meilisearch will create the index when the related asynchronous task resource is executed. See [3.3.2.2. Response Definition](#3322-response-definition).
 
-#### 3.3.3. `DELETE` - `indexes/:index_uid/settings/displayed-attributes`
+#### 3.3.3. `DELETE` - `indexes/:index_uid/settings/distinct-attribute`
 
-Reset the `displayedAttributes` setting of a Meilisearch index to the default value `["*"]`.
+Reset the `distinctAttribute` setting of a Meilisearch index to the default value `null`.
 
 ##### 3.3.3.1. Response Definition
 
@@ -124,5 +166,5 @@ N/A
 
 ## 5. Future Possibilities
 - Replace `POST` HTTP verb with `PATCH`
-- Add dedicated error to avoid using generic `bad_request` error code.
-- Return an error when `displayedAttributes` is defined as an empty array.
+- Add dedicated error to avoid using generic `bad_request` error code
+- Return an error when `distinctAttribute` is specified as an empty string

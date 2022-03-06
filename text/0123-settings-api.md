@@ -15,14 +15,14 @@ N/A
 
 | API Resource                                                       | Description                                                  |
 |--------------------------------------------------------------------|--------------------------------------------------------------|
-| [displayed-attributes](0000-displayed-attributes-setting-api.md)   | `displayedAttributes` sub-resource API endpoints definition  |
-| [searchable-attributes](0000-searchable-attributes-setting-api.md) | `searchableAttributes` sub-resource API endpoints definition |
+| [displayed-attributes](0123-displayed-attributes-setting-api.md)   | `displayedAttributes` sub-resource API endpoints definition  |
+| [searchable-attributes](0123-searchable-attributes-setting-api.md) | `searchableAttributes` sub-resource API endpoints definition |
 | [filterable-attributes]()                                          | `filterableAttributes` sub-resource API endpoints definition |
 | [sortable-attributes]()                                            | `sortableAttributes` sub-resource API endpoints definition   |
 | [ranking-rules]()                                                  | `rankingRules` sub-resource API endpoints definition         |
-| [stop-words](0000-stop-words-setting-api.md)                       | `stopWords` sub-resource API endpoints definition            |
-| [synonyms]()                                                       | `synonyms` sub-resource API endpoints definition             |
-| [distinct-attribute](0000-distinct-attribute-setting-api.md)       | `distinctAttribute` sub-resource API endpoints definition    |
+| [stop-words](0123-stop-words-setting-api.md)                       | `stopWords` sub-resource API endpoints definition            |
+| [synonyms](0123-synonyms-setting-api.md)                           | `synonyms` sub-resource API endpoints definition             |
+| [distinct-attribute](0123-distinct-attribute-setting-api.md)       | `distinctAttribute` sub-resource API endpoints definition    |
 
 ### 3.2. API Endpoints Definition
 
