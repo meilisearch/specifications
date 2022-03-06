@@ -13,16 +13,16 @@ N/A
 
 ### 3.1. Sub Resource Settings API List
 
-| API Resource                                                  | Description                                                  |
-|---------------------------------------------------------------|--------------------------------------------------------------|
-| [displayed-attributes]()                                      | `displayedAttributes` sub-resource API endpoints definition  |
-| [searchable-attributes]()                                     | `searchableAttributes` sub-resource API endpoints definition |
-| [filterable-attributes]()                                     | `filterableAttributes` sub-resource API endpoints definition |
-| [sortable-attributes]()                                       | `sortableAttributes` sub-resource API endpoints definition   |
-| [ranking-rules]()                                             | `rankingRules` sub-resource API endpoints definition         |
-| [stop-words]()                                                | `stopWords` sub-resource API endpoints definition            |
-| [synonyms]()                                                  | `synonyms` sub-resource API endpoints definition             |
-| [distinct-attribute](0000-distinct-attribute-setting-api.md)  | `distinctAttribute` sub-resource API endpoints definition    |
+| API Resource                                                       | Description                                                  |
+|--------------------------------------------------------------------|--------------------------------------------------------------|
+| [displayed-attributes](0000-displayed-attributes-setting-api.md)   | `displayedAttributes` sub-resource API endpoints definition  |
+| [searchable-attributes](0000-searchable-attributes-setting-api.md) | `searchableAttributes` sub-resource API endpoints definition |
+| [filterable-attributes]()                                          | `filterableAttributes` sub-resource API endpoints definition |
+| [sortable-attributes]()                                            | `sortableAttributes` sub-resource API endpoints definition   |
+| [ranking-rules]()                                                  | `rankingRules` sub-resource API endpoints definition         |
+| [stop-words]()                                                     | `stopWords` sub-resource API endpoints definition            |
+| [synonyms]()                                                       | `synonyms` sub-resource API endpoints definition             |
+| [distinct-attribute](0000-distinct-attribute-setting-api.md)       | `distinctAttribute` sub-resource API endpoints definition    |
 
 ### 3.2. API Endpoints Definition
 
@@ -45,7 +45,7 @@ Fetch the settings of a Meilisearch index.
 | `rankingRules`           | Array of String         | true     |
 | `stopWords`              | Array of String         | true     |
 | `synonyms`               | Object                  | true     |
-| `distinctAttribute`      | String                  | true     |
+| `distinctAttribute`      | String / `null`         | true     |
 
 The attributes ordering in the response payload is equivalent to the order described in the table above.
 
@@ -59,16 +59,16 @@ Modify the settings of a Meilisearch index.
 
 ##### 3.2.2.1. Request Payload Definition
 
-| Field                    | Type                    | Required |
-|--------------------------|-------------------------|----------|
-| `displayedAttributes`    | Array of String         | false    |
-| `searchableAttributes`   | Array of String         | false    |
-| `filterableAttributes`   | Array of String         | false    |
-| `sortableAttributes`     | Array of String         | false    |
-| `rankingRules`           | Array of String         | false    |
-| `stopWords`              | Array of String         | false    |
-| `synonyms`               | Object                  | false    |
-| `distinctAttribute`      | String                  | false    |
+| Field                    | Type                     | Required |
+|--------------------------|--------------------------|----------|
+| `displayedAttributes`    | Array of String / `null` | false    |
+| `searchableAttributes`   | Array of String / `null` | false    |
+| `filterableAttributes`   | Array of String / `null` | false    |
+| `sortableAttributes`     | Array of String / `null` | false    |
+| `rankingRules`           | Array of String          | false    |
+| `stopWords`              | Array of String / `null` | false    |
+| `synonyms`               | Object / `null`          | false    |
+| `distinctAttribute`      | String / `null`          | false    |
 
 The request payload accepts partial definitions.
 
