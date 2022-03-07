@@ -47,11 +47,11 @@ The identifier chosen for the `task` `batchUid` field corresponds to the `uid` v
 
 ### 3.2. Auto-batching mechanisms options
 
-### 3.2.1. `--enable-autobatching`
+### 3.2.1. `--enable-auto-batching`
 
 By default, the auto-batching feature is disabled.
 
-The auto-batching feature can be activated by passing the command flag `--enable-autobatching` to Meilisearch at launch.
+The auto-batching feature can be activated by passing the command flag `--enable-auto-batching` to Meilisearch at launch.
 
 ### 3.2.2.  `--max-batch-size`
 
