@@ -161,7 +161,12 @@ The auth layer can return the following errors if Meilisearch is secured (a mast
 - 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
 ## 4. Technical Details
-N/A
+
+### 4.1. Triggering Documents Re-Indexing
+
+Meilisearch favors search speed and makes a trade-off on indexing speed by computing internal data structures to get search results as fast as possible.
+
+Modifying this index setting cause documents to be re-indexed.
 
 ## 5. Future Possibilities
 - Replace `POST` HTTP verb with `PATCH`

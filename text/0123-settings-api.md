@@ -135,7 +135,7 @@ The auth layer can return the following errors if Meilisearch is secured (a mast
 
 ### 4.1. Triggering Documents Re-indexing
 
-Meilisearch favors search speed and compromises on indexing speed by computing internal data structures to get search results as fast as possible.
+Meilisearch favors search speed and makes a trade-off on indexing speed by computing internal data structures to get search results as fast as possible.
 
 Changing any of the following index settings will cause documents to be re-indexed:
 
