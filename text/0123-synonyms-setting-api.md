@@ -16,13 +16,13 @@ N/A
 
 If multiple words have an equivalent meaning in a dataset, specifying a list of synonyms will make search results more relevant.
 
-In general, a search on a word will return the same results as a search on any of its synonyms. There is one exception to this rule, see [4.2. Multi-word Phrases](#42-multi-word-phrases) section.
+In general, a search on a word will return the same results as a search on any of its synonyms. There is one exception to this rule. See [4.2. Multi-word Phrases](#42-multi-word-phrases) section.
 
 All synonyms are lowercased and de-unicoded during the indexing process. See [4.1. Normalization](#41-normalization) section.
 
 #### 3.1.1. Usage Examples
 
-Meilisearch supports two types of synonym declaration.
+Meilisearch supports two types of synonym declarations.
 
 ##### 3.1.1.1. One-way Association
 
@@ -153,7 +153,7 @@ These errors apply to all endpoints described here.
 
 ##### 3.3.4.1 Auth Errors
 
-The auth layer can return the following errors if Meilisearch is secured (a master-key is defined).
+The auth layer can return the following errors if Meilisearch is secured (a master key is defined).
 
 - 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
 - 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
@@ -162,7 +162,7 @@ The auth layer can return the following errors if Meilisearch is secured (a mast
 
 ### 4.1. Normalization
 
-All All synonyms are lowercased and de-unicoded during the indexing process.
+All synonyms are lowercased and de-unicoded during the indexing process.
 
 ### 4.1.1. Example
 
