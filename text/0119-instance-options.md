@@ -356,7 +356,7 @@ Value must be given in bytes or explicitly stating a base unit. For example, the
 
 ⚠️ WARNINGS
 - We do not recommend setting the full RAM size of your machine. For example, when running Meilisearch on a machine with 4GB of RAM, do not set this options to `4Gb`
-- This command-line option will not perfectly ensure the RAM usage, but will help you manage multiple Meilisearch engines on the same machine (for example, using Kubernetes). The core team cannot guarantee the exact usage of the RAM.
+- This command-line option will not perfectly ensure the RAM usage, but will help you manage multiple Meilisearch engines on the same machine (for example, using Kubernetes). The search engine cannot guarantee the exact usage of the RAM.
 - If the number set is higher than the real available RAM in the machine, we cannot prevent Meilisearch from crashing.
 
 #### 3.3.21. Indexing jobs
@@ -455,3 +455,5 @@ N/A
 ## 5. Future Possibilities
 
 - Redo the command-line to create a more interactive CLI
+- Autocomplete for the options when using the Meilisearch CLI
+- Minimal requirement when setting the master key, for example, a minimal number of characters
