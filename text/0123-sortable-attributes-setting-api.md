@@ -58,7 +58,7 @@ Specifying a document attribute that does not exist as a `sortableAttributes` in
 
 ##### 3.3.2.2. Response Definition
 
-When the request is in a successful state, Meilisearch returns the HTTP code `202 Accepted`. The response's content is the summarized representation of the received asynchronous task.
+When the request is successful, Meilisearch returns the HTTP code `202 Accepted`. The response's content is the summarized representation of the received asynchronous task.
 
 See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted).
 
