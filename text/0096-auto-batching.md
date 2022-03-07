@@ -4,7 +4,7 @@
 
 ## 1. Summary
 
-Meilisearch can automatically group consecutive asynchronous `documentsAddition` or `documentsPartial` tasks for the same index via an automatic batching mechanism.
+Meilisearch can automatically group consecutive asynchronous `documentAddition` or `documentPartial` tasks for the same index via an automatic batching mechanism.
 
 The user can enable this auto-batching behavior through various command flag options.
 
