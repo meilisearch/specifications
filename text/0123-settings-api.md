@@ -26,6 +26,8 @@ N/A
 
 Each setting is exposed as a sub-resource of the `indexes/:index_uid/settings` endpoints. e.g. The ranking rules setting of a Meilisearch index is exposed at `indexes/:index_uid/settings/ranking-rules`.
 
+Some setting changes cause a complete re-indexing of the documents. See [4.1. Triggering Documents Re-indexing](#41-triggering-documents-re-indexing).
+
 ### 3.2. API Endpoints Definition
 
 Manipulate all settings of a Meilisearch index.
@@ -65,7 +67,7 @@ Modify the settings of a Meilisearch index.
 | `searchableAttributes`   | Array of String / `null` | false    |
 | `filterableAttributes`   | Array of String / `null` | false    |
 | `sortableAttributes`     | Array of String / `null` | false    |
-| `rankingRules`           | Array of String          | false    |
+| `rankingRules`           | Array of String / `null` | false    |
 | `stopWords`              | Array of String / `null` | false    |
 | `synonyms`               | Object / `null`          | false    |
 | `distinctAttribute`      | String / `null`          | false    |
@@ -130,7 +132,18 @@ The auth layer can return the following errors if Meilisearch is secured (a mast
 - 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
 ## 4. Technical Details
-N/A
+
+### 4.1. Triggering Documents Re-indexing
+
+Meilisearch favors search speed and compromises on indexing speed by computing internal data structures to get search results as fast as possible.
+
+Changing any of the following index settings will cause documents to be re-indexed:
+
+- `searchableAttributes`
+- `filterableAttributes`
+- `sortableAttributes`
+- `distinctAttribute`
+- `stopWords`
 
 ## 5. Future Possibilities
 - Replace `POST` HTTP verb with `PATCH`
