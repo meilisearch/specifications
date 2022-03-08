@@ -47,8 +47,8 @@ Command-line options take precedence over environment variables. If the same con
 The options that do not expect any value when using the command-line option accepts the following value when using the corresponding environment variable: `n`, `no`, `f`, `false`, `off`, and `0` as `false`. An absent environment variable will also be considered as `false`. Everything else is considered `true`.
 
 Example with the snapshort creation:
-- `export MEIL_SCHEDULE_SNAPSHOT=yes` means the snapshot creation is enabled.
-- `export MEIL_SCHEDULE_SNAPSHOT=off` means the snapshot creation is disabled.
+- `export MEILI_SCHEDULE_SNAPSHOT=yes` means the snapshot creation is enabled.
+- `export MEILI_SCHEDULE_SNAPSHOT=off` means the snapshot creation is disabled.
 - No variable set means the snapshot creation is disabled.
 
 ### 3.2. Error behavior
