@@ -34,7 +34,7 @@ The users can configure Meilisearch when launching the search engine using
 
 There are 2 categories of CLI (command-line interface) options:
 - the ones that expect a value. Ex: `--db-path`.
-- the ones that does expect any value, called also "flags". Ex: `--no-analytics`. Their implicit values are booleans.
+- the ones that don't expect any value, called also "flags". Ex: `--no-analytics`. Their implicit values are booleans.
 
 ### 3.1. Some specific behaviors
 
