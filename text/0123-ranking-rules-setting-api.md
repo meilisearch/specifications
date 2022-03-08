@@ -4,7 +4,7 @@
 
 ## 1. Summary
 
-This specification describes the `rankingRules` setting API endpoints.
+This specification describes the `rankingRules` index setting API endpoints.
 
 ## 2. Motivation
 N/A
@@ -13,7 +13,7 @@ N/A
 
 ### 3.1. Explanations
 
-To ensure relevant search results, documents are sorted based on consecutive rules called ranking rules. The order in which ranking rules are applied matters.
+To ensure relevant results at search time, documents are sorted based on consecutive rules called ranking rules. The order in which ranking rules are applied matters.
 
 The first rule in the `rankingRules` list has the most impact, and the last rule has the least.
 
@@ -32,7 +32,7 @@ By default, Meilisearch contains six built-in ranking rules in the following ord
 
 ##### 3.1.1.1. Words Ranking Rule
 
-Results are sorted by decreasing the number of matched query terms. Ranks documents that contain all query terms first.
+Results are sorted by decreasing the number of matched query terms. `words` ranks documents that contain all query terms first.
 
 The `words` ranking rule works from right to left. Therefore, the order of the query string impacts the order of results.
 
@@ -40,17 +40,17 @@ For example, if someone were to search `batman dark knight`, then the words rule
 
 ##### 3.1.1.2. Typo Ranking Rule
 
-Results are sorted by increasing number of typos. Ranks documents that match query terms with fewer typos first.
+Results are sorted by increasing the number of typos. `typo` ranks documents that match query terms with fewer typos first.
 
 Meiliseach tolerates a maximum of `2` typos for a query term.
 
 ##### 3.1.1.3. Proximity Ranking Rule
 
-Results are sorted by increasing distance between matched query terms. Ranks documents where query terms occur close together and in the same order as the query terms first.
+Results are sorted by increasing distance between matched query terms. `proximity` ranks documents where query terms occur close together and in the same order as the query terms first.
 
 ##### 3.1.1.4. Attribute Ranking Rule
 
-Results are sorted according to the attribute ranking order. Ranks documents that contain query terms in more important attributes first. See [searchableAttributes setting API](0123-searchable-attributes-setting-API).
+Results are sorted according to the attribute ranking order. `attribute` ranks documents that contain query terms in more important attributes first. See [searchableAttributes setting API](0123-searchable-attributes-setting-API).
 
 Also, note that the documents with attributes containing the query terms at the beginning of an attribute will be considered more relevant than documents containing the query terms at the end of an attribute.
 
@@ -62,17 +62,17 @@ When the `sort` ranking rule is in a **higher** position, sorting is exhaustive:
 
 When the `sort` ranking rule is in a **lower** position, sorting is relevant: results will be very relevant, but might not always follow the order defined by the user.
 
-Unlike other ranking rules, `sort` is only active for queries containing the `sort` search parameter ([See Sort Search Parameter](0118-search-api.md#1213-sort)). If a search request does not contain `sort`, this ranking rule will be ignored.
+Unlike other ranking rules, `sort` is only active for search queries containing the `sort` search parameter ([See Sort Search Parameter](0118-search-api.md#1213-sort)). If a search request does not contain `sort`, this ranking rule will be ignored.
 
-If a field has values of different types across documents, Meilisearch will give precedence to numbers over strings. This means documents with numeric field values will be ranked higher than those with string values.
+If a field has values of different types across documents, Meilisearch will give precedence to numbers over strings. It means documents with numeric field values will be ranked higher than those with string values.
 
 ##### 3.1.1.6. Exactness Ranking Rule
 
-Results are sorted by the similarity of the matched words with the query words. Ranks documents that contain exactly the same terms as the ones queried first.
+Results are sorted by the similarity of the matched words with the query words. `exactness` ranks documents that contain exactly the same terms as the ones queried first.
 
 ### 3.1.2. Custom Ranking Rules
 
-Meilisearch supports two custom rules that can be added to the ranking rules setting: one for ascending sort and one for descending sort.
+Meilisearch supports two custom rules expression that can be added to the ranking rules setting: one for ascending sort and one for descending sort.
 
 To add a custom ranking rule, the attribute name must be specified and followed by a colon (`:`) and either `asc` for ascending order or `desc` for descending order.
 
@@ -82,7 +82,7 @@ To apply a descending sort (results sorted by decreasing value of the attribute)
 
 The attribute must have either a numeric or a string value.
 
-Contrary to the `sort` ranking rule, custom ranking rules are always active after configured and can be helpful to promote certain types of results. The `sort` ranking rule is most useful when users can define what type of results they want to see first.
+Contrary to the `sort` ranking rule, custom ranking rules are always active after configured and can be helpful to promote certain types of results. The `sort` ranking rule is most useful when end-users define what type of results they want to see first.
 
 #### 3.1.2.1. Example
 

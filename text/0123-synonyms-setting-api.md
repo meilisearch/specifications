@@ -4,7 +4,7 @@
 
 ## 1. Summary
 
-This specification describes the `synonyms` setting API endpoints.
+This specification describes the `synonyms` index setting API endpoints.
 
 ## 2. Motivation
 N/A
