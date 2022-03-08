@@ -43,11 +43,14 @@ If the instance is secured by a master-key, the auth layer will return the follo
 | offset                  | Integer                   | False    |
 | attributesToRetrieve    | Array of String - String  | False    |
 | attributesToHighlight   | Array of String - String  | False    |
+| highlightPreTag         | String                    | False    |
+| highlightPostTag        | String                    | False    |
 | attributesToCrop        | Array of String - String  | False    |
 | cropLength              | Integer                   | False    |
+| cropMarker              | String                    | False    |
 | matches                 | Boolean                   | False    |
 
-##### 1.2.1.1 `q`
+##### 1.2.1.1. `q`
 
 - Type: String
 - Required: False
@@ -63,7 +66,7 @@ If the instance is secured by a master-key, the auth layer will return the follo
 
 > `q` supports [Phrase Query](0043-phrase-query.md) expression.
 
-##### 1.2.1.2 `filter`
+##### 1.2.1.2. `filter`
 
 - Type: Array of String (POST) | String (POST/GET)
 - Required: False
@@ -79,7 +82,7 @@ Attributes used as filter criteria must be added to the `filterableAttributes` l
 
 > See [Filter And Facet Behavior](0027-filter-and-facet-behavior.md)
 
-##### 1.2.1.3 `sort`
+##### 1.2.1.3. `sort`
 
 - Type: Array of String (POST) | String (GET)
 - Required: False
@@ -95,7 +98,7 @@ Attributes used as sort criteria must be added to the `sortableAttributes list o
 
 > See [Sort](0055-sort.md)
 
-##### 1.2.1.4 `facetsDistribution`
+##### 1.2.1.4. `facetsDistribution`
 
 - Type: Array of String (POST) | String (GET)
 - Required: False
@@ -117,7 +120,7 @@ Attributes used in `facetsDistribution` must be added to the `filterableAttribut
 
 > See [Filter And Facet Behavior](0027-filter-and-facet-behavior.md)
 
-##### 1.2.1.5 `limit`
+##### 1.2.1.5. `limit`
 
 - Type: Integer
 - Required: False
@@ -127,7 +130,7 @@ Sets the maximum number of documents to be returned by the current search query.
 
 - 🔴 Sending a value with a different type than `Integer` or `null` for `limit` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-##### 1.2.1.6 `offset`
+##### 1.2.1.6. `offset`
 
 - Type: Integer
 - Required: False
@@ -137,7 +140,7 @@ Sets the starting point in the search results, effectively skipping over a given
 
 - 🔴 Sending a value with a different type than `Integer` or `null` for `offset` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-##### 1.2.1.7 `attributesToRetrieve`
+##### 1.2.1.7. `attributesToRetrieve`
 
 - Type: Array of String (POST) | String (GET)
 - Required: False
@@ -151,23 +154,41 @@ If no value is specified, `attributesToRetrieve` uses the `displayedAttributes` 
 
 - 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `attributesToRetrieve` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-##### 1.2.1.8 `attributesToHighlight`
+##### 1.2.1.8. `attributesToHighlight`
 
 - Type: Array[String](POST)|String(GET)
 - Required: False
 - Default: `[]|null`
 
-Highlights matching query terms in the specified attributes by enclosing them in `<em>` tags.
+Highlights document parts matching query terms in the specified attributes by enclosing them with [`highlightPreTag`](#3112-highlightpretag) and [`highlightPostTag`](#3113-highlightposttag).
 
-When this parameter is set, returned documents include a `_formatted` object containing the highlighted terms.
+When this parameter is set, returned search results include a `_formatted` object containing the highlighted terms.
 
 If `"*"` is provided as a value: `attributesToHighlight=["*"]` all the attributes present in `attributesToRetrieve` will be assigned to `attributesToHighlight`.
+
+`attributesToHighlight` only works on values of the following types: `string`, `number`, `array`, `object`.
 
 - 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToHighlight` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 > See [_Formatted Field Behavior](0039-_formatted-field-behavior_.md)
 
-##### 1.2.1.9 `attributesToCrop`
+##### 1.2.1.9. `highlightPreTag`
+
+- Type: String
+- Required: False
+- Default: `"<em>"`
+
+Specify the tag to put **before** the matched part to highlight.
+
+##### 1.2.1.10. `highlightPostTag`
+
+- Type: String
+- Required: False
+- Default: `"</em>"`
+
+Specify the tag to put **after** the matched part to highlight.
+
+##### 1.2.1.11. `attributesToCrop`
 
 - Type: Array[String]|String
 - Required: False
@@ -185,7 +206,7 @@ Instead of supplying individual attributes, it is possible to provide `["*"]` as
 
 > See [_Formatted Field Behavior](0039-_formatted-field-behavior_.md)
 
-##### 1.2.1.10 `cropLength`
+##### 1.2.1.12. `cropLength`
 
 - Type: Integer
 - Required: False
@@ -197,7 +218,15 @@ If `attributesToCrop` is not configured, `cropLength` has no effect on the retur
 
 - 🔴 Sending a value with a different type than `Integer` or `null` for `cropLength` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-##### 1.2.1.11 `matches`
+##### 1.2.1.13. `cropMarker`
+
+- Type: String
+- Required: False
+- Default: `"…"` (U+2026)
+
+Specify the
+
+##### 1.2.1.14. `matches`
 
 - Type: Boolean
 - Required: False
@@ -237,7 +266,7 @@ Results of the query as an array of documents.
 - Type: Integer
 - Required: True
 
-Gives the `limit` search parameter used for the query.
+Returns the `limit` search parameter used for the query.
 
 > See 1.2.1.5 `limit` section.
 
@@ -246,7 +275,7 @@ Gives the `limit` search parameter used for the query.
 - Type: Integer
 - Required: True
 
-Gives the `offset` search parameter used for the query.
+Returns the `offset` search parameter used for the query.
 
 > See 1.2.1.6 `offset` section.
 
@@ -335,7 +364,9 @@ Object containing the cropped/highlighted values of the fields specified in `att
 
 Contains the location of each occurrence of queried terms across all fields. The `_matchesInfo` object is added to a document when `matches` search parameter is specified to true.
 
-The beginning of a matching term within a field is indicated by start, and its length by length.
+The beginning of a matching term within a field is indicated by `start`, and its `length` by length.
+
+`start` and `length` are measured in bytes and not the number of characters. For example, `ü` represents two bytes but one character.
 
 > See 1.2.1.11 `matches` section.
 
