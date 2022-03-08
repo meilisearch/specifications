@@ -366,7 +366,7 @@ Value must be given in bytes or explicitly stating a base unit. For example, the
 **Default value**: half of the available core of the machine
 **Expected value**: an integer
 
-Sets the number of jobs available during the indexation.
+Sets the number of threads available during the indexation.
 
 By default, in machines with multi-core processors, the indexer avoids using more than half of the available processing units. For example, if your machine has twelve cores, the indexer will try to use six of them at most. This ensures Meilisearch is always ready to perform searches, even while you are updating an index.
 
