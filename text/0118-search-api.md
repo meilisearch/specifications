@@ -1,27 +1,27 @@
 - Title: Search API
-- Start Date: 2022-02-27
 
 # Search API
 
-## 1. Functional Specification
+## 1. Summary
 
-### 1.1. Summary
+The search endpoints permit to retrieve documents within an index that are the most relevant given a set of parameters forming a search request.
 
-The search endpoints permit to retrieve documents within an index that are the most relevant given a set of parameters forming a search query.
+## 2. Motivation
+N/A
 
-### 1.2. Explanation
+## 3. Functional Specification
 
-Meilisearch exposes 2 routes to perform searches:
+Meilisearch exposes 2 routes to perform search requests:
 
 - GET `indexes/:index_uid/search`
 - POST `indexes/:index_uid/search`
 
 - 🔴 If the index does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
-If the instance is secured by a master-key, the auth layer will return the following errors:
+If a master key secures the Meilisearch instance, the auth layer returns the following errors:
 
 - 🔴 Accessing these routes without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
 `POST` HTTP verb errors:
 
@@ -31,26 +31,26 @@ If the instance is secured by a master-key, the auth layer will return the follo
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
 
-#### 1.2.1. Search payload parameters
+### 3.1. Search Payload Parameters
 
-| Field                   | Type                      | Required |
-|-------------------------|---------------------------|----------|
-| q                       | String                    | False    |
-| filter                  | Array of String - String  | False    |
-| sort                    | Array of String - String  | False    |
-| facetsDistribution      | Array of String - String  | False    |
-| limit                   | Integer                   | False    |
-| offset                  | Integer                   | False    |
-| attributesToRetrieve    | Array of String - String  | False    |
-| attributesToHighlight   | Array of String - String  | False    |
-| highlightPreTag         | String                    | False    |
-| highlightPostTag        | String                    | False    |
-| attributesToCrop        | Array of String - String  | False    |
-| cropLength              | Integer                   | False    |
-| cropMarker              | String                    | False    |
-| matches                 | Boolean                   | False    |
+| Field                                                 | Type                      | Required |
+|-------------------------------------------------------|---------------------------|----------|
+| [`q`](#311-q)                                         | String                    | False    |
+| [`filter`](#312-filter)                               | Array of String - String  | False    |
+| [`sort`](#313-sort)                                   | Array of String - String  | False    |
+| [`facetsDistribution`](#314-facetsdistribution)       | Array of String - String  | False    |
+| [`limit`](#315-limit)                                 | Integer                   | False    |
+| [`offset`](#316-offset)                               | Integer                   | False    |
+| [`attributesToRetrieve`](#317-attributestoretrieve)   | Array of String - String  | False    |
+| [`attributesToHighlight`](#318-attributestohighlight) | Array of String - String  | False    |
+| [`highlightPreTag`](#319-highlightpretag)             | String                    | False    |
+| [`highlightPostTag`](#3110-highlightposttag)          | String                    | False    |
+| [`attributesToCrop`](#3111-attributestocrop)          | Array of String - String  | False    |
+| [`cropLength`](#31112-croplength)                     | Integer                   | False    |
+| [`cropMarker`](#31113-cropmarker)                     | String                    | False    |
+| [`matches`](#31114-matches)                           | Boolean                   | False    |
 
-##### 1.2.1.1. `q`
+#### 3.1.1. `q`
 
 - Type: String
 - Required: False
@@ -58,15 +58,15 @@ If the instance is secured by a master-key, the auth layer will return the follo
 
 `q` contains the terms to search within the index documents.
 
-- 🔴 Sending a value with a different type than `String` or `null` for `q` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `String` or `null` for `q` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-> When q isn't specified, Meilisearch performs a **placeholder search**. A placeholder search returns all searchable documents in an index, modified by any search parameters used and sorted by that index's custom ranking rules. If the index has no sort or custom ranking rules, the results are returned in the order of their internal database position.
+> When q isn't specified, Meilisearch performs a **placeholder search**. A placeholder search returns all searchable documents in an index, modified by any search parameters used and sorted by that index's custom ranking rules. If the index has no sort search parameter or custom ranking rules, the results are returned in the order of their internal database position.
 
 > Meilisearch only considers the first ten words of any given search query to deliver a fast search-as-you-type experience.
 
-> `q` supports [Phrase Query](0043-phrase-query.md) expression.
+> `q` supports the [Phrase Query](0043-phrase-query.md) expression.
 
-##### 1.2.1.2. `filter`
+#### 3.1.2. `filter`
 
 - Type: Array of String (POST) | String (POST/GET)
 - Required: False
@@ -76,29 +76,29 @@ If the instance is secured by a master-key, the auth layer will return the follo
 
 Attributes used as filter criteria must be added to the `filterableAttributes` list of an index settings. See [Filterable Attributes Setting API](0123-filterable-attributes-setting-api.md).
 
-- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `filter` will return an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
-- 🔴 Sending an invalid syntax for `filter` will return an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
-- 🔴 Sending a field not defined as a `filterableAttributes` for `filter` will return an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
+- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `filter` returns an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
+- 🔴 Sending an invalid syntax for `filter` returns an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
+- 🔴 Sending a field not defined as a `filterableAttributes` for `filter` returns an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
 
-> See [Filter And Facet Behavior](0027-filter-and-facet-behavior.md)
+> See [Filter And Facet Behavior](0027-filter-and-facet-behavior.md).
 
-##### 1.2.1.3. `sort`
+#### 3.1.3. `sort`
 
 - Type: Array of String (POST) | String (GET)
 - Required: False
 - Default: `[]|null`
 
-`sort` contains a sort expression written as a string or an array of strings. It permits to sorts search results at query time according to the specified attributes and indicated order.
+`sort` contains a sort expression written as a string or an array of strings. It sorts the search esults at query time according to the specified attributes and indicated order.
 
 Attributes used as sort criteria must be added to the `sortableAttributes list of an index settings. See [Sortable Attributes Setting API](0123-sortable-attributes-setting-api.md).
 
-- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `sort` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
-- 🔴 Sending an invalid syntax for `sort` will return an [invalid_sort](0061-error-format-and-definitions.md#invalid_sort) error.
-- 🔴 Sending a field not defined as a `sortableAttributes` for `sort` will return an [invalid_sort](0061-error-format-and-definitions.md#invalid_sort) error.
+- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `sort` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending an invalid syntax for `sort` returns an [invalid_sort](0061-error-format-and-definitions.md#invalid_sort) error.
+- 🔴 Sending a field not defined as a `sortableAttributes` for `sort` returns an [invalid_sort](0061-error-format-and-definitions.md#invalid_sort) error.
 
 > See [Sort](0055-sort.md)
 
-##### 1.2.1.4. `facetsDistribution`
+#### 3.1.4. `facetsDistribution`
 
 - Type: Array of String (POST) | String (GET)
 - Required: False
@@ -111,26 +111,26 @@ It returns the number of documents matching the current search query for each gi
 This parameter can take two values:
 
 - An array of attributes: `facetsDistribution=["attributeA", "attributeB", …]`
-- An asterisk `"*"` — this will return a count for all facets present in `filterableAttributes`
+- An asterisk `"*"` — this returns a count for all facets present in `filterableAttributes`
 
 Attributes used in `facetsDistribution` must be added to the `filterableAttributes` list of an index settings. See [Filterable Attributes Setting API](0123-filterable-attributes-setting-api.md).
 
-- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `facetsDistribution` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
-- 🔴 Sending a field not defined as a `filterableAttributes` for `facetsDistribution` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `facetsDistribution` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a field not defined as a `filterableAttributes` for `facetsDistribution` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 > See [Filter And Facet Behavior](0027-filter-and-facet-behavior.md)
 
-##### 1.2.1.5. `limit`
+#### 3.1.5. `limit`
 
 - Type: Integer
 - Required: False
 - Default: `20`
 
-Sets the maximum number of documents to be returned by the current search query.
+Sets the maximum number of documents to be returned for the search query.
 
-- 🔴 Sending a value with a different type than `Integer` or `null` for `limit` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Integer` or `null` for `limit` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-##### 1.2.1.6. `offset`
+#### 3.1.6. `offset`
 
 - Type: Integer
 - Required: False
@@ -138,9 +138,9 @@ Sets the maximum number of documents to be returned by the current search query.
 
 Sets the starting point in the search results, effectively skipping over a given number of documents.
 
-- 🔴 Sending a value with a different type than `Integer` or `null` for `offset` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Integer` or `null` for `offset` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-##### 1.2.1.7. `attributesToRetrieve`
+#### 3.1.7. `attributesToRetrieve`
 
 - Type: Array of String (POST) | String (GET)
 - Required: False
@@ -148,85 +148,154 @@ Sets the starting point in the search results, effectively skipping over a given
 
 Configures which attributes will be retrieved in the returned documents.
 
-If no value is specified, `attributesToRetrieve` uses the `displayedAttributes` list, which by default contains all attributes found in the documents.
+If no value is specified, `attributesToRetrieve` uses the `displayedAttributes` index setting, which by default contains all attributes found in the documents.
 
-> If an attribute has been removed from `displayedAttributes` index settings, `attributesToRetrieve` will silently ignore it and the field will not appear in the returned documents.
+> If an attribute is missing from `displayedAttributes` index setting, `attributesToRetrieve` silently ignore it, and the field doesn't appear in the returned search results.
 
-- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `attributesToRetrieve` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `attributesToRetrieve` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-##### 1.2.1.8. `attributesToHighlight`
+#### 3.1.8. `attributesToHighlight`
 
 - Type: Array[String](POST)|String(GET)
 - Required: False
 - Default: `[]|null`
 
-Highlights document parts matching query terms in the specified attributes by enclosing them with [`highlightPreTag`](#3112-highlightpretag) and [`highlightPostTag`](#3113-highlightposttag).
+Highlights document parts matching query terms in the `q` search parameter for the specified attributes.
 
-When this parameter is set, returned search results include a `_formatted` object containing the highlighted terms.
+Search results include a `_formatted` object containing the highlighted terms when this parameter is defined. See [3.2.1.1.2. `_formatted`](#32112-formatted) section.
 
-If `"*"` is provided as a value: `attributesToHighlight=["*"]` all the attributes present in `attributesToRetrieve` will be assigned to `attributesToHighlight`.
+Highlighted parts are surrounded by the [`highlightPreTag`](#319-highlightpretag) and [`highlightPostTag`](#3110-highlightposttag) parameter.
+
+If `"*"` is provided as a value: e.g. `"attributesToHighlight":["*"]` all the attributes present in `attributesToRetrieve` will be assigned to `attributesToHighlight`.
 
 `attributesToHighlight` only works on values of the following types: `string`, `number`, `array`, `object`.
 
-- 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToHighlight` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToHighlight` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-> See [_Formatted Field Behavior](0039-_formatted-field-behavior_.md)
+##### 3.1.8.1. searchableAttributes
 
-##### 1.2.1.9. `highlightPreTag`
+Attributes not defined in the `searchableAttributes` index setting are also highlighted if assigned to `attributesToHighlight`.
+
+##### 3.1.8.2. stopWords
+
+Attributes defined in the `stopWords` index setting are also highlighted if matched.
+
+#### 3.1.9. `highlightPreTag`
 
 - Type: String
 - Required: False
 - Default: `"<em>"`
 
-Specify the tag to put **before** the matched part to highlight.
+Specify the tag to put **before** the matched query terms.
 
-##### 1.2.1.10. `highlightPostTag`
+This parameter is taken into account when `attributesToHighlight` is specified. See [3.1.8. `attributesToHighlight`](#318-attributestohighlight) section.
+
+- 🔴 Sending a value with a different type than `String` for `highlightPreTag` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+
+#### 3.1.10. `highlightPostTag`
 
 - Type: String
 - Required: False
 - Default: `"</em>"`
 
-Specify the tag to put **after** the matched part to highlight.
+Specify the tag to put **after** the matched query terms.
 
-##### 1.2.1.11. `attributesToCrop`
+This parameter is taken into account when `attributesToHighlight` is specified. See [3.1.8. `attributesToHighlight`](#318-attributestohighlight) section.
+
+- 🔴 Sending a value with a different type than `String` for `highlightPostTag` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+
+#### 3.1.11. `attributesToCrop`
 
 - Type: Array[String]|String
 - Required: False
 - Default: `[]|null`
 
-Crops the selected attributes' values in the returned results to the length indicated by the `cropLength` parameter.
+Defines document attributes to be cropped. Cropped attributes have their values shortened around query terms.
 
-When this parameter is set, returned documents include a `_formatted` object containing the cropped terms.
+The number of words contained in the cropped value is defined by the `cropLength` parameter. See [3.1.1.12. `cropLength`](#31112-croplength) section.
 
-Optionally, indicating a custom crop length for any of the listed attributes is possible: `attributesToCrop=["attributeNameA:25", "attributeNameB:150"]`. The custom crop length set in this way has priority over the `cropLength` parameter.
+The value of `cropLength` can be customized per attribute. See [3.1.11.2. Custom `cropLength` Defined Per Cropped Attribute](#31112-custom-croplength-defined-per-attribute) section.
 
-Instead of supplying individual attributes, it is possible to provide `["*"]` as a value: `attributesToCrop=["*"]`. This will crop the values of all attributes present in `attributesToRetrieve`.
+The engine adds a marker by default in front of and/or behind the part selected by the cropper. This marker is customizable. See [3.1.1.13. `cropMarker`](#31113-cropmarker) section.
 
-- 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToCrop` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+Search results include a `_formatted` object containing the cropped attributes representation when this parameter is defined. See [3.2.1.1.2. `_formatted`](#32112-formatted) section.
 
-> See [_Formatted Field Behavior](0039-_formatted-field-behavior_.md)
+If `"*"` is provided as a value: `attributesToCrop=["*"]` all the attributes present in `attributesToRetrieve` will be automatically assigned to `attributesToCrop`.
 
-##### 1.2.1.12. `cropLength`
+- 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToCrop` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+
+##### 3.1.11.2. Custom `cropLength` Defined Per Attribute.
+
+Optionally, indicating a custom crop length for any of the listed attributes is possible:
+
+`"attributesToCrop":["attributeNameA:15", "attributeNameB:30"]`
+
+A custom crop length set in this way has priority over the `cropLength` parameter.
+
+##### 3.1.11.3. searchableAttributes
+
+As for `attributesToHighlight`, attributes not defined in the `searchableAttributes` index setting are also cropped if assigned to `attributesToCrop`.
+
+#### 3.1.1.12. `cropLength`
 
 - Type: Integer
 - Required: False
-- Default: `200`
+- Default: `10`
 
-Configures the number of characters to keep on each side of the matching query term when using the `attributesToCrop` parameter.
+Sets the total number of **words** to keep around the matched part of an attribute specified in the `attributesToCrop` parameter.
 
 If `attributesToCrop` is not configured, `cropLength` has no effect on the returned results.
 
-- 🔴 Sending a value with a different type than `Integer` or `null` for `cropLength` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Integer` or `null` for `cropLength` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-##### 1.2.1.13. `cropMarker`
+#### 3.1.1.13. `cropMarker`
 
 - Type: String
 - Required: False
 - Default: `"…"` (U+2026)
 
-Specify the
+Sets the crop marker to apply before and/or after the query terms that have matched within an attribute defined in `attributesToCrop`. See [3.1.11. `attributesToCrop`](#3111-attributestocrop) section.
 
-##### 1.2.1.14. `matches`
+The specified crop marker is applied by following rules. See [3.1.1.13.1. Applying `cropMarker`](#311131-applying-cropmarker) section.
+
+Specifying `cropMarker` to `""` or `null` implies that no marker will be applied to the cropped attribute.
+
+- 🔴 Sending a value with a different type than `String` or `null` for `cropMarker` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+
+##### 3.1.1.13.1. Applying `cropMarker`
+
+###### 3.1.1.13.1.1. Single Crop
+
+The cropping algorithm only keeps a single cropped part. It means that if any query terms could have been matched outside the number of words specified by `cropLength`. They will not be included into the resulting cropped part.
+
+Given a document
+
+```json
+{
+    "id": 0,
+    "description": "Every year, food waste is about a third of our food. A lot of this food waste is cereals, fruit and vegetables. In the UK, more than 97% of food waste ends up in a landfill site. That's a lot!"
+}
+```
+
+If a search query is defined by `"attributesToCrop": ["description:15"]` and `"q": "food waste"`.
+
+The cropped result is
+
+`"Every year, food waste if about a third of our food. A lot of this…"`
+
+###### 3.1.1.13.1.2. Matched Part To Be Cropped
+
+The cropping algorithm tries to match the window with the highest density of query terms within the `cropLength` limit. Then it will pick the window that contains the more ordered query terms.
+
+If two window have the same density, it chooses the first one within the attribute to be cropped.
+
+###### 3.1.1.13.1.3. Positioning Markers
+
+If the cropped part contains the beginning of the attribute to be cropped, the `cropMarker` is not placed to the left of the cropped part.
+
+If the cropped part contains the end of the attribute to be cropped, the `cropMarker`is not placed to the right of the cropped part.
+
+#### 3.1.1.14. `matches`
 
 - Type: Boolean
 - Required: False
@@ -234,9 +303,9 @@ Specify the
 
 Adds a `_matchesInfo` object to the search response that contains the location of each occurrence of queried terms across all fields. This is useful when more control is needed than offered by the built-in highlighting/cropping features.
 
-- 🔴 Sending a value with a different type than `Boolean` or `null` for `matches` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Boolean` or `null` for `matches` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-#### 1.2.2. Search response
+### 3.2. Search Response Properties
 
 | Field                   | Type                         | Required |
 |-------------------------|------------------------------|----------|
@@ -250,7 +319,7 @@ Adds a `_matchesInfo` object to the search response that contains the location o
 | processingTimeMs        | Integer                      | True     |
 | query                   | String                       | True     |
 
-##### 1.2.2.1 `hits`
+#### 3.2.1. `hits`
 
 - Type: Array[Hit]
 - Required: True
@@ -259,79 +328,9 @@ Results of the query as an array of documents.
 
 > The search parameters `attributesToRetrieve` influence the returned payload for a document as a search result. See 1.2.1.7 `attributesToRetrieve` section.
 
-> A Hit object that represents a document within the search results can host special attributes. See 1.2.2.9 `hits` special fields section.
+> Hit object represents a matched document as a search result. It can host special properties, see next section.
 
-##### 1.2.2.2 `limit`
-
-- Type: Integer
-- Required: True
-
-Returns the `limit` search parameter used for the query.
-
-> See 1.2.1.5 `limit` section.
-
-##### 1.2.2.3 `offset`
-
-- Type: Integer
-- Required: True
-
-Returns the `offset` search parameter used for the query.
-
-> See 1.2.1.6 `offset` section.
-
-##### 1.2.2.4 `nbHits`
-
-- Type: Integer
-- Required: True
-
-Returns the total number of candidates for the search query.
-
-##### 1.2.2.5 `exhaustiveNbHits`
-
-- Type: Boolean
-- Required: True
-
-Whether `nbHits` is exhaustive.
-
-> Always return `false`.
-
-##### 1.2.2.6 `facetsDistribution`
-
-- Type: Object
-- Required: False
-
-Added to the search response when `facetsDistribution` is set for a search query. It contains the number of remaining candidates for each specified facet in the `facetsDistribution` search parameter.
-
-> See 1.2.1.4 `facetsDistribution` section.
-> See [Filter And Facet Behavior](0027-filter-and-facet-behavior.md)
-
-##### 1.2.2.7 `exhaustiveFacetsCount`
-
-- Type: Boolean
-- Required: False
-
-Whether `facetsDistribution` count is exhaustive. The field `exhaustiveFacetsCount` is added when `facetsDistribution` is set as a search parameter.
-
-> Always returns `false`.
-
-##### 1.2.2.7 `processingTimeMs`
-
-- Type: Integer
-- Required: True
-
-Processing time of the search query in milliseconds.
-
-##### 1.2.2.8 `query`
-
-- Type: String
-- Required: True
-- Default: `""`
-
-Query originating the response. Equals to the `q` search parameter.
-
-> See 1.2.1.1 `q` section.
-
-##### 1.2.2.9 `hits` special fields
+##### 3.2.1.1. `hits` Special Properties
 
 | Field                   | Type        | Required |
 |-------------------------|-------------|----------|
@@ -339,7 +338,7 @@ Query originating the response. Equals to the `q` search parameter.
 | _formatted              | Object      | False    |
 | _matchesInfo            | Object      | False    |
 
-###### 1.2.2.9.1 `_geoDistance`
+###### 3.2.1.1.1. `_geoDistance`
 
 - Type: Integer
 - Required: False
@@ -348,16 +347,52 @@ Search queries using `_geoPoint` will always include a `_geoDistance` field cont
 
 > See [GeoSearch](0059-geo-search.md)
 
-###### 1.2.2.9.2 `_formatted`
+###### 3.2.1.1.2. `_formatted`
 
 - Type: Object
 - Required: False
 
 Object containing the cropped/highlighted values of the fields specified in `attributesToHighlight` or/and `attributesToCrop`.
 
-> See 1.2.1.8 `attributesToHighlight` section and 1.2.1.9 `attributesToCrop` section.
+###### 3.2.1.1.2.1 Example
 
-###### 1.2.2.9.3 `_matchesInfo`
+Given the following search query payload
+
+```json
+{
+    "q": "Summer T-Shirt",
+    "attributesToRetrieve": ["*"],
+    "attributesToHighlight": ["*"],
+    "attributesToCrop": ["description:10"]
+}
+```
+
+It returns
+
+```json
+{
+    "hits": [
+        {
+            "name": "T-shirt",
+            "id": 4,
+            "description": "Super cool T-Shirt for the summer. Soft, breathable jersey T-shirt fabric. Body: 100% Cotton.",
+            "_formatted": {
+                "name": "<em>T</em>-<em>shirt</em>",
+                "id": "4",
+                "description": "Super cool <em>T</em>-<em>Shirt</em> for the <em>summer</em>. Soft, breathable…"
+            }
+        }
+    ],
+    "nbHits": 1,
+    "exhaustiveNbHits": false,
+    "query": "Summer T-Shirt",
+    "limit": 20,
+    "offset": 0,
+    "processingTimeMs": 6
+}
+```
+
+###### 3.2.1.1.3. `_matchesInfo`
 
 - Type: Object
 - Required: False
@@ -370,8 +405,80 @@ The beginning of a matching term within a field is indicated by `start`, and its
 
 > See 1.2.1.11 `matches` section.
 
+#### 3.2.2. `limit`
+
+- Type: Integer
+- Required: True
+
+Returns the `limit` search parameter used for the query.
+
+> See 1.2.1.5 `limit` section.
+
+#### 3.2.3. `offset`
+
+- Type: Integer
+- Required: True
+
+Returns the `offset` search parameter used for the query.
+
+> See 1.2.1.6 `offset` section.
+
+#### 3.2.4. `nbHits`
+
+- Type: Integer
+- Required: True
+
+Returns the total number of candidates for the search query.
+
+#### 3.2.5. `exhaustiveNbHits`
+
+- Type: Boolean
+- Required: True
+
+Whether `nbHits` is exhaustive.
+
+> Always return `false`.
+
+#### 3.2.6. `facetsDistribution`
+
+- Type: Object
+- Required: False
+
+Added to the search response when `facetsDistribution` is set for a search query. It contains the number of remaining candidates for each specified facet in the `facetsDistribution` search parameter.
+
+> See 1.2.1.4 `facetsDistribution` section.
+> See [Filter And Facet Behavior](0027-filter-and-facet-behavior.md)
+
+#### 3.2.7. `exhaustiveFacetsCount`
+
+- Type: Boolean
+- Required: False
+
+Whether `facetsDistribution` count is exhaustive. The field `exhaustiveFacetsCount` is added when `facetsDistribution` is set as a search parameter.
+
+> Always returns `false`.
+
+#### 3.2.8. `processingTimeMs`
+
+- Type: Integer
+- Required: True
+
+Processing time of the search query in milliseconds.
+
+#### 3.2.9. `query`
+
+- Type: String
+- Required: True
+- Default: `""`
+
+Query originating the response. Equals to the `q` search parameter.
+
+> See 1.2.1.1 `q` section.
+
 ## 2. Technical Details
 n/a
 
 ## 3. Future Possibilities
 - Add dedicated errors to replace `bad_request` error.
+- Move `attributesToHighlight`, `highlightPreTag`, `highlightPostTag`, `attributesToCrop`, `cropLength` and `cropMarker` into a `formatter` objet.
+- Expose the `formatter` resource as an index setting.
