@@ -277,6 +277,7 @@ This property allows us to gather essential information to better understand on 
 | Property name | Description | Example |
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (2.1)", "Ruby (3.0)"]` |
+| searchable_attributes.total | Number of searchable attributes. | `3`|
 | ranking_rules.sort_position | Position of the `sort` ranking rule if any, otherwise `null`. | `5` |
 | sortable_attributes.total   | Number of sortable attributes. | `3` |
 | sortable_attributes.has_geo | Indicate if `_geo` is set as a sortable attribute. | `false`|
