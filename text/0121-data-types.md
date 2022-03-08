@@ -299,7 +299,7 @@ The following JSON document:
         "b": "c",
     },
     "a.b": "d"
-}```
+}
 
 Flattens to:
 
