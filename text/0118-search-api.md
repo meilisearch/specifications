@@ -214,7 +214,7 @@ Defines document attributes to be cropped. Cropped attributes have their values 
 
 The number of words contained in the cropped value is defined by the `cropLength` parameter. See [3.1.1.12. `cropLength`](#31112-croplength) section.
 
-The value of `cropLength` can be customized per attribute. See [3.1.11.2. Custom `cropLength` Defined Per Cropped Attribute](#31112-custom-croplength-defined-per-attribute) section.
+The value of `cropLength` can be customized per attribute. See [3.1.11.1. Custom `cropLength` Defined Per Cropped Attribute](#31111-custom-croplength-defined-per-attribute) section.
 
 The engine adds a marker by default in front of and/or behind the part selected by the cropper. This marker is customizable. See [3.1.1.13. `cropMarker`](#31113-cropmarker) section.
 
@@ -224,7 +224,7 @@ If `"*"` is provided as a value: `attributesToCrop=["*"]` all the attributes pre
 
 - 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToCrop` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-##### 3.1.11.2. Custom `cropLength` Defined Per Attribute.
+##### 3.1.11.1. Custom `cropLength` Defined Per Attribute.
 
 Optionally, indicating a custom crop length for any of the listed attributes is possible:
 
@@ -232,7 +232,7 @@ Optionally, indicating a custom crop length for any of the listed attributes is 
 
 A custom crop length set in this way has priority over the `cropLength` parameter.
 
-##### 3.1.11.3. searchableAttributes
+##### 3.1.11.2. searchableAttributes
 
 As for `attributesToHighlight`, attributes not defined in the `searchableAttributes` index setting are also cropped if assigned to `attributesToCrop`.
 
@@ -270,11 +270,13 @@ The cropping algorithm tries to match the window with the highest density of que
 
 If two window have the same density, it chooses the first one within the attribute to be cropped. It also means that only one cropped part is returned.
 
+If no window is found to select a part to be cropped. The value returned will start at the beginning of the attribute until the distance of `cropLength` without any `cropMarker` being applied.
+
 ###### 3.1.1.13.1.2. Positioning Markers
 
-If the cropped part contains the beginning of the attribute to be cropped, the `cropMarker` is not placed to the left of the cropped part.
+If the cropped part has been matched against query terms and contains the beginning of the attribute to be cropped, the `cropMarker` is not placed to the left of the cropped part.
 
-If the cropped part contains the end of the attribute to be cropped, the `cropMarker`is not placed to the right of the cropped part.
+If the cropped part has been matched against query terms and contains the end of the attribute to be cropped, the `cropMarker` is not placed to the right of the cropped part.
 
 #### 3.1.1.14. `matches`
 
@@ -335,7 +337,7 @@ Search queries using `_geoPoint` returns a `_geoDistance` field containing the d
 - Type: Object
 - Required: False
 
-Object containing the cropped/highlighted values, if any, for the fields specified in `attributesToHighlight` or/and `attributesToCrop`.
+`_formatted` returns highlighted and cropped attributes specified in `attributesToHighlight` and/or `attributesToCrop` of a search result.
 
 ###### 3.2.1.1.3. `_matchesInfo`
 
