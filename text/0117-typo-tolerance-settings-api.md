@@ -57,7 +57,7 @@ Any attributes defined in `disableOnAttributes` won't have their values matched 
 - Required: False
 - Default: `[]`
 
-`disableOnWords` disable the typo tolerance feature for a set of search query terms.
+`disableOnWords` disable the typo tolerance feature on a list of search query terms.
 
 #### 3.1.3.4. Example
 
