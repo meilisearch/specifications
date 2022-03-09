@@ -47,7 +47,7 @@ The typo tolerance feature is still used to match documents.
 - Required: False
 - Default: `[]`
 
-`disableOnAttributes` disable the typo tolerance feature on the specified attributes set.
+`disableOnAttributes` disable the typo tolerance feature on the specified attributes list.
 
 Any attributes defined in `disableOnAttributes` won't have their values matched by the typo tolerance.
 
