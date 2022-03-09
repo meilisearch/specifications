@@ -468,6 +468,19 @@ HTTP Code: `400 Bad Request`
 - The `:attribute` is inferred when the message is generated.
 - The `:filterableAttributes` is inferred when the message is generated. It contains the list of filterable attributes separated by a comma. `filterableAttribute1, filterableAttribute2, ...`
 
+#### Variant: Filtering on a non filterable attribute when `filterableAttributes` is empty
+
+```json
+{
+    "message": "Attribute `:attribute` is not filterable. This index does not have configured filterable attributes.",
+    "code": "invalid_filter",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_filter"
+}
+```
+
+- The `:attribute` is inferred when the message is generated.
+
 #### Variant: Using `_geoDistance` as a filter expression
 
 ```json
@@ -528,6 +541,19 @@ HTTP Code: `400 Bad Request`
 
 - The `:attribute` is inferred when the message is generated.
 - The `:sortableAttributes` is inferred when the message is generated. It contains the list of sortable attributes separated by a comma. `sortableAttribute1, sortableAttribute2, ...`
+
+#### Variant: Sorting on a non sortable attribute when `sortableAttributes` is empty
+
+```json
+{
+    "message": "Attribute `:attribute` is not sortable. This index does not have configured sortable attributes.",
+    "code": "invalid_sort",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_sort"
+}
+```
+
+- The `:attribute` is inferred when the message is generated.
 
 #### Variant: Using `_geoDistance` as a sort expression
 
