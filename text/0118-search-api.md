@@ -254,42 +254,23 @@ If `attributesToCrop` is not configured, `cropLength` has no effect on the retur
 - Required: False
 - Default: `"…"` (U+2026)
 
-Sets the crop marker to apply before and/or after the query terms that have matched within an attribute defined in `attributesToCrop`. See [3.1.11. `attributesToCrop`](#3111-attributestocrop) section.
+Sets the crop marker to apply before and/or after cropped part selected within an attribute defined in `attributesToCrop`. See [3.1.11. `attributesToCrop`](#3111-attributestocrop) section.
 
 The specified crop marker is applied by following rules. See [3.1.1.13.1. Applying `cropMarker`](#311131-applying-cropmarker) section.
 
-Specifying `cropMarker` to `""` or `null` implies that no marker will be applied to the cropped attribute.
+Specifying `cropMarker` to `""` or `null` implies that no marker will be applied to the cropped part, if any.
 
 - 🔴 Sending a value with a different type than `String` or `null` for `cropMarker` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 ##### 3.1.1.13.1. Applying `cropMarker`
 
-###### 3.1.1.13.1.1. Single Crop
-
-The cropping algorithm only keeps a single cropped part. It means that if any query terms could have been matched outside the number of words specified by `cropLength`. They will not be included into the resulting cropped part.
-
-Given a document
-
-```json
-{
-    "id": 0,
-    "description": "Every year, food waste is about a third of our food. A lot of this food waste is cereals, fruit and vegetables. In the UK, more than 97% of food waste ends up in a landfill site. That's a lot!"
-}
-```
-
-If a search query is defined by `"attributesToCrop": ["description:15"]` and `"q": "food waste"`.
-
-The cropped result is
-
-`"Every year, food waste if about a third of our food. A lot of this…"`
-
-###### 3.1.1.13.1.2. Matched Part To Be Cropped
+###### 3.1.1.13.1.1. Matched Part To Be Cropped
 
 The cropping algorithm tries to match the window with the highest density of query terms within the `cropLength` limit. Then it will pick the window that contains the more ordered query terms.
 
-If two window have the same density, it chooses the first one within the attribute to be cropped.
+If two window have the same density, it chooses the first one within the attribute to be cropped. It also means that only one cropped part is returned.
 
-###### 3.1.1.13.1.3. Positioning Markers
+###### 3.1.1.13.1.2. Positioning Markers
 
 If the cropped part contains the beginning of the attribute to be cropped, the `cropMarker` is not placed to the left of the cropped part.
 
@@ -307,17 +288,17 @@ Adds a `_matchesInfo` object to the search response that contains the location o
 
 ### 3.2. Search Response Properties
 
-| Field                   | Type                         | Required |
-|-------------------------|------------------------------|----------|
-| hits                    | Array[Hit]                   | True     |
-| limit                   | Integer                      | True     |
-| offset                  | Integer                      | True     |
-| nbHits                  | Integer                      | True     |
-| exhaustiveNbHits        | Boolean                      | True     |
-| facetsDistribution      | Object                       | False    |
-| exhaustiveFacetsCount   | Boolean                      | False    |
-| processingTimeMs        | Integer                      | True     |
-| query                   | String                       | True     |
+| Field                                                 | Type                         | Required |
+|-------------------------------------------------------|------------------------------|----------|
+| [`hits`](#321-hits)                                   | Array[Hit]                   | True     |
+| [`limit`](#322-limit)                                 | Integer                      | True     |
+| [`offset`](#323-offset)                               | Integer                      | True     |
+| [`nbHits`](#324-nbhits)                               | Integer                      | True     |
+| [`exhaustiveNbHits`](#325-exhaustivenbhits)           | Boolean                      | True     |
+| [`facetsDistribution`](#326-facetsdistribution)       | Object                       | False    |
+| [`exhaustiveFacetsCount`](#327-exhaustivefacetscount) | Boolean                      | False    |
+| [`processingTimeMs`](#328-processingtimems)           | Integer                      | True     |
+| [`query`](#329-query)                                 | String                       | True     |
 
 #### 3.2.1. `hits`
 
@@ -326,24 +307,26 @@ Adds a `_matchesInfo` object to the search response that contains the location o
 
 Results of the query as an array of documents.
 
-> The search parameters `attributesToRetrieve` influence the returned payload for a document as a search result. See 1.2.1.7 `attributesToRetrieve` section.
+> Hit object represents a matched document as a search result.
 
-> Hit object represents a matched document as a search result. It can host special properties, see next section.
+> The search parameters `attributesToRetrieve` influence the returned payload for a hit. See [3.1.7. `attributesToRetrieve`](#317-attributestoretrieve) section.
+
+A search result can host properties. See [3.2.1.1. `hits` Special Properties](#3211-hits-special-properties) section.
 
 ##### 3.2.1.1. `hits` Special Properties
 
-| Field                   | Type        | Required |
-|-------------------------|-------------|----------|
-| _geoDistance            | Integer     | False    |
-| _formatted              | Object      | False    |
-| _matchesInfo            | Object      | False    |
+| Field                                | Type        | Required |
+|--------------------------------------|-------------|----------|
+| [`_geoDistance`](#32111-geodistance) | Integer     | False    |
+| [`_formatted`](#32112-formatted)     | Object      | False    |
+| [`_matchesInfo`](#32113-matchesinfo) | Object      | False    |
 
 ###### 3.2.1.1.1. `_geoDistance`
 
 - Type: Integer
 - Required: False
 
-Search queries using `_geoPoint` will always include a `_geoDistance` field containing the distance in meters between the document location and the `_geoPoint`.
+Search queries using `_geoPoint` returns a `_geoDistance` field containing the distance in meters between the document `_geo` coordinates and the specified `_geoPoint`.
 
 > See [GeoSearch](0059-geo-search.md)
 
@@ -352,58 +335,20 @@ Search queries using `_geoPoint` will always include a `_geoDistance` field cont
 - Type: Object
 - Required: False
 
-Object containing the cropped/highlighted values of the fields specified in `attributesToHighlight` or/and `attributesToCrop`.
-
-###### 3.2.1.1.2.1 Example
-
-Given the following search query payload
-
-```json
-{
-    "q": "Summer T-Shirt",
-    "attributesToRetrieve": ["*"],
-    "attributesToHighlight": ["*"],
-    "attributesToCrop": ["description:10"]
-}
-```
-
-It returns
-
-```json
-{
-    "hits": [
-        {
-            "name": "T-shirt",
-            "id": 4,
-            "description": "Super cool T-Shirt for the summer. Soft, breathable jersey T-shirt fabric. Body: 100% Cotton.",
-            "_formatted": {
-                "name": "<em>T</em>-<em>shirt</em>",
-                "id": "4",
-                "description": "Super cool <em>T</em>-<em>Shirt</em> for the <em>summer</em>. Soft, breathable…"
-            }
-        }
-    ],
-    "nbHits": 1,
-    "exhaustiveNbHits": false,
-    "query": "Summer T-Shirt",
-    "limit": 20,
-    "offset": 0,
-    "processingTimeMs": 6
-}
-```
+Object containing the cropped/highlighted values, if any, for the fields specified in `attributesToHighlight` or/and `attributesToCrop`.
 
 ###### 3.2.1.1.3. `_matchesInfo`
 
 - Type: Object
 - Required: False
 
-Contains the location of each occurrence of queried terms across all fields. The `_matchesInfo` object is added to a document when `matches` search parameter is specified to true.
+Contains the location of each occurrence of queried terms across all fields. The `_matchesInfo` object is added to a search result when the `matches` search parameter is specified to true.
 
 The beginning of a matching term within a field is indicated by `start`, and its `length` by length.
 
 `start` and `length` are measured in bytes and not the number of characters. For example, `ü` represents two bytes but one character.
 
-> See 1.2.1.11 `matches` section.
+> See [3.1.1.14. `matches`](#31114-matches) section.
 
 #### 3.2.2. `limit`
 
@@ -412,7 +357,7 @@ The beginning of a matching term within a field is indicated by `start`, and its
 
 Returns the `limit` search parameter used for the query.
 
-> See 1.2.1.5 `limit` section.
+> See [3.1.5. `limit`](#315-limit) section.
 
 #### 3.2.3. `offset`
 
@@ -421,7 +366,7 @@ Returns the `limit` search parameter used for the query.
 
 Returns the `offset` search parameter used for the query.
 
-> See 1.2.1.6 `offset` section.
+> See [3.1.6. `offset` section](#316-offset) section.
 
 #### 3.2.4. `nbHits`
 
@@ -446,8 +391,7 @@ Whether `nbHits` is exhaustive.
 
 Added to the search response when `facetsDistribution` is set for a search query. It contains the number of remaining candidates for each specified facet in the `facetsDistribution` search parameter.
 
-> See 1.2.1.4 `facetsDistribution` section.
-> See [Filter And Facet Behavior](0027-filter-and-facet-behavior.md)
+> See See [3.1.4. `facetsDistribution`](#314-facetsdistribution) section.
 
 #### 3.2.7. `exhaustiveFacetsCount`
 
@@ -463,7 +407,7 @@ Whether `facetsDistribution` count is exhaustive. The field `exhaustiveFacetsCou
 - Type: Integer
 - Required: True
 
-Processing time of the search query in milliseconds.
+Processing time of the search query in **milliseconds**.
 
 #### 3.2.9. `query`
 
@@ -473,7 +417,7 @@ Processing time of the search query in milliseconds.
 
 Query originating the response. Equals to the `q` search parameter.
 
-> See 1.2.1.1 `q` section.
+> See [3.1.1. `q`](#311-q) section.
 
 ## 2. Technical Details
 n/a
