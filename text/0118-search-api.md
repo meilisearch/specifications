@@ -186,7 +186,7 @@ Attributes defined in the `stopWords` index setting are also highlighted if matc
 - Required: False
 - Default: `"<em>"`
 
-Specify the tag to put **before** the matched query terms.
+Specify the tag to put **before** the highlighted query terms.
 
 This parameter is taken into account when `attributesToHighlight` is specified. See [3.1.8. `attributesToHighlight`](#318-attributestohighlight) section.
 
@@ -198,7 +198,7 @@ This parameter is taken into account when `attributesToHighlight` is specified. 
 - Required: False
 - Default: `"</em>"`
 
-Specify the tag to put **after** the matched query terms.
+Specify the tag to put **after** the highlighted query terms.
 
 This parameter is taken into account when `attributesToHighlight` is specified. See [3.1.8. `attributesToHighlight`](#318-attributestohighlight) section.
 
