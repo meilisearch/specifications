@@ -112,8 +112,8 @@ The expected behavior of each flag is described in the list above.
 - [Import snapshot](#3317-import-snapshot)
 - [Ignore missing snapshot](#3318-ignore-missing-snapshot)
 - [Ignore snapshot if DB exists](#3319-ignore-snapshot-if-db-exists)
-- [Memory usage](#3320-memory-usage)
-- [Indexing jobs](#3321-indexing-jobs)
+- [Max memory usage when indexing](#3320-max-memory-usage-when-indexing)
+- [Max indexing threads](#3321-max-indexing-threads)
 - [SSL configuration](#3322-ssl-authentication-path)
 - [SSL authentication path](#3322-ssl-authentication-path)
 - [SSL certificates path](#3323-ssl-certificates-path)
@@ -343,14 +343,14 @@ Prevents a Meilisearch instance with an existing database from throwing an error
 
 This command will throw an error if `--import-snapshot` is not defined.
 
-#### 3.3.20. Memory usage
+#### 3.3.20. Max memory usage when indexing
 
-**Environment variable**: `MEILI_MAX_MEMORY`
-**CLI option**: `--max-memory`
+**Environment variable**: `MEILI_MAX_INDEXING_MEMORY`
+**CLI option**: `--max-indexing-memory`
 **Default value**: 2/3 of the available RAM of the machine
 **Expected value**: an integer (`104857600`) or a human readable size (`100Mb`)
 
-Set the maximum size of the RAM used by Meilisearch. By default, Meilisearch adapts its behavior to make the indexation use a maximum two thirds of available resources.
+Set the maximum size of the RAM used by Meilisearch when indexing. By default, Meilisearch adapts its behavior to make the indexation use a maximum two thirds of available resources.
 
 Value must be given in bytes or explicitly stating a base unit. For example, the default value can be written as `107374182400`, `'107.7Gb'`, or `'107374 Mb'`.
 
@@ -359,14 +359,14 @@ Value must be given in bytes or explicitly stating a base unit. For example, the
 - This command-line option will not perfectly ensure the RAM usage, but will help you manage multiple Meilisearch engines on the same machine (for example, using Kubernetes). The search engine cannot guarantee the exact usage of the RAM.
 - If the number set is higher than the real available RAM in the machine, we cannot prevent Meilisearch from crashing.
 
-#### 3.3.21. Indexing jobs
+#### 3.3.21. Max indexing threads
 
-**Environment variable**: `MEILI_INDEXING_JOBS`
-**CLI option**: `--indexing-jobs`
+**Environment variable**: `MEILI_MAX_INDEXING_THREADS`
+**CLI option**: `--max-indexing-threads`
 **Default value**: half of the available core of the machine
 **Expected value**: an integer
 
-Sets the number of threads available during the indexation.
+Sets the maximum number of threads available during the indexation.
 
 By default, in machines with multi-core processors, the indexer avoids using more than half of the available processing units. For example, if your machine has twelve cores, the indexer will try to use six of them at most. This ensures Meilisearch is always ready to perform searches, even while you are updating an index.
 
