@@ -21,7 +21,7 @@ Meilisearch exposes 2 routes to perform search requests:
 If a master key secures the Meilisearch instance, the auth layer returns the following errors:
 
 - 🔴 Accessing these routes without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Accessing these routes with a key that does not have permissions (i.e. other than the master key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
 `POST` HTTP verb errors:
 
