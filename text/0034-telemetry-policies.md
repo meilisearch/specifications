@@ -164,7 +164,7 @@ This property allows us to gather essential information to better understand on 
 | infos.debounce_duration_sec | Value of `--debounce-duration-sec`in seconds, otherwise `0` | `3600` |
 | infos.log_level | Value of `--log-level`/`MEILI_LOG_LEVEL`  | `debug` |
 | infos.max_indexing_memory  | Value of `--max-indexing-memory`/`MEILI_MAX_INDEXING_MEMORY` in bytes     | `336042103` |
-| infos.indexing_jobs  | Value of `--indexing-jobs`/`MEILI_INDEXING_JOBS` in integer | `4` |
+| infos.max_indexing_threads  | Value of `--max-indexing-threads`/`MEILI_MAX_INDEXING_THREADS` in integer | `4` |
 
 ##### MeiliSearch Statistics `stats`
 
