@@ -156,19 +156,19 @@ If no value is specified, `attributesToRetrieve` uses the `displayedAttributes` 
 
 #### 3.1.8. `attributesToHighlight`
 
-- Type: Array[String](POST)|String(GET)
+- Type: Array of String (POST) | String(GET)
 - Required: False
 - Default: `[]|null`
 
-Highlights document parts matching query terms in the `q` search parameter for the specified attributes.
+Highlights document parts matching query terms from the [`q`](#311-q) search parameter for the specified attributes.
 
 Search results include a `_formatted` object containing the highlighted terms when this parameter is defined. See [3.2.1.1.2. `_formatted`](#32112-formatted) section.
 
-Highlighted parts are surrounded by the [`highlightPreTag`](#319-highlightpretag) and [`highlightPostTag`](#3110-highlightposttag) parameter.
+Highlighted parts are surrounded by the [`highlightPreTag`](#319-highlightpretag) and [`highlightPostTag`](#3110-highlightposttag) parameters.
 
-If `"*"` is provided as a value: e.g. `"attributesToHighlight":["*"]` all the attributes present in `attributesToRetrieve` will be assigned to `attributesToHighlight`.
+If `"*"` is provided as a value: e.g. `"attributesToHighlight":["*"]`, all the attributes present in `attributesToRetrieve` will be assigned to `attributesToHighlight`.
 
-`attributesToHighlight` only works on values of the following types: `string`, `number`, `array`, `object`.
+`attributesToHighlight` only works on values of the following types: `string`, `number`, `array`, `object`. When highlighted, number attributes are transformed to string.
 
 - 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToHighlight` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
@@ -268,9 +268,9 @@ Specifying `cropMarker` to `""` or `null` implies that no marker will be applied
 
 The cropping algorithm tries to match the window with the highest density of query terms within the `cropLength` limit. Then it will pick the window that contains the more ordered query terms.
 
-If two window have the same density, it chooses the first one within the attribute to be cropped. It also means that only one cropped part is returned.
+If two windows have the same density, it chooses the first one within the attribute to be cropped. It also means that only one cropped part is returned.
 
-If no window is found to select a part to be cropped. The value returned will start at the beginning of the attribute until the distance of `cropLength` without any `cropMarker` being applied.
+If no match is found when selecting a part to be cropped. The returned value in `_formatted` will start at the beginning of the attribute until the distance of `cropLength` without any `cropMarker` being applied.
 
 ###### 3.1.1.13.1.2. Positioning Markers
 
@@ -284,7 +284,7 @@ If the cropped part has been matched against query terms and contains the end of
 - Required: False
 - Default: `false`
 
-Adds a `_matchesInfo` object to the search response that contains the location of each occurrence of queried terms across all fields. This is useful when more control is needed than offered by the built-in highlighting/cropping features.
+Adds a `_matchesInfo` object to the search response that contains the location of each occurrence of queried terms across all fields. It's useful when more control is needed than offered by the built-in highlighting/cropping features.
 
 - 🔴 Sending a value with a different type than `Boolean` or `null` for `matches` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
@@ -307,15 +307,15 @@ Adds a `_matchesInfo` object to the search response that contains the location o
 - Type: Array[Hit]
 - Required: True
 
-Results of the query as an array of documents.
+Results of the search query as an array of documents.
 
 > Hit object represents a matched document as a search result.
 
 > The search parameters `attributesToRetrieve` influence the returned payload for a hit. See [3.1.7. `attributesToRetrieve`](#317-attributestoretrieve) section.
 
-A search result can host properties. See [3.2.1.1. `hits` Special Properties](#3211-hits-special-properties) section.
+A search result can host special properties. See [3.2.1.1. `hit` Special Properties](#3211-hits-special-properties) section.
 
-##### 3.2.1.1. `hits` Special Properties
+##### 3.2.1.1. `hit` Special Properties
 
 | Field                                | Type        | Required |
 |--------------------------------------|-------------|----------|
@@ -393,7 +393,7 @@ Whether `nbHits` is exhaustive.
 
 Added to the search response when `facetsDistribution` is set for a search query. It contains the number of remaining candidates for each specified facet in the `facetsDistribution` search parameter.
 
-> See See [3.1.4. `facetsDistribution`](#314-facetsdistribution) section.
+> See [3.1.4. `facetsDistribution`](#314-facetsdistribution) section.
 
 #### 3.2.7. `exhaustiveFacetsCount`
 
@@ -425,6 +425,11 @@ Query originating the response. Equals to the `q` search parameter.
 n/a
 
 ## 3. Future Possibilities
+
 - Add dedicated errors to replace `bad_request` error.
+
+### 3.1. Formatting Search Results
+
 - Move `attributesToHighlight`, `highlightPreTag`, `highlightPostTag`, `attributesToCrop`, `cropLength` and `cropMarker` into a `formatter` objet.
+- Add an option to only highlight complete query term.
 - Expose the `formatter` resource as an index setting.
