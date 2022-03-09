@@ -688,7 +688,7 @@ components:
       description: Specify the tag to put before the highlighted query terms.
       schema:
         type: string
-        default: '"<em>"'
+        default: '<em>'
     highlightPostTag:
       name: highlightPostTag
       in: query
@@ -696,7 +696,7 @@ components:
       description: Specify the tag to put after the highlighted query terms.
       schema:
         type: string
-        default: '"</em>"'
+        default: '</em>'
     attributesToCrop:
       name: attributesToCrop
       in: query
@@ -712,7 +712,7 @@ components:
       required: false
       schema:
         type: string
-        default: '"…"'
+        default: '…'
     cropLength:
       name: cropLength
       in: query
@@ -1506,13 +1506,13 @@ paths:
                 highlightPreTag:
                   type: string
                   description: Specify the tag to put before the highlighted query terms.
-                  example: '"<mark>"'
-                  default: '"<em>"'
+                  example: '<mark>'
+                  default: '<em>'
                 highlightPostTag:
                   type: string
                   description: Specify the tag to put after the highlighted query terms.
-                  example: '"</mark>"'
-                  default: '"</em>"'
+                  example: '</mark>'
+                  default: '</em>'
                 attributesToCrop:
                   type: array
                   description: Array of attributes whose values have to be cropped. Cropped attributes are returned in `_formatted` response object.
