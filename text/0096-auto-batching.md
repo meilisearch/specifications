@@ -71,7 +71,7 @@ If not specified, this is unlimited.
 
 ### 3.2.4. `--debounce-duration-sec`
 
-`--debounce-duration-sec <SECS>` allow to wait at least `SECS` seconds between the time the scheduler is notified of a new `task` to batch and processing the related batch.
+`--debounce-duration-sec <SECS>` wait at least `SECS` seconds between the time the scheduler is notified of a new `task` and the processing of the related batch.
 
 Snapshots and dumps are impacted by this debounce duration. It means that they will be processed at the end of the current debounce duration.
 
