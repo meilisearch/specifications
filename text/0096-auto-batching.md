@@ -40,7 +40,7 @@ The identifier chosen for the `task` `batchUid` field corresponds to the `uid` v
 
 #### 3.1.2. Impacts on `task` API resource
 
-- The different tasks grouped in a batch are processed within the same transaction. If a task fails within a batch, all the tasks fail or succeed.
+- The different tasks grouped in a batch are processed within the same transaction. If a task fails within a batch, the whole batch fails.
 - A `batchUid` field is only added on fully-qualified `task` API objects. It corresponds to the `task` `uid` value of the first task grouped within a batch. `batchUid` values are therefore unique and consecutive.
 - Tasks within the same batch share the same values for the `startedAt`, `finishedAt`, `duration` fields, and the same `error` object if an error occurs for a `task` during the batch processing.
 - If a batch contains many `tasks`, the `task` `details` `indexedDocuments` is identical in all `tasks` belonging to the same processed `batch`.
