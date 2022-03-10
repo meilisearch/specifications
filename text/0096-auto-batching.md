@@ -26,7 +26,7 @@ Only consecutive `documentAddition` and `documentPartial` tasks for the same ind
 
 The scheduling program that groups tasks within a single batch is triggered when an asynchronous `task` currently processed reaches a terminal state as `succeeded` or `failed`.
 
-In other words, when a scheduled `task` is picked from the FIFO task queue, the scheduler fetches and groups all consecutive `documentAddition` for a similar index in a batch until it encounters another task type or a similar task type but for a different index.
+In other words, when a scheduled `documentAddition` task is picked from the task queue, the scheduler fetches and groups all `documentAddition` tasks for a similar index in a batch until it encounters another task type for that index.
 
 The more similar consecutive tasks the user sends in a row, the more likely the batching mechanism can group these tasks.
 
@@ -36,12 +36,12 @@ The more similar consecutive tasks the user sends in a row, the more likely the 
 
 ##### 3.1.1.2. `batchUid` generation
 
-The identifier chosen for the `task` `batchUid` field corresponds to the `uid` value of the first task grouped within a batch. The batch identifiers are therefore unique and consecutive.
+The identifier chosen for the `task` `batchUid` field corresponds to the `uid` value of the first task grouped within a batch. The batch identifiers are unique and ascending.
 
 #### 3.1.2. Impacts on `task` API resource
 
 - The different tasks grouped in a batch are processed within the same transaction. If a task fails within a batch, the whole batch fails.
-- A `batchUid` field is only added on fully-qualified `task` API objects. It corresponds to the `task` `uid` value of the first task grouped within a batch. `batchUid` values are therefore unique and consecutive.
+- A `batchUid` field is only added on fully-qualified `task` API objects. It corresponds to the `task` `uid` value of the first task grouped within a batch. `batchUid` values are unique and in ascending order.
 - Tasks within the same batch share the same values for the `startedAt`, `finishedAt`, `duration` fields, and the same `error` object if an error occurs for a `task` during the batch processing.
 - If a batch contains many `tasks`, the `task` `details` `indexedDocuments` is identical in all `tasks` belonging to the same processed `batch`.
 
@@ -71,7 +71,9 @@ If not specified, this is unlimited.
 
 ### 3.2.4. `--debounce-duration-sec`
 
-`--debounce-duration-sec <SECS>` allow to wait at least `SECS` seconds before processing a scheduled batch.
+`--debounce-duration-sec <SECS>` allow to wait at least `SECS` seconds between the time the scheduler is notified of a new `task` to batch and processing the related batch.
+
+Snapshots and dumps are impacted by this debounce duration. It means that they will be processed at the end of the current debounce duration.
 
 Defaults to `0`secs (process immediately).
 
@@ -82,5 +84,5 @@ N/A
 
 - Extends it for all consecutive payload types.
 - Add a filter capability by `batchUid` on the `/tasks` endpoints.
-- Schedule non-consecutive tasks.
-- Do not fail the entire transaction if a document is not valid. We must find a way to log the documents that could not be indexed.
+- Do not fail the entire transaction if a document is not valid. Report the documents that could not be indexed to the user.
+- Enable auto-batching by default.
