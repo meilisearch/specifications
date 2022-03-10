@@ -320,7 +320,7 @@ This error happens when the `minWordSizeFor2Typos` field of `typoTolerance` reso
 
 ```json
 {
-    "message": "`minWordSizeFor2Typos` field value `:value` is invalid. It should be an integer superior to 0 and superior or equals to `minWordSizeFor1Typo`.",
+    "message": "`minWordSizeFor2Typos` field value `:value` is invalid. It should be an integer superior to 0 and superior or equals to the value defined in the field `minWordSizeFor1Typo`.",
     "code": "invalid_typo_tolerance_min_word_size_for_2_typos",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_typo_tolerance_min_word_size_for_2_typos"
