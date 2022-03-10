@@ -18,7 +18,7 @@ To make Meilisearch easier to use, we explored the idea of automatically creatin
 
 ### 3.1. Explanations
 
-All `tasks` are linked to a `batchUid` field. The `batchUid` field identifies that several identical, consecutive tasks have been grouped in the same batch.
+All `tasks` are part of a batch identified by a `batchUid`. A task batch preserves the logical order of the tasks for a given index.
 
 Only consecutive `documentAddition` and `documentPartial` tasks for the same index can have the same `batchUid`. All `tasks` concerning other operations will also be part of a `batchUid` having only one task.
 
@@ -26,7 +26,7 @@ Only consecutive `documentAddition` and `documentPartial` tasks for the same ind
 
 The scheduling program that groups tasks within a single batch is triggered when an asynchronous `task` currently processed reaches a terminal state as `succeeded` or `failed`.
 
-In other words, when a scheduled `documentAddition` task is picked from the task queue, the scheduler fetches and groups all `documentAddition` tasks for a similar index in a batch until it encounters another task type for that index.
+In other words, when a scheduled `documentAddition` task for a given index is picked from the task queue, the scheduler fetches and groups all `documentAddition` tasks for that same index in a batch until it encounters another task type for that index.
 
 The more similar consecutive tasks the user sends in a row, the more likely the batching mechanism can group these tasks.
 
@@ -36,12 +36,12 @@ The more similar consecutive tasks the user sends in a row, the more likely the 
 
 ##### 3.1.1.2. `batchUid` generation
 
-The identifier chosen for the `task` `batchUid` field corresponds to the `uid` value of the first task grouped within a batch. The batch identifiers are unique and ascending.
+The batch identifiers are unique and strictly increasing.
 
 #### 3.1.2. Impacts on `task` API resource
 
 - The different tasks grouped in a batch are processed within the same transaction. If a task fails within a batch, the whole batch fails.
-- A `batchUid` field is only added on fully-qualified `task` API objects. It corresponds to the `task` `uid` value of the first task grouped within a batch. `batchUid` values are unique and in ascending order.
+- A `batchUid` field is only added on fully-qualified `task` API objects. `batchUid` values are unique and strictly increasing.
 - Tasks within the same batch share the same values for the `startedAt`, `finishedAt`, `duration` fields, and the same `error` object if an error occurs for a `task` during the batch processing.
 - If a batch contains many `tasks`, the `task` `details` `indexedDocuments` is identical in all `tasks` belonging to the same processed `batch`.
 
