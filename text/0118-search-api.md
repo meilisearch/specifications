@@ -74,7 +74,7 @@ If the instance is secured by a master-key, the auth layer returns the following
 Attributes used as filter criteria must be added to the `filterableAttributes` list of an index settings. See [Filterable Attributes Setting API](0123-filterable-attributes-setting-api.md).
 
 - 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `filter` returns an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
-- 🔴 Sending an invalid syntax for `filter` returs an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
+- 🔴 Sending an invalid syntax for `filter` returns an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
 - 🔴 Sending a field not defined as a `filterableAttributes` for `filter` returns an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
 
 > See [Filter And Facet Behavior](0027-filter-and-facet-behavior.md)
