@@ -363,7 +363,7 @@ Value must be given in bytes or explicitly stating a base unit. For example, the
 
 **Environment variable**: `MEILI_MAX_INDEXING_THREADS`
 **CLI option**: `--max-indexing-threads`
-**Default value**: half of the available cores of the machine
+**Default value**: half of the available threads of the machine
 **Expected value**: an integer
 
 Sets the maximum number of threads available to use during the indexation.
