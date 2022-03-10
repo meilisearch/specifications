@@ -255,7 +255,7 @@ This error happens when the `disableOnAttributes` field of `typoTolerance` resou
 
 ```json
 {
-    "message": "`disableOnAttributes` field value `:value` is invalid. It should be an array of string representing document attributes.",
+    "message": "`disableOnAttributes` field value `:value` is invalid. It should be an array of strings representing document's attributes.",
     "code": "invalid_typo_tolerance_disable_on_attributes",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_typo_tolerance_disable_on_attributes"
@@ -278,7 +278,7 @@ This error happens when the `disableOnWords` field of `typoTolerance` resource i
 
 ```json
 {
-    "message": "`disableOnWords` field value `:value` is invalid. It should be an array of string representing words.",
+    "message": "`disableOnWords` field value `:value` is invalid. It should be an array of strings representing words.",
     "code": "invalid_typo_tolerance_disable_on_words",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_typo_tolerance_disable_on_words"
@@ -299,7 +299,7 @@ This error happens when the `minWordSizeFor1Typo` field of `typoTolerance` resou
 
 ```json
 {
-    "message": "`minWordSizeFor1Typo` field value `:value` is invalid. It should be an integer superior to `0` and inferior or equals to `minWordSizeFor2Typos`.",
+    "message": "`minWordSizeFor1Typo` field value `:value` is invalid. It should be an integer superior to `0` and inferior or equals to the value defined in the field `minWordSizeFor2Typos`.",
     "code": "invalid_typo_tolerance_min_word_size_for_1_typo",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_typo_tolerance_min_word_size_for_1_typo"

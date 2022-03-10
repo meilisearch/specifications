@@ -54,7 +54,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | RankingRules Updated | Occurs when ranking rules are updated via `POST` - `/indexes/:indexUid/settings/ranking-rules`. |
 | FilterableAttributes Updated | Occurs when filterable attributes are updated via `POST` - `/indexes/:indexUid/settings/filterable-attributes`. |
 | SortableAttributes Updated | Occurs when sortable attributes are updated via `POST` - `/indexes/:indexUid/settings/sortable-attributes`. |
-| TypoTolerance Updated | Occurs when typo tolerance settings are updated via `POST` - `/indexes/indexUid/settings/typo-tolerance`. |
+| TypoTolerance Updated | Occurs when typo tolerance settings are updated via `POST` - `/indexes/:indexUid/settings/typo-tolerance`. |
 | Dump Created | Occurs when a dump is created via `POST` - `/dumps`. |
 | Tasks Seen | Occurs when tasks are fetched globally via `GET` - `/tasks`. |
 | Index Tasks Seen | Occurs when tasks are filtered by index via `GET` - `/indexes/:indexUid/tasks`. |
@@ -119,8 +119,8 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `filterable_attributes.has_geo`         | `true` if `_geo` is set as a filterable attribute, otherwise `false` | false | `Settings Updated`, `FilterableAttributes Updated`|
 | `searchable_attributes.total`           | Number of searchable attributes | 4 | `Settings Updated`, `SearchableAttributes Updated` |
 | `typo_tolerance.enabled`                 | Whether the typo tolerance is enabled | `true` | `Settings Updated`, `TypoTolerance Updated` |
-| `typo_tolerance.disable_on_attributes_used    | `true` if at least one value is defined | `false` | `Settings Updated`, `TypoTolerance Updated` |
-| `typo_tolerance.disable_on_words_used   | `true` if at least one value is defined | `false` | `Settings Updated`,  `TypoTolerance Updated` |
+| `typo_tolerance.disable_on_attributes_used`    | `true` if at least one value is defined | `false` | `Settings Updated`, `TypoTolerance Updated` |
+| `typo_tolerance.disable_on_words_used`   | `true` if at least one value is defined | `false` | `Settings Updated`,  `TypoTolerance Updated` |
 | `typo_tolerance.min_word_size_for_1_typo`     | The defined value for `minWordSizeFor1Typo` property | `5` | `Settings Updated`, `TypoTolerance Updated` |
 | `typo_tolerance.min_Word_size_for_2_typos`    | The defined value for `minWordSizeFor2Typos` property | `9` | `Settings Updated`, `TypoTolerance Updated` |
 | `per_task_uid`                          | `true` if an uid is used to fetch a particular task resource, otherwise `false` | true | `Tasks Seen`, `Index Tasks Seen` |
