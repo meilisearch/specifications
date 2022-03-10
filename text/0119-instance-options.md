@@ -350,23 +350,23 @@ This command will throw an error if `--import-snapshot` is not defined.
 **Default value**: 2/3 of the available RAM of the machine
 **Expected value**: an integer (`104857600`) or a human readable size (`100Mb`)
 
-Set the maximum size of the RAM used by Meilisearch when indexing. By default, Meilisearch adapts its behavior to make the indexation use a maximum two thirds of available resources.
+Set the maximum size of the RAM used by Meilisearch when indexing. By default, Meilisearch adapts its behavior to make the indexation use at maximum two-thirds of the available resources.
 
 Value must be given in bytes or explicitly stating a base unit. For example, the default value can be written as `107374182400`, `'107.7Gb'`, or `'107374 Mb'`.
 
 ⚠️ WARNINGS
 - We do not recommend setting the full RAM size of your machine. For example, when running Meilisearch on a machine with 4GB of RAM, do not set this options to `4Gb`
-- This command-line option will not perfectly ensure the RAM usage, but will help you manage multiple Meilisearch engines on the same machine (for example, using Kubernetes). The search engine cannot guarantee the exact usage of the RAM.
+- This command-line option does not perfectly ensure the RAM usage but helps you manage multiple Meilisearch engines on the same machine (for example, using Kubernetes). The search engine cannot guarantee the exact usage of the RAM.
 - If the number set is higher than the real available RAM in the machine, we cannot prevent Meilisearch from crashing.
 
 #### 3.3.21. Max indexing threads
 
 **Environment variable**: `MEILI_MAX_INDEXING_THREADS`
 **CLI option**: `--max-indexing-threads`
-**Default value**: half of the available core of the machine
+**Default value**: half of the available cores of the machine
 **Expected value**: an integer
 
-Sets the maximum number of threads available during the indexation.
+Sets the maximum number of threads available to use during the indexation.
 
 By default, in machines with multi-core processors, the indexer avoids using more than half of the available processing units. For example, if your machine has twelve cores, the indexer will try to use six of them at most. This ensures Meilisearch is always ready to perform searches, even while you are updating an index.
 
