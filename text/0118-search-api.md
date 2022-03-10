@@ -430,6 +430,7 @@ n/a
 
 ### 3.1. Formatting Search Results
 
+- Replaces `_matchesInfo` with chars position instead of bytes. It could also be a `mode` to choose `byte` or `char`.
 - Move `attributesToHighlight`, `highlightPreTag`, `highlightPostTag`, `attributesToCrop`, `cropLength` and `cropMarker` into a `formatter` objet.
 - Add an option to only highlight complete query term.
 - Expose the `formatter` resource as an index setting.
