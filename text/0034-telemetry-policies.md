@@ -122,7 +122,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `typo_tolerance.disable_on_attributes_used`    | `true` if at least one value is defined | `false` | `Settings Updated`, `TypoTolerance Updated` |
 | `typo_tolerance.disable_on_words_used`   | `true` if at least one value is defined | `false` | `Settings Updated`,  `TypoTolerance Updated` |
 | `typo_tolerance.min_word_size_for_1_typo`     | The defined value for `minWordSizeFor1Typo` property | `5` | `Settings Updated`, `TypoTolerance Updated` |
-| `typo_tolerance.min_Word_size_for_2_typos`    | The defined value for `minWordSizeFor2Typos` property | `9` | `Settings Updated`, `TypoTolerance Updated` |
+| `typo_tolerance.min_word_size_for_2_typos`    | The defined value for `minWordSizeFor2Typos` property | `9` | `Settings Updated`, `TypoTolerance Updated` |
 | `per_task_uid`                          | `true` if an uid is used to fetch a particular task resource, otherwise `false` | true | `Tasks Seen`, `Index Tasks Seen` |
 |
 
@@ -291,7 +291,7 @@ This property allows us to gather essential information to better understand on 
 | typo_tolerance.disable_on_attributes_used | `true` if at least one value is defined for `disableOnAttributes` property. | `false` |
 | typo_tolerance.disable_on_words_used    | `true` if at least one value is defined for `disableOnWords` property. | `false` |
 | typo_tolerance.min_word_size_for_1_typo | The defined value for `minWordSizeFor1Typo` property. | `5` |
-| typo_tolerance.min_Word_size_for_2_typos | The defined value for `minWordSizeFor2Typos` property. | `9` |
+| typo_tolerance.min_word_size_for_2_typos | The defined value for `minWordSizeFor2Typos` property. | `9` |
 
 ---
 
@@ -338,7 +338,7 @@ This property allows us to gather essential information to better understand on 
 | typo_tolerance.disable_on_attributes_used | `true` if at least one value is defined for `disableOnAttributes` property. | `false` |
 | typo_tolerance.disable_on_words_used    | `true` if at least one value is defined for `disableOnWords` property. | `false` |
 | typo_tolerance.min_word_size_for_1_typo | The defined value for `minWordSizeFor1Typo` property. | `5` |
-| typo_tolerance.min_Word_size_for_2_typos | The defined value for `minWordSizeFor2Typos` property. | `9` |
+| typo_tolerance.min_word_size_for_2_typos | The defined value for `minWordSizeFor2Typos` property. | `9` |
 
 ## `Dump Created`
 
