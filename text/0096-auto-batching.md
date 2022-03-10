@@ -26,7 +26,7 @@ Only consecutive `documentAddition` and `documentPartial` tasks for the same ind
 
 The scheduling program that groups tasks within a single batch is triggered when an asynchronous `task` currently processed reaches a terminal state as `succeeded` or `failed`.
 
-In other words, when a scheduled `documentAddition` task for a given index is picked from the task queue, the scheduler fetches and groups all `documentAddition` tasks for that same index in a batch until it encounters another task type for that index.
+In other words, when a scheduled `documentAddition` task for a given index is picked from the task queue, the scheduler fetches and groups all `documentAddition` tasks for that same index in a batch.
 
 The more similar consecutive tasks the user sends in a row, the more likely the batching mechanism can group these tasks.
 
@@ -65,13 +65,12 @@ If not specified, this is unlimited.
 
 `--max-documents-per-batch <NUM>` allows setting a limit to the maximum number `NUM` of documents that can be indexed together within a single batch.
 
-Since the batch must contain at least one update, this value can be exceeded.
+Since the batch can't split one update in half, this value is rounded up to the number of documents in the last document addition.
 
 If not specified, this is unlimited.
-
 ### 3.2.4. `--debounce-duration-sec`
 
-`--debounce-duration-sec <SECS>` wait at least `SECS` seconds between the time the scheduler is notified of a new `task` and the processing of the related batch.
+`--debounce-duration-sec <SECS>` wait at least `SECS` seconds between the time the scheduler is notified of a new `task` and the processing of the next batch.
 
 Snapshots and dumps are impacted by this debounce duration. It means that they will be processed at the end of the current debounce duration.
 
@@ -86,3 +85,4 @@ N/A
 - Add a filter capability by `batchUid` on the `/tasks` endpoints.
 - Do not fail the entire transaction if a document is not valid. Report the documents that could not be indexed to the user.
 - Enable auto-batching by default.
+- Optimize some tasks sequence, for example if there is a document addition followed by an index deletion, we could skip the document addition
