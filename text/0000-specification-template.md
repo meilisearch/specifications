@@ -1,6 +1,4 @@
 - Title:
-- Start Date:
-- Specification PR:
 
 # Title
 
