@@ -369,6 +369,7 @@ Value must be given in bytes or explicitly stating a base unit. For example, the
 Sets the maximum number of threads available to use during the indexation.
 
 By default, in machines with multi-core processors, the indexer avoids using more than half of the available processing units. For example, if your machine has twelve cores, the indexer will try to use six of them at most. This ensures Meilisearch is always ready to perform searches, even while you are updating an index.
+Users have to be aware that requiring the totality of the threads for the indexation can lead to a huge impact on the search experience.
 
 Obviously, multi-threading is not possible in machines with only one processor core.
 
