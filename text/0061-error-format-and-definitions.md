@@ -41,9 +41,9 @@ The second motivation is to describe in an exhaustive way all the errors that th
 
 e.g. 401 Unauthorized Response example
 
-```
+```json
 {
-    "message": "authorization header is missing",
+    "message": "The Authorization header is missing. It must use the bearer authorization method.",
     "code": "missing_authorization_header",
     "type": "auth",
     "link": "https://docs.meilisearch.com/errors#missing_authorization_header"
@@ -136,7 +136,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "description field value `:value` is invalid. It should be a string or specified as a null value.",
+    "message": "`description` field value `:value` is invalid. It should be a string or specified as a null value.",
     "code": "invalid_api_key_description",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_api_key_description"
@@ -161,7 +161,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "actions field value `:value` is invalid. It should be an array of string representing action names.",
+    "message": "`actions` field value `:value` is invalid. It should be an array of string representing action names.",
     "code": "invalid_api_key_actions",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_api_key_actions"
@@ -186,7 +186,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "indexes field value `:value` is invalid. It should be an array of string representing index names.",
+    "message": "`indexes` field value `:value` is invalid. It should be an array of string representing index names.",
     "code": "invalid_api_key_indexes",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_api_key_indexes"
@@ -211,7 +211,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "expiresAt field value `:value` is invalid. It should be in ISO-8601 format to represents a date or datetime in the future or specified as a null value. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DDTHH:MM:SS'.",
+    "message": "`expiresAt` field value `:value` is invalid. It should follow the RFC 3339 format to represents a date or datetime in the future or specified as a null value. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
     "code": "invalid_api_key_expires_at",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_api_key_expires_at"
@@ -741,7 +741,7 @@ This error happens when a requested api key can't be found.
 HTTP Code: `404 Not Found`
 
 ```json
-    "message": "API key :apiKey not found.",
+    "message": "API key `:apiKey` not found.",
     "code": "api_key_not_found",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#api_key_not_found"
@@ -874,19 +874,6 @@ HTTP Code: `400 Bad Request`
 
 - The `:payloadType` is inferred when the message is generated. e.g. `json`, `ndjson`, `csv`
 - The `:syntaxErrorHelper` is inferred when the message is generated.
-
-#### Variant: Sending a valid but empty `[]`/`{}` payload on `POST`/`PUT` - `indexes/:indexUid/documents`.
-
-```json
-{
-    "message": "The `:payloadType` payload must contain at least one document.",
-    "code": "malformed_payload",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#malformed_payload"
-}
-```
-
-- The `:payloadType` is inferred when the message is generated. e.g. `json`, `csv`.
 
 ---
 
