@@ -89,11 +89,17 @@ If `Javascript` is specified in `disableOnWords`, the engine won't apply the typ
 
 ## 3.2. API Endpoints Definition
 
-### 3.2.1. `indexes/:index_uid/settings/typo-tolerance`
+### 3.2.1. Global Settings API Endpoints Definition
+
+`typoTolerance` is a sub-resource of `/indexes/:index_uid/settings`.
+
+See [Settings API](0123-settings-api.md).
+
+### 3.2.2. `indexes/:index_uid/settings/typo-tolerance`
 
 Manage the typo tolerance configuration for an index.
 
-#### 3.2.1.1. `GET` - `indexes/:index_uid/settings/typo-tolerance`
+#### 3.2.2.1. `GET` - `indexes/:index_uid/settings/typo-tolerance`
 
 Allow fetching the current definition of the typo tolerance feature for an index.
 
@@ -111,13 +117,11 @@ Allow fetching the current definition of the typo tolerance feature for an index
 
 All properties must be returned when the resource is retrieved.
 
-##### 3.2.1.1.2. Errors
+##### 3.2.2.1.2. Errors
 
 - 🔴 If the index does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
-- 🔴 If Meilisearch is secured, accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 If Meilisearch is secured, accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
-#### 3.2.1.2. `POST` - `indexes/:index_uid/settings/typo-tolerance`
+#### 3.2.2.2. `POST` - `indexes/:index_uid/settings/typo-tolerance`
 
 Allow customizing partially the default settings of the typo tolerance feature for an index.
 
@@ -150,13 +154,14 @@ Request payload
 }
 ```
 
-> Returns a 202 response. See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted)
+##### 3.2.2.2.1. Response Definition
 
-##### 3.2.1.2.1. Errors
+When the request is successful, Meilisearch returns the HTTP code `202 Accepted`. The response's content is the summarized representation of the received asynchronous task.
 
-- 🔴 If the index does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
-- 🔴 If Meilisearch is secured, accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 If Meilisearch is secured, Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted).
+
+##### 3.2.2.2.2. Errors
+
 - 🔴 Omitting Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
 - 🔴 Sending an empty Content-Type returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
@@ -168,21 +173,42 @@ Request payload
 - 🔴 Sending an invalid value for the `minWordSizeFor1Typo` field returns an [invalid_typo_tolerance_min_word_size_for_1_typo](0061-error-format-and-definitions.md#invalid_typo_tolerance_min_word_size_for_1_typo) error.
 - 🔴 Sending an invalid value for the `minWordSizeFor2Typos` field returns an [invalid_typo_tolerance_min_word_size_for_2_typos](0061-error-format-and-definitions.md#invalid_typo_tolerance_min_word_size_for_2_typos) error.
 
-#### 3.2.1.3. `DELETE`- `indexes/:index_uid/settings/typo-tolerance`
+###### 3.2.2.2.2.1. Async Errors
+
+- 🔴 When Meilisearch is secured, if the API Key do not have the `indexes.create` action defined, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error in the related asynchronous `task` resource. See [3.2.2.2.1. Response Definition](#32221-response-definition).
+
+> Otherwise, Meilisearch will create the index in a lazy way. See [3.2.2.2.3. Lazy Index Creation](#32223-lazy-index-creation).
+
+##### 3.2.2.2.3. Lazy Index Creation
+
+If the requested `index_uid` does not exist, and the authorization layer allows it (See [3.2.2.2.2.1. Async Errors](#322221-async-errors)), Meilisearch will create the index when the related asynchronous task resource is executed. See [3.2.2.2.1. Response Definition](#32221-response-definition).
+
+#### 3.2.2.3. `DELETE`- `indexes/:index_uid/settings/typo-tolerance`
 
 Allow resetting the typo tolerance feature to the default for an index.
 
-> Returns a 202 response. See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted)
+##### 3.2.2.3.1. Response Definition
 
-##### 3.2.1.3.1. Errors
+When the request is in a successful state, Meilisearch returns the HTTP code `202 Accepted`. The response's content is the summarized representation of the received asynchronous task.
 
-- 🔴 If the index does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
-- 🔴 If Meilisearch is secured, accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 If Meilisearch is secured, Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted).
 
-### 3.3.1. `indexes/:index_uid/settings`
+##### 3.2.2.3.2. Errors
 
-TODO: Global Settings API spec and cross-ref here
+###### 3.2.2.3.2.1. Asynchronous Index Not Found Error
+
+- 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error in the related async `task` resource. See [3.2.2.3.1. Response Definition](#32231-response-definition).
+
+### 3.2.3. General Errors
+
+These errors apply to all endpoints described here.
+
+#### 3.2.3.1. Auth Errors
+
+The auth layer can return the following errors if Meilisearch is secured (a master-key is defined).
+
+- 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
 ## 2. Technical Details
 
