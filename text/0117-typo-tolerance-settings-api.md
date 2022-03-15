@@ -50,6 +50,21 @@ The typo tolerance feature is still used to match documents.
 
 Any attributes defined in `disableOnAttributes` won't have their values matched by the typo tolerance.
 
+#### 3.1.2.1. Example
+
+Given `["title"]` as `disableOnAttributes` and the following document
+
+```json
+{
+    "id": 0,
+    "title": "Hey World"
+}
+```
+
+The engine won't try to match query term with typos with values of the `title` attribute at search time to match documents.
+
+- Typing `Warld` won't bring the document as a candidate for the search results.
+
 ### 3.1.3. `disableOnWords`
 
 - Type: Array of String
@@ -60,7 +75,7 @@ Any attributes defined in `disableOnAttributes` won't have their values matched 
 
 > This field is case insensitive since the document attributes values are lowercased and de-unicoded internally.
 
-#### 3.1.3.4. Example
+#### 3.1.3.1. Example
 
 If `Javascript` is specified in `disableOnWords`, the engine won't apply the typo tolerance on the query term `Javascript` or `javascript` if typed at search time to match documents.
 
@@ -86,6 +101,7 @@ Given `5` as `minWordSizeFor1Typo` and the following document
     "title": "Hey World"
 }
 ```
+
 - Typing `World` with 1 typos, e.g. `Warld` will match `World`. It accepts 1 typo since `World` size is made of `5` chars.
 - Typing `Hey` with 1 typo, e.g. `Hoy` won't match `Hey`. It accepts 0 typo since `Hey` size is made of `3` chars.
 
