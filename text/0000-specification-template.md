@@ -1,5 +1,3 @@
-- Title:
-
 # Title
 
 ## 1. Summary
