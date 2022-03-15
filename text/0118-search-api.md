@@ -1,5 +1,3 @@
-- Title: Search API
-
 # Search API
 
 ## 1. Summary
