@@ -1,6 +1,4 @@
-- Title: Typo Tolerance Settings API
-
-# Typo Tolerance API
+# Typo Tolerance Settings API
 
 ## 1. Summary
 
