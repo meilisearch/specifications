@@ -76,6 +76,19 @@ If `Javascript` is specified in `disableOnWords`, the engine won't apply the typ
 
 > See [2.1. Typos calculation section](#21-typos-calculation)
 
+#### 3.1.4.1. Example
+
+Given `5` as `minWordSizeFor1Typo` and the following document
+
+```json
+{
+    "id": 0,
+    "title": "Hey World"
+}
+```
+- Typing `World` with 1 typos, e.g. `Warld` will match `World`. It accepts 1 typo since `World` size is made of `5` chars.
+- Typing `Hey` with 1 typo, e.g. `Hoy` won't match `Hey`. It accepts 0 typo since `Hey` size is made of `3` chars.
+
 ### 3.1.5. `minWordSizeFor2Typos`
 
 - Type: Integer
@@ -87,6 +100,20 @@ If `Javascript` is specified in `disableOnWords`, the engine won't apply the typ
 > Given the default value `9`, the search engine handles up to 2 typos on a query term if its length is at least equal to 9 characters.
 
 > See [2.1. Typos calculation section](#21-typos-calculation)
+
+#### 3.1.5.1 Example
+
+Given `3` for `minWordSizeFor1Typo` and `5` as `minWordSizeFor2Typos` and the following document
+
+```json
+{
+    "id": 0,
+    "title": "Hey World"
+}
+```
+
+- Typing `World` with 2 typos, e.g. `Warrld` will match `World`. It accepts 1 typo up to 2 typos since `World` size is made of `5` chars.
+- Typing `Hey` with 1 typo, e.g. `Hoy` will match `Hey`. It accepts only 1 typo since `Hey` size is made of `3` chars.
 
 ## 3.2. API Endpoints Definition
 
