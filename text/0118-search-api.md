@@ -158,7 +158,7 @@ If no value is specified, `attributesToRetrieve` uses the `displayedAttributes` 
 - Required: False
 - Default: `[]|null`
 
-Highlights document parts matching query terms from the [`q`](#311-q) search parameter for the specified attributes.
+Highlights terms in the documents that correspond to the query terms (i.e. the terms in the [`q`](#311-q) search parameter) for the specified attributes.
 
 Search results include a `_formatted` object containing the highlighted terms when this parameter is defined. See [3.2.1.1.2. `_formatted`](#32112-formatted) section.
 
@@ -178,6 +178,10 @@ Attributes not defined in the `searchableAttributes` index setting are also high
 
 Attributes defined in the `stopWords` index setting are also highlighted if matched.
 
+##### 3.1.8.3. Tokenizer Separators
+
+Tokenizer separators are not highlighted.
+
 #### 3.1.9. `highlightPreTag`
 
 - Type: String
@@ -189,6 +193,8 @@ Specify the tag to put **before** the highlighted query terms.
 This parameter is taken into account when `attributesToHighlight` is specified. See [3.1.8. `attributesToHighlight`](#318-attributestohighlight) section.
 
 - 🔴 Sending a value with a different type than `String` for `highlightPreTag` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+
+If `attributesToHighlight` is omitted while `highlightPreTag` is specified, there is no error.
 
 #### 3.1.10. `highlightPostTag`
 
@@ -234,19 +240,73 @@ A custom crop length set in this way has priority over the `cropLength` paramete
 
 As for `attributesToHighlight`, attributes not defined in the `searchableAttributes` index setting are also cropped if assigned to `attributesToCrop`.
 
-#### 3.1.1.12. `cropLength`
+##### 3.1.11.3. stopWords
+
+Attributes defined in the `stopWords` index setting are counted as words regarding `cropLength`.
+
+##### 3.1.11.3. Tokenizer Separators
+
+Tokenizer separators aren't counted as words regarding `cropLength`.
+
+#### 3.1.12. `cropLength`
 
 - Type: Integer
 - Required: False
 - Default: `10`
 
-Sets the total number of **words** to keep around the matched part of an attribute specified in the `attributesToCrop` parameter.
+Sets the total number of **words** to keep for the cropped part of an attribute specified in the `attributesToCrop` parameter. It means that if `10` is set for `cropLength`, the cropped part returned in `_formatted` will only be 10 words long.
 
-If `attributesToCrop` is not configured, `cropLength` has no effect on the returned results.
+This parameter is taken into account when `attributesToCrop` is specified. See [3.1.11. `attributesToCrop`](#3111-attributestocrop) section.
 
 - 🔴 Sending a value with a different type than `Integer` or `null` for `cropLength` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-#### 3.1.1.13. `cropMarker`
+##### 3.1.12.1 Examples
+
+###### 3.1.12.1.1. Extending around
+
+Given an attribute defined in `attributesToCrop` containing:
+
+`"In his ravenous hatred he found no peace, and with boiling blood he scoured the umbral plains, seeking vengence afgainst the dark lords who had robbed him."`
+
+With `croplength` defined as `5` and `q` defined as `boiling blood`, the cropped value will be:
+
+`"…and with boiling blood he…"`
+
+Croppped query terms are counted as a word regarding `cropLength`.
+
+###### 3.1.12.1.3. Length Reassignment to the left.
+
+Given an attribute defined in `attributesToCrop` containing:
+
+`"In his ravenous hatred he found no peace, and with boiling blood he scoured the umbral plains, seeking vengence afgainst the dark lords who had robbed him."`
+
+With `croplength` defined as `5` and `q` defined as `had robbed`, the cropped value will be:
+
+`"…lords who had robbed him."`
+
+In this example:
+
+- `"had robbed"` count for `2` words.
+- The right part contains `1` words. e.g. `"him.`.
+- The cropped part will be filled by `2` words on the left to reach `cropLength`. e.g. `"lords who"`.
+
+###### 3.1.12.1.2. Length Reassignment to the right.
+
+Given an attribute defined in `attributesToCrop` containing:
+
+`"In his ravenous hatred he found no peace, and with boiling blood he scoured the umbral plains, seeking vengence afgainst the dark lords who had robbed him."`
+
+With `croplength` defined as `5` and `q` defined as `hatred`, the cropped value will be:
+
+`"In his ravenous hatred he…"`
+
+In this example:
+
+- `"hatred"` count for `1` word.
+- The left part contains `3` words. e.g. `"In his ravenous`.
+- The cropped part will be filled by `1` words on the right to reach `cropLength`. e.g. `"he"`.
+
+#### 3.1.13. `cropMarker`
 
 - Type: String
 - Required: False
@@ -258,31 +318,42 @@ The specified crop marker is applied by following rules. See [3.1.1.13.1. Applyi
 
 Specifying `cropMarker` to `""` or `null` implies that no marker will be applied to the cropped part, if any.
 
+This parameter is taken into account when `attributesToCrop` is specified. See [3.1.11. `attributesToCrop`](#3111-attributestocrop) section.
+
 - 🔴 Sending a value with a different type than `String` or `null` for `cropMarker` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-##### 3.1.1.13.1. Applying `cropMarker`
+##### 3.1.13.1. Applying `cropMarker`
 
-###### 3.1.1.13.1.1. Matched Part To Be Cropped
+###### 3.1.13.1.1. Matched Part To Be Cropped
 
-The cropping algorithm tries to match the window with the highest density of query terms within the `cropLength` limit. Then it will pick the window that contains the more ordered query terms.
+The cropping algorithm tries to match the window with the highest density of query terms within the `cropLength` limit.
 
-If two windows have the same density, it chooses the first one within the attribute to be cropped. It also means that only one cropped part is returned.
+Here is how the density is calculated:
 
-If no match is found when selecting a part to be cropped. The returned value in `_formatted` will start at the beginning of the attribute until the distance of `cropLength` without any `cropMarker` being applied.
+- The algorithm will favor a part that contains all the query terms within the limits of cropLength, if it doesn't find it, it removes words from the query terms until it finds nothing to crop.
+- If parts have equivalent density, i.e. having the same numbers of query terms found, the algorithm will favor the part that contains the query terms closest to each other.
+- Then if parts have equivalent density, i.e. having the same distance between query terms, the algorithm will favor the part that contains the query terms in the order specified in `q`.
+- If there are still parts with an equivalent density, the algorithm will choose the first one encountered within the attribute.
 
-###### 3.1.1.13.1.2. Positioning Markers
+Only one cropped part from an attribute is returned.
+
+If no part is found when selecting a part to be cropped. The returned value in `_formatted` will start at the beginning of the attribute until the distance of `cropLength` is reached.
+
+###### 3.1.13.1.2. Positioning Markers
 
 If the cropped part has been matched against query terms and contains the beginning of the attribute to be cropped, the `cropMarker` is not placed to the left of the cropped part.
 
 If the cropped part has been matched against query terms and contains the end of the attribute to be cropped, the `cropMarker` is not placed to the right of the cropped part.
 
-#### 3.1.1.14. `matches`
+#### 3.1.14. `matches`
 
 - Type: Boolean
 - Required: False
 - Default: `false`
 
-Adds a `_matchesInfo` object to the search response that contains the location of each occurrence of queried terms across all fields. It's useful when more control is needed than offered by the built-in highlighting/cropping features.
+Adds a `_matchesInfo` object to the search response that contains the location of each occurrence of queried terms across all fields. The given positions are in bytes.
+
+It's useful when more control is needed than offered by the built-in highlighting/cropping features.
 
 - 🔴 Sending a value with a different type than `Boolean` or `null` for `matches` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
