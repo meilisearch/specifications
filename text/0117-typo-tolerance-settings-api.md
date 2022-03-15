@@ -1,5 +1,4 @@
 - Title: Typo Tolerance Settings API
-- Start Date: 2022-02-22
 
 # Typo Tolerance API
 
@@ -59,9 +58,11 @@ Any attributes defined in `disableOnAttributes` won't have their values matched 
 
 `disableOnWords` disable the typo tolerance feature on a list of search query terms.
 
+This field is case insensitive since the document attributes values are lowercased and de-unicoded internally.
+
 #### 3.1.3.4. Example
 
-If `Javascript` is specified in `disableOnWords`, the engine won't apply the typo tolerance on the query term `Javascript` if typed at search time.
+If `Javascript` is specified in `disableOnWords`, the engine won't apply the typo tolerance on the query term `Javascript` or `javascript` if typed at search time.
 
 ### 3.1.4. `minWordSizeFor1Typo`
 
