@@ -224,7 +224,7 @@ HTTP Code: `400 Bad Request`
 
 ## invalid_typo_tolerance_enabled
 
-`Asynchronous`
+`Synchronous`
 
 ### Context
 
@@ -241,11 +241,13 @@ This error happens when the `enabled` field of `typoTolerance` resource is inval
 }
 ```
 
+- The `:value` is inferred when the message is generated.
+
 ---
 
 ## invalid_typo_tolerance_disable_on_attributes
 
-`Asynchronous`
+`Synchronous`
 
 ### Context
 
@@ -262,19 +264,19 @@ This error happens when the `disableOnAttributes` field of `typoTolerance` resou
 }
 ```
 
+- The `:value` is inferred when the message is generated.
+
 ---
 
 ## invalid_typo_tolerance_disable_on_words
 
-`Asynchronous`
+`Synchronous`
 
 ### Context
 
 This error happens when the `disableOnWords` field of `typoTolerance` resource is invalid.
 
 ### Error Definition
-
-//TODO: Should it check for space in a given string?
 
 ```json
 {
@@ -289,7 +291,7 @@ This error happens when the `disableOnWords` field of `typoTolerance` resource i
 
 ## invalid_typo_tolerance_min_word_size_for_1_typo
 
-`Asynchronous`
+`Asynchronous/Synchronous`
 
 ### Context
 
@@ -306,11 +308,13 @@ This error happens when the `minWordSizeFor1Typo` field of `typoTolerance` resou
 }
 ```
 
+- The `:value` is inferred when the message is generated.
+
 ---
 
 ## invalid_typo_tolerance_min_word_size_for_2_typos
 
-`Asynchronous`
+`Asynchronous/Synchronous`
 
 ### Context
 
@@ -326,6 +330,8 @@ This error happens when the `minWordSizeFor2Typos` field of `typoTolerance` reso
     "link": "https://docs.meilisearch.com/errors#invalid_typo_tolerance_min_word_size_for_2_typos"
 }
 ```
+
+- The `:value` is inferred when the message is generated.
 
 ---
 

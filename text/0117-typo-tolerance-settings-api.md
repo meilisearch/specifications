@@ -58,11 +58,11 @@ Any attributes defined in `disableOnAttributes` won't have their values matched 
 
 `disableOnWords` disable the typo tolerance feature on a list of search query terms.
 
-This field is case insensitive since the document attributes values are lowercased and de-unicoded internally.
+> This field is case insensitive since the document attributes values are lowercased and de-unicoded internally.
 
 #### 3.1.3.4. Example
 
-If `Javascript` is specified in `disableOnWords`, the engine won't apply the typo tolerance on the query term `Javascript` or `javascript` if typed at search time.
+If `Javascript` is specified in `disableOnWords`, the engine won't apply the typo tolerance on the query term `Javascript` or `javascript` if typed at search time to match documents.
 
 ### 3.1.4. `minWordSizeFor1Typo`
 
@@ -124,22 +124,17 @@ All properties must be returned when the resource is retrieved.
 
 #### 3.2.2.2. `POST` - `indexes/:index_uid/settings/typo-tolerance`
 
-Allow customizing partially the default settings of the typo tolerance feature for an index.
+Allow customizing partially the settings of the typo tolerance feature for an index.
 
 Request payload
 
 ```json
 {
-    "enabled": true,
     "disableOnAttributes": [
         "title",
         "description"
-    ],
-    "disableOnWords": [
-        "Tolkien"
-    ],
-    "minWordSizeFor1Typo": 4,
-    "minWordSizeFor2Typos": 8
+    ]
+    "minWordSizeFor1Typo": 4
 }
 ```
 
@@ -168,17 +163,20 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
-- 🔴 Sending an invalid value for the `enabled` field returns an [invalid_typo_tolerance_enabled](0061-error-format-and-definitions.md#invalid_typo_tolerance_enabled) error.
-- 🔴 Sending an invalid value for the `disableOnAttributes` field returns an [invalid_typo_tolerance_disable_on_attributes](0061-error-format-and-definitions.md#invalid_typo_tolerance_disable_on_attributes) error.
-- 🔴 Sending an invalid value for the `disableOnWords` field returns an [invalid_typo_tolerance_disable_on_words](0061-error-format-and-definitions.md#invalid_typo_tolerance_disableOnWords) error.
-- 🔴 Sending an invalid value for the `minWordSizeFor1Typo` field returns an [invalid_typo_tolerance_min_word_size_for_1_typo](0061-error-format-and-definitions.md#invalid_typo_tolerance_min_word_size_for_1_typo) error.
-- 🔴 Sending an invalid value for the `minWordSizeFor2Typos` field returns an [invalid_typo_tolerance_min_word_size_for_2_typos](0061-error-format-and-definitions.md#invalid_typo_tolerance_min_word_size_for_2_typos) error.
+- 🔴 Sending a value with a different type than `Boolean` for the `enabled` field returns an [invalid_typo_tolerance_enabled](0061-error-format-and-definitions.md#invalid_typo_tolerance_enabled) error.
+- 🔴 Sending a value with a different type than `Array of String` for the `disableOnAttributes` field returns an [invalid_typo_tolerance_disable_on_attributes](0061-error-format-and-definitions.md#invalid_typo_tolerance_disable_on_attributes) error.
+- 🔴 Sending a value with a different type than `Array of String` for the `disableOnWords` field returns an [invalid_typo_tolerance_disable_on_words](0061-error-format-and-definitions.md#invalid_typo_tolerance_disableOnWords) error.
+- 🔴 Sending a value with a different type than `Integer` for the `minWordSizeFor1Typo` field returns an [invalid_typo_tolerance_min_word_size_for_1_typo](0061-error-format-and-definitions.md#invalid_typo_tolerance_min_word_size_for_1_typo) error.
+- 🔴 Sending a value with a different type than `Integer` for the `minWordSizeFor2Typos` field returns an [invalid_typo_tolerance_min_word_size_for_2_typos](0061-error-format-and-definitions.md#invalid_typo_tolerance_min_word_size_for_2_typos) error.
 
 ###### 3.2.2.2.2.1. Async Errors
 
 - 🔴 When Meilisearch is secured, if the API Key do not have the `indexes.create` action defined, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error in the related asynchronous `task` resource. See [3.2.2.2.1. Response Definition](#32221-response-definition).
 
 > Otherwise, Meilisearch will create the index in a lazy way. See [3.2.2.2.3. Lazy Index Creation](#32223-lazy-index-creation).
+
+- 🔴 Sending an invalid integer value for the `minWordSizeFor1Typo` field returns an [invalid_typo_tolerance_min_word_size_for_1_typo](0061-error-format-and-definitions.md#invalid_typo_tolerance_min_word_size_for_1_typo) error.
+- 🔴 Sending an invalid integer value for the `minWordSizeFor2Typos` field returns an [invalid_typo_tolerance_min_word_size_for_2_typos](0061-error-format-and-definitions.md#invalid_typo_tolerance_min_word_size_for_2_typos) error.
 
 ##### 3.2.2.2.3. Lazy Index Creation
 
