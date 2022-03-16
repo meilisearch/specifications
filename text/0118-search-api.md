@@ -204,7 +204,7 @@ If `attributesToHighlight` is omitted while `highlightPreTag` is specified, ther
 
 Specifies the tag, or sequence, to put **after** the highlighted query terms.
 
-This parameter is taken into account when `attributesToHighlight` is specified. See [3.1.8. `attributesToHighlight`](#318-attributestohighlight) section.
+This parameter is applied to the fields from `attributesToHighlight`. If there are none, this parameter has no effect. See [3.1.8. `attributesToHighlight`](#318-attributestohighlight) section.
 
 - 🔴 Sending a value with a different type than `String` for `highlightPostTag` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
@@ -256,7 +256,7 @@ Tokenizer separators aren't counted as words regarding `cropLength`.
 
 Sets the total number of **words** to keep for the cropped part of an attribute specified in the `attributesToCrop` parameter. It means that if `10` is set for `cropLength`, the cropped part returned in `_formatted` will only be 10 words long.
 
-This parameter is taken into account when `attributesToCrop` is specified. See [3.1.11. `attributesToCrop`](#3111-attributestocrop) section.
+This parameter is applied to the fields from `attributesToCrop`. If there are none, this parameter has no effect. See [3.1.11. `attributesToCrop`](#3111-attributestocrop) section.
 
 - 🔴 Sending a value with a different type than `Integer` or `null` for `cropLength` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
@@ -318,7 +318,7 @@ The specified crop marker is applied by following rules. See [3.1.1.13.1. Applyi
 
 Specifying `cropMarker` to `""` or `null` implies that no marker will be applied to the cropped part, if any.
 
-This parameter is taken into account when `attributesToCrop` is specified. See [3.1.11. `attributesToCrop`](#3111-attributestocrop) section.
+This parameter is applied to the fields from `attributesToCrop`. If there are none, this parameter has no effect. See [3.1.11. `attributesToCrop`](#3111-attributestocrop) section.
 
 - 🔴 Sending a value with a different type than `String` or `null` for `cropMarker` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
