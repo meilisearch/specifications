@@ -100,7 +100,7 @@ Given `5` as `minWordSizeFor1Typo` and the following document
 }
 ```
 
-- Typing `World` with 1 typos, e.g. `Warld` will match `World`. It accepts 1 typo since `World` size is made of `5` chars.
+- Typing `World` with 1 typo, e.g. `Warld` will match `World`. It accepts 1 typo since `World` size is made of `5` chars.
 - Typing `Hey` with 1 typo, e.g. `Hoy` won't match `Hey`. It accepts 0 typo since `Hey` size is made of `3` chars.
 
 ### 3.1.5. `minWordSizeFor2Typos`
