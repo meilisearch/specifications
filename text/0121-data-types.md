@@ -300,6 +300,7 @@ The following JSON document:
     },
     "a.b": "d"
 }
+```
 
 Flattens to:
 
