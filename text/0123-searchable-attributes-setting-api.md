@@ -58,6 +58,8 @@ To make some attributes non-searchable, or change the attribute ranking order. A
 
 The [Attribute Ranking Rule]() ranks search results by the order defined in the `searchableAttributes` setting. Documents that contain query terms in the more important searchable attribute will be returned first.
 
+Manually updating `searchableAttributes` will change the displayed order of document fields in the JSON response.
+
 #### 3.1.3. Relationship With Ranking Rules
 
 A document field that is not defined in the list of `searchableAttributes` will not be considered by the following ranking rules to match and rank search results.
@@ -171,3 +173,4 @@ Modifying this index setting cause documents to be re-indexed.
 - Replace `POST` HTTP verb with `PATCH`
 - Add dedicated error to avoid using generic `bad_request` error code
 - Return an error when `searchableAttributes` is defined as an empty array
+- Fix the reordering issue of document representation when `searchableAttributes` is specified.
