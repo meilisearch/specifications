@@ -1,5 +1,3 @@
-- Title: Ranking Rules Setting API
-
 # Ranking Rules Setting API
 
 ## 1. Summary
@@ -202,6 +200,7 @@ Whenever a search query is made, Meilisearch uses a [bucket sort](https://en.wik
 The first ranking rule is applied to all documents, while each subsequent rule is only applied to documents that are considered equal under the previous rule (i.e. as a tiebreaker).
 
 ## 5. Future Possibilities
+
 - Replace `POST` HTTP verb with `PATCH`
 - Add dedicated error to avoid using generic `bad_request` error code
 - Return an error when `rankingRules` is defined as an empty array

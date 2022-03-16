@@ -1,5 +1,3 @@
-- Title: Stop Words Setting API
-
 # Stop Words Setting API
 
 ## 1. Summary
@@ -120,5 +118,6 @@ Meilisearch favors search speed and makes a trade-off on indexing speed by compu
 Modifying this index setting cause documents to be re-indexed.
 
 ## 5. Future Possibilities
+
 - Replace `POST` HTTP verb with `PATCH`
 - Add dedicated error to avoid using generic `bad_request` error code

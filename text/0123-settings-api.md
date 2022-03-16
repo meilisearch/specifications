@@ -1,5 +1,3 @@
-- Title: Settings API
-
 # Settings API
 
 ## 1. Summary
@@ -146,4 +144,5 @@ Changing any of the following index settings will cause documents to be re-index
 - `stopWords`
 
 ## 5. Future Possibilities
+
 - Replace `POST` HTTP verb with `PATCH`

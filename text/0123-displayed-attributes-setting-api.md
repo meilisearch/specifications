@@ -1,5 +1,3 @@
-- Title: Displayed Attributes Setting API
-
 # Displayed Attributes Setting API
 
 ## 1. Summary
@@ -13,7 +11,7 @@ N/A
 
 ### 3.1. Explanations
 
-Documents in Meilisearch are composed of multiple fields
+Documents in Meilisearch are composed of multiple fields.
 
 When a search query is performed, the fields whose attributes are added to the `displayedAttributes` list are displayable in each matching document.
 
@@ -123,6 +121,7 @@ The auth layer can return the following errors if Meilisearch is secured (a mast
 N/A
 
 ## 5. Future Possibilities
+
 - Replace `POST` HTTP verb with `PATCH`
 - Add dedicated error to avoid using generic `bad_request` error code
 - Return an error when `displayedAttributes` is defined as an empty array

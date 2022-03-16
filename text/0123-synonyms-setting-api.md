@@ -1,5 +1,3 @@
-- Title: Synonyms Setting API
-
 # Synonyms Setting API
 
 ## 1. Summary
@@ -214,6 +212,7 @@ Multi-word synonyms are limited to a maximum of three words.
 For example, although `League of Legends` and `LOL` can be synonymous, it will not work for `The Lord of the Rings` and `LOTR`.
 
 ## 5. Future Possibilities
+
 - Replace `POST` HTTP verb with `PATCH`
 - Add dedicated error to avoid using generic `bad_request` error code
 - Automatically declare mutual association
