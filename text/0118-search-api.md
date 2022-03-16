@@ -408,10 +408,12 @@ Search queries using `_geoPoint` returns a `_geoDistance` field containing the d
 
 `_formatted` returns highlighted and cropped attributes specified in `attributesToHighlight` and/or `attributesToCrop` of a search result.
 
-If `attributesToHighlight` and `attributesToCrop` are not set, `_formatted` is not returned.
-If cumulated fields in `attributesToHighlight` and `attributesToCrop` resolve to only having non-existent fields, `_formatted` is not returned.
-If `attributesToRetrieve` is equal to `*` and `attributesToHighlight` or `attributesToCrop` are equals to `*`, `_formatted` is returned and contains `attributesToRetrieve` fields then compute highlights and crops on each received fields.
-If `attributesToRetrieve` is equal to `*` and `attributesToHighlight` or `attributesToCrop` contains a set of fields, `_formatted` is returned and contains `attributesToRetrieve` fields but only compute highlights and crops on fields declared in `attributesToHighlight` or `attributesToCrop`.
+- If `attributesToHighlight` and `attributesToCrop` are not set, `_formatted` is not returned.
+- If cumulated fields in `attributesToHighlight` and `attributesToCrop` resolve to only having non-existent fields, `_formatted` is not returned.
+- If `attributesToRetrieve` is equal to `*` and `attributesToHighlight` or `attributesToCrop` are equals to `*`, `_formatted` is returned and contains `attributesToRetrieve` fields then compute highlights and crops on each received fields.
+- If `attributesToRetrieve` is equal to `*` and `attributesToHighlight` or `attributesToCrop` contains a set of fields, `_formatted` is returned and contains `attributesToRetrieve` fields but only compute highlights and crops on fields declared in `attributesToHighlight` or `attributesToCrop`.
+- If a list of fields is defined for `attributesToRetrieve` and `attributesToHighlight` / `attributesToCrop` are equals to `*`, `_formatted` is returned and contains all `displayedAttributes` then compute highlights and crops on each received fields.
+- If a list of fields is defined for `attributesToRetrieve` and `attributesToHighlight` / `attributesToCrop` contains a list of fields, `_formatted` is returned and contains `attributesToRetrieve` fields, plus the fields set in `attributesToHighlight` or `attributesToCrop` then compute highlights and crops only for fields defined in `attributesToHighlight` / `attributesToCrop` parameters.
 
 ###### 3.2.1.1.3. `_matchesInfo`
 
