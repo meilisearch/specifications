@@ -2,7 +2,7 @@
 
 ## 1. Summary
 
-The search endpoints permit to retrieve documents within an index that are the most relevant given a set of parameters forming a search request.
+The search endpoints retrieve documents from an index. Their returned documents are considered relevant based on the settings of the index and the provided search parameters.
 
 ## 2. Motivation
 N/A
@@ -16,7 +16,7 @@ Meilisearch exposes 2 routes to perform search requests:
 
 - 🔴 If the index does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
-If a master key secures the Meilisearch instance, the auth layer returns the following errors:
+If a master key is used to secure a Meilisearch instance, the auth layer returns the following errors:
 
 - 🔴 Accessing these routes without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
 - 🔴 Accessing these routes with a key that does not have permissions (i.e. other than the master key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
@@ -86,7 +86,7 @@ Attributes used as filter criteria must be added to the `filterableAttributes` l
 - Required: False
 - Default: `[]|null`
 
-`sort` contains a sort expression written as a string or an array of strings. It sorts the search esults at query time according to the specified attributes and indicated order.
+`sort` contains a sort expression written as a string or an array of strings. It sorts the search results at query time according to the specified attributes and indicated order.
 
 Attributes used as sort criteria must be added to the `sortableAttributes list of an index settings. See [Sortable Attributes Setting API](0123-sortable-attributes-setting-api.md).
 
@@ -109,7 +109,7 @@ It returns the number of documents matching the current search query for each sp
 This parameter can take two values:
 
 - An array of attributes: `facetsDistribution=["attributeA", "attributeB", …]`
-- An asterisk `"*"` — this returns a count for all facets present in `filterableAttributes`
+- A wildcard `"*"` — this returns a count for all facets present in `filterableAttributes`
 
 Attributes used in `facetsDistribution` must be added to the `filterableAttributes` list of an index settings. See [Filterable Attributes Setting API](0123-filterable-attributes-setting-api.md).
 
@@ -158,9 +158,9 @@ If no value is specified, `attributesToRetrieve` uses the `displayedAttributes` 
 - Required: False
 - Default: `[]|null`
 
-Highlights terms in the documents that correspond to the query terms (i.e. the terms in the [`q`](#311-q) search parameter) for the specified attributes.
+Configures which fields may have highlighted parts, given that they match the requested query terms (i.e. the terms in the [`q`](#311-q) search parameter). 
 
-Search results include a `_formatted` object containing the highlighted terms when this parameter is defined. See [3.2.1.1.2. `_formatted`](#32112-formatted) section.
+Search results include a `_formatted` object containing the highlighted parts when this parameter is defined. See [3.2.1.1.2. `_formatted`](#32112-formatted) section.
 
 Highlighted parts are surrounded by the [`highlightPreTag`](#319-highlightpretag) and [`highlightPostTag`](#3110-highlightposttag) parameters.
 
@@ -188,9 +188,9 @@ Tokenizer separators are not highlighted.
 - Required: False
 - Default: `"<em>"`
 
-Specify the tag to put **before** the highlighted query terms.
+Specifies the tag, or sequence, to put **before** every highlighted query terms.
 
-This parameter is taken into account when `attributesToHighlight` is specified. See [3.1.8. `attributesToHighlight`](#318-attributestohighlight) section.
+This parameter is applied to the fields from `attributesToHighlight`. If there are none, this parameter has no effect. See [3.1.8. `attributesToHighlight`](#318-attributestohighlight) section.
 
 - 🔴 Sending a value with a different type than `String` for `highlightPreTag` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
@@ -202,7 +202,7 @@ If `attributesToHighlight` is omitted while `highlightPreTag` is specified, ther
 - Required: False
 - Default: `"</em>"`
 
-Specify the tag to put **after** the highlighted query terms.
+Specifies the tag, or sequence, to put **after** the highlighted query terms.
 
 This parameter is taken into account when `attributesToHighlight` is specified. See [3.1.8. `attributesToHighlight`](#318-attributestohighlight) section.
 
@@ -272,7 +272,7 @@ With `croplength` defined as `5` and `q` defined as `boiling blood`, the cropped
 
 `"…and with boiling blood he…"`
 
-Croppped query terms are counted as a word regarding `cropLength`.
+Cropped query terms are counted as a word regarding `cropLength`.
 
 ###### 3.1.12.1.3. Length Reassignment to the left.
 
@@ -382,7 +382,7 @@ Results of the search query as an array of documents.
 
 > The search parameters `attributesToRetrieve` influence the returned payload for a hit. See [3.1.7. `attributesToRetrieve`](#317-attributestoretrieve) section.
 
-A search result can host special properties. See [3.2.1.1. `hit` Special Properties](#3211-hits-special-properties) section.
+A search result can contain special properties. See [3.2.1.1. `hit` Special Properties](#3211-hits-special-properties) section.
 
 ##### 3.2.1.1. `hit` Special Properties
 
