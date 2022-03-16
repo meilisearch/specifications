@@ -378,7 +378,7 @@ It is possible to express the definition of all properties of an object.
 
 e.g. In this case `person` is an object containing properties. `attributesToRetrieve: ["person"]`
 
-> This notation is accepted on all parameters or settings allowing to specify attributes. This is due to the fact that several documents may not share the same schema. For example, one document might have a non-nested field called `person` while another has a `person` object containing properties. The chosen behavior is not to force the user's hand.
+This notation is accepted on all parameters or settings allowing to specify attributes. This is due to the fact that several documents may not share the same schema. See [3.2.4.8.3. Edge Case](#32483-edge-case) section.
 
 ##### 3.2.4.8.2. Example
 
@@ -418,6 +418,14 @@ It's equivalent to
     ]
 }
 ```
+
+##### 3.2.4.8.3. Edge Case
+
+One document might have a non-nested field `person` while another has a `person` object containing properties.
+
+The chosen behavior is not to force the user's hand and Meilisearch do not throw any errors.
+
+E.g. If a user specifies `"filter": "person = 'Guillaume'"` at search time, the document that would have a nested object person would not be brought up by the filter.
 
 ## 4. Future Possibilities
 
