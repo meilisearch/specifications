@@ -342,7 +342,7 @@ The second representation of `a.b` in its nested form is merged with the first r
 
 Users can't and should not rely on a given document field order when `searchableAttributes` is `[*]`.
 
-#### 3.2.4.7. Dot-notation expression
+#### 3.2.4.7. Dot-notation Expression
 
 ##### 3.2.4.7.1. Concerned API parameters
 
@@ -361,25 +361,23 @@ Document API
 
 Settings API
 
-- `displayedAttributes`
-- `searchableAttributes`
-- `filterableAttributes`
-- `sortableAttributes`
-- `rankingRules` (Custom ranking rule declaration)
-- `distinctAttribute`
+- [`displayedAttributes`](0123-displayed-attributes-setting-api.md)
+- [`searchableAttributes`](0123-searchable-attributes-setting-api.md)
+- [`filterableAttributes`](0123-filterable-attributes-setting-api.md)
+- [`sortableAttributes`](0123-sortable-attributes-setting-api.md)
+- [`rankingRules`](0123-ranking-rules-setting-api.md)
+- [`distinctAttribute`](0123-distinct-attribute-setting-api.md)
 
 Search API
 
-- `attributesToRetrieve`
-- `attributesToHighlight`
-- `attributesToCrop`
-- `filter`
-- `sort`
-- `facetsDistribution`
+- [`attributesToRetrieve`](0118-search-api.md#1217-attributestoretrieve)
+- [`attributesToHighlight`](0118-search-api.md#1218-attributestohighlight)
+- [`attributesToCrop`](0118-search-api.md#1219-attributestocrop)
+- [`filter`](0118-search-api.md#1212-filter)
+- [`sort`](0118-search-api.md#1213-sort)
+- [`facetsDistribution`](0118-search-api.md#1214-facetsdistribution)
 
-##### 3.2.4.7.2. Examples
-
-###### 3.2.4.7.2.1 Expressing a precise nested field
+##### 3.2.4.7.2. Example
 
 Given this document structure
 
@@ -405,7 +403,36 @@ A precise field can be expressed using the dot-notation
 }
 ```
 
-###### 3.2.4.7.2.2 Expressing all object properties
+#### 3.2.4.8. All Object Properties Expression
+
+##### 3.2.4.8.1. Concerned API parameters
+
+On some parameters, it is possible to express the definition of all properties of an object.
+
+
+e.g. In this case `person` is an object containing properties. `attributesToRetrieve: ["person"]`
+
+Here is an exhaustive list of parameters supporting this notation:
+
+Document API
+
+- `attributesToRetrieve`
+
+Settings API
+
+- [`displayedAttributes`](0123-displayed-attributes-setting-api.md)
+- [`searchableAttributes`](0123-searchable-attributes-setting-api.md)
+- [`filterableAttributes`](0123-filterable-attributes-setting-api.md)
+- [`sortableAttributes`](0123-sortable-attributes-setting-api.md)
+
+Search API
+
+- [`attributesToRetrieve`](0118-search-api.md#1217-attributestoretrieve)
+- [`attributesToHighlight`](0118-search-api.md#1218-attributestohighlight)
+- [`attributesToCrop`](0118-search-api.md#1219-attributestocrop)
+- [`facetsDistribution`](0118-search-api.md#1214-facetsdistribution)
+
+##### 3.2.4.8.2. Example
 
 Given this document structure
 
@@ -423,7 +450,7 @@ Given this document structure
 }
 ```
 
-All properties of a document nested object can be expressed using the dot-notation
+All properties of a document nested object can be expressed this way
 
 ```json
 {
