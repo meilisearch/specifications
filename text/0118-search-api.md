@@ -158,7 +158,7 @@ If no value is specified, `attributesToRetrieve` uses the `displayedAttributes` 
 - Required: False
 - Default: `[]|null`
 
-Configures which fields may have highlighted parts, given that they match the requested query terms (i.e. the terms in the [`q`](#311-q) search parameter). 
+Configures which fields may have highlighted parts, given that they match the requested query terms (i.e. the terms in the [`q`](#311-q) search parameter).
 
 Search results include a `_formatted` object containing the highlighted parts when this parameter is defined. See [3.2.1.1.2. `_formatted`](#32112-formatted) section.
 
@@ -411,7 +411,7 @@ Search queries using `_geoPoint` returns a `_geoDistance` field containing the d
 If `attributesToHighlight` and `attributesToCrop` are not set, `_formatted` is not returned.
 If cumulated fields in `attributesToHighlight` and `attributesToCrop` resolve to only having non-existent fields, `_formatted` is not returned.
 If `attributesToRetrieve` is equal to `*` and `attributesToHighlight` or `attributesToCrop` are equals to `*`, `_formatted` is returned and contains `attributesToRetrieve` fields then compute highlights and crops on each received fields.
-If `attributesToRetrieve` is equal to `*` and `attributesToHighlight` or `attributesToCrop` contains a set of fields, `_formatted` is returned and contains `attributesToRetrieve` fields but only compute highlights and crops on fields declared in `attributesToHighlight` or `attributesTocCrop`.
+If `attributesToRetrieve` is equal to `*` and `attributesToHighlight` or `attributesToCrop` contains a set of fields, `_formatted` is returned and contains `attributesToRetrieve` fields but only compute highlights and crops on fields declared in `attributesToHighlight` or `attributesToCrop`.
 
 ###### 3.2.1.1.3. `_matchesInfo`
 
