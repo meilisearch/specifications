@@ -252,13 +252,29 @@ The auth layer can return the following errors if Meilisearch is secured (a mast
 
 ## 2. Technical Details
 
-### 2.1. Typos calculation
+### 2.1. Typos Calculation
 
-TODO: Describes how the engine handle typo calculation.
+The size of a query term triggers the typo tolerance feature.
 
-### 2.2. Typo ranking rule
+By default, a query term made of `5` characters can tolerate `1` typo, while a query term made of `9` characters can tolerate `2` typos.
 
-TODO: Describes the impact of the typo ranking rule regarding search results ranking.
+If a query term can be derived from a distance of one or two typos to be found in a document, it will be selected as a candidate. The number of typos found has an impact on the relevancy.
+
+#### 2.1.1 Typo On The First Character
+
+A query term having the first character considered as a typo will not count as `1` typo but as `2` typos.
+
+It permits to drastically reduce the search space in this case, thus speed-up the search response.
+
+#### 2.1.2. Clamping Typo On Concatened Query Terms
+
+The concatenation of two query terms is equal to 1 typo.
+
+e.g. If `Le tableau` is typed,  the concatened string `Letableau` made of `9` letters can only have `1` typo instead of `2` since `1` typo is already counted by the concatenation.
+
+### 2.2. Typo Ranking Rule
+
+The `typo` ranking rule favors candidates with the least typos. That is, if a document is found with two typos, it will be ranked as less important than a document found with 1 typo. 0 typo is the most favorable case.
 
 ## 3. Future Possibilities
 
