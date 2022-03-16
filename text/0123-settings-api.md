@@ -21,6 +21,7 @@ N/A
 | [stop-words](0123-stop-words-setting-api.md)                       | `stopWords` sub-resource API endpoints definition            |
 | [synonyms](0123-synonyms-setting-api.md)                           | `synonyms` sub-resource API endpoints definition             |
 | [distinct-attribute](0123-distinct-attribute-setting-api.md)       | `distinctAttribute` sub-resource API endpoints definition    |
+| [typo](0117-typo-setting-api.md)                                   | `typo` sub-resource API endpoints definition                 |
 
 Each setting is exposed as a sub-resource of the `indexes/:index_uid/settings` endpoints. e.g. The ranking rules setting of a Meilisearch index is exposed at `indexes/:index_uid/settings/ranking-rules`.
 
@@ -46,6 +47,7 @@ Fetch the settings of a Meilisearch index.
 | `stopWords`              | Array of String         | true     |
 | `synonyms`               | Object                  | true     |
 | `distinctAttribute`      | String / `null`         | true     |
+| `typo`                   | Object                  | true     |
 
 The attributes ordering in the response payload is equivalent to the order described in the table above.
 
@@ -69,6 +71,7 @@ Modify the settings of a Meilisearch index.
 | `stopWords`              | Array of String / `null` | false    |
 | `synonyms`               | Object / `null`          | false    |
 | `distinctAttribute`      | String / `null`          | false    |
+| `typo`                   | Object                   | false    |
 
 The request payload accepts partial definitions.
 
