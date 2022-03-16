@@ -135,7 +135,7 @@ Setting `null` is equivalent to using the [3.3.3. `DELETE` - `indexes/:index_uid
 
 Specifying a document attribute that does not exist as a `rankingRules` index setting returns no error.
 
-Specifying `[]` for the `rankingRules` index setting allows specifying that no ranking rules are used to rank results. //TODO: CHECK THAT STATEMENT.
+Specifying `[]` for the `rankingRules` index setting allows specifying that no ranking rules are used to rank results. Search results are sorted by their **internal id**.
 
 ##### 3.3.2.2. Response Definition
 

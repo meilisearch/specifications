@@ -344,38 +344,7 @@ Users can't and should not rely on a given document field order when `searchable
 
 #### 3.2.4.7. Dot-notation Expression
 
-##### 3.2.4.7.1. Concerned API parameters
-
-All Meilisearch parameters that accept document attributes support the dot-notation.
-
-Here is an exhaustive list of parameters supporting this notation:
-
-Index API
-
-- `primaryKey`
-
-Document API
-
-- `attributesToRetrieve`
-- `primaryKey`
-
-Settings API
-
-- [`displayedAttributes`](0123-displayed-attributes-setting-api.md)
-- [`searchableAttributes`](0123-searchable-attributes-setting-api.md)
-- [`filterableAttributes`](0123-filterable-attributes-setting-api.md)
-- [`sortableAttributes`](0123-sortable-attributes-setting-api.md)
-- [`rankingRules`](0123-ranking-rules-setting-api.md)
-- [`distinctAttribute`](0123-distinct-attribute-setting-api.md)
-
-Search API
-
-- [`attributesToRetrieve`](0118-search-api.md#1217-attributestoretrieve)
-- [`attributesToHighlight`](0118-search-api.md#1218-attributestohighlight)
-- [`attributesToCrop`](0118-search-api.md#1219-attributestocrop)
-- [`filter`](0118-search-api.md#1212-filter)
-- [`sort`](0118-search-api.md#1213-sort)
-- [`facetsDistribution`](0118-search-api.md#1214-facetsdistribution)
+Permits to express the nested object property.
 
 ##### 3.2.4.7.2. Example
 
@@ -405,32 +374,11 @@ A precise field can be expressed using the dot-notation
 
 #### 3.2.4.8. All Object Properties Expression
 
-##### 3.2.4.8.1. Concerned API parameters
-
-On some parameters, it is possible to express the definition of all properties of an object.
-
+It is possible to express the definition of all properties of an object.
 
 e.g. In this case `person` is an object containing properties. `attributesToRetrieve: ["person"]`
 
-Here is an exhaustive list of parameters supporting this notation:
-
-Document API
-
-- `attributesToRetrieve`
-
-Settings API
-
-- [`displayedAttributes`](0123-displayed-attributes-setting-api.md)
-- [`searchableAttributes`](0123-searchable-attributes-setting-api.md)
-- [`filterableAttributes`](0123-filterable-attributes-setting-api.md)
-- [`sortableAttributes`](0123-sortable-attributes-setting-api.md)
-
-Search API
-
-- [`attributesToRetrieve`](0118-search-api.md#1217-attributestoretrieve)
-- [`attributesToHighlight`](0118-search-api.md#1218-attributestohighlight)
-- [`attributesToCrop`](0118-search-api.md#1219-attributestocrop)
-- [`facetsDistribution`](0118-search-api.md#1214-facetsdistribution)
+> This notation is accepted on all parameters or settings allowing to specify attributes. This is due to the fact that several documents may not share the same schema. For example, one document might have a non-nested field called `person` while another has a `person` object containing properties. The chosen behavior is not to force the user's hand.
 
 ##### 3.2.4.8.2. Example
 
