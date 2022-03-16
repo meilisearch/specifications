@@ -315,7 +315,7 @@ By default, `searchableAttributes` is set to `[*]`, making all document fields a
 
 In that case, `Attribute` ranking rule consider a field higher in the internal representation more important than a lower one.
 
-Field order is lost if the engine flattens identical field values are not co-located in a document payload.
+User document field order can be lost if the engine flattens identical field values are not co-located in a document payload.
 
 The following JSON document:
 
@@ -447,4 +447,5 @@ It's equivalent to
 ## 4. Future Possibilities
 
 - Change the default behavior of `searchableAttributes` so that it is predictable. We may remove the priority based on a field position in a document.
-- Support the wildcard notation with the dot-notation. e.g. `person.*` or `person.address.*`
+- Support the wildcard notation with the dot-notation. e.g. `person.*`, `person.address.*` or `person.l*`
+- Support the array notation. e.g. `person.addresses[1]`
