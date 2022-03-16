@@ -222,22 +222,22 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_typo_tolerance_enabled
+## invalid_typo_enabled
 
 `Synchronous`
 
 ### Context
 
-This error happens when the `enabled` field of `typoTolerance` resource is invalid.
+This error happens when the `enabled` field of `typo` resource is invalid.
 
 ### Error Definition
 
 ```json
 {
     "message": "`enabled` field value `:value` is invalid. It should be a boolean (`true` or `false`).",
-    "code": "invalid_typo_tolerance_enabled",
+    "code": "invalid_typo_enabled",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_typo_tolerance_enabled"
+    "link": "https://docs.meilisearch.com/errors#invalid_typo_enabled"
 }
 ```
 
@@ -245,22 +245,22 @@ This error happens when the `enabled` field of `typoTolerance` resource is inval
 
 ---
 
-## invalid_typo_tolerance_disable_on_attributes
+## invalid_typo_disabled_attributes
 
 `Synchronous`
 
 ### Context
 
-This error happens when the `disableOnAttributes` field of `typoTolerance` resource is invalid.
+This error happens when the `disabledAttributes` field of `typo` resource is invalid.
 
 ### Error Definition
 
 ```json
 {
     "message": "`disableOnAttributes` field value `:value` is invalid. It should be an array of strings representing document's attributes.",
-    "code": "invalid_typo_tolerance_disable_on_attributes",
+    "code": "invalid_typo_disabled_attributes",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_typo_tolerance_disable_on_attributes"
+    "link": "https://docs.meilisearch.com/errors#invalid_typo_disabled_attributes"
 }
 ```
 
@@ -268,43 +268,43 @@ This error happens when the `disableOnAttributes` field of `typoTolerance` resou
 
 ---
 
-## invalid_typo_tolerance_disable_on_words
+## invalid_typo_disabled_words
 
 `Synchronous`
 
 ### Context
 
-This error happens when the `disableOnWords` field of `typoTolerance` resource is invalid.
+This error happens when the `disabledWords` field of `typo`  resource is invalid.
 
 ### Error Definition
 
 ```json
 {
     "message": "`disableOnWords` field value `:value` is invalid. It should be an array of strings representing words.",
-    "code": "invalid_typo_tolerance_disable_on_words",
+    "code": "invalid_typo_disabled_words",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_typo_tolerance_disable_on_words"
+    "link": "https://docs.meilisearch.com/errors#invalid_typo_disabled_words"
 }
 ```
 
 ---
 
-## invalid_typo_tolerance_min_word_size_for_1_typo
+## invalid_typo_min_word_size_for_1_typo
 
 `Asynchronous/Synchronous`
 
 ### Context
 
-This error happens when the `minWordSizeFor1Typo` field of `typoTolerance` resource is invalid.
+This error happens when the `minWordSizeFor1Typo` field of `typo` resource is invalid.
 
 ### Error Definition
 
 ```json
 {
     "message": "`minWordSizeFor1Typo` field value `:value` is invalid. It should be an integer superior to `0` and inferior or equals to the value defined in the field `minWordSizeFor2Typos`.",
-    "code": "invalid_typo_tolerance_min_word_size_for_1_typo",
+    "code": "invalid_typo_min_word_size_for_1_typo",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_typo_tolerance_min_word_size_for_1_typo"
+    "link": "https://docs.meilisearch.com/errors#invalid_typo_min_word_size_for_1_typo"
 }
 ```
 
@@ -312,22 +312,22 @@ This error happens when the `minWordSizeFor1Typo` field of `typoTolerance` resou
 
 ---
 
-## invalid_typo_tolerance_min_word_size_for_2_typos
+## invalid_typo_min_word_size_for_2_typos
 
 `Asynchronous/Synchronous`
 
 ### Context
 
-This error happens when the `minWordSizeFor2Typos` field of `typoTolerance` resource is invalid.
+This error happens when the `minWordSizeFor2Typos` field of `typo` resource is invalid.
 
 ### Error Definition
 
 ```json
 {
     "message": "`minWordSizeFor2Typos` field value `:value` is invalid. It should be an integer superior to 0 and superior or equals to the value defined in the field `minWordSizeFor1Typo`.",
-    "code": "invalid_typo_tolerance_min_word_size_for_2_typos",
+    "code": "invalid_typo_min_word_size_for_2_typos",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_typo_tolerance_min_word_size_for_2_typos"
+    "link": "https://docs.meilisearch.com/errors#invalid_typo_min_word_size_for_2_typos"
 }
 ```
 
