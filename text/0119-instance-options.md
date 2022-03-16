@@ -122,6 +122,7 @@ The expected behavior of each flag is described in the list above.
 - [SSL require auth](#3326-ssl-require-auth)
 - [SSL resumption](#3327-ssl-resumption)
 - [SSL tickets](#3328-ssl-tickets)
+- [Max results range](#3329-max-results-range)
 
 #### 3.3.1. Database path
 
@@ -448,6 +449,22 @@ Activates SSL session resumption.
 ⚠️ This command-line option does not take any values. Assigning a value will throw an error.
 
 Activates SSL tickets.
+
+
+#### 3.3.29. Max results range
+
+**Environment variable**: `MEILI_MAX_RESULTS_RANGE`
+**CLI option**: `--max-results-range`
+**Default**: `1000`
+
+Set the maximum results range that can be retrieved from the search endpoints for all indexes.
+
+The search endpoints can't return more documents than `--max-results-range`.
+
+If `offset` is higher than `--max-results-range`, the engine returns `0` search results.
+If `limit` is higher than `--max-results-range`, the number of search results can't be higher than `--max-results-range`.
+
+e.g. With `--max-results-range` set to `1000`, specifying the `offset` search parameter to `995` will return only `4` documents. Higher search results can't be retrieved.
 
 ## 4. Technical Aspects
 
