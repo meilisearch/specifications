@@ -182,6 +182,10 @@ Attributes defined in the `stopWords` index setting are also highlighted if matc
 
 Tokenizer separators are not highlighted.
 
+##### 3.1.8.4. synonyms
+
+Synonyms are also highlighted.
+
 #### 3.1.9. `highlightPreTag`
 
 - Type: String
