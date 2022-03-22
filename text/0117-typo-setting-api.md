@@ -220,8 +220,7 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending a value with a different type than `Boolean` for the `enabled` field returns an [invalid_typo_enabled](0061-error-format-and-definitions.md#invalid_typo_enabled) error.
 - 🔴 Sending a value with a different type than `Array of String` for the `disabledAttributes` field returns an [invalid_typo_disabled_attributes](0061-error-format-and-definitions.md#invalid_typo_disabled_attributes) error.
 - 🔴 Sending a value with a different type than `Array of String` for the `disabledWords` field returns an [invalid_typo_disabled_words](0061-error-format-and-definitions.md#invalid_typo_disabled_words) error.
-- 🔴 Sending a value with a different type than `Integer` for the `minWordSizeFor1Typo` field returns an [invalid_typo_min_word_size_for_1_typo](0061-error-format-and-definitions.md#invalid_typo_min_word_size_for_1_typo) error.
-- 🔴 Sending a value with a different type than `Integer` for the `minWordSizeFor2Typos` field returns an [invalid_typo_min_word_size_for_2_typos](0061-error-format-and-definitions.md#invalid_typo_min_word_size_for_2_typos) error.
+- 🔴 Sending a value with a different type than `Integer` for `minWordSizeForTypos` object fields returns an [invalid_typo_min_word_size_for_typos](0061-error-format-and-definitions.md#invalid_typo_min_word_size_for_typos) error.
 
 ###### 3.2.2.2.2.1. Async Errors
 
@@ -229,8 +228,7 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 
 > Otherwise, Meilisearch will create the index in a lazy way. See [3.2.2.2.3. Lazy Index Creation](#32223-lazy-index-creation).
 
-- 🔴 Sending an invalid integer value for the `minWordSizeFor1Typo` field returns an [invalid_typo_min_word_size_for_1_typo](0061-error-format-and-definitions.md#invalid_typo_min_word_size_for_1_typo) error.
-- 🔴 Sending an invalid integer value for the `minWordSizeFor2Typos` field returns an [invalid_typo_min_word_size_for_2_typos](0061-error-format-and-definitions.md#invalid_typo_min_word_size_for_2_typos) error.
+- 🔴 Sending invalid integer values for the `minWordSizeForTypos` object fields returns an [invalid_typo_min_word_size_for_typos](0061-error-format-and-definitions.md#invalid_typo_min_word_size_for_typos) error.
 
 ##### 3.2.2.2.3. Lazy Index Creation
 

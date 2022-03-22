@@ -336,7 +336,7 @@ This property allows us to gather essential information to better understand on 
 |---------------|-------------|---------|
 | typo.enabled        | Whether the typo tolerance is enable.d | `true` |
 | typo.disabled_attributes | `true` if at least one value is defined for `disabledAttributes` property. | `false` |
-| typo.disabled__words    | `true` if at least one value is defined for `disabledWords` property. | `false` |
+| typo.disabled_words    | `true` if at least one value is defined for `disabledWords` property. | `false` |
 | typo.min_word_size_for_typos.one_typo | The defined value for `minWordSizeForTypos.oneTypo` property. | `5` |
 | typo.min_word_size_for_typos.two_typos | The defined value for `minWordSizeForTypos.twoTypos` property. | `9` |
 

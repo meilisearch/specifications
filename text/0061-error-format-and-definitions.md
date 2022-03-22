@@ -289,49 +289,27 @@ This error happens when the `disabledWords` field of `typo`  resource is invalid
 
 ---
 
-## invalid_typo_min_word_size_for_1_typo
+## invalid_typo_min_word_size_for_typos
 
 `Asynchronous/Synchronous`
 
 ### Context
 
-This error happens when the `minWordSizeFor1Typo` field of `typo` resource is invalid.
+This error happens when the `minWordSizeForTypos` object of the `typo` resource is invalid.
 
 ### Error Definition
 
 ```json
 {
-    "message": "`minWordSizeFor1Typo` field value `:value` is invalid. It should be an integer superior to `0` and inferior or equal to the value defined in the field `minWordSizeFor2Typos`.",
-    "code": "invalid_typo_min_word_size_for_1_typo",
+    "message": "`minWordSizeForTypos` setting is invalid. `oneTypo` and `twoTypos` fields should be between `0` and `255`, and `twoTypos` should be greater or equals to `oneTypo` but found `oneTypo: :oneTypo` and twoTypos: twoTypos`.",
+    "code": "invalid_typo_min_word_size_for_typos",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_typo_min_word_size_for_1_typo"
+    "link": "https://docs.meilisearch.com/errors#invalid_typo_min_word_size_for_typos"
 }
 ```
 
-- The `:value` is inferred when the message is generated.
-
----
-
-## invalid_typo_min_word_size_for_2_typos
-
-`Asynchronous/Synchronous`
-
-### Context
-
-This error happens when the `minWordSizeFor2Typos` field of `typo` resource is invalid.
-
-### Error Definition
-
-```json
-{
-    "message": "`minWordSizeFor2Typos` field value `:value` is invalid. It should be an integer superior to 0 and superior or equal to the value defined in the field `minWordSizeFor1Typo`.",
-    "code": "invalid_typo_min_word_size_for_2_typos",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_typo_min_word_size_for_2_typos"
-}
-```
-
-- The `:value` is inferred when the message is generated.
+- The `:oneTypo` is inferred when the message is generated.
+- The `:twoTypos` is inferred when the message is generated.
 
 ---
 
