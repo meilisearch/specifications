@@ -19,8 +19,7 @@ Meilisearch can adapt to different use-cases by providing customization options 
 | [enabled](#311-enabled)                          | Boolean         | False    |
 | [disabledAttributes](#312-disabledattributes)    | Array of String | False    |
 | [disabledWords](#313-disabledwords)              | Array of String | False    |
-| [minWordSizeFor1Typo](#314-minwordsizefor1typo)  | Integer         | False    |
-| [minWordSizeFor2Typos](#315-minwordsizefor2typos)| Integer         | False    |
+| [minWordSizeForTypos](#314-minwordsizefortypos)  | Object          | False    |
 
 #### 3.1.1. `enabled`
 
@@ -77,21 +76,33 @@ The engine won't try to match query term with typos with values of the `title` a
 
 If `Javascript` is specified in `disabledWords`, the engine won't apply the typo tolerance on the query term `Javascript` or `javascript` if typed at search time to match documents.
 
-### 3.1.4. `minWordSizeFor1Typo`
+### 3.1.4. `minWordSizeForTypos`
+
+- Type: Object
+- Required: False
+
+#### 3.1.4.1. `minWordSizeForTypos` Object Definition
+
+| Field                      | Type            | Required |
+|----------------------------|-----------------|----------|
+| [oneTypo](#3142-onetypo)   | Integer         | False    |
+| [twoTypos](#3143-twotypos) | Integer         | False    |
+
+#### 3.1.4.2. `oneTypo`
 
 - Type: Integer
 - Required: False
 - Default: `5`
 
-`minWordSizeFor1Typo` customize the minimum size for a word to tolerate 1 typo.
+`oneTypo` customize the minimum size for a word to tolerate 1 typo.
 
 > Given the default value `5`, the search engine starts to apply typo tolerance on a query term if its length is at least equal to 5 characters.
 
 > See [2.1. Typos calculation section](#21-typos-calculation)
 
-#### 3.1.4.1. Example
+##### 3.1.4.2.1 Example
 
-Given `5` as `minWordSizeFor1Typo` and the following document
+Given `5` as `oneTypo` and the following document
 
 ```json
 {
@@ -103,21 +114,21 @@ Given `5` as `minWordSizeFor1Typo` and the following document
 - Typing `World` with 1 typo, e.g. `Warld` will match `World`. It accepts 1 typo since `World` size is made of `5` chars.
 - Typing `Hey` with 1 typo, e.g. `Hoy` won't match `Hey`. It accepts 0 typo since `Hey` size is made of `3` chars.
 
-### 3.1.5. `minWordSizeFor2Typos`
+#### 3.1.4.3. `twoTypos`
 
 - Type: Integer
 - Required: False
 - Default: `9`
 
-`minWordSizeFor2Typos` customize the minimum size for a word to tolerate 2 typos.
+`twoTypos` customize the minimum size for a word to tolerate 2 typos.
 
 > Given the default value `9`, the search engine handles up to 2 typos on a query term if its length is at least equal to 9 characters.
 
 > See [2.1. Typos calculation section](#21-typos-calculation)
 
-#### 3.1.5.1 Example
+##### 3.1.4.3.1. Example
 
-Given `3` for `minWordSizeFor1Typo` and `5` as `minWordSizeFor2Typos` and the following document
+Given `3` for `oneTypo` and `5` as `twoTypos` and the following document
 
 ```json
 {
@@ -152,8 +163,10 @@ Allow fetching the current definition of the typo tolerance feature for an index
         "enabled": true,
         "disabledAttributes": [],
         "disabledWords": [],
-        "minWordSizeFor1Typo": 5,
-        "minWordSizeFor2Typos": 9
+        "minWordSizeForTypos": {
+            "oneTypo": 5,
+            "twoTypos": 9
+        }
     }
 ```
 

@@ -428,16 +428,19 @@ components:
             type: string
           default: []
           nullable: false
-        minWordSizeFor1Typo:
-          description: Customize the minimum size for a word to tolerate 1 typo.
-          type: integer
-          default: 5
-          nullable: false
-        minWordSizeFor2Typos:
-          description: Customize the minimum size for a word to tolerate 2 typos.
-          type: integer
-          default: 9
-          nullable: false
+        minWordSizeForTypos:
+          type: object
+          properties:
+            oneTypo:
+              description: Customize the minimum size for a word to tolerate 1 typo.
+              type: integer
+              default: 5
+              nullable: false
+            twoTypos:
+              description: Customize the minimum size for a word to tolerate 2 typos.
+              type: integer
+              default: 9
+              nullable: false
     filterableAttributes:
       type: array
       description: |
@@ -1703,8 +1706,9 @@ paths:
                         - price
                       disabledWords:
                         - Tolkien
-                      minWordSizeFor1Typo: 4
-                      minWordSizeFor2Typos: 8
+                      minWordSizeForTypos:
+                        oneTypo: 4
+                        twoTypos: 8
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -1793,8 +1797,9 @@ paths:
                       - author
                     disabledWords:
                       - Tolkien
-                    minWordSizeFor1Typo: 4
-                    minWordSizeFor2Typos: 8
+                    minWordSizeForTypos:
+                      oneTypo: 4
+                      twoTypos: 8
       responses:
         '202':
           $ref: '#/components/responses/202'

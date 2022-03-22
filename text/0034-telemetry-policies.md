@@ -121,8 +121,8 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `typo.enabled`                          | Whether the typo tolerance is enabled | `true` | `Settings Updated`, `TypoTolerance Updated` |
 | `typo.disabled_attributes`              | `true` if at least one value is defined | `false` | `Settings Updated`, `TypoTolerance Updated` |
 | `typo.disabled_words`                   | `true` if at least one value is defined | `false` | `Settings Updated`,  `TypoTolerance Updated` |
-| `typo.min_word_size_for_1_typo`         | The defined value for `minWordSizeFor1Typo` property | `5` | `Settings Updated`, `TypoTolerance Updated` |
-| `typo.min_word_size_for_2_typos`        | The defined value for `minWordSizeFor2Typos` property | `9` | `Settings Updated`, `TypoTolerance Updated` |
+| `typo.min_word_size_for_typos.one_typo` | The defined value for `minWordSizeForTypos.oneTypo` property | `5` | `Settings Updated`, `TypoTolerance Updated` |
+| `typo.min_word_size_for_typos.two_typos`| The defined value for `minWordSizeForTypos.twoTypos` property | `9` | `Settings Updated`, `TypoTolerance Updated` |
 | `per_task_uid`                          | `true` if an uid is used to fetch a particular task resource, otherwise `false` | true | `Tasks Seen`, `Index Tasks Seen` |
 |
 
@@ -290,8 +290,8 @@ This property allows us to gather essential information to better understand on 
 | typo.enabled        | Whether the typo tolerance is enable.d | `true` |
 | typo.disabled_attributes | `true` if at least one value is defined for `disabledAttributes` property. | `false` |
 | typo.disabled_words    | `true` if at least one value is defined for `disabledWords` property. | `false` |
-| typo.min_word_size_for_1_typo | The defined value for `minWordSizeFor1Typo` property. | `5` |
-| typo.min_word_size_for_2_typos | The defined value for `minWordSizeFor2Typos` property. | `9` |
+| typo.min_word_size_for_typos.one_typo | The defined value for `minWordSizeForTypos.oneTypo` property. | `5` |
+| typo.min_word_size_for_typos.two_typos | The defined value for `minWordSizeForTypos.twoTypos` property. | `9` |
 
 ---
 
@@ -337,8 +337,8 @@ This property allows us to gather essential information to better understand on 
 | typo.enabled        | Whether the typo tolerance is enable.d | `true` |
 | typo.disabled_attributes | `true` if at least one value is defined for `disabledAttributes` property. | `false` |
 | typo.disabled__words    | `true` if at least one value is defined for `disabledWords` property. | `false` |
-| typo.min_word_size_for_1_typo | The defined value for `minWordSizeFor1Typo` property. | `5` |
-| typo.min_word_size_for_2_typos | The defined value for `minWordSizeFor2Typos` property. | `9` |
+| typo.min_word_size_for_typos.one_typo | The defined value for `minWordSizeForTypos.oneTypo` property. | `5` |
+| typo.min_word_size_for_typos.two_typos | The defined value for `minWordSizeForTypos.twoTypos` property. | `9` |
 
 ## `Dump Created`
 
