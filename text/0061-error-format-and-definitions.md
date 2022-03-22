@@ -301,7 +301,7 @@ This error happens when the `minWordSizeFor1Typo` field of `typo` resource is in
 
 ```json
 {
-    "message": "`minWordSizeFor1Typo` field value `:value` is invalid. It should be an integer superior to `0` and inferior or equals to the value defined in the field `minWordSizeFor2Typos`.",
+    "message": "`minWordSizeFor1Typo` field value `:value` is invalid. It should be an integer superior to `0` and inferior or equal to the value defined in the field `minWordSizeFor2Typos`.",
     "code": "invalid_typo_min_word_size_for_1_typo",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_typo_min_word_size_for_1_typo"
@@ -324,7 +324,7 @@ This error happens when the `minWordSizeFor2Typos` field of `typo` resource is i
 
 ```json
 {
-    "message": "`minWordSizeFor2Typos` field value `:value` is invalid. It should be an integer superior to 0 and superior or equals to the value defined in the field `minWordSizeFor1Typo`.",
+    "message": "`minWordSizeFor2Typos` field value `:value` is invalid. It should be an integer superior to 0 and superior or equal to the value defined in the field `minWordSizeFor1Typo`.",
     "code": "invalid_typo_min_word_size_for_2_typos",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_typo_min_word_size_for_2_typos"
