@@ -262,6 +262,8 @@ Sets the total number of **words** to keep for the cropped part of an attribute 
 
 This parameter is applied to the fields from `attributesToCrop`. If there are none, this parameter has no effect. See [3.1.11. `attributesToCrop`](#3111-attributestocrop) section.
 
+Sending a `0` value is equivalent to `null` and thus deactivates the cropping. It works the same for a custom crop length per attribute in `attributesToCrop`, except it deactivates it for the related field.
+
 - 🔴 Sending a value with a different type than `Integer` or `null` for `cropLength` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 ##### 3.1.12.1 Examples
@@ -277,6 +279,8 @@ With `croplength` defined as `5` and `q` defined as `boiling blood`, the cropped
 `"…and with boiling blood he…"`
 
 Cropped query terms are counted as a word regarding `cropLength`.
+
+Sending more query terms than the `cropLength` value has no impact. The cropped part will contain the `cropLength` number.
 
 ###### 3.1.12.1.3. Length Reassignment to the left.
 

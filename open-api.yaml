@@ -1526,7 +1526,7 @@ paths:
                   default: '…'
                 cropLength:
                   type: number
-                  description: Sets the total number of **words** to keep around the matched part of an attribute specified in the `attributesToCrop` parameter.
+                  description: Sets the total number of **words** to keep for the cropped part of an attribute specified in the `attributesToCrop` parameter.
                   default: 10
                 matches:
                   type: boolean
