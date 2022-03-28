@@ -4,7 +4,7 @@
 
 This specification describes the stats API endpoints.
 
-Stats routes give extended information and metrics about indexes and the Meilisearch database.
+Stats routes give information and metrics about indexes and the Meilisearch database.
 
 ## 2. Motivation
 N/A
@@ -13,7 +13,7 @@ N/A
 
 ### 3.1. API Endpoints Definition
 
-Manipulate documents of a Meilisearch index.
+See statistics of Meilisearch indexes.
 
 - [3.1.1. `GET` - `stats`](#311-get---stats)
 - [3.1.2. `GET` - `indexes/:index_uid/stats`](#312-get---indexesindexuidstats)
@@ -51,21 +51,23 @@ In addition to all fields returned by [3.1.2. `GET` - `indexes/:index_uid/stats`
 - Type: Integer
 - Required: True
 
-Size of the database in bytes. It represents the size on disk of all the indexes.
+Size of the database in bytes. It represents the size on the disk of all the indexes.
 
 ###### 3.1.1.2.2. `lastUpdate`
 
 - Type: String
 - Required: True
 
-When the last update was made to the database in the RFC 3339 format.
+The last update date time when the index was updated.
+
+Represented wih the RFC 3339 format.
 
 ###### 3.1.1.2.3. `indexes`
 
 - Type: Object
 - Required: True
 
-Object representing the statistics for each index found in the database.
+An object representing the statistics for each index found in the database.
 
 e.g.
 
@@ -88,7 +90,7 @@ e.g.
 }
 ```
 
-See [3.1.2.2. Response Definition](#3122-response-definition) section.
+See [3.1.2.3. Response Definition](#3123-response-definition) section for more details.
 
 ##### 3.1.1.3. Errors
 
@@ -127,23 +129,23 @@ N/A
 - Type: Integer
 - Required: True
 
-Total number of documents in an index.
+The total number of documents in the index.
 
 ###### 3.1.2.3.2. `isIndexing`
 
 - Type: Boolean
 - Required: True
 
-If true, it indicates that the index is indexing documents.
+If true, it indicates that the index is processing documents.
 
 ###### 3.1.2.3.3. `fieldDistribution`
 
 - Type: Object
 - Required: True
 
-Lists every field in the index along with the total number of documents in the index that contain that field.
+Lists every field in the index and the total number of documents in the index containing that field.
 
-`fieldDistribution` is not impacted by searchableAttributes or displayedAttributes. Meaning, if one of the fields is not displayed or searchable, it will still be displayed in the `fieldDistribution` object.
+`fieldDistribution` is not impacted by searchableAttributes or displayedAttributes. If one of the fields is not displayed or searchable, it will still be displayed in the `fieldDistribution` object.
 
 ##### 3.1.2.4. Errors
 
