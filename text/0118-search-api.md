@@ -413,6 +413,7 @@ It's useful when more control is needed than offered by the built-in highlightin
 
 - 🔴 Sending a value with a different type than `Boolean` or `null` for `matches` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
+
 ### 3.2. Search Response Properties
 
 | Field                                                 | Type                         | Required |
@@ -420,12 +421,10 @@ It's useful when more control is needed than offered by the built-in highlightin
 | [`hits`](#321-hits)                                   | Array[Hit]                   | True     |
 | [`limit`](#322-limit)                                 | Integer                      | True     |
 | [`offset`](#323-offset)                               | Integer                      | True     |
-| [`nbHits`](#324-nbhits)                               | Integer                      | True     |
-| [`exhaustiveNbHits`](#325-exhaustivenbhits)           | Boolean                      | True     |
-| [`facetsDistribution`](#326-facetsdistribution)       | Object                       | False    |
-| [`exhaustiveFacetsCount`](#327-exhaustivefacetscount) | Boolean                      | False    |
-| [`processingTimeMs`](#328-processingtimems)           | Integer                      | True     |
-| [`query`](#329-query)                                 | String                       | True     |
+| [`approximativeNbHits`](#324-approximativeNbhits)     | Integer                      | True     |
+| [`facetsDistribution`](#325-facetsdistribution)       | Object                       | False    |
+| [`processingTimeMs`](#326-processingtimems)           | Integer                      | True     |
+| [`query`](#327-query)                                 | String                       | True     |
 
 #### 3.2.1. `hits`
 
@@ -671,23 +670,14 @@ Returns the `offset` search parameter used for the query.
 
 > See [3.1.6. `offset` section](#316-offset) section.
 
-#### 3.2.4. `nbHits`
+#### 3.2.4. `approximativeNbHits`
 
 - Type: Integer
 - Required: True
 
-Returns the total number of candidates for the search query.
+Returns the approximated number of candidates for the search query.
 
-#### 3.2.5. `exhaustiveNbHits`
-
-- Type: Boolean
-- Required: True
-
-Whether `nbHits` is exhaustive.
-
-> Always return `false`.
-
-#### 3.2.6. `facetsDistribution`
+#### 3.2.5. `facetsDistribution`
 
 - Type: Object
 - Required: False
@@ -698,23 +688,14 @@ If a field distributed as a facet contains no value, it is returned as a `facetD
 
 > See [3.1.4. `facetsDistribution`](#314-facetsdistribution) section.
 
-#### 3.2.7. `exhaustiveFacetsCount`
-
-- Type: Boolean
-- Required: False
-
-Whether `facetsDistribution` count is exhaustive. The field `exhaustiveFacetsCount` is added when `facetsDistribution` is set as a search parameter.
-
-> Always returns `false`.
-
-#### 3.2.8. `processingTimeMs`
+#### 3.2.6. `processingTimeMs`
 
 - Type: Integer
 - Required: True
 
 Processing time of the search query in **milliseconds**.
 
-#### 3.2.9. `query`
+#### 3.2.7. `query`
 
 - Type: String
 - Required: True
