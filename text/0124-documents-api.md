@@ -247,9 +247,8 @@ Add a list of documents or update them if they already exist.
 
 If the provided index does not exist, it will be created. See [3.1.4.5. Lazy Index Creation](#3145-lazy-index-creation)
 
-If an already existing document (same identifier) is set, the old document will be only partially updated according to the fields of the new document. Thus, any fields not present in the new document are kept and remained unchanged.
+If an already existing document (same identifier) is set, the old document will be only partially updated according to the fields of the new document. Thus, any fields not present in the new document are kept and remain unchanged.
 
-To completely overwrite a document, see [3.1.3. `POST` - `indexes/:index_uid/documents`](#313-post---indexesindexuiddocuments) section.
 
 This endpoint accepts various content-type:
 
