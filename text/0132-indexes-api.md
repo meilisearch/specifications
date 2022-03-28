@@ -4,12 +4,17 @@
 
 This specification describes the indexes API endpoints permitting to list, create, update and delete Meilsearch indexes.
 
-Indexes contain a set of documents to be searchable and have their specific settings.
-
 ## 2. Motivation
 N/A
 
 ## 3. Functional Specification
+
+Indexes contain a set of documents to be searchable and have their specific settings.
+
+See [Documents API specification](0124-documents-api.md) and [Settings API specification](0123-settings-api.md) for details.
+
+### 3.1. API Endpoints Definition
+
 
 ### 3.1. `index` API Resource Definition
 
@@ -150,7 +155,7 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 
 Update an index.
 
-The `primaryKey` field can be updated when the index is empty. When the `primaryKey` is set to `null`, the indexing process will try to auto-infer the `primaryKey` by searching the first attribute containing `id` in the document payload to index.
+The `primaryKey` field can be updated when the index is empty. If the `primaryKey` is not defined, the indexing process will try to auto-infer the `primaryKey` by searching the first attribute containing `id` in the first document payload to index.
 
 ##### 3.2.4.1. Request Payload Definition
 
@@ -208,4 +213,5 @@ The auth layer can return the following errors if Meilisearch is secured (a mast
 N/A
 
 ## 5. Future Possibilities
-N/A
+- Delete `uid` or `name`.
+- Rework the `primaryKey` concept
