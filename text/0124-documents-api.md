@@ -30,9 +30,9 @@ Manipulate documents of a Meilisearch index.
 
 List all documents of a Meilisearch index.
 
-The query parameters `offset` and `limit` permit to browse through all documents of an index.
+The query parameters `offset` and `limit` permit browsing through all documents of an index.
 
-Documents are ordered by Meilisearch depending on the hash of their id.
+Meilisearch orders documents depending on the hash of their id.
 
 ##### 3.1.1.1. Path Parameters
 
@@ -84,11 +84,32 @@ If no value is specified, `attributesToRetrieve` uses the `displayedAttributes` 
 
 > If an attribute has been removed from `displayedAttributes` index settings, `attributesToRetrieve` will silently ignore it and the field will not appear in the returned documents.
 
-> Specified fields are separated by a comma. e.g. `&attributesToRetrieve=title,description`
+> Specified fields have to be separated by a comma. e.g. `&attributesToRetrieve=title,description`
 
 ##### 3.1.1.3. Response Definition
 
-An array of documents.
+An array of documents represented as JSON objects.
+
+###### 3.1.1.3.1. Example
+
+```json
+[
+  {
+    "id": 25684,
+    "release_date": "1993-01-01",
+    "poster": "https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg",
+    "title": "American Ninja 5",
+    "overview": "When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja."
+  },
+  {
+    "id": 468219,
+    "title": "Dead in a Week (Or Your Money Back)",
+    "release_date": "2018-09-12",
+    "poster": "https://image.tmdb.org/t/p/w1280/f4ANVEuEaGy2oP5M0Y2P1dwxUNn.jpg",
+    "overview": "William has failed to kill himself so many times that he outsources his suicide to aging assassin Leslie. But with the contract signed and death assured within a week (or his money back), William suddenly discovers reasons to live... However Leslie is under pressure from his boss to make sure the contract is completed."
+  }
+]
+```
 
 ##### 3.1.1.4. Errors
 
@@ -127,6 +148,18 @@ N/A
 ##### 3.1.2.2. Response Definition
 
 A document represented as a JSON object.
+
+##### 3.1.2.2.1. Example
+
+```json
+{
+  "id": 25684,
+  "title": "American Ninja 5",
+  "poster": "https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg",
+  "overview": "When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.",
+  "release_date": "1993-01-01"
+}
+```
 
 ##### 3.1.2.3. Errors
 
@@ -197,7 +230,6 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending a different Content-Type than `application/json`, `text/csv`, or `application/x-ndjson` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
-- 🔴 Sending a value with a different type than `String` for `uid` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 - 🔴 Sending a value with a different type than `String` or `null` for `primaryKey` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 ###### 3.1.3.4.1. Async Errors
@@ -215,7 +247,7 @@ Add a list of documents or update them if they already exist.
 
 If the provided index does not exist, it will be created. See [3.1.4.5. Lazy Index Creation](#3145-lazy-index-creation)
 
-If an already existing document (same documentId) is set, the old document will be only partially updated according to the fields of the new document. Thus, any fields not present in the new document are kept and remained unchanged.
+If an already existing document (same identifier) is set, the old document will be only partially updated according to the fields of the new document. Thus, any fields not present in the new document are kept and remained unchanged.
 
 To completely overwrite a document, see [3.1.3. `POST` - `indexes/:index_uid/documents`](#313-post---indexesindexuiddocuments) section.
 
@@ -273,6 +305,7 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending a different Content-Type than `application/json`, `text/csv`, or `application/x-ndjson` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
+- 🔴 Sending a value with a different type than `String` or `null` for `primaryKey` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 ###### 3.1.4.4.1. Async Errors
 
