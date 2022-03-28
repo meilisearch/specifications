@@ -88,6 +88,7 @@ e.g.
       }
     }
 }
+}
 ```
 
 See [3.1.2.3. Response Definition](#3123-response-definition) section for more details.
