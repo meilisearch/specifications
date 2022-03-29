@@ -312,7 +312,7 @@ Flattens to:
 
 #### 3.2.4.6. searchableAttributes default value case
 
-By default, `searchableAttributes` is set to `[*]`, making all document fields are searchable.
+By default, `searchableAttributes` is set to `[*]`, making all document fields searchable.
 
 In that case, `Attribute` ranking rule consider a field higher in the internal representation more important than a lower one.
 
@@ -412,8 +412,10 @@ It's equivalent to
 ```json
 {
     "attributesToHighlight": [
+        "person",
         "person.firstname",
         "person.lastname",
+        "person.address",
         "person.address.country",
         "person.address.city"
     ]
