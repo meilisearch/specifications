@@ -35,6 +35,8 @@ A unique identifier for the index.
 
 This field is mandatory when creating an index and cannot be changed afterwards.
 
+The field `uid` can be an integer or a string containing only alphanumeric characters, hyphens (-) and underscores (_).
+
 #### 3.1.2. `name`
 
 - Type: String
@@ -150,7 +152,7 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 
 ###### 3.2.3.3.1. Async Errors
 
-- 🔴 When Meilisearch is secured, if the API Key do not have the `indexes.create` action defined, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error in the related asynchronous `task` resource. See [3.2.2.2. Response Definition](#3222-response-definition).
+- 🔴 When Meilisearch is secured by a master key, if the API Key used do not have the `indexes.create` action defined, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error in the related asynchronous `task` resource. See [3.2.2.2. Response Definition](#3222-response-definition).
 - 🔴 Sending a `uid` that already exists returns an [index_already_exists](0061-error-format-and-definitions.md#index_already_exists) error.
 
 #### 3.2.4. `PUT` - `indexes/:index_uid`
