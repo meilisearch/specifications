@@ -194,7 +194,7 @@ Synonyms are also highlighted.
 
 Specifies the tag, or sequence, to put **before** every highlighted query terms.
 
-This parameter is applied to the fields from `attributesToHighlight`. If there are none, this parameter has no effect. See [3.1.8. `attributesToHighlight`](#318-attributestohighlight) section.
+This parameter is applied to the fields configured in `attributesToHighlight`. If there are none, this parameter has no effect. See [3.1.8. `attributesToHighlight`](#318-attributestohighlight) section.
 
 - 🔴 Sending a value with a different type than `String` for `highlightPreTag` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
@@ -242,7 +242,7 @@ A custom crop length set in this way has priority over the `cropLength` paramete
 
 ##### 3.1.11.2. searchableAttributes
 
-As for `attributesToHighlight`, attributes not defined in the `searchableAttributes` index setting are also cropped if assigned to `attributesToCrop`.
+Attributes configured in `attributesToCrop` are cropped even if not present in the `searchableAttributes` index setting.
 
 ##### 3.1.11.3. stopWords
 
@@ -320,13 +320,13 @@ In this example:
 - Required: False
 - Default: `"…"` (U+2026)
 
-Sets the crop marker to apply before and/or after cropped part selected within an attribute defined in `attributesToCrop`. See [3.1.11. `attributesToCrop`](#3111-attributestocrop) section.
+Sets which string to add before and/or after the cropped text. See [3.1.11. `attributesToCrop`](#3111-attributestocrop) section.
 
-The specified crop marker is applied by following rules. See [3.1.1.13.1. Applying `cropMarker`](#311131-applying-cropmarker) section.
+The specified crop marker is applied by following rules outline in section [3.1.1.13.1. Applying `cropMarker`](#311131-applying-cropmarker).
 
-Specifying `cropMarker` to `""` or `null` implies that no marker will be applied to the cropped part, if any.
+Specifying `cropMarker` to `""` or `null` implies that no marker will be applied to the cropped part.
 
-This parameter is applied to the fields from `attributesToCrop`. If there are none, this parameter has no effect. See [3.1.11. `attributesToCrop`](#3111-attributestocrop) section.
+This parameter is applied to the fields configured in `attributesToCrop`. If there are none, this parameter has no effect. See [3.1.11. `attributesToCrop`](#3111-attributestocrop) section.
 
 - 🔴 Sending a value with a different type than `String` or `null` for `cropMarker` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
@@ -345,7 +345,7 @@ Here is how the density is calculated:
 
 Only one cropped part from an attribute is returned.
 
-If no part is found when selecting a part to be cropped. The returned value in `_formatted` will start at the beginning of the attribute until the distance of `cropLength` is reached.
+If no part is found when selecting a part to be cropped, the returned value in `_formatted` will start at the beginning of the attribute include a number of words equal to `cropLength`.
 
 ###### 3.1.13.1.2. Positioning Markers
 
