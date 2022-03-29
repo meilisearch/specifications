@@ -192,7 +192,7 @@ Synonyms are also highlighted.
 - Required: False
 - Default: `"<em>"`
 
-Specifies the tag, or sequence, to put **before** every highlighted query terms.
+Specifies the string to put **before** every highlighted query terms.
 
 This parameter is applied to the fields configured in `attributesToHighlight`. If there are none, this parameter has no effect. See [3.1.8. `attributesToHighlight`](#318-attributestohighlight) section.
 
@@ -206,7 +206,7 @@ If `attributesToHighlight` is omitted while `highlightPreTag` is specified, ther
 - Required: False
 - Default: `"</em>"`
 
-Specifies the tag, or sequence, to put **after** the highlighted query terms.
+Specifies the string to put **after** the highlighted query terms.
 
 This parameter is applied to the fields from `attributesToHighlight`. If there are none, this parameter has no effect. See [3.1.8. `attributesToHighlight`](#318-attributestohighlight) section.
 
@@ -518,3 +518,4 @@ n/a
 - Move `attributesToHighlight`, `highlightPreTag`, `highlightPostTag`, `attributesToCrop`, `cropLength` and `cropMarker` into a `formatter` objet.
 - Add an option to only highlight complete query term.
 - Expose the `formatter` resource as an index setting.
+- Highlight a phrase search as a single highlighted section.
