@@ -137,7 +137,7 @@ Given `3` for `oneTypo` and `5` as `twoTypos` and the following document
 }
 ```
 
-- Typing `World` with 2 typos, e.g. `Warrld` will match `World`. It accepts 1 typo up to 2 typos since `World` size is made of `5` chars.
+- Typing `World` with 2 typos, e.g. `Warrld` will match `World`. It accepts up to 2 typos since `World` size is made of `5` chars.
 - Typing `Hey` with 1 typo, e.g. `Hoy` will match `Hey`. It accepts only 1 typo since `Hey` size is made of `3` chars.
 
 ## 3.2. API Endpoints Definition
@@ -188,7 +188,7 @@ Request payload
         "title",
         "description"
     ]
-    "minWordSizeFor1Typo": 4
+    "minWordSizeForTypos": 4
 }
 ```
 
