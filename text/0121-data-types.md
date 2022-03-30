@@ -1,5 +1,3 @@
-- Title: Data Types
-
 # Data Types
 
 ## 1. Summary
@@ -168,9 +166,9 @@ It allows expressing a nested field in all Meilisearch parameters that accept do
 
 Meilisearch accepts the `.` (dot-notation) to express a nested field location in a document structure.
 
-### 3.4.1. Examples
+#### 3.4.1. Examples
 
-#### 3.4.1.1. Object
+##### 3.4.1.1. Object
 
 The following JSON document:
 
@@ -194,7 +192,7 @@ Flattens to:
 }
 ```
 
-#### 3.4.1.2. Array of objects
+##### 3.4.1.2. Array of objects
 
 The following JSON document:
 
@@ -216,7 +214,7 @@ Flattens to:
 }
 ```
 
-#### 3.4.1.3. Array of objects mixed with scalar value
+##### 3.4.1.3. Array of objects mixed with scalar value
 
 The following JSON document:
 
@@ -241,7 +239,7 @@ Flattens to:
 ```
 
 
-#### 3.4.1.4. Array of objects of array of objects of ...
+##### 3.4.1.4. Array of objects of array of objects of ...
 
 The following JSON document:
 
@@ -289,7 +287,7 @@ Flattens to:
 }
 ```
 
-#### 3.2.4.5. Collision between a representation
+##### 3.4.1.5. Collision between a representation
 
 The following JSON document:
 
@@ -310,7 +308,7 @@ Flattens to:
 }
 ```
 
-#### 3.2.4.6. searchableAttributes default value case
+##### 3.4.1.6. searchableAttributes default value case
 
 By default, `searchableAttributes` is set to `[*]`, making all document fields searchable.
 
@@ -343,11 +341,11 @@ The second representation of `a.b` in its nested form is merged with the first r
 
 Users can't and should not rely on a given document field order when `searchableAttributes` is `[*]`.
 
-#### 3.2.4.7. Dot-notation Expression
+##### 3.4.1.7. Dot-notation Expression
 
 Permits to express the nested object property.
 
-##### 3.2.4.7.2. Example
+###### 3.4.1.7.1. Example
 
 Given this document structure
 
@@ -373,15 +371,15 @@ A precise field can be expressed using the dot-notation
 }
 ```
 
-#### 3.2.4.8. All Object Properties Expression
+##### 3.4.1.8. All Object Properties Expression
 
 It is possible to express the definition of all properties of an object.
 
 e.g. In this case `person` is an object containing properties. `attributesToRetrieve: ["person"]`
 
-This notation is accepted on all parameters or settings allowing to specify attributes. This is due to the fact that several documents may not share the same schema. See [3.2.4.8.3. Edge Case](#32483-edge-case) section.
+This notation is accepted on all parameters or settings allowing to specify attributes. This is due to the fact that several documents may not share the same schema. See [3.4.1.8.2. Edge Case](#34182-edge-case) section.
 
-##### 3.2.4.8.2. Example
+###### 3.4.1.8.1. Example
 
 Given this document structure
 
@@ -422,7 +420,7 @@ It's equivalent to
 }
 ```
 
-##### 3.2.4.8.3. Edge Case
+###### 3.4.1.8.2. Edge Case
 
 One document might have a non-nested field `person` while another has a `person` object containing properties.
 
