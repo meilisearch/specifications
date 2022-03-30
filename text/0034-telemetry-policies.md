@@ -94,7 +94,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `stats.database_size`                   | Database size. Expressed in `Bytes`                     | 2621440           | Every hour |
 | `stats.indexes_number`                  | Number of indexes                                       | 2                 | Every hour |
 | `start_since_days`                      | Number of days since instance was launched              | 365               | Every hour |
-| `user_agent`                            | User-agent header encountered during one or more API calls | ["Meilisearch Ruby (2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `Dump Created` |
+| `user_agent`                            | User-agent header encountered during one or more API calls | ["Meilisearch Ruby (v2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `Dump Created` |
 | `requests.99th_response_time`           | Highest latency from among the fastest 99% of successful search requests | 57ms    | `Documents Searched POST`, `Documents Searched GET`|
 | `requests.total_succeeded`              | Total number of successful search requests in this batch | 3456 | `Documents Searched POST`, `Documents Searched GET` |
 | `requests.total_failed`                 | Total number of failed search requests in this batch    | 24   | `Documents Searched POST`, `Documents Searched GET` |
@@ -183,7 +183,7 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents all the user-agents encountered on this endpoint in the aggregated event.| `["Meilisearch Ruby (2.1)", "Ruby (3.0)"]` |
+| user_agent    | Represents all the user-agents encountered on this endpoint in the aggregated event.| `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | requests.99th_response_time | The maximum latency, in `ms`, for the fastest 99% of succeeded requests in the aggregated event. | `57ms` |
 | requests.total_succeeded | The total number of succeeded search requests in the aggregated event. | `3456` |
 | requests.total_failed | The total number of failed search requests in the aggregated event. | `24` |
@@ -205,7 +205,7 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents all the user-agents encountered on this endpoint in the aggregated event.| `["Meilisearch Ruby (2.1)", "Ruby (3.0)"]` |
+| user_agent    | Represents all the user-agents encountered on this endpoint in the aggregated event.| `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | requests.99th_response_time | Highest latency from among the fastest 99% of successful search requests. | `57ms` |
 | requests.total_succeeded | The total number of succeeded search requests in the aggregated event. | `3456` |
 | requests.total_failed | The total number of failed search requests in the aggregated event. | `24` |
@@ -225,7 +225,7 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents the user-agent encountered for this API call. | `["Meilisearch Ruby (2.1)", "Ruby (3.0)"]` |
+| user_agent    | Represents the user-agent encountered for this API call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | primary_key   | The field's name used as a primary key if set, otherwise `null`. | `id` |
 
 ---
@@ -234,7 +234,7 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents the user-agent encountered for this API call. | `["Meilisearch Ruby (2.1)", "Ruby (3.0)"]` |
+| user_agent    | Represents the user-agent encountered for this API call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | primary_key   | The field's name used as a primary key if set, otherwise `null`. | `id` |
 
 ---
@@ -245,7 +245,7 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents all the user-agents encountered on this endpoint in the aggregated event. | `["Meilisearch Ruby (2.1)", "Ruby (3.0)"]` |
+| user_agent    | Represents all the user-agents encountered on this endpoint in the aggregated event. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | payload_type | Represents all the payload_type encountered on this endpoint in the aggregated event as a set. `application/json`/ `application/x-ndjson`/ `text/plain` or any non-supported content-type. | [`text/plain`, `application/json`] |
 | primary_key   | Represents all the `primaryKey` query parameters encountered in the aggregated event as a set, otherwise `null`. | `["id"]` |
 | index_creation | Does an index creation happened among all requests in the aggregated event? | `false`|
@@ -258,7 +258,7 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents all the user-agents encountered on this endpoint in the aggregated event. | `["Meilisearch Ruby (2.1)", "Ruby (3.0)"]` |
+| user_agent    | Represents all the user-agents encountered on this endpoint in the aggregated event. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | payload_type | Represents all the payload_type encountered on this endpoint in the aggregated event as a set. `application/json`/ `application/x-ndjson`/ `text/plain` or any non-supported content-type. | [`text/plain`, `application/json`] |
 | primary_key   | Represents all the `primaryKey` query parameters encountered in the aggregated event as a set, otherwise `null`. | `["id"]` |
 | index_creation | Does an index creation happened among all requests in the aggregated event? | `false`|
@@ -270,7 +270,7 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (2.1)", "Ruby (3.0)"]` |
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | ranking_rules.sort_position | Position of the `sort` ranking rule if any, otherwise `null`. | `5` |
 | sortable_attributes.total   | Number of sortable attributes. | `3` |
 | sortable_attributes.has_geo | Indicate if `_geo` is set as a sortable attribute. | `false`|
@@ -283,7 +283,7 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (2.1)", "Ruby (3.0)"]` |
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | ranking_rules.sort_position | Position of the `sort` ranking rule if any, otherwise `null`. | `5` |
 
 ---
@@ -292,7 +292,7 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (2.1)", "Ruby (3.0)"]` |
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | sortable_attributes.total   | Number of sortable attributes. | `3` |
 | sortable_attributes.has_geo | Indicate if `_geo` is set as a sortable attribute. | `false`|
 
@@ -302,7 +302,7 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (2.1)", "Ruby (3.0)"]` |
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | filterable_attributes.total   | Number of filterable attributes. | `3` |
 | filterable_attributes.has_geo | Indicate if `_geo` is set as a filterable attribute. | `false`|
 
@@ -310,27 +310,27 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (2.1)", "Ruby (3.0)"]` |
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | searchable_attributes.total   | Number of searchable attributes. | `3` |
 
 ## `Dump Created`
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (2.1)", "Ruby (3.0)"]` |
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 
 ## `Tasks Seen`
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (2.1)", "Ruby (3.0)"]` |
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | per_task_uid  | `true` if an uid is used to fetch a particular task resource, otherwise `false` | `true` |
 
 ## `Index Tasks Seen`
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (2.1)", "Ruby (3.0)"]` |
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | per_task_uid  | `true` if an uid is used to fetch a particular task resource, otherwise `false` | `true` |
 
 ---
