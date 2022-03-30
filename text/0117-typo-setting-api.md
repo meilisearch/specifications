@@ -217,10 +217,10 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
-- 🔴 Sending a value with a different type than `Boolean` for the `enabled` field returns an [invalid_typo_enabled](0061-error-format-and-definitions.md#invalid_typo_enabled) error.
-- 🔴 Sending a value with a different type than `Array of String` for the `disabledAttributes` field returns an [invalid_typo_disabled_attributes](0061-error-format-and-definitions.md#invalid_typo_disabled_attributes) error.
-- 🔴 Sending a value with a different type than `Array of String` for the `disabledWords` field returns an [invalid_typo_disabled_words](0061-error-format-and-definitions.md#invalid_typo_disabled_words) error.
-- 🔴 Sending a value with a different type than `Integer` for `minWordSizeForTypos` object fields returns an [invalid_typo_min_word_size_for_typos](0061-error-format-and-definitions.md#invalid_typo_min_word_size_for_typos) error.
+- 🔴 Sending a value with a different type than `Boolean` for the `enabled` field returns an [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Array of String` for the `disabledAttributes` field returns an [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Array of String` for the `disabledWords` field returns an [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Integer` for `minWordSizeForTypos` object fields returns an [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 ###### 3.2.2.2.2.1. Async Errors
 
@@ -293,3 +293,4 @@ The `typo` ranking rule favors candidates with the least typos. That is, if a do
 - Add the possibility to disable the typo tolerance feature on all numeric fields.
 - Add different modes of result matching for the typo feature. e.g. `default`/`min`/`strict`
 - Replace `POST` to `PATCH` verb to allow partial edit of the settings and embrace REST API convention.
+- Introduce synchronous invalid_typo_{fieldName} error with a better error message than the one provided by serde.

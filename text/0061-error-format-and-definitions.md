@@ -222,76 +222,9 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_typo_enabled
-
-`Synchronous`
-
-### Context
-
-This error happens when the `enabled` field of `typo` resource is invalid.
-
-### Error Definition
-
-```json
-{
-    "message": "`enabled` field value `:value` is invalid. It should be a boolean (`true` or `false`).",
-    "code": "invalid_typo_enabled",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_typo_enabled"
-}
-```
-
-- The `:value` is inferred when the message is generated.
-
----
-
-## invalid_typo_disabled_attributes
-
-`Synchronous`
-
-### Context
-
-This error happens when the `disabledAttributes` field of `typo` resource is invalid.
-
-### Error Definition
-
-```json
-{
-    "message": "`disableOnAttributes` field value `:value` is invalid. It should be an array of strings representing document's attributes.",
-    "code": "invalid_typo_disabled_attributes",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_typo_disabled_attributes"
-}
-```
-
-- The `:value` is inferred when the message is generated.
-
----
-
-## invalid_typo_disabled_words
-
-`Synchronous`
-
-### Context
-
-This error happens when the `disabledWords` field of `typo`  resource is invalid.
-
-### Error Definition
-
-```json
-{
-    "message": "`disableOnWords` field value `:value` is invalid. It should be an array of strings representing words.",
-    "code": "invalid_typo_disabled_words",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_typo_disabled_words"
-}
-```
-
----
-
 ## invalid_typo_min_word_size_for_typos
 
-`Asynchronous/Synchronous`
+`Asynchronous`
 
 ### Context
 
