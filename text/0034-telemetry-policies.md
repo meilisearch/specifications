@@ -287,11 +287,11 @@ This property allows us to gather essential information to better understand on 
 | sortable_attributes.has_geo | Indicate if `_geo` is set as a sortable attribute. | `false`|
 | filterable_attributes.total   | Number of filterable attributes. | `3` |
 | filterable_attributes.has_geo | Indicate if `_geo` is set as a filterable attribute. | `false`|
-| typo.enabled        | Whether the typo tolerance is enabled. | `true` |
-| typo.disabled_attributes | `true` if at least one value is defined for `disabledAttributes` property. | `false` |
-| typo.disabled_words    | `true` if at least one value is defined for `disabledWords` property. | `false` |
-| typo.min_word_size_for_typos.one_typo | The defined value for `minWordSizeForTypos.oneTypo` property. | `5` |
-| typo.min_word_size_for_typos.two_typos | The defined value for `minWordSizeForTypos.twoTypos` property. | `9` |
+| typo_tolerance.enabled        | Whether the typo tolerance is enabled. | `true` |
+| typo_tolerance.disable_on_attributes | `true` if at least one value is defined for `disableOnAttributes` property. | `false` |
+| typo_tolerance.disable_on_words    | `true` if at least one value is defined for `disableOnWords` property. | `false` |
+| typo_tolerance.min_word_size_for_typos.one_typo | The defined value for `minWordSizeForTypos.oneTypo` property. | `5` |
+| typo_tolerance.min_word_size_for_typos.two_typos | The defined value for `minWordSizeForTypos.twoTypos` property. | `9` |
 
 ---
 
@@ -334,11 +334,11 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| typo.enabled        | Whether the typo tolerance is enable.d | `true` |
-| typo.disabled_attributes | `true` if at least one value is defined for `disabledAttributes` property. | `false` |
-| typo.disabled_words    | `true` if at least one value is defined for `disabledWords` property. | `false` |
-| typo.min_word_size_for_typos.one_typo | The defined value for `minWordSizeForTypos.oneTypo` property. | `5` |
-| typo.min_word_size_for_typos.two_typos | The defined value for `minWordSizeForTypos.twoTypos` property. | `9` |
+| typo_tolerance.enabled        | Whether the typo tolerance is enable.d | `true` |
+| typo_tolerance.disable_on_attributes | `true` if at least one value is defined for `disableOnAttributes` property. | `false` |
+| typo_tolerance.disable_on_words    | `true` if at least one value is defined for `disableOnWords` property. | `false` |
+| typo_tolerance.min_word_size_for_typos.one_typo | The defined value for `minWordSizeForTypos.oneTypo` property. | `5` |
+| typo_tolerance.min_word_size_for_typos.two_typos | The defined value for `minWordSizeForTypos.twoTypos` property. | `9` |
 
 ## `Dump Created`
 

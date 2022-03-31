@@ -222,7 +222,7 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_typo_min_word_size_for_typos
+## invalid_typo_tolerance_min_word_size_for_typos
 
 `Asynchronous`
 
@@ -235,9 +235,9 @@ This error happens when the `minWordSizeForTypos` object of the `typo` resource 
 ```json
 {
     "message": "`minWordSizeForTypos` setting is invalid. `oneTypo` and `twoTypos` fields should be between `0` and `255`, and `twoTypos` should be greater or equals to `oneTypo` but found `oneTypo: :oneTypo` and twoTypos: twoTypos`.",
-    "code": "invalid_typo_min_word_size_for_typos",
+    "code": "invalid_typo_tolerance_min_word_size_for_typos",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_typo_min_word_size_for_typos"
+    "link": "https://docs.meilisearch.com/errors#invalid_typo_tolerance_min_word_size_for_typos"
 }
 ```
 

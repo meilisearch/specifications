@@ -405,7 +405,7 @@ components:
         - exactness
         - 'release_date:asc'
       examples: []
-    typo:
+    typoTolerance:
       type: object
       description: Customize typo tolerance feature.
       properties:
@@ -414,14 +414,14 @@ components:
           type: boolean
           default: true
           nullable: false
-        disabledAttributes:
+        disableOnAttributes:
           description: Disable the typo tolerance feature on the specified attributes.
           type: array
           items:
             type: string
           default: []
           nullable: false
-        disabledWords:
+        disableOnWords:
           description: Disable the typo tolerance feature for a set of query terms given for a search query.
           type: array
           items:
@@ -494,8 +494,8 @@ components:
           $ref: '#/components/schemas/searchableAttributes'
         displayedAttributes:
           $ref: '#/components/schemas/displayedAttributes'
-        typo:
-          $ref: '#/components/schemas/typo'
+        typoTolerance:
+          $ref: '#/components/schemas/typoTolerance'
       required:
         - synonyms
         - stopWords
@@ -504,7 +504,7 @@ components:
         - distinctAttribute
         - searchableAttributes
         - displayedAttributes
-        - typo
+        - typoTolerance
     stats:
       type: object
       additionalProperties: false
@@ -1646,8 +1646,8 @@ paths:
                     $ref: '#/components/schemas/filterableAttributes'
                   sortableAttributes:
                     $ref: '#/components/schemas/sortableAttributes'
-                  typo:
-                    $ref: '#/components/schemas/typo'
+                  typoTolerance:
+                    $ref: '#/components/schemas/typoTolerance'
                 required:
                   - rankingRules
                   - distinctAttribute
@@ -1657,7 +1657,7 @@ paths:
                   - synonyms
                   - filterableAttributes
                   - sortableAttributes
-                  - typo
+                  - typoTolerance
               examples:
                 Example:
                   value:
@@ -1699,12 +1699,12 @@ paths:
                       - price
                       - author
                       - title
-                    typo:
+                    typoTolerance:
                       enabled: true
-                      disabledAttributes:
+                      disableOnAttributes:
                         - author
                         - price
-                      disabledWords:
+                      disableOnWords:
                         - Tolkien
                       minWordSizeForTypos:
                         oneTypo: 4
@@ -1752,8 +1752,8 @@ paths:
                   $ref: '#/components/schemas/filterableAttributes'
                 sortableAttributes:
                   $ref: '#/components/schemas/sortableAttributes'
-                typo:
-                  $ref: '#/components/schemas/typo'
+                typoTolerance:
+                  $ref: '#/components/schemas/typoTolerance'
             examples:
               Example:
                 value:
@@ -1790,12 +1790,12 @@ paths:
                     - release_date
                   filterableAttributes: []
                   sortableAttributes: null
-                  typo:
+                  typoTolerance:
                     enabled: false
-                    disabledAttributes:
+                    disableOnAttributes:
                       - title
                       - author
-                    disabledWords:
+                    disableOnWords:
                       - Tolkien
                     minWordSizeForTypos:
                       oneTypo: 4
@@ -2118,9 +2118,9 @@ paths:
           description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
-  '/indexes/{indexUid}/settings/typo':
+  '/indexes/{indexUid}/settings/typo-tolerance':
     get:
-      operationId: indexes.settings.typo.get
+      operationId: indexes.settings.typoTolerance.get
       summary: Get typo tolerance configuration
       description: |
         Get the typo tolerance configuration of an index.
@@ -2134,13 +2134,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/typo'
+                $ref: '#/components/schemas/typoTolerance'
         '401':
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
     post:
-      operationId: indexes.settings.typo.update
+      operationId: indexes.settings.typoTolerance.update
       summary: Update typo tolerance settings
       description: |
         Update the typo tolerance configuration of an index.
@@ -2156,7 +2156,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/typo'
+              $ref: '#/components/schemas/typoTolerance'
             examples: {}
         description: ''
       responses:
@@ -2169,7 +2169,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Content-Type'
     delete:
-      operationId: indexes.settings.typo.reset
+      operationId: indexes.settings.typoTolerance.reset
       summary: Reset typo tolerance settings to the default configuration
       description: |
         Reset the typo tolerance settings of an index to its default configuration.

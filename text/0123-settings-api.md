@@ -21,7 +21,7 @@ N/A
 | [stop-words](0123-stop-words-setting-api.md)                       | `stopWords` sub-resource API endpoints definition            |
 | [synonyms](0123-synonyms-setting-api.md)                           | `synonyms` sub-resource API endpoints definition             |
 | [distinct-attribute](0123-distinct-attribute-setting-api.md)       | `distinctAttribute` sub-resource API endpoints definition    |
-| [typo](0117-typo-setting-api.md)                                   | `typo` sub-resource API endpoints definition                 |
+| [typo-tolerance](0117-typo-tolerance-setting-api.md)                         | `typoTolerance` sub-resource API endpoints definition                 |
 
 Each setting is exposed as a sub-resource of the `indexes/:index_uid/settings` endpoints. e.g. The ranking rules setting of a Meilisearch index is exposed at `indexes/:index_uid/settings/ranking-rules`.
 
