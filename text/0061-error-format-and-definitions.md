@@ -479,7 +479,7 @@ HTTP Code: `400 Bad Request`
 }
 ```
 
-- The `:attribute` is inferred when the message is generated.
+- `:attribute` is inferred when the message is generated.
 
 #### Variant: Using `_geoDistance` as a filter expression
 
