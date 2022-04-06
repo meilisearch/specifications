@@ -84,7 +84,7 @@ components:
         title: American Ninja 5
         poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
         overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
-        release_date: '1993-01-01'
+        release_date: 725846400
       description: 'A document made of attribute. The maximum number of attribute for a document is 65,535.'
     matchesPosition:
       type: object
@@ -106,13 +106,13 @@ components:
         title: American Ninja 5
         poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
         overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
-        release_date: '1993-01-01'
+        release_date: 725846400
         _formatted:
           id: 25684
           title: American Ninja 5
           poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
           overview: 'When a scientists daughter is kidnapped, American <em>Ninja</em>, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the <em>ninja</em>.'
-          release_date: '1993-01-01'
+          release_date: 725846400
         _matchesPosition:
           overview:
             - start: 49
@@ -124,13 +124,13 @@ components:
           title: American Ninja 5
           poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
           overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
-          release_date: '1993-01-01'
+          release_date: 725846400
           _formatted:
             id: 25684
             title: American Ninja 5
             poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
             overview: 'When a scientists daughter is kidnapped, American <em>Ninja</em>, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the <em>ninja</em>.'
-            release_date: '1993-01-01'
+            release_date: 725846400
           _matchesPosition:
             overview:
               - start: 49
@@ -1014,17 +1014,21 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/index'
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/index'
               examples:
                 Example:
                   value:
-                    - uid: movies
-                      name: movies
-                      primaryKey: movie_id
-                      createdAt: '2019-11-20T09:40:33.711324Z'
-                      updatedAt: '2019-11-20T09:40:33.711324Z'
+                    results:
+                      - uid: movies
+                        name: movies
+                        primaryKey: movie_id
+                        createdAt: '2019-11-20T09:40:33.711324Z'
+                        updatedAt: '2019-11-20T09:40:33.711324Z'
         '401':
           $ref: '#/components/responses/401'
     post:
@@ -1192,17 +1196,27 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/document'
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/document'
               examples:
                 Example:
                   value:
-                    - id: 25684
-                      title: American Ninja 5
-                      poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
-                      overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
-                      release_date: '1993-01-01'
+                    results:
+                      - id: 25684
+                        title: American Ninja 5
+                        poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
+                        overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
+                        release_date: 725846400
+                      - id: 45881
+                        title: The Bridge of San Luis Rey
+                        poster: 'https://image.tmdb.org/t/p/w500/4X7quIcdkc24Cveg5XdpfRqxtYA.jpg'
+                        overview: "The Bridge of San Luis Rey is American author Thornton Wilder's second novel, first published in 1927 to worldwide acclaim. It tells the story of several interrelated people who die in the collapse of an Inca rope-fiber suspension bridge in Peru, and the events that lead up to their being on the bridge.[ A friar who has witnessed the tragic accident then goes about inquiring into the lives of the victims, seeking some sort of cosmic answer to the question of why each had to die. The novel won the Pulitzer Prize in 1928."
+                        release_date: 1072915200
+
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -1290,7 +1304,7 @@ paths:
                     title: American Ninja 5
                     poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
                     overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
-                    release_date: '1993-01-01'
+                    release_date: 725846400
         description: ''
       responses:
         '202':
@@ -1446,13 +1460,13 @@ paths:
                         title: American Ninja 5
                         poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
                         overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
-                        release_date: '1993-01-01'
+                        release_date: 725846400
                         _formatted:
                           id: 25684
                           title: American Ninja 5
                           poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
                           overview: 'When a scientists daughter is kidnapped, American <em>Ninja</em>, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the <em>ninja</em>.'
-                          release_date: '1993-01-01'
+                          release_date: 725846400
                         _matchesPosition:
                           overview:
                             - start: 49
@@ -1588,13 +1602,13 @@ paths:
                         title: American Ninja 5
                         poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
                         overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
-                        release_date: '1993-01-01'
+                        release_date: 725846400
                         _formatted:
                           id: 25684
                           title: American Ninja 5
                           poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
                           overview: 'When a scientists daughter is kidnapped, American <em>Ninja</em>, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the <em>ninja</em>.'
-                          release_date: '1993-01-01'
+                          release_date: 725846400
                         _matchesPosition:
                           overview:
                             - start: 49
