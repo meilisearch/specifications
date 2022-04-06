@@ -13,8 +13,6 @@ Indexes contain a set of documents in which to search and have their specific se
 
 See [Documents API specification](0124-documents-api.md) and [Settings API specification](0123-settings-api.md) for more details.
 
-### 3.1. API Endpoints Definition
-
 
 ### 3.1. `index` API Resource Definition
 
@@ -100,7 +98,18 @@ List all indexes of a Meilisearch instance.
 
 ##### 3.2.1.1. Response Definition
 
-Returns an array made of multiple index API resource objects. See [3.1.2.1. Response Definition](#3121-response-definition) section.
+A `results`  array containing indexes of the Meilisearch instance.
+
+| Field                    | Type                     | Required |
+|--------------------------|--------------------------|----------|
+| `results`                | Array[Index]             | true     |
+
+###### 3.2.1.1.1. `results`
+
+- Type: Array[Index]
+- Required: True
+
+Contains the fetched indexes.
 
 #### 3.2.2. `GET` - `indexes/:index_uid`
 
