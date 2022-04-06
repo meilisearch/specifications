@@ -228,3 +228,4 @@ N/A
 ## 5. Future Possibilities
 - Delete `uid` or `name`.
 - Rework the `primaryKey` concept
+- Paginate `GET` - `/indexes`
