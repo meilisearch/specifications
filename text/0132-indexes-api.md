@@ -109,7 +109,7 @@ A `results`  array containing indexes of the Meilisearch instance.
 - Type: Array[Index]
 - Required: True
 
-Contains the fetched indexes.
+An array containing the fetched indexes.
 
 #### 3.2.2. `GET` - `indexes/:index_uid`
 

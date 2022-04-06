@@ -101,7 +101,7 @@ A `results` array representing documents as JSON objects.
 - Type: Array[Document]
 - Required: True
 
-Contains the fetched documents.
+An array containing the fetched documents.
 
 ###### 3.1.1.3.2. `offset`
 
