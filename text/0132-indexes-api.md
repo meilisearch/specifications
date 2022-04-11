@@ -98,7 +98,7 @@ List all indexes of a Meilisearch instance.
 
 ##### 3.2.1.1. Response Definition
 
-A `results`  array containing indexes of the Meilisearch instance.
+An object containing all the indexes.
 
 | Field                    | Type                     | Required |
 |--------------------------|--------------------------|----------|

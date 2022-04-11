@@ -129,17 +129,11 @@ Gives the `limit` parameter used for the query.
   "results": [
     {
       "id": 25684,
-      "release_date": "1993-01-01",
-      "poster": "https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg",
-      "title": "American Ninja 5",
-      "overview": "When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja."
+      "title": "American Ninja 5"
     },
     {
       "id": 468219,
-      "title": "Dead in a Week (Or Your Money Back)",
-      "release_date": "2018-09-12",
-      "poster": "https://image.tmdb.org/t/p/w1280/f4ANVEuEaGy2oP5M0Y2P1dwxUNn.jpg",
-      "overview": "William has failed to kill himself so many times that he outsources his suicide to aging assassin Leslie. But with the contract signed and death assured within a week (or his money back), William suddenly discovers reasons to live... However Leslie is under pressure from his boss to make sure the contract is completed."
+      "title": "Dead in a Week (Or Your Money Back)"
     }
   ],
   "offset": 0,
