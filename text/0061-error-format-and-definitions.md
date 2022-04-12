@@ -849,29 +849,6 @@ HTTP Code: `404 Not Found`
 
 ---
 
-## dump_already_processing
-
-`Synchronous`
-
-### Context
-
-This error occurs when the user tries to launch the creation of a new dump while a creation is already being processed.
-
-### Error Definition
-
-Http Code: `409 Conflict`
-
-```json
-{
-    "message": "A dump is already processing. You must wait until the current process is finished before requesting another dump.",
-    "code": "dump_already_processing",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#dump_already_processing"
-}
-```
-
----
-
 ## invalid_content_type
 
 `Synchronous`

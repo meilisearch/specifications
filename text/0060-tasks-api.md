@@ -126,6 +126,10 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 | -----   | ------------ |
 | dumpUid | The generated uid of the dump |
 
+Since the creation of a dump is not a task associated with a particular index, it will only be visible on the `GET` - `/tasks` and `GET` - `tasks/:task_uid` endpoints.
+
+Fully qualified and summarized task objects related to a dump creation display a `null` `indexUid` field.
+
 #### 5. Examples
 
 e.g. A fully qualified `task` object in an `enqueued` state.
