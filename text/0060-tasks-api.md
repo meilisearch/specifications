@@ -36,12 +36,12 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 
 ##### Summarized `task` Object for `202 Accepted`
 
-| field      | type    | description                                                                      |
-|------------|---------|----------------------------------------------------------------------------------|
-| taskUid    | integer | Unique sequential identifier                                                     |
-| indexUid   | string  | Unique index identifier                                                          |
-| status     | string  | Status of the task. Value is `enqueued`                                          |
-| type       | string  | Type of the task.                                                                |
+| field      | type    | description                     |
+|------------|---------|---------------------------------|
+| taskUid    | integer | Unique sequential identifier |
+| indexUid   | string  | Unique index identifier. This field is defined to `null` for a `dumpCreation`. |
+| status     | string  | Status of the task. Value is `enqueued` |
+| type       | string  | Type of the task. |
 | enqueuedAt | string  | Represent the date and time as `RFC 3339` format when the task has been enqueued |
 
 

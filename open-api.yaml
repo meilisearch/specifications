@@ -341,6 +341,9 @@ components:
               description: Value for the primaryKey field encountered if any for indexCreation or indexUpdate task.
             settings:
               $ref: '#/components/schemas/settings'
+            dumpUid:
+              type: string
+              description: Identifier generated for the dump for dumpCreation task.
         error:
           description: Error object containing error details and context when a task has a failed status.
           $ref: '#/components/schemas/error'
@@ -855,6 +858,7 @@ components:
               - uid
               - indexUid
               - status
+              - type
               - enqueuedAt
           examples:
             Example:
@@ -862,6 +866,7 @@ components:
                 taskUid: 0
                 indexUid: movies
                 status: enqueued
+                type: documentAddition
                 enqueuedAt: '2021-07-19T14:31:16.920473Z'
     '204':
       description: No Content
@@ -971,6 +976,7 @@ paths:
                     uid: 0
                     indexUid: null
                     status: enqueued
+                    type: dumpCreation
                     enqueuedAt: '2021-07-19T14:31:16.920473Z'
         '401':
           $ref: '#/components/responses/401'
