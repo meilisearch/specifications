@@ -115,4 +115,4 @@ When a dump is being imported, the http API is not available. Meilisearch can't 
 
 ## 5. Future Possibilities
 
-n/a
+- Give information about the import of a dump within the tasks.
