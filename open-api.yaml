@@ -541,37 +541,6 @@ components:
         - numberOfDocuments
         - isIndexing
         - fieldDistribution
-    dumps:
-      type: object
-      additionalProperties: false
-      examples:
-        - uid: 20210719-114144097
-          status: done
-          startedAt: '2021-07-19T14:31:16.920473Z'
-          finishedAt: '2021-07-19T14:32:16.920473Z'
-      title: dumps
-      description: ''
-      properties:
-        uid:
-          type: string
-          example: 20200929-114144097
-          description: ' Unique identifier for the dump'
-        status:
-          type: string
-          enum:
-            - in_progress
-            - failed
-            - done
-          example: in_progress
-          description: Status of the dump
-        startedAt:
-          $ref: '#/components/schemas/timestamp'
-        finishedAt:
-          $ref: '#/components/schemas/timestamp'
-      required:
-        - uid
-        - status
-        - startedAt
     error:
       title: error
       type: object
@@ -620,7 +589,6 @@ components:
               - settings.update
               - stats.get
               - dumps.create
-              - dumps.get
               - version
         indexes:
           type: array
@@ -996,59 +964,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/dumps'
+                $ref: '#/components/responses/202'
               examples:
-                Created:
+                '202':
                   value:
-                    uid: 20210719-114144097
-                    status: in_progress
-                    startedAt: '2021-07-19T14:31:16.920473Z'
+                    uid: 0
+                    indexUid: null
+                    status: enqueued
+                    enqueuedAt: '2021-07-19T14:31:16.920473Z'
         '401':
           $ref: '#/components/responses/401'
-  '/dumps/{dumpUid}/status':
-    get:
-      operationId: dumps.get
-      summary: Get dump status
-      description: |
-        Get the status of a dump creation process using the uid returned after calling the [dump creation route](https://docs.meilisearch.com/reference/api/dump.html#create-a-dump).
-
-        The returned status could be:
-
-        * `in_progress`: Dump creation is in progress.
-        * `failed`: An error occured during dump process, and the task was aborted.
-        * `done`: Dump creation is finished and was successful.
-      tags:
-        - Dumps
-      security:
-        - apiKey: []
-      responses:
-        '200':
-          description: Ok
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/dumps'
-        '401':
-          $ref: '#/components/responses/401'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error'
-              examples:
-                Not Found:
-                  value:
-                    message: Dump `20201001-110357260` not found
-                    code: dump_not_found
-                    type: invalid_request
-                    link: 'https://docs.meilisearch.com/errors#dump_not_found'
-    parameters:
-      - schema:
-          type: string
-        name: dumpUid
-        in: path
-        required: true
   /health:
     get:
       operationId: health.check
