@@ -211,7 +211,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`expiresAt` field value `:value` is invalid. It should follow the RFC 3339 format to represents a date or datetime in the future or specified as a null value. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
+    "message": "`expiresAt` field value `:value` is invalid. It should follow the RFC 3339 format to represents a date or datetime in the future. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
     "code": "invalid_api_key_expires_at",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_api_key_expires_at"
