@@ -38,8 +38,8 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 
 | field      | type    | description                     |
 |------------|---------|---------------------------------|
-| taskUid    | integer | Unique sequential identifier |
-| indexUid   | string  | Unique index identifier. This field is defined to `null` for a `dumpCreation`. |
+| uid        | integer | Unique sequential identifier           |
+| indexUid   | string  | Unique index identifier. This field is `null` when the task type is `dumpCreation`. |
 | status     | string  | Status of the task. Value is `enqueued` |
 | type       | string  | Type of the task. |
 | enqueuedAt | string  | Represent the date and time as `RFC 3339` format when the task has been enqueued |
@@ -126,7 +126,7 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 | -----   | ------------ |
 | dumpUid | The generated uid of the dump |
 
-Since the creation of a dump is not a task associated with a particular index, it will only be visible on the `GET` - `/tasks` and `GET` - `tasks/:task_uid` endpoints.
+Since the creation of a dump is not a task associated with a particular index, it is only present on the `GET` - `/tasks` and `GET` - `tasks/:task_uid` endpoints.
 
 Fully qualified and summarized task objects related to a dump creation display a `null` `indexUid` field.
 
@@ -713,4 +713,4 @@ n/a
 - Use Hateoas capability to give direct access to a `task` resource.
 - Add dedicated task type names modifying a sub-setting. e.g. `SearchableAttributesUpdate`.
 - Add an archived state for old `tasks`.
-- Indicate the `API Key` identity that added a `task`.
+- Add the `API Key` identity that added a `task`.
