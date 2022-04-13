@@ -118,11 +118,11 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `filterable_attributes.total`           | Number of filterable attributes | 3 | `Settings Updated`, `FilterableAttributes Updated` |
 | `filterable_attributes.has_geo`         | `true` if `_geo` is set as a filterable attribute, otherwise `false` | false | `Settings Updated`, `FilterableAttributes Updated`|
 | `searchable_attributes.total`           | Number of searchable attributes | 4 | `Settings Updated`, `SearchableAttributes Updated` |
-| `typo.enabled`                          | Whether the typo tolerance is enabled | `true` | `Settings Updated`, `TypoTolerance Updated` |
-| `typo.disabled_attributes`              | `true` if at least one value is defined | `false` | `Settings Updated`, `TypoTolerance Updated` |
-| `typo.disabled_words`                   | `true` if at least one value is defined | `false` | `Settings Updated`,  `TypoTolerance Updated` |
-| `typo.min_word_size_for_typos.one_typo` | The defined value for `minWordSizeForTypos.oneTypo` property | `5` | `Settings Updated`, `TypoTolerance Updated` |
-| `typo.min_word_size_for_typos.two_typos`| The defined value for `minWordSizeForTypos.twoTypos` property | `9` | `Settings Updated`, `TypoTolerance Updated` |
+| `typo_tolerance.enabled`                          | Whether the typo tolerance is enabled | `true` | `Settings Updated`, `TypoTolerance Updated` |
+| `typo_tolerance.disable_on_attributes`              | `true` if at least one value is defined | `false` | `Settings Updated`, `TypoTolerance Updated` |
+| `typo_tolerance.disable_on_words`                   | `true` if at least one value is defined | `false` | `Settings Updated`,  `TypoTolerance Updated` |
+| `typo_tolerance.min_word_size_for_typos.one_typo` | The defined value for `minWordSizeForTypos.oneTypo` property | `5` | `Settings Updated`, `TypoTolerance Updated` |
+| `typo_tolerance.min_word_size_for_typos.two_typos`| The defined value for `minWordSizeForTypos.twoTypos` property | `9` | `Settings Updated`, `TypoTolerance Updated` |
 | `per_task_uid`                          | `true` if an uid is used to fetch a particular task resource, otherwise `false` | true | `Tasks Seen`, `Index Tasks Seen` |
 |
 
