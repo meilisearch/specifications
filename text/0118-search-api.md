@@ -162,9 +162,9 @@ Configures which fields may have highlighted parts, given that they match the re
 
 Search results include a `_formatted` object containing the highlighted parts when this parameter is defined. See [3.2.1.1.2. `_formatted`](#32112-formatted) section.
 
-Highlighted parts are surrounded by the [`highlightPreTag`](#319-highlightpretag) and [`highlightPostTag`](#3110-highlightposttag) parameters.
+If `"*"` is provided as a value: `attributesToHighlight=["*"]` all the attributes present in `displayedAttributes` setting will be automatically assigned to `_formatted`.
 
-If `"*"` is provided as a value: e.g. `"attributesToHighlight":["*"]`, all the attributes present in `attributesToRetrieve` will be assigned to `attributesToHighlight`.
+Highlighted parts are surrounded by the [`highlightPreTag`](#319-highlightpretag) and [`highlightPostTag`](#3110-highlightposttag) parameters.
 
 `attributesToHighlight` only works on values of the following types: `string`, `number`, `array`, `object`. When highlighted, number attributes are transformed to string.
 
@@ -228,7 +228,7 @@ The engine adds a marker by default in front of and/or behind the part selected 
 
 Search results include a `_formatted` object containing the cropped attributes representation when this parameter is defined. See [3.2.1.1.2. `_formatted`](#32112-formatted) section.
 
-If `"*"` is provided as a value: `attributesToCrop=["*"]` all the attributes present in `attributesToRetrieve` will be automatically assigned to `attributesToCrop`.
+If `"*"` is provided as a value: `attributesToCrop=["*"]` all the attributes present in the `displayedAttributes` setting will be automatically assigned to `_formatted`.
 
 - 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToCrop` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
@@ -418,9 +418,9 @@ Search queries using `_geoPoint` returns a `_geoDistance` field containing the d
 
 - If `attributesToHighlight` and `attributesToCrop` are not set, `_formatted` is not returned.
 - If cumulated fields in `attributesToHighlight` and `attributesToCrop` resolve to only having non-existent fields, `_formatted` is not returned.
-- If `attributesToRetrieve` is equal to `*` and `attributesToHighlight` or `attributesToCrop` are equals to `*`, `_formatted` is returned and contains `attributesToRetrieve` fields then compute highlights and crops on each received fields.
-- If `attributesToRetrieve` is equal to `*` and `attributesToHighlight` or `attributesToCrop` contains a set of fields, `_formatted` is returned and contains `attributesToRetrieve` fields but only compute highlights and crops on fields declared in `attributesToHighlight` or `attributesToCrop`.
-- If a list of fields is defined for `attributesToRetrieve` and `attributesToHighlight` / `attributesToCrop` are equals to `*`, `_formatted` is returned and contains all `displayedAttributes` then compute highlights and crops on each received fields.
+- If `attributesToRetrieve` is equal to `*` and `attributesToHighlight` or `attributesToCrop` are equals to `*`, `_formatted` is returned and contains `displayedAttributes` setting fields then compute highlights and crops on each received fields.
+- If `attributesToRetrieve` is equal to `*` and `attributesToHighlight` or `attributesToCrop` contains a set of fields, `_formatted` is returned and contains `displayedAttributes` setting fields but only compute highlights and crops on fields declared in `attributesToHighlight` or `attributesToCrop`.
+- If a list of fields is defined for `attributesToRetrieve` and `attributesToHighlight` / `attributesToCrop` are equals to `*`, `_formatted` is returned and contains `displayedAttributes` setting fields then compute highlights and crops on each received fields.
 - If a list of fields is defined for `attributesToRetrieve` and `attributesToHighlight` / `attributesToCrop` contains a list of fields, `_formatted` is returned and contains `attributesToRetrieve` fields, plus the fields set in `attributesToHighlight` or `attributesToCrop` then compute highlights and crops only for fields defined in `attributesToHighlight` / `attributesToCrop` parameters.
 
 ###### 3.2.1.1.3. `_matchesInfo`
