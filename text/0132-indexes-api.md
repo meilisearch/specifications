@@ -96,20 +96,73 @@ Manipulate indexes of a Meilisearch instance.
 
 List all indexes of a Meilisearch instance.
 
-##### 3.2.1.1. Response Definition
+The results are sorted in ascending alphanumeric order from the `uid` field.
+
+##### 3.2.1.1. Query Parameters
+
+| Field                    | Type                     | Required |
+|--------------------------|--------------------------|----------|
+| `offset`                 | integer / `null`         | false    |
+| `limit`                  | integer / `null`         | false    |
+
+###### 3.2.1.1.1. `offset`
+
+- Type: Integer
+- Required: False
+- Default: `0`
+
+Sets the starting point in the results, effectively skipping over a given number of indexes.
+
+###### 3.2.1.1.2. `limit`
+
+- Type: Integer
+- Required: False
+- Default: `20`
+
+Sets the maximum number of indexes to be returned by the current request.
+
+##### 3.2.1.2. Response Definition
 
 An object containing all the indexes.
 
 | Field                    | Type                     | Required |
 |--------------------------|--------------------------|----------|
 | `results`                | Array[Index]             | true     |
+| `offset`                 | integer                  | true     |
+| `limit`                  | integer                  | true     |
+| `total`                  | integer                  | true     |
 
-###### 3.2.1.1.1. `results`
+###### 3.2.1.2.1. `results`
 
 - Type: Array[Index]
 - Required: True
 
 An array containing the fetched indexes.
+
+###### 3.2.1.2.2. `offset`
+
+- Type: Integer
+- Required: True
+
+Gives the `offset` parameter used for the query.
+
+> See [3.2.1.1.1. `offset`](#32111-offset) section.
+
+###### 3.2.1.2.3. `limit`
+
+- Type: Integer
+- Required: True
+
+Gives the `limit` parameter used for the query.
+
+> See [3.2.1.1.2. `limit`](#32112-limit) section.
+
+###### 3.2.1.2.3. `total`
+
+- Type: Integer
+- Required: True
+
+Gives the total number of indexes that can be browsed.
 
 #### 3.2.2. `GET` - `indexes/:index_uid`
 

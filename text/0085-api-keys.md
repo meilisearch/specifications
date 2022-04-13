@@ -367,8 +367,67 @@ Only the master key allows managing the API keys.
 ```
 "Authorization: Bearer :masterKey"
 ```
+##### Query Parameters
 
-##### Response
+| Field                    | Type                     | Required |
+|--------------------------|--------------------------|----------|
+| `offset`                 | Integer / `null`         | false    |
+| `limit`                  | Integer / `null`         | false    |
+
+###### `offset`
+
+- Type: Integer
+- Required: False
+- Default: `0`
+
+Sets the starting point in the results, effectively skipping over a given number of API keys.
+
+###### `limit`
+
+- Type: Integer
+- Required: False
+- Default: `20`
+
+Sets the maximum number of documents to be returned by the current request.
+
+##### Response Definition
+
+| Field                    | Type                     | Required |
+|--------------------------|--------------------------|----------|
+| `result`                 | Array[Key]               | true     |
+| `offset`                 | Integer                  | true     |
+| `limit`                  | Integer                  | true     |
+| `total`                  | Integer                  | true     |
+
+###### `results`
+
+- Type: Array[Key]
+- Required: True
+
+An array containing the fetched API keys.
+
+###### `offset`
+
+- Type: Integer
+- Required: True
+
+Gives the `offset` parameter used for the query.
+
+###### `limit`
+
+- Type: Integer
+- Required: True
+
+Gives the `limit` parameter used for the query.
+
+###### `total`
+
+- Type: Integer
+- Required: True
+
+Gives the total number of API keys that can be browsed.
+
+###### Example
 
 `200 Success`
 
@@ -416,7 +475,10 @@ Only the master key allows managing the API keys.
             "createdAt": "2021-08-11T10:00:00Z",
             "updatedAt": "2021-08-11T10:00:00Z"
         }
-    ]
+    ],
+    "offset": 0,
+    "limit": 20,
+    "total": 3
 }
 ```
 
