@@ -282,37 +282,21 @@ Cropped query terms are counted as a word regarding `cropLength`.
 
 Sending more query terms than the `cropLength` value has no impact. The cropped part will contain the `cropLength` number.
 
-###### 3.1.12.1.3. Length Reassignment to the left.
+###### 3.1.12.1.2. Keeping a phrase context
 
-Given an attribute defined in `attributesToCrop` containing:
+Meilisearch keep words that are farther from the matching words but are in the same phrase, than words that are nearer but separated by a dot.
 
-`"In his ravenous hatred he found no peace, and with boiling blood he scoured the umbral plains, seeking vengence afgainst the dark lords who had robbed him."`
+For instance, for the matching word `Split` the text:
 
-With `croplength` defined as `5` and `q` defined as `had robbed`, the cropped value will be:
+`"Natalie risk her future. Split The World is a book written by Emily Henry. I never read it."`
 
-`"…lords who had robbed him."`
+will be cropped like:
 
-In this example:
+`…Split The World is a book written by Emily Henry.…`
 
-- `"had robbed"` count for `2` words.
-- The right part contains `1` words. e.g. `"him.`.
-- The cropped part will be filled by `2` words on the left to reach `cropLength`. e.g. `"lords who"`.
+and not like:
 
-###### 3.1.12.1.2. Length Reassignment to the right.
-
-Given an attribute defined in `attributesToCrop` containing:
-
-`"In his ravenous hatred he found no peace, and with boiling blood he scoured the umbral plains, seeking vengence afgainst the dark lords who had robbed him."`
-
-With `croplength` defined as `5` and `q` defined as `hatred`, the cropped value will be:
-
-`"In his ravenous hatred he…"`
-
-In this example:
-
-- `"hatred"` count for `1` word.
-- The left part contains `3` words. e.g. `"In his ravenous`.
-- The cropped part will be filled by `1` words on the right to reach `cropLength`. e.g. `"he"`.
+`Natalie risk her future. Split The World is a book…`
 
 #### 3.1.13. `cropMarker`
 
@@ -336,12 +320,19 @@ This parameter is applied to the fields configured in `attributesToCrop`. If the
 
 The cropping algorithm tries to match the window with the highest density of query terms within the `cropLength` limit.
 
-Here is how the density is calculated:
+The cropping algorithm find the "best" matches, it tries to find the crop interval:
 
-- The algorithm will favor a part that contains all the query terms within the limits of cropLength, if it doesn't find it, it removes words from the query terms until it finds nothing to crop.
-- If parts have equivalent density, i.e. having the same numbers of query terms found, the algorithm will favor the part that contains the query terms closest to each other.
-- Then if parts have equivalent density, i.e. having the same distance between query terms, the algorithm will favor the part that contains the query terms in the order specified in `q`.
-- If there are still parts with an equivalent density, the algorithm will choose the first one encountered within the attribute.
+1. That have the highest count of unique matches
+
+For example, for the query terms `split the world`, then the interval `the split the split the` has `5` matches but only `2` unique matches (`1` for `split` and `1` for `the`) where the interval `split of the world` has `3` matches and `3` unique matches. So the interval `split of the world` is considered better.
+
+2. That have the minimum distance between matches
+
+For example, for the query terms `split the world`, then the interval `split of the world` has a distance of `3` (`2` between `split` and `the`, and `1` between `the` and `world`) where the interval `split the world` has a distance of `2`. So the interval `split the world` is considered better.
+
+3. That have the highest count of ordered matches
+
+For example, for the query terms `split the world`, then the interval `the world split` has `2` ordered words where the interval `split the world` has `3`. So the interval `split the world` is considered better.
 
 Only one cropped part from an attribute is returned.
 
