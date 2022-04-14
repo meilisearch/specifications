@@ -4,6 +4,8 @@
 
 This specification describes the documents API endpoints permitting to list, fetch, add/replace, and delete index documents.
 
+It is an API dedicated to document management within the Meilisearch index.
+
 ## 2. Motivation
 N/A
 
@@ -80,11 +82,11 @@ Sets the maximum number of documents to be returned by the current request.
 
 Configures which attributes will be retrieved in the returned documents.
 
-If no value is specified, `attributesToRetrieve` uses the `displayedAttributes` list, which by default contains all attributes found in the documents.
-
-> If an attribute has been removed from `displayedAttributes` index settings, `attributesToRetrieve` will silently ignore it and the field will not appear in the returned documents.
+If no value is specified, all attributes from the documents are returned in the response.
 
 > Specified fields have to be separated by a comma. e.g. `&attributesToRetrieve=title,description`
+
+> The index setting `displayedAttributes` has no impact on this endpoint.
 
 ##### 3.1.1.3. Response Definition
 
