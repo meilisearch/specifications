@@ -152,7 +152,7 @@ The following input:
 }
 ```
 
-In the example above, `movie_id`, `1564saqw12ss`, `title`, `Kung fu Panda` are all considered sentences. The colon `:` and comma `,` characters are used as separators.
+In the example above, `movie_id`, `1564saqw12ss`, `title`, `Kung fu Panda` are all considered sentences.
 
 `"movie_id. 1564saqw12ss. title. Kung fu Panda."`
 
