@@ -1,9 +1,4 @@
-- Title: Tasks API
-- Start Date: 2021-08-13
-- Specification PR: [#60](https://github.com/meilisearch/specifications/pull/60)
-- Discovery Issue: [#48](https://github.com/meilisearch/product/issues/48)
-
-# Refashion Updates APIs
+# Tasks API
 
 ## 1. Functional Specification
 
@@ -393,81 +388,6 @@ Allows users to get a detailed `task` object retrieved by the `uid` field regard
 
 ---
 
-**Get all tasks of an index** | `GET` - `/indexes/{indexUid}/tasks`
-
-##### Goals
-
-Allows users to list tasks of a particular index.
-
-`200` - Response body - `/indexes/movies/tasks`
-
-```json
-{
-    "results": [
-        {
-            "uid": 1,
-            "indexUid": "movies",
-            "batchUid": 1,
-            "status": "enqueued",
-            "type": "documentAddition",
-            "duration": null,
-            "enqueuedAt": "2021-08-12T10:00:00.000000Z",
-            "startedAt": null,
-            "finishedAt": null
-        },
-        {
-            "uid": 0,
-            "indexUid": "movies",
-            "batchUid": 0,
-            "status": "succeeded",
-            "type": "documentAddition",
-            "details": {
-                "receivedDocuments": 100,
-                "indexedDocuments": 100
-            },
-            "duration": "PT16S",
-            "enqueuedAt": "2021-08-11T09:25:53.000000Z",
-            "startedAt": "2021-08-11T10:03:00.000000Z",
-            "finishedAt": "2021-08-11T10:03:16.000000Z"
-        }
-    ]
-}
-```
-
-##### Errors
-
-- 🔴 If a master key is configured on the server-side but missing from the client in the `X-MEILI-API-KEY` header, the API returns a `401 Unauthorized` - `missing_authorization_header` error.
-- 🔴 If a master key is sent by the client but does not match the value configured on the server-side, the API returns a `403 Forbidden` - `invalid_api_key`.
-- 🔴 If the index does not exist, the API returns a `404 Not Found` - `index_not_found` error.
-
----
-
-**Get a task of an index** | `GET` - `/indexes/{indexUid}/tasks/{tasksUid}`
-
-`200` - Response body - `/indexes/movies/tasks/1`
-
-```json
-{
-
-    "uid": 1,
-    "indexUid": "movies",
-    "batchUid": 1,
-    "status": "enqueued",
-    "type": "documentAddition",
-    "duration": null,
-    "enqueuedAt": "2021-08-12T10:00:00.000000Z",
-    "startedAt": null,
-    "finishedAt": null
-}
-```
-
-##### Errors
-
-- 🔴 If a master key is configured on the server-side but missing from the client in the `X-MEILI-API-KEY` header, the API returns a `401 Unauthorized` - `missing_authorization_header` error.
-- 🔴 If a master key is sent by the client but does not match the value configured on the server-side, the API returns a `403 Forbidden` - `invalid_api_key`.
-- 🔴 If the index does not exist, the API returns a `404 Not Found` - `index_not_found` error.
-- 🔴 If the task does not exist, the API returns a `404 Not Found` - `task_not_found` error.
-
 #### 6. `task_not_found` error
 
 ##### Context
@@ -707,8 +627,6 @@ This part demonstrates keyset paging in action on `/tasks`. The items `uid` rema
 - 🔴 Sending a value with a different type than `Integer` for `limit` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 - 🔴 Sending a value with a different type than `Integer` for `from` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
----
-
 #### 10. Filtering task resources
 
 The `/tasks` endpoint is filterable by `indexUid`, `type` and `status` query parameters.
@@ -895,16 +813,10 @@ If no results match the filters. A response is returned with an empty `results` 
 
 ## 2. Technical details
 
-### I. Measuring
-
-- Number of call on `indexes/:indexUid/tasks` per instance
-- Number of call on `indexes/:indexUid/tasks/:taskUid` per instance
-- Number of call on `tasks` per instance
-- Number of call on `tasks/:taskUid` per instance
+n/a
 
 ## 3. Future Possibilities
 
-- Add enhanced filtering capabilities.
 - Simplify `documentAddition` and `documentPartial` type and elaborate on `details` metadata.
 - Use Hateoas capability to give direct access to a `task` resource.
 - Add dedicated task type names modifying a sub-setting. e.g. `SearchableAttributesUpdate`.

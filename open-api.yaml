@@ -681,6 +681,27 @@ components:
       required: true
       schema:
         type: number
+    taskIndexUid:
+      name: indexUid
+      in: path
+      description: Permits to filter tasks by their related index. By default, when `indexUid` query parameter is not set, the tasks of all the indexes are returned. It is possible to specify several indexes by separating them with the `,` character.
+      required: false
+      schema:
+        type: string
+    taskType:
+      name: type
+      in: path
+      description: Permits to filter tasks by their related type. By default, when `type` query parameter is not set, all task types are returned. It's possible to specify several types by separating them with the `,` character.
+      required: false
+      schema:
+        type: string
+    taskStatus:
+      name: status
+      in: path
+      description: Permits to filter tasks by their status. By default, when `status` query parameter is not set, all task statuses are returned. It's possible to specify several types by separating them with the `,` character.
+      required: false
+      schema:
+        type: string
     primaryKey:
       name: primaryKey
       in: query
@@ -2535,106 +2556,6 @@ paths:
           description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
-  '/indexes/{indexUid}/tasks':
-    get:
-      operationId: indexes.tasks.list
-      summary: Get all tasks of an index
-      description: |
-        Get all [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) of an [index](https://docs.meilisearch.com/learn/core_concepts/indexes.html).
-      tags:
-        - Tasks
-      security:
-        - apiKey: []
-      responses:
-        '200':
-          description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/task'
-              examples:
-                Example:
-                  value:
-                    results:
-                      - uid: 1
-                        indexUid: movies,
-                        batchUid: 1
-                        status: succeeded
-                        type: documentAddition
-                        details:
-                          receivedDocuments: 79000
-                          indexedDocuments: 79000
-                        duration: PT2S
-                        enqueuedAt: '2021-01-01T09:39:00.000000Z'
-                        startedAt: '2021-01-01T09:39:01.000000Z'
-                        finishedAt: '2021-01-01T09:39:02.000000Z'
-                      - uid: 0
-                        indexUid: movies
-                        batchUid: 0
-                        status: failed
-                        type: documentAddition
-                        details:
-                          receivedDocuments: 67493
-                          indexedDocuments: 0
-                        error:
-                          message: 'Document does not have a `:primaryKey` attribute: `:documentRepresentation`.'
-                          code: missing_document_id
-                          type: invalid_request
-                          link: 'https://docs.meilisearch.com/errors#missing_document_id'
-                        duration: PT5S
-                        enqueuedAt: '2021-01-01T09:38:00.000000Z'
-                        startedAt: '2021-01-01T09:38:02.000000Z'
-                        finishedAt: '2021-01-01T09:38:07.000000Z'
-        '401':
-          $ref: '#/components/responses/401'
-        '404':
-          description: Not Found
-    parameters:
-      - $ref: '#/components/parameters/indexUid'
-  '/indexes/{indexUid}/tasks/{taskUid}':
-    get:
-      operationId: indexes.tasks.get
-      summary: Get a task of an index
-      description: |
-        Get a [task](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) of an [index](https://docs.meilisearch.com/learn/core_concepts/indexes.html).
-      tags:
-        - Tasks
-      security:
-        - apiKey: []
-      responses:
-        '200':
-          description: Ok
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/task'
-              examples:
-                Example:
-                  value:
-                    uid: 1
-                    indexUid: movies
-                    batchUid: 1
-                    status: succeeded
-                    type: documentAddition
-                    details:
-                      receivedDocuments: 79000
-                      indexedDocuments: 79000
-                    duration: PT1S
-                    enqueuedAt: '2021-01-01T09:39:00.000000Z'
-                    startedAt: '2021-01-01T09:39:01.000000Z'
-                    finishedAt: '2021-01-01T09:39:02.000000Z'
-        '401':
-          $ref: '#/components/responses/401'
-        '404':
-          description: Not Found
-    parameters:
-      - $ref: '#/components/parameters/indexUid'
-      - $ref: '#/components/parameters/taskUid'
   /keys:
     get:
       operationId: keys.list
@@ -2951,6 +2872,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/from'
+        - $ref: '#/components/parameters/taskIndexUid'
+        - $ref: '#/components/parameters/taskStatus'
+        - $ref: '#/components/parameters/taskType'
       security:
         - apiKey: []
   '/tasks/:taskUid':
