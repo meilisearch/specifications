@@ -156,7 +156,7 @@ components:
           type:
             - string
             - number
-          description: Retrieve attributes of the document. `attributesToRetrieve` controls these fields.
+          description: Retrieve attributes of a search result. `attributesToRetrieve` controls these fields.
         _geoDistance:
           type: number
           description: 'Using _geoPoint({lat}, {lng}) built-in sort rule at search leads the engine to return a _geoDistance within the search results. This field represents the distance in meters of the document from the specified _geoPoint.'
@@ -815,6 +815,16 @@ components:
 
         > warn
         > Attribute(s) used in `filter` should be declared as filterable attributes. See [Filtering and Faceted Search](https://docs.meilisearch.com/reference/features/filtering_and_faceted_search.html).
+    fields:
+      name: fields
+      in: query
+      description: 'Comma-separated list of fields to display for an API resource. By default it contains all fields of an API resource.'
+      schema:
+        type: string
+        items:
+          type: string
+        example: 'uid,createdAt'
+        default: '*'
     Content-Type:
       name: Content-Type
       in: header
@@ -1255,7 +1265,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/attributesToRetrieve'
+        - $ref: '#/components/parameters/fields'
     post:
       operationId: indexes.documents.create
       summary: Add or replace documents
@@ -1431,6 +1441,8 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
+      parameters:
+        - $ref: '#/components/parameters/fields'
     delete:
       operationId: indexes.documents.remove
       summary: Delete one document
