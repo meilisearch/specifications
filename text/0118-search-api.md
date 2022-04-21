@@ -421,7 +421,7 @@ It's useful when more control is needed than offered by the built-in highlightin
 | [`hits`](#321-hits)                                   | Array[Hit]                   | True     |
 | [`limit`](#322-limit)                                 | Integer                      | True     |
 | [`offset`](#323-offset)                               | Integer                      | True     |
-| [`approximativeNbHits`](#324-approximativeNbhits)     | Integer                      | True     |
+| [`estimatedTotalHits`](#324-estimatedTotalHits)       | Integer                      | True     |
 | [`facetsDistribution`](#325-facetsdistribution)       | Object                       | False    |
 | [`processingTimeMs`](#326-processingtimems)           | Integer                      | True     |
 | [`query`](#327-query)                                 | String                       | True     |
@@ -670,12 +670,12 @@ Returns the `offset` search parameter used for the query.
 
 > See [3.1.6. `offset` section](#316-offset) section.
 
-#### 3.2.4. `approximativeNbHits`
+#### 3.2.4. `estimatedTotalHits`
 
 - Type: Integer
 - Required: True
 
-Returns the approximated number of candidates for the search query.
+Returns the estimated number of candidates for the search query.
 
 #### 3.2.5. `facetsDistribution`
 
