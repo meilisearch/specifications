@@ -228,12 +228,9 @@ components:
         limit:
           type: integer
           description: Number of returned documents.
-        nbHits:
+        estimatedTotalHits:
           type: integer
-          description: Total number of candidates for this search in the database.
-        exhaustiveNbHits:
-          type: boolean
-          description: Whether `nbHits` is exhaustive.
+          description: Estimated number of candidates for the search query.
         facetsDistribution:
           type: object
           additionalProperties:
@@ -251,9 +248,6 @@ components:
               comedy: 475
               mystery: 70
               thriller: 217
-        exhaustiveFacetsCount:
-          type: boolean
-          description: Whether `facetsDistribution` is exhaustive.
         processingTimeMs:
           type: integer
           description: Processing time of the query.
@@ -265,8 +259,7 @@ components:
         - hits
         - offset
         - limit
-        - nbHits
-        - exhaustiveNbHits
+        - estimatedTotalHits
         - processingTimeMs
         - query
     task:
@@ -1468,9 +1461,8 @@ paths:
                               length: 5
                     limit: 0
                     offset: 0
-                    nbHits: 0
+                    estimatedTotalHits: 0
                     query: string
-                    exhaustiveNbHits: true
                     processingTimeMs: 0
         '401':
           $ref: '#/components/responses/401'
@@ -1611,9 +1603,8 @@ paths:
                               length: 5
                     limit: 0
                     offset: 0
-                    nbHits: 0
+                    estimatedTotalHits: 0
                     query: string
-                    exhaustiveNbHits: true
                     processingTimeMs: 0
         '401':
           $ref: '#/components/responses/401'
