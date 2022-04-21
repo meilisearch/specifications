@@ -828,9 +828,9 @@ components:
           schema:
             type: object
             properties:
-              uid:
+              taskUid:
                 type: number
-                description: 'This `uid` allows you to [track the current task](https://docs.meilisearch.com/reference/api/tasks.html).'
+                description: 'This `taskUid` allows you to [track the current task](https://docs.meilisearch.com/reference/api/tasks.html).'
               indexUid:
                 type: string
                 description: The unique identifier of the index where this task is operated
@@ -850,7 +850,7 @@ components:
           examples:
             Example:
               value:
-                uid: 0
+                taskUid: 0
                 indexUid: movies
                 status: enqueued
                 enqueuedAt: '2021-07-19T14:31:16.920473Z'
