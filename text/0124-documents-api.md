@@ -453,4 +453,5 @@ The auth layer can return the following errors if Meilisearch is secured (a mast
 N/A
 
 ## 5. Future Possibilities
-N/A
+
+- Introduce a way to reject fields from a document in the response. e.g. `?fields=-createdAt`
