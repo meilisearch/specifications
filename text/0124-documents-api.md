@@ -56,7 +56,7 @@ Unique identifier of an index.
 |--------------------------|--------------------------|----------|
 | `offset`                 | Integer / `null`         | false    |
 | `limit`                  | String / `null`          | false    |
-| `attributesToRetrieve`   | String / `null`          | false    |
+| `fields`                 | String / `null`          | false    |
 
 ###### 3.1.1.2.1. `offset`
 
@@ -74,7 +74,7 @@ Sets the starting point in the results, effectively skipping over a given number
 
 Sets the maximum number of documents to be returned by the current request.
 
-###### 3.1.1.2.3. `attributesToRetrieve`
+###### 3.1.1.2.3. `fields`
 
 - Type: String
 - Required: False
@@ -84,7 +84,7 @@ Configures which attributes will be retrieved in the returned documents.
 
 If no value is specified, all attributes from the documents are returned in the response.
 
-> Specified fields have to be separated by a comma. e.g. `&attributesToRetrieve=title,description`
+> Specified fields have to be separated by a comma. e.g. `&fields=title,description`
 
 > The index setting `displayedAttributes` has no impact on this endpoint.
 
@@ -117,7 +117,7 @@ An array of documents represented as JSON objects.
 
 - 🔴 Sending a value with a different type than `Integer` or `null` for `offset` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 - 🔴 Sending a value with a different type than `Integer` or `null` for `limit` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
-- 🔴 Sending a value with a different type than `String` or `null` for `attributesToRetrieve` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `String` or `null` for `fields` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 #### 3.1.2. `GET` - `indexes/:index_uid/documents/:document_id`
 
