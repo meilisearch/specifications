@@ -54,7 +54,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | RankingRules Updated | Occurs when ranking rules are updated via `POST` - `/indexes/:indexUid/settings/ranking-rules`. |
 | FilterableAttributes Updated | Occurs when filterable attributes are updated via `POST` - `/indexes/:indexUid/settings/filterable-attributes`. |
 | SortableAttributes Updated | Occurs when sortable attributes are updated via `POST` - `/indexes/:indexUid/settings/sortable-attributes`. |
-| TypoTolerance Updated | Occurs when typo tolerance settings are updated via `POST` - `/indexes/:indexUid/settings/typo`. |
+| TypoTolerance Updated | Occurs when typo tolerance settings are updated via `POST` - `/indexes/:indexUid/settings/typo-tolerance`. |
 | Dump Created | Occurs when a dump is created via `POST` - `/dumps`. |
 | Tasks Seen | Occurs when tasks are fetched globally via `GET` - `/tasks`. |
 | Index Tasks Seen | Occurs when tasks are filtered by index via `GET` - `/indexes/:indexUid/tasks`. |
