@@ -292,7 +292,7 @@ For instance, for the matching word `Split` the text:
 
 will be cropped like:
 
-`…Split The World is a book written by Emily Henry.…`
+`…Split The World is a book written by Emily Henry…`
 
 and not like:
 
@@ -320,9 +320,9 @@ This parameter is applied to the fields configured in `attributesToCrop`. If the
 
 The cropping algorithm tries to match the window with the highest density of query terms within the `cropLength` limit.
 
-The cropping algorithm find the "best" matches, it tries to find the crop interval:
+The cropping algorithm tries to find the crop window that contains the most relevant matches.
 
-1. That have the highest count of unique matches
+1. That has the highest count of unique matches
 
 For example, for the query terms `split the world`, then the interval `the split the split the` has `5` matches but only `2` unique matches (`1` for `split` and `1` for `the`) where the interval `split of the world` has `3` matches and `3` unique matches. So the interval `split of the world` is considered better.
 
@@ -336,7 +336,7 @@ For example, for the query terms `split the world`, then the interval `the world
 
 Only one cropped part from an attribute is returned.
 
-If no part is found when selecting a part to be cropped, the returned value in `_formatted` will start at the beginning of the attribute include a number of words equal to `cropLength`.
+If no part is found when selecting a part to be cropped, the returned value in `_formatted` will start at the beginning of the attribute and include a number of words equal to `cropLength`.
 
 ###### 3.1.13.1.2. Positioning Markers
 
