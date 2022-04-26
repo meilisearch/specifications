@@ -421,7 +421,7 @@ Each endpoint API tracked sends the `User-Agent` as a `user_agent` event propert
 
 Some browser engines prevent overloading the User-Agent header. To track the calls made by some clients concerned by this fact, e.g. the JavaScript SDK, it is possible to use the `x-meilisearch-client` query parameter.
 
-If the query parameter is encountered, it overrides the presence of the User-Agent header.
+If the query parameter is encountered, it overrides the presence of the `User-Agent` header.
 
 #### Identifying MeiliSearch installation
 
