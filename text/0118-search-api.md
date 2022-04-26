@@ -246,7 +246,7 @@ Attributes configured in `attributesToCrop` are cropped even if not present in t
 
 ##### 3.1.11.3. stopWords
 
-Attributes defined in the `stopWords` index setting are counted as words regarding `cropLength`.
+Terms defined in the `stopWords` index setting are counted as words regarding `cropLength`.
 
 ##### 3.1.11.3. Tokenizer Separators
 
@@ -284,7 +284,7 @@ Sending more query terms than the `cropLength` value has no impact. The cropped 
 
 ###### 3.1.12.1.2. Keeping a phrase context
 
-Meilisearch keep words that are farther from the matching words but are in the same phrase, than words that are nearer but separated by a dot.
+After Meilisearch has chosen the best possible match window (some number of words < `cropLength`), it will add words from before or after the match window until the total number is equal to `cropLength`. In doing so, it will attempt to add context to the match window by choosing words from the same sentence(s) where the match window occurs.
 
 For instance, for the matching word `Split` the text:
 
