@@ -44,9 +44,9 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 | [`highlightPreTag`](#319-highlightpretag)             | String                    | False    |
 | [`highlightPostTag`](#3110-highlightposttag)          | String                    | False    |
 | [`attributesToCrop`](#3111-attributestocrop)          | Array of String - String  | False    |
-| [`cropLength`](#31112-croplength)                     | Integer                   | False    |
-| [`cropMarker`](#31113-cropmarker)                     | String                    | False    |
-| [`matches`](#31114-matches)                           | Boolean                   | False    |
+| [`cropLength`](#3112-croplength)                     | Integer                   | False    |
+| [`cropMarker`](#3113-cropmarker)                     | String                    | False    |
+| [`matches`](#3114-matches)                           | Boolean                   | False    |
 
 #### 3.1.1. `q`
 
@@ -220,9 +220,9 @@ This parameter is applied to the fields from `attributesToHighlight`. If there a
 
 Defines document attributes to be cropped. Cropped attributes have their values shortened around query terms.
 
-The number of words contained in the cropped value is defined by the `cropLength` parameter. See [3.1.1.12. `cropLength`](#31112-croplength) section.
+The number of words contained in the cropped value is defined by the `cropLength` parameter. See [3.1.1.12. `cropLength`](#3112-croplength) section.
 
-The value of `cropLength` can be customized per attribute. See [3.1.11.1. Custom `cropLength` Defined Per Cropped Attribute](#31111-custom-croplength-defined-per-attribute) section.
+The value of `cropLength` can be customized per attribute. See [3.1.12.1. Custom `cropLength` Defined Per Cropped Attribute](#31121-custom-croplength-defined-per-attribute) section.
 
 The engine adds a marker by default in front of and/or behind the part selected by the cropper. This marker is customizable. See [3.1.1.13. `cropMarker`](#31113-cropmarker) section.
 
@@ -231,14 +231,6 @@ Search results include a `_formatted` object containing the cropped attributes r
 If `"*"` is provided as a value: `attributesToCrop=["*"]` all the attributes present in the `displayedAttributes` setting will be automatically assigned to `_formatted`.
 
 - 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToCrop` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
-
-##### 3.1.11.1. Custom `cropLength` Defined Per Attribute.
-
-Optionally, indicating a custom crop length for any of the listed attributes is possible:
-
-`"attributesToCrop":["attributeNameA:15", "attributeNameB:30"]`
-
-A custom crop length set in this way has priority over the `cropLength` parameter.
 
 ##### 3.1.11.2. searchableAttributes
 
@@ -262,11 +254,19 @@ Sets the total number of **words** to keep for the cropped part of an attribute 
 
 This parameter is applied to the fields from `attributesToCrop`. If there are none, this parameter has no effect. See [3.1.11. `attributesToCrop`](#3111-attributestocrop) section.
 
-Sending a `0` value is equivalent to `null` and thus deactivates the cropping. It works the same for a custom crop length per attribute in `attributesToCrop`, except it deactivates it for the related field.
+Sending a `0` value deactivates the cropping unless a custom crop length is defined for an attribute inside `attributesToCrop`.
 
-- 🔴 Sending a value with a different type than `Integer` or `null` for `cropLength` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Integer` for `cropLength` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-##### 3.1.12.1 Examples
+##### 3.1.12.1. Custom `cropLength` Defined Per Attribute.
+
+Optionally, indicating a custom crop length for any of the listed attributes is possible:
+
+`"attributesToCrop":["attributeNameA:15", "attributeNameB:30"]`
+
+A custom crop length set in this way has priority over the `cropLength` parameter.
+
+##### 3.1.12.2 Examples
 
 ###### 3.1.12.1.1. Extending around
 
@@ -306,7 +306,7 @@ and not like:
 
 Sets which string to add before and/or after the cropped text. See [3.1.11. `attributesToCrop`](#3111-attributestocrop) section.
 
-The specified crop marker is applied by following rules outline in section [3.1.1.13.1. Applying `cropMarker`](#311131-applying-cropmarker).
+The specified crop marker is applied by following rules outline in section [3.1.13.1. Applying `cropMarker`](#31131-applying-cropmarker).
 
 Specifying `cropMarker` to `""` or `null` implies that no marker will be applied to the cropped part.
 
