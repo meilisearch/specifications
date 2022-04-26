@@ -158,7 +158,7 @@ If no value is specified, `attributesToRetrieve` uses the `displayedAttributes` 
 - Required: False
 - Default: `[]|null`
 
-Configures which fields may have highlighted parts, given that they match the requested query terms (i.e. the terms in the [`q`](#311-q) search parameter).
+Configures which fields may have highlighted parts, given that they match the requested query terms (i.e. the terms in the [`q`](#311-q) search parameter). Pre/post highlighting tags are applied around each word corresponding to a query term.
 
 Search results include a `_formatted` object containing the highlighted parts when this parameter is defined. See [3.2.1.1.2. `_formatted`](#32112-formatted) section.
 
