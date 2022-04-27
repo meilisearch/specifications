@@ -225,7 +225,7 @@ is equivalent to
 ```
 ---
 
-> The `filter` field accepts an array, a string, and the mixed syntax as described in the [filter and facet specification](0027-filter-and-facet-behavior.md).
+> The `filter` field accepts an array, a string, and the mixed syntax as described in the [Search Endpoints Specification](0118-search-api.md#312-filter).
 
 ##### 3.2.2.3. Payload example
 
