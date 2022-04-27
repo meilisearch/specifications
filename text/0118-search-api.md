@@ -64,6 +64,8 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 
 > `q` supports the [Phrase Query](0043-phrase-query.md) expression.
 
+- 🔴 Sending a value with a different type than `String` or `null` for `q` returns an [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+
 #### 3.1.2. `filter`
 
 - Type: Array of String (POST) | String (POST/GET)
@@ -78,7 +80,62 @@ Attributes used as filter criteria must be added to the `filterableAttributes` l
 - 🔴 Sending an invalid syntax for `filter` returns an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
 - 🔴 Sending a field not defined as a `filterableAttributes` for `filter` returns an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
 
-> See [Filter And Facet Behavior](0027-filter-and-facet-behavior.md).
+##### 3.1.2.1. Supported Operators And Syntaxes.
+
+###### 3.1.2.1.1. Supported Operators
+
+- `<`, `<=`, `>`, `>=`, `TO`; only operate on number values. MeiliSearch returns only documents that have numbers in this field.
+- `=`, `!=`/`NOT`; operate on string and number values. MeiliSearch returns only documents that have numbers, strings, or arrays of strings in this field.
+- `AND`/`OR`; permits to cumulate several operations.
+
+`filter` cannot operate on `null`, arrays of "undefined elements" (ex: array of `null`).
+
+###### 3.1.2.1.2. Supported Syntaxes
+
+Three syntaxes will be accepted for the `filter` parameter during search. `String syntax`, `Array syntax` and `Mixed syntax`.
+
+**String syntax**
+
+The string syntax uses operators combined with parentheses to express a search filter.
+
+Example:
+```json
+{
+    "filter": "(genres = Comedy OR genres = Romance) AND director = 'Mati Diop'"
+}
+```
+
+**Array syntax**
+
+The array syntax uses dimensional array to express logical connectives.
+
+- Inner arrays elements are connected by an `OR` operator (e.g. [["genres:Comedy", "genres:Romance"]]).
+- Outer arrays elements are connected by an `AND` operator (e.g. ["genres:Romance", "director:Mati Diop"]).
+
+Example:
+```json
+{
+    "filter": [["genres = Comedy", "genres = Romance"], "director = 'Mati Diop'"]
+}
+```
+
+**Mixed syntax**
+
+The mixed syntax can mix string and array syntaxes.
+
+Let's say that we want to translate
+```json
+{
+    "filter": "((genres = Comedy AND genres = Romance) OR genres = Action) AND director != 'Mati Diop'"
+}
+```
+Example:
+```json
+{
+    "filter": [["genres = Comedy AND genres = Romance", "genres = Action"], "NOT director = comedy"]
+}
+```
+> Note that string values that are longer than a single word need to be enclosed by quote. `"director = Mati Diop"` will lead to a parsing error. The valid syntax is `"director = 'Mati Diop'"`.
 
 #### 3.1.3. `sort`
 
@@ -116,8 +173,6 @@ Attributes used in `facetsDistribution` must be added to the `filterableAttribut
 - 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `facetsDistribution` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 - 🔴 Sending a field not defined as a `filterableAttributes` for `facetsDistribution` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-> See [Filter And Facet Behavior](0027-filter-and-facet-behavior.md)
-
 #### 3.1.5. `limit`
 
 - Type: Integer
@@ -126,7 +181,7 @@ Attributes used in `facetsDistribution` must be added to the `filterableAttribut
 
 Sets the maximum number of documents to be returned for the search query.
 
-- 🔴 Sending a value with a different type than `Integer` or `null` for `limit` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Integer` for `limit` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 #### 3.1.6. `offset`
 
@@ -136,7 +191,7 @@ Sets the maximum number of documents to be returned for the search query.
 
 Sets the starting point in the search results, effectively skipping over a given number of documents.
 
-- 🔴 Sending a value with a different type than `Integer` or `null` for `offset` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Integer` for `offset` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 #### 3.1.7. `attributesToRetrieve`
 
@@ -467,6 +522,8 @@ Whether `nbHits` is exhaustive.
 - Required: False
 
 Added to the search response when `facetsDistribution` is set for a search query. It contains the number of remaining candidates for each specified facet in the `facetsDistribution` search parameter.
+
+If a field distributed as a facet contains no value, it is returned as a `facetDistribution` field with an empty object as value.
 
 > See [3.1.4. `facetsDistribution`](#314-facetsdistribution) section.
 
