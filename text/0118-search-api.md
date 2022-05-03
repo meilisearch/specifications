@@ -466,7 +466,7 @@ Search queries using `_geoPoint` returns a `_geoDistance` field containing the d
 
 If `attributesToHighlight` and `attributesToCrop` are not set, `_formatted` is not returned.
 
-This `_formatted` object will be present in the each returned document in the `hits` field.
+This `_formatted` object will be present in each returned document in the `hits` field.
 
 Example:
 
