@@ -502,6 +502,8 @@ Example:
 
 Which attributes are present in `_formatted`?
 
+*Remember the main rule: `_formatted` is only present if `attributesToHighlight` or `attributesToCrop` is set.*
+
 The `_formatted` object contains attributes coming from the original document, depending on the parameters the users set during the search query. Indeed, **`_formatted` contains all the attributes present in `attributesToRetrieve`, `attributesToHighlight`, and `attributesToCrop` combined**.
 
 Knowing the default value of `attributesToRetrieve` is `["*"]` (so all the attributes present in `displayedAttributes`), if no `attributesToRetrieve` are set in the search query, `_formatted` will return all the `displayedAttributes`.
@@ -510,7 +512,7 @@ Returning attributes in the `_formatted` object does not mean these attributes w
 
 Which attributes are highlighted or cropped in `_formatted`?
 
-No matter how many attributes are retrieved in `_formatted` following the previous rule:
+No matter which attributes are retrieved in `_formatted` (according to the previous section "Which attributes are present in `_formatted`?"):
 - Only the attributes present in `attributesToHighlight` are highlighted.
 - Only the attributes present in `attributesToCrop` are cropped.
 - Attributes present in both are cropped and highlighted at the same time.
