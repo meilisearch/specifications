@@ -502,7 +502,7 @@ Example:
 
 Which attributes are present in `_formatted`?
 
-The `_formatted` object will contain attributes coming from the original document, depending on the parameters the users set during the search query. Indeed, **the attributes present in `_formatted` are the addition of the attributes present in `attributesToRetrieve`, `attributesToHighlight`, and `attributesToCrop`**.
+The `_formatted` object contains attributes coming from the original document, depending on the parameters the users set during the search query. Indeed, **`_formatted` contains all the attributes present in `attributesToRetrieve`, `attributesToHighlight`, and `attributesToCrop` combined**.
 
 Kmowing the default value of `attributesToRetrieve` is `["*"]` (so all the attributes present in `displayedAttributes`), if no `attributesToRetrieve` are set in the search query, `_formatted` will return all the `displayedAttributes`.
 
