@@ -472,7 +472,6 @@ Example:
 
 ```json
 {
-    "q": "",
     "attributesToCrop": ["title"]
 }
 ```
