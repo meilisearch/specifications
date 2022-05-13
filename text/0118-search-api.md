@@ -267,6 +267,8 @@ This parameter is applied to the fields from `attributesToHighlight`. If there a
 
 - 🔴 Sending a value with a different type than `String` for `highlightPostTag` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
+If `attributesToHighlight` is omitted while `highlightPostTag` is specified, there is no error.
+
 #### 3.1.11. `attributesToCrop`
 
 - Type: Array[String]|String
