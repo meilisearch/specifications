@@ -285,7 +285,7 @@ The number of words contained in the cropped value is defined by the `cropLength
 
 The value of `cropLength` can be customized per attribute. See [3.1.12.1. Custom `cropLength` Defined Per Cropped Attribute](#31121-custom-croplength-defined-per-attribute) section.
 
-The engine adds a marker by default in front of and/or behind the part selected by the cropper. This marker is customizable. See [3.1.1.13. `cropMarker`](#31113-cropmarker) section.
+The engine adds a marker by default in front of and/or behind the part selected by the cropper. This marker is customizable. See [3.1.13. `cropMarker`](#3113-cropmarker) section.
 
 - 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToCrop` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
@@ -651,7 +651,7 @@ The beginning of a matching term within a field is indicated by `start`, and its
 
 `start` and `length` are measured in bytes and not the number of characters. For example, `ü` represents two bytes but one character.
 
-> See [3.1.1.14. `matches`](#31114-matches) section.
+> See [3.1.14. `matches`](#3114-matches) section.
 
 #### 3.2.2. `limit`
 
