@@ -720,6 +720,22 @@ components:
           default:
             - ''
         example: 'title,description'
+    highlightPreTag:
+      name: highlightPreTag
+      in: query
+      required: false
+      description: Specify the tag to put before the highlighted query terms.
+      schema:
+        type: string
+        default: '<em>'
+    highlightPostTag:
+      name: highlightPostTag
+      in: query
+      required: false
+      description: Specify the tag to put after the highlighted query terms.
+      schema:
+        type: string
+        default: '</em>'
     attributesToCrop:
       name: attributesToCrop
       in: query
@@ -728,6 +744,14 @@ components:
         type: string
         example: 'overview:10'
       description: Comma-separated list of attributes whose values have to be cropped. Cropped attributes are returned in `_formatted` response object.
+    cropMarker:
+      name: cropMarker
+      in: query
+      description: Sets the crop marker to apply before and/or after cropped part selected within an attribute defined in `attributesToCrop` parameter.
+      required: false
+      schema:
+        type: string
+        default: '…'
     cropLength:
       name: cropLength
       in: query
@@ -735,8 +759,8 @@ components:
       schema:
         type: integer
         example: 5
-        default: 200
-      description: Length used to crop field values.
+        default: 10
+      description: Sets the total number of words to keep around the matched part of an attribute specified in the `attributesToCrop` parameter.
     facetsDistribution:
       name: facetsDistribution
       in: query
@@ -1431,7 +1455,10 @@ paths:
         - $ref: '#/components/parameters/q'
         - $ref: '#/components/parameters/attributesToRetrieve'
         - $ref: '#/components/parameters/attributesToHighlight'
+        - $ref: '#/components/parameters/highlightPreTag'
+        - $ref: '#/components/parameters/highlightPostTag'
         - $ref: '#/components/parameters/attributesToCrop'
+        - $ref: '#/components/parameters/cropMarker'
         - $ref: '#/components/parameters/cropLength'
         - $ref: '#/components/parameters/facetsDistribution'
         - $ref: '#/components/parameters/filter'
@@ -1515,6 +1542,16 @@ paths:
                     type: string
                     example: '["title", "overview"]'
                     default: '[]'
+                highlightPreTag:
+                  type: string
+                  description: Specify the tag to put before the highlighted query terms.
+                  example: '<mark>'
+                  default: '<em>'
+                highlightPostTag:
+                  type: string
+                  description: Specify the tag to put after the highlighted query terms.
+                  example: '</mark>'
+                  default: '</em>'
                 attributesToCrop:
                   type: array
                   description: Array of attributes whose values have to be cropped. Cropped attributes are returned in `_formatted` response object.
@@ -1522,10 +1559,14 @@ paths:
                     type: string
                     example: '["overview", "author"]'
                     default: '[]'
+                cropMarker:
+                  type: string
+                  description: Sets the crop marker to apply before and/or after cropped part selected within an attribute defined in `attributesToCrop` parameter.
+                  default: '…'
                 cropLength:
                   type: number
-                  description: Length used to crop field values.
-                  default: 200
+                  description: Sets the total number of **words** to keep for the cropped part of an attribute specified in the `attributesToCrop` parameter.
+                  default: 10
                 matches:
                   type: boolean
                   description: Defines whether an `_matchesInfo` object that contains information about the matches should be returned or not.
