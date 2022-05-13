@@ -405,6 +405,42 @@ components:
         - exactness
         - 'release_date:asc'
       examples: []
+    typoTolerance:
+      type: object
+      description: Customize typo tolerance feature.
+      properties:
+        enabled:
+          description: Enable the typo tolerance feature.
+          type: boolean
+          default: true
+          nullable: false
+        disableOnAttributes:
+          description: Disable the typo tolerance feature on the specified attributes.
+          type: array
+          items:
+            type: string
+          default: []
+          nullable: false
+        disableOnWords:
+          description: Disable the typo tolerance feature for a set of query terms given for a search query.
+          type: array
+          items:
+            type: string
+          default: []
+          nullable: false
+        minWordSizeForTypos:
+          type: object
+          properties:
+            oneTypo:
+              description: Customize the minimum size for a word to tolerate 1 typo.
+              type: integer
+              default: 5
+              nullable: false
+            twoTypos:
+              description: Customize the minimum size for a word to tolerate 2 typos.
+              type: integer
+              default: 9
+              nullable: false
     filterableAttributes:
       type: array
       description: |
@@ -458,6 +494,8 @@ components:
           $ref: '#/components/schemas/searchableAttributes'
         displayedAttributes:
           $ref: '#/components/schemas/displayedAttributes'
+        typoTolerance:
+          $ref: '#/components/schemas/typoTolerance'
       required:
         - synonyms
         - stopWords
@@ -466,6 +504,7 @@ components:
         - distinctAttribute
         - searchableAttributes
         - displayedAttributes
+        - typoTolerance
     stats:
       type: object
       additionalProperties: false
@@ -1607,6 +1646,8 @@ paths:
                     $ref: '#/components/schemas/filterableAttributes'
                   sortableAttributes:
                     $ref: '#/components/schemas/sortableAttributes'
+                  typoTolerance:
+                    $ref: '#/components/schemas/typoTolerance'
                 required:
                   - rankingRules
                   - distinctAttribute
@@ -1616,6 +1657,7 @@ paths:
                   - synonyms
                   - filterableAttributes
                   - sortableAttributes
+                  - typoTolerance
               examples:
                 Example:
                   value:
@@ -1657,6 +1699,16 @@ paths:
                       - price
                       - author
                       - title
+                    typoTolerance:
+                      enabled: true
+                      disableOnAttributes:
+                        - author
+                        - price
+                      disableOnWords:
+                        - Tolkien
+                      minWordSizeForTypos:
+                        oneTypo: 4
+                        twoTypos: 8
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -1700,6 +1752,8 @@ paths:
                   $ref: '#/components/schemas/filterableAttributes'
                 sortableAttributes:
                   $ref: '#/components/schemas/sortableAttributes'
+                typoTolerance:
+                  $ref: '#/components/schemas/typoTolerance'
             examples:
               Example:
                 value:
@@ -1736,6 +1790,16 @@ paths:
                     - release_date
                   filterableAttributes: []
                   sortableAttributes: null
+                  typoTolerance:
+                    enabled: false
+                    disableOnAttributes:
+                      - title
+                      - author
+                    disableOnWords:
+                      - Tolkien
+                    minWordSizeForTypos:
+                      oneTypo: 4
+                      twoTypos: 8
       responses:
         '202':
           $ref: '#/components/responses/202'
@@ -2041,6 +2105,74 @@ paths:
         ```
 
         To remove all ranking rules, which is not recommended in any case, you would send an empty array to the add or replace ranking rules route.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    parameters:
+      - $ref: '#/components/parameters/indexUid'
+  '/indexes/{indexUid}/settings/typo-tolerance':
+    get:
+      operationId: indexes.settings.typoTolerance.get
+      summary: Get typo tolerance configuration
+      description: |
+        Get the typo tolerance configuration of an index.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/typoTolerance'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    post:
+      operationId: indexes.settings.typoTolerance.update
+      summary: Update typo tolerance settings
+      description: |
+        Update the typo tolerance configuration of an index.
+
+        > info
+        > If the provided index does not exist, it will be created.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/typoTolerance'
+            examples: {}
+        description: ''
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
+    delete:
+      operationId: indexes.settings.typoTolerance.reset
+      summary: Reset typo tolerance settings to the default configuration
+      description: |
+        Reset the typo tolerance settings of an index to its default configuration.
       tags:
         - Settings
       security:
