@@ -197,11 +197,11 @@ Sets the starting point in the search results, effectively skipping over a given
 
 - Type: Array of String (POST) | String (GET)
 - Required: False
-- Default: `[]|null`
+- Default: `["*"]`, meaning all the attributes
 
 Configures which attributes will be retrieved in the returned documents.
 
-If no value is specified, `attributesToRetrieve` uses the `displayedAttributes` index setting, which by default contains all attributes found in the documents.
+If no value is specified, the default value of `attributesToRetrieve` is used (`["*"]`). This corresponds to the `displayedAttributes` index setting, which by default contains all attributes found in the documents.
 
 > If an attribute is missing from `displayedAttributes` index setting, `attributesToRetrieve` silently ignore it, and the field doesn't appear in the returned search results.
 
@@ -215,9 +215,9 @@ If no value is specified, `attributesToRetrieve` uses the `displayedAttributes` 
 
 Configures which fields may have highlighted parts, given that they match the requested query terms (i.e. the terms in the [`q`](#311-q) search parameter). Pre/post highlighting tags are applied around each word corresponding to a query term.
 
-Search results include a `_formatted` object containing the highlighted parts when this parameter is defined. See [3.2.1.1.2. `_formatted`](#32112-formatted) section.
+If `attributesToHighlight` is present in the search query, the search results will include a `_formatted` object containing the attributes and their highlighted parts. For more detailed regarding the `_formatted` behavior, see the [3.2.1.1.2. `_formatted`](#32112-formatted) section.
 
-If `"*"` is provided as a value: `attributesToHighlight=["*"]` all the attributes present in `displayedAttributes` setting will be automatically assigned to `_formatted`.
+If `"*"` is provided as a value (`attributesToHighlight=["*"]`), all the attributes present in `displayedAttributes` setting will be highlighted.
 
 Highlighted parts are surrounded by the [`highlightPreTag`](#319-highlightpretag) and [`highlightPostTag`](#3110-highlightposttag) parameters.
 
@@ -275,15 +275,15 @@ This parameter is applied to the fields from `attributesToHighlight`. If there a
 
 Defines document attributes to be cropped. Cropped attributes have their values shortened around query terms.
 
+If `attributesToCrop` is present in the search query, the search results will include a `_formatted` object containing the attributes and their cropped parts. For more detailed regarding the `_formatted` behavior, see the [3.2.1.1.2. `_formatted`](#32112-formatted) section.
+
+If `"*"` is provided as a value (`attributesToCrop=["*"]`), all the attributes present in `displayedAttributes` setting will be cropped.
+
 The number of words contained in the cropped value is defined by the `cropLength` parameter. See [3.1.1.12. `cropLength`](#3112-croplength) section.
 
 The value of `cropLength` can be customized per attribute. See [3.1.12.1. Custom `cropLength` Defined Per Cropped Attribute](#31121-custom-croplength-defined-per-attribute) section.
 
 The engine adds a marker by default in front of and/or behind the part selected by the cropper. This marker is customizable. See [3.1.1.13. `cropMarker`](#31113-cropmarker) section.
-
-Search results include a `_formatted` object containing the cropped attributes representation when this parameter is defined. See [3.2.1.1.2. `_formatted`](#32112-formatted) section.
-
-If `"*"` is provided as a value: `attributesToCrop=["*"]` all the attributes present in the `displayedAttributes` setting will be automatically assigned to `_formatted`.
 
 - 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToCrop` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
@@ -460,14 +460,183 @@ Search queries using `_geoPoint` returns a `_geoDistance` field containing the d
 - Type: Object
 - Required: False
 
-`_formatted` returns highlighted and cropped attributes specified in `attributesToHighlight` and/or `attributesToCrop` of a search result.
+`_formatted` is an object returned in the search response, only if at least one of the following paramaters has been set in the search query:
+- `attributesToHighlight`
+- `attributesToCrop`
 
-- If `attributesToHighlight` and `attributesToCrop` are not set, `_formatted` is not returned.
+If `attributesToHighlight` and `attributesToCrop` are not set, `_formatted` is not returned.
+
+This `_formatted` object will be present in each returned document in the `hits` field.
+
+Example:
+
+```json
+{
+    "attributesToCrop": ["title"]
+}
+```
+
+```json
+{
+    "hits": [
+        {
+            "id": 2,
+            "title": "Pride and Prejudice",
+            "_formatted": {
+                "id": "2",
+                "title": "Pride and Prejudice"
+            }
+        },
+        {
+            "id": 456,
+            "title": "Le Petit Prince",
+            "_formatted": {
+                "id": "456",
+                "title": "Le Petit Prince",
+            }
+        }
+    ],
+    ...
+}
+```
+
+Which attributes are present in `_formatted`?
+
+*Remember the main rule: `_formatted` is only present if `attributesToHighlight` or `attributesToCrop` is set.*
+
+The `_formatted` object contains attributes coming from the original document, depending on the parameters the users set during the search query. Indeed, **`_formatted` contains all the attributes present in `attributesToRetrieve`, `attributesToHighlight`, and `attributesToCrop` combined**.
+
+Knowing the default value of `attributesToRetrieve` is `["*"]` (so all the attributes present in `displayedAttributes`), if no `attributesToRetrieve` are set in the search query, `_formatted` will return all the `displayedAttributes`.
+
+Returning attributes in the `_formatted` object does not mean these attributes will be necessarily highlighted or cropped, see the next point.
+
+Which attributes are highlighted or cropped in `_formatted`?
+
+No matter which attributes are retrieved in `_formatted` (according to the previous section "Which attributes are present in `_formatted`?"):
+- Only the attributes present in `attributesToHighlight` are highlighted.
+- Only the attributes present in `attributesToCrop` are cropped.
+- Attributes present in both are cropped and highlighted at the same time.
+
+Some edge cases:
 - If cumulated fields in `attributesToHighlight` and `attributesToCrop` resolve to only having non-existent fields, `_formatted` is not returned.
-- If `attributesToRetrieve` is equal to `*` and `attributesToHighlight` or `attributesToCrop` are equals to `*`, `_formatted` is returned and contains `displayedAttributes` setting fields then compute highlights and crops on each received fields.
-- If `attributesToRetrieve` is equal to `*` and `attributesToHighlight` or `attributesToCrop` contains a set of fields, `_formatted` is returned and contains `displayedAttributes` setting fields but only compute highlights and crops on fields declared in `attributesToHighlight` or `attributesToCrop`.
-- If a list of fields is defined for `attributesToRetrieve` and `attributesToHighlight` / `attributesToCrop` are equals to `*`, `_formatted` is returned and contains `displayedAttributes` setting fields then compute highlights and crops on each received fields.
-- If a list of fields is defined for `attributesToRetrieve` and `attributesToHighlight` / `attributesToCrop` contains a list of fields, `_formatted` is returned and contains `attributesToRetrieve` fields, plus the fields set in `attributesToHighlight` or `attributesToCrop` then compute highlights and crops only for fields defined in `attributesToHighlight` / `attributesToCrop` parameters.
+
+Some examples:
+*The examples work the same with `attributesToCrop`*
+
+Example 1:
+
+```json
+{
+    "q": "t",
+    "attributesToHighlight": ["title"]
+}
+```
+
+```json
+{
+    "hits": [
+        {
+            "id": 1,
+            "title": "The Hobbit",
+            "author": "J. R. R. Tolkien",
+            "_formatted": {
+                "id": "1",
+                "title": "<em>T</em>he Hobbit",
+                "author": "J. R. R. Tolkien"
+            }
+        }
+    ],
+    ...
+}
+```
+-> All the attributes (so `id`, `title` and `author`) are returned in `_formatted` because by default `attributesToRetrieve` is set to `["*"]`.
+-> Only `title` is highlighted.
+
+Example 2:
+
+```json
+{
+    "q": "t",
+    "attributesToHighlight": ["*"]
+}
+```
+
+```json
+{
+    "hits": [
+        {
+            "id": 1,
+            "title": "The Hobbit",
+            "author": "J. R. R. Tolkien",
+            "_formatted": {
+                "id": "1",
+                "title": "<em>T</em>he Hobbit",
+                "author": "J. R. R. <em>T</em>olkien"
+            }
+        }
+    ],
+    ...
+}
+```
+-> `id`, `title` and `author` are returned in `_formatted` because`attributesToHighlight` is set to `["*"]` (but also `attributesToRetrieve` by default).
+-> Both `title` and `author` are highlighted because `attributesToHighlight` is set to `["*"]`.
+
+Example 3:
+
+```json
+{
+    "q": "t",
+    "attributesToRetrieve": ["author"],
+    "attributesToHighlight": ["title"]
+}
+```
+
+```json
+{
+    "hits": [
+        {
+            "author": "J. R. R. Tolkien",
+            "_formatted": {
+                "title": "<em>T</em>he Hobbit",
+                "author": "J. R. R. Tolkien"
+            }
+        }
+    ],
+    ...
+}
+```
+-> Only `author` is returned at the root of the document because defined in the `attributesToRetrieve`.
+-> Only `author` and `title` are returned in `_formatted` because the addition of `attributesToRetrieve` and `attributesToHighlight`.
+-> Only `title` is highlighted because the only one defined in `attributesToHighlight`.
+
+Example 4:
+
+```json
+{
+    "q": "t",
+    "attributesToRetrieve": [],
+    "attributesToHighlight": ["*"]
+}
+```
+
+```json
+{
+    "hits": [
+        {
+            "_formatted": {
+                "id": "1",
+                "title": "<em>T</em>he Hobbit",
+                "author": "J. R. R. <em>T</em>olkien"
+            }
+        }
+    ],
+    ...
+}
+```
+-> No attributes are returned at the root of the document because `attributesToRetrieve` is set to `[]`.
+-> All the attributes are returned in `_formatted` because `attributesToHighlight` is set to `["*"]`.
+-> All the attributes are highlighted because `attributesToHighlight` is set to `["*"]`.
+
 
 ###### 3.2.1.1.3. `_matchesInfo`
 
