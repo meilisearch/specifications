@@ -29,6 +29,14 @@ components:
       type: integer
       description: Limit given for the query. If limit is not provided as a query parameter, this parameter displays the default limit value.
       example: 10
+    offset:
+      type: integer
+      description: Offset given for the query. If offset is not provided as a query parameter, this parameter displays the default offset value.
+      example: 0
+    total:
+      type: integer
+      description: Total number of browsable results using offset/limit parameters for the given resource.
+      example: 50
     from:
       type: integer
       description: The first task uid returned.
@@ -675,14 +683,14 @@ components:
     limit:
       name: limit
       in: query
-      description: Maximum number of documents to return.
+      description: Maximum number of results to return.
       schema:
         type: number
         default: 20
     offset:
       name: offset
       in: query
-      description: Number of documents to skip.
+      description: Number of results to skip.
       schema:
         type: number
         default: 0
@@ -1020,6 +1028,17 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/index'
+                  limit:
+                    $ref: '#/components/schemas/limit'
+                  offset:
+                    $ref: '#/components/schemas/offset'
+                  total:
+                    $ref: '#/components/schemas/total'
+                required:
+                  - results
+                  - limit
+                  - offset
+                  - total
               examples:
                 Example:
                   value:
@@ -1029,8 +1048,14 @@ paths:
                         primaryKey: movie_id
                         createdAt: '2019-11-20T09:40:33.711324Z'
                         updatedAt: '2019-11-20T09:40:33.711324Z'
+                    limit: 1
+                    offset: 0
+                    total: 1
         '401':
           $ref: '#/components/responses/401'
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
     post:
       operationId: indexes.create
       summary: Create Index
@@ -1202,6 +1227,17 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/document'
+                  limit:
+                    $ref: '#/components/schemas/limit'
+                  offset:
+                    $ref: '#/components/schemas/offset'
+                  total:
+                    $ref: '#/components/schemas/total'
+                required:
+                  - results
+                  - limit
+                  - offset
+                  - total
               examples:
                 Example:
                   value:
@@ -1216,7 +1252,9 @@ paths:
                         poster: 'https://image.tmdb.org/t/p/w500/4X7quIcdkc24Cveg5XdpfRqxtYA.jpg'
                         overview: "The Bridge of San Luis Rey is American author Thornton Wilder's second novel, first published in 1927 to worldwide acclaim. It tells the story of several interrelated people who die in the collapse of an Inca rope-fiber suspension bridge in Peru, and the events that lead up to their being on the bridge.[ A friar who has witnessed the tragic accident then goes about inquiring into the lives of the victims, seeking some sort of cosmic answer to the question of why each had to die. The novel won the Pulitzer Prize in 1928."
                         release_date: 1072915200
-
+                    limit: 20
+                    offset: 0
+                    total: 2
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2516,6 +2554,17 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/key'
+                  limit:
+                    $ref: '#/components/schemas/limit'
+                  offset:
+                    $ref: '#/components/schemas/offset'
+                  total:
+                    $ref: '#/components/schemas/total'
+                required:
+                  - results
+                  - limit
+                  - offset
+                  - total
               examples:
                 example-1:
                   value:
@@ -2529,8 +2578,14 @@ paths:
                         expiresAt: '2022-11-12T10:00:00Z'
                         createdAt: '2021-11-12T10:00:00Z'
                         updatedAt: '2021-11-12T10:00:00Z'
+                    limit: 20
+                    offset: 0
+                    total: 1
         '401':
           $ref: '#/components/responses/401'
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
   '/keys/{key}':
     get:
       summary: Get an API key
