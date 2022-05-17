@@ -693,7 +693,7 @@ This part demonstrates cursor paging on `/tasks`, but it should be equivalent fo
 ###### 9.5.1 `limit`
 
 - If `limit` is not set, the default value is chosen.
-- If `limit` is set and it is not between the minimum and maximum values, the default value is chosen.
+- If `limit` is defined and that the given value is not between the minimum `1` and the maximum `100`, minimum and maximum value included, the default value `30` is chosen.
 - If `limit` is not an integer, the default value is chosen.
 
 ###### 9.5.2 `after`
