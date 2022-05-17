@@ -25,6 +25,14 @@ servers:
     description: 'https://example.meilisearch.com:7700'
 components:
   schemas:
+    limit:
+      type: integer
+      description: Limit given for the query. If limit is not provided as a query parameter, this parameter displays the default limit value.
+      example: 10
+    after:
+      type: integer
+      description: Represents identifier to fetch the next slice of the results. The first item identifier for the next slice starts at `after+1`.
+      example: 999
     timestamp:
       type: string
       description: An `RFC 3339` format for date/time/duration.
@@ -2882,6 +2890,14 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/task'
+                  limit:
+                    $ref: '#/components/schemas/limit'
+                  after:
+                    $ref: '#/components/schemas/after'
+                required:
+                  - results
+                  - limit
+                  - after
               examples:
                 Example:
                   value:
@@ -2915,6 +2931,8 @@ paths:
                         enqueuedAt: '2021-01-01T09:38:00.000000Z'
                         startedAt: '2021-01-01T09:38:02.000000Z'
                         finishedAt: '2021-01-01T09:38:07.000000Z'
+                    limit: 2
+                    after: null
       operationId: tasks.list
       parameters: []
       security:
