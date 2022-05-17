@@ -75,7 +75,7 @@ The motivation is to stabilize the current `update` resource to a version that c
 
 | field      | type    | description                     |
 |------------|---------|---------------------------------|
-| taskUid    | integer | Unique sequential identifier           |
+| taskUid    | integer | Unique sequential identifier |
 | indexUid   | string | Unique index identifier |
 | status     | string  | Status of the task. Value is `enqueued` |
 | enqueuedAt | string | Represent the date and time as `RFC 3339` format when the task has been enqueued |
