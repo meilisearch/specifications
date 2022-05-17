@@ -75,7 +75,7 @@ The motivation is to stabilize the current `update` resource to a version that c
 
 | field      | type    | description                     |
 |------------|---------|---------------------------------|
-| uid        | integer | Unique sequential identifier           |
+| taskUid    | integer | Unique sequential identifier |
 | indexUid   | string | Unique index identifier |
 | status     | string  | Status of the task. Value is `enqueued` |
 | enqueuedAt | string | Represent the date and time as `RFC 3339` format when the task has been enqueued |
@@ -293,7 +293,7 @@ e.g. A summarized `task` object in a `202 Accepted` HTTP response returned at in
 
 ```json
 {
-    "uid": 0,
+    "taskUid": 0,
     "indexUid": "movies",
     "status": "enqueued",
     "type": "createIndex",
@@ -524,7 +524,7 @@ New task types are also added for these operations. `indexCreation`, `indexUpdat
 
 ```json
 {
-    "uid": 0,
+    "taskUid": 0,
     "indexUid": "movies",
     "status": "enqueued",
     "type": "indexCreation",
@@ -546,7 +546,7 @@ New task types are also added for these operations. `indexCreation`, `indexUpdat
 
 ```json
 {
-    "uid": 1,
+    "taskUid": 1,
     "indexUid": "movies",
     "status": "enqueued",
     "type": "indexUpdate",
@@ -560,7 +560,7 @@ New task types are also added for these operations. `indexCreation`, `indexUpdat
 
 ```json
 {
-    "uid": 1,
+    "taskUid": 1,
     "indexUid": "movies",
     "status": "enqueued",
     "type": "indexDeletion",
