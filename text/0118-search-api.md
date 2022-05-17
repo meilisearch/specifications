@@ -36,7 +36,7 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 | [`q`](#311-q)                                         | String                    | False    |
 | [`filter`](#312-filter)                               | Array of String - String  | False    |
 | [`sort`](#313-sort)                                   | Array of String - String  | False    |
-| [`facetsDistribution`](#314-facetsdistribution)       | Array of String - String  | False    |
+| [`facets`](#314-facets)                               | Array of String - String  | False    |
 | [`limit`](#315-limit)                                 | Integer                   | False    |
 | [`offset`](#316-offset)                               | Integer                   | False    |
 | [`attributesToRetrieve`](#317-attributestoretrieve)   | Array of String - String  | False    |
@@ -44,9 +44,9 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 | [`highlightPreTag`](#319-highlightpretag)             | String                    | False    |
 | [`highlightPostTag`](#3110-highlightposttag)          | String                    | False    |
 | [`attributesToCrop`](#3111-attributestocrop)          | Array of String - String  | False    |
-| [`cropLength`](#3112-croplength)                     | Integer                   | False    |
-| [`cropMarker`](#3113-cropmarker)                     | String                    | False    |
-| [`matches`](#3114-matches)                           | Boolean                   | False    |
+| [`cropLength`](#3112-croplength)                      | Integer                   | False    |
+| [`cropMarker`](#3113-cropmarker)                      | String                    | False    |
+| [`showMatchesPosition`](#3114-showmatchesposition)                | Boolean                   | False    |
 
 #### 3.1.1. `q`
 
@@ -153,25 +153,27 @@ Attributes used as sort criteria must be added to the `sortableAttributes list o
 
 > See [Sort](0055-sort.md)
 
-#### 3.1.4. `facetsDistribution`
+#### 3.1.4. `facets`
 
 - Type: Array of String (POST) | String (GET)
 - Required: False
 - Default: `[]|null`
 
-`facetsDistribution` permits to specify facets to be computed for the current search query.
+`facets` permits to specify facets to be computed for the current search query.
 
 It returns the number of documents matching the current search query for each specified facet.
 
 This parameter can take two values:
 
-- An array of attributes: `facetsDistribution=["attributeA", "attributeB", …]`
+- An array of attributes: `facets=["attributeA", "attributeB", …]`
 - A wildcard `"*"` — this returns a count for all facets present in `filterableAttributes`
 
-Attributes used in `facetsDistribution` must be added to the `filterableAttributes` list of an index settings. See [Filterable Attributes Setting API](0123-filterable-attributes-setting-api.md).
+Attributes used in `facets` must be added to the `filterableAttributes` list of an index settings. See [Filterable Attributes Setting API](0123-filterable-attributes-setting-api.md).
 
-- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `facetsDistribution` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
-- 🔴 Sending a field not defined as a `filterableAttributes` for `facetsDistribution` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `facets` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a field not defined as a `filterableAttributes` for `facets` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+
+The distribution of the different facets is returned in the `facetDistribution` response parameter.
 
 #### 3.1.5. `limit`
 
@@ -401,17 +403,17 @@ If the cropped part has been matched against query terms and contains the beginn
 
 If the cropped part has been matched against query terms and contains the end of the attribute to be cropped, the `cropMarker` is not placed to the right of the cropped part.
 
-#### 3.1.14. `matches`
+#### 3.1.14. `showMatchesPosition`
 
 - Type: Boolean
 - Required: False
 - Default: `false`
 
-Adds a `_matchesInfo` object to the search response that contains the location of each occurrence of queried terms across all fields. The given positions are in bytes.
+Adds a `_matchesPosition` object to the search response that contains the location of each occurrence of queried terms across all fields. The given positions are in bytes.
 
 It's useful when more control is needed than offered by the built-in highlighting/cropping features.
 
-- 🔴 Sending a value with a different type than `Boolean` or `null` for `matches` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Boolean` or `null` for `showMatchesPosition` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 
 ### 3.2. Search Response Properties
@@ -422,7 +424,7 @@ It's useful when more control is needed than offered by the built-in highlightin
 | [`limit`](#322-limit)                                 | Integer                      | True     |
 | [`offset`](#323-offset)                               | Integer                      | True     |
 | [`estimatedTotalHits`](#324-estimatedTotalHits)       | Integer                      | True     |
-| [`facetsDistribution`](#325-facetsdistribution)       | Object                       | False    |
+| [`facetDistribution`](#325-facetdistribution)       | Object                       | False    |
 | [`processingTimeMs`](#326-processingtimems)           | Integer                      | True     |
 | [`query`](#327-query)                                 | String                       | True     |
 
@@ -445,7 +447,7 @@ A search result can contain special properties. See [3.2.1.1. `hit` Special Prop
 |--------------------------------------|-------------|----------|
 | [`_geoDistance`](#32111-geodistance) | Integer     | False    |
 | [`_formatted`](#32112-formatted)     | Object      | False    |
-| [`_matchesInfo`](#32113-matchesinfo) | Object      | False    |
+| [`_matchesPosition`](#32113-matchesposition) | Object      | False    |
 
 ###### 3.2.1.1.1. `_geoDistance`
 
@@ -639,18 +641,18 @@ Example 4:
 -> All the attributes are highlighted because `attributesToHighlight` is set to `["*"]`.
 
 
-###### 3.2.1.1.3. `_matchesInfo`
+###### 3.2.1.1.3. `_matchesPosition`
 
 - Type: Object
 - Required: False
 
-Contains the location of each occurrence of queried terms across all fields. The `_matchesInfo` object is added to a search result when the `matches` search parameter is specified to true.
+Contains the location of each occurrence of queried terms across all fields. The `_matchesPosition` object is added to a search result when the `showMatchesPosition` search parameter is specified to true.
 
 The beginning of a matching term within a field is indicated by `start`, and its `length` by length.
 
 `start` and `length` are measured in bytes and not the number of characters. For example, `ü` represents two bytes but one character.
 
-> See [3.1.14. `matches`](#3114-matches) section.
+> See [3.1.14. `showMatchesPosition`](#3114-showmatchesposition) section.
 
 #### 3.2.2. `limit`
 
@@ -677,16 +679,16 @@ Returns the `offset` search parameter used for the query.
 
 Returns the estimated number of candidates for the search query.
 
-#### 3.2.5. `facetsDistribution`
+#### 3.2.5. `facetDistribution`
 
 - Type: Object
 - Required: False
 
-Added to the search response when `facetsDistribution` is set for a search query. It contains the number of remaining candidates for each specified facet in the `facetsDistribution` search parameter.
+Added to the search response when `facets` is set for a search query. It contains the number of remaining candidates for each specified facet in the `facets` search parameter.
 
 If a field distributed as a facet contains no value, it is returned as a `facetDistribution` field with an empty object as value.
 
-> See [3.1.4. `facetsDistribution`](#314-facetsdistribution) section.
+> See [3.1.4. `facet`](#314-facets) section.
 
 #### 3.2.6. `processingTimeMs`
 
@@ -714,7 +716,7 @@ n/a
 
 ### 3.1. Formatting Search Results
 
-- Replaces `_matchesInfo` with chars position instead of bytes. It could also be a `mode` to choose `byte` or `char`.
+- Replaces `_matchesPosition` with chars position instead of bytes. It could also be a `mode` to choose `byte` or `char`.
 - Move `attributesToHighlight`, `highlightPreTag`, `highlightPostTag`, `attributesToCrop`, `cropLength` and `cropMarker` into a `formatter` objet.
 - Add an option to only highlight complete query term.
 - Expose the `formatter` resource as an index setting.

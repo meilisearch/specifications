@@ -86,7 +86,7 @@ components:
         overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
         release_date: '1993-01-01'
       description: 'A document made of attribute. The maximum number of attribute for a document is 65,535.'
-    matchesInfo:
+    matchesPosition:
       type: object
       properties:
         start:
@@ -113,7 +113,7 @@ components:
           poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
           overview: 'When a scientists daughter is kidnapped, American <em>Ninja</em>, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the <em>ninja</em>.'
           release_date: '1993-01-01'
-        _matchesInfo:
+        _matchesPosition:
           overview:
             - start: 49
               length: 5
@@ -131,7 +131,7 @@ components:
             poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
             overview: 'When a scientists daughter is kidnapped, American <em>Ninja</em>, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the <em>ninja</em>.'
             release_date: '1993-01-01'
-          _matchesInfo:
+          _matchesPosition:
             overview:
               - start: 49
                 length: 5
@@ -143,12 +143,12 @@ components:
           type: object
           description: Only present if `attributesToHighlight`/`attributesToCrop` is not empty. Return highlighted and cropped fields.
           additionalProperties: true
-        _matchesInfo:
+        _matchesPosition:
           type: object
-          description: Only present if matches = `true`. Array of all search query occurrences in all fields.
+          description: Only present if showMatchesPosition = `true`. Array of all search query occurrences in all fields.
           properties:
             '':
-              $ref: '#/components/schemas/matchesInfo'
+              $ref: '#/components/schemas/matchesPosition'
         attribute:
           type:
             - string
@@ -231,14 +231,14 @@ components:
         estimatedTotalHits:
           type: integer
           description: Estimated number of candidates for the search query.
-        facetsDistribution:
+        facetDistribution:
           type: object
           additionalProperties:
             type: object
             additionalProperties:
               type: integer
           description: |
-            [Distribution of the given facets](https://docs.meilisearch.com/reference/features/search_parameters.html#facets-distribution).
+            [Distribution of the given facets](https://docs.meilisearch.com/reference/features/search_parameters.html#facet-distribution).
           example:
             genres:
               action: 273
@@ -762,21 +762,21 @@ components:
         example: 5
         default: 10
       description: Sets the total number of words to keep around the matched part of an attribute specified in the `attributesToCrop` parameter.
-    facetsDistribution:
-      name: facetsDistribution
+    facets:
+      name: facets
       in: query
       schema:
         type: string
         example: 'genres,author'
-      description: 'Comma-separated list of attributes whose fields will be distributed as a facet. If you have [set up filterableAttributes](https://docs.meilisearch.com/reference/features/settings.html#filterable-attributes), you can retrieve the count of matching terms for each facets.[Learn more about facet distribution in the dedicated guide](https://docs.meilisearch.com/reference/features/search_parameters.html#facets-distribution)'
-    matches:
-      name: matches
+      description: 'Comma-separated list of attributes whose fields will be distributed as a facet. If you have [set up filterableAttributes](https://docs.meilisearch.com/reference/features/settings.html#filterable-attributes), you can retrieve the count of matching terms for each facets.[Learn more about facet distribution in the dedicated guide](https://docs.meilisearch.com/reference/features/search_parameters.html#facet-distribution)'
+    showMatchesPosition:
+      name: showMatchesPosition
       in: query
       required: false
       schema:
         type: boolean
         default: 'false'
-      description: Defines whether an `_matchesInfo` object that contains information about the matches should be returned or not.
+      description: Defines whether an `_matchesPosition` object that contains information about the matches should be returned or not.
     sort:
       name: sort
       in: query
@@ -1425,12 +1425,12 @@ paths:
         - $ref: '#/components/parameters/attributesToCrop'
         - $ref: '#/components/parameters/cropMarker'
         - $ref: '#/components/parameters/cropLength'
-        - $ref: '#/components/parameters/facetsDistribution'
+        - $ref: '#/components/parameters/facets'
         - $ref: '#/components/parameters/filter'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/matches'
+        - $ref: '#/components/parameters/showMatchesPosition'
       responses:
         '200':
           description: Ok
@@ -1453,7 +1453,7 @@ paths:
                           poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
                           overview: 'When a scientists daughter is kidnapped, American <em>Ninja</em>, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the <em>ninja</em>.'
                           release_date: '1993-01-01'
-                        _matchesInfo:
+                        _matchesPosition:
                           overview:
                             - start: 49
                               length: 5
@@ -1531,15 +1531,15 @@ paths:
                   type: number
                   description: Sets the total number of **words** to keep for the cropped part of an attribute specified in the `attributesToCrop` parameter.
                   default: 10
-                matches:
+                showMatchesPosition:
                   type: boolean
-                  description: Defines whether an `_matchesInfo` object that contains information about the matches should be returned or not.
+                  description: Defines whether an `_matchesPosition` object that contains information about the matches should be returned or not.
                   default: false
                 filter:
                   $ref: '#/components/schemas/filter'
-                facetsDistribution:
+                facets:
                   type: array
-                  description: 'Array of attributes whose fields will be distributed as a facet. If you have [set up filterableAttributes](https://docs.meilisearch.com/reference/features/settings.html#filterable-attributes), you can retrieve the count of matching terms for each [facets](https://docs.meilisearch.com/reference/features/filtering_and_faceted_search.html#faceted-search).[Learn more about facet distribution in the dedicated guide](https://docs.meilisearch.com/reference/features/search_parameters.html#facets-distribution)'
+                  description: 'Array of attributes whose fields will be distributed as a facet. If you have [set up filterableAttributes](https://docs.meilisearch.com/reference/features/settings.html#filterable-attributes), you can retrieve the count of matching terms for each [facets](https://docs.meilisearch.com/reference/features/filtering_and_faceted_search.html#faceted-search).[Learn more about facet distribution in the dedicated guide](https://docs.meilisearch.com/reference/features/search_parameters.html#facet-distribution)'
                   items:
                     type: string
                     example: '["genres", "author"]'
@@ -1561,7 +1561,7 @@ paths:
                   offset: 0
                   limit: 20
                   filter: (genres = Horror AND genres = Mystery) OR release_date > 523242000
-                  facetsDistribution:
+                  facets:
                     - genres
                     - author
                   attributesToRetrieve:
@@ -1572,7 +1572,7 @@ paths:
                   cropLength: 20
                   attributesToHighlight:
                     - overview
-                  matches: true
+                  showMatchesPosition: true
       responses:
         '200':
           description: Ok
@@ -1595,7 +1595,7 @@ paths:
                           poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
                           overview: 'When a scientists daughter is kidnapped, American <em>Ninja</em>, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the <em>ninja</em>.'
                           release_date: '1993-01-01'
-                        _matchesInfo:
+                        _matchesPosition:
                           overview:
                             - start: 49
                               length: 5
