@@ -24,6 +24,7 @@ The dumps exist to upgrade a MeiliSearch instance from a previous version to a m
 - By default, trying to import a dump that does not exist, will stop the process and throw an error.
 - When using the command-line flag `--ignore-missing-dump`, MeiliSearch will continue its process and not throw an error.
 - When a dump is being imported, the http API is not available. Meilisearch can't receive read or write requests.
+- `dumpCreation` task takes priority over enqueued `tasks`. This means that if a `dumpCreation` task is created, it will be directly processed when the current processing task finishes even if other tasks have been enqueued before.
 
 ---
 
@@ -112,6 +113,10 @@ When a dump is being created, the task queue can receive other future operations
 ### 4.2. Importing a dump
 
 When a dump is being imported, the http API is not available. Meilisearch can't receive read or write requests.
+
+### 4.3. Dump Creation Task Priority
+
+Dump creation tasks have priority over other task types. If a `dumpCreation` task is enqueued, it will be directly processed when the current processing task finishes even if other tasks have been enqueued before.
 
 ## 5. Future Possibilities
 
