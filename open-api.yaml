@@ -973,7 +973,7 @@ paths:
               examples:
                 '202':
                   value:
-                    uid: 0
+                    taskUid: 0
                     indexUid: null
                     status: enqueued
                     type: dumpCreation

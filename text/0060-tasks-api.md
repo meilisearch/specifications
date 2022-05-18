@@ -38,7 +38,7 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 
 | field      | type    | description                     |
 |------------|---------|---------------------------------|
-| uid        | integer | Unique sequential identifier           |
+| taskUid    | integer | Unique sequential identifier           |
 | indexUid   | string  | Unique index identifier. This field is `null` when the task type is `dumpCreation`. |
 | status     | string  | Status of the task. Value is `enqueued` |
 | type       | string  | Type of the task. |
