@@ -78,11 +78,16 @@ Sets the maximum number of documents to be returned by the current request.
 
 - Type: String
 - Required: False
-- Default: `null`
+- Default: `*`
 
 Configures which attributes will be retrieved in the returned documents.
 
-If no value is specified, all attributes from the documents are returned in the response.
+If `fields` is not specified, all attributes from the documents are returned in the response. It's equivalent to `fields=*`.
+
+- Sending `fields` without specifying a value, returns empty documents ressources. `fields=`.
+- Sending `fields` with a non-existent field as part of the value will not return an error, the non-existent field will not be displayed.
+
+> `fields` values are case-sensitive.
 
 > Specified fields have to be separated by a comma. e.g. `&fields=title,description`
 
