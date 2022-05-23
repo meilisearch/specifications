@@ -338,7 +338,8 @@ See [API Key Resource Representation](#3241-api-key-resource-representation) sec
 - 🔴 Omitting `actions` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
 - 🔴 Omitting `indexes` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
 - 🔴 Omitting `expiresAt` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
-- 🔴 Sending an invalid value for the `uid` field returns an [invalid_api_key_uid](0061-error-format-and-definitions.md#invalid_api_key_uid).
+- 🔴 Sending an `uid` field that already exists returns an [api_key_already_exists](0061-error-format-and-definitions.md#api_key_already_exists) error.
+- 🔴 Sending an invalid value for the `uid` field returns an [invalid_api_key_uid](0061-error-format-and-definitions.md#invalid_api_key_uid) error.
 - 🔴 Sending an invalid value for the `actions` field returns an [invalid_api_key_actions](0061-error-format-and-definitions.md#invalid_api_key_actions) error.
 - 🔴 Sending an invalid value for the `indexes` field returns an [invalid_api_key_indexes](0061-error-format-and-definitions.md#invalid_api_key_indexes) error.
 - 🔴 Sending an invalid value for the `expiresAt` field returns an [invalid_api_key_expires_at](0061-error-format-and-definitions.md#invalid_api_key_expires_at) error.
