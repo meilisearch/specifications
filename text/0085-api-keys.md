@@ -25,7 +25,7 @@ To make Meilisearch more reliable for teams and more adapted to production cases
 - API keys must be provided via the `Authorization` header using the bearer method to authorize a request.
 - The value of the `key` field of an API Key is generated from its `uid` and the master key.
 - When a master key is set at Meilisearch first-launch, it generate two pre-configured default `API Key` resources. A `Default Search API Key` authorizing the search action on all indexes and a `Default Admin API Key` authorizing all actions on all indexes (except managing `/keys` resource).
-- If the master-key changes, all `key` field are re-generated.
+- If the master-key changes, the `key` field is re-generated.
 - Default API keys can be modified/deleted from the `/keys` endpoints but are not re-created if Meilisearch has already created them.
 - The master key can only be used to manage API keys. Using the master-key for any other request other than on `/keys` returns an authorization error.
 - API keys can have restrictions on which methods can be accessed via an `actions` list; they also `expiresAt` a specific date time and are restricted to a specific set of `indexes`.
@@ -60,7 +60,7 @@ The master key must be composed of valid utf-8 characters. It is advisable to en
 
 The first time a Meilisearch instance is launched with a `master key`, Meilisearch will generate two API keys described below.
 
-If the user changes the value of the master key later, these two default keys are not created again but re-generated with a different `key` field. However, these two API keys can be updated/deleted using the `/keys` endpoints.
+If the user changes the value of the master key later, these two default keys are not created again but the `key` field is re-generated. However, these two API keys can be updated/deleted using the `/keys` endpoints.
 
 If these API keys are deleted, the engine should not create them again when Meilisearch is launched again with a master key.
 
@@ -75,7 +75,7 @@ Here is how the `Default Search API Key` is represented after its generation.
     "uid": "01b4bc42-eb33-4041-b481-254d00cce834", //auto-generated value
     "key": "0a6e572506c52ab0bd6195921575d23092b7f0c284ab4ac86d12346c33057f99", //auto-generated value
     "name": "Default Search API Key",
-    "description": "(Use it to search from the frontend)",
+    "description": "Use it to search from the frontend",
     "actions": [
         "search"
     ],
@@ -99,7 +99,7 @@ Here is how the `Default Admin API Key` is represented after its generation.
     "uid": "ac06a7e1-6956-4699-bb04-dbeb72a231df", //auto-generated value
     "key": "380689dd379232519a54d15935750cc7625620a2ea2fc06907cb40ba5b421b6f", //auto-generated value
     "name": "Default Admin API Key",
-    "description": "(Use it for all other than search operations. Caution! Do not expose it on a public frontend)",
+    "description": "Use it for all other than search operations. Caution! Do not expose it on a public frontend",
     "actions": [
         "*"
     ],
