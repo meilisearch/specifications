@@ -790,7 +790,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:status` is invalid. Available task statuses are: `:taskStatuses`.",
+    "message": "Task status `:status` is invalid. Available task statuses are: `:taskStatuses`.",
     "code": "invalid_task_status",
     "type": "invalid_request",
     "link":"https://docs.meilisearch.com/errors#invalid_task_status"
@@ -814,7 +814,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:type` is invalid. Available task types are: `:taskTypes`.",
+    "message": "Task type `:type` is invalid. Available task types are: `:taskTypes`.",
     "code": "invalid_task_type",
     "type": "invalid_request",
     "link":"https://docs.meilisearch.com/errors#invalid_task_type"

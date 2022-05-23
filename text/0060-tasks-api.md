@@ -50,30 +50,30 @@ The motivation is to stabilize the current `update` resource to a version that c
 
 > This fully qualified version appears as a response object on `task` dedicated endpoints.
 
-| field   | type    | description                     |
-|---------|---------|---------------------------------|
-| uid      | integer | Unique sequential identifier           |
-| indexUid | string | Unique index identifier |
-| batchUid | integer | Identify in which batch a task has been grouped by auto-batching. It corresponds to the first task uid grouped within a batch. See [auto-batching specification](0096-auto-batching.md) |
-| status  | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`                                |
-| type    | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `documentAddition`, `documentPartial`, `documentDeletion`, `settingsUpdate`, `clearAll` |
-| details | object |  Details information for a task payload. See Task Details part. |
-| error | object | Error object containing error details and context when a task has a `failed` status. See https://github.com/meilisearch/specifications/pull/61|
- | duration | string | Total elapsed time the engine was in processing state expressed as an `ISO-8601` duration format. Times below the second can be expressed with the `.` notation, e.g., `PT0.5S` to express `500ms`. Default is set to `null`.   |
-| enqueuedAt | string | Represent the date and time as `RFC 3339` format when the task has been enqueued |
-| startedAt | string | Represent the date and time as `RFC 3339` format when the task has been dequeued and started to be processed. Default is set to `null`|
-| finishedAt | string | Represent the date and time as `RFC 3339` format when the task has `failed` or `succeeded`. Default is set to `null` |
+| field      | type    | description                                                                                                                                                                                                                   |
+|------------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| uid        | integer | Unique sequential identifier                                                                                                                                                                                                  |
+| indexUid   | string  | Unique index identifier                                                                                                                                                                                                       |
+| batchUid   | integer | Identify in which batch a task has been grouped by auto-batching. It corresponds to the first task uid grouped within a batch. See [auto-batching specification](0096-auto-batching.md)                                       |
+| status     | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`                                                                                                                                       |
+| type       | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `documentAddition`, `documentPartial`, `documentDeletion`, `settingsUpdate`, `clearAll`                                                |
+| details    | object  | Details information for a task payload. See Task Details part.                                                                                                                                                                |
+| error      | object  | Error object containing error details and context when a task has a `failed` status. See https://github.com/meilisearch/specifications/pull/61                                                                                |
+| duration   | string  | Total elapsed time the engine was in processing state expressed as an `ISO-8601` duration format. Times below the second can be expressed with the `.` notation, e.g., `PT0.5S` to express `500ms`. Default is set to `null`. |
+| enqueuedAt | string  | Represent the date and time as `RFC 3339` format when the task has been enqueued                                                                                                                                              |
+| startedAt  | string  | Represent the date and time as `RFC 3339` format when the task has been dequeued and started to be processed. Default is set to `null`                                                                                        |
+| finishedAt | string  | Represent the date and time as `RFC 3339` format when the task has `failed` or `succeeded`. Default is set to `null`                                                                                                          |
 
 > 💡 The order of the fields must be returned in this order.
 
 ##### Summarized `task` Object for `202 Accepted`
 
-| field      | type    | description                     |
-|------------|---------|---------------------------------|
-| taskUid    | integer | Unique sequential identifier |
-| indexUid   | string | Unique index identifier |
-| status     | string  | Status of the task. Value is `enqueued` |
-| enqueuedAt | string | Represent the date and time as `RFC 3339` format when the task has been enqueued |
+| field      | type    | description                                                                      |
+|------------|---------|----------------------------------------------------------------------------------|
+| taskUid    | integer | Unique sequential identifier                                                     |
+| indexUid   | string  | Unique index identifier                                                          |
+| status     | string  | Status of the task. Value is `enqueued`                                          |
+| enqueuedAt | string  | Represent the date and time as `RFC 3339` format when the task has been enqueued |
 
 
 > 💡 The order of the fields must be returned in this order.
@@ -93,16 +93,16 @@ The motivation is to stabilize the current `update` resource to a version that c
 
 #### 3. `type` field enum
 
-| old        | new           |
-|------------|---------------|
-|  -         | indexCreation |
-|  -         | indexUpdate   |
-|  -         | indexDeletion |
-| DocumentsAddition | documentAddition  |
-| DocumentsPartial | documentPartial  |
-| DocumentsDeletion  | documentDeletion |
-| Settings     | settingsUpdate |
-| ClearAll | clearAll |
+| old               | new              |
+|-------------------|------------------|
+| -                 | indexCreation    |
+| -                 | indexUpdate      |
+| -                 | indexDeletion    |
+| DocumentsAddition | documentAddition |
+| DocumentsPartial  | documentPartial  |
+| DocumentsDeletion | documentDeletion |
+| Settings          | settingsUpdate   |
+| ClearAll          | clearAll         |
 
 > 👍 Type values follow a `camelCase` naming convention.
 >
@@ -112,64 +112,64 @@ The motivation is to stabilize the current `update` resource to a version that c
 
 ##### documentAddition
 
-| name     | description |
-| -------- | --------    |
-| receivedDocuments | Number of documents received. |
+| name              | description                          |
+|-------------------|--------------------------------------|
+| receivedDocuments | Number of documents received.        |
 | indexedDocuments  | Number of documents finally indexed. |
 
 
 ##### documentPartial
 
-| name     | description |
-| -------- | --------    |
-| receivedDocuments | Number of documents received. |
+| name              | description                          |
+|-------------------|--------------------------------------|
+| receivedDocuments | Number of documents received.        |
 | indexedDocuments  | Number of documents finally indexed. |
 
 
 ##### documentDeletion
 
-| name     | description |
-| -------- | --------    |
-| receivedDocumentIds | Number of document ids received.  |
+| name                | description                          |
+|---------------------|--------------------------------------|
+| receivedDocumentIds | Number of document ids received.     |
 | deletedDocuments    | Number of documents finally deleted. |
 
 ##### indexCreation
 
-| name     | description |
-| -------- | --------    |
-| primaryKey  | Value for the `primaryKey` field into the POST index payload. `null` if no `primaryKey` has been specified at the time of the index creation. |
+| name       | description                                                                                                                                   |
+|------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| primaryKey | Value for the `primaryKey` field into the POST index payload. `null` if no `primaryKey` has been specified at the time of the index creation. |
 
 
 ##### indexUpdate
 
-| name     | description |
-| -------- | --------    |
+| name       | description                                                                                                                                |
+|------------|--------------------------------------------------------------------------------------------------------------------------------------------|
 | primaryKey | Value for the `primaryKey` field into the PUT index payload. `null` if no `primaryKey` has been specified at the time of the index update. |
 
 ##### indexDeletion
 
-| name     | description |
-| -------- | --------    |
-| deletedDocuments    | Number of deleted documents. Should be all documents contained in the deleted index. |
+| name             | description                                                                          |
+|------------------|--------------------------------------------------------------------------------------|
+| deletedDocuments | Number of deleted documents. Should be all documents contained in the deleted index. |
 
 ##### clearAll
 
-| name     | description |
-| -------- | --------    |
-| deletedDocuments    | Number of deleted documents. Should be all documents contained in the cleared index. |
+| name             | description                                                                          |
+|------------------|--------------------------------------------------------------------------------------|
+| deletedDocuments | Number of deleted documents. Should be all documents contained in the cleared index. |
 
 ##### settingsUpdate
 
-| name     | description |
-| -------- | --------    |
-| rankingRules     | `rankingRules` payload array |
+| name                 | description                          |
+|----------------------|--------------------------------------|
+| rankingRules         | `rankingRules` payload array         |
 | searchableAttributes | `searchableAttributes` payload array |
 | filterableAttributes | `filterableAttributes` payload array |
-| sortableAttributes | `sortableAttributes` payload array | 
-| stopWords | `stopWords` payload array |
-| synonyms  | `synonyms` payload object |
-| distinctAttribute | `distrinctAttribute` payload string |
-| displayedAttributes | `displayedAttributes` payload array |
+| sortableAttributes   | `sortableAttributes` payload array   |
+| stopWords            | `stopWords` payload array            |
+| synonyms             | `synonyms` payload object            |
+| distinctAttribute    | `distrinctAttribute` payload string  |
+| displayedAttributes  | `displayedAttributes` payload array  |
 
 #### 5. Examples
 
