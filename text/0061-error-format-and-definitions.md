@@ -122,6 +122,73 @@ HTTP Code: `400 Bad Request`
 
 ---
 
+## invalid_api_key_uid
+
+`Synchronous`
+
+### Context
+
+This error happens when the `uid` field for an `API Key` resource is invalid. The error may occur when the format given for the `uid` field is not valid or if an API key with this `uid` already exists.
+
+### Error Definition
+
+#### Variant: Sending an invalid uuid v4 format
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "`uid` field value `:value` is invalid. It should be a valid uuidv4 string or ommited.",
+    "code": "invalid_api_key_uid",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_api_key_uid"
+}
+```
+
+- The `:value` is inferred when the message is generated.
+
+#### Variant: Sending an `uid` that already exists
+
+HTTP Code: `409 Conflict`
+
+```json
+{
+    "message": "`uid` field value `:value` already exists for an API key.",
+    "code": "invalid_api_key_uid",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_api_key_uid"
+}
+```
+
+- The `:value` is inferred when the message is generated.
+
+---
+
+## invalid_api_key_name
+
+`Synchronous`
+
+### Context
+
+This error happens when the `name` field for an `API Key` resource is invalid.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "`name` field value `:value` is invalid. It should be a string or specified as a null value.",
+    "code": "invalid_api_key_name",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_api_key_name"
+}
+```
+
+- The `:value` is inferred when the message is generated.
+
+---
+
 ## invalid_api_key_description
 
 `Synchronous`
