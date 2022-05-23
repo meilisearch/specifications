@@ -42,7 +42,7 @@ At the first launch of Meilisearch with a master key, Meilisearch automatically 
 
 If the master key is removed at Meilisearch launch, the previously generated API keys no longer secure the Meilisearch instance.
 
-If Meilisearch is launched with the `production` value for the `MEILI_ENV` environment variable or the `--env` CLI option, a master key is mandatory. If the master key is omitted in that particular case, MeiliSearch launch is aborted and displays an error:
+If Meilisearch is launched with the `production` value for the `MEILI_ENV` environment variable or the `--env` CLI option, a master key is mandatory. If the master key is omitted in that particular case, Meilisearch launch is aborted and displays an error:
 
 `Error: In production mode, the environment variable MEILI_MASTER_KEY is mandatory`
 
@@ -58,7 +58,7 @@ The master key must be composed of valid utf-8 characters. It is advisable to en
 
 #### 3.2.3. Default API Keys
 
-The first time a Meilisearch is launched with a `master key`, Meilisearch will generate two API keys described below.
+The first time a Meilisearch instance is launched with a `master key`, Meilisearch will generate two API keys described below.
 
 If the user changes the value of the master key later, these two default keys are not created again but re-generated with a different `key` field. However, these two API keys can be updated/deleted using the `/keys` endpoints.
 
@@ -412,7 +412,7 @@ When the Meilisearch API is secured by the presence of a master key, the `Author
 
 An `uid` representing by a uuid v4 is generated if not specified at creation by the user.
 
-The final key is then a SHA-2556 hash made of the `uid` and the master key concatenation.
+The final key is then an SHA-256 hash made of the `uid` and the master key concatenation.
 
 `SHA-256(:uid, :master-key)` gives the final `key` field to use when authorizing requests.
 
