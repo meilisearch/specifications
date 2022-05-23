@@ -26,7 +26,7 @@ Meilisearch supports two types of synonym declarations.
 
 One-way association permits to declare one word to be synonymous with another, but not the other way around.
 
-***Request payload `POST`- `/indexes/proucts/settings/synonyms`***
+***Request payload `PUT`- `/indexes/proucts/settings/synonyms`***
 ```json
 {
     "phone": [
@@ -43,7 +43,7 @@ However, in the case of a search for `iphone`, documents containing `phone` will
 
 By associating one or more synonyms with each other, they will be considered the same in both directions.
 
-***Request payload `POST`- `/indexes/proucts/settings/synonyms`***
+***Request payload `PUT`- `/indexes/proucts/settings/synonyms`***
 ```json
 {
     "shoe": [
@@ -94,7 +94,7 @@ Fetch the `synonyms` setting of a Meilisearch index.
 
 - 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
-#### 3.3.2. `POST` - `indexes/:index_uid/settings/synonyms`
+#### 3.3.2. `PUT` - `indexes/:index_uid/settings/synonyms`
 
 Modify the `synonyms` setting of a Meilisearch index.
 
@@ -213,6 +213,5 @@ For example, although `League of Legends` and `LOL` can be synonymous, it will n
 
 ## 5. Future Possibilities
 
-- Replace `POST` HTTP verb with `PATCH`
 - Add dedicated error to avoid using generic `bad_request` error code
 - Automatically declare mutual association

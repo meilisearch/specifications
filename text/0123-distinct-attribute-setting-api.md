@@ -95,7 +95,7 @@ Fetch the `distinctAttribute` setting of a Meilisearch index.
 
 - 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
-#### 3.3.2. `POST` - `indexes/:index_uid/settings/distinct-attribute`
+#### 3.3.2. `PUT` - `indexes/:index_uid/settings/distinct-attribute`
 
 Modify the `distinctAttribute` setting of a Meilisearch index.
 
@@ -169,6 +169,5 @@ Modifying this index setting cause documents to be re-indexed.
 
 ## 5. Future Possibilities
 
-- Replace `POST` HTTP verb with `PATCH`
 - Add dedicated error to avoid using generic `bad_request` error code
 - Return an error when `distinctAttribute` is specified as an empty string

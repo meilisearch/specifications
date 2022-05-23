@@ -80,7 +80,7 @@ Manipulate indexes of a Meilisearch instance.
 - [3.2.1. `GET` - `indexes`](#321-get---indexes)
 - [3.2.2. `GET` - `indexes/:index_uid`](#322-get---indexesindexuid)
 - [3.2.3. `POST` - `indexes`](#323-post---indexes)
-- [3.2.4. `PUT` - `indexes/:index_uid`](#324-put---indexesindexuid)
+- [3.2.4. `PATCH` - `indexes/:index_uid`](#324-patch---indexesindexuid)
 - [3.2.5. `DELETE` - `indexes/:index_uid`](#325-delete---indexesindexuid)
 
 #### 3.2.1. `GET` - `indexes`
@@ -205,7 +205,7 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 When Meilisearch is secured by a master key, if the API Key used do not have the `indexes.create` action defined, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error in the related asynchronous `task` resource. See [3.2.2.2. Response Definition](#3222-response-definition).
 - 🔴 Sending a `uid` that already exists returns an [index_already_exists](0061-error-format-and-definitions.md#index_already_exists) error.
 
-#### 3.2.4. `PUT` - `indexes/:index_uid`
+#### 3.2.4. `PATCH` - `indexes/:index_uid`
 
 Updates an index.
 

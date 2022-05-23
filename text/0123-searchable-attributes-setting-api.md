@@ -21,7 +21,7 @@ By default, Meilisearch looks for matches in every field, but the `searchableAtt
 
 Suppose a database of movies with the following fields: `id`, `overview`, `genres`, `title`, `release_date`. These fields all contain useful information; however, some are more useful to search than others. To make the `id` and `release_date` fields non-searchable and re-order the remaining fields by importance, it can be specified in the following way.
 
-***Request payload `POST`- `/indexes/movies/settings/searchable-attributes`***
+***Request payload `PUT`- `/indexes/movies/settings/searchable-attributes`***
 ```json
 ["overview", "genres", "title"]
 ```
@@ -49,7 +49,7 @@ This default behavior is indicated by a `searchableAttributes` value of `["*"]`.
 
 To make some attributes non-searchable, or change the attribute ranking order. Attributes must be described from most important to least important.
 
-***Request payload `POST`- `/indexes/movies/settings/searchable-attributes`***
+***Request payload `PUT`- `/indexes/movies/settings/searchable-attributes`***
 ```json
 ["title", "overview", "genres"]
 ```
@@ -64,12 +64,11 @@ Manually updating `searchableAttributes` will change the displayed order of docu
 
 A document field that is not defined in the list of `searchableAttributes` will not be considered by the following ranking rules to match and rank search results.
 
-- [Words]()
-- [Typo]()
-- [Proximity]()
-- [Attribute]()
-- [Exactness](0036-exactness-criterion.md)
-
+1. [Words](0123-settings-api.md#3111-words-ranking-rule)
+2. [Typo](0123-settings-api.md#3112-typo-ranking-rule)
+3. [Proximity](0123-settings-api.md#3113-proximity-ranking-rule)
+4. [Attribute](0123-settings-api.md#3114-attribute-ranking-rule)
+6. [Exactness](0123-settings-api.md#3116-exactness-ranking-rule)
 
 ### 3.2. Global Settings API Endpoints Definition
 
@@ -94,7 +93,7 @@ Fetch the `searchableAttributes` setting of a Meilisearch index.
 
 - 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
-#### 3.3.2. `POST` - `indexes/:index_uid/settings/searchable-attributes`
+#### 3.3.2. `PUT` - `indexes/:index_uid/settings/searchable-attributes`
 
 Modify the `searchableAttributes` setting of a Meilisearch index.
 
@@ -170,7 +169,6 @@ Modifying this index setting cause documents to be re-indexed.
 
 ## 5. Future Possibilities
 
-- Replace `POST` HTTP verb with `PATCH`
 - Add dedicated error to avoid using generic `bad_request` error code
 - Return an error when `searchableAttributes` is defined as an empty array
 - Fix the reordering issue of document representation when `searchableAttributes` is specified.
