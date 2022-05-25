@@ -570,11 +570,11 @@ New task types are also added for these operations. `indexCreation`, `indexUpdat
 
 #### 9. Paginate `task` resource lists
 
-The API endpoints `/tasks` and `indexes/{indexUid}/tasks` are browsable using a cursor based pagination.
+The API endpoints `/tasks` and `indexes/{indexUid}/tasks` are browsable using a keyset based pagination.
 
-##### 9.1 Why a cursor based pagination?
+##### 9.1 Why a keyset based pagination?
 
-As seen in the [Rest API Format Convention](https://github.com/meilisearch/product/issues/44#issuecomment-895888679), cursor-based pagination is more appropriate when the data can grow or shrink quickly in terms of magnitude.
+Keyset-based pagination is more appropriate when the data can grow or shrink quickly in terms of magnitude.
 
 ###### 9.1.1 Pros
 
@@ -592,19 +592,19 @@ The main drawback of this type of pagination is that it does not navigate within
 
 | field | type | description                          |
 |-------|------|--------------------------------------|
-| limit | integer  | Default `30`. |
+| limit | integer  | Default `20`. |
 | after | integer - nullable  | Represents the query parameter to send to fetch the next slice of the results. The first item for the next slice starts at `after+1`. When the returned value is null, it means that all the data have been browsed in the given order. |
 
 ##### 9.3 GET query parameters
 
 | field | type | required | description  |
 |-------|------|----------|--------------|
-| limit | integer  | No       | Default `30`. Limit on the number of tasks to be returned, between `1` and `100`. |
+| limit | integer  | No       | Default `20`. Limit on the number of tasks to be returned. |
 | after | integer  | No       | Limit results to tasks with uids greater/lower than the specified uid. |
 
 ##### 9.4 Usage examples
 
-This part demonstrates cursor paging on `/tasks`, but it should be equivalent for `indexes/:uid/tasks`. Although the uids can be "holey" on the `/indexes/:uid/tasks` endpoint if several indexes are managed within the instance. The items uid remains sorted sequentially and can be used to navigate a list of `tasks` objects.
+This part demonstrates keyset paging in action on `/tasks`, but it should be equivalent for `indexes/:uid/tasks`. Although the uids can be "holey" on the `/indexes/:uid/tasks` endpoint if several indexes are managed within the instance. The items uid remains sorted sequentially and can be used to navigate a list of `tasks` objects.
 
 ---
 
@@ -693,7 +693,6 @@ This part demonstrates cursor paging on `/tasks`, but it should be equivalent fo
 ###### 9.5.1 `limit`
 
 - If `limit` is not set, the default value is chosen.
-- If `limit` is defined and that the given value is not between the minimum `1` and the maximum `100`, minimum and maximum value included, the default value `30` is chosen.
 - If `limit` is not an integer, the default value is chosen.
 
 ###### 9.5.2 `after`
