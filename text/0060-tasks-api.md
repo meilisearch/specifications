@@ -700,6 +700,5 @@ n/a
 
 - Use Hateoas capability to give direct access to a `task` resource.
 - Add dedicated task type names modifying a sub-setting. e.g. `SearchableAttributesUpdate`.
-- Reconsider existence of `/indexes/:indexUid/tasks/:taskUid` route since it is similar to `/tasks/:taskUid`.
 - Add an archived state for old `tasks`.
 - Indicate the `API Key` identity that added a `task`.
