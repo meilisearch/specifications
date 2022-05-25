@@ -283,7 +283,7 @@ components:
           indexUid: movies
           batchUid: 0
           status: succeeded
-          type: documentAddition
+          type: documentAdditionOrUpdate
           details:
             receivedDocuments: 10
             indexedDocuments: 10
@@ -314,30 +314,28 @@ components:
           type: string
           description: The type of the task
           enum:
-            - documentAddition
-            - documentPartial
+            - documentAdditionOrUpdate
             - documentDeletion
             - indexCreation
             - indexUpdate
             - indexDeletion
             - settingsUpdate
-            - clearAll
         details:
           type: object
           description: Details information of the task payload.
           properties:
             receivedDocuments:
               type: integer
-              description: Number of documents received for documentAddition or documentPartial task.
+              description: Number of documents received for documentAdditionOrUpdate task.
             indexedDocuments:
               type: integer
-              description: Number of documents finally indexed for documentAddition or documentPartial task or if batched, in the batchUid.
+              description: Number of documents finally indexed for documentAdditionOrUpdate task or if batched, in the batchUid.
             receivedDocumentsIds:
               type: integer
               description: Number of document ids received for documentDeletion task.
             deletedDocuments:
               type: integer
-              description: 'Number of documents finally deleted for documentDeletion, indexDeletion or clearAll task.'
+              description: 'Number of documents finally deleted for documentDeletion and indexDeletion tasks.'
             primaryKey:
               type: string
               description: Value for the primaryKey field encountered if any for indexCreation or indexUpdate task.
@@ -2840,7 +2838,7 @@ paths:
                         indexUid: movies
                         batchUid: 1
                         status: succeeded
-                        type: documentAddition
+                        type: documentAdditionOrUpdate
                         details:
                           receivedDocuments: 79000
                           indexedDocuments: 79000
@@ -2852,7 +2850,7 @@ paths:
                         indexUid: movies_Review
                         batchUid: 0
                         status: failed
-                        type: documentAddition
+                        type: documentAdditionOrUpdate
                         details:
                           receivedDocuments: 67493
                           indexedDocuments: 0
@@ -2897,7 +2895,7 @@ paths:
                     indexUid: movies
                     batchUid: 1
                     status: succeeded
-                    type: documentAddition
+                    type: documentAdditionOrUpdate
                     details:
                       receivedDocuments: 79000
                       indexedDocuments: 79000

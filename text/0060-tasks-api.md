@@ -4,43 +4,11 @@
 
 ### I. Summary
 
-The term `update` is not the best choice as it can be confused with document updates or `settings`. We have chosen to replace this term with `task`, which is more generic and better reflects the meaning of this API resource.
-
-As an additional change, we have reworked the format of an update to make it more in line with our expectations of an API that is supposed to be easily understandable and developer-oriented.
-
-Changing the format of `task` object lists makes adding more functionality in a future iteration easier. See the Future Possibilities section for a brief overview.
-
-The specification adds two new API endpoints. Although quite simple, they allow consulting the list of tasks or a specific task without being forced to know the related index.
-
-The specification makes any writing operation on an index asynchronous to serve consistency and facilitate future evolutions.
-
-#### Summary Key Points
-
-- The `update` resource is renamed `task`. The names of existing API routes are also changed to reflect this change.
-- Tasks are now also accessible as an independent resource of an index. `GET - /tasks`; `GET - /tasks/:taskUid`
-- The task `uid` is not incremented by index anymore. The sequence is generated globally.
-- A `task_not_found` error is introduced.
-- The format of the `task` object is updated.
-    - `updateId` becomes `uid`.
-    - Attributes of an error appearing in a `failed` `task` are now contained in a dedicated `error` object.
-    - `type` is no longer an object. It now becomes a string containing the values of its `name` field previously defined in the `type` object.
-    - The possible values for the `type` field are reworked to be more clear and consistent with our naming rules.
-    - A `details` object is added to contain specific information related to a `task` payload that was previously displayed in the `type` nested object.
-    - An `indexUid` field is added to give information about the related index on which the task is performed.
-    - `duration` format has been updated to express an `ISO 8601` duration.
-    - `processed` status changes to `succeeded`.
-    - `startedProcessingAt` is updated to `startedAt`.
-    - `processedAt` is updated to `finishedAt`.
-- `202 Accepted` requests previously returning an `updateId` are now returning a summarized `task` object.
-- `MEILI_MAX_UDB_SIZE` env var is updated `MEILI_MAX_TASK_DB_SIZE`.
-- `--max-udb-size` cli option is updated to `--max-task-db-size`.
-- `task` object lists are now returned under a `results` array.
-- Each operation on an index (creation, update, deletion) is now asynchronous and represented by a `task`.
-
+This specification describes the API endpoints for viewing asynchronous tasks.
 
 ### II. Motivation
 
-The motivation is to stabilize the current `update` resource to a version that conforms to our API convention, thus developing future evolutions on a more solid base. We want to modify the name `update`, the format is also changed because some attributes are not immediately explicit, either in the possible values or in the chosen names.
+As writing is asynchronous for most of Meilisearch's operations, this API makes it possible to track the progress of asynchronous tasks, to know and understand why a task failed and also serves as consulting the history of operations that happened.
 
 ### III. Explanation
 
@@ -54,11 +22,11 @@ The motivation is to stabilize the current `update` resource to a version that c
 |------------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | uid        | integer | Unique sequential identifier                                                                                                                                                                                                  |
 | indexUid   | string  | Unique index identifier                                                                                                                                                                                                       |
-| batchUid   | integer | Identify in which batch a task has been grouped by auto-batching. It corresponds to the first task uid grouped within a batch. See [auto-batching specification](0096-auto-batching.md)                                       |
+| batchUid   | integer | Identify in which batch a task has been grouped by auto-batching. It corresponds to the first task uid grouped within a batch. See [0096-auto-batching.md](0096-auto-batching.md)                                             |
 | status     | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`                                                                                                                                       |
-| type       | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `documentAddition`, `documentPartial`, `documentDeletion`, `settingsUpdate`, `clearAll`                                                |
+| type       | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `documentAdditionOrUpdate`, `documentDeletion`, `settingsUpdate`                                                                       |
 | details    | object  | Details information for a task payload. See Task Details part.                                                                                                                                                                |
-| error      | object  | Error object containing error details and context when a task has a `failed` status. See https://github.com/meilisearch/specifications/pull/61                                                                                |
+| error      | object  | Error object containing error details and context when a task has a `failed` status. See [0061-error-format-and-definitions.md](0061-error-format-and-definitions.md)                                                         |
 | duration   | string  | Total elapsed time the engine was in processing state expressed as an `ISO-8601` duration format. Times below the second can be expressed with the `.` notation, e.g., `PT0.5S` to express `500ms`. Default is set to `null`. |
 | enqueuedAt | string  | Represent the date and time as `RFC 3339` format when the task has been enqueued                                                                                                                                              |
 | startedAt  | string  | Represent the date and time as `RFC 3339` format when the task has been dequeued and started to be processed. Default is set to `null`                                                                                        |
@@ -82,49 +50,34 @@ The motivation is to stabilize the current `update` resource to a version that c
 
 #### 2. `status` field enum
 
-| old        | new           |
-|------------|---------------|
-| enqueued   | -             |
-| processing | -             |
-| processed  | **succeeded** |
-| failed     | -             |
-
-> 👍 Better semantic differentiation between `processing` and `processed`. The final status of a *processed* task is `succeeded` or `failed`.
+| label      |
+|------------|
+| enqueued   |
+| processing |
+| succeeded  |
+| failed     |
 
 #### 3. `type` field enum
 
-| old               | new              |
-|-------------------|------------------|
-| -                 | indexCreation    |
-| -                 | indexUpdate      |
-| -                 | indexDeletion    |
-| DocumentsAddition | documentAddition |
-| DocumentsPartial  | documentPartial  |
-| DocumentsDeletion | documentDeletion |
-| Settings          | settingsUpdate   |
-| ClearAll          | clearAll         |
+| label                    |
+|--------------------------|
+| indexCreation            |
+| indexUpdate              |
+| indexDeletion            |
+| documentAdditionOrUpdate |
+| documentDeletion         |
+| settingsUpdate           |
 
 > 👍 Type values follow a `camelCase` naming convention.
->
-> 💡 `Settings` is updated to be more precise with the name `settingsUpdate`.
 
 #### 4. `details` field object
 
-##### documentAddition
+##### documentAdditionOrUpdate
 
 | name              | description                          |
 |-------------------|--------------------------------------|
 | receivedDocuments | Number of documents received.        |
 | indexedDocuments  | Number of documents finally indexed. |
-
-
-##### documentPartial
-
-| name              | description                          |
-|-------------------|--------------------------------------|
-| receivedDocuments | Number of documents received.        |
-| indexedDocuments  | Number of documents finally indexed. |
-
 
 ##### documentDeletion
 
@@ -151,12 +104,6 @@ The motivation is to stabilize the current `update` resource to a version that c
 | name             | description                                                                          |
 |------------------|--------------------------------------------------------------------------------------|
 | deletedDocuments | Number of deleted documents. Should be all documents contained in the deleted index. |
-
-##### clearAll
-
-| name             | description                                                                          |
-|------------------|--------------------------------------------------------------------------------------|
-| deletedDocuments | Number of deleted documents. Should be all documents contained in the cleared index. |
 
 ##### settingsUpdate
 
@@ -316,7 +263,7 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
             "indexUid": "movies_reviews",
             "batchUid": 1,
             "status": "enqueued",
-            "type": "documentAddition",
+            "type": "documentAdditionOrUpdate",
             "duration": null,
             "enqueuedAt": "2021-08-12T10:00:00.000000Z",
             "startedProcessingAt": null,
@@ -327,7 +274,7 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
             "indexUid": "movies",
             "batchUid": 0,
             "status": "succeeded",
-            "type": "documentAddition",
+            "type": "documentAdditionOrUpdate",
             "details": {
                 "receivedDocuments": 100,
                 "indexedDocuments": 100
@@ -353,8 +300,10 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
 
 ##### Errors
 
-- 🔴 If a master key is configured on the server-side but missing from the client in the `X-MEILI-API-KEY` header, the API returns a `401 Unauthorized` - `missing_authorization_header` error.
-- 🔴 If a master key is sent by the client but does not match the value configured on the server-side, the API returns a `403 Forbidden` - `invalid_api_key`.
+The auth layer can return the following errors if Meilisearch is secured (a master-key is defined).
+
+- 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route with a key that does not have the required permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
 ---
 
@@ -372,7 +321,7 @@ Allows users to get a detailed `task` object retrieved by the `uid` field regard
     "indexUid": "movies",
     "batchUid": 1,
     "status": "enqueued",
-    "type": "documentAddition",
+    "type": "documentAdditionOrUpdate",
     "duration": null,
     "enqueuedAt": "2021-08-12T10:00:00.000000Z",
     "startedAt": null,
@@ -382,9 +331,12 @@ Allows users to get a detailed `task` object retrieved by the `uid` field regard
 
 ##### Errors
 
-- 🔴 If a master key is configured on the server-side but missing from the client in the `X-MEILI-API-KEY` header, the API returns a `401 Unauthorized` - `missing_authorization_header` error.
-- 🔴 If a master key is sent by the client but does not match the value configured on the server-side, the API returns a `403 Forbidden` - `invalid_api_key`.
 - 🔴 If the task does not exist, the API returns a `404 Not Found` - `task_not_found` error.
+
+The auth layer can return the following errors if Meilisearch is secured (a master-key is defined).
+
+- 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route with a key that does not have the required permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
 ---
 
@@ -409,84 +361,13 @@ HTTP Code: `404 Not Found`
 
 - The `:taskUid` is inferred when the message is generated.
 
-#### 7. `MEILI_MAX_UDB_SIZE` env var and `--max-udb-size` cli option
+#### 7. `MEILI_MAX_TASK_DB_SIZE` env var and `--max-task-db-size` CLI option
 
-As the notion of `update` no longer exists. The acronym `UDB` is changed by `TASK_DB`.
-
-- `MEILI_MAX_UDB_SIZE` env var is updated to `MEILI_MAX_TASK_DB_SIZE`.
-- `--max-udb-size` cli option is updated to `--max-task-db-size`.
+See [0119-instance-options](0119-instance-options.md##3312-max-taskdb-size)
 
 #### 8. Asynchronous Write Operations on Index resource
 
-To consolidate the writing behavior between an index and document modifications, configuration changes of settings, the creation, modification, and deletion of an index resource are now asynchronous.
-
-Initially, the index creation, update, and deletion operations were synchronous, which could cause problems like race conditions.
-
-For example, when updating documents on an index while an index is being deleted synchronously in parallel. It also improves the consistency for the understanding of writes within a MeiliSearch index among an identical behavior.
-
-This structure allows us to facilitate communications and write propagations in a high availability context in the future.
-
-The main change in the API is that the routes response described below now becomes a `202 Accepted` response with the summarized task response payload.
-
-Errors are now part of the `task` as for other asynchronous operations.
-
-New task types are also added for these operations. `indexCreation`, `indexUpdate`, and `indexDeletion`.
-
-**Create an index** | `POST` - `/indexes`
-
-```json
-{
-    "uid": "movies"
-}
-```
-
-`202` - Accepted Response body
-
-```json
-{
-    "taskUid": 0,
-    "indexUid": "movies",
-    "status": "enqueued",
-    "type": "indexCreation",
-    "enqueuedAt": "2021-08-12T10:00:00.000000Z"
-}
-```
-
-- 💡 Automatic index creation using the `/indexes/:indexToCreate/documents` route generates only one `documentAdditions` task that also handles index creation.
-
-**Update an index** | `PUT` - `/indexes/:indexUid`
-
-```json
-{
-    "primaryKey": "uid"
-}
-```
-
-`202` - Accepted Response body
-
-```json
-{
-    "taskUid": 1,
-    "indexUid": "movies",
-    "status": "enqueued",
-    "type": "indexUpdate",
-    "enqueuedAt": "2021-08-12T10:00:00.000000Z"
-}
-```
-
-**Delete an index** | `DELETE` - `/indexes/:indexUid`
-
-`202` - Accepted Response body
-
-```json
-{
-    "taskUid": 1,
-    "indexUid": "movies",
-    "status": "enqueued",
-    "type": "indexDeletion",
-    "enqueuedAt": "2021-08-12T10:00:00.000000Z"
-}
-```
+- 💡 Automatic index creation using the `/indexes/:indexToCreate/documents` route generates a `documentAdditionOrUpdate` task that also handles index creation.
 
 #### 9. Paginate `task` resource lists
 
@@ -539,14 +420,14 @@ This part demonstrates keyset paging in action on `/tasks`. The items `uid` rema
         {
             "uid": 1350,
             "indexUid": "movies",
-            "type": "documentAddition",
+            "type": "documentAdditionOrUpdate",
             ...,
         },
         ...,
         {
             "uid": 1330,
             "indexUid": "movies_reviews",
-            "type": "documentAddition",
+            "type": "documentAdditionOrUpdate",
             ...,
         }
     ],
@@ -566,7 +447,7 @@ This part demonstrates keyset paging in action on `/tasks`. The items `uid` rema
         {
             "uid": 1329,
             "indexUid": "movies",
-            "type": "documentAddition",
+            "type": "documentAdditionOrUpdate",
             ...,
         },
         ...,
@@ -593,14 +474,14 @@ This part demonstrates keyset paging in action on `/tasks`. The items `uid` rema
         {
             "uid": 19,
             "indexUid": "movies",
-            "type": "documentsAddition",
+            "type": "documentsAdditionOrUdpdate",
             ...,
         },
         ...,
         {
             "uid": 0,
             "indexUid": "movies",
-            "type": "documentsAddition",
+            "type": "documentsAdditionOrUpdate",
             ...,
         }
     ],
@@ -817,7 +698,6 @@ n/a
 
 ## 3. Future Possibilities
 
-- Simplify `documentAddition` and `documentPartial` type and elaborate on `details` metadata.
 - Use Hateoas capability to give direct access to a `task` resource.
 - Add dedicated task type names modifying a sub-setting. e.g. `SearchableAttributesUpdate`.
 - Reconsider existence of `/indexes/:indexUid/tasks/:taskUid` route since it is similar to `/tasks/:taskUid`.
