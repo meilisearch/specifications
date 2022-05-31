@@ -198,7 +198,7 @@ A document represented as a JSON object.
 
 - 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 - 🔴 If the requested `document_id` does not exist, the API returns an [document_not_found](0061-error-format-and-definitions.md#document_not_found) error.
-- 🔴 Sending a value with a different type than `String` or `null` for `attributesToRetrieve` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `String` or `null` for `fields` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 #### 3.1.3. `POST` - `indexes/:index_uid/documents`
 
