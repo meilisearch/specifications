@@ -149,6 +149,32 @@ Unique identifier of an index.
 
 Unique identifier of a document.
 
+##### 3.1.1.2. Query Parameters
+
+| Field                    | Type                     | Required |
+|--------------------------|--------------------------|----------|
+| `fields`                 | String / `null`          | false    |
+
+
+###### 3.1.1.2.1. `fields`
+
+- Type: String
+- Required: False
+- Default: `*`
+
+Configures which attributes will be retrieved in the returned documents.
+
+If `fields` is not specified, all attributes from the documents are returned in the response. It's equivalent to `fields=*`.
+
+- Sending `fields` without specifying a value, returns empty documents ressources. `fields=`.
+- Sending `fields` with a non-existent field as part of the value will not return an error, the non-existent field will not be displayed.
+
+> `fields` values are case-sensitive.
+
+> Specified fields have to be separated by a comma. e.g. `&fields=title,description`
+
+> The index setting `displayedAttributes` has no impact on this endpoint.
+
 ##### 3.1.2.1. Request Payload Definition
 N/A
 
@@ -172,6 +198,7 @@ A document represented as a JSON object.
 
 - 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 - 🔴 If the requested `document_id` does not exist, the API returns an [document_not_found](0061-error-format-and-definitions.md#document_not_found) error.
+- 🔴 Sending a value with a different type than `String` or `null` for `attributesToRetrieve` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 #### 3.1.3. `POST` - `indexes/:index_uid/documents`
 
