@@ -136,7 +136,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:fieldName` cannot be modified for the given resource.",
+    "message": "The `:fieldName` field cannot be modified for the given resource.",
     "code": "immutable_field",
     "type": "invalid_request",
     "link":"https://docs.meilisearch.com/errors#immutable_field"
