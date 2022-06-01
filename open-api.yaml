@@ -593,6 +593,10 @@ components:
               - stats.get
               - dumps.create
               - version
+              - keys.get
+              - keys.create
+              - keys.update
+              - keys.delete
         indexes:
           type: array
           description: 'A list of accesible indexes permitted for the key. ["*"] for all indexes.'
