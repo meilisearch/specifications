@@ -122,6 +122,31 @@ HTTP Code: `400 Bad Request`
 
 ---
 
+## immutable_field
+
+`Synchronous` / `Asynchronous`
+
+### Context
+
+This error happens when an immutable field is given in a payload dedicated to modify a resource.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "`:fieldName` cannot be modified for the given resource.",
+    "code": "immutable_field",
+    "type": "invalid_request",
+    "link":"https://docs.meilisearch.com/errors#immutable_field"
+}
+```
+
+- The `:fieldName` is inferred when the message is generated.
+
+--
+
 ## api_key_already_exists
 
 `Synchronous`

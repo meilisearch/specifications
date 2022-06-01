@@ -76,14 +76,14 @@ Meilisearch needs information within the tenant token to check its validity and 
 
 | Fields   | Required   | Description | Comments |
 | -------- |----------- | ----------- | -------- |
-| `apiKeyPrefix` (Custom claim) | Required  | Must contain the first 8 characters of the signing `Meilisearch API key` used to generate the JWT | |
+| `apiKeyUid` (Custom claim) | Required  | Must contain the `uid` field value of the signing `Meilisearch API key` used to generate the JWT | |
 | `exp` (Expiration Time claim) | Optional  | A JSON numeric value representing the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time. | If the signing API key expires, the Tenant Token also expires. Thus said, the `exp` can't be greater than the expiration date of the signing API key. |
 
-###### 3.2.2.1.1. `apiKeyPrefix` field
+###### 3.2.2.1.1. `apiKeyUid` field
 
-`apiKeyPrefix` permits to verify that the signing API key of the Token is known and valid within Meilisearch. It must contain the first 8 characters of the Meilisearch API key that generates and signs the Tenant Token.
+`apiKeyUid` permits to verify that the signing API key of the Token is known and valid within Meilisearch. It must contain the `uid` field value of the Meilisearch API key that generates and signs the Tenant Token.
 
-The `apiKeyPrefix` can't be generated from a master key, and the `API Key` must have the `search` action defined.
+The `apiKeyUid` can't be generated from the master key, and the `API Key` must have the `search` action defined to generate a usable tenant token.
 
 ###### 3.2.2.1.2. `exp` field
 
@@ -235,7 +235,7 @@ e.g. `Meilisearch API key: rkDxFUHd02193e120218f72cc51a9db62729fdb4003e271f960d1
 
 ```jsonc
 {
-    "apiKeyPrefix": "rkDxFUHd", // The first 8 characters of the signing Meilisearch API Key
+    "apiKeyUid": "f0ec9882-0184-4303-89f0-d4c4d6912bcf", // The uid field value of the signing Meilisearch API Key
     "exp": 1641835850, // An expiration date in seconds from 1970-01-01T00:00:00Z UTC
     "searchRules": { // The searchRules Json Object definition
         "*": {
