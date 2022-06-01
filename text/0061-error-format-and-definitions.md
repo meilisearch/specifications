@@ -136,7 +136,7 @@ HTTP Code: `409 Conflict`
 
 ```json
 {
-    "message": "`uid` field value `:value` already exists for an API key.",
+    "message": "`uid` field value `:value` is already an existing API key.",
     "code": "api_key_already_exists",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#api_key_already_exists"
@@ -160,7 +160,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`uid` field value `:value` is invalid. It should be a valid uuidv4 string or ommited.",
+    "message": "`uid` field value `:value` is invalid. It should be a valid UUID v4 string or omitted.",
     "code": "invalid_api_key_uid",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_api_key_uid"
