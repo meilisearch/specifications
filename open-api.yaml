@@ -29,10 +29,14 @@ components:
       type: integer
       description: Limit given for the query. If limit is not provided as a query parameter, this parameter displays the default limit value.
       example: 10
-    after:
+    from:
       type: integer
-      description: Represents identifier to fetch the next slice of the results. The first item identifier for the next slice starts at `after+1`.
+      description: The first task uid returned.
       example: 999
+    next:
+      type: integer
+      description: Represents the value to send in `from` to fetch the next slice of the results. The first item for the next slice starts at this exact number. When the returned value is null, it means that all the data have been browsed in the given order.
+      example: 989
     timestamp:
       type: string
       description: An `RFC 3339` format for date/time/duration.
@@ -699,6 +703,12 @@ components:
       schema:
         type: number
         default: 0
+    from:
+      name: from
+      in: query
+      description: Fetch the next set of results from the given uid.
+      schema:
+        type: number
     q:
       name: q
       in: query
@@ -2892,12 +2902,15 @@ paths:
                       $ref: '#/components/schemas/task'
                   limit:
                     $ref: '#/components/schemas/limit'
-                  after:
-                    $ref: '#/components/schemas/after'
+                  from:
+                    $ref: '#/components/schemas/from'
+                  next:
+                    $ref: '#/components/schemas/next'
                 required:
                   - results
                   - limit
-                  - after
+                  - from
+                  - next
               examples:
                 Example:
                   value:
@@ -2932,9 +2945,12 @@ paths:
                         startedAt: '2021-01-01T09:38:02.000000Z'
                         finishedAt: '2021-01-01T09:38:07.000000Z'
                     limit: 2
-                    after: null
+                    from: 1
+                    next: null
       operationId: tasks.list
-      parameters: []
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/from'
       security:
         - apiKey: []
   '/tasks/:taskUid':

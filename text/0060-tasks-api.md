@@ -572,7 +572,7 @@ New task types are also added for these operations. `indexCreation`, `indexUpdat
 
 The API endpoints `/tasks` and `indexes/{indexUid}/tasks` are browsable using a keyset based pagination.
 
-##### 9.1 Why a keyset based pagination?
+##### 9.1 Why a Seek/Keyset based pagination?
 
 Keyset-based pagination is more appropriate when the data can grow or shrink quickly in terms of magnitude.
 
@@ -580,7 +580,7 @@ Keyset-based pagination is more appropriate when the data can grow or shrink qui
 
 The performance is better than the not-so-good but old pagination with `offset`/`limit`.
 
-Cursor pagination keeps the results consistent between each page as the data evolves. It avoids the [Page Drift effect](https://use-the-index-luke.com/sql/partial-results/fetch-next-page), especially when the data is sorted from the most recent to the oldest.
+Seek/Keyset pagination keeps the results consistent between each page as the data evolves. It avoids the [Page Drift effect](https://use-the-index-luke.com/sql/partial-results/fetch-next-page), especially when the data is sorted from the most recent to the oldest.
 
 Moreover, the performance is superior to traditional pagination since the computational complexity remains constant to reach the identifier marking the beginning of the new slice to be returned from a hash table.
 
@@ -594,7 +594,7 @@ The main drawback of this type of pagination is that it does not navigate within
 |-------|------|--------------------------------------|
 | limit | integer  | Default `20`. |
 | from | integer | The first task uid returned |
-| next | integer - nullable  | Represents the query parameter to send to fetch the next slice of the results. The first item for the next slice starts at this exact number. When the returned value is null, it means that all the data have been browsed in the given order. |
+| next | integer - nullable  | Represents the value to send in `from` to fetch the next slice of the results. The first item for the next slice starts at this exact number. When the returned value is null, it means that all the data have been browsed in the given order. |
 
 ##### 9.3 GET query parameters
 
@@ -663,7 +663,7 @@ This part demonstrates keyset paging in action on `/tasks`, but it should be equ
 }
 ```
 
-**End of cursor pagination**
+**End of seek/keyset pagination**
 
 `GET` - `/tasks?from=20`
 
@@ -701,6 +701,11 @@ This part demonstrates keyset paging in action on `/tasks`, but it should be equ
 ###### 9.5.2 `from`
 
 - If `from` is set with an out of bounds task `uid`, the response returns the tasks that are the nearest to the specified uid, the `next` field is set to the next page. It will be equivalent to call the `/tasks` route without any parameter.
+
+###### 9.5.3 Errors
+
+- 🔴 Sending a value with a different type than `Integer` for `limit` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Integer` for `from` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 ## 2. Technical details
 
