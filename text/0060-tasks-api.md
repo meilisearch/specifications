@@ -593,14 +593,15 @@ The main drawback of this type of pagination is that it does not navigate within
 | field | type | description                          |
 |-------|------|--------------------------------------|
 | limit | integer  | Default `20`. |
-| after | integer - nullable  | Represents the query parameter to send to fetch the next slice of the results. The first item for the next slice starts at `after+1`. When the returned value is null, it means that all the data have been browsed in the given order. |
+| from | integer | The first task uid returned |
+| next | integer - nullable  | Represents the query parameter to send to fetch the next slice of the results. The first item for the next slice starts at this exact number. When the returned value is null, it means that all the data have been browsed in the given order. |
 
 ##### 9.3 GET query parameters
 
 | field | type | required | description  |
 |-------|------|----------|--------------|
 | limit | integer  | No       | Default `20`. Limit on the number of tasks to be returned. |
-| after | integer  | No       | Limit results to tasks with uids greater/lower than the specified uid. |
+| from | integer  | No       | Limit results to tasks with uids equal to and lower than this uid. |
 
 ##### 9.4 Usage examples
 
@@ -630,13 +631,14 @@ This part demonstrates keyset paging in action on `/tasks`, but it should be equ
         }
     ],
     "limit": 20,
-    "after": 1330
+    "from": 1350,
+    "next": 1329
 }
 ```
 
 **Request the next slice of `tasks` items with a limit of `50` tasks**
 
-`GET` - `/tasks?after=1330&limit=50`
+`GET` - `/tasks?from=1329&limit=50`
 
 ```json
 {
@@ -656,13 +658,14 @@ This part demonstrates keyset paging in action on `/tasks`, but it should be equ
         }
     ],
     "limit": 50,
-    "after": 1279
+    "from": 1329,
+    "next": 1278
 }
 ```
 
 **End of cursor pagination**
 
-`GET` - `/tasks?after=20`
+`GET` - `/tasks?from=20`
 
 ```json
 {
@@ -681,23 +684,23 @@ This part demonstrates keyset paging in action on `/tasks`, but it should be equ
             ...,
         }
     ],
-    "limit": 10,
-    "after": null
+    "limit": 20,
+    "from": 20,
+    "next": null
 }
 ```
 
-- 💡 `after` response parameter is null because there are no more `tasks` to fetch. It means that the response represents the last slice of results for the given resource list.
+- 💡 `next` response parameter is null because there are no more `tasks` to fetch. It means that the response represents the last slice of results for the given resource list.
 
-##### 9.5 Behaviors for `limit` and `after` query parameters
+##### 9.5 Behaviors for `limit` and `from` query parameters
 
 ###### 9.5.1 `limit`
 
 - If `limit` is not set, the default value is chosen.
-- If `limit` is not an integer, the default value is chosen.
 
-###### 9.5.2 `after`
+###### 9.5.2 `from`
 
-- If `after` is set with an out of bounds task `uid`, the response returns an empty `results` array and `after` is set to `null`.
+- If `from` is set with an out of bounds task `uid`, the response returns the tasks that are the nearest to the specified uid, the `next` field is set to the next page. It will be equivalent to call the `/tasks` route without any parameter.
 
 ## 2. Technical details
 
