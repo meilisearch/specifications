@@ -128,7 +128,7 @@ The following table describes which version of the dump correspond to which vers
 | `v1`         | `v0.20.0` and below                  | `v3`                               |
 | `v2`         | `v0.21.0` and `v0.21.1`              | `v5`                               |
 | `v3`         | From `v0.22.0` to `v0.24.0` included | `v5`                               |
-| `v4`         | From `v0.25.0` to `v0.27.1` included | `v5`                               |
+| `v4`         | From `v0.25.0` to `v0.27.2` included | `v5`                               |
 | `v5`         | `v0.28.0` and later                  | -                                  |
 
 What does "Highest compatibility dump version" means?
