@@ -1741,6 +1741,10 @@ paths:
                     $ref: '#/components/schemas/sortableAttributes'
                   typoTolerance:
                     $ref: '#/components/schemas/typoTolerance'
+                  pagination:
+                    $ref: '#/components/schemas/pagination'
+                  faceting:
+                    $ref: '#/components/schemas/faceting'
                 required:
                   - rankingRules
                   - distinctAttribute
@@ -1751,6 +1755,8 @@ paths:
                   - filterableAttributes
                   - sortableAttributes
                   - typoTolerance
+                  - pagination
+                  - faceting
               examples:
                 Example:
                   value:
@@ -1802,6 +1808,10 @@ paths:
                       minWordSizeForTypos:
                         oneTypo: 4
                         twoTypos: 8
+                    pagination:
+                      limitedTo: 1000
+                    faceting:
+                      maxValuesPerFacet: 100
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -1847,6 +1857,10 @@ paths:
                   $ref: '#/components/schemas/sortableAttributes'
                 typoTolerance:
                   $ref: '#/components/schemas/typoTolerance'
+                pagination:
+                  $ref: '#/components/schemas/pagination'
+                faceting:
+                  $ref: '#/components/schemas/faceting'
             examples:
               Example:
                 value:
@@ -1893,6 +1907,10 @@ paths:
                     minWordSizeForTypos:
                       oneTypo: 4
                       twoTypos: 8
+                  pagination:
+                    limitedTo: 1000
+                  faceting:
+                    maxValuesPerFacet: 100
       responses:
         '202':
           $ref: '#/components/responses/202'
