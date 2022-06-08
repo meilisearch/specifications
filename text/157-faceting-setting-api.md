@@ -26,7 +26,7 @@ This settings will host the parameters to configure the faceting behavior for an
 
 Define maximum number of value returned for a distributed facet.
 
-e.g. This means that with the default value of `100`, it is not possible to have `101` colors if the color field is defined as a facet at search time.
+e.g. It means that with the default value of `100`, it is not possible to have `101` colors if the color field is defined as a facet at search time.
 
 The value of 100 ensures good performance and prevents malicious users from scraping data from a Meilisearch instance.
 

@@ -24,9 +24,9 @@ This settings will host the parameters to configure the paging behavior for an i
 - Required: False
 - Default: `1000`
 
-Define maximum number of documents reachable for a search request.
+Define the maximum number of documents reachable for a search request.
 
-e.g. This means that with the default value of `1000`, it is not possible to see the 1001st result for a **search query**.
+e.g. It means that with the default value of `1000`, it is not possible to see the `1001`st result for a **search query**.
 
 The value of 1000 ensures good performance and prevents malicious users from scraping documents from a Meilisearch instance.
 
