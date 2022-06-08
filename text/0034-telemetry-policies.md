@@ -372,7 +372,7 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| pagination.max_values_per_facet | The defined value for `maxValuesPerFacet` property | `100` |
+| faceting.max_values_per_facet | The defined value for `maxValuesPerFacet` property | `100` |
 
 ## `Dump Created`
 
