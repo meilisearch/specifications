@@ -32,6 +32,8 @@ The value of 100 ensures good performance and prevents malicious users from scra
 
 Increasing this value can degrade performance as well as expose the data of an instance to scrapping.
 
+The facets that are returned are not specified, they are not sorted in a particular way.
+
 ## 3.2. API Endpoints Definition
 
 ### 3.2.1. Global Settings API Endpoints Definition
