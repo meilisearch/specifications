@@ -605,7 +605,7 @@ The main drawback of this type of pagination is that it does not navigate within
 
 ##### 9.4 Usage examples
 
-This part demonstrates keyset paging in action on `/tasks`, but it should be equivalent for `indexes/:uid/tasks`. Although the uids can be "holey" on the `/indexes/:uid/tasks` endpoint if several indexes are managed within the instance. The items uid remains sorted sequentially and can be used to navigate a list of `tasks` objects.
+This part demonstrates keyset paging in action on `/tasks`. The items `uid` remains sorted sequentially and can be used to navigate a list of `tasks` objects.
 
 ---
 
