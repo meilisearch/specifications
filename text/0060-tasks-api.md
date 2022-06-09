@@ -570,7 +570,7 @@ New task types are also added for these operations. `indexCreation`, `indexUpdat
 
 #### 9. Paginate `task` resource lists
 
-The API endpoints `/tasks` and `indexes/{indexUid}/tasks` are browsable using a keyset based pagination.
+The API endpoint `/tasks` is browsable using a keyset-based pagination.
 
 ##### 9.1 Why a Seek/Keyset based pagination?
 
