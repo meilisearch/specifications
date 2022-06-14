@@ -41,6 +41,7 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 | taskUid    | integer | Unique sequential identifier                                                     |
 | indexUid   | string  | Unique index identifier                                                          |
 | status     | string  | Status of the task. Value is `enqueued`                                          |
+| type       | string  | Type of the task.                                                                |
 | enqueuedAt | string  | Represent the date and time as `RFC 3339` format when the task has been enqueued |
 
 
@@ -238,7 +239,7 @@ e.g. A summarized `task` object in a `202 Accepted` HTTP response returned at in
     "taskUid": 0,
     "indexUid": "movies",
     "status": "enqueued",
-    "type": "createIndex",
+    "type": "indexCreation",
     "enqueuedAt": "2021-08-11T09:25:53.000000Z"
 }
 ```

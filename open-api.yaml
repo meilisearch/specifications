@@ -875,6 +875,10 @@ components:
                 type: string
                 description: The status of the task
                 example: enqueued
+              type:
+                type: string
+                description: The type of the task
+                example: indexCreation
               enqueuedAt:
                 $ref: '#/components/schemas/timestamp'
                 description: Represent the date and time as `RFC 3339` format when the task has been enqueued
