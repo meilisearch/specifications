@@ -21,10 +21,10 @@ To make Meilisearch more reliable for teams and more adapted to production cases
 
 #### 3.2.1 Summary Key Points
 
-- API keys management is restricted to the master key or API keys having `keys.get`, `keys.create`, `keys.update`, `keys.delete` actions.
+- API keys management is restricted to the master key or API keys having `keys.get`, `keys.create`, `keys.update`, `keys.delete` or `*` actions.
 - API keys must be provided via the `Authorization` header using the bearer method to authorize a request.
 - The value of the `key` field of an API Key is generated from its `uid` and the master key.
-- When a master key is set at Meilisearch first-launch, it generate two pre-configured default `API Key` resources. A `Default Search API Key` authorizing the search action on all indexes and a `Default Admin API Key` authorizing all actions on all indexes (except managing `/keys` resource).
+- When a master key is set at Meilisearch first-launch, it generate two pre-configured default `API Key` resources. A `Default Search API Key` authorizing the search action on all indexes and a `Default Admin API Key` authorizing all actions.
 - If the master-key changes, the `key` field is re-generated.
 - Default API keys can be modified/deleted from the `/keys` endpoints but are not re-created if Meilisearch has already created them.
 - API keys can have restrictions on which methods can be accessed via an `actions` list; they also `expiresAt` a specific date time and are restricted to a specific set of `indexes`.
@@ -89,7 +89,7 @@ Here is how the `Default Search API Key` is represented after its generation.
 
 ##### 3.2.3.2. Default Admin API Key
 
-The `Default Admin API key` gives access to all actions on all indexes except managing the API Keys.
+The `Default Admin API key` gives access to all actions by default.
 
 Here is how the `Default Admin API Key` is represented after its generation.
 
