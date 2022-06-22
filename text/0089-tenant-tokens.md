@@ -68,6 +68,8 @@ e.g. With `HS256`
 }
 ```
 
+The secret key that is used to encrypt the JWT token must be the original API Key value (not the UID).
+
 #### 3.2.2. Payload: Data
 
 Meilisearch needs information within the tenant token to check its validity and use it to authorize and perform end-user search requests.
