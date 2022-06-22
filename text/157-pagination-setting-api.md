@@ -16,9 +16,9 @@ This settings will host the parameters to configure the paging behavior for an i
 
 | Field                                            | Type            | Required |
 |--------------------------------------------------|-----------------|----------|
-| [limitedTo](#311-limitedTo)                      | Integer         | False    |
+| [maxTotalHits](#311-maxTotalHits)                      | Integer         | False    |
 
-#### 3.1.1. `limitedTo`
+#### 3.1.1. `maxTotalHits`
 
 - Type: Integer
 - Required: False
@@ -52,7 +52,7 @@ Allow fetching the current definition of the pagination setting for an index.
 
 ```json
     {
-        "limitedTo": 1000
+        "maxTotalHits": 1000
     }
 ```
 
@@ -70,7 +70,7 @@ Request payload
 
 ```json
 {
-    "limitedTo": 500
+    "maxTotalHits": 500
 }
 ```
 
@@ -99,7 +99,7 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
-- 🔴 Sending a value with a different type than `Integer` for the `limitedTo` field returns an [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Integer` for the `maxTotalHits` field returns an [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 ###### 3.2.2.2.2.1. Async Errors
 
