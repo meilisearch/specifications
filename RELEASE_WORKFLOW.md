@@ -15,17 +15,17 @@ This repository uses a system similar to git-flow and has 4 types of branches.
 
 - Create a `release-v{X.X}` branch starting from an up-to-date `main`.
 
-### Insert a change to a release.
+### Insert a change to a release
 
 - Merge squash the pull-request modifying/adding a specification in `develop`, if it has not been done earlier.
 - Move to the `release-v{X.X}` branch and cherry pick the previous commit created during the merge squash operation.
 
-### Release a release
+### Ship a release
 
 - Merge squash the `release-v{X.X}` branch pull-request into `main`.
 - Pull `main` into `develop`.
 
-### Rebase current work branch to develop
+### Rebase current work branches on develop
 
 - Move to the given `branch_name`
 - `git pull origin branch_name`
