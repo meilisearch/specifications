@@ -1,4 +1,4 @@
-# Specification Git Workflow Management Guide
+# Release Workflow
 
 This repository uses a system similar to git-flow and has 4 types of branches.
 
