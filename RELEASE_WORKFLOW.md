@@ -9,7 +9,7 @@ This repository uses a system similar to git-flow and has 4 types of branches.
 
 ## Add/Change a specification
 
-- Create a new branch starting from an up-to-date develop.
+- Create a new branch starting from the up-to-date `develop` branch.
 
 ## Release Process
 
