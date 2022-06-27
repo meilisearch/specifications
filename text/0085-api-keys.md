@@ -98,7 +98,7 @@ Here is how the `Default Admin API Key` is represented after its generation.
     "uid": "ac06a7e1-6956-4699-bb04-dbeb72a231df", //auto-generated value
     "key": "380689dd379232519a54d15935750cc7625620a2ea2fc06907cb40ba5b421b6f", //auto-generated value
     "name": "Default Admin API Key",
-    "description": "Use it for all other than search operations. Caution! Do not expose it on a public frontend",
+    "description": "Use it for anything that is not a search operation. Caution! Do not expose it on a public frontend",
     "actions": [
         "*"
     ],
