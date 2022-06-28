@@ -24,15 +24,15 @@ This settings will host the parameters to configure the faceting behavior for an
 - Required: False
 - Default: `100`
 
-Define maximum number of value returned for a distributed facet.
+Define maximum number of value returned for all distributed facets.
 
-e.g. It means that with the default value of `100`, it is not possible to have `101` colors if the color field is defined as a facet at search time.
+e.g. It means that with the default value of `100`, it is not possible to have `101` different colors if the `color` field is defined as a facet at search time.
 
 The value of 100 ensures good performance and prevents malicious users from scraping data from a Meilisearch instance.
 
 Increasing this value can degrade performance as well as expose the data of an instance to scrapping.
 
-The facets that are returned are not specified, they are not sorted in a particular way.
+The facets that are returned are sorted in ascending lexicographical order.
 
 ## 3.2. API Endpoints Definition
 
