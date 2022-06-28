@@ -349,9 +349,9 @@ See [API Key Resource Representation](#3241-api-key-resource-representation) sec
 - 🔴 Sending an invalid value for the `name` field returns an [invalid_api_key_name](0061-error-format-and-definitions.md#invalid_api_key_name) error.
 - 🔴 Sending an invalid value for the `description` field returns an [invalid_api_key_description](0061-error-format-and-definitions.md#invalid_api_key_description) error.
 
-##### 3.2.4.5. `PATCH` - `/keys/:uid`
+##### 3.2.4.5. `PATCH` - `/keys/:uid_or_key`
 
-Update an API key found by its `uid`. Only the `name` and `description` fields of an API key can be modified.
+Update an API key found by it's `uid` or `key` field. Only the `name` and `description` fields of an API key can be modified.
 
 ###### 3.2.4.5.1. Payload Definition
 
@@ -382,9 +382,9 @@ See [API Key Resource Representation](#3241-api-key-resource-representation) sec
 - 🔴 Sending `uid`, `key`, `actions`, `indexes`, `expiresAt`, `createdAt`, `updatedAt` in the payload request returns an [immutable_field](0061-error-format-and-definitions.md#immutable_field) error.
 
 
-##### 3.2.4.6. `DELETE` - `/keys/:uid`
+##### 3.2.4.6. `DELETE` - `/keys/:uid_or_key`
 
-Delete an API key found by its `uid`.
+Delete an API key found by it's `uid` or `key` field.
 
 ###### 3.2.4.6.1. Payload Definition
 n/a

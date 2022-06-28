@@ -2651,44 +2651,45 @@ paths:
                   indexes:
                     - products
                   expiresAt: '2021-11-13T00:00:00Z'
-  '/keys/{uid}':
-    summary: Get an API key from its uid
-    tags:
-      - Keys
-    security:
-      - apiKey: []
-    responses:
-      '200':
-        description: OK
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/key'
-            examples:
-              Fetch an API Key details:
-                value:
-                  uid: 01b4bc42-eb33-4041-b481-254d00cce834
-                  key: d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4
-                  name: Indexing Products API key
-                  description: null
-                  actions:
-                    - documents.add
-                  indexes:
-                    - products
-                  expiresAt: '2021-11-13T00:00:00Z'
-                  createdAt: '2021-11-12T10:00:00Z'
-                  updatedAt: '2021-11-12T10:00:00Z'
+  '/keys/{uid_or_key}':
+    get:
+      summary: Get an API key from its uid or key field.
+      tags:
+        - Keys
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/key'
+              examples:
+                Fetch an API Key details:
+                  value:
+                    uid: 01b4bc42-eb33-4041-b481-254d00cce834
+                    key: d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4
+                    name: Indexing Products API key
+                    description: null
+                    actions:
+                      - documents.add
+                    indexes:
+                      - products
+                    expiresAt: '2021-11-13T00:00:00Z'
+                    createdAt: '2021-11-12T10:00:00Z'
+                    updatedAt: '2021-11-12T10:00:00Z'
       operationId: keys.get
       description: Get an API Key
-    parameters:
-      - schema:
-          type: string
-        name: key
-        in: path
-        required: true
-        description: The API key value
+      parameters:
+        - schema:
+            type: string
+          name: uidOrKey
+          in: path
+          required: true
+          description: The uid or the key field value of the API Key.
     delete:
-      summary: Delete an API key
+      summary: Delete an API key specified by its uid or key field.
       operationId: keys.delete
       tags:
         - Keys
@@ -2699,7 +2700,7 @@ paths:
           $ref: '#/components/responses/204'
       description: ''
     patch:
-      summary: Update an API key
+      summary: Update an API key specified by its uid or key field.
       operationId: keys.update
       tags:
         - Keys
