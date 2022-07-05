@@ -420,7 +420,10 @@ An `uid` representing by a uuid v4 is generated if not specified at creation by 
 
 The final key is then an HMAC with the master key, as the secret, and the `uid`, a hyphenated Uuidv4, as the data. HMAC uses an SHA-256 algorithm internally.
 
-`HMAC(secret: SHA-256(:master-key), data: :uid)` gives the final `key` field to use when authorizing requests.
+The final key could be generated with openssl as below:
+
+    echo -n $HYPHENATED_UUID | openssl dgst -sha256 -hmac $MASTER_KEY
+
 
 ### 4.2. Synchronous write of `API Key` resources
 
