@@ -418,7 +418,7 @@ When the Meilisearch API is secured by the presence of a master key, the `Author
 
 An `uid` representing by a uuid v4 is generated if not specified at creation by the user.
 
-The final key is then an HMAC with the master key, pre-hashed by an SHA-256 algorithm, as the secret and the `uid` as the data. HMAC uses an SHA-256 algorithm internally.
+The final key is then an HMAC with the master key, as the secret, and the `uid`, a hyphenated Uuidv4, as the data. HMAC uses an SHA-256 algorithm internally.
 
 `HMAC(secret: SHA-256(:master-key), data: :uid)` gives the final `key` field to use when authorizing requests.
 
