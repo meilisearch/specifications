@@ -568,6 +568,145 @@ New task types are also added for these operations. `indexCreation`, `indexUpdat
 }
 ```
 
+#### 9. Paginate `task` resource lists
+
+The API endpoint `/tasks` is browsable using a keyset-based pagination.
+
+##### 9.1 Why a Seek/Keyset based pagination?
+
+Keyset-based pagination is more appropriate when the data can grow or shrink quickly in terms of magnitude.
+
+###### 9.1.1 Pros
+
+The performance is better than the not-so-good but old pagination with `offset`/`limit`.
+
+Seek/Keyset pagination keeps the results consistent between each page as the data evolves. It avoids the [Page Drift effect](https://use-the-index-luke.com/sql/partial-results/fetch-next-page), especially when the data is sorted from the most recent to the oldest.
+
+Moreover, the performance is superior to traditional pagination since the computational complexity remains constant to reach the identifier marking the beginning of the new slice to be returned from a hash table.
+
+###### 9.1.2 Cons
+
+The main drawback of this type of pagination is that it does not navigate within a finite number of pages. It is also limited to a precise sorting criterion on unique identifiers ordered sequentially.
+
+##### 9.2 Response attributes
+
+| field | type | description                          |
+|-------|------|--------------------------------------|
+| limit | integer  | Default `20`. |
+| from | integer | The first task uid returned |
+| next | integer - nullable  | Represents the value to send in `from` to fetch the next slice of the results. The first item for the next slice starts at this exact number. When the returned value is null, it means that all the data have been browsed in the given order. |
+
+##### 9.3 GET query parameters
+
+| field | type | required | description  |
+|-------|------|----------|--------------|
+| limit | integer  | No       | Default `20`. Limit on the number of tasks to be returned. |
+| from | integer  | No       | Limit results to tasks with uids equal to and lower than this uid. |
+
+##### 9.4 Usage examples
+
+This part demonstrates keyset paging in action on `/tasks`. The items `uid` remains sorted sequentially and can be used to navigate a list of `tasks` objects.
+
+---
+
+**Initial default slice of `tasks`**
+
+`GET` - `/tasks`
+
+```json
+{
+    "results": [
+        {
+            "uid": 1350,
+            "indexUid": "movies",
+            "type": "documentAddition",
+            ...,
+        },
+        ...,
+        {
+            "uid": 1330,
+            "indexUid": "movies_reviews",
+            "type": "documentAddition",
+            ...,
+        }
+    ],
+    "limit": 20,
+    "from": 1350,
+    "next": 1329
+}
+```
+
+**Request the next slice of `tasks` items with a limit of `50` tasks**
+
+`GET` - `/tasks?from=1329&limit=50`
+
+```json
+{
+    "results": [
+        {
+            "uid": 1329,
+            "indexUid": "movies",
+            "type": "documentAddition",
+            ...,
+        },
+        ...,
+        {
+            "uid": 1279,
+            "indexUid": "movies",
+            "type": "settingsUpdate",
+            ...,
+        }
+    ],
+    "limit": 50,
+    "from": 1329,
+    "next": 1278
+}
+```
+
+**End of seek/keyset pagination**
+
+`GET` - `/tasks?from=20`
+
+```json
+{
+    "results": [
+        {
+            "uid": 19,
+            "indexUid": "movies",
+            "type": "documentsAddition",
+            ...,
+        },
+        ...,
+        {
+            "uid": 0,
+            "indexUid": "movies",
+            "type": "documentsAddition",
+            ...,
+        }
+    ],
+    "limit": 20,
+    "from": 20,
+    "next": null
+}
+```
+
+- 💡 `next` response parameter is null because there are no more `tasks` to fetch. It means that the response represents the last slice of results for the given resource list.
+
+##### 9.5 Behaviors for `limit` and `from` query parameters
+
+###### 9.5.1 `limit`
+
+- If `limit` is not set, the default value is chosen.
+
+###### 9.5.2 `from`
+
+- If `from` is set with an out of bounds task `uid`, the response returns the tasks that are the nearest to the specified uid, the `next` field is set to the next page. It will be equivalent to call the `/tasks` route without any parameter.
+
+###### 9.5.3 Errors
+
+- 🔴 Sending a value with a different type than `Integer` for `limit` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Integer` for `from` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+
 ## 2. Technical details
 
 ### I. Measuring
@@ -579,11 +718,10 @@ New task types are also added for these operations. `indexCreation`, `indexUpdat
 
 ## 3. Future Possibilities
 
-- Add a pagination system for on `/tasks` and `indexes/:indexUid/tasks` lists.
 - Add enhanced filtering capabilities.
 - Simplify `documentAddition` and `documentPartial` type and elaborate on `details` metadata.
 - Use Hateoas capability to give direct access to a `task` resource.
 - Add dedicated task type names modifying a sub-setting. e.g. `SearchableAttributesUpdate`.
 - Reconsider existence of `/indexes/:indexUid/tasks/:taskUid` route since it is similar to `/tasks/:taskUid`.
 - Add an archived state for old `tasks`.
-- Indicate the `API Key` identity that added a `task`. It should not permits to
+- Indicate the `API Key` identity that added a `task`.
