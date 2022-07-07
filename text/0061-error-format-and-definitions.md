@@ -778,6 +778,54 @@ HTTP Code: `404 Not Found`
 
 ---
 
+## invalid_task_status
+
+### Context
+
+This error happens when a requested task status is invalid.
+
+#### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "Task status `:status` is invalid. Available task statuses are: `:taskStatuses`.",
+    "code": "invalid_task_status",
+    "type": "invalid_request",
+    "link":"https://docs.meilisearch.com/errors#invalid_task_status"
+}
+```
+
+- The `:status` is inferred when the message is generated.
+- The `:taskStatuses` is inferred when the message is generated.
+
+---
+
+## invalid_task_type
+
+### Context
+
+This error happens when a requested task type is invalid.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "Task type `:type` is invalid. Available task types are: `:taskTypes`.",
+    "code": "invalid_task_type",
+    "type": "invalid_request",
+    "link":"https://docs.meilisearch.com/errors#invalid_task_type"
+}
+```
+
+- The `:type` is inferred when the message is generated.
+- The `:taskTypes` is inferred when the message is generated.
+
+---
+
 ## api_key_not_found
 
 `Synchronous`

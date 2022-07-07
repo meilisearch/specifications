@@ -57,7 +57,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | TypoTolerance Updated | Occurs when typo tolerance settings are updated via `POST` - `/indexes/:indexUid/settings/typo-tolerance`. |
 | Dump Created | Occurs when a dump is created via `POST` - `/dumps`. |
 | Tasks Seen | Occurs when tasks are fetched globally via `GET` - `/tasks`. |
-| Index Tasks Seen | Occurs when tasks are filtered by index via `GET` - `/indexes/:indexUid/tasks`. |
+
 ----
 
 #### Summarized Metrics/Events table
@@ -128,8 +128,11 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `typo_tolerance.disable_on_words`                   | `true` if at least one value is defined | `false` | `Settings Updated`,  `TypoTolerance Updated` |
 | `typo_tolerance.min_word_size_for_typos.one_typo` | The defined value for `minWordSizeForTypos.oneTypo` property | `5` | `Settings Updated`, `TypoTolerance Updated` |
 | `typo_tolerance.min_word_size_for_typos.two_typos`| The defined value for `minWordSizeForTypos.twoTypos` property | `9` | `Settings Updated`, `TypoTolerance Updated` |
-| `per_task_uid`                          | `true` if an uid is used to fetch a particular task resource, otherwise `false` | true | `Tasks Seen`, `Index Tasks Seen` |
-|
+| `per_task_uid`                          | `true` if an uid is used to fetch a particular task resource, otherwise `false` | true | `Tasks Seen` |
+| `filtered_by_index_uid`                 | `true` if `GET /tasks` endpoint is filered by `indexUid`, otherwise `false` | false | `Tasks Seen` |
+| `filtered_by_type`                      | `true` if `GET /tasks` endpoint is filered by `type`, otherwise `false` | false | `Tasks Seen` |
+| `filtered_by_status`                    | `true` if `GET /tasks` endpoint is filered by `status`, otherwise `false` | false | `Tasks Seen` |
+
 
 ----
 
@@ -367,13 +370,9 @@ This property allows us to gather essential information to better understand on 
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | per_task_uid  | `true` if an uid is used to fetch a particular task resource, otherwise `false` | `true` |
-
-## `Index Tasks Seen`
-
-| Property name | Description | Example |
-|---------------|-------------|---------|
-| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
-| per_task_uid  | `true` if an uid is used to fetch a particular task resource, otherwise `false` | `true` |
+| filtered_by_index_uid | `true` if `GET /tasks` endpoint is filered by `indexUid`, otherwise `false` | `false` |
+| filtered_by_type | `true` if `GET /tasks` endpoint is filered by `type`, otherwise `false` | `false` |
+| filtered_by_status | `true` if `GET /tasks` endpoint is filered by `status`, otherwise `false` | `false` |
 
 ---
 
