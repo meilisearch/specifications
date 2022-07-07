@@ -681,21 +681,21 @@ components:
         type: number
     taskIndexUid:
       name: indexUid
-      in: path
+      in: query
       description: Permits to filter tasks by their related index. By default, when `indexUid` query parameter is not set, the tasks of all the indexes are returned. It is possible to specify several indexes by separating them with the `,` character.
       required: false
       schema:
         type: string
     taskType:
       name: type
-      in: path
+      in: query
       description: Permits to filter tasks by their related type. By default, when `type` query parameter is not set, all task types are returned. It's possible to specify several types by separating them with the `,` character.
       required: false
       schema:
         type: string
     taskStatus:
       name: status
-      in: path
+      in: query
       description: Permits to filter tasks by their status. By default, when `status` query parameter is not set, all task statuses are returned. It's possible to specify several types by separating them with the `,` character.
       required: false
       schema:
