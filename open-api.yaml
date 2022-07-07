@@ -316,6 +316,7 @@ components:
             - indexUpdate
             - indexDeletion
             - settingsUpdate
+            - dumpCreation
         details:
           type: object
           description: Details information of the task payload.
