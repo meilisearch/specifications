@@ -35,7 +35,6 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 
 [Amplitude](https://amplitude.com/) is a tool for graphing and highlighting collected data. Segment feeds Amplitude so that we can build visualizations according to our needs.
 
-
 ----
 
 #### Events table
@@ -113,7 +112,8 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `formatting.highlight_post_tag`       | `true` if `highlightPostTag` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
 | `formatting.crop_length`                | `true` if `cropLength` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
 | `formatting.crop_marker`                | `true` if `cropMarker` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
-| `formatting.matches`                    | `true` if `matches` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
+| `formatting.show_matches_position`                    | `true` if `showMatchesPosition` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
+| `facets`                                | `true` if `facets` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
 | `primary_key`                           | Value given for the `primaryKey` parameter if used, otherwise `null` | id | `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`|
 | `payload_type`                          | All `payload_type` encountered in this batch | ["application/json", "text/plain", "application/x-ndjson"] | `Documents Added`, `Documents Updated` |
 | `index_creation`                        | `true` if a document addition or update request triggered index creation in this batch, otherwise `false` | true | `Documents Added`, `Documents Updated` |
@@ -132,7 +132,6 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `filtered_by_index_uid`                 | `true` if `GET /tasks` endpoint is filered by `indexUid`, otherwise `false` | false | `Tasks Seen` |
 | `filtered_by_type`                      | `true` if `GET /tasks` endpoint is filered by `type`, otherwise `false` | false | `Tasks Seen` |
 | `filtered_by_status`                    | `true` if `GET /tasks` endpoint is filered by `status`, otherwise `false` | false | `Tasks Seen` |
-
 
 ----
 
@@ -218,7 +217,8 @@ This property allows us to gather essential information to better understand on 
 | formatting.highlight_post_tag | Does `highlightPostTag` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.crop_length | Does `cropLength` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.crop_marker | Does `cropMarker` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
-| formatting.matches | Does `matches` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
+| formatting.show_matches_position | Does `showMatchesPosition` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
+| facets | Does `facets` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 
 ---
 
@@ -245,7 +245,8 @@ This property allows us to gather essential information to better understand on 
 | formatting.highlight_post_tag | Does `highlightPostTag` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.crop_length | Does `cropLength` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.crop_marker | Does `cropMarker` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
-| formatting.matches | Does `matches` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
+| formatting.show_matches_position | Does `showMatchesPosition` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
+| facets | Does `facets` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 
 ---
 
@@ -346,7 +347,6 @@ This property allows us to gather essential information to better understand on 
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | searchable_attributes.total   | Number of searchable attributes. | `3` |
-
 
 ## `TypoTolerance Updated`
 

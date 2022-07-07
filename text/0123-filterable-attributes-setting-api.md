@@ -15,7 +15,7 @@ N/A
 
 Filters have several use-cases, such as restricting the results a specific user has access to or creating faceted search interfaces. Faceted search interfaces are particularly efficient in helping users navigate a great number of results across many broad categories.
 
-`filterableAttributes` need to be properly processed and prepared by Meilisearch before they can be used at search time. Fields defined as `filterableAttributes` are usable in the [`filter`](0118-search-api.md#1212-filter) and [facetsDistribution](0118-search-api.md#1214-facetsdistribution) search API parameters.
+`filterableAttributes` need to be properly processed and prepared by Meilisearch before they can be used at search time. Fields defined as `filterableAttributes` are usable in the [`filter`](0118-search-api.md#312-filter) and [facets](0118-search-api.md#314-facets) search API parameters.
 
 By default, Meilisearch has no filterable attributes defined.
 
