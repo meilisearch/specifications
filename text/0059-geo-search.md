@@ -119,28 +119,6 @@ csv format example
 
 - 🔴 Giving a bad formed `_geo` that do not conform to the format causes the `update` payload to fail. A new `invalid_geo_field` error is given in the `update` object.
 
-##### Errors Definition
-
-## invalid_geo_field
-
-### Context
-
-This error occurs when the `_geo` field of a document payload is not valid.
-
-### Error Definition
-
-```json
-{
-    "message": "The document with the id: `:documentId` contains an invalid _geo field: :syntaxErrorHelper.",
-    "code": "invalid_geo_field",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
-}
-```
-
-- The `:documentId` is inferred when the message is generated.
-- The `:syntaxErrorHelper` is inferred when the message is generated.
-
 ---
 
 ### **As an end-user, I want to filter documents within a geo radius.**
