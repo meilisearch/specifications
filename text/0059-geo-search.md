@@ -119,40 +119,6 @@ csv format example
 
 - 🔴 Giving a bad formed `_geo` that do not conform to the format causes the `update` payload to fail. A new `invalid_geo_field` error is given in the `update` object.
 
-##### Errors Definition
-
-## invalid_geo_field
-
-### Context
-
-These errors occurs when the `_geo` field of a document payload is not valid. Either the latitude / longitude is missing or is not a number.
-
-### Error Definition
-
-- When one field is missing the following error is thrown:
-```json
-{
-    "message": "Could not find :coord in the document with the id: `:documentId`. Was expecting a `:field` field.",
-    "code": "invalid_geo_field",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
-}
-```
-
-- When the coordinate can't be parsed:
-```json
-{
-    "message": "Could not parse :coord in the document with the id: `:documentId`. Was expecting a number but instead got `:value`.",
-    "code": "invalid_geo_field",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
-}
-```
-
-- The `:documentId` is inferred when the message is generated.
-- The `:coord` is either `latitude` or `longitude` depending on what's wrong.
-- The `:field` is either `_geo.lat` or `_geo.lng` depending on what's wrong.
-
 ---
 
 ### **As an end-user, I want to filter documents within a geo radius.**
