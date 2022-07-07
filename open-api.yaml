@@ -1159,10 +1159,10 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    put:
+    patch:
       operationId: indexes.update
       summary: Update Index
-      description: Update an index. Add a primaryKey if it doesn't already exists yet.
+      description: Update an index. Specify a primaryKey if it doesn't already exists yet.
       tags:
         - Indexes
       security:
@@ -1788,7 +1788,7 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    post:
+    patch:
       operationId: indexes.settings.update
       summary: Update settings
       description: |
@@ -1925,7 +1925,7 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    post:
+    put:
       operationId: indexes.settings.synonyms.update
       summary: Update synonyms
       description: |
@@ -1993,7 +1993,7 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    post:
+    put:
       operationId: indexes.settings.sortable-attributes.update
       summary: Update sortable attributes
       description: |
@@ -2068,7 +2068,7 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    post:
+    put:
       operationId: indexes.settings.stopWords.update
       summary: Update stop-words
       description: |
@@ -2136,7 +2136,7 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    post:
+    put:
       operationId: indexes.settings.rankingRules.update
       summary: Update ranking rules
       description: |
@@ -2214,7 +2214,7 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    post:
+    patch:
       operationId: indexes.settings.typoTolerance.update
       summary: Update typo tolerance settings
       description: |
@@ -2282,7 +2282,7 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    post:
+    put:
       operationId: indexes.settings.filterableAttributes.update
       summary: Update Filterable Attributes
       description: |
@@ -2351,7 +2351,7 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    post:
+    put:
       operationId: indexes.settings.distinctAttribute.update
       summary: Update distinct attribute
       description: |
@@ -2418,7 +2418,7 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    post:
+    put:
       operationId: indexes.settings.searchableAttributes.update
       summary: Update searchable attributes
       description: |
@@ -2484,7 +2484,7 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    post:
+    put:
       operationId: indexes.settings.displayedAttributes.update
       summary: Update displayed attributes
       description: |
