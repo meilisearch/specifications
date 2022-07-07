@@ -422,7 +422,13 @@ Some browser engines prevent overloading the User-Agent header. To track the cal
 
 If the `X-Meilisearch-Client` is encountered, it overrides the presence of the `User-Agent` header.
 
-#### Identifying MeiliSearch installation
+#### Telemetry Endpoint
+
+Telemetric data are sent to the domain `telemetry.meilisearch.com` which then redirects it to Segment.
+
+This transit domain allows us to change the telemetry collection solution in the future without impacting older versions of Meilisearch.
+
+##### Identifying MeiliSearch installation
 
 To identify instances, we generate a unique identifier at first launch if analytics are not disabled.
 
@@ -433,23 +439,23 @@ To identify instances, we generate a unique identifier at first launch if analyt
 |-----------|---------|------------|-------|
 |config_dir	| %APPDATA% (C:\Users\%USERNAME%\AppData\Roaming) |	$XDG_CONFIG_HOME (~/.config) |	~/Library/Application Support |
 
-#### Segment Identify Call
+##### Segment Identify Call
 
 The `identify` method of Segment permits identifying an instance by sending a unique identifier. It groups the information of a MeiliSearch binary such as `system`, `stats`, and general properties related below in this specification.
 
 The segment identify call is only sent after the first hour if the instance is still running. At the first launch, MeiliSearch sends a `Launched` event on an instance ID equal to `total_launch` in order to avoid tracking instances usage for nothing when they could be shut down and never restarted.
 
-#### Segment Track Call
+##### Segment Track Call
 
 The `track` calls of Segment allow tracking the events passed on the instance.
 
-#### Batching
+##### Batching
 
 A batch is sent every hour or when it reaches the maximum size of `500Kb` to avoid sending analytics in real-time and preserve network exchanges.
 
 This batch contains an identify payload and all tracked events that occurred during this hour.
 
-#### Logging
+##### Logging
 
 Errors occurring when sending metrics to Segment should be silent. In general, the impact of data collection should be minimized as much as possible concerning performance and be entirely transparent for the user during its use.
 
