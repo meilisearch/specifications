@@ -283,7 +283,7 @@ components:
           indexUid: movies
           batchUid: 0
           status: succeeded
-          type: documentAddition
+          type: documentAdditionOrUpdate
           details:
             receivedDocuments: 10
             indexedDocuments: 10
@@ -314,30 +314,28 @@ components:
           type: string
           description: The type of the task
           enum:
-            - documentAddition
-            - documentPartial
+            - documentAdditionOrUpdate
             - documentDeletion
             - indexCreation
             - indexUpdate
             - indexDeletion
             - settingsUpdate
-            - clearAll
         details:
           type: object
           description: Details information of the task payload.
           properties:
             receivedDocuments:
               type: integer
-              description: Number of documents received for documentAddition or documentPartial task.
+              description: Number of documents received for documentAdditionOrUpdate task.
             indexedDocuments:
               type: integer
-              description: Number of documents finally indexed for documentAddition or documentPartial task or if batched, in the batchUid.
+              description: Number of documents finally indexed for documentAdditionOrUpdate task or if batched, in the batchUid.
             receivedDocumentsIds:
               type: integer
               description: Number of document ids received for documentDeletion task.
             deletedDocuments:
               type: integer
-              description: 'Number of documents finally deleted for documentDeletion, indexDeletion or clearAll task.'
+              description: 'Number of documents finally deleted for documentDeletion and indexDeletion tasks.'
             primaryKey:
               type: string
               description: Value for the primaryKey field encountered if any for indexCreation or indexUpdate task.
@@ -681,6 +679,27 @@ components:
       required: true
       schema:
         type: number
+    taskIndexUid:
+      name: indexUid
+      in: path
+      description: Permits to filter tasks by their related index. By default, when `indexUid` query parameter is not set, the tasks of all the indexes are returned. It is possible to specify several indexes by separating them with the `,` character.
+      required: false
+      schema:
+        type: string
+    taskType:
+      name: type
+      in: path
+      description: Permits to filter tasks by their related type. By default, when `type` query parameter is not set, all task types are returned. It's possible to specify several types by separating them with the `,` character.
+      required: false
+      schema:
+        type: string
+    taskStatus:
+      name: status
+      in: path
+      description: Permits to filter tasks by their status. By default, when `status` query parameter is not set, all task statuses are returned. It's possible to specify several types by separating them with the `,` character.
+      required: false
+      schema:
+        type: string
     primaryKey:
       name: primaryKey
       in: query
@@ -856,6 +875,10 @@ components:
                 type: string
                 description: The status of the task
                 example: enqueued
+              type:
+                type: string
+                description: The type of the task
+                example: indexCreation
               enqueuedAt:
                 $ref: '#/components/schemas/timestamp'
                 description: Represent the date and time as `RFC 3339` format when the task has been enqueued
@@ -2535,106 +2558,6 @@ paths:
           description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
-  '/indexes/{indexUid}/tasks':
-    get:
-      operationId: indexes.tasks.list
-      summary: Get all tasks of an index
-      description: |
-        Get all [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) of an [index](https://docs.meilisearch.com/learn/core_concepts/indexes.html).
-      tags:
-        - Tasks
-      security:
-        - apiKey: []
-      responses:
-        '200':
-          description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/task'
-              examples:
-                Example:
-                  value:
-                    results:
-                      - uid: 1
-                        indexUid: movies,
-                        batchUid: 1
-                        status: succeeded
-                        type: documentAddition
-                        details:
-                          receivedDocuments: 79000
-                          indexedDocuments: 79000
-                        duration: PT2S
-                        enqueuedAt: '2021-01-01T09:39:00.000000Z'
-                        startedAt: '2021-01-01T09:39:01.000000Z'
-                        finishedAt: '2021-01-01T09:39:02.000000Z'
-                      - uid: 0
-                        indexUid: movies
-                        batchUid: 0
-                        status: failed
-                        type: documentAddition
-                        details:
-                          receivedDocuments: 67493
-                          indexedDocuments: 0
-                        error:
-                          message: 'Document does not have a `:primaryKey` attribute: `:documentRepresentation`.'
-                          code: missing_document_id
-                          type: invalid_request
-                          link: 'https://docs.meilisearch.com/errors#missing_document_id'
-                        duration: PT5S
-                        enqueuedAt: '2021-01-01T09:38:00.000000Z'
-                        startedAt: '2021-01-01T09:38:02.000000Z'
-                        finishedAt: '2021-01-01T09:38:07.000000Z'
-        '401':
-          $ref: '#/components/responses/401'
-        '404':
-          description: Not Found
-    parameters:
-      - $ref: '#/components/parameters/indexUid'
-  '/indexes/{indexUid}/tasks/{taskUid}':
-    get:
-      operationId: indexes.tasks.get
-      summary: Get a task of an index
-      description: |
-        Get a [task](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) of an [index](https://docs.meilisearch.com/learn/core_concepts/indexes.html).
-      tags:
-        - Tasks
-      security:
-        - apiKey: []
-      responses:
-        '200':
-          description: Ok
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/task'
-              examples:
-                Example:
-                  value:
-                    uid: 1
-                    indexUid: movies
-                    batchUid: 1
-                    status: succeeded
-                    type: documentAddition
-                    details:
-                      receivedDocuments: 79000
-                      indexedDocuments: 79000
-                    duration: PT1S
-                    enqueuedAt: '2021-01-01T09:39:00.000000Z'
-                    startedAt: '2021-01-01T09:39:01.000000Z'
-                    finishedAt: '2021-01-01T09:39:02.000000Z'
-        '401':
-          $ref: '#/components/responses/401'
-        '404':
-          description: Not Found
-    parameters:
-      - $ref: '#/components/parameters/indexUid'
-      - $ref: '#/components/parameters/taskUid'
   /keys:
     get:
       operationId: keys.list
@@ -2919,7 +2842,7 @@ paths:
                         indexUid: movies
                         batchUid: 1
                         status: succeeded
-                        type: documentAddition
+                        type: documentAdditionOrUpdate
                         details:
                           receivedDocuments: 79000
                           indexedDocuments: 79000
@@ -2931,7 +2854,7 @@ paths:
                         indexUid: movies_Review
                         batchUid: 0
                         status: failed
-                        type: documentAddition
+                        type: documentAdditionOrUpdate
                         details:
                           receivedDocuments: 67493
                           indexedDocuments: 0
@@ -2951,6 +2874,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/from'
+        - $ref: '#/components/parameters/taskIndexUid'
+        - $ref: '#/components/parameters/taskStatus'
+        - $ref: '#/components/parameters/taskType'
       security:
         - apiKey: []
   '/tasks/:taskUid':
@@ -2973,7 +2899,7 @@ paths:
                     indexUid: movies
                     batchUid: 1
                     status: succeeded
-                    type: documentAddition
+                    type: documentAdditionOrUpdate
                     details:
                       receivedDocuments: 79000
                       indexedDocuments: 79000
