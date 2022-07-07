@@ -25,6 +25,18 @@ servers:
     description: 'https://example.meilisearch.com:7700'
 components:
   schemas:
+    limit:
+      type: integer
+      description: Limit given for the query. If limit is not provided as a query parameter, this parameter displays the default limit value.
+      example: 10
+    from:
+      type: integer
+      description: The first task uid returned.
+      example: 999
+    next:
+      type: integer
+      description: Represents the value to send in `from` to fetch the next slice of the results. The first item for the next slice starts at this exact number. When the returned value is null, it means that all the data have been browsed in the given order.
+      example: 989
     timestamp:
       type: string
       description: An `RFC 3339` format for date/time/duration.
@@ -691,6 +703,12 @@ components:
       schema:
         type: number
         default: 0
+    from:
+      name: from
+      in: query
+      description: Fetch the next set of results from the given uid.
+      schema:
+        type: number
     q:
       name: q
       in: query
@@ -2882,6 +2900,17 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/task'
+                  limit:
+                    $ref: '#/components/schemas/limit'
+                  from:
+                    $ref: '#/components/schemas/from'
+                  next:
+                    $ref: '#/components/schemas/next'
+                required:
+                  - results
+                  - limit
+                  - from
+                  - next
               examples:
                 Example:
                   value:
@@ -2915,8 +2944,13 @@ paths:
                         enqueuedAt: '2021-01-01T09:38:00.000000Z'
                         startedAt: '2021-01-01T09:38:02.000000Z'
                         finishedAt: '2021-01-01T09:38:07.000000Z'
+                    limit: 2
+                    from: 1
+                    next: null
       operationId: tasks.list
-      parameters: []
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/from'
       security:
         - apiKey: []
   '/tasks/:taskUid':
