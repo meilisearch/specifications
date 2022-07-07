@@ -521,7 +521,7 @@ This error occurs when the user specifies a non-existent ranking rule, a malform
 
 ```json
 {
-    "message": "`:rankingRule` ranking rule is invalid. Valid ranking rules are Words, Typo, Sort, Proximity, Attribute, Exactness and custom ranking rules.",
+    "message": "`:rankingRule` ranking rule is invalid. Valid ranking rules are words, typo, sort, proximity, attribute, exactness and custom ranking rules.",
     "code": "invalid_ranking_rule",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_ranking_rule"
