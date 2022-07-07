@@ -416,11 +416,11 @@ The `User-Agent` header is tracked on the events listed below. Our official SDKs
 
 Each endpoint API tracked sends the `User-Agent` as a `user_agent` event property as an array. If several values are contained in the `User-Agent` header, they are split by the `;` character.
 
-##### `x-meilisearch-client` Query Parameter
+##### `X-Meilisearch-Client` Header
 
-Some browser engines prevent overloading the User-Agent header. To track the calls made by some clients concerned by this fact, e.g. the JavaScript SDK, it is possible to use the `x-meilisearch-client` query parameter.
+Some browser engines prevent overloading the User-Agent header. To track the calls made by some clients concerned by this fact, e.g. the JavaScript SDK, it is possible to use the `X-Meilisearch-Client` custom header.
 
-If the query parameter is encountered, it overrides the presence of the `User-Agent` header.
+If the `X-Meilisearch-Client` is encountered, it overrides the presence of the `User-Agent` header.
 
 #### Identifying MeiliSearch installation
 
