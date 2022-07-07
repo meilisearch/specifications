@@ -122,6 +122,105 @@ HTTP Code: `400 Bad Request`
 
 ---
 
+## immutable_field
+
+`Synchronous` / `Asynchronous`
+
+### Context
+
+This error happens when an immutable field is given in a payload dedicated to modify a resource.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "The `:fieldName` field cannot be modified for the given resource.",
+    "code": "immutable_field",
+    "type": "invalid_request",
+    "link":"https://docs.meilisearch.com/errors#immutable_field"
+}
+```
+
+- The `:fieldName` is inferred when the message is generated.
+
+--
+
+## api_key_already_exists
+
+`Synchronous`
+
+### Context
+
+This error happens when a user tries to create an API Key that already exists for the given `uid`.
+
+### Error Definition
+
+HTTP Code: `409 Conflict`
+
+```json
+{
+    "message": "`uid` field value `:value` is already an existing API key.",
+    "code": "api_key_already_exists",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#api_key_already_exists"
+}
+```
+
+- The `:value` is inferred when the message is generated.
+
+---
+## invalid_api_key_uid
+
+`Synchronous`
+
+### Context
+
+This error happens when the `uid` field for an `API Key` resource is invalid.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "`uid` field value `:value` is invalid. It should be a valid UUID v4 string or omitted.",
+    "code": "invalid_api_key_uid",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_api_key_uid"
+}
+```
+
+- The `:value` is inferred when the message is generated.
+
+---
+
+## invalid_api_key_name
+
+`Synchronous`
+
+### Context
+
+This error happens when the `name` field for an `API Key` resource is invalid.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "`name` field value `:value` is invalid. It should be a string or specified as a null value.",
+    "code": "invalid_api_key_name",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_api_key_name"
+}
+```
+
+- The `:value` is inferred when the message is generated.
+
+---
+
 ## invalid_api_key_description
 
 `Synchronous`

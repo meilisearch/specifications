@@ -1,89 +1,80 @@
-- Title: API Keys
-- Start Date: 2021-10-15
-- Specification PR: [#85](https://github.com/meilisearch/specifications/pull/85)
-- Discovery Issue: [#51](https://github.com/meilisearch/product/issues/51)
-
 # API Keys
 
-## 1. Functional Specification
+## 1. Summary
 
-### 1.1 Summary
+API keys allows to define which actions and which indexes are accessible by the holder of an API key. The use of API keys allows to secure the access to the routes in a fine-grained manner of a Meilisearch instance.
 
-Granular management of API keys is added to MeiliSearch. It is possible to restrict the access of an API key to certain actions on specific indexes.
+## 2. Motivation
 
-### 1.2 Motivation
+To make Meilisearch more reliable for teams and more adapted to production cases, we extend the management and the possibilities of restrictions regarding write and read requests on a Meilisearch instance by introducing a way to manage custom API keys.
 
-To make MeiliSearch more reliable for teams, we extend the management and the possibilities of restrictions for the management of a MeiliSearch instance by introducing a concrete API resource (`API Key`). Security is a critical need, often tricky to negotiate as the stakes are high for a company.
+## 3. Functional Specification
 
-### 1.3 Glossary
+### 3.1. Glossary
 
-| Term               | Definition |
-|--------------------|------------|
-| Master Key         | This is the master key that allows you to create other API keys. The master key is defined by the user when launching MeiliSearch, thus gives access to the `/keys` API endpoint. |
-| API Key            | API keys are stored and managed from the endpoint `/keys` by the master key holder. These are the keys used by the technical teams to interact with MeiliSearch at the level of the client code. |
+| Term       | Definition                                                                                                                                                                                                     |
+|------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Master Key | This is the master key that allows managing API keys. The master key is defined by the user when launching Meilisearch, thus gives access to the `/keys` API endpoint and requiring requests to be authorized. |
+| API Key    | API keys are stored and managed from the endpoint `/keys` by the master key holder.                                                                                                                            |
 
-### 1.4 Personas
+### 3.2. Explanation
 
-| Persona | Role |
-|---------|------|
-| Anna    | Anna has an `ssh` access to the MeiliSearch instance and manages it on a daily basis. |
-| Mark    | Mark is a developer from the same company as Anna. He will implement the code to communicate with MeiliSearch to solve technical/product needs. |
+#### 3.2.1 Summary Key Points
 
-### 1.5 `API Key` Explanations
+- API keys management is restricted to the master key or API keys having `keys.get`, `keys.create`, `keys.update`, `keys.delete` or `*` actions.
+- API keys must be provided via the `Authorization` header using the bearer method to authorize a request.
+- The value of the `key` field of an API Key is generated from its `uid` and the master key.
+- When a master key is set at Meilisearch first-launch, it generate two pre-configured default `API Key` resources. A `Default Search API Key` authorizing the search action on all indexes and a `Default Admin API Key` authorizing all actions.
+- If the master-key changes, the `key` field is re-generated.
+- Default API keys can be modified/deleted from the `/keys` endpoints but are not re-created if Meilisearch has already created them.
+- API keys can have restrictions on which methods can be accessed via an `actions` list; they also `expiresAt` a specific date time and are restricted to a specific set of `indexes`.
+- `name` and `description` fields are the only editable fields of an API key.
+- API key resources are propagated to snapshots and dumps.
 
-#### 1.5.1 Summary Key Points
+#### 3.2.2. Master Key
 
-- `X-MEILI-API-KEY` header is replaced by the `Authorization` header. `API keys` must be specified with the bearer authorization method. See examples.
-- `/keys` management is restricted to the master key.
-- When a master key is set at MeiliSearch first-launch, we generate two pre-configured default `API Key` resources. A `Default Search API Key` restricted to the search action and a `Default Admin API Key` to handle all operations (except managing `/keys` resource) on MeiliSearch.
-- If the master-key changes, all `API Keys` are re-generated.
-- These default API Keys can be modified/deleted with the `/keys` endpoint but are not re-created if MeiliSearch has already created them.
-- New endpoints are added to manage the `API Key` resource.
-- `API keys` can have restrictions on which methods can be accessed via an `actions` list; they can also `expiresAt` a specific date time and be restricted to a specific set of `indexes`.
-- There is no possibility to regenerate the value of the `key` field for a specific `API key` in this first iteration.
-- New errors are added and the `missing_authorization_header` message is updated.
-- The current state of the `API Keys` resource is propagated to snapshots and dumps.
+The master key exists to secure a Meilisearch instance. As soon as a master key is set via the  `MEILI_MASTER_KEY` environment variable or the `--master-key` CLI option, the endpoint `/keys` is accessible for the master key holder. It can be seen as a super admin key; It must be securely shared only with people who have to manage the security of a Meilisearch instance.
 
-#### 1.5.2 Master Key
+This master key is not an API key, thus is not stored and fetchable from the `/keys` API endpoint. It must be seen as a runtime lock that activates the security of Meilisearch as soon as an instance is launched with it. The master key should only be used to fetch API Keys the first time. The default Admin API key should be preferred to manage the API keys resources.
 
-The master key exists to secure a MeiliSearch instance. As soon as a master key is set via the  `MEILI_MASTER_KEY` environment variable or the `--master-key` CLI option , the endpoint `/keys` is accessible only for the master key holder. It can be seen as a super admin key; It must be shared only with people who have to manage the security of a MeiliSearch instance.
+At the first launch of Meilisearch with a master key, Meilisearch automatically generates two default API keys to cover the basic needs a user may encounter. It generates a `Default Search API Key` dedicated to the search that can be used on the client-side and a `Default Admin API Key` to manipulate a MeiliSearch instance from a backend side.
 
-This master key is not an API Key, thus is not stored and fetchable from the `/keys` API endpoint. It must be seen as a runtime lock that activates the security of MeiliSearch as soon as an instance is launched with it.
+If the master key is removed at Meilisearch launch, the previously generated API keys no longer secure the Meilisearch instance.
 
-At the first launch of MeiliSearch with a master key, MeiliSearch automatically generates two default API keys (See the `GET - /keys` example) to cover many of the most basic needs. It generates a `Default Search API Key` dedicated to the search that can be used on the client-side and a `Default Admin API Key` to manipulate a MeiliSearch instance from a backend side.
+If Meilisearch is launched with the `production` value for the `MEILI_ENV` environment variable or the `--env` CLI option, a master key is mandatory. If the master key is omitted in that particular case, Meilisearch launch is aborted and displays an error:
 
-If the master key is removed at MeiliSearch launch, the previously generated API keys no longer secure the MeiliSearch instance.
+`Error: In production mode, the environment variable MEILI_MASTER_KEY is mandatory`
 
-If MeiliSearch is launched with the `production` value for the `MEILI_ENV` environment variable or the `--env` CLI option, a master key is mandatory to force the user to secure his instance. If the master key is omitted in that particular case, MeiliSearch launch is aborted and displays the `Error: In production mode, the environment variable MEILI_MASTER_KEY is mandatory` error in stdout.
+The master key must be composed of valid utf-8 characters. It is advisable to enclose it in `'` when specified via the `--master-key` option.
 
-The master key must be composed of valid utf-8 characters. It is advisable to enclose it in `'` when specified via the --master-key option.
+> 🚨 The master key should never be exposed to the public as it may compromise a Meilisearch instance.
 
-> 🚨 A user coming from a version prior to v0.25.0 and having a master-key will have to update their code to use the newly generated default keys replacing the public and private, since we changed the previous `public` and `private` API Key generation, is it mandatory for that specific version upgrade. Now, a prefix of an API Key is generated uniquely and the final value of the `key` field is a hash of that randomized prefix with the master-key. See 2.1 API Key Generation part.
+> 🚨 If the value of the master key changes, all the previously generated `API Keys` changes, thus allows to invalidate the set of API keys previously generated by regenerating a different value for their `key` field. This is particularly useful in the case where the master key might have been leaked and the user need to re-generate the whole set of keys at once to re-secure the instance.
 
-> 🚨 The master-key should never be exposed to the public or bad-intentioned persons for security measures as it may compromise a MeiliSearch instance.
+> The master key does not appear on the `/keys` endpoints and can't be used to authorize requests other than on the `/keys` endpoint.
 
-> 🚨 If the value of the master key changes, all the previously generated `API Keys` changes, thus allows to invalidate the set of keys previously generated by regenerating to a different value for the `key` field. This is particularly useful in the case where the master key might have been leaked and the user need to re-generate the whole set of keys at once to re-secure the instance.
+> The only route not secured in the presence of a master key is the `/health` route.
 
-> Note that the master key does not appear on the `/keys` endpoints.
+#### 3.2.3. Default API Keys
 
-#### 1.5.3 Default API Keys
+The first time a Meilisearch instance is launched with a `master key`, Meilisearch will generate two API keys described below.
 
-When the user accessing the machine launches MeiliSearch with a `master` key the first time, MeiliSearch will generate two API keys described below, as it did before with the `public` and `private` key.
+If the user changes the value of the master key later, these two default keys are not created again but the `key` field is re-generated. However, these two API keys can be updated/deleted using the `/keys` endpoints.
 
-If the user changes the value of the `master` key later, these two default keys are not created again but re-generated with a different `key` field. However, these two API keys can be changed using the `/keys` endpoints.
+If these API keys are deleted, the engine should not create them again when Meilisearch is launched again with a master key.
 
-MeiliSearch must know that it has already generated these Default API Keys internally so if the user delete them, the engine should not create them again when MeiliSearch is launched again with a `master` key.
+##### 3.2.3.1. Default Search API Key
 
-##### 1.5.3.1 Default Search API Key
-
-The `Default Search API key` gives access to the same rights as the old `public` key.
+The `Default Search API key` gives access to the search endpoints on all indexes.
 
 Here is how the `Default Search API Key` is represented after its generation.
 
-```json
+```jsonc
 {
-    "description": "Default Search API Key (Use it to search from the frontend)",
-    "key": "0a6e572506c52ab0bd6195921575d23092b7f0c284ab4ac86d12346c33057f99", //example
+    "uid": "01b4bc42-eb33-4041-b481-254d00cce834", //auto-generated value
+    "key": "0a6e572506c52ab0bd6195921575d23092b7f0c284ab4ac86d12346c33057f99", //auto-generated value
+    "name": "Default Search API Key",
+    "description": "Use it to search from the frontend",
     "actions": [
         "search"
     ],
@@ -91,21 +82,23 @@ Here is how the `Default Search API Key` is represented after its generation.
         "*"
     ],
     "expiresAt": null,
-    "createdAt": "2021-08-11T10:00:00Z", //example
+    "createdAt": "2021-08-11T10:00:00Z",
     "updatedAt": "2021-08-11T10:00:00Z"
 }
 ```
 
-##### 1.5.3.2 Default Admin API Key
+##### 3.2.3.2. Default Admin API Key
 
-The `Default Admin API key` gives access to the same rights as the old `private` key.
+The `Default Admin API key` gives access to all actions by default.
 
 Here is how the `Default Admin API Key` is represented after its generation.
 
-```json
+```jsonc
 {
-    "description": "Default Admin API Key (Use it for all other operations. Caution! Do not use it on a public frontend)",
-    "key": "380689dd379232519a54d15935750cc7625620a2ea2fc06907cb40ba5b421b6f", //example
+    "uid": "ac06a7e1-6956-4699-bb04-dbeb72a231df", //auto-generated value
+    "key": "380689dd379232519a54d15935750cc7625620a2ea2fc06907cb40ba5b421b6f", //auto-generated value
+    "name": "Default Admin API Key",
+    "description": "Use it for anything that is not a search operation. Caution! Do not expose it on a public frontend",
     "actions": [
         "*"
     ],
@@ -113,261 +106,34 @@ Here is how the `Default Admin API Key` is represented after its generation.
         "*"
     ],
     "expiresAt": null,
-    "createdAt": "2021-08-11T10:00:00Z", //example
+    "createdAt": "2021-08-11T10:00:00Z",
     "updatedAt": "2021-08-11T10:00:00Z"
 }
 ```
 
-#### 1.5.3 Managing `API Key`
+#### 3.2.4. API Endpoints Definition
 
-![](https://i.imgur.com/mAUFnNb.png)
+Manipulate API keys of a Meilisearch instance. `/keys` endpoints are **only accessible by the master key holder.**
 
-`Anna` manages the MeiliSearch instance; she uses the master key she defined at startup to generate an `API Key` resource for `Mark` to use in his client code to communicate with the MeiliSearch instance.
+##### 3.2.4.1. `API Key` Resource Representation
 
-`Anna` can define access rights to certain indexes to define an expiration date and also authorized `actions` for an `API Key` (See API Key Actions List Definition Part).
+| field       | type   | description                                                                                                                                              |
+|-------------|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| uid         | string | A unique identifier represented by a uuid v4. Can be specified at creation or generated by Meilisearch if ommited.                                       |
+| key         | string | The generated key to use when in the Authorization header when making requests. **Generated by MeiliSearch by a combination of uid and the master key**. |
+| name        | string | A non unique human readable name to ease identification of the API key. `null` if empty.                                                                 |
+| description | string | A description for the key. `null` if empty.                                                                                                              |
+| actions     | array  | A list of actions permitted for the key. `["*"]` for all actions. See Actions List Definition part.                                                      |
+| indexes     | array  | A list of indexes permitted for the key. `["*"]` for all indexes.                                                                                        |
+| expiresAt   | string | Represent the expiration date and time as `RFC 3339` format. `null` equals to no expiration time.                                                        |
+| createdAt   | string | Represent the date and time as `RFC 3339` format when the API key has been created. **Generated by MeiliSearch**                                         |
+| updatedAt   | string | Represent the date and time as `RFC 3339` format when the API key has been updated. **Default**: Value of `createdAt`. **Generated by MeiliSearch**      |
 
-Only the master key allows managing the API keys.
+##### 3.2.4.2. `GET` - `/keys`
 
-#### 1.5.4 `API Key` object representation
+Fetch the API keys of a Meilisearch instance.
 
-| field       | type    | description                                      |
-|-------------|---------|--------------------------------------------------|
-| description | string  | A description for the key. `null` if empty. |
-| key         | string  | The generated key. **Generated by MeiliSearch**. |
-| actions     | array   | A list of actions permitted for the key. `["*"]` for all actions. See Actions list definition part. |
-| indexes     | array   | A list of indexes permitted for the key. `["*"]` for all indexes. |
-| expiresAt   | string  | Represent the expiration date and time as `RFC 3339` format. `null` equals to no expiration time. |
-| createdAt   | string  | Represent the date and time as `RFC 3339` format when the API key has been created. **Generated by MeiliSearch** |
-| updatedAt   | string  | Represent the date and time as `RFC 3339` format when the API key has been updated. **Default**: Value of `createdAt`. **Generated by MeiliSearch** |
-
-#### 1.5.5 `POST`/ `PATCH` - `/keys` - API Key object payload definition
-
-| field       | type    | required |description                     |
-|-------------|---------|----------|--------------------------------|
-| indexes     | array   | Required | `[*]` for all indexes. **Default**: `No Default` |
-| description | string  | Optional | A description for the API key. **Default**: `null` |
-| actions     | array   | Required | A list of actions permitted for the API key. `["*"]` for all actions. **See Actions list definition part**. `*` character can be used as a wildcard. e.g. `documents.*` to authorize access on all documents endpoints. **Default**: `No default` |
-| expiresAt   | string  | Required | The expiration date and time as `RFC 3339` format. `null` equals to no expiration time. Sending only the date part e.g `2021-12-01` leads to having an `expiresAt` value set to `2021-12-01T00:00:00`. **Default**: `No Default` |
-
-
-#### 1.5.6 Actions List Definition
-
-> `:authorizedIndexes` can be any value extracted from the `indexes` field of an `API key` resource.
-
-| name    | description |
-|---------|-------------|
-| search  | Provides access to `GET` and `POST` methods on `/indexes/:authorizedIndexes/search` routes. |
-| documents.add | Provides access to `POST` and `PUT` on `/indexes/:authorizedIndexes/documents` routes. |
-| documents.get | Provides access to `GET` methods on `/indexes/:authorizedIndexes/documents` and `/indexes/:authorizedIndexes/documents/:documentId` routes. |
-| documents.delete | Provides access to `DELETE` method on `/indexes/:authorizedIndexes/documents/:documentId`, `indexes/:authorizedIndexes/documents/:documentId` and `POST` method on `/indexes/:authorizedIndexes/documents/delete-batch` routes. |
-| indexes.create | Provides access to `POST` `/indexes`. **⚠️ `indexes` field should indicate the newly created index or having `[*]` to permits access on it.**. |
-| indexes.get | Provides access to `GET` `/indexes` and `/indexes/:authorizedIndexes`. **⚠️Non-authorized `indexes` are omitted from the response on `/indexes`**. |
-| indexes.update | Provides access to `PUT` `/indexes/:authorizedIndexes`. |
-| indexes.delete | Provides access to `DELETE` `/indexes/:authorizedIndexes`. |
-| tasks.get | Provides access to `GET` `/tasks`. **⚠️Non-authorized `indexes` are omitted from the response on `/tasks`**. Also add access to `GET` `/indexes/:authorizedIndexes/tasks` routes. |
-| settings.get | Provides access to `GET` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes. |
-| settings.update | Provides access to `POST / DELETE` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes. |
-| stats.get | Provides access to `GET` `/stats/`. **⚠️Non-authorized `indexes` are omitted from the response on `/stats`**. Also add access to `GET` `/indexes/:authorizedIndexes/stats`. |
-| dumps.create | Provides access to `POST` `/dumps` route. **As dumps are not scoped by indexes, a restriction on `indexes` does not affect this action.** |
-| version | Provides access to `GET` `/version` route.
-
----
-
-#### **As `Anna 👩`, I want to create an `API key` for `Mark 👨🏻` client-code, so that he can index some documents into MeiliSearch**
-
-##### Request Definition
-
-`POST` - `/keys`
-
-##### Headers
-
-```
-"Authorization: Bearer :masterKey"
-"Content-Type: application/json"
-```
-
-##### Body Payload
-
-```json
-{
-    "description": "Indexing Products API key",
-    "actions": [
-        "documents.add"
-    ],
-    "indexes": ["products"],
-    "expiresAt": "2021-11-13T00:00:00Z"
-}
-```
-
-##### Response
-
-`201 Created`
-
-```json
-{
-    "description": "Indexing Products API key",
-    "key": "d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4",
-    "actions": [
-        "documents.add"
-    ],
-    "indexes": ["products"],
-    "expiresAt": "2021-11-13T00:00:00Z",
-    "createdAt": "2021-11-12T10:00:00Z",
-    "updatedAt": "2021-11-12T10:00:00Z"
-}
-```
-
-##### Requirements
-
-- `actions` is mandatory and should be an array of valid `actions`.
-- `indexes` is mandatory and should be an array of string.
-- `expiresAt` is mandatory and must be a valid `RFC 3339` datetime in the future or `null`.
-- If set, `description` should be a string or `null`.
-
-##### Errors
-
-- 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
-- 🔴 Omitting Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
-- 🔴 Sending an empty Content-Type returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
-- 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
-- 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
-- 🔴 Sending a different payload type than the Content-Type header returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
-- 🔴 Sending an invalid json format returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
-- 🔴 Omitting `actions` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
-- 🔴 Omitting `indexes` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
-- 🔴 Omitting `expiresAt` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
-- 🔴 Sending an invalid value for the `actions` field returns an [invalid_api_key_actions](0061-error-format-and-definitions.md#invalid_api_key_actions) error.
-- 🔴 Sending an invalid value for the `indexes` field returns an [invalid_api_key_indexes](0061-error-format-and-definitions.md#invalid_api_key_indexes) error.
-- 🔴 Sending an invalid value for the `expiresAt` field returns an [invalid_api_key_expires_at](0061-error-format-and-definitions.md#invalid_api_key_expires_at) error.
-- 🔴 Sending an invalid value for the `description` field returns an [invalid_api_key_description](0061-error-format-and-definitions.md#invalid_api_key_description) error.
-
----
-
-#### **As `Anna 👩`, I want to get details about an `API Key`**
-
-##### Request Definition
-
-`GET` - `/keys/:key`
-
-##### Headers
-
-```
-"Authorization: Bearer :masterKey"
-```
-
-##### Response
-
-`200 Success`
-
-```json
-{
-    "description": "Indexing API key",
-    "key": "d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4",
-    "actions": [
-        "documents.add"
-    ],
-    "indexes": [
-        "products"
-    ],
-    "expiresAt": "2021-11-13T00:00:00Z",
-    "createdAt": "2021-11-12T10:00:00Z",
-    "updatedAt": "2021-11-12T10:00:00Z"
-}
-```
-
-##### Errors
-
-- 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
-- 🔴 Attempting to access an API key that does not exist returns an [api_key_not_found](0061-error-format-and-definitions.md#api_key_not_found) error.
-
----
-
-#### **As `Anna 👩`, I want to update API key to change its restrictions**
-
-##### Request Definition
-
-`PATCH` - `/keys/:key`
-
-##### Headers
-
-```
-"Authorization: Bearer :masterKey"
-"Content-Type: application/json"
-```
-
-##### Body Payload
-
-> PATCH method allows making partial changes to an existing resource. Thus the user is not obliged to send the complete API resource for each update.
-
-```json
-{
-    "description": "Manage Products/Reviews Documents API key", //Update the description to specify the API Key purposes.
-    "actions": [
-        "documents.add",
-        "documents.delete" //Has now access to documents deletion
-    ],
-    "indexes": [
-        "products",
-        "reviews"
-    ], //Has now access to reviews
-    "expiresAt": "2021-12-31T23:59:59Z" //Extended to the end of the year
-}
-```
-
-##### Response
-
-`200 Success`
-
-```json
-{
-    "description": "Manage Products/Reviews Documents API key",
-    "key": "d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4",
-    "actions": [
-        "documents.add",
-        "documents.delete"
-    ],
-    "indexes": [
-        "products",
-        "reviews"
-    ],
-    "expiresAt": "2021-12-31T23:59:59Z",
-    "createdAt": "2021-11-12T10:00:00Z",
-    "updatedAt": "2021-10-12T15:00:00Z"
-}
-```
-
-##### Errors
-
-- 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
-- 🔴 Attempting to access an API key that does not exist returns a [api_key_not_found](0061-error-format-and-definitions.md#api_key_not_found) error.
-- 🔴 Omitting Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
-- 🔴 Sending an empty Content-Type returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
-- 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
-- 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
-- 🔴 Sending a different payload type than the Content-Type header returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
-- 🔴 Sending an invalid json format returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
-- 🔴 Sending an invalid value for the `actions` field returns an [invalid_api_key_actions](0061-error-format-and-definitions.md#invalid_api_key_actions) error.
-- 🔴 Sending an invalid value for the `indexes` field returns an [invalid_api_key_indexes](0061-error-format-and-definitions.md#invalid_api_key_indexes) error.
-- 🔴 Sending an invalid value for the `expiresAt` field returns an [invalid_api_key_expires_at](0061-error-format-and-definitions.md#invalid_api_key_expires_at) error.
-- 🔴 Sending an invalid value for the `description` field returns an [invalid_api_key_description](0061-error-format-and-definitions.md#invalid_api_key_description) error.
-
----
-
-#### **As `Anna 👩`, I want to list the API Keys**
-
-##### Request Definition
-
-`GET` - `/keys`
-
-##### Headers
-
-```
-"Authorization: Bearer :masterKey"
-```
-##### Query Parameters
+###### 3.2.4.2.1. Query Parameter Definition
 
 | Field                    | Type                     | Required |
 |--------------------------|--------------------------|----------|
@@ -390,18 +156,20 @@ Sets the starting point in the results, effectively skipping over a given number
 
 Sets the maximum number of documents to be returned by the current request.
 
-##### Response Definition
+###### 3.2.4.2.2. Response Definition
 
-| Field                    | Type                     | Required |
-|--------------------------|--------------------------|----------|
-| `result`                 | Array[Key]               | true     |
-| `offset`                 | Integer                  | true     |
-| `limit`                  | Integer                  | true     |
-| `total`                  | Integer                  | true     |
+Returns a `200 Success` HTTP code when the request is successful.
+
+| Field     | Type                                                     | Required |
+|-----------|----------------------------------------------------------|----------|
+| `results` | Array of [APIKey](#3241-api-key-resource-representation) | true     |
+| `offset`  | Integer                                                  | true     |
+| `limit`   | Integer                                                  | true     |
+| `total`   | Integer                                                  | true     |
 
 ###### `results`
 
-- Type: Array[Key]
+- Type: Array[APIKey]
 - Required: True
 
 An array containing the fetched API keys.
@@ -427,7 +195,16 @@ Gives the `limit` parameter used for the query.
 
 Gives the total number of API keys that can be browsed.
 
-###### Example
+> API Keys are ordered by `createdAt` in `desc` order. (Most recent first)
+
+> Expired API keys can be found on the `/keys` endpoints. An archiving system or a filter could allow to not display them by default. See Future Possibilities part.
+
+###### 3.2.4.2.3. Errors
+
+- 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route without the master key returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+
+###### 3.2.4.2.4. Example
 
 `200 Success`
 
@@ -436,7 +213,8 @@ Gives the total number of API keys that can be browsed.
     "results": [
         {
             "description": "Manage Products/Reviews Documents API key",
-            "key": "d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4",
+            "uid": "ac06a7e1-6956-4699-bb04-dbeb72a231df",
+            "key": "2fcdddd16ab75a4aeea6b74577874bc2888938a69ffafe3d05547560fa72e15b",
             "actions": [
                 "documents.add",
                 "documents.delete"
@@ -451,7 +229,8 @@ Gives the total number of API keys that can be browsed.
         },
         {
             "description": "Default Search API Key (Use it to search from the frontend code)",
-            "key": "0a6e572506c52ab0bd6195921575d23092b7f0c284ab4ac86d12346c33057f99",
+            "uid": "87861fb0-e948-41da-ae7f-89617d57d5f5",
+            "key": "0fe6fc6d94a21b5ca0b5a714bcb338865108039efc048e99e5ba2e7a976fa330",
             "actions": [
                 "search"
             ],
@@ -464,7 +243,8 @@ Gives the total number of API keys that can be browsed.
         },
         {
             "description": "Default Admin API Key (Use it for all other operations. Caution! Do not share it on the client side)",
-            "key": "380689dd379232519a54d15935750cc7625620a2ea2fc06907cb40ba5b421b6f",
+            "uid": "ad9af94e-d2db-420f-9ee3-9375f091e565",
+            "key": "1846b591d7fd0454bc2b7f1c7ad80c411b1cfe46a51b0d44e6554a30f4bc0a18",
             "actions": [
                 "*"
             ],
@@ -482,130 +262,199 @@ Gives the total number of API keys that can be browsed.
 }
 ```
 
-> Expired API keys can be found on the `/keys` endpoints. An archiving system or a filter could allow to not display them by default. See Future Possibilities part.
-
 > 👉 Note the two default generated API keys here. When a master key is set at MeiliSearch's launch, it generates two pre-configured `API Keys`. A Default Search API Key restricted to the search action on all indexes and a Default Admin API Key on all indexes to handle all operations (except managing API Keys).
 
-##### List details
+##### 3.2.4.3. `GET` - `/keys/:uid_or_key`
 
-- `API Key` objects are returned in a `results` array.
-- `API Keys` are ordered by `createdAt` in `desc` order. (Most recent first)
-- No pagination yet. See Future Possibilities part.
+Fetch a specific API key of a Meilisearch instance from it's `uid` or `key` field.
 
-##### Errors
+###### 3.2.4.3.1. Query Parameter Definition
+n/a
 
-- 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+###### 3.2.4.3.2. Response Definition
 
----
+Returns a `200 Success` HTTP code when the request is successful.
 
-#### **As `Anna 👩`, I want to delete an `API Key`**
+See [API Key Resource Representation](#3241-api-key-resource-representation) section for the response body.
 
-##### Request Definition
-
-`DELETE` - `/keys/:key`
-
-##### Headers
-
-```
-"Authorization: Bearer :masterKey"
-```
-
-##### Response
-
-`204 No-Content`
-
-##### Errors
+###### 3.2.4.3.3. Errors
 
 - 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 Accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
-- 🔴 Attempting to access an API key that does not exist returns a `api_key_not_found`.
+- 🔴 Accessing this route without the master key or an API key missing the `keys.get` permission returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
----
+##### 3.2.4.4. `POST` - `/keys`
 
-#### Using `API Key` on client-code
+Create an API key.
 
-![](https://i.imgur.com/kRKcB43.png)
+###### 3.2.4.4.1. Payload Definition
 
-`Mark 👨🏻` receives the `API Key` transmitted by `Anna 👩` on a secured channel of their choice. He uses it to authenticate requests from the client code to MeiliSearch.
+| field       | type   | required | description                                                                                                                                                                                                                                       |
+|-------------|--------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| uid         | string | Optional | A unique identifier represented by a [uuid v4](https://fr.wikipedia.org/wiki/Universally_unique_identifier). Specified at creation or generated by Meilisearch if ommited.                                                                        |
+| name        | string | Optional | A non unique human readable name to ease identification of the API key. **Default**: `null`                                                                                                                                                       |
+| description | string | Optional | A description for the API key. **Default**: `null`                                                                                                                                                                                                |
+| actions     | array  | Required | A list of actions permitted for the API key. `["*"]` for all actions. **See Actions list definition part**. `*` character can be used as a wildcard. e.g. `documents.*` to authorize access on all documents endpoints. **Default**: `No default` |
+| indexes     | array  | Required | `[*]` for all indexes. **Default**: `No Default`                                                                                                                                                                                                  |
+| expiresAt   | string | Required | The expiration date and time as `RFC 3339` format. `null` equals to no expiration time. Sending only the date part e.g `2021-12-01` leads to having an `expiresAt` value set to `2021-12-01T00:00:00`. **Default**: `No Default`                  |
 
-#### **As `Mark 👨🏻`, I am using an expired/deleted API Key**
+###### 3.2.4.4.2. `actions` List Definition
 
-#### Request example
+> `:authorizedIndexes` can be any value extracted from the `indexes` field of an API key resource.
 
-`POST` - `/indexes/movies/search`
+| name             | description                                                                                                                                                                                                                     |
+|------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| search           | Provides access to `GET` and `POST` methods on `/indexes/:authorizedIndexes/search` routes.                                                                                                                                     |
+| documents.add    | Provides access to `POST` and `PUT` on `/indexes/:authorizedIndexes/documents` routes.                                                                                                                                          |
+| documents.get    | Provides access to `GET` methods on `/indexes/:authorizedIndexes/documents` and `/indexes/:authorizedIndexes/documents/:documentId` routes.                                                                                     |
+| documents.delete | Provides access to `DELETE` method on `/indexes/:authorizedIndexes/documents/:documentId`, `indexes/:authorizedIndexes/documents/:documentId` and `POST` method on `/indexes/:authorizedIndexes/documents/delete-batch` routes. |
+| indexes.create   | Provides access to `POST` `/indexes`. **⚠️ `indexes` field should indicate the newly created index or having `[*]` to permits access on it.**.                                                                                   |
+| indexes.get      | Provides access to `GET` `/indexes` and `/indexes/:authorizedIndexes`. **⚠️Non-authorized `indexes` are omitted from the response on `/indexes`**.                                                                               |
+| indexes.update   | Provides access to `PUT` `/indexes/:authorizedIndexes`.                                                                                                                                                                         |
+| indexes.delete   | Provides access to `DELETE` `/indexes/:authorizedIndexes`.                                                                                                                                                                      |
+| tasks.get        | Provides access to `GET` `/tasks`. **⚠️Non-authorized `indexes` are omitted from the response on `/tasks`**. Also add access to `GET` `/indexes/:authorizedIndexes/tasks` routes.                                                |
+| settings.get     | Provides access to `GET` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes.                                                                                                            |
+| settings.update  | Provides access to `POST / DELETE` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes.                                                                                                  |
+| stats.get        | Provides access to `GET` `/stats/`. **⚠️Non-authorized `indexes` are omitted from the response on `/stats`**. Also add access to `GET` `/indexes/:authorizedIndexes/stats`.                                                      |
+| dumps.create     | Provides access to `POST` `/dumps` route. **As dumps are not scoped by indexes, a restriction on `indexes` does not affect this action.**                                                                                       |
+| version          | Provides access to `GET` `/version` route.                                                                                                                                                                                      |
+| keys.get         | Provides access to `GET` `/keys` route.                                                                                                                                                                                         |
+| keys.create      | Provides access to `POST` `/keys` route.                                                                                                                                                                                        |
+| keys.update      | Provides access to `PATCH` `/keys` routes.                                                                                                                                                                                      |
+| keys.delete      | Provides access to `DELETE` `/keys` routes.                                                                                                                                                                                     |
 
-#### Headers
+###### 3.2.4.4.3. Response Definition
+
+Returns a `201 Created` HTTP code when the request is successful.
+
+See [API Key Resource Representation](#3241-api-key-resource-representation) section for the response body.
+
+###### 3.2.4.4.3. Errors
+
+- 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route without the master key or an API key missing the `keys.create` permission returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Omitting Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
+- 🔴 Sending an empty Content-Type returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
+- 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
+- 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
+- 🔴 Sending a different payload type than the Content-Type header returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
+- 🔴 Sending an invalid json format returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
+- 🔴 Omitting `actions` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
+- 🔴 Omitting `indexes` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
+- 🔴 Omitting `expiresAt` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
+- 🔴 Sending an `uid` field that already exists returns an [api_key_already_exists](0061-error-format-and-definitions.md#api_key_already_exists) error.
+- 🔴 Sending an invalid value for the `uid` field returns an [invalid_api_key_uid](0061-error-format-and-definitions.md#invalid_api_key_uid) error.
+- 🔴 Sending an invalid value for the `actions` field returns an [invalid_api_key_actions](0061-error-format-and-definitions.md#invalid_api_key_actions) error.
+- 🔴 Sending an invalid value for the `indexes` field returns an [invalid_api_key_indexes](0061-error-format-and-definitions.md#invalid_api_key_indexes) error.
+- 🔴 Sending an invalid value for the `expiresAt` field returns an [invalid_api_key_expires_at](0061-error-format-and-definitions.md#invalid_api_key_expires_at) error.
+- 🔴 Sending an invalid value for the `name` field returns an [invalid_api_key_name](0061-error-format-and-definitions.md#invalid_api_key_name) error.
+- 🔴 Sending an invalid value for the `description` field returns an [invalid_api_key_description](0061-error-format-and-definitions.md#invalid_api_key_description) error.
+
+##### 3.2.4.5. `PATCH` - `/keys/:uid_or_key`
+
+Update an API key found by it's `uid` or `key` field. Only the `name` and `description` fields of an API key can be modified.
+
+###### 3.2.4.5.1. Payload Definition
+
+| field       | type   | required | description                                        |
+|-------------|--------|----------|----------------------------------------------------|
+| name        | string | Optional | A name for the API Key. **Default**: `null`        |
+| description | string | Optional | A description for the API key. **Default**: `null` |
+
+###### 3.2.4.5.2. Response Definition
+
+Returns a `200 Success` HTTP code when the request is successful.
+
+See [API Key Resource Representation](#3241-api-key-resource-representation) section for the response body.
+
+###### 3.2.4.5.3. Errors
+
+- 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route without the master key or an API key missing the `keys.update` permission returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Attempting to access an API key that does not exist returns a [api_key_not_found](0061-error-format-and-definitions.md#api_key_not_found) error.
+- 🔴 Omitting Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
+- 🔴 Sending an empty Content-Type returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
+- 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
+- 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
+- 🔴 Sending a different payload type than the Content-Type header returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
+- 🔴 Sending an invalid json format returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
+- 🔴 Sending an invalid value for the `name` field returns an [invalid_api_key_name](0061-error-format-and-definitions.md#invalid_api_key_name) error.
+- 🔴 Sending an invalid value for the `description` field returns an [invalid_api_key_description](0061-error-format-and-definitions.md#invalid_api_key_description) error.
+- 🔴 Sending `uid`, `key`, `actions`, `indexes`, `expiresAt`, `createdAt`, `updatedAt` in the payload request returns an [immutable_field](0061-error-format-and-definitions.md#immutable_field) error.
+
+
+##### 3.2.4.6. `DELETE` - `/keys/:uid_or_key`
+
+Delete an API key found by it's `uid` or `key` field.
+
+###### 3.2.4.6.1. Payload Definition
+n/a
+
+###### 3.2.4.6.2. Response Definition
+
+Returns a `204 No-Content` HTTP code when the request is successful.
+
+###### 3.2.4.6.3. Errors
+
+- 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route without the master key or an API key missing the `keys.delete` permission returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Attempting to access an API key that does not exist returns a [`api_key_not_found`](0061-error-format-and-definitions.md#api_key_not_found) error.
+
+##### 3.2.4.7. Using an API key on client-code
+
+###### 3.2.4.7.1 Authorization Bearer Header
+
+When the Meilisearch API is secured by the presence of a master key, the `Authorization` header must be used with a bearer to authorize requests. The specified value must be the value of the `key` field of an API key.
 
 ```
-    "Authorization: Bearer :apiKey"
+    "Authorization: Bearer `:key`"
     "Content-Type: application/json"
 ```
 
-#### Response
+- 🔴 Accessing a route with an `API Key` that has expired, been deleted or don't have sufficient permissions returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
-- 🔴 Accessing this route with an `API Key` that has expired or, been deleted returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+## 4. Technical Aspects
 
----
+### 4.1. API Key generation
 
-### **As `Mark 👨🏻`, I am using a valid API Key, but the permission set is not sufficient to access the requested API resource**
+An `uid` representing by a uuid v4 is generated if not specified at creation by the user.
 
-#### Request example
+The final key is then an HMAC with the master key, as the secret, and the `uid`, a hyphenated Uuidv4, as the data. HMAC uses an SHA-256 algorithm internally.
 
-`POST` - `/indexes/movies/search`
+The final key could be generated with openssl as below:
 
-#### Headers
+    echo -n $HYPHENATED_UUID | openssl dgst -sha256 -hmac $MASTER_KEY
 
-```
-    "Authorization: Bearer :apiKey"
-    "Content-Type: application/json"
-```
 
-#### Response
+### 4.2. Synchronous write of `API Key` resources
 
-- 🔴 Accessing this route with an `API Key` that don't have sufficient permissions to access it returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+Writing to `/keys` endpoints are synchronous in order to return errors directly to the user when he performs an operation on them. This means that API key management operations do not appear as a task on `/tasks`.
 
-## 2. Technical Aspects
-
-### 2.1 API Key generation
-
-A prefix of 8 characters is randomly generated per key and is stored within the instance.
-
-The final key is then a SHA-2556 hash made of the prefix and the master-key concatenation.
-
-`SHA-256(:randomizedPrefix, :master-key)` gives the final `key` field to use.
-
-### 2.2 Synchronous write of `API Key` resources
-
-Writing to `/keys` endpoints are synchronous in order to return errors directly to the user when he performs an operation on them.
-
-### 2.3 Propagating `API Key` to a dump.
+### 4.3. Propagating `API Key` to dumps.
 
 The generated API keys must also transit within a dump to facilitate the upgrade of a MeiliSearch instance.
 
 > 🚨 As a reminder, dumps must be stored in secure areas not accessible to the public or unaccredited persons. In general, you should avoid moving them off the host machine or do so via a secure channel as a security measure.
 
-If the dumps ever leak, the api keys cannot be spoofed from the dump inspection because it needs the master-key to have the full value of a valid API key. Only the randomized prefixes are propagated in the dumps.
+If the dumps ever leak, the api keys cannot be spoofed from the dump inspection because it needs the master key to have the full value of a valid API key. Only the `uid` value is propagated in the dumps.
 
-### 2.4 Propagating `API Key` to snapshots.
+### 4.4. Propagating `API Key` to snapshots.
 
 The generated API keys must also transit within a snapshot to facilitate the recovery of a MeiliSearch instance.
 
 > 🚨 As a reminder, snapshots must be stored in secure areas not accessible to the public or unaccredited persons. In general, you should avoid moving them off the host machine or do so via a secure channel as a security measure.
 
-If the snapshot ever leak, the `API Keys` cannot be spoofed from the snapshot inspection because it needs the master-key to have the full value of a valid `API key`. Only the randomized prefixes are propagated in the snapshots.
+If the snapshot ever leak, the `API keys` cannot be spoofed from the snapshot inspection because it needs the master key to have the full value of a valid `API key`. Only the `uid` value is propagated in the snapshots.
 
-### 2.5 API Keys storage size limit
+### 4.5. API Keys storage size limit
 
-The maximum size of the API key storage is `100GB`.
+The maximum size of the API key storage layer is `100GB`.
 
-## 3. Future Possibilities
+## 5. Future Possibilities
 
 - Regenerate a specific `API Key`.
-- Add a generated id field to paginate the list of API Key.
-- Have a filer/dedicated route to fetch expired key if MeiliSearch do not display them by default on `/keys` in the future.
 - Have an "archive" state where manually deleted API Keys can be restored for a certain amount of time.
 - Add rate-limiting per API Key.
 - A restriction on the maximum offset/limit.
 - Add search parameters restrictions for an API Key.
 - Add rfc2822 format expression for `expiredAt` field. e.g. `Wed, 18 Feb 2022 23:16:09 GMT`
+- Add an alias that can only be associated to one API Key to retrieve it easily on client side. e.g. `GET /keys/:uid_or_alias`
