@@ -88,7 +88,7 @@ Suppose a movie dataset. The documents contain a field `release_date` with a tim
 
 The following example creates a custom ranking rule that makes recent movies more relevant than older ones. A movie released in 2020 will appear before a movie released in 1999.
 
-***Request payload `POST`- `/indexes/products/settings/ranking-rules`***
+***Request payload `PUT`- `/indexes/products/settings/ranking-rules`***
 ```json
 [
     "words",
@@ -123,7 +123,7 @@ Fetch the `rankingRules` setting of a Meilisearch index.
 
 - 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
-#### 3.3.2. `POST` - `indexes/:index_uid/settings/ranking-rules`
+#### 3.3.2. `PUT` - `indexes/:index_uid/settings/ranking-rules`
 
 Modify the `rankingRules` setting of a Meilisearch index.
 
@@ -201,6 +201,5 @@ The first ranking rule is applied to all documents, while each subsequent rule i
 
 ## 5. Future Possibilities
 
-- Replace `POST` HTTP verb with `PATCH`
 - Add dedicated error to avoid using generic `bad_request` error code
 - Return an error when `rankingRules` is defined as an empty array
