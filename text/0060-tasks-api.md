@@ -21,10 +21,10 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 | field      | type    | description                                                                                                                                                                                                                   |
 |------------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | uid        | integer | Unique sequential identifier                                                                                                                                                                                                  |
-| indexUid   | string  | Unique index identifier                                                                                                                                                                                                       |
+| indexUid   | string  | Unique index identifier. This field is `null` when the task type is `dumpCreation`.                                                                                                                                                                                                                                        |
 | batchUid   | integer | Identify in which batch a task has been grouped by auto-batching. It corresponds to the first task uid grouped within a batch. See [0096-auto-batching.md](0096-auto-batching.md)                                             |
 | status     | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`                                                                                                                                       |
-| type       | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `documentAdditionOrUpdate`, `documentDeletion`, `settingsUpdate`                                                                       |
+| type       | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `documentAdditionOrUpdate`, `documentDeletion`, `settingsUpdate`, `dumpCreation`                                                       |
 | details    | object  | Details information for a task payload. See Task Details part.                                                                                                                                                                |
 | error      | object  | Error object containing error details and context when a task has a `failed` status. See [0061-error-format-and-definitions.md](0061-error-format-and-definitions.md)                                                         |
 | duration   | string  | Total elapsed time the engine was in processing state expressed as an `ISO-8601` duration format. Times below the second can be expressed with the `.` notation, e.g., `PT0.5S` to express `500ms`. Default is set to `null`. |
@@ -36,12 +36,12 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 
 ##### Summarized `task` Object for `202 Accepted`
 
-| field      | type    | description                                                                      |
-|------------|---------|----------------------------------------------------------------------------------|
-| taskUid    | integer | Unique sequential identifier                                                     |
-| indexUid   | string  | Unique index identifier                                                          |
-| status     | string  | Status of the task. Value is `enqueued`                                          |
-| type       | string  | Type of the task.                                                                |
+| field      | type    | description                     |
+|------------|---------|---------------------------------|
+| taskUid    | integer | Unique sequential identifier           |
+| indexUid   | string  | Unique index identifier. This field is `null` when the task type is `dumpCreation`. |
+| status     | string  | Status of the task. Value is `enqueued` |
+| type       | string  | Type of the task. |
 | enqueuedAt | string  | Represent the date and time as `RFC 3339` format when the task has been enqueued |
 
 
@@ -68,6 +68,7 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 | documentAdditionOrUpdate |
 | documentDeletion         |
 | settingsUpdate           |
+| dumpCreation |
 
 > 👍 Type values follow a `camelCase` naming convention.
 
@@ -118,6 +119,16 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 | synonyms             | `synonyms` payload object            |
 | distinctAttribute    | `distrinctAttribute` payload string  |
 | displayedAttributes  | `displayedAttributes` payload array  |
+
+##### dumpCreation
+
+| name    | description  |
+| -----   | ------------ |
+| dumpUid | The generated uid of the dump |
+
+Since the creation of a dump is not a task associated with a particular index, it is only present on the `GET` - `/tasks` and `GET` - `tasks/:task_uid` endpoints.
+
+Fully qualified and summarized task objects related to a dump creation display a `null` `indexUid` field.
 
 #### 5. Examples
 
@@ -702,4 +713,4 @@ n/a
 - Use Hateoas capability to give direct access to a `task` resource.
 - Add dedicated task type names modifying a sub-setting. e.g. `SearchableAttributesUpdate`.
 - Add an archived state for old `tasks`.
-- Indicate the `API Key` identity that added a `task`.
+- Add the `API Key` identity that added a `task`.

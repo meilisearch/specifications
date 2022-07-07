@@ -169,7 +169,6 @@ Only the master key allows managing the API keys.
 | settings.update | Provides access to `POST / DELETE` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes. |
 | stats.get | Provides access to `GET` `/stats/`. **⚠️Non-authorized `indexes` are omitted from the response on `/stats`**. Also add access to `GET` `/indexes/:authorizedIndexes/stats`. |
 | dumps.create | Provides access to `POST` `/dumps` route. **As dumps are not scoped by indexes, a restriction on `indexes` does not affect this action.** |
-| dumps.get | Provides access to `GET` `/dumps/:dumpUid` route. **As dumps are not scoped by indexes, a restriction on `indexes` does not affect this action.** |
 | version | Provides access to `GET` `/version` route.
 
 ---
