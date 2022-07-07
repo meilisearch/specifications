@@ -22,6 +22,8 @@ N/A
 | [synonyms](0123-synonyms-setting-api.md)                           | `synonyms` sub-resource API endpoints definition             |
 | [distinct-attribute](0123-distinct-attribute-setting-api.md)       | `distinctAttribute` sub-resource API endpoints definition    |
 | [typo-tolerance](0117-typo-tolerance-setting-api.md)               | `typoTolerance` sub-resource API endpoints definition        |
+| [pagination](157-pagination-setting-api.md)                        | `pagination` sub-resource API endpoints definition           |
+| [faceting](157-faceting-setting-api.md)                            | `faceting` sub-resource API endpoints definition             |
 
 Each setting is exposed as a sub-resource of the `indexes/:index_uid/settings` endpoints. e.g. The ranking rules setting of a Meilisearch index is exposed at `indexes/:index_uid/settings/ranking-rules`.
 
@@ -47,7 +49,9 @@ Fetch the settings of a Meilisearch index.
 | `stopWords`              | Array of String         | true     |
 | `synonyms`               | Object                  | true     |
 | `distinctAttribute`      | String / `null`         | true     |
-| `typo`                   | Object                  | true     |
+| `typoTolerance`          | Object                  | true     |
+| `pagination`             | Object                  | true     |
+| `faceting`               | Object                  | true     |
 
 The attributes ordering in the response payload is equivalent to the order described in the table above.
 
@@ -71,7 +75,9 @@ Modify the settings of a Meilisearch index.
 | `stopWords`              | Array of String / `null` | false    |
 | `synonyms`               | Object / `null`          | false    |
 | `distinctAttribute`      | String / `null`          | false    |
-| `typo`                   | Object                   | false    |
+| `typoTolerance`          | Object                   | false    |
+| `pagination`             | Object                   | false    |
+| `faceting`               | Object                   | false    |
 
 The request payload accepts partial definitions.
 

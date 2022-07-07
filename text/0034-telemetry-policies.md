@@ -54,6 +54,8 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | FilterableAttributes Updated | Occurs when filterable attributes are updated via `POST` - `/indexes/:indexUid/settings/filterable-attributes`. |
 | SortableAttributes Updated | Occurs when sortable attributes are updated via `POST` - `/indexes/:indexUid/settings/sortable-attributes`. |
 | TypoTolerance Updated | Occurs when typo tolerance settings are updated via `POST` - `/indexes/:indexUid/settings/typo-tolerance`. |
+| Pagination Updated | Occurs when pagination settings are updated via `PATCH` — `/indexes/:indexUid/settings/pagination`. |
+| Faceting Updated | Occurs when faceting settings are updated via `PATCH` — `/indexes/:indexUid/settings/faceting`. |
 | Dump Created | Occurs when a dump is created via `POST` - `/dumps`. |
 | Tasks Seen | Occurs when tasks are fetched globally via `GET` - `/tasks`. |
 
@@ -128,6 +130,8 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `typo_tolerance.disable_on_words`                   | `true` if at least one value is defined | `false` | `Settings Updated`,  `TypoTolerance Updated` |
 | `typo_tolerance.min_word_size_for_typos.one_typo` | The defined value for `minWordSizeForTypos.oneTypo` property | `5` | `Settings Updated`, `TypoTolerance Updated` |
 | `typo_tolerance.min_word_size_for_typos.two_typos`| The defined value for `minWordSizeForTypos.twoTypos` property | `9` | `Settings Updated`, `TypoTolerance Updated` |
+| `pagination.max_total_hits`                 | The defined value for `pagination.maxTotalHits` property | `1000` | `Settings Updated`, `Pagination Updated` |
+| `faceting.max_values_per_facet`         | The defined value for `faceting.maxValuesPerFacet` property | `100` | `Settings Updated`, `Faceting Updated` |
 | `per_task_uid`                          | `true` if an uid is used to fetch a particular task resource, otherwise `false` | true | `Tasks Seen` |
 | `filtered_by_index_uid`                 | `true` if `GET /tasks` endpoint is filered by `indexUid`, otherwise `false` | false | `Tasks Seen` |
 | `filtered_by_type`                      | `true` if `GET /tasks` endpoint is filered by `type`, otherwise `false` | false | `Tasks Seen` |
@@ -311,6 +315,8 @@ This property allows us to gather essential information to better understand on 
 | typo_tolerance.disable_on_words    | `true` if at least one value is defined for `disableOnWords` property. | `false` |
 | typo_tolerance.min_word_size_for_typos.one_typo | The defined value for `minWordSizeForTypos.oneTypo` property. | `5` |
 | typo_tolerance.min_word_size_for_typos.two_typos | The defined value for `minWordSizeForTypos.twoTypos` property. | `9` |
+| pagination.max_total_hits                 | The defined value for `pagination.maxTotalHits` property | `1000` |
+| faceting.max_values_per_facet         | The defined value for `faceting.maxValuesPerFacet` property | `100` |
 
 ---
 
@@ -352,11 +358,23 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| typo_tolerance.enabled        | Whether the typo tolerance is enable.d | `true` |
+| typo_tolerance.enabled        | Whether the typo tolerance is enabled | `true` |
 | typo_tolerance.disable_on_attributes | `true` if at least one value is defined for `disableOnAttributes` property. | `false` |
 | typo_tolerance.disable_on_words    | `true` if at least one value is defined for `disableOnWords` property. | `false` |
 | typo_tolerance.min_word_size_for_typos.one_typo | The defined value for `minWordSizeForTypos.oneTypo` property. | `5` |
 | typo_tolerance.min_word_size_for_typos.two_typos | The defined value for `minWordSizeForTypos.twoTypos` property. | `9` |
+
+## `Pagination Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| pagination.max_total_hits | The defined value for `maxTotalHits` property | `1000` |
+
+## `Faceting Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| faceting.max_values_per_facet | The defined value for `maxValuesPerFacet` property | `100` |
 
 ## `Dump Created`
 
