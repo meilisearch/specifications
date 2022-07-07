@@ -727,22 +727,35 @@ HTTP Code: `400 Bad Request`
 
 ### Context
 
-This error occurs when the `_geo` field of a document payload is not valid.
+These errors occurs when the `_geo` field of a document payload is not valid. Either the latitude / longitude is missing or is not a number.
 
 ### Error Definition
 
+#### Variant: Missing `_geo.lat` or `_geo.lng` field.
+
 ```json
 {
-    "message": "The document with the id: `:documentId` contains an invalid _geo field: `:syntaxErrorHelper`.",
+    "message": "Could not find :coord in the document with the id: `:documentId`. Was expecting a `:field` field.",
     "code": "invalid_geo_field",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
 }
-
 ```
 
-- The `:documentId` is inferred when the error message is generated.
-- The `:syntaxErrorHelper` is inferred when the error message is generated.
+#### Variant: Coordinate can't be parsed.
+
+```json
+{
+    "message": "Could not parse :coord in the document with the id: `:documentId`. Was expecting a number but instead got `:value`.",
+    "code": "invalid_geo_field",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
+}
+```
+
+- The `:documentId` is inferred when the message is generated.
+- The `:coord` is either `latitude` or `longitude` depending on what's wrong.
+- The `:field` is either `_geo.lat` or `_geo.lng` depending on what's wrong.
 
 ---
 
