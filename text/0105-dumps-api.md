@@ -1,7 +1,4 @@
-- Title: Dumps API
-- Start Date: 2022-01-12
-
-# Dumps
+# Dumps API and CLI
 
 ## 1. Summary
 
@@ -16,11 +13,10 @@ The dumps exist to upgrade a MeiliSearch instance from a previous version to a m
 ### 3.1. Summary Key Points
 
 - A dump creation can be scheduled from the MeiliSearch API using the `POST - /dumps` endpoint.
-- A dump creation status can be tracked using the `GET - /dumps/{uid}/status` endpoint.
+- A dump creation status can be tracked using the `GET - /tasks/:task_uid` endpoint.
 - MeiliSearch can only create one dump at a time.
 - By default, dumps are created in a folder named `dumps`, and can be found in the same directory as the MeiliSearch binary.
 - The `dumps` directory can be customized using the `--dumps-dir` configuration option. If the dump directory does not already exist when the dump creation process is called, MeiliSearch will create it.
-- If MeiliSearch is restarted after a dump creation, the dump's status will not appear on the `GET - /dumps/:uid/status` endpoint.
 - A `.dump` file can be imported using the `--import-dump` command-line flag.
 - The MeiliSearch server starts when the dump is fully imported and indexed.
 - By default, importing a dump when a database already exists (a non-empty data.ms folder in the same directory as the MeiliSearch binary) will stop the process and throw an error.
@@ -28,7 +24,7 @@ The dumps exist to upgrade a MeiliSearch instance from a previous version to a m
 - By default, trying to import a dump that does not exist, will stop the process and throw an error.
 - When using the command-line flag `--ignore-missing-dump`, MeiliSearch will continue its process and not throw an error.
 - When a dump is being imported, the http API is not available. Meilisearch can't receive read or write requests.
-- When a dump is being created, the task queue can receive other future operations to perform later but can't process any additional tasks during the dump creation.
+- `dumpCreation` task takes priority over enqueued `tasks`. This means that if a `dumpCreation` task is created, it will be directly processed when the current processing task finishes even if other tasks have been enqueued before.
 
 ---
 
@@ -41,45 +37,18 @@ Create a dump
 ##### 3.2.1.1. Body Payload
 N/A
 
-##### 3.2.1.2. Response
+##### 3.2.1.2. Response Definition
 
-`202 Accepted`
+When the request is successful, Meilisearch returns the HTTP code `202 Accepted`. The response's content is the summarized representation of the received asynchronous task.
 
-```json
-{
-    "uid": "20220112-151751438",
-    "status": "in_progress",
-    "startedAt": "2022-01-12T15:17:51.438881Z"
-}
-```
+See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted).
+
+The uid of the generated dump can be found in the task details.
 
 ##### 3.2.1.3. Errors
 
 - 🔴 If Meilisearch is secured, accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
 - 🔴 If Meilisearch is secured, accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
-- 🔴 Attempting to create a dump while a dump is already being created return an [dump_already_in_progress](0061-error-format-and-definitions.md#dump_already_in_progress) error.
-
-#### 3.2.2  GET `/dumps/:dump_uid/status`
-
-Get a dump status
-
-##### 3.2.2.1. Response
-
-`200 Success`
-
-```json
-{
-    "uid": "20220112-151751438",
-    "status": "in_progress",
-    "startedAt": "2022-01-12T15:17:51.438881Z"
-}
-```
-
-##### 3.2.2.2. Errors
-
-- 🔴 If Meilisearch is secured, accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 If Meilisearch is secured, accessing this route with a key that does not have permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
-- 🔴 Attempting to access a dump details that does not exist returns a [dump_not_found](0061-error-format-and-definitions.md#dump_not_found) error.
 
 ---
 
@@ -126,23 +95,30 @@ The following table describes which version of the dump correspond to which vers
 | Dump version | Meilisearch version                  | Highest compatibility dump version |
 |--------------|--------------------------------------|------------------------------------|
 | `v1`         | `v0.20.0` and below                  | `v3`                               |
-| `v2`         | `v0.21.0` and `v0.21.1`              | `v4`                               |
-| `v3`         | From `v0.22.0` to `v0.24.0` included | `v4`                               |
-| `v4`         | `v0.25.0` and later                  | -                                  |
+| `v2`         | `v0.21.0` and `v0.21.1`              | `v5`                               |
+| `v3`         | From `v0.22.0` to `v0.24.0` included | `v5`                               |
+| `v4`         | From `v0.25.0` to `v0.27.2` included | `v5`                               |
+| `v5`         | `v0.28.0` and later                  | -                                  |
 
 What does "Highest compatibility dump version" means?
+
 For maintainance reasons, we cannot guarantee the compatibility from old dump versions to the newest ones.
 Concretely, if the user wants to upgrade from Meilisearch `v0.19.0` (dump `v1`) to `v0.26.0` (dump `v4`), migration should be done in two steps. First, import your `v0.19.0` dump into an instance running any version of Meilisearch between v0.21 and v0.24. Second, export another dump from this instance and import it to a final instance running with `v0.26.0`.
 
-## 2. Technical Aspects
+## 4. Technical Aspects
 
-### 2.1. Dump Creation
+### 4.1. Dump Creation
 
-When a dump is being created, the task queue can receive other future operations to perform later but can't process any additional tasks during the dump creation.
+When a dump is being created, the task queue can receive other future operations to perform.
 
-### 2.2. Importing a dump
+### 4.2. Importing a dump
 
 When a dump is being imported, the http API is not available. Meilisearch can't receive read or write requests.
 
-## 3. Future Possibilities
-- Make dump creation a `task`
+### 4.3. Dump Creation Task Priority
+
+Dump creation tasks have priority over other task types. If a `dumpCreation` task is enqueued, it will be directly processed when the current processing task finishes even if other tasks have been enqueued before.
+
+## 5. Future Possibilities
+
+- Give information about the import of a dump within the tasks.

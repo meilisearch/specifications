@@ -176,7 +176,7 @@ All properties must be returned when the resource is retrieved.
 
 - 🔴 If the index does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
-#### 3.2.2.2. `POST` - `indexes/:index_uid/settings/typo-tolerance`
+#### 3.2.2.2. `PATCH` - `indexes/:index_uid/settings/typo-tolerance`
 
 Allow customizing partially the settings of the typo tolerance feature for an index.
 
@@ -292,5 +292,4 @@ The `typo` ranking rule favors candidates with the least typos. That is, if a do
 - Expose `typoTolerance` resource as a search parameter to override index settings.
 - Add the possibility to disable the typo tolerance feature on all numeric fields.
 - Add different modes of result matching for the typo feature. e.g. `default`/`min`/`strict`
-- Replace `POST` to `PATCH` verb to allow partial edit of the settings and embrace REST API convention.
 - Introduce synchronous `invalid_typo_tolerance_{fieldName}` error with a better error message than the one provided by serde.

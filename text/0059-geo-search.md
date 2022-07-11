@@ -42,11 +42,12 @@ According to our user feedback, the lack of a geosearch feature is mentioned as 
 
 - Name: `_geo`
 - Type: Object
-- Format: `{lat:float, lng:float}`
+- Format: `{lat:number|string, lng:number|string}`
 - Not required
 
 > 💡 if `_geo` is found in the document payload, `lat` and `lng` are required.
 > 💡 `lat` and `lng` must be of float value.
+> 💡 `lat` and `lng` field type can be mixed. e.g. `lat` can be a string while `lng` is a number in the same `_geo` object.
 
 ##### **CSV Format**
 
@@ -101,8 +102,8 @@ csv format example
         "brand": "F40 LM",
         "brand": "Ferrari",
         "_geo": {
-            "lat": 48.862725,
-            "lng": 2.287592
+            "lat": "48.862725",
+            "lng": "2.287592"
         }
     }
 ]
@@ -117,28 +118,6 @@ csv format example
 ```
 
 - 🔴 Giving a bad formed `_geo` that do not conform to the format causes the `update` payload to fail. A new `invalid_geo_field` error is given in the `update` object.
-
-##### Errors Definition
-
-## invalid_geo_field
-
-### Context
-
-This error occurs when the `_geo` field of a document payload is not valid.
-
-### Error Definition
-
-```json
-{
-    "message": "The document with the id: `:documentId` contains an invalid _geo field: :syntaxErrorHelper.",
-    "code": "invalid_geo_field",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
-}
-```
-
-- The `:documentId` is inferred when the message is generated.
-- The `:syntaxErrorHelper` is inferred when the message is generated.
 
 ---
 
@@ -241,7 +220,7 @@ This error is raised asynchronously when the user tries to specify an invalid ra
 #### Error Definition
 
 ```json
-    "message": ":rankingRule ranking rule is invalid. Valid ranking rules are Words, Typo, Sort, Proximity, Attribute, Exactness and custom ranking rules."
+    "message": ":rankingRule ranking rule is invalid. Valid ranking rules are words, typo, sort, proximity, attribute, exactness and custom ranking rules."
     "code": "invalid_ranking_rule"
     "type": "invalid_request"
     "link": "https://docs.meilisearch.com/errors#invalid_ranking_rule"

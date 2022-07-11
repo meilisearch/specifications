@@ -35,7 +35,6 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 
 [Amplitude](https://amplitude.com/) is a tool for graphing and highlighting collected data. Segment feeds Amplitude so that we can build visualizations according to our needs.
 
-
 ----
 
 #### Events table
@@ -55,9 +54,11 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | FilterableAttributes Updated | Occurs when filterable attributes are updated via `POST` - `/indexes/:indexUid/settings/filterable-attributes`. |
 | SortableAttributes Updated | Occurs when sortable attributes are updated via `POST` - `/indexes/:indexUid/settings/sortable-attributes`. |
 | TypoTolerance Updated | Occurs when typo tolerance settings are updated via `POST` - `/indexes/:indexUid/settings/typo-tolerance`. |
+| Pagination Updated | Occurs when pagination settings are updated via `PATCH` — `/indexes/:indexUid/settings/pagination`. |
+| Faceting Updated | Occurs when faceting settings are updated via `PATCH` — `/indexes/:indexUid/settings/faceting`. |
 | Dump Created | Occurs when a dump is created via `POST` - `/dumps`. |
 | Tasks Seen | Occurs when tasks are fetched globally via `GET` - `/tasks`. |
-| Index Tasks Seen | Occurs when tasks are filtered by index via `GET` - `/indexes/:indexUid/tasks`. |
+
 ----
 
 #### Summarized Metrics/Events table
@@ -113,7 +114,8 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `formatting.highlight_post_tag`       | `true` if `highlightPostTag` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
 | `formatting.crop_length`                | `true` if `cropLength` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
 | `formatting.crop_marker`                | `true` if `cropMarker` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
-| `formatting.matches`                    | `true` if `matches` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
+| `formatting.show_matches_position`                    | `true` if `showMatchesPosition` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
+| `facets`                                | `true` if `facets` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
 | `primary_key`                           | Value given for the `primaryKey` parameter if used, otherwise `null` | id | `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`|
 | `payload_type`                          | All `payload_type` encountered in this batch | ["application/json", "text/plain", "application/x-ndjson"] | `Documents Added`, `Documents Updated` |
 | `index_creation`                        | `true` if a document addition or update request triggered index creation in this batch, otherwise `false` | true | `Documents Added`, `Documents Updated` |
@@ -128,8 +130,12 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `typo_tolerance.disable_on_words`                   | `true` if at least one value is defined | `false` | `Settings Updated`,  `TypoTolerance Updated` |
 | `typo_tolerance.min_word_size_for_typos.one_typo` | The defined value for `minWordSizeForTypos.oneTypo` property | `5` | `Settings Updated`, `TypoTolerance Updated` |
 | `typo_tolerance.min_word_size_for_typos.two_typos`| The defined value for `minWordSizeForTypos.twoTypos` property | `9` | `Settings Updated`, `TypoTolerance Updated` |
-| `per_task_uid`                          | `true` if an uid is used to fetch a particular task resource, otherwise `false` | true | `Tasks Seen`, `Index Tasks Seen` |
-|
+| `pagination.max_total_hits`                 | The defined value for `pagination.maxTotalHits` property | `1000` | `Settings Updated`, `Pagination Updated` |
+| `faceting.max_values_per_facet`         | The defined value for `faceting.maxValuesPerFacet` property | `100` | `Settings Updated`, `Faceting Updated` |
+| `per_task_uid`                          | `true` if an uid is used to fetch a particular task resource, otherwise `false` | true | `Tasks Seen` |
+| `filtered_by_index_uid`                 | `true` if `GET /tasks` endpoint is filered by `indexUid`, otherwise `false` | false | `Tasks Seen` |
+| `filtered_by_type`                      | `true` if `GET /tasks` endpoint is filered by `type`, otherwise `false` | false | `Tasks Seen` |
+| `filtered_by_status`                    | `true` if `GET /tasks` endpoint is filered by `status`, otherwise `false` | false | `Tasks Seen` |
 
 ----
 
@@ -215,7 +221,8 @@ This property allows us to gather essential information to better understand on 
 | formatting.highlight_post_tag | Does `highlightPostTag` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.crop_length | Does `cropLength` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.crop_marker | Does `cropMarker` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
-| formatting.matches | Does `matches` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
+| formatting.show_matches_position | Does `showMatchesPosition` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
+| facets | Does `facets` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 
 ---
 
@@ -242,7 +249,8 @@ This property allows us to gather essential information to better understand on 
 | formatting.highlight_post_tag | Does `highlightPostTag` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.crop_length | Does `cropLength` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.crop_marker | Does `cropMarker` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
-| formatting.matches | Does `matches` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
+| formatting.show_matches_position | Does `showMatchesPosition` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
+| facets | Does `facets` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 
 ---
 
@@ -307,6 +315,8 @@ This property allows us to gather essential information to better understand on 
 | typo_tolerance.disable_on_words    | `true` if at least one value is defined for `disableOnWords` property. | `false` |
 | typo_tolerance.min_word_size_for_typos.one_typo | The defined value for `minWordSizeForTypos.oneTypo` property. | `5` |
 | typo_tolerance.min_word_size_for_typos.two_typos | The defined value for `minWordSizeForTypos.twoTypos` property. | `9` |
+| pagination.max_total_hits                 | The defined value for `pagination.maxTotalHits` property | `1000` |
+| faceting.max_values_per_facet         | The defined value for `faceting.maxValuesPerFacet` property | `100` |
 
 ---
 
@@ -344,16 +354,27 @@ This property allows us to gather essential information to better understand on 
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | searchable_attributes.total   | Number of searchable attributes. | `3` |
 
-
 ## `TypoTolerance Updated`
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| typo_tolerance.enabled        | Whether the typo tolerance is enable.d | `true` |
+| typo_tolerance.enabled        | Whether the typo tolerance is enabled | `true` |
 | typo_tolerance.disable_on_attributes | `true` if at least one value is defined for `disableOnAttributes` property. | `false` |
 | typo_tolerance.disable_on_words    | `true` if at least one value is defined for `disableOnWords` property. | `false` |
 | typo_tolerance.min_word_size_for_typos.one_typo | The defined value for `minWordSizeForTypos.oneTypo` property. | `5` |
 | typo_tolerance.min_word_size_for_typos.two_typos | The defined value for `minWordSizeForTypos.twoTypos` property. | `9` |
+
+## `Pagination Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| pagination.max_total_hits | The defined value for `maxTotalHits` property | `1000` |
+
+## `Faceting Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| faceting.max_values_per_facet | The defined value for `maxValuesPerFacet` property | `100` |
 
 ## `Dump Created`
 
@@ -367,13 +388,9 @@ This property allows us to gather essential information to better understand on 
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | per_task_uid  | `true` if an uid is used to fetch a particular task resource, otherwise `false` | `true` |
-
-## `Index Tasks Seen`
-
-| Property name | Description | Example |
-|---------------|-------------|---------|
-| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
-| per_task_uid  | `true` if an uid is used to fetch a particular task resource, otherwise `false` | `true` |
+| filtered_by_index_uid | `true` if `GET /tasks` endpoint is filered by `indexUid`, otherwise `false` | `false` |
+| filtered_by_type | `true` if `GET /tasks` endpoint is filered by `type`, otherwise `false` | `false` |
+| filtered_by_status | `true` if `GET /tasks` endpoint is filered by `status`, otherwise `false` | `false` |
 
 ---
 
@@ -417,7 +434,19 @@ The `User-Agent` header is tracked on the events listed below. Our official SDKs
 
 Each endpoint API tracked sends the `User-Agent` as a `user_agent` event property as an array. If several values are contained in the `User-Agent` header, they are split by the `;` character.
 
-#### Identifying MeiliSearch installation
+##### `X-Meilisearch-Client` Header
+
+Some browser engines prevent overloading the User-Agent header. To track the calls made by some clients concerned by this fact, e.g. the JavaScript SDK, it is possible to use the `X-Meilisearch-Client` custom header.
+
+If the `X-Meilisearch-Client` is encountered, it overrides the presence of the `User-Agent` header.
+
+#### Telemetry Endpoint
+
+Telemetric data are sent to the domain `telemetry.meilisearch.com` which then redirects it to Segment.
+
+This transit domain allows us to change the telemetry collection solution in the future without impacting older versions of Meilisearch.
+
+##### Identifying MeiliSearch installation
 
 To identify instances, we generate a unique identifier at first launch if analytics are not disabled.
 
@@ -428,23 +457,23 @@ To identify instances, we generate a unique identifier at first launch if analyt
 |-----------|---------|------------|-------|
 |config_dir	| %APPDATA% (C:\Users\%USERNAME%\AppData\Roaming) |	$XDG_CONFIG_HOME (~/.config) |	~/Library/Application Support |
 
-#### Segment Identify Call
+##### Segment Identify Call
 
 The `identify` method of Segment permits identifying an instance by sending a unique identifier. It groups the information of a MeiliSearch binary such as `system`, `stats`, and general properties related below in this specification.
 
 The segment identify call is only sent after the first hour if the instance is still running. At the first launch, MeiliSearch sends a `Launched` event on an instance ID equal to `total_launch` in order to avoid tracking instances usage for nothing when they could be shut down and never restarted.
 
-#### Segment Track Call
+##### Segment Track Call
 
 The `track` calls of Segment allow tracking the events passed on the instance.
 
-#### Batching
+##### Batching
 
 A batch is sent every hour or when it reaches the maximum size of `500Kb` to avoid sending analytics in real-time and preserve network exchanges.
 
 This batch contains an identify payload and all tracked events that occurred during this hour.
 
-#### Logging
+##### Logging
 
 Errors occurring when sending metrics to Segment should be silent. In general, the impact of data collection should be minimized as much as possible concerning performance and be entirely transparent for the user during its use.
 

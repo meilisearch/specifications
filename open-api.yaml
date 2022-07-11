@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: Meilisearch Core API
   description: 'Search documents, configure and manage the Meilisearch engine.'
-  version: 0.27.0
+  version: 0.28.0
   contact:
     name: Meilisearch
     email: bonjour@Meilisearch.com
@@ -25,6 +25,26 @@ servers:
     description: 'https://example.meilisearch.com:7700'
 components:
   schemas:
+    limit:
+      type: integer
+      description: Limit given for the query. If limit is not provided as a query parameter, this parameter displays the default limit value.
+      example: 10
+    offset:
+      type: integer
+      description: Offset given for the query. If offset is not provided as a query parameter, this parameter displays the default offset value.
+      example: 0
+    total:
+      type: integer
+      description: Total number of browsable results using offset/limit parameters for the given resource.
+      example: 50
+    from:
+      type: integer
+      description: The first task uid returned.
+      example: 999
+    next:
+      type: integer
+      description: Represents the value to send in `from` to fetch the next slice of the results. The first item for the next slice starts at this exact number. When the returned value is null, it means that all the data have been browsed in the given order.
+      example: 989
     timestamp:
       type: string
       description: An `RFC 3339` format for date/time/duration.
@@ -34,7 +54,6 @@ components:
       additionalProperties: false
       examples:
         - uid: movies
-          name: movies
           primaryKey: movie_id
           createdAt: '2019-11-20T09:40:33.711324Z'
           updatedAt: '2019-11-20T09:40:33.711324Z'
@@ -45,9 +64,6 @@ components:
           type: string
           example: movies
           description: Unique identifier for the index
-        name:
-          type: string
-          description: Name of the index
         primaryKey:
           type:
             - string
@@ -61,7 +77,6 @@ components:
           $ref: '#/components/schemas/timestamp'
       required:
         - uid
-        - name
         - createdAt
         - updatedAt
     document:
@@ -72,9 +87,9 @@ components:
         title: American Ninja 5
         poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
         overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
-        release_date: '1993-01-01'
+        release_date: 725846400
       description: 'A document made of attribute. The maximum number of attribute for a document is 65,535.'
-    matchesInfo:
+    matchesPosition:
       type: object
       properties:
         start:
@@ -94,14 +109,14 @@ components:
         title: American Ninja 5
         poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
         overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
-        release_date: '1993-01-01'
+        release_date: 725846400
         _formatted:
           id: 25684
           title: American Ninja 5
           poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
           overview: 'When a scientists daughter is kidnapped, American <em>Ninja</em>, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the <em>ninja</em>.'
-          release_date: '1993-01-01'
-        _matchesInfo:
+          release_date: 725846400
+        _matchesPosition:
           overview:
             - start: 49
               length: 5
@@ -112,14 +127,14 @@ components:
           title: American Ninja 5
           poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
           overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
-          release_date: '1993-01-01'
+          release_date: 725846400
           _formatted:
             id: 25684
             title: American Ninja 5
             poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
             overview: 'When a scientists daughter is kidnapped, American <em>Ninja</em>, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the <em>ninja</em>.'
-            release_date: '1993-01-01'
-          _matchesInfo:
+            release_date: 725846400
+          _matchesPosition:
             overview:
               - start: 49
                 length: 5
@@ -131,17 +146,17 @@ components:
           type: object
           description: Only present if `attributesToHighlight`/`attributesToCrop` is not empty. Return highlighted and cropped fields.
           additionalProperties: true
-        _matchesInfo:
+        _matchesPosition:
           type: object
-          description: Only present if matches = `true`. Array of all search query occurrences in all fields.
+          description: Only present if showMatchesPosition = `true`. Array of all search query occurrences in all fields.
           properties:
             '':
-              $ref: '#/components/schemas/matchesInfo'
+              $ref: '#/components/schemas/matchesPosition'
         attribute:
           type:
             - string
             - number
-          description: Retrieve attributes of the document. `attributesToRetrieve` controls these fields.
+          description: Retrieve attributes of a search result. `attributesToRetrieve` controls these fields.
         _geoDistance:
           type: number
           description: 'Using _geoPoint({lat}, {lng}) built-in sort rule at search leads the engine to return a _geoDistance within the search results. This field represents the distance in meters of the document from the specified _geoPoint.'
@@ -216,20 +231,17 @@ components:
         limit:
           type: integer
           description: Number of returned documents.
-        nbHits:
+        estimatedTotalHits:
           type: integer
-          description: Total number of candidates for this search in the database.
-        exhaustiveNbHits:
-          type: boolean
-          description: Whether `nbHits` is exhaustive.
-        facetsDistribution:
+          description: Estimated number of candidates for the search query.
+        facetDistribution:
           type: object
           additionalProperties:
             type: object
             additionalProperties:
               type: integer
           description: |
-            [Distribution of the given facets](https://docs.meilisearch.com/reference/features/search_parameters.html#facets-distribution).
+            [Distribution of the given facets](https://docs.meilisearch.com/reference/features/search_parameters.html#facet-distribution).
           example:
             genres:
               action: 273
@@ -239,9 +251,6 @@ components:
               comedy: 475
               mystery: 70
               thriller: 217
-        exhaustiveFacetsCount:
-          type: boolean
-          description: Whether `facetsDistribution` is exhaustive.
         processingTimeMs:
           type: integer
           description: Processing time of the query.
@@ -253,8 +262,7 @@ components:
         - hits
         - offset
         - limit
-        - nbHits
-        - exhaustiveNbHits
+        - estimatedTotalHits
         - processingTimeMs
         - query
     task:
@@ -271,7 +279,7 @@ components:
           indexUid: movies
           batchUid: 0
           status: succeeded
-          type: documentAddition
+          type: documentAdditionOrUpdate
           details:
             receivedDocuments: 10
             indexedDocuments: 10
@@ -302,35 +310,37 @@ components:
           type: string
           description: The type of the task
           enum:
-            - documentAddition
-            - documentPartial
+            - documentAdditionOrUpdate
             - documentDeletion
             - indexCreation
             - indexUpdate
             - indexDeletion
             - settingsUpdate
-            - clearAll
+            - dumpCreation
         details:
           type: object
           description: Details information of the task payload.
           properties:
             receivedDocuments:
               type: integer
-              description: Number of documents received for documentAddition or documentPartial task.
+              description: Number of documents received for documentAdditionOrUpdate task.
             indexedDocuments:
               type: integer
-              description: Number of documents finally indexed for documentAddition or documentPartial task or if batched, in the batchUid.
+              description: Number of documents finally indexed for documentAdditionOrUpdate task or if batched, in the batchUid.
             receivedDocumentsIds:
               type: integer
               description: Number of document ids received for documentDeletion task.
             deletedDocuments:
               type: integer
-              description: 'Number of documents finally deleted for documentDeletion, indexDeletion or clearAll task.'
+              description: 'Number of documents finally deleted for documentDeletion and indexDeletion tasks.'
             primaryKey:
               type: string
               description: Value for the primaryKey field encountered if any for indexCreation or indexUpdate task.
             settings:
               $ref: '#/components/schemas/settings'
+            dumpUid:
+              type: string
+              description: Identifier generated for the dump for dumpCreation task.
         error:
           description: Error object containing error details and context when a task has a failed status.
           $ref: '#/components/schemas/error'
@@ -441,10 +451,28 @@ components:
               type: integer
               default: 9
               nullable: false
+    pagination:
+      type: object
+      description: Customize pagination settings
+      properties:
+        maxTotalHits:
+          description: Define the maximum number of documents reachable for a search request. It means that with the default value of `1000`, it is not possible to see the `1001`st result for a **search query**.
+          type: integer
+          default: 1000
+          nullable: false
+    faceting:
+      type: object
+      description: Customize faceting settings
+      properties:
+        maxValuesPerFacet:
+          description: Define maximum number of value returned for a facet for a **search query**. It means that with the default value of `100`, it is not possible to have `101` different colors if the `color`` field is defined as a facet at search time.
+          type: integer
+          default: 100
+          nullable: false
     filterableAttributes:
       type: array
       description: |
-        Attributes to use for facetting and filtering. See [Filtering and Faceted Search](https://docs.meilisearch.com/reference/features/filtering_and_faceted_search.html).
+        Attributes to use for faceting and filtering. See [Filtering and Faceted Search](https://docs.meilisearch.com/reference/features/filtering_and_faceted_search.html).
       items:
         type: string
       example:
@@ -531,37 +559,6 @@ components:
         - numberOfDocuments
         - isIndexing
         - fieldDistribution
-    dumps:
-      type: object
-      additionalProperties: false
-      examples:
-        - uid: 20210719-114144097
-          status: done
-          startedAt: '2021-07-19T14:31:16.920473Z'
-          finishedAt: '2021-07-19T14:32:16.920473Z'
-      title: dumps
-      description: ''
-      properties:
-        uid:
-          type: string
-          example: 20200929-114144097
-          description: ' Unique identifier for the dump'
-        status:
-          type: string
-          enum:
-            - in_progress
-            - failed
-            - done
-          example: in_progress
-          description: Status of the dump
-        startedAt:
-          $ref: '#/components/schemas/timestamp'
-        finishedAt:
-          $ref: '#/components/schemas/timestamp'
-      required:
-        - uid
-        - status
-        - startedAt
     error:
       title: error
       type: object
@@ -584,9 +581,13 @@ components:
       title: key
       type: object
       properties:
+        uid:
+          type: string
+          description: A uuid v4 to identify the API Key. If not specified, it's generated by Meilisearch.
+          example: 01b4bc42-eb33-4041-b481-254d00cce834
         key:
           type: string
-          description: The generated key. Generated by Meilisearch.
+          description: The derived key to use in the Authorization header to authorize requests. Generated by Meilisearch with an HMAC, using an SHA-256 hash, of the uid and the master key.
           example: d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4
           readOnly: true
         actions:
@@ -610,14 +611,23 @@ components:
               - settings.update
               - stats.get
               - dumps.create
-              - dumps.get
               - version
+              - keys.get
+              - keys.create
+              - keys.update
+              - keys.delete
         indexes:
           type: array
           description: 'A list of accesible indexes permitted for the key. ["*"] for all indexes.'
           items:
             type: string
             example: movies
+        name:
+          type:
+            - string
+            - 'null'
+          description: A human-readable name for the key. null if empty.
+          default: null
         description:
           type:
             - string
@@ -645,7 +655,7 @@ components:
         - actions
         - indexes
         - expiresAt
-      description: API keys are stored and managed by the master key holder. These are the keys used by the technical teams to interact with Meilisearch at the level of the client/server code. API keys can have restrictions on which methods can be accessed via an actions list; they can also expiresAt a specific date time and be restricted to a specific set of indexes.
+      description: API keys are stored and managed by the master key holder and the default admin key holder. These are the keys used by the technical teams to interact with Meilisearch at the level of the client/server code. API keys can have restrictions on which methods can be accessed via an actions list; they can also expiresAt a specific date time and be restricted to a specific set of indexes.
   parameters:
     indexUid:
       name: indexUid
@@ -669,6 +679,27 @@ components:
       required: true
       schema:
         type: number
+    taskIndexUid:
+      name: indexUid
+      in: query
+      description: Permits to filter tasks by their related index. By default, when `indexUid` query parameter is not set, the tasks of all the indexes are returned. It is possible to specify several indexes by separating them with the `,` character.
+      required: false
+      schema:
+        type: string
+    taskType:
+      name: type
+      in: query
+      description: Permits to filter tasks by their related type. By default, when `type` query parameter is not set, all task types are returned. It's possible to specify several types by separating them with the `,` character.
+      required: false
+      schema:
+        type: string
+    taskStatus:
+      name: status
+      in: query
+      description: Permits to filter tasks by their status. By default, when `status` query parameter is not set, all task statuses are returned. It's possible to specify several types by separating them with the `,` character.
+      required: false
+      schema:
+        type: string
     primaryKey:
       name: primaryKey
       in: query
@@ -680,17 +711,23 @@ components:
     limit:
       name: limit
       in: query
-      description: Maximum number of documents to return.
+      description: Maximum number of results to return.
       schema:
         type: number
         default: 20
     offset:
       name: offset
       in: query
-      description: Number of documents to skip.
+      description: Number of results to skip.
       schema:
         type: number
         default: 0
+    from:
+      name: from
+      in: query
+      description: Fetch the next set of results from the given uid.
+      schema:
+        type: number
     q:
       name: q
       in: query
@@ -761,21 +798,21 @@ components:
         example: 5
         default: 10
       description: Sets the total number of words to keep around the matched part of an attribute specified in the `attributesToCrop` parameter.
-    facetsDistribution:
-      name: facetsDistribution
+    facets:
+      name: facets
       in: query
       schema:
         type: string
         example: 'genres,author'
-      description: 'Comma-separated list of attributes whose fields will be distributed as a facet. If you have [set up filterableAttributes](https://docs.meilisearch.com/reference/features/settings.html#filterable-attributes), you can retrieve the count of matching terms for each facets.[Learn more about facet distribution in the dedicated guide](https://docs.meilisearch.com/reference/features/search_parameters.html#facets-distribution)'
-    matches:
-      name: matches
+      description: 'Comma-separated list of attributes whose fields will be distributed as a facet. If you have [set up filterableAttributes](https://docs.meilisearch.com/reference/features/settings.html#filterable-attributes), you can retrieve the count of matching terms for each facets.[Learn more about facet distribution in the dedicated guide](https://docs.meilisearch.com/reference/features/search_parameters.html#facet-distribution)'
+    showMatchesPosition:
+      name: showMatchesPosition
       in: query
       required: false
       schema:
         type: boolean
         default: 'false'
-      description: Defines whether an `_matchesInfo` object that contains information about the matches should be returned or not.
+      description: Defines whether an `_matchesPosition` object that contains information about the matches should be returned or not.
     sort:
       name: sort
       in: query
@@ -811,6 +848,16 @@ components:
 
         > warn
         > Attribute(s) used in `filter` should be declared as filterable attributes. See [Filtering and Faceted Search](https://docs.meilisearch.com/reference/features/filtering_and_faceted_search.html).
+    fields:
+      name: fields
+      in: query
+      description: 'Comma-separated list of fields to display for an API resource. By default it contains all fields of an API resource.'
+      schema:
+        type: string
+        items:
+          type: string
+        example: 'uid,createdAt'
+        default: '*'
     Content-Type:
       name: Content-Type
       in: header
@@ -828,9 +875,9 @@ components:
           schema:
             type: object
             properties:
-              uid:
+              taskUid:
                 type: number
-                description: 'This `uid` allows you to [track the current task](https://docs.meilisearch.com/reference/api/tasks.html).'
+                description: 'This `taskUid` allows you to [track the current task](https://docs.meilisearch.com/reference/api/tasks.html).'
               indexUid:
                 type: string
                 description: The unique identifier of the index where this task is operated
@@ -838,6 +885,10 @@ components:
                 type: string
                 description: The status of the task
                 example: enqueued
+              type:
+                type: string
+                description: The type of the task
+                example: indexCreation
               enqueuedAt:
                 $ref: '#/components/schemas/timestamp'
                 description: Represent the date and time as `RFC 3339` format when the task has been enqueued
@@ -846,13 +897,15 @@ components:
               - uid
               - indexUid
               - status
+              - type
               - enqueuedAt
           examples:
             Example:
               value:
-                uid: 0
+                taskUid: 0
                 indexUid: movies
                 status: enqueued
+                type: documentAddition
                 enqueuedAt: '2021-07-19T14:31:16.920473Z'
     '204':
       description: No Content
@@ -915,7 +968,7 @@ tags:
   - name: Keys
     description: |
       Manage API `keys` for a Meilisearch instance. Each key has a given set of permissions.
-      You must have the master key to access the `keys` route.
+      You must have the master key or the default admin key to access the `keys` route.
       [More information about the keys and their rights](https://docs.meilisearch.com/reference/features/security.html).
   - name: Settings
     description: |
@@ -955,59 +1008,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/dumps'
+                $ref: '#/components/responses/202'
               examples:
-                Created:
+                '202':
                   value:
-                    uid: 20210719-114144097
-                    status: in_progress
-                    startedAt: '2021-07-19T14:31:16.920473Z'
+                    taskUid: 0
+                    indexUid: null
+                    status: enqueued
+                    type: dumpCreation
+                    enqueuedAt: '2021-07-19T14:31:16.920473Z'
         '401':
           $ref: '#/components/responses/401'
-  '/dumps/{dumpUid}/status':
-    get:
-      operationId: dumps.get
-      summary: Get dump status
-      description: |
-        Get the status of a dump creation process using the uid returned after calling the [dump creation route](https://docs.meilisearch.com/reference/api/dump.html#create-a-dump).
-
-        The returned status could be:
-
-        * `in_progress`: Dump creation is in progress.
-        * `failed`: An error occured during dump process, and the task was aborted.
-        * `done`: Dump creation is finished and was successful.
-      tags:
-        - Dumps
-      security:
-        - apiKey: []
-      responses:
-        '200':
-          description: Ok
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/dumps'
-        '401':
-          $ref: '#/components/responses/401'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error'
-              examples:
-                Not Found:
-                  value:
-                    message: Dump `20201001-110357260` not found
-                    code: dump_not_found
-                    type: invalid_request
-                    link: 'https://docs.meilisearch.com/errors#dump_not_found'
-    parameters:
-      - schema:
-          type: string
-        name: dumpUid
-        in: path
-        required: true
   /health:
     get:
       operationId: health.check
@@ -1049,19 +1060,39 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/index'
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/index'
+                  limit:
+                    $ref: '#/components/schemas/limit'
+                  offset:
+                    $ref: '#/components/schemas/offset'
+                  total:
+                    $ref: '#/components/schemas/total'
+                required:
+                  - results
+                  - limit
+                  - offset
+                  - total
               examples:
                 Example:
                   value:
-                    - uid: movies
-                      name: movies
-                      primaryKey: movie_id
-                      createdAt: '2019-11-20T09:40:33.711324Z'
-                      updatedAt: '2019-11-20T09:40:33.711324Z'
+                    results:
+                      - uid: movies
+                        primaryKey: movie_id
+                        createdAt: '2019-11-20T09:40:33.711324Z'
+                        updatedAt: '2019-11-20T09:40:33.711324Z'
+                    limit: 1
+                    offset: 0
+                    total: 1
         '401':
           $ref: '#/components/responses/401'
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
     post:
       operationId: indexes.create
       summary: Create Index
@@ -1140,7 +1171,6 @@ paths:
                 Example:
                   value:
                     uid: movies
-                    name: movies
                     primaryKey: movie_id
                     createdAt: '2019-11-20T09:40:33.711324Z'
                     updatedAt: '2019-11-20T09:40:33.711324Z'
@@ -1148,10 +1178,10 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    put:
+    patch:
       operationId: indexes.update
       summary: Update Index
-      description: Update an index. Add a primaryKey if it doesn't already exists yet.
+      description: Update an index. Specify a primaryKey if it doesn't already exists yet.
       tags:
         - Indexes
       security:
@@ -1227,17 +1257,40 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/document'
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/document'
+                  limit:
+                    $ref: '#/components/schemas/limit'
+                  offset:
+                    $ref: '#/components/schemas/offset'
+                  total:
+                    $ref: '#/components/schemas/total'
+                required:
+                  - results
+                  - limit
+                  - offset
+                  - total
               examples:
                 Example:
                   value:
-                    - id: 25684
-                      title: American Ninja 5
-                      poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
-                      overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
-                      release_date: '1993-01-01'
+                    results:
+                      - id: 25684
+                        title: American Ninja 5
+                        poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
+                        overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
+                        release_date: 725846400
+                      - id: 45881
+                        title: The Bridge of San Luis Rey
+                        poster: 'https://image.tmdb.org/t/p/w500/4X7quIcdkc24Cveg5XdpfRqxtYA.jpg'
+                        overview: "The Bridge of San Luis Rey is American author Thornton Wilder's second novel, first published in 1927 to worldwide acclaim. It tells the story of several interrelated people who die in the collapse of an Inca rope-fiber suspension bridge in Peru, and the events that lead up to their being on the bridge.[ A friar who has witnessed the tragic accident then goes about inquiring into the lives of the victims, seeking some sort of cosmic answer to the question of why each had to die. The novel won the Pulitzer Prize in 1928."
+                        release_date: 1072915200
+                    limit: 20
+                    offset: 0
+                    total: 2
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -1245,7 +1298,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/attributesToRetrieve'
+        - $ref: '#/components/parameters/fields'
     post:
       operationId: indexes.documents.create
       summary: Add or replace documents
@@ -1325,7 +1378,7 @@ paths:
                     title: American Ninja 5
                     poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
                     overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
-                    release_date: '1993-01-01'
+                    release_date: 725846400
         description: ''
       responses:
         '202':
@@ -1421,6 +1474,8 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
+      parameters:
+        - $ref: '#/components/parameters/fields'
     delete:
       operationId: indexes.documents.remove
       summary: Delete one document
@@ -1460,12 +1515,12 @@ paths:
         - $ref: '#/components/parameters/attributesToCrop'
         - $ref: '#/components/parameters/cropMarker'
         - $ref: '#/components/parameters/cropLength'
-        - $ref: '#/components/parameters/facetsDistribution'
+        - $ref: '#/components/parameters/facets'
         - $ref: '#/components/parameters/filter'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/matches'
+        - $ref: '#/components/parameters/showMatchesPosition'
       responses:
         '200':
           description: Ok
@@ -1481,14 +1536,14 @@ paths:
                         title: American Ninja 5
                         poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
                         overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
-                        release_date: '1993-01-01'
+                        release_date: 725846400
                         _formatted:
                           id: 25684
                           title: American Ninja 5
                           poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
                           overview: 'When a scientists daughter is kidnapped, American <em>Ninja</em>, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the <em>ninja</em>.'
-                          release_date: '1993-01-01'
-                        _matchesInfo:
+                          release_date: 725846400
+                        _matchesPosition:
                           overview:
                             - start: 49
                               length: 5
@@ -1496,9 +1551,8 @@ paths:
                               length: 5
                     limit: 0
                     offset: 0
-                    nbHits: 0
+                    estimatedTotalHits: 0
                     query: string
-                    exhaustiveNbHits: true
                     processingTimeMs: 0
         '401':
           $ref: '#/components/responses/401'
@@ -1567,15 +1621,15 @@ paths:
                   type: number
                   description: Sets the total number of **words** to keep for the cropped part of an attribute specified in the `attributesToCrop` parameter.
                   default: 10
-                matches:
+                showMatchesPosition:
                   type: boolean
-                  description: Defines whether an `_matchesInfo` object that contains information about the matches should be returned or not.
+                  description: Defines whether an `_matchesPosition` object that contains information about the matches should be returned or not.
                   default: false
                 filter:
                   $ref: '#/components/schemas/filter'
-                facetsDistribution:
+                facets:
                   type: array
-                  description: 'Array of attributes whose fields will be distributed as a facet. If you have [set up filterableAttributes](https://docs.meilisearch.com/reference/features/settings.html#filterable-attributes), you can retrieve the count of matching terms for each [facets](https://docs.meilisearch.com/reference/features/filtering_and_faceted_search.html#faceted-search).[Learn more about facet distribution in the dedicated guide](https://docs.meilisearch.com/reference/features/search_parameters.html#facets-distribution)'
+                  description: 'Array of attributes whose fields will be distributed as a facet. If you have [set up filterableAttributes](https://docs.meilisearch.com/reference/features/settings.html#filterable-attributes), you can retrieve the count of matching terms for each [facets](https://docs.meilisearch.com/reference/features/filtering_and_faceted_search.html#faceted-search).[Learn more about facet distribution in the dedicated guide](https://docs.meilisearch.com/reference/features/search_parameters.html#facet-distribution)'
                   items:
                     type: string
                     example: '["genres", "author"]'
@@ -1597,7 +1651,7 @@ paths:
                   offset: 0
                   limit: 20
                   filter: (genres = Horror AND genres = Mystery) OR release_date > 523242000
-                  facetsDistribution:
+                  facets:
                     - genres
                     - author
                   attributesToRetrieve:
@@ -1608,7 +1662,7 @@ paths:
                   cropLength: 20
                   attributesToHighlight:
                     - overview
-                  matches: true
+                  showMatchesPosition: true
       responses:
         '200':
           description: Ok
@@ -1624,14 +1678,14 @@ paths:
                         title: American Ninja 5
                         poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
                         overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
-                        release_date: '1993-01-01'
+                        release_date: 725846400
                         _formatted:
                           id: 25684
                           title: American Ninja 5
                           poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
                           overview: 'When a scientists daughter is kidnapped, American <em>Ninja</em>, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the <em>ninja</em>.'
-                          release_date: '1993-01-01'
-                        _matchesInfo:
+                          release_date: 725846400
+                        _matchesPosition:
                           overview:
                             - start: 49
                               length: 5
@@ -1639,9 +1693,8 @@ paths:
                               length: 5
                     limit: 0
                     offset: 0
-                    nbHits: 0
+                    estimatedTotalHits: 0
                     query: string
-                    exhaustiveNbHits: true
                     processingTimeMs: 0
         '401':
           $ref: '#/components/responses/401'
@@ -1689,6 +1742,10 @@ paths:
                     $ref: '#/components/schemas/sortableAttributes'
                   typoTolerance:
                     $ref: '#/components/schemas/typoTolerance'
+                  pagination:
+                    $ref: '#/components/schemas/pagination'
+                  faceting:
+                    $ref: '#/components/schemas/faceting'
                 required:
                   - rankingRules
                   - distinctAttribute
@@ -1699,6 +1756,8 @@ paths:
                   - filterableAttributes
                   - sortableAttributes
                   - typoTolerance
+                  - pagination
+                  - faceting
               examples:
                 Example:
                   value:
@@ -1750,11 +1809,15 @@ paths:
                       minWordSizeForTypos:
                         oneTypo: 4
                         twoTypos: 8
+                    pagination:
+                      maxTotalHits: 1000
+                    faceting:
+                      maxValuesPerFacet: 100
         '401':
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    post:
+    patch:
       operationId: indexes.settings.update
       summary: Update settings
       description: |
@@ -1795,6 +1858,10 @@ paths:
                   $ref: '#/components/schemas/sortableAttributes'
                 typoTolerance:
                   $ref: '#/components/schemas/typoTolerance'
+                pagination:
+                  $ref: '#/components/schemas/pagination'
+                faceting:
+                  $ref: '#/components/schemas/faceting'
             examples:
               Example:
                 value:
@@ -1841,6 +1908,10 @@ paths:
                     minWordSizeForTypos:
                       oneTypo: 4
                       twoTypos: 8
+                  pagination:
+                    maxTotalHits: 1000
+                  faceting:
+                    maxValuesPerFacet: 100
       responses:
         '202':
           $ref: '#/components/responses/202'
@@ -1891,7 +1962,7 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    post:
+    put:
       operationId: indexes.settings.synonyms.update
       summary: Update synonyms
       description: |
@@ -1959,7 +2030,7 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    post:
+    put:
       operationId: indexes.settings.sortable-attributes.update
       summary: Update sortable attributes
       description: |
@@ -2034,7 +2105,7 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    post:
+    put:
       operationId: indexes.settings.stopWords.update
       summary: Update stop-words
       description: |
@@ -2102,7 +2173,7 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    post:
+    put:
       operationId: indexes.settings.rankingRules.update
       summary: Update ranking rules
       description: |
@@ -2180,7 +2251,7 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    post:
+    patch:
       operationId: indexes.settings.typoTolerance.update
       summary: Update typo tolerance settings
       description: |
@@ -2227,6 +2298,142 @@ paths:
           description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
+  '/indexes/{indexUid}/settings/pagination':
+    get:
+      operationId: indexes.settings.pagination.get
+      summary: Get pagination configuration
+      description: |
+        Get the pagination configuration of an index.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pagination'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    patch:
+      operationId: indexes.settings.pagination.update
+      summary: Update pagination settings
+      description: |
+        Update the pagination configuration of an index.
+
+        > info
+        > If the provided index does not exist, it will be created.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pagination'
+            examples: {}
+        description: ''
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
+    delete:
+      operationId: indexes.settings.pagination.reset
+      summary: Reset pagination settings to the default configuration
+      description: |
+        Reset the pagination settings of an index to its default configuration.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    parameters:
+      - $ref: '#/components/parameters/indexUid'
+  '/indexes/{indexUid}/settings/faceting':
+    get:
+      operationId: indexes.settings.faceting.get
+      summary: Get faceting configuration
+      description: |
+        Get the faceting configuration of an index.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/faceting'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    patch:
+      operationId: indexes.settings.faceting.update
+      summary: Update faceting settings
+      description: |
+        Update the typo tolerance faceting of an index.
+
+        > info
+        > If the provided index does not exist, it will be created.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/faceting'
+            examples: {}
+        description: ''
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
+    delete:
+      operationId: indexes.settings.faceting.reset
+      summary: Reset faceting settings to the default configuration
+      description: |
+        Reset the faceting settings of an index to its default configuration.
+      tags:
+        - Settings
+      security:
+        - apiKey: []
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+    parameters:
+      - $ref: '#/components/parameters/indexUid'
   '/indexes/{indexUid}/settings/filterable-attributes':
     get:
       operationId: indexes.settings.filterableAttributes.get
@@ -2248,7 +2455,7 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    post:
+    put:
       operationId: indexes.settings.filterableAttributes.update
       summary: Update Filterable Attributes
       description: |
@@ -2317,7 +2524,7 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    post:
+    put:
       operationId: indexes.settings.distinctAttribute.update
       summary: Update distinct attribute
       description: |
@@ -2384,7 +2591,7 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    post:
+    put:
       operationId: indexes.settings.searchableAttributes.update
       summary: Update searchable attributes
       description: |
@@ -2450,7 +2657,7 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-    post:
+    put:
       operationId: indexes.settings.displayedAttributes.update
       summary: Update displayed attributes
       description: |
@@ -2517,106 +2724,6 @@ paths:
           description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
-  '/indexes/{indexUid}/tasks':
-    get:
-      operationId: indexes.tasks.list
-      summary: Get all tasks of an index
-      description: |
-        Get all [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) of an [index](https://docs.meilisearch.com/learn/core_concepts/indexes.html).
-      tags:
-        - Tasks
-      security:
-        - apiKey: []
-      responses:
-        '200':
-          description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/task'
-              examples:
-                Example:
-                  value:
-                    results:
-                      - uid: 1
-                        indexUid: movies,
-                        batchUid: 1
-                        status: succeeded
-                        type: documentAddition
-                        details:
-                          receivedDocuments: 79000
-                          indexedDocuments: 79000
-                        duration: PT2S
-                        enqueuedAt: '2021-01-01T09:39:00.000000Z'
-                        startedAt: '2021-01-01T09:39:01.000000Z'
-                        finishedAt: '2021-01-01T09:39:02.000000Z'
-                      - uid: 0
-                        indexUid: movies
-                        batchUid: 0
-                        status: failed
-                        type: documentAddition
-                        details:
-                          receivedDocuments: 67493
-                          indexedDocuments: 0
-                        error:
-                          message: 'Document does not have a `:primaryKey` attribute: `:documentRepresentation`.'
-                          code: missing_document_id
-                          type: invalid_request
-                          link: 'https://docs.meilisearch.com/errors#missing_document_id'
-                        duration: PT5S
-                        enqueuedAt: '2021-01-01T09:38:00.000000Z'
-                        startedAt: '2021-01-01T09:38:02.000000Z'
-                        finishedAt: '2021-01-01T09:38:07.000000Z'
-        '401':
-          $ref: '#/components/responses/401'
-        '404':
-          description: Not Found
-    parameters:
-      - $ref: '#/components/parameters/indexUid'
-  '/indexes/{indexUid}/tasks/{taskUid}':
-    get:
-      operationId: indexes.tasks.get
-      summary: Get a task of an index
-      description: |
-        Get a [task](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) of an [index](https://docs.meilisearch.com/learn/core_concepts/indexes.html).
-      tags:
-        - Tasks
-      security:
-        - apiKey: []
-      responses:
-        '200':
-          description: Ok
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/task'
-              examples:
-                Example:
-                  value:
-                    uid: 1
-                    indexUid: movies
-                    batchUid: 1
-                    status: succeeded
-                    type: documentAddition
-                    details:
-                      receivedDocuments: 79000
-                      indexedDocuments: 79000
-                    duration: PT1S
-                    enqueuedAt: '2021-01-01T09:39:00.000000Z'
-                    startedAt: '2021-01-01T09:39:01.000000Z'
-                    finishedAt: '2021-01-01T09:39:02.000000Z'
-        '401':
-          $ref: '#/components/responses/401'
-        '404':
-          description: Not Found
-    parameters:
-      - $ref: '#/components/parameters/indexUid'
-      - $ref: '#/components/parameters/taskUid'
   /keys:
     get:
       operationId: keys.list
@@ -2639,105 +2746,40 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/key'
+                  limit:
+                    $ref: '#/components/schemas/limit'
+                  offset:
+                    $ref: '#/components/schemas/offset'
+                  total:
+                    $ref: '#/components/schemas/total'
+                required:
+                  - results
+                  - limit
+                  - offset
+                  - total
               examples:
                 example-1:
                   value:
                     results:
-                      - key: d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4
+                      - uid: 01b4bc42-eb33-4041-b481-254d00cce834
+                        key: d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4
+                        name: An API Key
+                        description: null
                         actions:
                           - documents.add
                         indexes:
                           - movies
-                        description: An API Key
                         expiresAt: '2022-11-12T10:00:00Z'
                         createdAt: '2021-11-12T10:00:00Z'
                         updatedAt: '2021-11-12T10:00:00Z'
+                    limit: 20
+                    offset: 0
+                    total: 1
         '401':
           $ref: '#/components/responses/401'
-  '/keys/{key}':
-    get:
-      summary: Get an API key
-      tags:
-        - Keys
-      security:
-        - apiKey: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/key'
-              examples:
-                Fetch an API Key details:
-                  value:
-                    description: Indexing Products API key
-                    key: d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4
-                    actions:
-                      - documents.add
-                    indexes:
-                      - products
-                    expiresAt: '2021-11-13T00:00:00Z'
-                    createdAt: '2021-11-12T10:00:00Z'
-                    updatedAt: '2021-11-12T10:00:00Z'
-      operationId: keys.get
-      description: Get an API Key
-    parameters:
-      - schema:
-          type: string
-        name: key
-        in: path
-        required: true
-        description: The API key value
-    delete:
-      summary: Delete an API key
-      operationId: keys.delete
-      tags:
-        - Keys
-      security:
-        - apiKey: []
-      responses:
-        '204':
-          $ref: '#/components/responses/204'
-      description: ''
-    patch:
-      summary: Update an API key
-      operationId: keys.update
-      tags:
-        - Keys
-      security:
-        - apiKey: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/key'
-              examples:
-                Patch an API Key Response:
-                  value:
-                    description: Indexing Products API key
-                    key: d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4
-                    actions:
-                      - documents.add
-                    indexes:
-                      - products
-                    expiresAt: '2021-11-13T00:00:00Z'
-                    createdAt: '2021-11-12T10:00:00Z'
-                    updatedAt: '2021-11-12T15:00:00Z'
       parameters:
-        - $ref: '#/components/parameters/Content-Type'
-      description: Update an API Key
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/key'
-            examples:
-              Patch an API Key Request:
-                value:
-                  description: Indexing Products API key
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
     post:
       summary: Create an API Key
       operationId: keys.create
@@ -2755,8 +2797,10 @@ paths:
               examples:
                 Create an API Key:
                   value:
-                    description: Indexing Products API key
+                    uid: 01b4bc42-eb33-4041-b481-254d00cce834
                     key: d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4
+                    name: Indexing Products API key
+                    description: null
                     actions:
                       - documents.add
                     indexes:
@@ -2774,12 +2818,110 @@ paths:
             examples:
               API Key Creation:
                 value:
-                  description: Indexing Products API key
+                  name: Indexing Products API key
                   actions:
                     - documents.add
                   indexes:
                     - products
                   expiresAt: '2021-11-13T00:00:00Z'
+  '/keys/{uid_or_key}':
+    get:
+      summary: Get an API key from its uid or key field.
+      tags:
+        - Keys
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/key'
+              examples:
+                Fetch an API Key details:
+                  value:
+                    uid: 01b4bc42-eb33-4041-b481-254d00cce834
+                    key: d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4
+                    name: Indexing Products API key
+                    description: null
+                    actions:
+                      - documents.add
+                    indexes:
+                      - products
+                    expiresAt: '2021-11-13T00:00:00Z'
+                    createdAt: '2021-11-12T10:00:00Z'
+                    updatedAt: '2021-11-12T10:00:00Z'
+      operationId: keys.get
+      description: Get an API Key
+      parameters:
+        - schema:
+            type: string
+          name: uidOrKey
+          in: path
+          required: true
+          description: The uid or the key field value of the API Key.
+    delete:
+      summary: Delete an API key specified by its uid or key field.
+      operationId: keys.delete
+      tags:
+        - Keys
+      security:
+        - apiKey: []
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+      description: ''
+    patch:
+      summary: Update an API key specified by its uid or key field.
+      operationId: keys.update
+      tags:
+        - Keys
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/key'
+              examples:
+                Patch an API Key Response:
+                  value:
+                    uid: 01b4bc42-eb33-4041-b481-254d00cce834
+                    key: d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4
+                    name: Indexing Products API key
+                    description: null
+                    actions:
+                      - documents.add
+                    indexes:
+                      - products
+                    expiresAt: '2021-11-13T00:00:00Z'
+                    createdAt: '2021-11-12T10:00:00Z'
+                    updatedAt: '2021-11-12T15:00:00Z'
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
+      description: Update an API Key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type:
+                    - string
+                    - 'null'
+                description:
+                  type:
+                    - string
+                    - 'null'
+              additionalProperties: false
+            examples:
+              Patch an API Key Request:
+                value:
+                  description: Indexing Products API key
   /stats:
     get:
       operationId: stats.list
@@ -2882,6 +3024,17 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/task'
+                  limit:
+                    $ref: '#/components/schemas/limit'
+                  from:
+                    $ref: '#/components/schemas/from'
+                  next:
+                    $ref: '#/components/schemas/next'
+                required:
+                  - results
+                  - limit
+                  - from
+                  - next
               examples:
                 Example:
                   value:
@@ -2890,7 +3043,7 @@ paths:
                         indexUid: movies
                         batchUid: 1
                         status: succeeded
-                        type: documentAddition
+                        type: documentAdditionOrUpdate
                         details:
                           receivedDocuments: 79000
                           indexedDocuments: 79000
@@ -2902,7 +3055,7 @@ paths:
                         indexUid: movies_Review
                         batchUid: 0
                         status: failed
-                        type: documentAddition
+                        type: documentAdditionOrUpdate
                         details:
                           receivedDocuments: 67493
                           indexedDocuments: 0
@@ -2915,8 +3068,16 @@ paths:
                         enqueuedAt: '2021-01-01T09:38:00.000000Z'
                         startedAt: '2021-01-01T09:38:02.000000Z'
                         finishedAt: '2021-01-01T09:38:07.000000Z'
+                    limit: 2
+                    from: 1
+                    next: null
       operationId: tasks.list
-      parameters: []
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/from'
+        - $ref: '#/components/parameters/taskIndexUid'
+        - $ref: '#/components/parameters/taskStatus'
+        - $ref: '#/components/parameters/taskType'
       security:
         - apiKey: []
   '/tasks/:taskUid':
@@ -2939,7 +3100,7 @@ paths:
                     indexUid: movies
                     batchUid: 1
                     status: succeeded
-                    type: documentAddition
+                    type: documentAdditionOrUpdate
                     details:
                       receivedDocuments: 79000
                       indexedDocuments: 79000

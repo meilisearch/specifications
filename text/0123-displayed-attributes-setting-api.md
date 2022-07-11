@@ -23,7 +23,7 @@ Therefore, if a document field is not in the `displayedAttributes` list, the fie
 
 Suppose a database of movies with the following fields: `id`, `overview`, `genres`, `title`, `release_date`. Some of these fields are more useful to be displayed than others. To make the `id` and `genres` fields non-displayed, it can be specified in the following way.
 
-***Request payload `POST`- `/indexes/movies/settings/displayed-attributes`***
+***Request payload `PUT`- `/indexes/movies/settings/displayed-attributes`***
 ```json
 ["title", "overview"]
 ```
@@ -51,7 +51,7 @@ Fetch the `displayedAttributes` setting of a Meilisearch index.
 
 - 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
-#### 3.3.2. `POST` - `indexes/:index_uid/settings/displayed-attributes`
+#### 3.3.2. `PUT` - `indexes/:index_uid/settings/displayed-attributes`
 
 Modify the `displayedAttributes` setting of a Meilisearch index.
 
@@ -122,6 +122,5 @@ N/A
 
 ## 5. Future Possibilities
 
-- Replace `POST` HTTP verb with `PATCH`
 - Add dedicated error to avoid using generic `bad_request` error code
 - Return an error when `displayedAttributes` is defined as an empty array

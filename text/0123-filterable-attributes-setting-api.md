@@ -15,7 +15,7 @@ N/A
 
 Filters have several use-cases, such as restricting the results a specific user has access to or creating faceted search interfaces. Faceted search interfaces are particularly efficient in helping users navigate a great number of results across many broad categories.
 
-`filterableAttributes` need to be properly processed and prepared by Meilisearch before they can be used at search time. Fields defined as `filterableAttributes` are usable in the [`filter`](0118-search-api.md#1212-filter) and [facetsDistribution](0118-search-api.md#1214-facetsdistribution) search API parameters.
+`filterableAttributes` need to be properly processed and prepared by Meilisearch before they can be used at search time. Fields defined as `filterableAttributes` are usable in the [`filter`](0118-search-api.md#312-filter) and [facets](0118-search-api.md#314-facets) search API parameters.
 
 By default, Meilisearch has no filterable attributes defined.
 
@@ -42,7 +42,7 @@ Fetch the `filterableAttributes` setting of a Meilisearch index.
 
 - 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
-#### 3.3.2. `POST` - `indexes/:index_uid/settings/filterable-attributes`
+#### 3.3.2. `PUT` - `indexes/:index_uid/settings/filterable-attributes`
 
 Modify the `filterableAttributes` setting of a Meilisearch index.
 
@@ -116,5 +116,4 @@ Modifying this index setting cause documents to be re-indexed.
 
 ## 5. Future Possibilities
 
-- Replace `POST` HTTP verb with `PATCH`
 - Add dedicated error to avoid using generic `bad_request` error code

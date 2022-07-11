@@ -122,6 +122,105 @@ HTTP Code: `400 Bad Request`
 
 ---
 
+## immutable_field
+
+`Synchronous` / `Asynchronous`
+
+### Context
+
+This error happens when an immutable field is given in a payload dedicated to modify a resource.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "The `:fieldName` field cannot be modified for the given resource.",
+    "code": "immutable_field",
+    "type": "invalid_request",
+    "link":"https://docs.meilisearch.com/errors#immutable_field"
+}
+```
+
+- The `:fieldName` is inferred when the message is generated.
+
+--
+
+## api_key_already_exists
+
+`Synchronous`
+
+### Context
+
+This error happens when a user tries to create an API Key that already exists for the given `uid`.
+
+### Error Definition
+
+HTTP Code: `409 Conflict`
+
+```json
+{
+    "message": "`uid` field value `:value` is already an existing API key.",
+    "code": "api_key_already_exists",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#api_key_already_exists"
+}
+```
+
+- The `:value` is inferred when the message is generated.
+
+---
+## invalid_api_key_uid
+
+`Synchronous`
+
+### Context
+
+This error happens when the `uid` field for an `API Key` resource is invalid.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "`uid` field value `:value` is invalid. It should be a valid UUID v4 string or omitted.",
+    "code": "invalid_api_key_uid",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_api_key_uid"
+}
+```
+
+- The `:value` is inferred when the message is generated.
+
+---
+
+## invalid_api_key_name
+
+`Synchronous`
+
+### Context
+
+This error happens when the `name` field for an `API Key` resource is invalid.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "`name` field value `:value` is invalid. It should be a string or specified as a null value.",
+    "code": "invalid_api_key_name",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_api_key_name"
+}
+```
+
+- The `:value` is inferred when the message is generated.
+
+---
+
 ## invalid_api_key_description
 
 `Synchronous`
@@ -422,7 +521,7 @@ This error occurs when the user specifies a non-existent ranking rule, a malform
 
 ```json
 {
-    "message": "`:rankingRule` ranking rule is invalid. Valid ranking rules are Words, Typo, Sort, Proximity, Attribute, Exactness and custom ranking rules.",
+    "message": "`:rankingRule` ranking rule is invalid. Valid ranking rules are words, typo, sort, proximity, attribute, exactness and custom ranking rules.",
     "code": "invalid_ranking_rule",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_ranking_rule"
@@ -628,22 +727,35 @@ HTTP Code: `400 Bad Request`
 
 ### Context
 
-This error occurs when the `_geo` field of a document payload is not valid.
+These errors occurs when the `_geo` field of a document payload is not valid. Either the latitude / longitude is missing or is not a number.
 
 ### Error Definition
 
+#### Variant: Missing `_geo.lat` or `_geo.lng` field.
+
 ```json
 {
-    "message": "The document with the id: `:documentId` contains an invalid _geo field: `:syntaxErrorHelper`.",
+    "message": "Could not find :coord in the document with the id: `:documentId`. Was expecting a `:field` field.",
     "code": "invalid_geo_field",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
 }
-
 ```
 
-- The `:documentId` is inferred when the error message is generated.
-- The `:syntaxErrorHelper` is inferred when the error message is generated.
+#### Variant: Coordinate can't be parsed.
+
+```json
+{
+    "message": "Could not parse :coord in the document with the id: `:documentId`. Was expecting a number but instead got `:value`.",
+    "code": "invalid_geo_field",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
+}
+```
+
+- The `:documentId` is inferred when the message is generated.
+- The `:coord` is either `latitude` or `longitude` depending on what's wrong.
+- The `:field` is either `_geo.lat` or `_geo.lng` depending on what's wrong.
 
 ---
 
@@ -778,6 +890,54 @@ HTTP Code: `404 Not Found`
 
 ---
 
+## invalid_task_status
+
+### Context
+
+This error happens when a requested task status is invalid.
+
+#### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "Task status `:status` is invalid. Available task statuses are: `:taskStatuses`.",
+    "code": "invalid_task_status",
+    "type": "invalid_request",
+    "link":"https://docs.meilisearch.com/errors#invalid_task_status"
+}
+```
+
+- The `:status` is inferred when the message is generated.
+- The `:taskStatuses` is inferred when the message is generated.
+
+---
+
+## invalid_task_type
+
+### Context
+
+This error happens when a requested task type is invalid.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "Task type `:type` is invalid. Available task types are: `:taskTypes`.",
+    "code": "invalid_task_type",
+    "type": "invalid_request",
+    "link":"https://docs.meilisearch.com/errors#invalid_task_type"
+}
+```
+
+- The `:type` is inferred when the message is generated.
+- The `:taskTypes` is inferred when the message is generated.
+
+---
+
 ## api_key_not_found
 
 `Synchronous`
@@ -798,29 +958,6 @@ HTTP Code: `404 Not Found`
 ```
 
 - The `:apiKey` is inferred when the message is generated.
-
----
-
-## dump_already_processing
-
-`Synchronous`
-
-### Context
-
-This error occurs when the user tries to launch the creation of a new dump while a creation is already being processed.
-
-### Error Definition
-
-Http Code: `409 Conflict`
-
-```json
-{
-    "message": "A dump is already processing. You must wait until the current process is finished before requesting another dump.",
-    "code": "dump_already_processing",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#dump_already_processing"
-}
-```
 
 ---
 

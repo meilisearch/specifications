@@ -2,7 +2,7 @@
 
 ## 1. Summary
 
-## 2. Movtivation
+## 2. Motivation
 
 ## 3. Functional Specification
 

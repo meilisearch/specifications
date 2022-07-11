@@ -4,6 +4,8 @@
 
 This specification describes the documents API endpoints permitting to list, fetch, add/replace, and delete index documents.
 
+It is an API dedicated to document management within the Meilisearch index.
+
 ## 2. Motivation
 N/A
 
@@ -54,7 +56,7 @@ Unique identifier of an index.
 |--------------------------|--------------------------|----------|
 | `offset`                 | Integer / `null`         | false    |
 | `limit`                  | String / `null`          | false    |
-| `attributesToRetrieve`   | String / `null`          | false    |
+| `fields`                 | String / `null`          | false    |
 
 ###### 3.1.1.2.1. `offset`
 
@@ -72,50 +74,93 @@ Sets the starting point in the results, effectively skipping over a given number
 
 Sets the maximum number of documents to be returned by the current request.
 
-###### 3.1.1.2.3. `attributesToRetrieve`
+###### 3.1.1.2.3. `fields`
 
 - Type: String
 - Required: False
-- Default: `null`
+- Default: `*`
 
 Configures which attributes will be retrieved in the returned documents.
 
-If no value is specified, `attributesToRetrieve` uses the `displayedAttributes` list, which by default contains all attributes found in the documents.
+If `fields` is not specified, all attributes from the documents are returned in the response. It's equivalent to `fields=*`.
 
-> If an attribute has been removed from `displayedAttributes` index settings, `attributesToRetrieve` will silently ignore it and the field will not appear in the returned documents.
+- Sending `fields` without specifying a value, returns empty documents ressources. `fields=`.
+- Sending `fields` with a non-existent field as part of the value will not return an error, the non-existent field will not be displayed.
 
-> Specified fields have to be separated by a comma. e.g. `&attributesToRetrieve=title,description`
+> `fields` values are case-sensitive.
+
+> Specified fields have to be separated by a comma. e.g. `&fields=title,description`
+
+> The index setting `displayedAttributes` has no impact on this endpoint.
 
 ##### 3.1.1.3. Response Definition
 
-An array of documents represented as JSON objects.
+A `results` array representing documents as JSON objects.
 
-###### 3.1.1.3.1. Example
+| Field                    | Type                     | Required |
+|--------------------------|--------------------------|----------|
+| `results`                | Array[Document]          | true     |
+| `offset`                 | Integer                  | true     |
+| `limit`                  | Integer                  | true     |
+| `total`                  | Integer                  | true     |
+
+###### 3.1.1.3.1. `results`
+
+- Type: Array[Document]
+- Required: True
+
+An array containing the fetched documents.
+
+###### 3.1.1.3.2. `offset`
+
+- Type: Integer
+- Required: True
+
+Gives the `offset` parameter used for the query.
+
+> See [3.1.1.2.1. `offset`](#31121-offset) section.
+
+###### 3.1.1.3.3. `limit`
+
+- Type: Integer
+- Required: True
+
+Gives the `limit` parameter used for the query.
+
+> See [3.1.1.2.2. `limit`](#31122-limit) section.
+
+###### 3.1.1.3.3. `total`
+
+- Type: Integer
+- Required: True
+
+Gives the total number of documents that can be browsed in the related index.
+
+###### 3.1.1.3.4. Example
 
 ```json
-[
-  {
-    "id": 25684,
-    "release_date": "1993-01-01",
-    "poster": "https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg",
-    "title": "American Ninja 5",
-    "overview": "When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja."
-  },
-  {
-    "id": 468219,
-    "title": "Dead in a Week (Or Your Money Back)",
-    "release_date": "2018-09-12",
-    "poster": "https://image.tmdb.org/t/p/w1280/f4ANVEuEaGy2oP5M0Y2P1dwxUNn.jpg",
-    "overview": "William has failed to kill himself so many times that he outsources his suicide to aging assassin Leslie. But with the contract signed and death assured within a week (or his money back), William suddenly discovers reasons to live... However Leslie is under pressure from his boss to make sure the contract is completed."
-  }
-]
+{
+  "results": [
+    {
+      "id": 25684,
+      "title": "American Ninja 5"
+    },
+    {
+      "id": 468219,
+      "title": "Dead in a Week (Or Your Money Back)"
+    }
+  ],
+  "offset": 0,
+  "limit": 2,
+  "total": 3 //The index contains 3 documents in total
+}
 ```
 
 ##### 3.1.1.4. Errors
 
 - 🔴 Sending a value with a different type than `Integer` or `null` for `offset` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 - 🔴 Sending a value with a different type than `Integer` or `null` for `limit` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
-- 🔴 Sending a value with a different type than `String` or `null` for `attributesToRetrieve` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `String` or `null` for `fields` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 #### 3.1.2. `GET` - `indexes/:index_uid/documents/:document_id`
 
@@ -142,14 +187,39 @@ Unique identifier of an index.
 
 Unique identifier of a document.
 
-##### 3.1.2.1. Request Payload Definition
+##### 3.1.2.2. Query Parameters
+
+| Field                    | Type                     | Required |
+|--------------------------|--------------------------|----------|
+| `fields`                 | String / `null`          | false    |
+
+###### 3.1.2.2.1. `fields`
+
+- Type: String
+- Required: False
+- Default: `*`
+
+Configures which attributes will be retrieved in the returned documents.
+
+If `fields` is not specified, all attributes from the documents are returned in the response. It's equivalent to `fields=*`.
+
+- Sending `fields` without specifying a value, returns empty documents ressources. `fields=`.
+- Sending `fields` with a non-existent field as part of the value will not return an error, the non-existent field will not be displayed.
+
+> `fields` values are case-sensitive.
+
+> Specified fields have to be separated by a comma. e.g. `&fields=title,description`
+
+> The index setting `displayedAttributes` has no impact on this endpoint.
+
+##### 3.1.2.3. Request Payload Definition
 N/A
 
-##### 3.1.2.2. Response Definition
+##### 3.1.2.4. Response Definition
 
 A document represented as a JSON object.
 
-##### 3.1.2.2.1. Example
+##### 3.1.2.4.1. Example
 
 ```json
 {
@@ -161,10 +231,11 @@ A document represented as a JSON object.
 }
 ```
 
-##### 3.1.2.3. Errors
+##### 3.1.2.5. Errors
 
 - 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 - 🔴 If the requested `document_id` does not exist, the API returns an [document_not_found](0061-error-format-and-definitions.md#document_not_found) error.
+- 🔴 Sending a value with a different type than `String` or `null` for `fields` will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 #### 3.1.3. `POST` - `indexes/:index_uid/documents`
 
@@ -451,4 +522,5 @@ The auth layer can return the following errors if Meilisearch is secured (a mast
 N/A
 
 ## 5. Future Possibilities
-N/A
+
+- Introduce a way to reject fields from a document in the response. e.g. `?fields=-createdAt`
