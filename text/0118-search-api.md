@@ -68,49 +68,293 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 
 #### 3.1.2. `filter`
 
-- Type: Array of String (POST) | String (POST/GET)
+- Type: String (POST/GET) | Array of (String, Array of String) (POST)
 - Required: False
 - Default: `[]|null`
 
-`filter` contains a filter expression written as a string or an array of strings. It permits to refine search results.
+`filter` contains a filter expression written as a string or an array of (strings and array of strings). Its purpose is to refine search results by selecting documents that match the given filter and running the search query only on those documents.
 
 Attributes used as filter criteria must be added to the `filterableAttributes` list of an index settings. See [Filterable Attributes Setting API](0123-filterable-attributes-setting-api.md).
 
-- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `filter` returns an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
+- 🔴 Sending a value with a different type than `String`(GET/POST), `Array of (Array of String, String) (POST)`, or `null` for `filter` returns an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
 - 🔴 Sending an invalid syntax for `filter` returns an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
 - 🔴 Sending a field not defined as a `filterableAttributes` for `filter` returns an [invalid_filter](0061-error-format-and-definitions.md#invalid_filter) error.
 
-##### 3.1.2.1. Supported Operators And Syntaxes.
+##### 3.1.2.1. String Syntax
 
-###### 3.1.2.1.1. Supported Operators
+##### 3.1.2.1.1 Grammar
 
-- `<`, `<=`, `>`, `>=`, `TO`; only operate on number values. MeiliSearch returns only documents that have numbers in this field.
-- `=`, `!=`/`NOT`; operate on string and number values. MeiliSearch returns only documents that have numbers, strings, or arrays of strings in this field.
-- `AND`/`OR`; permits to cumulate several operations.
+The grammar of the filter syntax is given below in pseudo-BNF form:
+```
+filter         = expression EOF
+expression     = or
+or             = and ("OR" WS+ and)*
+and            = not ("AND" WS+ not)*
+not            = ("NOT" WS+ not) | primary
+primary        = "(" WS* expression WS* ")" | geoRadius | in | condition | exists | not_exists | to
+in             = attribute "IN" WS* "[" value_list "]"
+condition      = attribute ("=" | "!=" | ">" | ">=" | "<" | "<=") value
+exists         = attribute "EXISTS"
+not_exists     = attribute "NOT" WS+ "EXISTS"
+to             = attribute value "TO" WS+ value
+value          = WS* ( word | singleQuoted | doubleQuoted) WS+
+attribute      = value
+value_list     = (value ("," value)* ","?)?
+singleQuoted   = "'" single_quoted_string "'"
+doubleQuoted   = "\"" double_quoted_string "\""
+word           = ([a-zA-Z0-9] | "_" | "-" | ".")+
+geoRadius      = "_geoRadius(" WS* float WS* "," WS* float WS* "," float WS* ")"
+float          = [+-]?[0-9]*("."[0-9]+)?(("E"|"e") [+-]?[0-9]+)?
+WS             = ' ' | '\t' | '\r' | '\n'
+```
+where `single_quoted_string` and `double_quoted_string` can contain anything except unescaped single quotes `'` and unescaped double quotes `"`, respectively. Quotes are escaped by a preceding backslash. For example: `"escaped \" double quote" "` and `escaped \' single quote`. If a backslash is not followed by the correct quote, it is kept in the string.
 
-`filter` cannot operate on `null`, arrays of "undefined elements" (ex: array of `null`).
+##### 3.1.2.1.2 Naming a filterable attribute
 
-###### 3.1.2.1.2. Supported Syntaxes
+A filterable attribute can appear in a filter by its unquoted name if it only contains ascii alphanumeric characters, dots, hyphens, and underscores. 
 
-Three syntaxes will be accepted for the `filter` parameter during search. `String syntax`, `Array syntax` and `Mixed syntax`.
+For example, each filter below selects the documents where the given filterable attribute (on the left side of the equal) is equal to a specific value (on the right side):
 
-**String syntax**
-
-The string syntax uses operators combined with parentheses to express a search filter.
-
-Example:
-```json
-{
-    "filter": "(genres = Comedy OR genres = Romance) AND director = 'Mati Diop'"
-}
+```
+genres = "film"
+genre.subgenre = "adventure"
+_geo.lat = 1.23
+101 = "abc"
 ```
 
-**Array syntax**
+If the filterable attribute is composed of multiple words or contains other characters, it must be quoted, either using single quotes or double quotes:
 
-The array syntax uses dimensional array to express logical connectives.
+```
+"place of birth" = Berlin
+"∆" = 2.1
+"Friend's name" = Albus
+'opinion on "the best search engine"' = "meilisearch"
+```
 
-- Inner arrays elements are connected by an `OR` operator (e.g. [["genres:Comedy", "genres:Romance"]]).
-- Outer arrays elements are connected by an `AND` operator (e.g. ["genres:Romance", "director:Mati Diop"]).
+If the filterable attribute contains the same quote character that surrounds the attribute, then this quote character must be escaped by a preceding backslash:
+```
+'Friend\'s name' = Albus
+```
+
+##### 3.1.2.1.3 Naming the value of a filterable attribute
+
+The grammar for the value of a filterable attribute is the same as the grammar for filterable attributes themselves.
+
+##### 3.1.2.1.4 List of supported operators
+
+- Equality: `attribute = value`
+- Inequality: `attribute != value`
+- Comparison: 
+    * `attribute < value`
+    * `attribute <= value`
+    * `attribute > value` 
+    * `attribute >= value`
+    * `attribute value TO value`
+- Exists: 
+    * `attribute EXISTS`
+    * `attribute NOT EXISTS`
+- In: 
+    * `attribute IN[value, value, etc.]`
+    * `attribute NOT IN[value, value, etc.]`
+- AND: `filter AND filter`
+- OR: `filter OR filter`
+- NOT: `NOT filter`
+- GeoSearch: `_geoRadius(lat, lng, distance)`
+
+##### 3.1.2.1.5 Equality
+
+The equality operator, `=`, selects the documents for which:
+1. the given filterable attribute exists; and
+2. the attribute contains a value that is equal to a specific value
+
+It is an infix operator that takes an attribute name on the left hand side and a value on the right hand side.
+
+For example, given the documents:
+```json
+[{
+    "id": 0,
+    "size": 1
+},
+{
+    "id": 1,
+    "size": ["1", "L"]
+},
+{
+    "id": 2,
+}
+{
+    "id": 3,
+    "size": "small"
+    "shop_distance": 1.2e+5
+}]
+```
+then the filter:
+```
+size = 1
+```
+will select the documents with ids `0` and `1`. 
+
+Note that there is no way to specify whether the value on the right hand side of the equality should be interpreted as a string or as a number. Meilisearch will always try to match both. And since unquoted values cannot contain the `+` character, it is in fact necessary to quote floating point numbers that have positive exponents:
+```
+shop_distance = "1.2e+5"
+```
+will select the document with id `3`.
+
+Furthermore, there is no way to check whether an attribute has a value that is `null` or an array. An attribute whose value is `null` or an empty array is considered not to have any value and will therefore never be matched by an equality operator.
+
+##### 3.1.2.1.6 Inequality
+
+The inequality operator selects all documents that are not selected by the equality operator.
+With the same documents given as examples to the equality operator, the following filter:
+```
+size != 1
+```
+will select the documents with ids `2` and `3`.
+
+Note that `attribute != value` is equivalent to `NOT attribute = value`. 
+
+Furthermore, there is no way to write a filter to select documents which contain a value that is different than a given string or number. In the example above, `size != 1` did not select the document with id `1`, even though its `size` attribute contains the value `"L"`, which is different than `1`.
+
+##### 3.1.2.1.7 Comparison
+
+The comparison operators select the documents for which:
+1. the filterable attribute exists; and
+2. the attribute contains a number that satisfies the comparison
+
+Note that the right hand side of the comparison must be a valid floating point number.
+
+For example, with the documents:
+```json
+[{
+    "id": 0,
+    "size": [0, "small"]
+    "colour": "blue"
+},
+{
+    "id": 1,
+    "size": 1
+},
+{
+    "id": 2,
+    "size": [2, 20]
+}]
+```
+Then the following filters will select these documents:
+```
+size > 1      -> selects [1]
+size >= 1     -> selects [1,2]
+size < 2      -> selects [0,1]
+size <= 2     -> selects [0,1,2]
+size -1 TO 2  -> equivalent to size >= -1 AND size <= 2 -> selects [0,1,2]
+```
+
+And the following filters are invalid:
+```
+size > "small"
+size "larga" TO "largz"
+```
+
+##### 3.1.2.1.8 Combining filter conditions
+
+Multiple filters can be combined together using the operators `AND` and `OR`. These infix operators take two sub-filters as arguments
+
+The `AND` operator selects the documents that are selected by both subfilters at the same time. In other words, it is an intersection of the two sets of documents selected by the sub-filters.
+
+The `OR` operator selects the documents that are selected by either operator. In other words, it is a union of the two sets of documents selected by the sub-filters.
+
+Note that `AND` has a higher precedence than `OR`. Therefore, the following filter:
+```
+x = 1 AND y = 2 OR z = 3
+```
+will be interepreted as:
+```
+(x = 1 AND y = 2) OR (z = 3)
+```
+
+With the same documents given as examples for the comparison operators, the following filters will select these documents:
+```
+size = 0 OR size = 1                       -> selects [0,1]
+size = 0 AND (size = 2 OR colour = "blue") -> selects []
+size = 0 AND size = 2 OR colour = "blue"   -> selects [0]
+size > 5 AND size < 5                      -> selects [2]
+```
+
+##### 3.1.2.1.9 Negating a filter
+
+The negation operator, `NOT`, is used to select all documents that are not selected by a sub-filter. It is a prefix operator that takes one argument. Its precedence is higher than both `AND` and `OR`.
+
+With the same documents given as examples for the comparison operators, the following filters will select these documents:
+```
+NOT size = 0                               -> selects [1,2]
+NOT (size = 0 OR size = 1)                 -> selects [2]
+NOT size = 0 OR size = 1                   -> selects [1,2]
+NOT (size < 2 AND colour = "blue")         -> selects [1,2]
+NOT size < 2 AND colour = "blue"           -> selects []
+size = 0 OR NOT size = 2                   -> selects [0,1]
+NOT (NOT size = 0)                         -> selects [0]
+```
+
+##### 3.1.2.1.10 Exists
+
+The `EXISTS` operator selects the documents for which the filterable attribute exists, even if its value is `null` or an empty array. It is a postfix operator that takes an attribute name as argument.
+
+The negated form of `EXISTS` can be written in two ways:
+```
+attribute NOT EXISTS
+NOT attribute EXISTS
+```
+Both forms are equivalent. They select the documents for which the attribute does not exist.
+
+For example, with the documents:
+```json
+[{
+    "id": 0,
+    "colour": []
+},
+{
+    "id": 1,
+    "colour": null
+},
+{
+    "id": 2
+}]
+```
+Then the filter `colour EXISTS` selects the document ids `[0,1]` wihle the filter `colour NOT EXISTS` or `NOT colour EXISTS` selects the document ids `[2]`.
+
+##### 3.1.2.1.11 In
+
+The `IN[..]` operator is a more concise way to combine equality operators. It is a postfix operator that takes an attribute name on the left hand side and an array of values on the right hand side. An array of value is a comma-separated list of values delimited by square brackets.
+
+The two filters below are equivalent:
+```
+attribute IN[value1, value2, value3,]
+
+attribute = value1 OR attribute = value2 OR attribute = value3
+```
+In short, `IN` selects the documents for which:
+1. the filterable attribute exists; and
+2. the attribute contains a value that is equal to any of the values in the array
+
+The negated form of `IN` can be written in two different ways:
+```
+attribute NOT IN [value1, value2, etc.]
+NOT attribute IN [value1, value2, etc.]
+```
+and it is equivalent to:
+```
+attribute != value1 AND attribute != value2 AND ...
+```
+
+##### 3.1.2.1.12 Geo Search
+
+The `_geoRadius` operator selects the documents whose geographical coordinates fall within a certain range of a given coordinate. See [GeoSearch](0059-geo-search.md) for more information.
+
+#### 3.1.2.2. Array Syntax
+
+The array syntax is an alternative way to combine different filters with `OR` and `AND` operators.
+
+- Elements in the outer array are connected by `AND` operators
+- Elements in the inner arrays are connected by `OR` operators
 
 Example:
 ```json
@@ -118,24 +362,12 @@ Example:
     "filter": [["genres = Comedy", "genres = Romance"], "director = 'Mati Diop'"]
 }
 ```
-
-**Mixed syntax**
-
-The mixed syntax can mix string and array syntaxes.
-
-Let's say that we want to translate
+is equivalent to:
 ```json
 {
-    "filter": "((genres = Comedy AND genres = Romance) OR genres = Action) AND director != 'Mati Diop'"
+    "filter": "(genres = Comedy OR genres = Romance) AND (director = 'Mati Diop')" 
 }
 ```
-Example:
-```json
-{
-    "filter": [["genres = Comedy AND genres = Romance", "genres = Action"], "NOT director = comedy"]
-}
-```
-> Note that string values that are longer than a single word need to be enclosed by quote. `"director = Mati Diop"` will lead to a parsing error. The valid syntax is `"director = 'Mati Diop'"`.
 
 #### 3.1.3. `sort`
 
