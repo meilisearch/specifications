@@ -119,6 +119,9 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 | synonyms             | `synonyms` payload object            |
 | distinctAttribute    | `distrinctAttribute` payload string  |
 | displayedAttributes  | `displayedAttributes` payload array  |
+| typoTolerance        | `typoTolerance` payload object       |
+| pagination           | `pagination` payload object          |
+| faceting             | `faceting` payload object            |
 
 ##### dumpCreation
 
