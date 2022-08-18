@@ -6,7 +6,7 @@
 
 Meilisearch can automatically group consecutive asynchronous `documentAddition` or `documentPartial` tasks for the same index via an automatic batching mechanism.
 
-The user can enable this auto-batching behavior through various command flag options.
+The user can disable this auto-batching behavior. See [3.2. Auto-batching mechanisms options](#32-auto-batching-mechanisms-options) section.
 
 ## 2. Motivation
 
@@ -18,9 +18,9 @@ To make Meilisearch easier to use, we explored the idea of automatically creatin
 
 ### 3.1. Explanations
 
-All `tasks` are part of a batch identified by a `batchUid`. A task batch preserves the logical order of the tasks for a given index.
+A batch preserves the logical order of the tasks for a given index.
 
-Only consecutive `documentAdditionOrUpdate` tasks for the same index can have the same `batchUid`. All `tasks` concerning other operations will also be part of a `batchUid` having only one task.
+Only consecutive `documentAdditionOrUpdate` tasks for the same index can be in the same batch. All `tasks` concerning other operations will also be part of a batch having only one task.
 
 #### 3.1.1. Grouping tasks to a single batch
 
@@ -36,12 +36,11 @@ The more similar consecutive tasks the user sends in a row, the more likely the 
 
 ##### 3.1.1.2. `batchUid` generation
 
-The batch identifiers are unique and strictly increasing.
+All tasks are part of a batch identified by an internal `batchUid` field. A task batch preserves the logical order of the tasks for a given index. The batch identifiers are unique and strictly increasing. The `batchUid` field is internal; thus not visible on a `task` resource.
 
 #### 3.1.2. Impacts on `task` API resource
 
 - The different tasks grouped in a batch are processed within the same transaction. But if a task fails within a batch, the whole batch does not fail, only the related task.
-- A `batchUid` field is added on fully-qualified `task` API objects. `batchUid` values are unique and strictly increasing.
 - Tasks within the same batch share the same values for the `startedAt`, `finishedAt`, `duration` fields, and the same `error` object if an error occurs for a `task` during the batch processing.
 - If a batch contains many `tasks`, the `task` `details` `indexedDocuments` is identical in all `tasks` belonging to the same processed `batch`.
 
@@ -59,7 +58,7 @@ N/A
 ## 5. Future Possibilities
 
 - Extends it for all consecutive payload types.
-- Add a filter capability by `batchUid` on the `/tasks` endpoints.
+- Expose the `batchUid` field and add a filter capability on it on the `/tasks` endpoints.
 - <s>Do not fail the entire transaction if a document is not valid. Report the documents that could not be indexed to the user.</s>
 - <s>Enable auto-batching by default.</s>
-- Optimize some tasks sequence, for example if there is a document addition followed by an index deletion, we could skip the document addition
+- Optimize some tasks sequence, for example if there is a document addition followed by an index deletion, we could skip the document addition.
