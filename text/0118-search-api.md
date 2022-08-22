@@ -31,22 +31,23 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 
 ### 3.1. Search Payload Parameters
 
-| Field                                                 | Type                      | Required |
-|-------------------------------------------------------|---------------------------|----------|
-| [`q`](#311-q)                                         | String                    | False    |
-| [`filter`](#312-filter)                               | Array of String - String  | False    |
-| [`sort`](#313-sort)                                   | Array of String - String  | False    |
-| [`facets`](#314-facets)                               | Array of String - String  | False    |
-| [`limit`](#315-limit)                                 | Integer                   | False    |
-| [`offset`](#316-offset)                               | Integer                   | False    |
-| [`attributesToRetrieve`](#317-attributestoretrieve)   | Array of String - String  | False    |
-| [`attributesToHighlight`](#318-attributestohighlight) | Array of String - String  | False    |
-| [`highlightPreTag`](#319-highlightpretag)             | String                    | False    |
-| [`highlightPostTag`](#3110-highlightposttag)          | String                    | False    |
-| [`attributesToCrop`](#3111-attributestocrop)          | Array of String - String  | False    |
-| [`cropLength`](#3112-croplength)                      | Integer                   | False    |
-| [`cropMarker`](#3113-cropmarker)                      | String                    | False    |
-| [`showMatchesPosition`](#3114-showmatchesposition)                | Boolean                   | False    |
+| Field                                                 | Type                     | Required |
+|-------------------------------------------------------|--------------------------|----------|
+| [`q`](#311-q)                                         | String                   | False    |
+| [`filter`](#312-filter)                               | Array of String - String | False    |
+| [`sort`](#313-sort)                                   | Array of String - String | False    |
+| [`facets`](#314-facets)                               | Array of String - String | False    |
+| [`limit`](#315-limit)                                 | Integer                  | False    |
+| [`offset`](#316-offset)                               | Integer                  | False    |
+| [`attributesToRetrieve`](#317-attributestoretrieve)   | Array of String - String | False    |
+| [`attributesToHighlight`](#318-attributestohighlight) | Array of String - String | False    |
+| [`highlightPreTag`](#319-highlightpretag)             | String                   | False    |
+| [`highlightPostTag`](#3110-highlightposttag)          | String                   | False    |
+| [`attributesToCrop`](#3111-attributestocrop)          | Array of String - String | False    |
+| [`cropLength`](#3112-croplength)                      | Integer                  | False    |
+| [`cropMarker`](#3113-cropmarker)                      | String                   | False    |
+| [`showMatchesPosition`](#3114-showmatchesposition)    | Boolean                  | False    |
+| [`wordMatchingStrategy](#3115-wordMatchingStrategy)   | String                   | False    |
 
 #### 3.1.1. `q`
 
@@ -647,18 +648,37 @@ It's useful when more control is needed than offered by the built-in highlightin
 
 - 🔴 Sending a value with a different type than `Boolean` or `null` for `showMatchesPosition` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
+#### 3.1.15. `wordMatchingStrategy`
+
+- Type: String
+- Required: False
+- Default: `last`
+
+Defines which strategy to use to match the query terms within the documents as search results.
+
+Two different strategies are available, `last` and `all`. By default, the `last` strategy is chosen.
+
+- 🔴 Sending a value with a different type than `String` and other than `last` or `all` as a value for `wordMatchingStrategy` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+
+##### 3.1.15.1. `last` strategy
+
+The documents containing ALL the query words (i.e. in the `q` parameter) are returned first by Meilisearch. If Meilisearch doesn't have enough documents to fit the requested `limit`, it iteratively ignores the query words from the last typed word to the first typed word to match more documents.
+
+##### 3.1.15.2. `all` strategy
+
+Only the documents containing ALL the query words (i.e. in the `q` parameter) are returned by Meilisearch. If Meilisearch doesn't have enough documents to fit the requested `limit`, it returns the documents found without trying to match more documents.
 
 ### 3.2. Search Response Properties
 
-| Field                                                 | Type                         | Required |
-|-------------------------------------------------------|------------------------------|----------|
-| [`hits`](#321-hits)                                   | Array[Hit]                   | True     |
-| [`limit`](#322-limit)                                 | Integer                      | True     |
-| [`offset`](#323-offset)                               | Integer                      | True     |
-| [`estimatedTotalHits`](#324-estimatedTotalHits)       | Integer                      | True     |
-| [`facetDistribution`](#325-facetdistribution)       | Object                       | False    |
-| [`processingTimeMs`](#326-processingtimems)           | Integer                      | True     |
-| [`query`](#327-query)                                 | String                       | True     |
+| Field                                           | Type       | Required |
+|-------------------------------------------------|------------|----------|
+| [`hits`](#321-hits)                             | Array[Hit] | True     |
+| [`limit`](#322-limit)                           | Integer    | True     |
+| [`offset`](#323-offset)                         | Integer    | True     |
+| [`estimatedTotalHits`](#324-estimatedTotalHits) | Integer    | True     |
+| [`facetDistribution`](#325-facetdistribution)   | Object     | False    |
+| [`processingTimeMs`](#326-processingtimems)     | Integer    | True     |
+| [`query`](#327-query)                           | String     | True     |
 
 #### 3.2.1. `hits`
 
@@ -675,11 +695,11 @@ A search result can contain special properties. See [3.2.1.1. `hit` Special Prop
 
 ##### 3.2.1.1. `hit` Special Properties
 
-| Field                                | Type        | Required |
-|--------------------------------------|-------------|----------|
-| [`_geoDistance`](#32111-geodistance) | Integer     | False    |
-| [`_formatted`](#32112-formatted)     | Object      | False    |
-| [`_matchesPosition`](#32113-matchesposition) | Object      | False    |
+| Field                                        | Type    | Required |
+|----------------------------------------------|---------|----------|
+| [`_geoDistance`](#32111-geodistance)         | Integer | False    |
+| [`_formatted`](#32112-formatted)             | Object  | False    |
+| [`_matchesPosition`](#32113-matchesposition) | Object  | False    |
 
 ###### 3.2.1.1.1. `_geoDistance`
 
