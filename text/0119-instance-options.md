@@ -117,6 +117,7 @@ The expected behavior of each flag is described in the list above.
 - [SSL resumption](#3324-ssl-resumption)
 - [SSL tickets](#3325-ssl-tickets)
 - [Config file path](#3326-config-file-path)
+- [Enable Metrics Route](#3329-enable-metrics-route)
 
 #### 3.3.1. Database path
 
@@ -475,6 +476,14 @@ Activates SSL tickets.
 Define the config file to load at Meilisearch launch.
 
 See [Configuration File](0185-configuration-file.md) specification details.
+
+#### 3.3.27. Enable Metrics Route
+
+**Environment variable**: N/A
+**CLI option**: `--enable-metrics-route`
+**Default**: Disabled
+
+Activate the `/metrics` endpoint to collect Meilisearch metrics for monitoring purposes. See [0174-metrics-api.md](0174-metrics-api.md).
 
 ## 4. Technical Aspects
 
