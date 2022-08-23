@@ -33,51 +33,50 @@ A metric is composed by several fields:
 
 Meilisearch returns the metrics specified in the table below.
 
-| Metric                                                         |
-|----------------------------------------------------------------|
-| [`http_requests_total`](#321-http_requests_total)              |
-| [`meilisearch_database_size`](#322-meilisearch_database_size)  |
-| [`meilisearch_docs_count`](#323-meilisearch_docs_count)        |
-| [`meilisearch_total_index`](#324-meilisearch_total_index)      |
-| [`http_response_time_seconds`](#325-http_response_time_seconds)|
+| Name                                                                      | Type  |
+|---------------------------------------------------------------------------|-------|
+| [`http_requests_total`](#321-http_requests_total)                         |       |
+| [`http_response_time_seconds`](#322-http_response_time_seconds)           |       |
+| [`meilisearch_database_size_bytes`](#323-meilisearch_database_size_bytes) | gauge |
+| [`meilisearch_index_docs_count`](#324-meilisearch_index_docs_count)       | gauge |
+| [`meilisearch_index_count`](#325-meilisearch_index_count)                 | gauge |
 
 #### 3.2.1 `http_requests_total`
 tbd
 
-#### 3.2.2 `meilisearch_database_size`
+#### 3.2.2. `http_responses_time_seconds`
+
+tbd
+
+#### 3.2.3. `meilisearch_database_size_bytes`
 
 Return the size of the database in bytes.
 
 ```
-# HELP meilisearch_database_size Meilisearch Stats DbSize
-# TYPE meilisearch_database_size gauge
-meilisearch_database_size :databaseSizeInBytes
+# HELP meilisearch_db_size_bytes Meilisearch Db Size In Bytes
+# TYPE meilisearch_db_size_bytes gauge
+meilisearch_db_size_bytes :databaseSizeInBytes
 ```
 
-#### 3.2.3 `meilisearch_docs_count`
+#### 3.2.4. `meilisearch_index_docs_count`
 
 Return the number of documents for an index.
-Each index produce a `meilisearch_docs_count` line.
 
 ```
-# HELP meilisearch_docs_count Meilisearch Stats Docs Count
-# TYPE meilisearch_docs_count gauge
-meilisearch_docs_count{index=":indexUid"} :numberOfDocuments
+# HELP meilisearch_index_docs_count Meilisearch Index Docs Count
+# TYPE meilisearch_index_docs_count gauge
+meilisearch_index_docs_count{index=":indexUid"} :numberOfDocuments
 ```
 
-#### 3.2.4. `meilisearch_total_index`
+#### 3.2.5. `meilisearch_index_count`
 
 Return the total number of index for the Meilisearch instance.
 
 ```
-# HELP meilisearch_total_index Meilisearch Stats Index Count
-# TYPE meilisearch_total_index gauge
-meilisearch_total_index :numberOfIndexes
+# HELP meilisearch_index_count Meilisearch Index Count
+# TYPE meilisearch_index_count gauge
+meilisearch_index_count :numberOfIndex
 ````
-
-#### 3.2.5. `http_responses_time_seconds`
-
-tbd
 
 ### 3.3. API Endpoints Definition
 
@@ -85,7 +84,7 @@ tbd
 
 Fetch the metrics of the Meilisearch instance.
 
-`200` - Response body
+`200` - Response body example
 
 ```
 # HELP meilisearch_database_size MeiliSearch Stats DbSize
@@ -103,3 +102,10 @@ meilisearch_total_index 2
 #### 3.3.2. Errors
 
 - 🔴 If `--enable-metrics-route` is not specified at launch, the API returns a `404 Not Found` HTTP response.
+
+##### 3.3.2.1 Auth Errors
+
+If a master key is used to secure a Meilisearch instance, the auth layer returns the following errors:
+
+- 🔴 Accessing these routes without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing these routes with a key that does not have permissions (i.e. other than the master key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
