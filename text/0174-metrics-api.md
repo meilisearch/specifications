@@ -46,24 +46,31 @@ tbd
 
 #### 3.2.2 `meilisearch_database_size`
 
+Return the size of the database in bytes.
+
 ```
-# HELP meilisearch_database_size MeiliSearch Stats DbSize
+# HELP meilisearch_database_size Meilisearch Stats DbSize
 # TYPE meilisearch_database_size gauge
-meilisearch_database_size :databaseSize
+meilisearch_database_size :databaseSizeInBytes
 ```
 
 #### 3.2.3 `meilisearch_docs_count`
 
+Return the number of documents for an index.
+Each index produce a `meilisearch_docs_count` line.
+
 ```
-# HELP meilisearch_docs_count MeiliSearch Stats Docs Count
+# HELP meilisearch_docs_count Meilisearch Stats Docs Count
 # TYPE meilisearch_docs_count gauge
 meilisearch_docs_count{index=":indexUid"} :numberOfDocuments
 ```
 
 #### 3.2.4. `meilisearch_total_index`
 
+Return the total number of index for the Meilisearch instance.
+
 ```
-# HELP meilisearch_total_index MeiliSearch Stats Index Count
+# HELP meilisearch_total_index Meilisearch Stats Index Count
 # TYPE meilisearch_total_index gauge
 meilisearch_total_index :numberOfIndexes
 ````
