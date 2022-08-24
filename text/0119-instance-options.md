@@ -479,9 +479,11 @@ See [Configuration File](0185-configuration-file.md) specification details.
 
 #### 3.3.27. Enable Metrics Route
 
-**Environment variable**: N/A
+**Environment variable**: `MEILI_ENABLE_METRICS_ROUTE`
 **CLI option**: `--enable-metrics-route`
 **Default**: Disabled
+
+⚠️ This command-line option does not take any values. Assigning a value will throw an error.
 
 Activate the `/metrics` endpoint to collect Meilisearch metrics for monitoring purposes. See [0174-metrics-api.md](0174-metrics-api.md).
 
