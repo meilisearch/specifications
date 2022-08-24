@@ -144,4 +144,4 @@ N/A
 
 ## 5. Future Possibilities
 
-- Merge `/stats` with `/metrics`. A header could specify the a prefered format. `json` or `text/plain` (prometheus)
+- Merge `/stats` with `/metrics`. A header could specify the prefered format. e.g `application/json` (similar to actual `stats` resource) or `text/plain` (prometheus)
