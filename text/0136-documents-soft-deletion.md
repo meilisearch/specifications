@@ -1,8 +1,8 @@
-# Soft Deleted Documents
+# Documents Soft Deletion
 
 ## 1. Summary
 
-This specification describes the internals of the soft-deleted documents algorithm.
+This specification describes the internals of the documents soft-deletion algorithm.
 
 ## 2. Motivation
 
@@ -11,7 +11,7 @@ Deleting documents is extremely slow and can happen when;
 - You delete a batch of documents.
 - You update one or multiple documents (i.e., the primary key is the same, but the document's content is not the same).
 
-The purpose of the soft-deleted documents feature is to make the deletion of documents almost instantaneous by **not** deleting the document when asked.
+The purpose of the documents soft-deletion feature is to make the deletion of documents almost instantaneous by **not** deleting the document when asked.
 
 ## 3. Functional Specification
 
@@ -30,7 +30,8 @@ The idea is good, but there are two little problems;
 The second point could be a real issue for the case of someone who has very few documents but update them frequently on a small disk without updating the `max-index-size` parameter.
 The soft-deleted documents would grow until they use 10GB of disk even though the user only has like 100MB of documents.
 
-## 4. Future possibilities
+## 4. Future Possibilities
+
 - Work again on the way to get the size of the disk the `data.ms` is currently running on. This would improve the analytics as well.
 - Provide a cli parameter to select how much space can be used to store the soft deleted documents.
   It could be expressed as a real size or in terms of percentage.
