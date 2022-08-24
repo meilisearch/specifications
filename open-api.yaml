@@ -698,6 +698,7 @@ components:
               - settings.get
               - settings.update
               - stats.get
+              - metrics.get
               - dumps.create
               - version
               - keys.get

@@ -137,10 +137,11 @@ meilisearch_total_index 2
 If a master key is used to secure a Meilisearch instance, the auth layer returns the following errors:
 
 - 🔴 Accessing these routes without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 Accessing these routes with a key that does not have the permission `stats.get` (i.e. other than the master key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Accessing these routes with a key that does not have the permission `metrics.get` (i.e. other than the master key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
 ## 4. Technical Details
 N/A
 
 ## 5. Future Possibilities
-N/A
+
+- Merge `/stats` with `/metrics`. A header could specify the a prefered format. `json` or `text/plain` (prometheus)
