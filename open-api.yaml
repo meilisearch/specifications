@@ -3702,4 +3702,55 @@ paths:
                   $ref: '#/components/examples/202_indexSwap'
         '401':
           $ref: '#/components/responses/401'
+    parameters:
+      - $ref: '#/components/parameters/taskUid'
+  /metrics:
+    get:
+      summary: (BETA) Get prometheus format metrics for observability and monitoring
+      description: 'See [technical specification](https://github.com/meilisearch/specifications/blob/main/text/0174-metrics-api.md)'
+      tags:
+        - stats
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              type: string
+              examples:
+                sampleResponse: '
+                  # HELP http_requests_total HTTP requests total
+                  # TYPE http_requests_total counter
+                  http_requests_total{method="GET",path="/metrics"} 3
+                  # HELP http_response_time_seconds HTTP response times
+                  # TYPE http_response_time_seconds histogram
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.0005"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.0008"} 1
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.00085"} 1
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.0009"} 1
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.00095"} 1
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.001"} 1
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.00105"} 1
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.0011"} 1
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.00115"} 1
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.0012"} 1
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.0015"} 1
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.002"} 1
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.003"} 1
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="1"} 2
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="+Inf"} 2
+                  http_response_time_seconds_sum{method="GET",path="/metrics"} 0.0056515409999999995
+                  http_response_time_seconds_count{method="GET",path="/metrics"} 2
+                  # HELP meilisearch_db_size_bytes Meilisearch Db Size In Bytes
+                  # TYPE meilisearch_db_size_bytes gauge
+                  meilisearch_db_size_bytes 155648
+                  # HELP meilisearch_index_count Meilisearch Index Count
+                  # TYPE meilisearch_index_count gauge
+                  meilisearch_index_count 1
+                  # HELP meilisearch_index_docs_count Meilisearch Index Docs Count
+                  # TYPE meilisearch_index_docs_count gauge
+                  meilisearch_index_docs_count{index="movies"} 0'
+      operationId: metrics.get
+      parameters: []
+      security:
+        - apiKey: []
 security: []
