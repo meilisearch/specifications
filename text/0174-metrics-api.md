@@ -33,24 +33,53 @@ A metric is composed by several fields:
 
 Meilisearch returns the metrics specified in the table below.
 
-| Name                                                                      | Type  |
-|---------------------------------------------------------------------------|-------|
-| [`http_requests_total`](#321-http_requests_total)                         |       |
-| [`http_response_time_seconds`](#322-http_response_time_seconds)           |       |
-| [`meilisearch_database_size_bytes`](#323-meilisearch_database_size_bytes) | gauge |
-| [`meilisearch_index_docs_count`](#324-meilisearch_index_docs_count)       | gauge |
-| [`meilisearch_index_count`](#325-meilisearch_index_count)                 | gauge |
+| Name                                                                      | Type      |
+|---------------------------------------------------------------------------|-----------|
+| [`http_requests_total`](#321-http_requests_total)                         | counter   |
+| [`http_response_time_seconds`](#322-http_response_time_seconds)           | histogram |
+| [`meilisearch_database_size_bytes`](#323-meilisearch_database_size_bytes) | gauge     |
+| [`meilisearch_index_docs_count`](#324-meilisearch_index_docs_count)       | gauge     |
+| [`meilisearch_index_count`](#325-meilisearch_index_count)                 | gauge     |
 
 #### 3.2.1 `http_requests_total`
-tbd
+
+Returns the number of times an API resource is accessed.
+
+```
+# HELP http_requests_total HTTP requests total
+# TYPE http_requests_total counter
+http_requests_total{method=":httpMethod",path=":resourcePath"} :numberOfRequest
+```
 
 #### 3.2.2. `http_responses_time_seconds`
 
-tbd
+Returns a time histogram showing the number of times an API resource call goes into a time bucket (expressed in second).
+
+```
+# HELP http_response_time_seconds HTTP response times
+# TYPE http_response_time_seconds histogram
+http_response_time_seconds_bucket{method=":httpMethod",path=":resourcePath",le="0.0005"} :numberOfRequest
+http_response_time_seconds_bucket{method=":httpMethod",path=":resourcePath",le="0.0008"} :numberOfRequest
+http_response_time_seconds_bucket{method=":httpMethod",path=":resourcePath",le="0.00085"} :numberOfRequest
+http_response_time_seconds_bucket{method=":httpMethod",path=":resourcePath",le="0.0009"} :numberOfRequest
+http_response_time_seconds_bucket{method=":httpMethod",path=":resourcePath",le="0.00095"} :numberOfRequest
+http_response_time_seconds_bucket{method=":httpMethod",path=":resourcePath",le="0.001"} :numberOfRequest
+http_response_time_seconds_bucket{method=":httpMethod",path=":resourcePath",le="0.00105"} :numberOfRequest
+http_response_time_seconds_bucket{method=":httpMethod",path=":resourcePath",le="0.0011"} :numberOfRequest
+http_response_time_seconds_bucket{method=":httpMethod",path=":resourcePath",le="0.00115"} :numberOfRequest
+http_response_time_seconds_bucket{method=":httpMethod",path=":resourcePath",le="0.0012"} :numberOfRequest
+http_response_time_seconds_bucket{method=":httpMethod",path=":resourcePath",le="0.0015"} :numberOfRequest
+http_response_time_seconds_bucket{method=":httpMethod",path=":resourcePath",le="0.002"} :numberOfRequest
+http_response_time_seconds_bucket{method=":httpMethod",path=":resourcePath",le="0.003"} :numberOfRequest
+http_response_time_seconds_bucket{method=":httpMethod",path=":resourcePath",le="1"} :numberOfRequest
+http_response_time_seconds_bucket{method=":httpMethod",path=":resourcePath",le="+Inf"} :numberOfRequest
+http_response_time_seconds_sum{method=":httpMethod",path=":resourcePath"} :numberOfRequest
+http_response_time_seconds_count{method=":httpMethod",path=":resourcePath"} :numberOfRequest
+```
 
 #### 3.2.3. `meilisearch_database_size_bytes`
 
-Return the size of the database in bytes.
+Returns the size of the database in bytes.
 
 ```
 # HELP meilisearch_db_size_bytes Meilisearch Db Size In Bytes
@@ -60,7 +89,7 @@ meilisearch_db_size_bytes :databaseSizeInBytes
 
 #### 3.2.4. `meilisearch_index_docs_count`
 
-Return the number of documents for an index.
+Returns the number of documents for an index.
 
 ```
 # HELP meilisearch_index_docs_count Meilisearch Index Docs Count
@@ -70,7 +99,7 @@ meilisearch_index_docs_count{index=":indexUid"} :numberOfDocuments
 
 #### 3.2.5. `meilisearch_index_count`
 
-Return the total number of index for the Meilisearch instance.
+Returns the total number of index for the Meilisearch instance.
 
 ```
 # HELP meilisearch_index_count Meilisearch Index Count
@@ -80,7 +109,7 @@ meilisearch_index_count :numberOfIndex
 
 ### 3.3. API Endpoints Definition
 
-#### 3.3.1. `GET` - `metrics`
+#### 3.3.1. `GET` - `/metrics`
 
 Fetch the metrics of the Meilisearch instance.
 
@@ -108,4 +137,10 @@ meilisearch_total_index 2
 If a master key is used to secure a Meilisearch instance, the auth layer returns the following errors:
 
 - 🔴 Accessing these routes without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
-- 🔴 Accessing these routes with a key that does not have permissions (i.e. other than the master key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+- 🔴 Accessing these routes with a key that does not have the permission `stats.get` (i.e. other than the master key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+
+## 4. Technical Details
+N/A
+
+## 5. Future Possibilities
+N/A
