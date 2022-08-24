@@ -327,7 +327,7 @@ Create an API key.
 | tasks.delete     | Provides access to `DELETE` `/tasks` route. |
 | settings.get     | Provides access to `GET` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes.                                                                                                            |
 | settings.update  | Provides access to `POST / DELETE` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes.                                                                                                  |
-| stats.get        | Provides access to `GET` `/stats/`. **⚠️Non-authorized `indexes` are omitted from the response on `/stats`**. Also add access to `GET` `/indexes/:authorizedIndexes/stats`.                                                      |
+| stats.get        | Provides access to `GET` `/stats` and `/metrics`. **⚠️Non-authorized `indexes` are omitted from the response on `/stats`**. Also add access to `GET` `/indexes/:authorizedIndexes/stats`.                                                      |
 | dumps.create     | Provides access to `POST` `/dumps` route. **As dumps are not scoped by indexes, a restriction on `indexes` does not affect this action.**                                                                                       |
 | version          | Provides access to `GET` `/version` route.                                                                                                                                                                                      |
 | keys.get         | Provides access to `GET` `/keys` route.                                                                                                                                                                                         |
@@ -478,3 +478,4 @@ The maximum size of the API key storage layer is `100GB`.
 - Add search parameters restrictions for an API Key.
 - Add rfc2822 format expression for `expiredAt` field. e.g. `Wed, 18 Feb 2022 23:16:09 GMT`
 - Add an alias that can only be associated to one API Key to retrieve it easily on client side. e.g. `GET /keys/:uid_or_alias`
+- Add a dedicated action for `/metrics` e.g `metrics.get`
