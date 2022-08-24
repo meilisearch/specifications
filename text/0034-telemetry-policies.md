@@ -135,7 +135,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `filtered_by_type`                      | `true` if `GET /tasks` endpoint is filered by `type`, otherwise `false` | false | `Tasks Seen` |
 | `filtered_by_status`                    | `true` if `GET /tasks` endpoint is filered by `status`, otherwise `false` | false | `Tasks Seen` |
 | `per_index_uid` | `true` if an uid is used to fetch an index stat resource, otherwise `false` | false | `Stats Seen` |
-| `most_used_word_matching_strategy`      | Most used word matching strategy among all search requests in this batch | `last` | `Documents Searched POST`, `Documents Searched GET` |
+| `most_used_matching_strategy`      | Most used word matching strategy among all search requests in this batch | `last` | `Documents Searched POST`, `Documents Searched GET` |
 
 ----
 
@@ -220,7 +220,7 @@ This property allows us to gather essential information to better understand on 
 | formatting.crop_marker | Does `cropMarker` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.show_matches_position | Does `showMatchesPosition` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | facets | Does `facets` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
-| most_used_word_matching_strategy | Most used word matching strategy among all search requests in the aggregated event. `last` / `all` | `last` |
+| most_used_matching_strategy | Most used word matching strategy among all search requests in the aggregated event. `last` / `all` | `last` |
 
 ---
 
@@ -249,7 +249,7 @@ This property allows us to gather essential information to better understand on 
 | formatting.crop_marker | Does `cropMarker` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.show_matches_position | Does `showMatchesPosition` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | facets | Does `facets` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
-| most_used_word_matching_strategy | Most used word matching strategy among all search requests in the aggregated event. `last` / `all` | `last` |
+| most_used_matching_strategy | Most used word matching strategy among all search requests in the aggregated event. `last` / `all` | `last` |
 
 ---
 

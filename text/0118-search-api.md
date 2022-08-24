@@ -47,7 +47,7 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 | [`cropLength`](#3112-croplength)                      | Integer                  | False    |
 | [`cropMarker`](#3113-cropmarker)                      | String                   | False    |
 | [`showMatchesPosition`](#3114-showmatchesposition)    | Boolean                  | False    |
-| [`wordMatchingStrategy](#3115-wordMatchingStrategy)   | String                   | False    |
+| [`matchingStrategy](#3115-matchingStrategy)           | String                   | False    |
 
 #### 3.1.1. `q`
 
@@ -648,7 +648,7 @@ It's useful when more control is needed than offered by the built-in highlightin
 
 - 🔴 Sending a value with a different type than `Boolean` or `null` for `showMatchesPosition` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-#### 3.1.15. `wordMatchingStrategy`
+#### 3.1.15. `matchingStrategy`
 
 - Type: String
 - Required: False
@@ -658,7 +658,7 @@ Defines which strategy to use to match the query terms within the documents as s
 
 Two different strategies are available, `last` and `all`. By default, the `last` strategy is chosen.
 
-- 🔴 Sending a value with a different type than `String` and other than `last` or `all` as a value for `wordMatchingStrategy` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `String` and other than `last` or `all` as a value for `matchingStrategy` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 ##### 3.1.15.1. `last` strategy
 
