@@ -322,7 +322,7 @@ components:
               description: Number of documents received for documentAdditionOrUpdate task.
             indexedDocuments:
               type: integer
-              description: Number of documents finally indexed for documentAdditionOrUpdate task or a documentAdditionorUpdate batch of tasks.
+              description: Number of documents finally indexed for documentAdditionOrUpdate task or a documentAdditionOrUpdate batch of tasks.
             receivedDocumentsIds:
               type: integer
               description: Number of document ids received for documentDeletion task.
