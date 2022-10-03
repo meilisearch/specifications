@@ -82,7 +82,7 @@ Attributes used as filter criteria must be added to the `filterableAttributes` l
 
 ##### 3.1.2.1. String Syntax
 
-##### 3.1.2.1.1 Grammar
+###### 3.1.2.1.1 Grammar
 
 The grammar of the filter syntax is given below in pseudo-BNF form:
 ```
@@ -109,7 +109,7 @@ WS             = ' ' | '\t' | '\r' | '\n'
 ```
 where `single_quoted_string` and `double_quoted_string` can contain anything except unescaped single quotes `'` and unescaped double quotes `"`, respectively. Quotes are escaped by a preceding backslash. For example: `"escaped \" double quote" "` and `escaped \' single quote`. If a backslash is not followed by the correct quote, it is kept in the string.
 
-##### 3.1.2.1.2 Naming a filterable attribute
+###### 3.1.2.1.2 Naming a filterable attribute
 
 A filterable attribute can appear in a filter by its unquoted name if it only contains ascii alphanumeric characters, dots, hyphens, and underscores. 
 
@@ -161,7 +161,7 @@ The grammar for the value of a filterable attribute is the same as the grammar f
 - NOT: `NOT filter`
 - GeoSearch: `_geoRadius(lat, lng, distance)`
 
-##### 3.1.2.1.5 Equality
+###### 3.1.2.1.5 Equality
 
 The equality operator, `=`, selects the documents for which:
 1. the given filterable attribute exists; and
@@ -202,7 +202,7 @@ will select the document with id `3`.
 
 Furthermore, there is no way to check whether an attribute has a value that is `null` or an array. An attribute whose value is `null` or an empty array is considered not to have any value and will therefore never be matched by an equality operator.
 
-##### 3.1.2.1.6 Inequality
+###### 3.1.2.1.6 Inequality
 
 The inequality operator selects all documents that are not selected by the equality operator.
 With the same documents given as examples to the equality operator, the following filter:
@@ -215,7 +215,7 @@ Note that `attribute != value` is equivalent to `NOT attribute = value`.
 
 Furthermore, there is no way to write a filter to select documents which contain a value that is different than a given string or number. In the example above, `size != 1` did not select the document with id `1`, even though its `size` attribute contains the value `"L"`, which is different than `1`.
 
-##### 3.1.2.1.7 Comparison
+###### 3.1.2.1.7 Comparison
 
 The comparison operators select the documents for which:
 1. the filterable attribute exists; and
@@ -256,7 +256,7 @@ size "larga" TO "largz"
 
 ##### 3.1.2.1.8 Combining filter conditions
 
-Multiple filters can be combined together using the operators `AND` and `OR`. These infix operators take two sub-filters as arguments
+Multiple filters can be combined together using the operators `AND` and `OR`. These infix operators take two sub-filters as arguments.
 
 The `AND` operator selects the documents that are selected by both subfilters at the same time. In other words, it is an intersection of the two sets of documents selected by the sub-filters.
 
@@ -279,7 +279,7 @@ size = 0 AND size = 2 OR colour = "blue"   -> selects [0]
 size > 5 AND size < 5                      -> selects [2]
 ```
 
-##### 3.1.2.1.9 Negating a filter
+###### 3.1.2.1.9 Negating a filter
 
 The negation operator, `NOT`, is used to select all documents that are not selected by a sub-filter. It is a prefix operator that takes one argument. Its precedence is higher than both `AND` and `OR`.
 
@@ -294,7 +294,7 @@ size = 0 OR NOT size = 2                   -> selects [0,1]
 NOT (NOT size = 0)                         -> selects [0]
 ```
 
-##### 3.1.2.1.10 Exists
+###### 3.1.2.1.10 Exists
 
 The `EXISTS` operator selects the documents for which the filterable attribute exists, even if its value is `null` or an empty array. It is a postfix operator that takes an attribute name as argument.
 
@@ -319,9 +319,9 @@ For example, with the documents:
     "id": 2
 }]
 ```
-Then the filter `colour EXISTS` selects the document ids `[0,1]` wihle the filter `colour NOT EXISTS` or `NOT colour EXISTS` selects the document ids `[2]`.
+Then the filter `colour EXISTS` selects the document ids `[0,1]` while the filter `colour NOT EXISTS` or `NOT colour EXISTS` selects the document ids `[2]`.
 
-##### 3.1.2.1.11 In
+###### 3.1.2.1.11 In
 
 The `IN[..]` operator is a more concise way to combine equality operators. It is a postfix operator that takes an attribute name on the left hand side and an array of values on the right hand side. An array of value is a comma-separated list of values delimited by square brackets.
 
@@ -345,11 +345,11 @@ and it is equivalent to:
 attribute != value1 AND attribute != value2 AND ...
 ```
 
-##### 3.1.2.1.12 Geo Search
+###### 3.1.2.1.12 Geo Search
 
 The `_geoRadius` operator selects the documents whose geographical coordinates fall within a certain range of a given coordinate. See [GeoSearch](0059-geo-search.md) for more information.
 
-#### 3.1.2.2. Array Syntax
+##### 3.1.2.2. Array Syntax
 
 The array syntax is an alternative way to combine different filters with `OR` and `AND` operators.
 
