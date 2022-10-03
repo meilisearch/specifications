@@ -48,19 +48,39 @@ We want to provide our users with an always improved searching experience. For t
 In order to use the tokenizer, all the user has to do is to instantiate a `Tokenizer`, call `tokenize(&str)` on it and iterate over the emitted tokens:
 
 ```rust
-let stop_words = Set::from_iter(["the", "of"].iter()).unwrap();
-let analyzer = Analyzer::new(AnalyzerConfig::default_with_stopwords(&stop_words));
+    use fst::Set;
+    
+    use charabia::TokenizerBuilder;
+    
+    // text to tokenize.
+    let orig = "The quick (\"brown\") fox can't jump 32.3 feet, right? Brr, it's 29.3°F!";
+    
+    // create the builder.
+    let mut builder = TokenizerBuilder::new();
+    
+    // create a set of stop words.
+    let stop_words = Set::from_iter(["the"].iter()).unwrap();
+    
+    // configurate stop words.
+    builder.stop_words(&stop_words);
+    
+    // build the tokenizer passing the text to tokenize.
+    let tokenizer = builder.build();
+    
+    // tokenize original string
+    let mut tokens = tokenizer.tokenize(orig);
+    
+    let Token { lemma, kind, .. } = tokens.next().unwrap();
+    assert_eq!(lemma, "the");
+    assert_eq!(kind, TokenKind::Word);
 
-let orig = "The quick (\"brown\") fox can't jump 32.3 feet, right? Brr, it's 29.3°F!";
-let analyzed = analyzer.analyze(orig);
-let mut analyzed = analyzed.tokens();
-assert_eq!("the", analyzed.next().unwrap().text());
-assert_eq!(" ", analyzed.next().unwrap().text());
-assert_eq!("quick", analyzed.next().unwrap().text());
-assert_eq!(" ", analyzed.next().unwrap().text());
-assert_eq!("(", analyzed.next().unwrap().text());
-assert_eq!("\"", analyzed.next().unwrap().text());
-assert_eq!("brown", analyzed.next().unwrap().text());
+    let Token { lemma, kind, .. } = tokens.next().unwrap();
+    assert_eq!(lemma, " ");
+    assert_eq!(kind, TokenKind::Separator(SeparatorKind::Soft));
+
+    let Token { lemma, kind, .. } = tokens.next().unwrap();
+    assert_eq!(lemma, "quick");
+    assert_eq!(kind, TokenKind::Word);
 ```
 
 The call to the tokenize method allows the reuse of the same `Tokenizer` instance, and keep its configuration state and allocations.
@@ -71,14 +91,24 @@ Below are examples of the integration of the new tokenizer in existing code:
 ```rust
 // new tokenizer
 fn highlight_record(record: &mut IndexMap<String, String>, words: &HashSet<String>) {
-   let stop_words = Set::default();
-    let analyzer = Analyzer::new(AnalyzerConfig::default_with_stopwords(&stop_words));
+    // create the builder.
+    let mut builder = TokenizerBuilder::new();
+    
+    // create a set of stop words.
+    let stop_words = Set::from_iter(["the"].iter()).unwrap();
+    
+    // configurate stop words.
+    builder.stop_words(&stop_words);
+    
+    // build the tokenizer passing the text to tokenize.
+    let tokenizer = builder.build();
 
     for (_key, value) in record.iter_mut() {
         let old_value = mem::take(value);
-        let analyzed = analyzer.analyze(&old_value);
+        // reuse tokenizer at each iteration
+        let tokens = tokenizer.reconstruct(&old_value);
         
-        for (original, token) in analyzed.reconstruct() {
+        for (original, token) in tokens {
             if token.is_word() {
                 let to_highlight = words.contains(&token.text());
                 if to_highlight { value.push_str("<mark>") }
@@ -122,203 +152,20 @@ In future versions, we will probably provide a way to configure tokenizer and th
 
 ### Architecture
 
-The new version of the tokenizer will replace the current version as a standalone library.
+The new version of the tokenizer will replace the current version as a [standalone library named charabia](https://crates.io/crates/charabia).
 
-![Tokenizer](https://user-images.githubusercontent.com/6482087/102896344-8560d200-4466-11eb-8cfe-b4ae8741093b.jpg)
 ### Implementation Details
 
-We want to support different tokenizers based on the language of the text that needs to be indexed. For this, we may need to change the tokenizer we are using while indexing, depending on the language and the script, detected by `whatlang`. The Analyzer provides an interface that abstracts this need away from the consumer of the tokens.
+We want to support different tokenizers based on the language of the text that needs to be indexed. For this, we may need to change the tokenizer we are using while indexing, depending on the language and the script, detected by `whatlang`. The Tokenizer provides an interface that abstracts this need away from the consumer of the tokens.
 
-#### Pipeline
+See [the official documentation](https://docs.rs/charabia) to know more about the API of the library.
 
-A pipeline is a structure that contains all the steps needed to tokenize a specific language or script:
-- One or several preprocessors to prepare text before tokenization e.g. traditional Chinese translation or erasing some characters;
-- A tokenizer to transform the text into an iterator of tokens;
-- One or several normalizers to normalize tokens for indexation e.g. deunicode or lowercase.
-```rust
-pub struct Pipeline {
-    pre_processor: Box<dyn PreProcessor + 'static>,
-    tokenizer: Box<dyn Tokenizer + 'static>,
-    normalizer: Box<dyn Normalizer + 'static>,
-}
-```
+See the repository [Contributing.md](https://github.com/meilisearch/charabia/blob/main/CONTRIBUTING.md) to know more about contribution that can be made by the community.
 
-#### Configuration
 
-The tokenizer is configured at initialization. A `Default` implementation is provided with the settings we believe suits most cases.
-The configuration options, for now, are:
-- the `stop_words`
-- the `pipeline_map` that links a `(Script, Language)` to a `Pipeline`. This defaults to the mapping we find the best fitting for most cases. These settings should be left as is now, but will allow the user to define Pipelines in the future.
-
-```rust
-pub struct AnalyzerConfig<'a, A> {
-    /// language specialized pipeline, this can be switched during
-    /// document tokenization if the document contains several languages
-    pub pipeline_map: HashMap<(Script, Language), Pipeline>,
-    pub stop_words: &'a Set<A>,
-}
-```
-
-#### Analyzer
-
-The analyzer exposes an abstracted interface to the tokenization process. Its API is standard:
-
-```rust
-use crate::token::Token;
-use crate::tokenizer::Tokenizer;
-
-pub struct Analyzer<'a, A> {
-    config: AnalyzerConfig<'a, A>,
-}
-
-impl<'a, A> Analyzer<'a, A>
-where
-    A: AsRef<[u8]>
-{
-    /// create a new tokenizer detecting script
-    /// and chose the specialized internal tokenizer
-    pub fn new(config: AnalyzerConfig<'a, A>) -> Self { unimplemented!() }
-
-    /// Builds an `AnalyzedText` instance with the correct analyzer pipeline, and pre-processes the
-    /// text.
-    ///
-    /// If an analysis pipeline exists for the inferred `(Script, Language)`, the analyzer will look
-    /// for a user specified default `(Script::Other, Language::Other)`. If the user default is not
-    /// specified, it will fallback to `(IdentityPreProcessor, UnicodeSegmenter, IdentityNormalizer)`.
-    ///
-    /// ```rust
-    /// use meilisearch_tokenizer::{Analyzer, AnalyzerConfig};
-    /// use fst::Set;
-    /// // defaults to unicode segmenter with identity preprocessor and normalizer.
-    /// let stop_words = Set::from_iter([""].iter()).unwrap();
-    /// let analyzer = Analyzer::new(AnalyzerConfig::default_with_stopwords(&stop_words));
-    /// let analyzed = analyzer.analyze("The quick (\"brown\") fox can't jump 32.3 feet, right? Brr, it's 29.3°F!");
-    /// let mut tokens = analyzed.tokens();
-    /// assert!("the" == tokens.next().unwrap().text());
-    /// ```
-    pub fn analyze<'t>(&'t self, text: &'t str) -> AnalyzedText<'t, A> { unimplemented!() }
-}
-
-/// result of analyzer.analyze() function, made to choose how tokens will be returned.
-pub struct AnalyzedText<'a, A> {}
-
-impl<'a, A> AnalyzedText<'a, A>
-where
-    A: AsRef<[u8]>
-{
-    /// Returns a `TokenStream` for the Analyzed text.
-    pub fn tokens(&'a self) -> TokenStream<'a> { unimplemented!() }
-
-    /// Attaches each token to its corresponding portion of the original text.
-    pub fn reconstruct(&'a self) -> impl Iterator<Item = (&'a str, Token<'a>)>  { unimplemented!() }
-}
-```
-
-#### Token
-
-The `Token` is is the result of an iteration of the `Analyzer`,
-it wraps a `&str`, a byte slice containing one or several characters, with some informations about:
-- the `kind: TokenKind` defining if the token is a `Word`, a `Separator` or a `StopWord`
-- the `char_index: usize` defining the index of the first character of the `Token` in the whole original text
-- the `byte_start/byte_end: usize` defining the indexes of start and end of the byte slice in the whole original text
-
-:warning: The wrapped byte slice should not be considered as a subset of the original text 
-but as a normalized version of the subset.
-
-```rust
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum SeparatorKind {
-    Hard,
-    Soft,
-}
-
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub enum TokenKind {
-    Word,
-    /// the token is a stop word,
-    /// meaning that it can be ignored to optimize size and performance or be indexed as a Word
-    StopWord,
-    /// the token is a separator,
-    /// meaning that it shouldn't be indexed but used to determine word proximity
-    Separator(SeparatorKind),
-    Unknown,
-}
-```
-
-The emitted token position is relative to the original text, this information is reliable. The `word` is normalized if need be.
-
-```rust
-#[derive(Debug, Clone, Default)]
-pub struct Token<'a> {
-    pub kind: TokenKind,
-    pub word: Cow<'a, str>,
-    /// index of the first character of the word
-    pub char_index: usize,
-    /// indexes of start and end of the byte slice
-    pub byte_start: usize,
-    pub byte_end: usize,
-}
-
-impl<'a> Token<'a> {
-    // return the normalized version of the token
-    pub fn text(&self) -> &str { unimplemented!() }
-
-    // return the size in byte of the original text
-    pub fn byte_len(&self) -> usize { unimplemented!() }
-
-    // return the TokenKind of the token
-    pub fn kind(&self) -> TokenKind { unimplemented!() }
-
-    // return true if the TokenKind of the token is TokenKind::Word
-    pub fn is_word(&self) -> bool { unimplemented!() }
-
-    // return Some(SeparatorKind) if the TokenKind of the token is TokenKind::Separator(SeparatorKind),
-    // None if the token is not a separator
-    pub fn is_separator(&self) -> Option<SeparatorKind> { unimplemented!() }
-
-    // return true if the TokenKind of the token is TokenKind::StopWord
-    pub fn is_stopword(&self) -> bool { unimplemented!() }
-}
-```
-
-#### Internal Tokenizer trait
-
-The `InternalTokenizer` trait provides a common interface to adapt other tokenizers to the tokenizer. This allows the extensibility of the current tokenizer to other languages.
-
-```rust
-/// iterator over tokens processed by the specialized tokenizer
-pub struct TokenStream<'a> {
-    pub(crate) inner: Box<dyn Iterator<Item = Token<'a>> + 'a>
-}
-
-impl<'a> Iterator for TokenStream<'a> {
-    type Item = Token<'a>;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.inner.next()
-    }
-}
-
-/// trait defining an internal tokenizer,
-/// an internal tokenizer should be a script specialized tokenizer,
-/// this should be implemented as an `Iterator` with `Token` as `Item`,
-pub trait Tokenizer: Sync + Send {
-    /// create the tokenizer based on the given `text` and `char_index`
-    fn tokenize<'a>(&self, s: &'a ProcessedText<'a>) -> TokenStream<'a>;
-}
-```
-- use of `jieba` for Chinese tokenization
-- use of `unicode-segmenter` for other segmentations
-
-### Corner Cases
-
-In some languages like Chinese, there can be multiple "words" extracted that are considered to be at the same position in the text. For example, 计算所 gives 计算 and 计算所, that are at the same position in the text but don't have the same length, the tokenizer should support that behavior. See #5.
-> return several token as the same word_position seems to be over-engineering, we may want to have only 1 token by iteration making API simplier
 ## Future possibilities
 
 - We should add a way to configure the tokenizer to enforce a specific language/script
 - We should add a way to configure tokenizer whitelisting/blacklisting separators
 - The tokenizer specified here is based on scripts, we should base it on languages to be able to have default stop-words for each language
-- The chinese tokenizer is a complicated subject. The first implementation will simply adapt jieba's `cut` method. In another [specification](https://github.com/meilisearch/specifications/pull/5), we'll think about improving this, and this will probably require the help of a native mandarin speaker input.
 - We will want in the future to allow user configuration for the tokenizer. This is taken into account in the design of the new Tokenizer.
-- Normalized synonyms (#964)
