@@ -731,7 +731,29 @@ These errors occurs when the `_geo` field of a document payload is not valid. Ei
 
 ### Error Definition
 
-#### Variant: Missing `_geo.lat` or `_geo.lng` field.
+#### Variant: `_geo` field is not an object.
+
+```json
+{
+    "message": "The `_geo` field in the document with the id: `:documentId` is not an object. Was expecting an object with the `_geo.lat` and `_geo.lng` fields but instead got `:field`.",
+    "code": "invalid_geo_field",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
+}
+```
+
+#### Variant: Missing `_geo.lat` **and** `_geo.lng` field.
+
+```json
+{
+    "message": "Could not find latitude nor longitude in the document with the id: `:documentId`. Was expecting `_geo.lat` and `_geo.lng` fields.",
+    "code": "invalid_geo_field",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
+}
+```
+
+#### Variant: Missing `_geo.lat` **or** `_geo.lng` field.
 
 ```json
 {
@@ -746,7 +768,7 @@ These errors occurs when the `_geo` field of a document payload is not valid. Ei
 
 ```json
 {
-    "message": "Could not parse :coord in the document with the id: `:documentId`. Was expecting a number but instead got `:value`.",
+    "message": "Could not parse :coord in the document with the id: `:documentId`. Was expecting a finite number but instead got `:value`.",
     "code": "invalid_geo_field",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
