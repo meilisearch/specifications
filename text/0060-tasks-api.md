@@ -22,7 +22,6 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 |------------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | uid        | integer | Unique sequential identifier                                                                                                                                                                                                  |
 | indexUid   | string  | Unique index identifier. This field is `null` when the task type is `dumpCreation`.                                                                                                                                                                                                                                        |
-| batchUid   | integer | Identify in which batch a task has been grouped by auto-batching. It corresponds to the first task uid grouped within a batch. See [0096-auto-batching.md](0096-auto-batching.md)                                             |
 | status     | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`                                                                                                                                       |
 | type       | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `documentAdditionOrUpdate`, `documentDeletion`, `settingsUpdate`, `dumpCreation`                                                       |
 | details    | object  | Details information for a task payload. See Task Details part.                                                                                                                                                                |
@@ -119,6 +118,9 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 | synonyms             | `synonyms` payload object            |
 | distinctAttribute    | `distrinctAttribute` payload string  |
 | displayedAttributes  | `displayedAttributes` payload array  |
+| typoTolerance        | `typoTolerance` payload object       |
+| pagination           | `pagination` payload object          |
+| faceting             | `faceting` payload object            |
 
 ##### dumpCreation
 
@@ -138,7 +140,6 @@ e.g. A fully qualified `task` object in an `enqueued` state.
 {
     "uid": 0,
     "indexUid": "movies",
-    "batchUid": 0,
     "status": "enqueued",
     "type": "settingsUpdate",
     "details": {
@@ -164,7 +165,6 @@ e.g. A fully qualified `task` object in a `processing` state.
 {
     "uid": 0,
     "indexUid": "movies",
-    "batchUid": 0,
     "status": "processing",
     "type": "settingsUpdate",
     "details": {
@@ -190,7 +190,6 @@ e.g. A fully qualified `task` object in a `succeeded` state.
 {
     "uid": 0,
     "indexUid": "movies",
-    "batchUid": 0,
     "status": "succeeded",
     "type": "settingsUpdate",
     "details": {
@@ -216,7 +215,6 @@ e.g. A fully qualified `task` object in a `failed` state.
 {
     "uid": 0,
     "indexUid": "movies",
-    "batchUid": 0,
     "status": "failed",
     "type": "settingsUpdate",
     "details": {
@@ -273,7 +271,6 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
         {
             "uid": 1,
             "indexUid": "movies_reviews",
-            "batchUid": 1,
             "status": "enqueued",
             "type": "documentAdditionOrUpdate",
             "duration": null,
@@ -284,7 +281,6 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
         {
             "uid": 0,
             "indexUid": "movies",
-            "batchUid": 0,
             "status": "succeeded",
             "type": "documentAdditionOrUpdate",
             "details": {
@@ -331,7 +327,6 @@ Allows users to get a detailed `task` object retrieved by the `uid` field regard
 {
     "uid": 1,
     "indexUid": "movies",
-    "batchUid": 1,
     "status": "enqueued",
     "type": "documentAdditionOrUpdate",
     "duration": null,

@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: Meilisearch Core API
   description: 'Search documents, configure and manage the Meilisearch engine.'
-  version: 0.28.0
+  version: 0.29.0
   contact:
     name: Meilisearch
     email: bonjour@Meilisearch.com
@@ -277,7 +277,6 @@ components:
       examples:
         - uid: 0
           indexUid: movies
-          batchUid: 0
           status: succeeded
           type: documentAdditionOrUpdate
           details:
@@ -294,9 +293,6 @@ components:
         indexUid:
           type: string
           description: The unique identifier of the index where this task is operated
-        batchUid:
-          type: integer
-          description: Identify in which batch a task has been grouped by auto-batching. It corresponds to the first task uid grouped within a batch.
         status:
           type: string
           description: The status of the task
@@ -326,7 +322,7 @@ components:
               description: Number of documents received for documentAdditionOrUpdate task.
             indexedDocuments:
               type: integer
-              description: Number of documents finally indexed for documentAdditionOrUpdate task or if batched, in the batchUid.
+              description: Number of documents finally indexed for documentAdditionOrUpdate task or a documentAdditionOrUpdate batch of tasks.
             receivedDocumentsIds:
               type: integer
               description: Number of document ids received for documentDeletion task.
@@ -362,12 +358,50 @@ components:
       required:
         - uid
         - indexUid
-        - batchUid
         - status
         - type
         - enqueuedAt
         - startedAt
         - finishedAt
+    summarizedTask:
+      type: object
+      description: A summarized version of an asynchronous task. Summarized task representation are given for the 202 Accepted HTTP response. [Learn More](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html).
+      additionalProperties: false
+      examples:
+        documentAdditionOrUpdate:
+          $ref: '#/components/examples/202_documentAdditionOrUpdate'
+      properties:
+        taskUid:
+          type: integer
+          description: The unique sequential identifier of the task. This `taskUid` allows you to [track the current task](https://docs.meilisearch.com/reference/api/tasks.html).
+        indexUid:
+          type: string
+          description: The unique identifier of the index where this task is operated
+        status:
+          type: string
+          description: The status of the task
+          enum:
+            - enqueued
+        type:
+          type: string
+          description: The type of the task
+          enum:
+            - documentAdditionOrUpdate
+            - documentDeletion
+            - indexCreation
+            - indexUpdate
+            - indexDeletion
+            - settingsUpdate
+            - dumpCreation
+        enqueuedAt:
+          description: Represent the date and time as a `RFC 3339` format when the task has been enqueued
+          $ref: '#/components/schemas/timestamp'
+      required:
+        - uid
+        - indexUid
+        - status
+        - type
+        - enqueuedAt
     synonyms:
       type: object
       description: List of associated words treated similarly. A word associated to an array of word as synonyms.
@@ -813,6 +847,17 @@ components:
         type: boolean
         default: 'false'
       description: Defines whether an `_matchesPosition` object that contains information about the matches should be returned or not.
+    matchingStrategy:
+      name: matchingStrategy
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - last
+          - all
+        default: 'last'
+      description: Defines which strategy to use to match the query terms within the documents as search results. Two different strategies are available, `last` and `all`. By default, the `last` strategy is chosen.
     sort:
       name: sort
       in: query
@@ -873,40 +918,7 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              taskUid:
-                type: number
-                description: 'This `taskUid` allows you to [track the current task](https://docs.meilisearch.com/reference/api/tasks.html).'
-              indexUid:
-                type: string
-                description: The unique identifier of the index where this task is operated
-              status:
-                type: string
-                description: The status of the task
-                example: enqueued
-              type:
-                type: string
-                description: The type of the task
-                example: indexCreation
-              enqueuedAt:
-                $ref: '#/components/schemas/timestamp'
-                description: Represent the date and time as `RFC 3339` format when the task has been enqueued
-            additionalProperties: false
-            required:
-              - uid
-              - indexUid
-              - status
-              - type
-              - enqueuedAt
-          examples:
-            Example:
-              value:
-                taskUid: 0
-                indexUid: movies
-                status: enqueued
-                type: documentAddition
-                enqueuedAt: '2021-07-19T14:31:16.920473Z'
+            $ref: '#/components/schemas/summarizedTask'
     '204':
       description: No Content
     '401':
@@ -944,7 +956,63 @@ components:
         An API key is a token that you provide when making API calls. Include the token in a header parameter called `Authorization`.
 
         Example: `Authorization: Bearer 8fece4405662dd830e4cb265e7e047aab2e79672a760a12712d2a263c9003509`
-  examples: {}
+  examples:
+    202_indexCreation:
+      summary: 202 Accepted indexCreation response example
+      value:
+        taskUid: 0
+        indexUid: movies
+        status: enqueued
+        type: indexCreation
+        enqueuedAt: '2021-01-01T09:39:00.000000Z'
+    202_indexUpdate:
+      summary: 202 Accepted indexUpdate response example
+      value:
+        taskUid: 0
+        indexUid: movies
+        status: enqueued
+        type: indexUpdate
+        enqueuedAt: '2021-01-01T09:39:00.000000Z'
+    202_indexDeletion:
+      summary: 202 Accepted indexDeletion response example
+      value:
+        taskUid: 0
+        indexUid: movies
+        status: enqueued
+        type: indexDeletion
+        enqueuedAt: '2021-01-01T09:39:00.000000Z'
+    202_documentAdditionOrUpdate:
+      summary: 202 Accepted documentAdditionOrUpdate response example
+      value:
+        taskUid: 0
+        indexUid: movies
+        status: enqueued
+        type: documentAdditionOrUpdate
+        enqueuedAt: '2021-01-01T09:39:00.000000Z'
+    202_documentDeletion:
+      summary: 202 Accepted documentDeletion response example
+      value:
+        taskUid: 0
+        indexUid: movies
+        status: enqueued
+        type: documentDeletion
+        enqueuedAt: '2021-01-01T09:39:00.000000Z'
+    202_settingsUpdate:
+      summary: 202 Accepted settingsUpdate response example
+      value:
+        taskUid: 0
+        indexUid: movies
+        status: enqueued
+        type: settingsUpdate
+        enqueuedAt: '2021-01-01T09:39:00.000000Z'
+    202_dumpCreation:
+      summary: 202 Accepted dumpCreation response example
+      value:
+        taskUid: 0
+        indexUid: movies
+        status: enqueued
+        type: dumpCreation
+        enqueuedAt: '2021-01-01T09:39:00.000000Z'
 tags:
   - name: Indexes
     description: |
@@ -1011,12 +1079,7 @@ paths:
                 $ref: '#/components/responses/202'
               examples:
                 '202':
-                  value:
-                    taskUid: 0
-                    indexUid: null
-                    status: enqueued
-                    type: dumpCreation
-                    enqueuedAt: '2021-07-19T14:31:16.920473Z'
+                  $ref: '#/components/examples/202_dumpCreation'
         '401':
           $ref: '#/components/responses/401'
   /health:
@@ -1121,13 +1184,15 @@ paths:
                   uid: movies
                   primaryKey: movie_id
       responses:
-        '201':
-          description: Created
+        '202':
+          description: Accepted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/index'
-              examples: {}
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_indexCreation'
         '400':
           description: Bad Request
           content:
@@ -1199,12 +1264,15 @@ paths:
               required:
                 - primaryKey
       responses:
-        '200':
-          description: Ok
+        '202':
+          description: Accepted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/index'
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_indexUpdate'
         '400':
           description: Bad Request
           content:
@@ -1233,8 +1301,15 @@ paths:
       security:
         - apiKey: []
       responses:
-        '204':
-          $ref: '#/components/responses/204'
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_indexDeletion'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -1328,7 +1403,14 @@ paths:
             examples: {}
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_documentAdditionOrUpdate'
         '401':
           $ref: '#/components/responses/401'
         '413':
@@ -1382,7 +1464,14 @@ paths:
         description: ''
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_documentAdditionOrUpdate'
         '401':
           $ref: '#/components/responses/401'
         '413':
@@ -1408,7 +1497,14 @@ paths:
         - apiKey: []
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_documentDeletion'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -1444,7 +1540,14 @@ paths:
                   - a string id
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_documentDeletion'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -1486,7 +1589,14 @@ paths:
         - apiKey: []
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_documentDeletion'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -1521,6 +1631,7 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/showMatchesPosition'
+        - $ref: '#/components/parameters/matchingStrategy'
       responses:
         '200':
           description: Ok
@@ -1625,6 +1736,10 @@ paths:
                   type: boolean
                   description: Defines whether an `_matchesPosition` object that contains information about the matches should be returned or not.
                   default: false
+                matchingStrategy:
+                  type: string
+                  description: Defines which strategy to use to match the query terms within the documents as search results. Two different strategies are available, `last` and `all`. By default, the `last` strategy is chosen.
+                  default: 'last'
                 filter:
                   $ref: '#/components/schemas/filter'
                 facets:
@@ -1663,6 +1778,7 @@ paths:
                   attributesToHighlight:
                     - overview
                   showMatchesPosition: true
+                  wordsMatchingStrategy: all
       responses:
         '200':
           description: Ok
@@ -1914,7 +2030,14 @@ paths:
                     maxValuesPerFacet: 100
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -1934,7 +2057,14 @@ paths:
         - apiKey: []
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -1984,7 +2114,14 @@ paths:
         description: ''
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2002,7 +2139,14 @@ paths:
         - apiKey: []
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2052,7 +2196,14 @@ paths:
         description: ''
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2070,7 +2221,14 @@ paths:
         - apiKey: []
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2127,7 +2285,14 @@ paths:
               $ref: '#/components/schemas/stopWords'
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2145,7 +2310,14 @@ paths:
         - apiKey: []
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2198,7 +2370,14 @@ paths:
               $ref: '#/components/schemas/rankingRules'
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2223,7 +2402,14 @@ paths:
         - apiKey: []
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2273,7 +2459,14 @@ paths:
         description: ''
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2291,7 +2484,14 @@ paths:
         - apiKey: []
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2341,7 +2541,14 @@ paths:
         description: ''
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2359,7 +2566,14 @@ paths:
         - apiKey: []
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2409,7 +2623,14 @@ paths:
         description: ''
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2427,7 +2648,14 @@ paths:
         - apiKey: []
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2472,7 +2700,14 @@ paths:
         - apiKey: []
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2496,7 +2731,14 @@ paths:
         - apiKey: []
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2545,7 +2787,14 @@ paths:
         description: ''
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2563,7 +2812,14 @@ paths:
         - apiKey: []
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2611,7 +2867,14 @@ paths:
               $ref: '#/components/schemas/searchableAttributes'
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2629,7 +2892,14 @@ paths:
         - apiKey: []
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2677,7 +2947,14 @@ paths:
               $ref: '#/components/schemas/displayedAttributes'
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2695,7 +2972,14 @@ paths:
         - apiKey: []
       responses:
         '202':
-          $ref: '#/components/responses/202'
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_settingsUpdate'
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -3041,7 +3325,6 @@ paths:
                     results:
                       - uid: 1
                         indexUid: movies
-                        batchUid: 1
                         status: succeeded
                         type: documentAdditionOrUpdate
                         details:
@@ -3053,7 +3336,6 @@ paths:
                         finishedAt: '2021-01-01T09:39:02.000000Z'
                       - uid: 0
                         indexUid: movies_Review
-                        batchUid: 0
                         status: failed
                         type: documentAdditionOrUpdate
                         details:
@@ -3098,7 +3380,6 @@ paths:
                   value:
                     uid: 1
                     indexUid: movies
-                    batchUid: 1
                     status: succeeded
                     type: documentAdditionOrUpdate
                     details:

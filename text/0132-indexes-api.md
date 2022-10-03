@@ -19,7 +19,6 @@ See [Documents API specification](0124-documents-api.md) and [Settings API speci
 | Field                         | Type            | Required |
 |-------------------------------|-----------------|----------|
 | [uid](#311-uid)               | string          | True     |
-| [name](#312-name)             | string          | False    |
 | [primaryKey](#313-primaryKey) | string / `null` | False    |
 | [createdAt](#314-createdAt)   | string          | False    |
 | [updatedAt](#315-updatedAt)   | string          | False    |

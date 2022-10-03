@@ -58,6 +58,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | Faceting Updated | Occurs when faceting settings are updated via `PATCH` — `/indexes/:indexUid/settings/faceting`. |
 | Dump Created | Occurs when a dump is created via `POST` - `/dumps`. |
 | Tasks Seen | Occurs when tasks are fetched globally via `GET` - `/tasks`. |
+| Stats Seen | Occurs when stats are fetched via `GET` - `/stats` or `/indexes/:indexUid/stats`. |
 
 ----
 
@@ -82,10 +83,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `infos.max_index_size`                  | Value of `--max-index-size`/`MEILI_INDEX_SIZE` in bytes | 336042103 | Every Hour |
 | `infos.max_task_db_size`                | Value of `--max-task-db-size`/`MEILI_MAX_TASK_DB_SIZE` in bytes | 336042103 | Every Hour |
 | `infos.http_payload_size_limit`         | Value of `--http-payload-size-limit`/`MEILI_HTTP_PAYLOAD_SIZE_LIMIT` in bytes | 336042103 | Every Hour |
-| `infos.enable_auto_batching`            | `true` if `--enable-auto-batching` is specified to true, otherwise `false` | `true` | Every Hour |
-| `infos.max_batch_size`                  | Value of `--max-batch-size` in integer, otherwise `null` | 1000 | Every Hour |
-| `infos.max_documents_per_batch`         | Value of `--max-documents-per-batch` in integer, otherwise `null` | 1000 | Every Hour |
-| `infos.debounce_duration_sec`           | Value of `--debounce-duration-sec` in seconds, otherwise `0` | 3600 | Every Hour |
+| `infos.disable_auto_batching`            | `true` if `--disable-auto-batching`/`MEILI_DISABLE_AUTO_BATCHING` is specified to true, otherwise `false` | `true` | Every Hour |
 | `infos.log_level`                       | Value of `--log-level`/`MEILI_LOG_LEVEL`                | debug             | Every Hour |
 | `infos.max_indexing_memory`                      | Value of `--max-indexing-memory`/`MEILI_MAX_INDEXING_MEMORY` in bytes     | 336042103         | Every Hour |
 | `infos.max_indexing_threads`                   | Value of `--max-indexing-threads`/`MEILI_MAX_INDEXING_THREADS` in integer | 4             | Every Hour |
@@ -98,7 +96,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `stats.database_size`                   | Database size. Expressed in `Bytes`                     | 2621440           | Every hour |
 | `stats.indexes_number`                  | Number of indexes                                       | 2                 | Every hour |
 | `start_since_days`                      | Number of days since instance was launched              | 365               | Every hour |
-| `user_agent`                            | User-agent header encountered during one or more API calls | ["Meilisearch Ruby (v2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `Dump Created` |
+| `user_agent`                            | User-agent header encountered during one or more API calls | ["Meilisearch Ruby (v2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `TypoTolerance Updated`, `Pagination Updated`, `Faceting Updated`, `Dump Created`, `Tasks Seen`, `Stats Seen` |
 | `requests.99th_response_time`           | Highest latency from among the fastest 99% of successful search requests | 57ms    | `Documents Searched POST`, `Documents Searched GET`|
 | `requests.total_succeeded`              | Total number of successful search requests in this batch | 3456 | `Documents Searched POST`, `Documents Searched GET` |
 | `requests.total_failed`                 | Total number of failed search requests in this batch    | 24   | `Documents Searched POST`, `Documents Searched GET` |
@@ -136,6 +134,8 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `filtered_by_index_uid`                 | `true` if `GET /tasks` endpoint is filered by `indexUid`, otherwise `false` | false | `Tasks Seen` |
 | `filtered_by_type`                      | `true` if `GET /tasks` endpoint is filered by `type`, otherwise `false` | false | `Tasks Seen` |
 | `filtered_by_status`                    | `true` if `GET /tasks` endpoint is filered by `status`, otherwise `false` | false | `Tasks Seen` |
+| `per_index_uid` | `true` if an uid is used to fetch an index stat resource, otherwise `false` | false | `Stats Seen` |
+| `most_used_matching_strategy`      | Most used word matching strategy among all search requests in this batch | `last` | `Documents Searched POST`, `Documents Searched GET` |
 
 ----
 
@@ -175,10 +175,7 @@ This property allows us to gather essential information to better understand on 
 | infos.max_index_size | Value of `--max-index-size`/`MEILI_INDEX_SIZE` in bytes | `336042103` |
 | infos.max_task_db_size | Value of `--max-task-db-size`/`MEILI_MAX_TASK_DB_SIZE` in bytes | `336042103` |
 | infos.http_payload_size_limit | Value of `--http-payload-size-limit`/`MEILI_HTTP_PAYLOAD_SIZE_LIMIT` in bytes | `336042103` |
-| infos.enable_autobatching | `true` if `--enable-autobatching` is specified to true, otherwise `false` | `true` |
-| infos.max_batch_size | Value of `--max-batch-size` in integer, otherwise `null` | `1000` |
-| infos.max_documents_per_batch | Value of `--max-documents-per-batch` in integer, otherwise `null` | `1000` |
-| infos.debounce_duration_sec | Value of `--debounce-duration-sec`in seconds, otherwise `0` | `3600` |
+| infos.disable_auto_batching | `true` if `--disable-auto-batching`/`MEILI_DISABLE_AUTO_BATCHING` is specified to true, otherwise `false` | `true` |
 | infos.log_level | Value of `--log-level`/`MEILI_LOG_LEVEL`  | `debug` |
 | infos.max_indexing_memory  | Value of `--max-indexing-memory`/`MEILI_MAX_INDEXING_MEMORY` in bytes     | `336042103` |
 | infos.max_indexing_threads  | Value of `--max-indexing-threads`/`MEILI_MAX_INDEXING_THREADS` in integer | `4` |
@@ -223,6 +220,7 @@ This property allows us to gather essential information to better understand on 
 | formatting.crop_marker | Does `cropMarker` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.show_matches_position | Does `showMatchesPosition` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | facets | Does `facets` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
+| most_used_matching_strategy | Most used word matching strategy among all search requests in the aggregated event. `last` / `all` | `last` |
 
 ---
 
@@ -251,6 +249,7 @@ This property allows us to gather essential information to better understand on 
 | formatting.crop_marker | Does `cropMarker` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.show_matches_position | Does `showMatchesPosition` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | facets | Does `facets` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
+| most_used_matching_strategy | Most used word matching strategy among all search requests in the aggregated event. `last` / `all` | `last` |
 
 ---
 
@@ -391,6 +390,13 @@ This property allows us to gather essential information to better understand on 
 | filtered_by_index_uid | `true` if `GET /tasks` endpoint is filered by `indexUid`, otherwise `false` | `false` |
 | filtered_by_type | `true` if `GET /tasks` endpoint is filered by `type`, otherwise `false` | `false` |
 | filtered_by_status | `true` if `GET /tasks` endpoint is filered by `status`, otherwise `false` | `false` |
+
+## `Stats Seen`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| per_index_uid | `true` if an uid is used to fetch an index stat resource, otherwise `false` | `true` |
 
 ---
 

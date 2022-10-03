@@ -249,7 +249,7 @@ Fields that are no longer present in the new document are removed.
 
 This endpoint accepts various content-type:
 
-- `application/json`
+- [`application/json`](0135-indexing-json.md)
 - [`text/csv`](0028-indexing-csv.md)
 - [`application/x-ndjson`](0028-indexing-ndjson.md)
 
@@ -323,7 +323,7 @@ If an already existing document (same identifier) is set, the old document will 
 
 This endpoint accepts various content-type:
 
-- `application/json`
+- [`application/json`](0135-indexing-json.md)
 - [`text/csv`](0028-indexing-csv.md)
 - [`application/x-ndjson`](0028-indexing-ndjson.md)
 
