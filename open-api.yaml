@@ -847,6 +847,17 @@ components:
         type: boolean
         default: 'false'
       description: Defines whether an `_matchesPosition` object that contains information about the matches should be returned or not.
+    matchingStrategy:
+      name: matchingStrategy
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - last
+          - all
+        default: 'last'
+      description: Defines which strategy to use to match the query terms within the documents as search results. Two different strategies are available, `last` and `all`. By default, the `last` strategy is chosen.
     sort:
       name: sort
       in: query
@@ -1620,6 +1631,7 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/showMatchesPosition'
+        - $ref: '#/components/parameters/matchingStrategy'
       responses:
         '200':
           description: Ok
@@ -1724,6 +1736,10 @@ paths:
                   type: boolean
                   description: Defines whether an `_matchesPosition` object that contains information about the matches should be returned or not.
                   default: false
+                matchingStrategy:
+                  type: string
+                  description: Defines which strategy to use to match the query terms within the documents as search results. Two different strategies are available, `last` and `all`. By default, the `last` strategy is chosen.
+                  default: 'last'
                 filter:
                   $ref: '#/components/schemas/filter'
                 facets:
@@ -1762,6 +1778,7 @@ paths:
                   attributesToHighlight:
                     - overview
                   showMatchesPosition: true
+                  wordsMatchingStrategy: all
       responses:
         '200':
           description: Ok
