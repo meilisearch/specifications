@@ -277,7 +277,6 @@ components:
       examples:
         - uid: 0
           indexUid: movies
-          batchUid: 0
           status: succeeded
           type: documentAdditionOrUpdate
           details:
@@ -294,9 +293,6 @@ components:
         indexUid:
           type: string
           description: The unique identifier of the index where this task is operated
-        batchUid:
-          type: integer
-          description: Identify in which batch a task has been grouped by auto-batching. It corresponds to the first task uid grouped within a batch.
         status:
           type: string
           description: The status of the task
@@ -326,7 +322,7 @@ components:
               description: Number of documents received for documentAdditionOrUpdate task.
             indexedDocuments:
               type: integer
-              description: Number of documents finally indexed for documentAdditionOrUpdate task or if batched, in the batchUid.
+              description: Number of documents finally indexed for documentAdditionOrUpdate task or a documentAdditionOrUpdate batch of tasks.
             receivedDocumentsIds:
               type: integer
               description: Number of document ids received for documentDeletion task.
@@ -362,7 +358,6 @@ components:
       required:
         - uid
         - indexUid
-        - batchUid
         - status
         - type
         - enqueuedAt
@@ -3041,7 +3036,6 @@ paths:
                     results:
                       - uid: 1
                         indexUid: movies
-                        batchUid: 1
                         status: succeeded
                         type: documentAdditionOrUpdate
                         details:
@@ -3053,7 +3047,6 @@ paths:
                         finishedAt: '2021-01-01T09:39:02.000000Z'
                       - uid: 0
                         indexUid: movies_Review
-                        batchUid: 0
                         status: failed
                         type: documentAdditionOrUpdate
                         details:
@@ -3098,7 +3091,6 @@ paths:
                   value:
                     uid: 1
                     indexUid: movies
-                    batchUid: 1
                     status: succeeded
                     type: documentAdditionOrUpdate
                     details:
