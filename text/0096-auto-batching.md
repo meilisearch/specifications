@@ -59,6 +59,5 @@ N/A
 
 - Extends it for all consecutive payload types.
 - Expose the `batchUid` field and add a filter capability on it on the `/tasks` endpoints.
-- <s>Do not fail the entire transaction if a document is not valid. Report the documents that could not be indexed to the user.</s>
-- <s>Enable auto-batching by default.</s>
+- Report the documents that could not be indexed to the user in a more precise manner.
 - Optimize some tasks sequence, for example if there is a document addition followed by an index deletion, we could skip the document addition.
