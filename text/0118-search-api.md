@@ -47,7 +47,7 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 | [`cropLength`](#3112-croplength)                      | Integer                  | False    |
 | [`cropMarker`](#3113-cropmarker)                      | String                   | False    |
 | [`showMatchesPosition`](#3114-showmatchesposition)    | Boolean                  | False    |
-| [`matchingStrategy](#3115-matchingStrategy)           | String                   | False    |
+| [`matchingStrategy`](#3115-matchingStrategy)           | String                   | False    |
 
 #### 3.1.1. `q`
 
@@ -112,7 +112,7 @@ where `single_quoted_string` and `double_quoted_string` can contain anything exc
 
 ###### 3.1.2.1.2 Naming a filterable attribute
 
-A filterable attribute can appear in a filter by its unquoted name if it only contains ascii alphanumeric characters, dots, hyphens, and underscores. 
+A filterable attribute can appear in a filter by its unquoted name if it only contains ascii alphanumeric characters, dots, hyphens, and underscores.
 
 For example, each filter below selects the documents where the given filterable attribute (on the left side of the equal) is equal to a specific value (on the right side):
 
@@ -145,16 +145,16 @@ The grammar for the value of a filterable attribute is the same as the grammar f
 
 - Equality: `attribute = value`
 - Inequality: `attribute != value`
-- Comparison: 
+- Comparison:
     * `attribute < value`
     * `attribute <= value`
-    * `attribute > value` 
+    * `attribute > value`
     * `attribute >= value`
     * `attribute value TO value`
-- Exists: 
+- Exists:
     * `attribute EXISTS`
     * `attribute NOT EXISTS`
-- In: 
+- In:
     * `attribute IN[value, value, etc.]`
     * `attribute NOT IN[value, value, etc.]`
 - AND: `filter AND filter`
@@ -193,7 +193,7 @@ then the filter:
 ```
 size = 1
 ```
-will select the documents with ids `0` and `1`. 
+will select the documents with ids `0` and `1`.
 
 Note that there is no way to specify whether the value on the right hand side of the equality should be interpreted as a string or as a number. Meilisearch will always try to match both. And since unquoted values cannot contain the `+` character, it is in fact necessary to quote floating point numbers that have positive exponents:
 ```
@@ -212,7 +212,7 @@ size != 1
 ```
 will select the documents with ids `2` and `3`.
 
-Note that `attribute != value` is equivalent to `NOT attribute = value`. 
+Note that `attribute != value` is equivalent to `NOT attribute = value`.
 
 Furthermore, there is no way to write a filter to select documents which contain a value that is different than a given string or number. In the example above, `size != 1` did not select the document with id `1`, even though its `size` attribute contains the value `"L"`, which is different than `1`.
 
@@ -366,7 +366,7 @@ Example:
 is equivalent to:
 ```json
 {
-    "filter": "(genres = Comedy OR genres = Romance) AND (director = 'Mati Diop')" 
+    "filter": "(genres = Comedy OR genres = Romance) AND (director = 'Mati Diop')"
 }
 ```
 
