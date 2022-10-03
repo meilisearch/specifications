@@ -196,7 +196,7 @@ This error occurs when the format sent in the payload is malformed. The payload 
 HTTP Code: `400 Bad Request`
 
 ```json
-    "message": ":syntaxErrorHelper. The :payloadType payload provided is malformed.",
+    "message": "The :payloadType payload provided is malformed. :syntaxErrorHelper.",
     "code": "malformed_payload",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#malformed_payload"
