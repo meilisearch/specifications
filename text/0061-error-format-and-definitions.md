@@ -1356,8 +1356,7 @@ HTTP Code: `403 Forbidden`
 
 ### Context
 
-For some specific protected routes (i.e. `/keys`) where the master key is mandatory to access it, if the users do not pass any `Authorization` header, this error occurs instead of `missing_authorization_header`.
-If an `Authorization` is passed but with the wrong master key value, `invalid_api_key` is still returned.
+For some specific protected routes (i.e. `/keys`) the master key must be defined before accessing it. This error indicates to the user that he must first define a master key when launching Meilisearch.
 
 ### Error Definition
 
@@ -1365,7 +1364,7 @@ HTTP Code: `401 Forbidden`
 
 ```json
 {
-    "message": "The master key is needed to access this route.",
+    "message": "Meilisearch is running without a master key. To access this API endpoint, you must have set a master key at launch.",
     "code": "missing_master_key",
     "type": "auth",
     "link": "https://docs.meilisearch.com/errors#missing_master_key"
