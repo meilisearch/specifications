@@ -14,7 +14,10 @@ The purpose of this specification is to add a first iteration of the **geosearch
 #### Summary Key points
 
 - Documents MUST have a `_geo` reserved object to be geosearchable.
-- Filter documents by a given geo radius using the built-in filter `_geoRadius({lat}, {lng}, {distance_in_meters})`. It is possible to cumulate several geosearch filters within the `filter` field.
+- Filter documents by a given geo radius using the built-in filter `_geoRadius({lat}, {lng}, {distance_in_meters})`.
+- Filter documents by a given geo bounding box using the built-in filter `_geoBoundingBox([{lat, lng}, {lat, lng}])`.
+- Filter documents by a given geo polygon using the built-in filter `_geoPolygon([{lat, lng}, ...])`
+- It is possible to cumulate several geosearch filters within the `filter` field.
 - Sort documents in ascending/descending order around a geo point. e.g. `_geoPoint({lat}, {lng}):asc`.
 - It is possible to filter and/or sort by geographical criteria of the user's choice.
 - `_geo` must be set as a filterable attribute to use geo filtering capabilities.
@@ -27,7 +30,7 @@ The purpose of this specification is to add a first iteration of the **geosearch
 
 ### II. Motivation
 
-According to our user feedback, the lack of a geosearch feature is mentioned as one of the biggest deal-breakers for choosing MeiliSearch as a search engine. A search engine must offer this feature. Some use cases specifically require integrated geosearch capabilities. Moreover, a lot of direct competitors offer it. Users today must find workarounds like using geohash to be able to geosearch documents. We hope to better serve the needs of users by implementing this feature. It allows multiplying the use-cases to which MeiliSearch can respond.
+According to our user feedback, the lack of a geosearch feature is mentioned as one of the biggest deal-breakers for choosing Meilisearch as a search engine. A search engine must offer this feature. Some use cases specifically require integrated geosearch capabilities. Moreover, a lot of direct competitors offer it. Users today must find workarounds like using geohash to be able to geosearch documents. We hope to better serve the needs of users by implementing this feature. It allows multiplying the use-cases to which Meilisearch can respond.
 
 ### III. Technical Explanations
 
@@ -121,9 +124,13 @@ csv format example
 
 ---
 
-### **As an end-user, I want to filter documents within a geo radius.**
+### **As an end-user, I want to filter documents within a geo shape.**
 
-- Introduce a `_geoRadius({lat}, {lng}, {distance_in_meters})` built-in filter rule  to `filter` documents in a geo radius.shape.
+#### Available shapes
+
+##### Radius
+
+`_geoRadius({lat}, {lng}, {distance_in_meters})` built-in filter rule  to `filter` documents in a geo radius shape.
 
 **`_geoRadius` built-in filter rule definition**
 
@@ -131,6 +138,28 @@ csv format example
 - Signature: ({lat:float}:required, {lng:float}:required, {distance_in_meters:int}:required)
 - Not required
 - `distance_in_meters` only accepts positive value.
+
+##### BoundingBox
+
+`_geoBoundingBox([{{lat1}, {lng1}}, {{lat2, lng2}}])` built-in filter rule to `filter` documents in a geo bounding box shape.
+
+**`_geoBoundingBox` built-in filter rule definition**
+
+- Name: `_geoBoundingBox`
+- Signature: ([{{lat1}, {lng1}}, {{lat2}, {lng2}}]): Array made of 2 geo coordinates object.
+- Not required
+
+##### Polygon
+
+`_geoPolygon([{{lat1}, {lng1}}, {{lat2}, {lng2}}, ...])` built-in filter rule to `filter` documents in a geo polygon shape.
+
+**`_geoPolygon` built-in filter rule definition**
+
+- Name: `_geoPolygon`
+- Signature: ([{{lat1}, {lng1}}, {{lat2}, {lng2}}, {{lat3}, {lng3}}, ...]): Array made of 3 or more geo coordinates object to form a geo polygon shape.
+- Not required
+
+---
 
 >  The `_geo` field has to be set in `filterableAttributes` setting by the developer to activate geo filtering capabilities at search.
 
@@ -189,7 +218,8 @@ Following the [`sort` specification feature](https://github.com/meilisearch/spec
 - 🔴 Using `_geoDistance` in a sort expression causes the API to return an `invalid_sort` error. `message` should be `:reservedKeyword is a reserved keyword and thus can't be used as a sort expression.`
 - 🔴 Using `_geo` in a sort expression causes the API to return an `invalid_sort` error. `message` should be `:reservedKeyword is a reserved keyword and thus can't be used as a sort expression. Use the _geoPoint(latitude, longitude) built-in rule to sort on _geo field coordinates.`
 - 🔴 Using `_geoRadius` in a sort expression causes the API to return an `invalid_sort` error. `message` should be `:reservedKeyword is a reserved keyword and thus can't be used as a sort expression. Use the _geoPoint(latitude, longitude) built-in rule to sort on _geo field coordinates.`
-
+- 🔴 Using `_geoBoundingBox` in a sort expression causes the API to return an `invalid_sort` error. `message` should be `:reservedKeyword is a reserved keyword and thus can't be used as a sort expression. Use the _geoPoint(latitude, longitude) built-in rule to sort on _geo field coordinates.`
+- 🔴 Using `_geoPolygon` in a sort expression causes the API to return an `invalid_sort` error. `message` should be `:reservedKeyword is a reserved keyword and thus can't be used as a sort expression. Use the _geoPoint(latitude, longitude) built-in rule to sort on _geo field coordinates.`
 ---
 
 ### **As an end-user, I want to know the document distance when I am sorting around a geo point.**
@@ -230,14 +260,10 @@ This error is raised asynchronously when the user tries to specify an invalid ra
 - 🔴 Specifying a custom ranking rule with `_geo` or `_geoDistance` raises an `invalid_ranking_rule` error. The message is `:reservedKeyword is a reserved keyword and thus can't be used as a ranking rule.`.
 - 🔴 Specifying a custom ranking rule with `_geoPoint` raises an `invalid_ranking_rule` error. The message is `_geoPoint is a reserved keyword and thus can't be used as a ranking rule. _geoPoint can only be used for sorting at search time`.
 - 🔴 Specifying a custom ranking rule with `_geoRadius` raises an `invalid_ranking_rule` error. The message is `_geoRadius is a reserved keyword and thus can't be used as a ranking rule. _geoRadius can only be used for filtering at search time`.
+- 🔴 Specifying a custom ranking rule with `_geoBoundingBox` raises an `invalid_ranking_rule` error. The message is `_geoBoundingBox is a reserved keyword and thus can't be used as a ranking rule. _geoBoundingBox can only be used for filtering at search time`.
+- 🔴 Specifying a custom ranking rule with `_geoPolygon` raises an `invalid_ranking_rule` error. The message is `_geoPolygon is a reserved keyword and thus can't be used as a ranking rule. _geoPolygon can only be used for filtering at search time`.
+
 ---
-
-### IV. Finalized Key Changes
-
-- Add a `_geo` reserved field on JSON and CSV format to index a geo point coordinates for a document.
-- Add a `_geoPoint(lat, lng)` built-in sort rule.
-- Add a `_geoRadius(lat, lng, distance_in_meters)` built-in filter rule.
-- Return a `_geoDistance` in `hits` objects representing the distance in meters computed from the `_geoPoint` built-in sort rule.
 
 ## 2. Technical Aspects
 
@@ -248,7 +274,6 @@ This error is raised asynchronously when the user tries to specify an invalid ra
 
 ## 3. Future Possibilities
 
-- Add built-in filter to filter documents within `polygon` and `bounding-box`.
 - Handling array of geo points in the document object.
 - Handling multiple geo formats for the `_geo` field. e.g. "{lat},{lng}", a geohash etc.
 - Handling distance in other formats (like the imperial format). **It's easy to implement on the user side though.**
