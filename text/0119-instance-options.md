@@ -194,7 +194,7 @@ Sets the directory where Meilisearch will create dump files. If the directory do
 
 #### 3.3.7. Import dump
 
-**Environment variable**: N/A
+**Environment variable**: `MEILI_IMPORT_DUMP`
 **CLI option**: `--import-dump`
 **Default value**: `none`
 **Expected value**: a filepath pointing to a `.dump` file
@@ -207,7 +207,7 @@ More regarding dump behaviors in this [spec](https://github.com/meilisearch/spec
 
 #### 3.3.8. Ignore missing dump
 
-**Environment variable**: N/A
+**Environment variable**: `MEILI_IGNORE_MISSING_DUMP`
 **CLI option**: `--ignore-missing-dump`
 **Default**: Disabled
 
@@ -221,7 +221,7 @@ More information in this [section of the spec](https://github.com/meilisearch/sp
 
 #### 3.3.9. Ignore dump if DB exists
 
-**Environment variable**: N/A
+**Environment variable**: `MEILI_IGNORE_DUMP_IF_DB_EXISTS`
 **CLI option**: `--ignore-dump-if-db-exists`
 **Default**: Disabled
 
@@ -303,7 +303,7 @@ Defines the interval between each snapshot. Value must be given in seconds.
 
 #### 3.3.17. Import snapshot
 
-**Environment variable**: N/A
+**Environment variable**: `MEILI_IMPORT_SNAPSHOT`
 **CLI option**: `--import-snapshot`
 **Default value**: `None`
 **Expected value**: a filepath pointing to a snapshot file
@@ -319,7 +319,7 @@ This behavior can be modified with the `--ignore-snapshot-if-db-exists` and `--i
 
 #### 3.3.18. Ignore missing snapshot
 
-**Environment variable**: N/A
+**Environment variable**: `MEILI_IGNORE_MISSING_SNAPSHOT`
 **CLI option**: `--ignore-missing-snapshot`
 **Default**: Disabled
 
@@ -331,7 +331,7 @@ This command will throw an error if `--import-snapshot` is not defined.
 
 #### 3.3.19. Ignore snapshot if DB exists
 
-**Environment variable**: N/A
+**Environment variable**: `MEILI_IGNORE_SNAPSHOT_IF_DB_EXISTS`
 **CLI option**: `--ignore-snapshot-if-db-exists`
 **Default**: Disabled
 
