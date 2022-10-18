@@ -30,7 +30,7 @@ Specify the algorithm used to compress the payload being sent to Meilisearch wit
 
 ### 3.3. Receiving a compressed response
 
-Specify to Meilisearch the compression method to use when receiving a response within the `Accept-Encoding` header.
+Specify to Meilisearch the compression method to use when sending a response to a client within the `Accept-Encoding` header.
 
 #### 3.3.1. Example with `gzip`
 
