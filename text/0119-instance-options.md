@@ -249,7 +249,7 @@ Defines how much detail should be present in Meilisearch's logs.
 **Default value**: `107374182400` (100 GiB)
 **Expected value**: an integer (`104857600`) or a human readable size (`100Mb`)
 
-Sets the maximum size of the index. Value must be given in bytes or explicitly stating a base unit. For example, the default value can be written as `107374182400`, `'107.7Gb'`, or `'107374 Mb'`.
+Sets the maximum size for an index. Value must be given in bytes or explicitly stating a base unit. For example, the default value can be written as `107374182400`, `'107.7Gb'`, or `'107374 Mb'`.
 
 The `index` stores processed data and is different from the `task` database, which handles pending tasks.
 
