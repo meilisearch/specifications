@@ -2,7 +2,9 @@
 
 ## 1. Summary
 
-Using the `Content-Encoding` header it's possible to send a compressed payload to Meilisearch. Using the `Accept-Encoding` header it's possible to receive a compressed response from Meilisearch.
+Send and receive compressed payload, using the `Accept-Encoding` and `Content-Encoding` HTTP headers.
+
+Meilisearch supports `gzip`, `deflate` and `brotli` compression methods.
 
 ## 2. Motivation
 
@@ -15,7 +17,7 @@ Compression HTTP headers can be used to improve transfer speed and to reduce ban
 | name      |
 |-----------|
 | `gzip`    |
-| `br`      |
+| `br` (refers to brotli) |
 | `deflate` |
 
 ### 3.2. Sending a compressed payload
