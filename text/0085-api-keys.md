@@ -458,3 +458,4 @@ The maximum size of the API key storage layer is `100GB`.
 - Add search parameters restrictions for an API Key.
 - Add rfc2822 format expression for `expiredAt` field. e.g. `Wed, 18 Feb 2022 23:16:09 GMT`
 - Add an alias that can only be associated to one API Key to retrieve it easily on client side. e.g. `GET /keys/:uid_or_alias`
+- Supports wildcard expressions at the start/middle of a string.
