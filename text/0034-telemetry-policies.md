@@ -46,6 +46,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | Documents Searched GET | Aggregated event on all received requests via the `GET` - `/indexes/:indexUid/search` route during one hour or until a batch size reaches `500Kb`. |
 | Documents Added | Aggregated event on all received requests via the `POST` - `/indexes/:indexUid/documents` route during one hour or until a batch size reaches `500Kb`. |
 | Documents Updated | Aggregated event on all received requests via the `PUT` - `/indexes/:indexUid/documents` route during one hour or until a batch size reaches `500Kb`. |
+| Documents Deleted | TODO |
 | Index Created | Occurs when an index is created via `POST` - `/indexes`. |
 | Index Updated | Occurs when an index is updated via `PUT` - `/indexes/:indexUid`. |
 | Settings Updated | Occurs when the settings are updated via `POST` - `/indexes/:indexUid/settings`. |
@@ -56,10 +57,15 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | TypoTolerance Updated | Occurs when typo tolerance settings are updated via `POST` - `/indexes/:indexUid/settings/typo-tolerance`. |
 | Pagination Updated | Occurs when pagination settings are updated via `PATCH` — `/indexes/:indexUid/settings/pagination`. |
 | Faceting Updated | Occurs when faceting settings are updated via `PATCH` — `/indexes/:indexUid/settings/faceting`. |
+| DistinctAttribute Updated | Occurs when distinct attribute setting is updated via `PUT` — `/indexes/:indexUid/settings/distinct-attribute`. |
+| DisplayedAttributes Updated | Occurs when displayed attributes are updated via `PUT` — `/indexes/:indexUid/settings/displayed-attributes`. |
+| StopWords Updated | Occurs when stop words are updated via `PUT` — `/indexes/:indexUid/settings/stop-words`. |
+| Synonyms Updated | Occurs when synonyms are updated via `PUT` — `/indexes/:indexUid/settings/synonyms`. |
 | Dump Created | Occurs when a dump is created via `POST` - `/dumps`. |
 | Tasks Seen | Occurs when tasks are fetched globally via `GET` - `/tasks`. |
 | Stats Seen | Occurs when stats are fetched via `GET` - `/stats` or `/indexes/:indexUid/stats`. |
-
+| Health Seen | Occurs when `GET - /health` is fetched. |
+| Version Seen | Occurs when `GET - /version` is fetched. |
 ----
 
 #### Summarized Metrics/Events table
@@ -87,6 +93,13 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `infos.log_level`                       | Value of `--log-level`/`MEILI_LOG_LEVEL`                | debug             | Every Hour |
 | `infos.max_indexing_memory`                      | Value of `--max-indexing-memory`/`MEILI_MAX_INDEXING_MEMORY` in bytes     | 336042103         | Every Hour |
 | `infos.max_indexing_threads`                   | Value of `--max-indexing-threads`/`MEILI_MAX_INDEXING_THREADS` in integer | 4             | Every Hour |
+| `infos.ssl_auth_path` | `true` if `--ssl-auth-path`/`MEILI_SSL_AUTH_PATH` is specified, otherwise `false` | false |Every Hour |
+| `infos.ssl_cert_path` | `true` if `--ssl-cert-path`/`MEILI_SSL_CERT_PATH` is specified, otherwise `false` | false | Every Hour |
+| `infos.ssl_key_path`  | `true` if `--ssl-key-path`/`MEILI_SSL_KEY_PATH` is specified, otherwise `false` | false |Every Hour |
+| `infos.ssl_ocsp_path` | `true` if `--ssl-ocsp-path`/`MEILI_SSL_OCSP_PATH` is specified, otherwise `false` | false | Every Hour |
+| `infos.ssl_require_auth` | Value of `--ssl-require-auth`/`MEILI_SSL_REQUIRE_AUTH` as a boolean | false | Every Hour |
+| `infos.ssl_resumption` | `true` if `--ssl-resumption`/`MEILI_SSL_RESUMPTION` is specified, otherwise `false` | false | Every Hour |
+| `infos.ssl_tickets` | `true` if `--ssl-tickets`/`MEILI_SSL_TICKETS` is specified, otherwise `false` | false | Every Hour |
 | `system.distribution`                   | Distribution on which MeiliSearch is launched           | Arch Linux        | Every hour |
 | `system.kernel_version`                 | Kernel version on which MeiliSearch is launched         | 5.14.10           | Every hour |
 | `system.cores`                          | Number of cores                                         | 24                | Every hour |
@@ -96,7 +109,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `stats.database_size`                   | Database size. Expressed in `Bytes`                     | 2621440           | Every hour |
 | `stats.indexes_number`                  | Number of indexes                                       | 2                 | Every hour |
 | `start_since_days`                      | Number of days since instance was launched              | 365               | Every hour |
-| `user_agent`                            | User-agent header encountered during one or more API calls | ["Meilisearch Ruby (v2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `TypoTolerance Updated`, `Pagination Updated`, `Faceting Updated`, `Dump Created`, `Tasks Seen`, `Stats Seen` |
+| `user_agent`                            | User-agent header encountered during one or more API calls | ["Meilisearch Ruby (v2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `TypoTolerance Updated`, `Pagination Updated`, `Faceting Updated`, `DistinctAttribute Updated`, `DisplayedAttributes Updated`, `StopWords Updated`, `Synonyms Updated`, `Dump Created`, `Tasks Seen`, `Stats Seen`, `Health Seen`, `Version Seen` |
 | `requests.99th_response_time`           | Highest latency from among the fastest 99% of successful search requests | 57ms    | `Documents Searched POST`, `Documents Searched GET`|
 | `requests.total_succeeded`              | Total number of successful search requests in this batch | 3456 | `Documents Searched POST`, `Documents Searched GET` |
 | `requests.total_failed`                 | Total number of failed search requests in this batch    | 24   | `Documents Searched POST`, `Documents Searched GET` |
@@ -135,7 +148,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `filtered_by_type`                      | `true` if `GET /tasks` endpoint is filered by `type`, otherwise `false` | false | `Tasks Seen` |
 | `filtered_by_status`                    | `true` if `GET /tasks` endpoint is filered by `status`, otherwise `false` | false | `Tasks Seen` |
 | `per_index_uid` | `true` if an uid is used to fetch an index stat resource, otherwise `false` | false | `Stats Seen` |
-| `most_used_matching_strategy`      | Most used word matching strategy among all search requests in this batch | `last` | `Documents Searched POST`, `Documents Searched GET` |
+| `matching_strategy.most_used_strategy`      | Most used word matching strategy among all search requests in this batch | `last` | `Documents Searched POST`, `Documents Searched GET` |
 
 ----
 
@@ -179,6 +192,13 @@ This property allows us to gather essential information to better understand on 
 | infos.log_level | Value of `--log-level`/`MEILI_LOG_LEVEL`  | `debug` |
 | infos.max_indexing_memory  | Value of `--max-indexing-memory`/`MEILI_MAX_INDEXING_MEMORY` in bytes     | `336042103` |
 | infos.max_indexing_threads  | Value of `--max-indexing-threads`/`MEILI_MAX_INDEXING_THREADS` in integer | `4` |
+| infos.ssl_auth_path | `true` if `--ssl-auth-path`/`MEILI_SSL_AUTH_PATH` is specified, otherwise `false` | false |
+| infos.ssl_cert_path | `true` if `--ssl-cert-path`/`MEILI_SSL_CERT_PATH` is specified, otherwise `false` | false |
+| infos.ssl_key_path | `true` if `--ssl-key-path`/`MEILI_SSL_KEY_PATH` is specified, otherwise `false` | false |
+| infos.ssl_ocsp_path | `true` if `--ssl-ocsp-path`/`MEILI_SSL_OCSP_PATH` is specified, otherwise `false` | false |
+| infos.ssl_require_auth | Value of `--ssl-require-auth`/`MEILI_SSL_REQUIRE_AUTH` as a boolean | false |
+| infos.ssl_resumption | `true` if `--ssl-resumption`/`MEILI_SSL_RESUMPTION` is specified, otherwise `false` | false |
+| infos.ssl_tickets | `true` if `--ssl-tickets`/`MEILI_SSL_TICKETS` is specified, otherwise `false` | false |
 
 ##### MeiliSearch Statistics `stats`
 
@@ -220,8 +240,8 @@ This property allows us to gather essential information to better understand on 
 | formatting.crop_marker | Does `cropMarker` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.show_matches_position | Does `showMatchesPosition` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | facets | Does `facets` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
-| most_used_matching_strategy | Most used word matching strategy among all search requests in the aggregated event. `last` / `all` | `last` |
-
+| matching_strategy.most_used_strategy | Most used word matching strategy among all search requests in the aggregated event. `last` / `all` | `last` |
+//TODO:
 ---
 
 #### `Documents Searched GET`
@@ -249,8 +269,8 @@ This property allows us to gather essential information to better understand on 
 | formatting.crop_marker | Does `cropMarker` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.show_matches_position | Does `showMatchesPosition` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | facets | Does `facets` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
-| most_used_matching_strategy | Most used word matching strategy among all search requests in the aggregated event. `last` / `all` | `last` |
-
+| matching_strategy.most_used_strategy | Most used word matching strategy among all search requests in the aggregated event. `last` / `all` | `last` |
+//TODO:
 ---
 
 ## `Index Created`
@@ -297,8 +317,17 @@ This property allows us to gather essential information to better understand on 
 
 ---
 
-## `Settings Updated`
+## `Documents Deleted`
 
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents all the user-agents encountered on this endpoint in the aggregated event. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| per_uid |
+| all |
+| per_batch |
+//TODO Split per route?
+
+## `Settings Updated`
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
@@ -357,6 +386,7 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | typo_tolerance.enabled        | Whether the typo tolerance is enabled | `true` |
 | typo_tolerance.disable_on_attributes | `true` if at least one value is defined for `disableOnAttributes` property. | `false` |
 | typo_tolerance.disable_on_words    | `true` if at least one value is defined for `disableOnWords` property. | `false` |
@@ -367,13 +397,39 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | pagination.max_total_hits | The defined value for `maxTotalHits` property | `1000` |
 
 ## `Faceting Updated`
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | faceting.max_values_per_facet | The defined value for `maxValuesPerFacet` property | `100` |
+
+## `DistinctAttribute Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+
+## `DisplayedAttributes Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+
+## `StopWords Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+
+## `Synonyms Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 
 ## `Dump Created`
 
@@ -397,6 +453,18 @@ This property allows us to gather essential information to better understand on 
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | per_index_uid | `true` if an uid is used to fetch an index stat resource, otherwise `false` | `true` |
+
+## `Health Seen`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+
+## `Version Seen`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 
 ---
 
