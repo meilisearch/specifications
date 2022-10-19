@@ -120,6 +120,7 @@ The expected behavior of each flag is described in the list above.
 - [SSL require auth](#3327-ssl-require-auth)
 - [SSL resumption](#3328-ssl-resumption)
 - [SSL tickets](#3329-ssl-tickets)
+- [Config file path](#3330-config-file-path)
 
 #### 3.3.1. Database path
 
@@ -456,6 +457,16 @@ Activates SSL session resumption.
 ⚠️ This command-line option does not take any values. Assigning a value will throw an error.
 
 Activates SSL tickets.
+
+#### 3.3.30. Config file path
+
+**Environment variable**: `MEILI_CONFIG_FILE_PATH`
+**CLI option**: `--config-file-path`
+**Default**: `./config.toml`
+
+Define the config file to load at Meilisearch launch.
+
+See [Configuration File](0185-configuration-file.md) specification details.
 
 ## 4. Technical Aspects
 
