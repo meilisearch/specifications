@@ -71,6 +71,22 @@ Defining `config_file_path` in the configuration file is not valid and Meilisear
 `config_file_path` is not supported in config file
 ```
 
+#### 3.7.2. Defining a non-existent config file.
+
+Defining a configuration file other than the default file that does not exist returns an error when launching Meilisearch.
+
+```bash
+unable to open or read the {:?} configuration file.
+```
+
+#### 3.7.3. Defining a config file with a syntax error.
+
+Defining a configuration file wrongly formatted or containing an invalid configuration key returns an error when launching Meilisearch.
+
+```bash
+unable to open or read the {:?} configuration file.
+```
+
 ## 4. Technical Details
 N/A
 
