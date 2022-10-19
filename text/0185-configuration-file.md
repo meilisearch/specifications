@@ -2,11 +2,11 @@
 
 ## 1. Summary
 
-Meilisearch options can be defined in a `TOML` configuration file being loaded at launch.
+Meilisearch options can be defined in a `.toml` configuration file being loaded at launch.
 
 ## 2. Motivation
 
-A configuration file can be versioned, tracked and shared more easily by teams. It makes it easier to learn about the different options available and to define at a glance how Meilisearch is configured.
+Teams can easily version, track, and share configuration files. It makes it easier to learn about the different options available and to define at a glance how Meilisearch is configured.
 
 ## 3. Functional Specification
 
@@ -38,7 +38,7 @@ The current consistency rule is that all environment variables and launch option
 
 Configuration keys are named following the `snake_case` convention from the name of a CLI option. That is, `--import-dump` must be named `import_dump` within the configuration file.
 
-There is an exception rule. The `config_file_path` key is not taken into account in the configuration file and stop Meilisearch from being launch if specified.
+There is an exception rule. The `config_file_path` key is not accepted in the configuration file and stops Meilisearch from being launched if specified.
 
 See [Instance Options](0119-instance-options.md) for more details.
 
