@@ -701,7 +701,17 @@ If no results match the filters. A response is returned with an empty `results` 
 
 ## 2. Technical details
 
-n/a
+### 2.1. Tasks Priority
+
+The tasks are processed given a order of priority. That is, if a task `B` of a higher priority is enqueued after an enqueued `task A`, `task B` will be processed first.
+
+The task types are listed in decreasing order of priority:
+
+1. `taskCancelation`
+2. `taskDeletion`
+3. `snapshotCreation`
+4. `dumpCreation`
+5. All other task types with no priority order.
 
 ## 3. Future Possibilities
 
