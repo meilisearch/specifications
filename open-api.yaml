@@ -313,6 +313,7 @@ components:
             - indexDeletion
             - settingsUpdate
             - dumpCreation
+            - snapshotCreation
         details:
           type: object
           description: Details information of the task payload.
