@@ -421,8 +421,6 @@ If a user tries canceling a `succeeded`, `failed`, or `canceled` task, it won’
 
 - 🔴 If the `type` parameter value is not consistent with one of the task types, an `[invalid_task_type](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalidtasktype)` error is returned.
 - 🔴 If the `status` parameter value is not consistent with one of the task statuses, an `[invalid_task_status](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalidtaskstatus)` error is returned.
-- ? (value type format error for every query parameters)
-- ? (sending a query parameter that does not exists error)
 
 The auth layer can return the following errors if Meilisearch is secured (a master-key is defined).
 
@@ -980,7 +978,6 @@ You can cancel tasks using `afterXAt` and `beforeXAt`. You can use the following
 
 - `enqueuedAt` → `afterenqueuedAt` or `beforeanqueuedAt`
 - `startedAt` → `afterstartedAt` or `beforestartedAt`
-- `finishedAt` →`afterfinishedAt`  or `before` `finishedAt`
 
 The filter accepts the RFC 3339 format. The following syntaxes are valid:
 
