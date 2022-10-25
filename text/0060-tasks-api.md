@@ -382,13 +382,13 @@ The auth layer can return the following errors if Meilisearch is secured (a mast
 
 ---
 
-##### 6.3. Cancel tasks | `POST` - `/tasks`
+##### 6.3. Cancel tasks | `POST` - `/tasks/cancel`
 
 ##### 6.3.1. Goals
 
 Allows users to cancel an `enqueued` or `processing` task. Particularly useful if a long or heavy task blocks the queue.
 
-`202` - Response body - `/tasks/cancels`
+`202` - Response body - `/tasks/cancel`
 
 ```json
 {
