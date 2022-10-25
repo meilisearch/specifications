@@ -39,15 +39,18 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 | [`facets`](#314-facets)                               | Array of String - String | False    |
 | [`limit`](#315-limit)                                 | Integer                  | False    |
 | [`offset`](#316-offset)                               | Integer                  | False    |
-| [`attributesToRetrieve`](#317-attributestoretrieve)   | Array of String - String | False    |
-| [`attributesToHighlight`](#318-attributestohighlight) | Array of String - String | False    |
-| [`highlightPreTag`](#319-highlightpretag)             | String                   | False    |
-| [`highlightPostTag`](#3110-highlightposttag)          | String                   | False    |
-| [`attributesToCrop`](#3111-attributestocrop)          | Array of String - String | False    |
-| [`cropLength`](#3112-croplength)                      | Integer                  | False    |
-| [`cropMarker`](#3113-cropmarker)                      | String                   | False    |
-| [`showMatchesPosition`](#3114-showmatchesposition)    | Boolean                  | False    |
-| [`matchingStrategy`](#3115-matchingStrategy)           | String                   | False    |
+| [`hitsPerPage`](#317-hitsPerPage)                    | Integer                  | False    |
+| [`page`](#318-page)                                  | String                   | False    |
+| [`attributesToRetrieve`](#319-attributestoretrieve)   | Array of String - String | False    |
+| [`attributesToHighlight`](#3110-attributestohighlight) | Array of String - String | False    |
+| [`highlightPreTag`](#3111-highlightpretag)             | String                   | False    |
+| [`highlightPostTag`](#3112-highlightposttag)          | String                   | False    |
+| [`attributesToCrop`](#3113-attributestocrop)          | Array of String - String | False    |
+| [`cropLength`](#3114-croplength)                      | Integer                  | False    |
+| [`cropMarker`](#3115-cropmarker)                      | String                   | False    |
+| [`showMatchesPosition`](#3116-showmatchesposition)    | Boolean                  | False    |
+| [`matchingStrategy`](#3117-matchingStrategy)          | String                   | False    |
+
 
 #### 3.1.1. `q`
 
@@ -416,6 +419,8 @@ The distribution of the different facets is returned in the `facetDistribution` 
 
 Sets the maximum number of documents to be returned for the search query.
 
+When using `limit` and `offset` as pagination system, instead of the [`numbered pagination`](#3181), [`estimatedTotalHits`](#324), `limit`, `offset` are returned.
+
 - 🔴 Sending a value with a different type than `Integer` for `limit` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 #### 3.1.6. `offset`
@@ -426,9 +431,62 @@ Sets the maximum number of documents to be returned for the search query.
 
 Sets the starting point in the search results, effectively skipping over a given number of documents.
 
+When using `limit` and `offset` as pagination system, instead of the [`numbered pagination`](#3181), [`estimatedTotalHits`](#324), `limit`, `offset` are returned.
+
 - 🔴 Sending a value with a different type than `Integer` for `offset` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-#### 3.1.7. `attributesToRetrieve`
+#### 3.1.7. `page`
+
+- Type: Integer
+- Required: False
+- Default: `null`
+
+Sets the specific results page. Pages are calculated using the [hitsPerPage](#) parameter.
+
+By default, page is `null`, or `1` if `hitsPerPage` is provided.
+
+When providing `pages` or `hitsPerPage` in the query parameters, the `numbered pagination` system is enabled, which impacts the returned fields (and maybe the efficacité ?). `estimatedTotalHits`, `limit` and `offset` are not returned anymore, instead new fields are returned: `page`, `hitsPerPage`, `hitsPerPage` and `totalPages`.
+
+For a deeper explaination on the `numbered pagination` its parameters and response fields, see this [section](#3181).
+
+- 🔴 Sending a value with a different type than `Integer` for `page` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+
+#### 3.1.8. `hitsPerPage`
+
+- Type: Integer
+- Required: False
+- Default: `null`
+
+Sets the amount of results returned for a query.
+
+By default, `hitsPerPage` is `null`, or `20` if `page` is provided.
+
+When providing `pages` or `hitsPerPage` in the query parameters, the `numbered pagination` system is enabled, which impacts the returned fields (and maybe the efficacité ?). `estimatedTotalHits`, `limit` and `offset` are not returned anymore, instead new fields are returned: `page`, `hitsPerPage`, `hitsPerPage` and `totalPages`.
+
+For a deeper explaination on the `numbered pagination` its parameters and response fields, see this [section](#3181).
+
+- 🔴 Sending a value with a different type than `Integer` for `hitsPerPage` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+
+#### 3.1.8.1 Numbered Pagination
+
+By default, `limit` and `offset` are used for pagination. That pagination system, while fast, does not provide the required information to create a reliable pagination. In the returned fields, `estimatedTotalHits` provides a rough estimation on how many hits may be candidate for a given request. As it is `estimated` it should not be used. Additionaly, pagination with `limit` and `offset` is hacky.
+
+The `numbered pagination` system provides an alternative which tackles the above mentioned issue when the user needs reliable information for its pagination. For example, when creating a pagination with numbers `<< < 1, 2, 3, ...14 > >>`.
+
+With this pagination system it is possible to jump from one page to another using the `page` parameter and decide how many hits should be present in a page with `hitsPerPage`.
+
+As soon as the either `page` or `hitsPerPage` is used as a query parameter, `limit` and `offset` are ignored. In the response object, `estimatedTotalHits` is removed and new fields are returned:
+
+- `hitsPerPage`: number of results contained in each search results page.
+- `page`: current search results page. Counting starts at 1.
+- `totalPages`: total number of results pages. Calculated using hitsPerPage value.
+- `totalHits`: total number of search results.
+
+Both `totalPages` and `totalHits` are impacted by the setting `pagination.maxTotalHits` index setting. They are not going to provide more hits than fixed by that setting.
+
+As opposed to `estimatedTotalHits`, `totalHits` is a reliable information.
+
+#### 3.1.9. `attributesToRetrieve`
 
 - Type: Array of String (POST) | String (GET)
 - Required: False
@@ -442,7 +500,7 @@ If no value is specified, the default value of `attributesToRetrieve` is used (`
 
 - 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `attributesToRetrieve` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-#### 3.1.8. `attributesToHighlight`
+#### 3.1.10. `attributesToHighlight`
 
 - Type: Array of String (POST) | String(GET)
 - Required: False
@@ -454,29 +512,29 @@ If `attributesToHighlight` is present in the search query, the search results wi
 
 If `"*"` is provided as a value (`attributesToHighlight=["*"]`), all the attributes present in `displayedAttributes` setting will be highlighted.
 
-Highlighted parts are surrounded by the [`highlightPreTag`](#319-highlightpretag) and [`highlightPostTag`](#3110-highlightposttag) parameters.
+Highlighted parts are surrounded by the [`highlightPreTag`](3111-highlightpretag) and [`highlightPostTag`](#3112-highlightposttag) parameters.
 
 `attributesToHighlight` only works on values of the following types: `string`, `number`, `array`, `object`. When highlighted, number attributes are transformed to string.
 
 - 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToHighlight` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-##### 3.1.8.1. searchableAttributes
+##### 3.1.10.1. searchableAttributes
 
 Attributes not defined in the `searchableAttributes` index setting are also highlighted if assigned to `attributesToHighlight`.
 
-##### 3.1.8.2. stopWords
+##### 3.1.10.2. stopWords
 
 Attributes defined in the `stopWords` index setting are also highlighted if matched.
 
-##### 3.1.8.3. Tokenizer Separators
+##### 3.1.10.3. Tokenizer Separators
 
 Tokenizer separators are not highlighted.
 
-##### 3.1.8.4. synonyms
+##### 3.1.10.4. synonyms
 
 Synonyms are also highlighted.
 
-#### 3.1.9. `highlightPreTag`
+#### 3.1.11. `highlightPreTag`
 
 - Type: String
 - Required: False
@@ -484,13 +542,13 @@ Synonyms are also highlighted.
 
 Specifies the string to put **before** every highlighted query terms.
 
-This parameter is applied to the fields configured in `attributesToHighlight`. If there are none, this parameter has no effect. See [3.1.8. `attributesToHighlight`](#318-attributestohighlight) section.
+This parameter is applied to the fields configured in `attributesToHighlight`. If there are none, this parameter has no effect. See [3.1.8. `attributesToHighlight`](3110-attributestohighlight) section.
 
 - 🔴 Sending a value with a different type than `String` for `highlightPreTag` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 If `attributesToHighlight` is omitted while `highlightPreTag` is specified, there is no error.
 
-#### 3.1.10. `highlightPostTag`
+#### 3.1.12. `highlightPostTag`
 
 - Type: String
 - Required: False
@@ -498,13 +556,13 @@ If `attributesToHighlight` is omitted while `highlightPreTag` is specified, ther
 
 Specifies the string to put **after** the highlighted query terms.
 
-This parameter is applied to the fields from `attributesToHighlight`. If there are none, this parameter has no effect. See [3.1.8. `attributesToHighlight`](#318-attributestohighlight) section.
+This parameter is applied to the fields from `attributesToHighlight`. If there are none, this parameter has no effect. See [3.1.8. `attributesToHighlight`](3110-attributestohighlight) section.
 
 - 🔴 Sending a value with a different type than `String` for `highlightPostTag` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 If `attributesToHighlight` is omitted while `highlightPostTag` is specified, there is no error.
 
-#### 3.1.11. `attributesToCrop`
+#### 3.1.13. `attributesToCrop`
 
 - Type: Array[String]|String
 - Required: False
@@ -516,27 +574,27 @@ If `attributesToCrop` is present in the search query, the search results will in
 
 If `"*"` is provided as a value (`attributesToCrop=["*"]`), all the attributes present in `displayedAttributes` setting will be cropped.
 
-The number of words contained in the cropped value is defined by the `cropLength` parameter. See [3.1.1.12. `cropLength`](#3112-croplength) section.
+The number of words contained in the cropped value is defined by the `cropLength` parameter. See [3.1.1.12. `cropLength`](#3114-croplength) section.
 
 The value of `cropLength` can be customized per attribute. See [3.1.12.1. Custom `cropLength` Defined Per Cropped Attribute](#31121-custom-croplength-defined-per-attribute) section.
 
-The engine adds a marker by default in front of and/or behind the part selected by the cropper. This marker is customizable. See [3.1.13. `cropMarker`](#3113-cropmarker) section.
+The engine adds a marker by default in front of and/or behind the part selected by the cropper. This marker is customizable. See [3.1.13. `cropMarker`](#3115-cropmarker) section.
 
 - 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToCrop` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-##### 3.1.11.2. searchableAttributes
+##### 3.1.13.2. searchableAttributes
 
 Attributes configured in `attributesToCrop` are cropped even if not present in the `searchableAttributes` index setting.
 
-##### 3.1.11.3. stopWords
+##### 3.1.13.3. stopWords
 
 Terms defined in the `stopWords` index setting are counted as words regarding `cropLength`.
 
-##### 3.1.11.3. Tokenizer Separators
+##### 3.1.13.3. Tokenizer Separators
 
 Tokenizer separators aren't counted as words regarding `cropLength`.
 
-#### 3.1.12. `cropLength`
+#### 3.1.14. `cropLength`
 
 - Type: Integer
 - Required: False
@@ -544,13 +602,13 @@ Tokenizer separators aren't counted as words regarding `cropLength`.
 
 Sets the total number of **words** to keep for the cropped part of an attribute specified in the `attributesToCrop` parameter. It means that if `10` is set for `cropLength`, the cropped part returned in `_formatted` will only be 10 words long.
 
-This parameter is applied to the fields from `attributesToCrop`. If there are none, this parameter has no effect. See [3.1.11. `attributesToCrop`](#3111-attributestocrop) section.
+This parameter is applied to the fields from `attributesToCrop`. If there are none, this parameter has no effect. See [3.1.11. `attributesToCrop`](#3113-attributestocrop) section.
 
 Sending a `0` value deactivates the cropping unless a custom crop length is defined for an attribute inside `attributesToCrop`.
 
 - 🔴 Sending a value with a different type than `Integer` for `cropLength` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-##### 3.1.12.1. Custom `cropLength` Defined Per Attribute.
+##### 3.1.14.1. Custom `cropLength` Defined Per Attribute.
 
 Optionally, indicating a custom crop length for any of the listed attributes is possible:
 
@@ -558,9 +616,9 @@ Optionally, indicating a custom crop length for any of the listed attributes is 
 
 A custom crop length set in this way has priority over the `cropLength` parameter.
 
-##### 3.1.12.2 Examples
+##### 3.1.14.2 Examples
 
-###### 3.1.12.1.1. Extending around
+###### 3.1.14.1.1. Extending around
 
 Given an attribute defined in `attributesToCrop` containing:
 
@@ -574,7 +632,7 @@ Cropped query terms are counted as a word regarding `cropLength`.
 
 Sending more query terms than the `cropLength` value has no impact. The cropped part will contain the `cropLength` number.
 
-###### 3.1.12.1.2. Keeping a phrase context
+###### 3.1.14.1.2. Keeping a phrase context
 
 After Meilisearch has chosen the best possible match window (some number of words < `cropLength`), it will add words from before or after the match window until the total number is equal to `cropLength`. In doing so, it will attempt to add context to the match window by choosing words from the same sentence(s) where the match window occurs.
 
@@ -590,25 +648,25 @@ and not like:
 
 `Natalie risk her future. Split The World is a book…`
 
-#### 3.1.13. `cropMarker`
+#### 3.1.15. `cropMarker`
 
 - Type: String
 - Required: False
 - Default: `"…"` (U+2026)
 
-Sets which string to add before and/or after the cropped text. See [3.1.11. `attributesToCrop`](#3111-attributestocrop) section.
+Sets which string to add before and/or after the cropped text. See [3.1.11. `attributesToCrop`](#3113-attributestocrop) section.
 
-The specified crop marker is applied by following rules outline in section [3.1.13.1. Applying `cropMarker`](#31131-applying-cropmarker).
+The specified crop marker is applied by following rules outline in section [3.1.13.1. Applying `cropMarker`](#31131-applyi15-cropmarker).
 
 Specifying `cropMarker` to `""` or `null` implies that no marker will be applied to the cropped part.
 
-This parameter is applied to the fields configured in `attributesToCrop`. If there are none, this parameter has no effect. See [3.1.11. `attributesToCrop`](#3111-attributestocrop) section.
+This parameter is applied to the fields configured in `attributesToCrop`. If there are none, this parameter has no effect. See [3.1.11. `attributesToCrop`](#3113-attributestocrop) section.
 
 - 🔴 Sending a value with a different type than `String` or `null` for `cropMarker` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-##### 3.1.13.1. Applying `cropMarker`
+##### 3.1.15.1. Applying `cropMarker`
 
-###### 3.1.13.1.1. Matched Part To Be Cropped
+###### 3.1.15.1.1. Matched Part To Be Cropped
 
 The cropping algorithm tries to match the window with the highest density of query terms within the `cropLength` limit.
 
@@ -630,13 +688,13 @@ Only one cropped part from an attribute is returned.
 
 If no part is found when selecting a part to be cropped, the returned value in `_formatted` will start at the beginning of the attribute and include a number of words equal to `cropLength`.
 
-###### 3.1.13.1.2. Positioning Markers
+###### 3.1.15.1.2. Positioning Markers
 
 If the cropped part has been matched against query terms and contains the beginning of the attribute to be cropped, the `cropMarker` is not placed to the left of the cropped part.
 
 If the cropped part has been matched against query terms and contains the end of the attribute to be cropped, the `cropMarker` is not placed to the right of the cropped part.
 
-#### 3.1.14. `showMatchesPosition`
+#### 3.1.16. `showMatchesPosition`
 
 - Type: Boolean
 - Required: False
@@ -648,7 +706,7 @@ It's useful when more control is needed than offered by the built-in highlightin
 
 - 🔴 Sending a value with a different type than `Boolean` or `null` for `showMatchesPosition` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-#### 3.1.15. `matchingStrategy`
+#### 3.1.17. `matchingStrategy`
 
 - Type: String
 - Required: False
@@ -660,11 +718,11 @@ Two different strategies are available, `last` and `all`. By default, the `last`
 
 - 🔴 Sending a value with a different type than `String` and other than `last` or `all` as a value for `matchingStrategy` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-##### 3.1.15.1. `last` strategy
+##### 3.1.17.1. `last` strategy
 
 The documents containing ALL the query words (i.e. in the `q` parameter) are returned first by Meilisearch. If Meilisearch doesn't have enough documents to fit the requested `limit`, it iteratively ignores the query words from the last typed word to the first typed word to match more documents.
 
-##### 3.1.15.2. `all` strategy
+##### 3.1.17.2. `all` strategy
 
 Only the documents containing ALL the query words (i.e. in the `q` parameter) are returned by Meilisearch. If Meilisearch doesn't have enough documents to fit the requested `limit`, it returns the documents found without trying to match more documents.
 
@@ -673,12 +731,16 @@ Only the documents containing ALL the query words (i.e. in the `q` parameter) ar
 | Field                                           | Type       | Required |
 |-------------------------------------------------|------------|----------|
 | [`hits`](#321-hits)                             | Array[Hit] | True     |
-| [`limit`](#322-limit)                           | Integer    | True     |
-| [`offset`](#323-offset)                         | Integer    | True     |
-| [`estimatedTotalHits`](#324-estimatedTotalHits) | Integer    | True     |
-| [`facetDistribution`](#325-facetdistribution)   | Object     | False    |
-| [`processingTimeMs`](#326-processingtimems)     | Integer    | True     |
-| [`query`](#327-query)                           | String     | True     |
+| [`limit`](#322-limit)                           | Integer    | False    |
+| [`offset`](#323-offset)                         | Integer    | False    |
+| [`estimatedTotalHits`](#324-estimatedTotalHits) | Integer    | False    |
+| [`page`](#325-page)                             | Integer    | False    |
+| [`hitsPerPage`](#326-hitsperpage)               | Integer    | False    |
+| [`totalPages`](#327-totalpages)                 | Integer    | False    |
+| [`totalHits`](#328-totalhits)                   | Integer    | False    |
+| [`facetDistribution`](#329-facetdistribution)   | Object     | False    |
+| [`processingTimeMs`](#330-processingtimems)     | Integer    | True     |
+| [`query`](#331-query)                           | String     | True     |
 
 #### 3.2.1. `hits`
 
@@ -689,7 +751,7 @@ Results of the search query as an array of documents.
 
 > Hit object represents a matched document as a search result.
 
-> The search parameters `attributesToRetrieve` influence the returned payload for a hit. See [3.1.7. `attributesToRetrieve`](#317-attributestoretrieve) section.
+> The search parameters `attributesToRetrieve` influence the returned payload for a hit. See [3.1.7. `attributesToRetrieve`](#319-attributestoretrieve) section.
 
 A search result can contain special properties. See [3.2.1.1. `hit` Special Properties](#3211-hits-special-properties) section.
 
@@ -904,34 +966,81 @@ The beginning of a matching term within a field is indicated by `start`, and its
 
 `start` and `length` are measured in bytes and not the number of characters. For example, `ü` represents two bytes but one character.
 
-> See [3.1.14. `showMatchesPosition`](#3114-showmatchesposition) section.
+> See [3.1.14. `showMatchesPosition`](#3116-showmatchesposition) section.
 
 #### 3.2.2. `limit`
 
 - Type: Integer
-- Required: True
+- Required: False
 
 Returns the `limit` search parameter used for the query.
+
+Only returned when the `numbered pagination` is **not** enabled, see [explaination](#3181-numbered-pagination).
 
 > See [3.1.5. `limit`](#315-limit) section.
 
 #### 3.2.3. `offset`
 
 - Type: Integer
-- Required: True
+- Required: False
 
 Returns the `offset` search parameter used for the query.
+
+Only returned when the `numbered pagination` is **not** enabled, see [explaination](#3181-numbered-pagination).
 
 > See [3.1.6. `offset` section](#316-offset) section.
 
 #### 3.2.4. `estimatedTotalHits`
 
 - Type: Integer
-- Required: True
+- Required: False
 
 Returns the estimated number of candidates for the search query.
 
-#### 3.2.5. `facetDistribution`
+Only returned when the `numbered pagination` is enabled, see [explaination](#3181-numbered-pagination).
+
+#### 3.2.5. `page`
+
+- Type: Integer
+- Required: False
+
+Returns the current search results page.
+
+Only returned when the `numbered pagination` is enabled, see [explaination](#3181-numbered-pagination).
+
+> See [3.1.7. `page` section](#317-page) section.
+
+#### 3.2.6. `hitsPerPage`
+
+- Type: Integer
+- Required: False
+
+Returns the number of results contained in a search result page.
+
+Only returned when the `numbered pagination` is enabled, see [explaination](#3181-numbered-pagination).
+
+> See [3.1.7. `hitsPerPage` section](#318-hitsperpage) section.
+
+#### 3.2.7. `totalPages`
+
+- Type: Integer
+- Required: False
+
+Returns the total number of results pages. Calculated using [`hitsPerPage`]. Will never exceed the `pagination.maxTotalHits` index setting value.
+
+Only returned when the `numbered pagination` is enabled, see [explaination](#3181-numbered-pagination).(#326-hitsperpage) value.
+
+
+#### 3.2.8. `totalHits`
+
+- Type: Integer
+- Required: False
+
+Returns the total number of search results. Will never exceed the `pagination.maxTotalHits` index setting value.
+
+Only returned when the `numbered pagination` is enabled, see [explaination](#3181-numbered-pagination).
+
+#### 3.2.9. `facetDistribution`
 
 - Type: Object
 - Required: False
@@ -942,14 +1051,14 @@ If a field distributed as a facet contains no value, it is returned as a `facetD
 
 > See [3.1.4. `facet`](#314-facets) section.
 
-#### 3.2.6. `processingTimeMs`
+#### 3.2.10. `processingTimeMs`
 
 - Type: Integer
 - Required: True
 
 Processing time of the search query in **milliseconds**.
 
-#### 3.2.7. `query`
+#### 3.2.11. `query`
 
 - Type: String
 - Required: True
