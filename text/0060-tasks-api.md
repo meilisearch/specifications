@@ -403,13 +403,30 @@ Allows users to cancel an `enqueued` or `processing` task. Particularly useful i
 
 When the request is successful, Meilisearch returns the HTTP code 202 Accepted. The response's content is the summarized representation of the received asynchronous task.
 
-##### 6.3.3. Errors
+##### 6.3.3. Auto-batching
+
+If the task you’re canceling is part of a batch, **the whole batch is stopped.** Meilisearch automatically creates a new batch once the current one is stopped and the specified tasks are canceled. The canceled tasks will not be part of the new batch.
+
+This means:
+- When the new batch is created, it may contain tasks that have been requested to be canceled in the meantime
+- Any progress the batch made before being canceled is lost
+
+##### 6.3.4. Errors
 
 If a user tries canceling a `succeeded`, `failed`, or `canceled` task, it won’t throw an error. Task cancelation is an atomic transaction; all tasks are successfully canceled, or none aren't.
 
 - 🔴 Sending a task cancelation without filtering query parameters returns a `[missing_filters](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#missing_filters)` error.
 - 🔴 If the `type` parameter value is not consistent with one of the task types, an `[invalid_task_type](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalidtasktype)` error is returned.
 - 🔴 If the `status` parameter value is not consistent with one of the task statuses, an `[invalid_task_status](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalidtaskstatus)` error is returned.
+- 🔴 If the `type` parameter value is not consistent with one of the task types, an `[invalid_task_type](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalidtasktype)` error is returned.
+- 🔴 If the `status` parameter value is not consistent with one of the task statuses, an `[invalid_task_status](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalidtaskstatus)` error is returned.
+- 🔴 Sending values with a different type than `Integer` being separated by `,` for the `uid` parameter returns an `invalid_task_uid` error.
+- 🔴 Sending an invalid value for the `beforeEnqueuedAt` parameter returns an `invalid_task_date` error.
+- 🔴 Sending an invalid value for the `afterEnqueuedAt` parameter returns an `invalid_task_date` error.
+- 🔴 Sending an invalid value for the `beforeStartedAt` parameter returns an `invalid_task_date` error.
+- 🔴 Sending an invalid value for the `afterStartedAt` parameter returns an `invalid_task_date` error.
+- 🔴 Sending an invalid value for the `beforeFinishedAt` parameter returns an `invalid_task_date` error.
+- 🔴 Sending an invalid value for the `afterFinishedAt` parameter returns an `invalid_task_date` error.
 
 The auth layer can return the following errors if Meilisearch is secured (a master-key is defined).
 
