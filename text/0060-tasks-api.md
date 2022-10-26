@@ -256,9 +256,9 @@ e.g. A fully qualified `task` object in a `canceled` state.
 ```json
 {
     "uid": 0,
-	"indexUid": "movies",
-	"status": "canceled",
-	"type": "settingsUpdate",
+    "indexUid": "movies",
+    "status": "canceled",
+    "type": "settingsUpdate",
     "details": {
         "rankingRules": [
             "typo",
@@ -271,11 +271,9 @@ e.g. A fully qualified `task` object in a `canceled` state.
     },
     "canceledBy": 1,
     "enqueuedAt": "2021-08-10T14:29:17.000000Z",
-	"startedAt": "2021-08-10T14:29:18.000000Z",
+    "startedAt": "2021-08-10T14:29:18.000000Z",
     "finishedAt": "2021-08-10T14:29:19.000000Z"
 }
-```
-
 e.g. A summarized `task` object in a `202 Accepted` HTTP response returned at index creation.
 
 ```json
