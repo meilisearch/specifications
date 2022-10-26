@@ -76,7 +76,7 @@ Error: `config_file_path` is not supported in configuration file.
 Defining a configuration file other than the default file that does not exist returns an error when launching Meilisearch.
 
 ```bash
-unable to open or read the {:?} configuration file.
+Error: unable to open or read the "XXX" configuration file: No such file or directory (os error 2).
 ```
 
 #### 3.7.3. Defining a config file with a syntax error.
