@@ -391,7 +391,7 @@ Allows users to cancel an `enqueued` or `processing` task. Particularly useful i
 ```json
 {
     "taskUid": 0,
-    "indexUid": "movies",
+    "indexUid": null,
     "status": "enqueued",
     "type": "taskCancelation",
     "enqueuedAt": "2021-08-12T10:00:00.000000Z"
