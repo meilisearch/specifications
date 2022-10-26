@@ -446,7 +446,7 @@ Sets the specific results page.
 By default, page is `null`, or `1` if `hitsPerPage` is provided. 
 The first page has a value of `1`, the second `2`, etc...
 
-When providing `page` or `hitsPerPage` in the query parameters, the `numbered pagination` system is enabled, which impacts the returned fields and the perfomance. See explaination on the [`numbered pagination`](#3181).
+When providing `page` or `hitsPerPage` in the query parameters, the `numbered pagination` system is enabled, which impacts the returned fields and the performance. See explanation on the [`numbered pagination`](#3181).
 
 - 🔴 Sending a value with a different type than `Integer` for `page` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
@@ -456,11 +456,11 @@ When providing `page` or `hitsPerPage` in the query parameters, the `numbered pa
 - Required: False
 - Default: `null`
 
-Sets the amount of results returned for a query.
+Sets the number of results returned for a query.
 
 By default, `hitsPerPage` is `null`, or `20` if `page` is provided.
 
-When providing `page` or `hitsPerPage` in the query parameters, the `numbered pagination` system is enabled, which impacts the returned fields and the perfomance. See explaination on the [`numbered pagination`](#3181).
+When providing `page` or `hitsPerPage` in the query parameters, the `numbered pagination` system is enabled, which impacts the returned fields and the performance. See explanation on the [`numbered pagination`](#3181).
 
 - 🔴 Sending a value with a different type than `Integer` for `hitsPerPage` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
