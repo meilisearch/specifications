@@ -490,12 +490,12 @@ When either `limit` or `offset` is specified or when neither `limit`, `offset`, 
 - `limit`
 - `offset`. 
 
-Example, given the following query parameters:
+For example, given the following query parameters:
 
 - limit: 10
 - offset: 1
 
-The response objects contains these specific fields:
+The response objects contain these specific fields:
 ```json
 {
     "hits": [
@@ -508,9 +508,9 @@ The response objects contains these specific fields:
 }
 ```
 
-Example, on a query with no query parameters:
+For example, on a query with no query parameters:
 
-The response objects contains these specific fields:
+The response objects contain these specific fields:
 ```json
 {
     "hits": [
@@ -534,12 +534,12 @@ The response object contains the following related fields:
 - `page`
 - `hitsPerPage` 
 
-Example, given the following query parameters:
+For example, given the following query parameters:
 
 - page: 2
 - hitsPerPage: 10
 
-The response objects contains these specific fields:
+The response objects contain these specific fields:
 ```json
 {
     "hits": [ 
@@ -1043,7 +1043,7 @@ The beginning of a matching term within a field is indicated by `start`, and its
 
 Returns the `limit` search parameter used for the query. 
 This field is returned only when:
-- `limit` or/and `offset` were used as a query parameter.
+- `limit` or/and `offset` were used as query parameters.
 - `limit`, `offset`, `page`, `hitsPerPage` were not used as a query parameter 
 
 See [explaination](#3181-numbered-pagination) on the different paginations.
@@ -1057,8 +1057,8 @@ See [explaination](#3181-numbered-pagination) on the different paginations.
 
 Returns the `offset` search parameter used for the query. This field is returned only when `limit` or/and `offset` was used as a query parameter.
 This field is returned only when:
-- `limit` or/and `offset` were used as a query parameter.
-- `limit`, `offset`, `page`, `hitsPerPage` were not used as a query parameter 
+- `limit` or/and `offset` were used as query parameters.
+- `limit`, `offset`, `page`, `hitsPerPage` were not used as query parameter 
 
 See [explaination](#3181-numbered-pagination) on the different paginations.
 
@@ -1069,7 +1069,7 @@ See [explaination](#3181-numbered-pagination) on the different paginations.
 - Type: Integer
 - Required: False
 
-Returns the estimated number of candidates for the search query. This field is returned only when `limit` or/and `offset` was used as a query parameter.
+Returns the estimated number of candidates for the search query. This field is returned only when `limit` or/and `offset` are used as a query parameter.
 
 See [explaination](#3181-numbered-pagination) on the different paginations.
 
@@ -1078,7 +1078,7 @@ See [explaination](#3181-numbered-pagination) on the different paginations.
 - Type: Integer
 - Required: False
 
-Returns the current search results page. This field is returned only when the `numbered pagination` is enabled, see [explaination](#3181-numbered-pagination)..
+Returns the current search results page. This field is returned only when the `numbered pagination` is enabled; see [explaination](#3181-numbered-pagination).
 
 > See [3.1.7. `page` section](#317-page) section.
 
@@ -1087,7 +1087,7 @@ Returns the current search results page. This field is returned only when the `n
 - Type: Integer
 - Required: False
 
-Returns the number of results contained in a search result page. This field is returned only when the `numbered pagination` is enabled, see [explaination](#3181-numbered-pagination)..
+Returns the number of results contained in a search result page. This field is returned only when the `numbered pagination` is enabled; see [explaination](#3181-numbered-pagination).
 
 
 > See [3.1.7. `hitsPerPage` section](#318-hitsperpage) section.
@@ -1099,7 +1099,7 @@ Returns the number of results contained in a search result page. This field is r
 
 Returns the total number of results pages. Calculated using [`hitsPerPage`]. Both `totalPages` and `totalHits` are computed until they reach the `pagination.maxTotalHits` number from the settings (default `1000`).
 
-This field is returned only when the `numbered pagination` is enabled, see [explaination](#3181-numbered-pagination)..
+This field is returned only when the `numbered pagination` is enabled; see [explaination](#3181-numbered-pagination)..
 
 
 #### 3.2.8. `totalHits`
