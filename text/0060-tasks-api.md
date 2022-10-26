@@ -598,9 +598,12 @@ The `/tasks` and `/tasks/cancel` endpoints are filterable by  `uid`, `indexUid`,
 | indexUid  | string | No       | Permits to filter tasks by their related index. By default, when `indexUid` query parameter is not set, the tasks of all the indexes are concerned. It is possible to specify several indexes by separating them with the `,` character. |
 | status    | string | No       | Permits to filter tasks by their status. By default, when `status` query parameter is not set, all task statuses are concerned. It's possible to specify several types by separating them with the `,` character.                        |
 | type      | string | No       | Permits to filter tasks by their related type. By default, when `type` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
-| beforeEnqueuedAt afterEnqueuedAt | string | No       | Permits to filter tasks by the time before or after they are queued. By default, when `beforeEnqueuedAt` or `afterEnqueuedAt` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
-| beforeStartedAt afterStartedAt | string | No       | Permits to filter tasks by their started time. By default, when `beforeStartedAt` or `afterStartedAt` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
-| beforeFinishedAt afterFinishedAt | string | No       | Permits to filter tasks by their finished time. By default, when `beforeFinishedAt` or `afterFinishedAt` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
+| beforeEnqueuedAt | string | No       | Permits to filter tasks based on the time before they are queued. By default, when `beforeEnqueuedAt` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
+| afterEnqueuedAt | string | No       | Permits to filter tasks based on the time after they are queued. By default, when `afterEnqueuedAt` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
+| beforeStartedAt | string | No       | Permits to filter tasks by the time before they were started. By default, when `beforeStartedAt` or `afterStartedAt` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
+| afterStartedAt | string | No       | Permits to filter tasks by the time after they were started. By default, when `beforeStartedAt` or `afterStartedAt` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
+| beforeFinishedAt | string | No       | Permits to filter tasks by the time before they were finished. By default, when `beforeFinishedAt` or `afterFinishedAt` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
+| afterFinishedAt | string | No       | Permits to filter tasks by the time after they were finished. By default, when `beforeFinishedAt` or `afterFinishedAt` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
 
 ##### 11.2. Usages examples
 
@@ -815,7 +818,7 @@ Users will not be allowed to use this route without any filters on `POST` `/task
 
 - 🔴 If the `type` parameter value is not consistent with one of the task types, an [`invalid_task_type`](0061-error-format-and-definitions.md#invalidtasktype) error is returned.
 
-###### 11.3.5. `afterXAt` and `beforeXAt`
+###### 11.3.5. `beforeEnqueuedAt` and `afterEnqueuedAt`
 
 - Type: String
 - Required: False
@@ -829,7 +832,35 @@ The filter accepts the RFC 3339 format. The following syntaxes are valid:
 
 - 🔴 The date filters are exclusive. You can cancel tasks before or after a specified date, meaning it will not be included.
 
-###### 11.3.6. Select multiple values for the same filter
+###### 11.3.6. `beforeStartedAt` and `afterStartedAt`
+
+- Type: String
+- Required: False
+- Default: `*`
+
+The filter accepts the RFC 3339 format. The following syntaxes are valid:
+
+- `Y-M-D`
+- `Y-M-DTH:M:SZ`
+- `Y-M-DTH:M:S+01:00`
+
+- 🔴 The date filters are exclusive. You can cancel tasks before or after a specified date, meaning it will not be included.
+
+###### 11.3.7. `beforeFinishedAt` and `afterFinishedAt`
+
+- Type: String
+- Required: False
+- Default: `*`
+
+The filter accepts the RFC 3339 format. The following syntaxes are valid:
+
+- `Y-M-D`
+- `Y-M-DTH:M:SZ`
+- `Y-M-DTH:M:S+01:00`
+
+- 🔴 The date filters are exclusive. You can cancel tasks before or after a specified date, meaning it will not be included.
+
+###### 11.3.8. Select multiple values for the same filter
 
 It is possible to specify multiple values for a filter using the `,` character.
 
