@@ -10,9 +10,9 @@ It's critical to deploy a new version of an index without any downtimes to the s
 
 ## 3. Functional Specification
 
-### 3.1. Swap Workflow
+### 3.1. 0 dowtime deployment workflow
 
-A user has big changes to make on an index. It could be changes to the index settings to improve relevancy, improve the end-user experience by configuring filterableAttributes or sortableAttributes. It could also be a need to apply changes in the schema of the documents due to changes in the schema of its primary data store.
+A user has big changes to make on an index. It could be important document schema or index settings changes.
 
 The deployment workflow with zero-downtimes for clients looks like this:
 
