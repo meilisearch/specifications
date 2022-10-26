@@ -23,7 +23,7 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 | uid        | integer | Unique sequential identifier                                                                                                                                                                                                  |
 | indexUid   | string  | Unique index identifier. This field is `null` when the task type is `dumpCreation`.                                                                                                                                                                                                                                        |
 | status     | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`                                                                                                                                       |
-| type       | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `documentAdditionOrUpdate`, `documentDeletion`, `settingsUpdate`, `dumpCreation`                                                       |
+| type       | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `indexSwap`, `documentAdditionOrUpdate`, `documentDeletion`, `settingsUpdate`, `dumpCreation`                                                       |
 | details    | object  | Details information for a task payload. See Task Details part.                                                                                                                                                                |
 | error      | object  | Error object containing error details and context when a task has a `failed` status. See [0061-error-format-and-definitions.md](0061-error-format-and-definitions.md)                                                         |
 | duration   | string  | Total elapsed time the engine was in processing state expressed as an `ISO-8601` duration format. Times below the second can be expressed with the `.` notation, e.g., `PT0.5S` to express `500ms`. Default is set to `null`. |
@@ -64,10 +64,11 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 | indexCreation            |
 | indexUpdate              |
 | indexDeletion            |
+| indexSwap                |
 | documentAdditionOrUpdate |
 | documentDeletion         |
 | settingsUpdate           |
-| dumpCreation |
+| dumpCreation             |
 
 > 👍 Type values follow a `camelCase` naming convention.
 
@@ -105,6 +106,12 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 | name             | description                                                                          |
 |------------------|--------------------------------------------------------------------------------------|
 | deletedDocuments | Number of deleted documents. Should be all documents contained in the deleted index. |
+
+##### indexSwap
+
+| name             | description                                                                          |
+|------------------|--------------------------------------------------------------------------------------|
+| swaps            | Object containing the payload originating the `indexSwap` task creation              |
 
 ##### settingsUpdate
 
