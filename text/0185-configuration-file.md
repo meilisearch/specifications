@@ -68,7 +68,7 @@ If Meilisearch can't find the default `config.toml` or if no other config file i
 Defining `config_file_path` in the configuration file is not valid and Meilisearch returns an error.
 
 ```bash
-Error: `config_file_path` is not supported in config file
+Error: `config_file_path` is not supported in configuration file.
 ```
 
 #### 3.7.2. Defining a non-existent config file.
