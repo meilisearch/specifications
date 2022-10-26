@@ -607,9 +607,11 @@ The `/tasks` endpoint is filterable by `indexUid`, `type` and `status` query par
 
 | parameter | type   | required | description                                                                                                                                                                                                                             |
 |-----------|--------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| indexUid  | string | No       | Permits to filter tasks by their related index. By default, when `indexUid` query parameter is not set, the tasks of all the indexes are returned. It is possible to specify several indexes by separating them with the `,` character. |
-| status    | string | No       | Permits to filter tasks by their status. By default, when `status` query parameter is not set, all task statuses are returned. It's possible to specify several types by separating them with the `,` character.                        |
-| type      | string | No       | Permits to filter tasks by their related type. By default, when `type` query parameter is not set, all task types are returned. It's possible to specify several types by separating them with the `,` character.                       |
+| uid  | string | No       | Permits to filter tasks by their related unique identifier. By default, when `uid` query parameter is not set, all the tasks are concerned. It is possible to specify several uid by separating them with the `,` character. |
+| indexUid  | string | No       | Permits to filter tasks by their related index. By default, when `indexUid` query parameter is not set, the tasks of all the indexes are concerned. It is possible to specify several indexes by separating them with the `,` character. |
+| status    | string | No       | Permits to filter tasks by their status. By default, when `status` query parameter is not set, all task statuses are concerned. It's possible to specify several types by separating them with the `,` character.                        |
+| type      | string | No       | Permits to filter tasks by their related type. By default, when `type` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
+| date | string | No       | Permits to filter tasks by their started or launched time. By default, when `afterXAt` or `beforeXAt` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
 
 ##### 11.1.2. Usages examples
 
@@ -800,7 +802,27 @@ This part demonstrates filtering on `/tasks`.
 
 - 🔴 If the `type` parameter value is not consistent with one of the task types, an [`invalid_task_type`](0061-error-format-and-definitions.md#invalidtasktype) error is returned.
 
-###### 11.1.3.6. Select multiple values for the same filter
+###### 11.1.3.4. `date`
+
+You can cancel tasks using `afterXAt` and `beforeXAt`. You can use the following fields:
+
+- `enqueuedAt` → `afterenqueuedAt` or `beforeanqueuedAt`
+- `startedAt` → `afterstartedAt` or `beforestartedAt`
+- `finishedAt` → `afterFinishedAt` or `beforeFinishedAt`
+
+The filter accepts the RFC 3339 format. The following syntaxes are valid:
+
+- `Y-M-D`
+- `Y-M-DTH:M:SZ`
+- `Y-M-DTH:M:S+01:00`
+
+- Type: String
+- Required: False
+- Default: `*`
+
+- 🔴 The date filters are exclusive. You can cancel tasks before or after a specified date, meaning it will not be included, `>=` and `<=` are not valid.
+
+###### 11.1.3.5. Select multiple values for the same filter
 
 It is possible to specify multiple values for a filter using the `,` character.
 
@@ -855,7 +877,7 @@ Users will not be allowed to use this route without any filters (POST /tasks/can
 ```json
 {
     "taskUid": 1,
-    "indexUid": "movies",
+    "indexUid": null,
     "status": "enqueued",
     "type": "taskCancelation",
     "enqueuedAt": "2021-08-12T10:00:00.000000Z"
@@ -869,7 +891,7 @@ Users will not be allowed to use this route without any filters (POST /tasks/can
 ```json
 {
     "taskUid": 1,
-    "indexUid": "movies",
+    "indexUid": null,
     "status": "enqueued",
     "type": "taskCancelation",
     "enqueuedAt": "2021-08-12T10:00:00.000000Z"
@@ -883,7 +905,7 @@ Users will not be allowed to use this route without any filters (POST /tasks/can
 ```json
 {
     "taskUid": 1,
-    "indexUid": "movies",
+    "indexUid": null,
     "status": "enqueued",
     "type": "taskCancelation",
     "enqueuedAt": "2021-08-12T10:00:00.000000Z"
@@ -897,7 +919,7 @@ Users will not be allowed to use this route without any filters (POST /tasks/can
 ```json
 {
     "taskUid": 1,
-    "indexUid": "movies",
+    "indexUid": null,
     "status": "enqueued",
     "type": "taskCancelation",
     "enqueuedAt": "2021-08-12T10:00:00.000000Z"
@@ -910,7 +932,7 @@ Users will not be allowed to use this route without any filters (POST /tasks/can
 ```json
 {
     "taskUid": 1,
-    "indexUid": "movies",
+    "indexUid": null,
     "status": "enqueued",
     "type": "taskCancelation",
     "enqueuedAt": "2021-08-12T10:00:00.000000Z"
@@ -927,7 +949,7 @@ Users will not be allowed to use this route without any filters (POST /tasks/can
 ```json
 {
     "taskUid": 1,
-    "indexUid": "movies",
+    "indexUid": null,
     "status": "enqueued",
     "type": "taskCancelation",
     "enqueuedAt": "2021-08-12T10:00:00.000000Z"
