@@ -474,10 +474,10 @@ With this pagination system, it is possible to jump from one page to another usi
 
 As soon as either `page` or `hitsPerPage` is used as a query parameter. In the response object, `limit`, `offset`, and `estimatedTotalHits` are removed and new fields are returned:
 
-- `hitsPerPage`: number of results in each search results page.
-- `page`: current search results page. The counting starts at 1.
-- `totalPages`: total number of results pages. Calculated using `hitsPerPage` value.
-- `totalHits`: total number of search results.
+- [`hitsPerPage`](#326-hitsperpage): number of results in each search results page.
+- [`page`](#325-page): current search results page. The counting starts at 1.
+- [`totalPages`](#327-totalpages): total number of results pages. Calculated using `hitsPerPage` value.
+- [`totalHits`](#328-totalhits): total number of search results.
 
 Both `totalPages` and `totalHits` are computed until they reach the `pagination.maxTotalHits` number from the settings. Default (1000).
 
@@ -486,9 +486,9 @@ As opposed to `estimatedTotalHits`, `totalHits` is a reliable information.
 ##### 3.1.8.1.1 Limit/offset parameters
 
 When either `limit` or `offset` is specified or when neither `limit`, `offset`, `page` and `hitsPerPage` are specific, the response object contains related fields:
-- `estimatedTotalHits`
-- `limit`
-- `offset`. 
+- [`estimatedTotalHits`](#324-estimatedtotalhits)
+- [`limit`](#322-limit)
+- [`offset`](#323-offset). 
 
 For example, given the following query parameters:
 
@@ -529,10 +529,10 @@ If in addition to `limit` and/or `offset`, either `page` or `hitsPerPage` is als
 
 When either `page` or `hitsPerPage` is specified, and **not** either `limit` or `offset` 
 The response object contains the following related fields: 
-- `totalHits`
-- `totalPages`
-- `page`
-- `hitsPerPage` 
+- [`hitsPerPage`](#326-hitsperpage)
+- [`page`](#325-page)
+- [`totalPages`](#327-totalpages)
+- [`totalHits`](#328-totalhits)
 
 For example, given the following query parameters:
 
