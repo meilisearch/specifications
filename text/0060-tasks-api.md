@@ -588,11 +588,9 @@ This part demonstrates keyset paging in action on `/tasks`. The items `uid` rema
 
 #### 11. Filtering task resources
 
-##### 11.1. Filtering task to get
+The `/tasks` and `/tasks/cancel` endpoints are filterable by  `uid`, `indexUid`, `type`, `status`, `beforeEnqueuedAt`, `afterEnqueuedAt`, `beforeStartedAt`, `afterStartedAt`, `beforeFinishedAt`,  `afterFinishedAt` query parameters.
 
-The `/tasks` endpoint is filterable by  `uid`, `indexUid`, `type`, `status`, `beforeEnqueuedAt`, `afterEnqueuedAt`, `beforeStartedAt`, `afterStartedAt`, `beforeFinishedAt`,  `afterFinishedAt` query parameters.
-
-##### 11.1.1 Query parameters definition
+##### 11.1 Query parameters definition
 
 | parameter | type   | required | description                                                                                                                                                                                                                             |
 |-----------|--------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -600,9 +598,11 @@ The `/tasks` endpoint is filterable by  `uid`, `indexUid`, `type`, `status`, `be
 | indexUid  | string | No       | Permits to filter tasks by their related index. By default, when `indexUid` query parameter is not set, the tasks of all the indexes are concerned. It is possible to specify several indexes by separating them with the `,` character. |
 | status    | string | No       | Permits to filter tasks by their status. By default, when `status` query parameter is not set, all task statuses are concerned. It's possible to specify several types by separating them with the `,` character.                        |
 | type      | string | No       | Permits to filter tasks by their related type. By default, when `type` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
-| date | string | No       | Permits to filter tasks by their started or launched time. By default, when `afterXAt` or `beforeXAt` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
+| beforeEnqueuedAt afterEnqueuedAt | string | No       | Permits to filter tasks by the time before or after they are queued. By default, when `beforeEnqueuedAt` or `afterEnqueuedAt` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
+| beforeStartedAt afterStartedAt | string | No       | Permits to filter tasks by their started time. By default, when `beforeStartedAt` or `afterStartedAt` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
+| beforeFinishedAt afterFinishedAt | string | No       | Permits to filter tasks by their finished time. By default, when `beforeFinishedAt` or `afterFinishedAt` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
 
-##### 11.1.2. Usages examples
+##### 11.2. Usages examples
 
 This part demonstrates filtering on `/tasks`.
 
@@ -634,6 +634,8 @@ This part demonstrates filtering on `/tasks`.
     ...
 }
 ```
+
+Users will not be allowed to use this route without any filters on `POST` `/tasks/cancel`, as it may result in canceling everything by mistake. If the request contains no filters, the user will get an error asking them to be more specific.
 
 **Filter `tasks` that have a `failed` `status`**
 
@@ -761,176 +763,6 @@ This part demonstrates filtering on `/tasks`.
 
 - If the `indexUid` parameter value contains an inexistent index, it returns an empty `results` array.
 
----
-
-##### 11.1.3. Query Parameters Behaviors
-
-###### 11.1.3.1. `indexUid`
-
-- Type: String
-- Required: False
-- Default: `*`
-
-`indexUid` is **case-sensitive**.
-
-###### 11.1.3.2. `status`
-
-- Type: String
-- Required: False
-- Default: `*`
-
-- 🔴 If the `status` parameter value is not consistent with one of the task statuses, an [`invalid_task_status`](0061-error-format-and-definitions.md#invalidtaskstatus) error is returned.
-
-###### 11.1.3.3. `type`
-
-- Type: String
-- Required: False
-- Default: `*`
-
-`type` is **case-insensitive**.
-
-- 🔴 If the `type` parameter value is not consistent with one of the task types, an [`invalid_task_type`](0061-error-format-and-definitions.md#invalidtasktype) error is returned.
-
-###### 11.1.3.4. `date`
-
-You can cancel tasks using `afterXAt` and `beforeXAt`. You can use the following fields:
-
-- `enqueuedAt` → `afterenqueuedAt` or `beforeanqueuedAt`
-- `startedAt` → `afterstartedAt` or `beforestartedAt`
-- `finishedAt` → `afterFinishedAt` or `beforeFinishedAt`
-
-The filter accepts the RFC 3339 format. The following syntaxes are valid:
-
-- `Y-M-D`
-- `Y-M-DTH:M:SZ`
-- `Y-M-DTH:M:S+01:00`
-
-- Type: String
-- Required: False
-- Default: `*`
-
-- 🔴 The date filters are exclusive. You can cancel tasks before or after a specified date, meaning it will not be included.
-
-###### 11.1.3.5. Select multiple values for the same filter
-
-It is possible to specify multiple values for a filter using the `,` character.
-
-For example, to select the `enqueued` and `processing` tasks of the `movies` and `movie_reviews` indexes, it is possible to express it like this: `/tasks?indexUid=movies,movie_reviews&status=enqueued,processing`
-
-##### 11.1.4. Empty `results`
-
-If no results match the filters. A response is returned with an empty `results` array.
-
-##### 11.2. Filtering task to cancel
-
-The `/tasks/cancel` endpoint is filterable by `uid`, `indexUid`, `type` and `status` query parameters.
-
-##### 11.2.1 Query parameters definition
-
-| parameter | type   | required | description                                                                                                                                                                                                                             |
-|-----------|--------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| uid  | string | No       | Permits to filter tasks by their related unique identifier. By default, when `uid` query parameter is not set, all the tasks are concerned. It is possible to specify several uid by separating them with the `,` character. |
-| indexUid  | string | No       | Permits to filter tasks by their related index. By default, when `indexUid` query parameter is not set, the tasks of all the indexes are concerned. It is possible to specify several indexes by separating them with the `,` character. |
-| status    | string | No       | Permits to filter tasks by their status. By default, when `status` query parameter is not set, all task statuses are concerned. It's possible to specify several types by separating them with the `,` character.                        |
-| type      | string | No       | Permits to filter tasks by their related type. By default, when `type` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
-| date | string | No       | Permits to filter tasks by their started or launched time. By default, when `afterXAt` or `beforeXAt` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
-
-##### 11.2.2. Usages examples
-
-This part demonstrates filtering on `/tasks/cancel`.
-
----
-
-**No filtering**
-
-Users will not be allowed to use this route without any filters (POST /tasks/cancel), as it may result in canceling everything by mistake. If the request contains no filters, the user will get an error asking them to be more specific.
-
-**Filter `tasks` to cancel based on `uid`**
-
-`POST` `/tasks/cancel?uid=1,2`
-
-```json
-{
-    "taskUid": 3,
-    "indexUid": null,
-    "status": "enqueued",
-    "type": "taskCancelation",
-    "enqueuedAt": "2021-08-12T10:00:00.000000Z"
-}
-```
-
-**Filter `tasks` to cancel based on `indexUid`**
-
-`POST` `/tasks/cancel?indexUid=movies`
-
-```json
-{
-    "taskUid": 1,
-    "indexUid": null,
-    "status": "enqueued",
-    "type": "taskCancelation",
-    "enqueuedAt": "2021-08-12T10:00:00.000000Z"
-}
-```
-
-**Filter `tasks` to cancel based on `status`**
-
-`POST` - `/tasks/cancel?status=processing`
-
-```json
-{
-    "taskUid": 1,
-    "indexUid": null,
-    "status": "enqueued",
-    "type": "taskCancelation",
-    "enqueuedAt": "2021-08-12T10:00:00.000000Z"
-}
-```
-
-**Filter `tasks` to cancel based on `type`**
-
-`POST` - `/tasks/cancel?type=documentAdditionOrUpdate`
-
-```json
-{
-    "taskUid": 1,
-    "indexUid": null,
-    "status": "enqueued",
-    "type": "taskCancelation",
-    "enqueuedAt": "2021-08-12T10:00:00.000000Z"
-}
-```
-
-**Filter `tasks` to cancel using date filters**
-
-`POST` - `/tasks/cancel?afterenqueuedAt>2020-10-11T11:49:53.000Z`
-
-```json
-{
-    "taskUid": 1,
-    "indexUid": null,
-    "status": "enqueued",
-    "type": "taskCancelation",
-    "enqueuedAt": "2021-08-12T10:00:00.000000Z"
-}
-```
-**Filter `tasks` to cancel that are of multiple type and have a `indexUid`**
-
-`POST` - `/tasks/cancel?indexUid=movies&(AND)type=documentAdditionOrUpdate,(OR)documentDeletion`
-
-```json
-{
-    "taskUid": 1,
-    "indexUid": null,
-    "status": "enqueued",
-    "type": "taskCancelation",
-    "enqueuedAt": "2021-08-12T10:00:00.000000Z"
-}
-```
-
-- 💡 Filters can be used together. Both parameters are accumulated and `AND` and `OR` operations are performed between the filters.
-- `type` and `indexUid` query parameters can be read as is `type=documentsAdditionOrUpdate OR documentDeletion AND indexUid=movies`.
-
 **Cancel all the tasks with filter**
 
 `POST` - `/taskscancel?status=processing,enqueued`
@@ -947,9 +779,9 @@ Users will not be allowed to use this route without any filters (POST /tasks/can
 
 ---
 
-##### 11.2.3. Behaviors for `uid`, `indexUid`, `status`, `type` and `date` query parameters.
+##### 11.3. Query Parameters Behaviors
 
-###### 11.2.3.1. `uid`
+###### 11.3.1. `uid`
 
 - Type: String
 - Required: False
@@ -957,7 +789,7 @@ Users will not be allowed to use this route without any filters (POST /tasks/can
 
 `uid` is **case-sensitive**.
 
-###### 11.2.3.2. `indexUid`
+###### 11.3.2. `indexUid`
 
 - Type: String
 - Required: False
@@ -965,7 +797,7 @@ Users will not be allowed to use this route without any filters (POST /tasks/can
 
 `indexUid` is **case-sensitive**.
 
-###### 11.2.3.3. `status`
+###### 11.3.3. `status`
 
 - Type: String
 - Required: False
@@ -973,7 +805,7 @@ Users will not be allowed to use this route without any filters (POST /tasks/can
 
 - 🔴 If the `status` parameter value is not consistent with one of the task statuses, an [`invalid_task_status`](0061-error-format-and-definitions.md#invalidtaskstatus) error is returned.
 
-###### 11.2.3.4. `type`
+###### 11.3.4. `type`
 
 - Type: String
 - Required: False
@@ -983,12 +815,11 @@ Users will not be allowed to use this route without any filters (POST /tasks/can
 
 - 🔴 If the `type` parameter value is not consistent with one of the task types, an [`invalid_task_type`](0061-error-format-and-definitions.md#invalidtasktype) error is returned.
 
-###### 11.2.3.5. `date`
+###### 11.3.5. `afterXAt` and `beforeXAt`
 
-You can cancel tasks using `afterXAt` and `beforeXAt`. You can use the following fields:
-
-- `enqueuedAt` → `afterenqueuedAt` or `beforeanqueuedAt`
-- `startedAt` → `afterstartedAt` or `beforestartedAt`
+- Type: String
+- Required: False
+- Default: `*`
 
 The filter accepts the RFC 3339 format. The following syntaxes are valid:
 
@@ -996,17 +827,19 @@ The filter accepts the RFC 3339 format. The following syntaxes are valid:
 - `Y-M-DTH:M:SZ`
 - `Y-M-DTH:M:S+01:00`
 
-- Type: String
-- Required: False
-- Default: `*`
+- 🔴 The date filters are exclusive. You can cancel tasks before or after a specified date, meaning it will not be included.
 
-- 🔴 The date filters are exclusive. You can cancel tasks before or after a specified date, meaning it will not be included, `>=` and `<=` are not valid.
-
-###### 11.2.3.6. Select multiple values for the same filter
+###### 11.3.6. Select multiple values for the same filter
 
 It is possible to specify multiple values for a filter using the `,` character.
 
-For example, to select the `enqueued` and `processing` tasks of the `movies` and `movie_reviews` indexes, it is possible to express it like this: `/tasks/cancel?indexUid=movies,movie_reviews&status=enqueued,processing`.
+For example, to select the `enqueued` and `processing` tasks of the `movies` and `movie_reviews` indexes, it is possible to express it like this: `/tasks?indexUid=movies,movie_reviews&status=enqueued,processing`
+
+##### 11.4. Empty `results`
+
+If no results match the filters. A response is returned with an empty `results` array.
+
+---
 
 ## 2. Technical details
 
