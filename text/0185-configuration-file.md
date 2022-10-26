@@ -84,7 +84,7 @@ Error: unable to open or read the "XXX" configuration file: No such file or dire
 Defining a configuration file wrongly formatted or containing an invalid configuration key returns an error when launching Meilisearch.
 
 ```bash
-unable to open or read the {:?} configuration file.
+Error: unknown field `XXX` at line Y column Z
 ```
 
 ## 4. Technical Details
