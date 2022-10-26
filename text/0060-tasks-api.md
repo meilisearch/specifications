@@ -24,6 +24,7 @@ As writing is asynchronous for most of Meilisearch's operations, this API allows
 | indexUid   | string  | Unique index identifier. This field is `null` when the task type is `dumpCreation`.                                                                                                                                                                                                                                        |
 | status     | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`, `canceled`                                                                                                                          |
 | type       | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `documentAdditionOrUpdate`, `documentDeletion`, `settingsUpdate`, `dumpCreation`, `taskCancelation`                                                    |
+| canceledBy | integer | Unique identifier of the `taskCancelation` task that cancelled the given task.                                                    |
 | details    | object  | Details information for a task payload. See Task Details part.                                                                                                                                                                |
 | error      | object  | Error object containing error details and context when a task has a `failed` status. See [0061-error-format-and-definitions.md](0061-error-format-and-definitions.md)                                                         |
 | duration   | string  | Total elapsed time the engine was in processing state expressed as an `ISO-8601` duration format. Times below the second can be expressed with the `.` notation, e.g., `PT0.5S` to express `500ms`. Default is set to `null`. |
@@ -406,17 +407,7 @@ When the request is successful, Meilisearch returns the HTTP code 202 Accepted. 
 
 If a user tries canceling a `succeeded`, `failed`, or `canceled` task, it won’t throw an error. Task cancelation is an atomic transaction; all tasks are successfully canceled, or none aren't.
 
-- 🔴 Sending a task cancelation without filtering query parameters returns a `missing_filters` error.
-    
-    ```json
-    {
-        "message": "Query parameters to filter the tasks to cancel are missing. Available query parameters are: `uid`, `indexUid`, `status`, `type`, `beforeEnqueuedAt`, `afterEnqueudAt`, `beforeStartedAt`, afterStartedAt`",
-        "code": "missing_filters",
-        "type": "invalid_request",
-        "link": "https://docs.meilisearch.com/errors#missing_filters"
-    }
-    ```
-
+- 🔴 Sending a task cancelation without filtering query parameters returns a `[missing_filters](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#missing_filters)` error.
 - 🔴 If the `type` parameter value is not consistent with one of the task types, an `[invalid_task_type](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalidtasktype)` error is returned.
 - 🔴 If the `status` parameter value is not consistent with one of the task statuses, an `[invalid_task_status](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalidtaskstatus)` error is returned.
 

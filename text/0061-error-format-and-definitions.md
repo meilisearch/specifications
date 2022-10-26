@@ -1086,6 +1086,29 @@ HTTP Code: `400 Bad Request`
 
 ---
 
+## missing_filters
+
+`Synchronous`
+
+### Context
+
+This error occurs when the request does not contain any filters and they are mandatory.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "Query parameters to filter the tasks to cancel are missing. Available query parameters are: `uid`, `indexUid`, `status`, `type`, `beforeEnqueuedAt`, `afterEnqueudAt`, `beforeStartedAt`, afterStartedAt`",
+    "code": "missing_filters",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#missing_filters"
+}
+```
+
+---
+
 # internal type
 
 ## internal
