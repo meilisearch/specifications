@@ -21,7 +21,7 @@ As writing is asynchronous for most of Meilisearch's operations, this API allows
 | field      | type    | description                                                                                                                                                                                                                   |
 |------------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | uid        | integer | Unique sequential identifier                                                                                                                                                                                                  |
-| indexUid   | string  | Unique index identifier. This field is `null` when the task type is `dumpCreation`.                                                                                                                                                                                                                                        |
+| indexUid   | string  | Unique index identifier. This field is `null` when the task is a global task.                                                   |
 | status     | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`, `canceled`                                                                                                                          |
 | type       | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `documentAdditionOrUpdate`, `documentDeletion`, `settingsUpdate`, `dumpCreation`, `taskCancelation`                                                    |
 | canceledBy | integer | Unique identifier of the `taskCancelation` task that cancelled the given task.                                                    |
@@ -34,14 +34,24 @@ As writing is asynchronous for most of Meilisearch's operations, this API allows
 
 > 💡 The order of the fields must be returned in this order.
 
+###### Global task
+
+Some specific tasks are not associated with any particular index and apply to all.
+
+The fully qualified and summarized task objects linked to this kind of task display a `null` `indexUid` field.
+
+List of global tasks by `type`:
+- `dumpCreation`
+- `taskCancelation`
+
 ##### Summarized `task` Object for `202 Accepted`
 
 | field      | type    | description                     |
 |------------|---------|---------------------------------|
 | taskUid    | integer | Unique sequential identifier           |
-| indexUid   | string  | Unique index identifier. This field is `null` when the task type is `dumpCreation`. |
+| indexUid   | string  | Unique index identifier. This field is `null` when the task is a global task |
 | status     | string  | Status of the task. Value is `enqueued` |
-| type       | string  | Type of the task. |
+| type       | string  | Type of the task |
 | enqueuedAt | string  | Represent the date and time as `RFC 3339` format when the task has been enqueued |
 
 
@@ -130,10 +140,6 @@ As writing is asynchronous for most of Meilisearch's operations, this API allows
 | name    | description  |
 | -----   | ------------ |
 | dumpUid | The generated uid of the dump |
-
-Since the creation of a dump is not a task associated with a particular index, it is only present on the `GET` - `/tasks` and `GET` - `tasks/:task_uid` endpoints.
-
-Fully qualified and summarized task objects related to a dump creation display a `null` `indexUid` field.
 
 ##### taskCancelation
 
