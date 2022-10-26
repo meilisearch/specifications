@@ -599,7 +599,7 @@ This part demonstrates keyset paging in action on `/tasks`. The items `uid` rema
 
 ##### 11.1. Filtering task to get
 
-The `/tasks` endpoint is filterable by `indexUid`, `type` and `status` query parameters.
+The `/tasks` endpoint is filterable by  `uid`, `indexUid`, `type`, `status`, `beforeEnqueuedAt`, `afterEnqueuedAt`, `beforeStartedAt`, `afterStartedAt`, `beforeFinishedAt`,  `afterFinishedAt` query parameters.
 
 ##### 11.1.1 Query parameters definition
 
