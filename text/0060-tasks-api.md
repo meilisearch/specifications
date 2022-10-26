@@ -772,7 +772,7 @@ This part demonstrates filtering on `/tasks`.
 
 ---
 
-##### 11.1.3. Behaviors for `indexUid`, `status`and `type` query parameters.
+##### 11.1.3. Query Parameters Behaviors
 
 ###### 11.1.3.1. `indexUid`
 
