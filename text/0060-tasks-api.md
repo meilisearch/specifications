@@ -8,7 +8,7 @@ This specification describes the API endpoints for handling asynchronous tasks.
 
 ### II. Motivation
 
-As writing is asynchronous for most of Meilisearch's operations, this API allows you to track the progress of asynchronous tasks, know and understand why a task has failed, and cancel specific tasks in progress by consulting the history of operations that happened.
+As writing is asynchronous for most of Meilisearch's operations, this API allows you to track the progress of asynchronous tasks, know and understand why a task has failed, and cancel specific tasks being enqueued or processing by consulting the history of operations that happened.
 
 ### III. Explanation
 
