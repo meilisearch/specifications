@@ -14,11 +14,11 @@ It's critical to deploy a new version of an index without any downtimes to the s
 
 A user has big changes to make on an index. It could be important document schema or index settings changes.
 
-The deployment workflow with zero-downtimes for clients looks like this:
+The zero-downtimes deployment looks like this:
 
 1. Search clients search on `indexA`.
-2. The developer build a new index `indexB` representing the new index version to deploy to the search clients.
-3. When `indexB` is built and ready to be deployed, the developer send an indexes swap request to Meilisearch for `indexA` and `indexB`.
+2. The developer builds a new index `indexB` representing the new index version to deploy to the search clients.
+3. When `indexB` is built and ready to be deployed, the developer sends an indexes swap request to Meilisearch for `indexA` and `indexB`.
 4. `indexB` documents, settings and tasks are swapped with `indexA`.
 5. Search clients search on the updated `indexA` without experiencing any downtime.
 
