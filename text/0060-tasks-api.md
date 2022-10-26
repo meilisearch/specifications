@@ -818,7 +818,7 @@ The filter accepts the RFC 3339 format. The following syntaxes are valid:
 - Required: False
 - Default: `*`
 
-- 🔴 The date filters are exclusive. You can cancel tasks before or after a specified date, meaning it will not be included, `>=` and `<=` are not valid.
+- 🔴 The date filters are exclusive. You can cancel tasks before or after a specified date, meaning it will not be included.
 
 ###### 11.1.3.5. Select multiple values for the same filter
 
