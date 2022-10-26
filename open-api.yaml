@@ -33,6 +33,22 @@ components:
       type: integer
       description: Offset given for the query. If offset is not provided as a query parameter, this parameter displays the default offset value.
       example: 0
+    page:
+      type: integer
+      description: Sets the specific results page. If page is not provided as a query parameter, this parameter is ignored.
+      example: 1
+    hitsPerPage:
+      type: integer
+      description: Sets the number of results returned for a query. If hitsPerPage is not provided as a query parameter, this parameter is ignored.
+      example: 20
+    totalHits:
+      type: integer
+      description: Returns the total number of search results. Computed if either `page` or `hitsPerPage` is provided as a query parameter.
+      example: 20
+    totalPages:
+      type: integer
+      description: Returns the total number of results pages. Computed if either `page` or `hitsPerPage` is provided as a query parameter.
+      example: 20
     total:
       type: integer
       description: Total number of browsable results using offset/limit parameters for the given resource.
@@ -234,6 +250,18 @@ components:
         estimatedTotalHits:
           type: integer
           description: Estimated number of candidates for the search query.
+        page:
+          type: integer
+          description: Specific results page.
+        hitsPerPage:
+          type: integer
+          description: Number of results returned for a query.
+        totalHits:
+          type: integer
+          description: Total number of search results.
+        totalPages:
+          type: integer
+          description: Total number of results pages.
         facetDistribution:
           type: object
           additionalProperties:
@@ -260,9 +288,6 @@ components:
           example: ninja
       required:
         - hits
-        - offset
-        - limit
-        - estimatedTotalHits
         - processingTimeMs
         - query
     task:
@@ -756,6 +781,20 @@ components:
       schema:
         type: number
         default: 0
+    page:
+      name: page
+      in: query
+      description: Sets the specific results page.
+      schema:
+        type: number
+        default: 1
+    hitsPerPage:
+      name: hitsPerPage
+      in: query
+      description: Sets the number of results returned for a query. If hitsPerPage is not provided as a query parameter, this parameter is ignored.
+      schema:
+        type: number
+        default: 20
     from:
       name: from
       in: query
@@ -1630,6 +1669,8 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/hitsPerPage'
         - $ref: '#/components/parameters/showMatchesPosition'
         - $ref: '#/components/parameters/matchingStrategy'
       responses:
@@ -1757,6 +1798,14 @@ paths:
                   type: number
                   description: Maximum number of documents returned.
                   default: 20
+                page:
+                  type: number
+                  description: Specific results page.
+                  example: 1
+                hitsPerPage:
+                  type: number
+                  description: Number of results returned for a query.
+                  example: 20
                 sort:
                   $ref: '#/components/schemas/sort'
             examples:
