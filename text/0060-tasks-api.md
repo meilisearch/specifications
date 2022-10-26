@@ -594,7 +594,7 @@ The `/tasks` and `/tasks/cancel` endpoints are filterable by  `uid`, `indexUid`,
 
 | parameter | type   | required | description                                                                                                                                                                                                                             |
 |-----------|--------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| uid  | string | No       | Permits to filter tasks by their related unique identifier. By default, when `uid` query parameter is not set, all the tasks are concerned. It is possible to specify several uid by separating them with the `,` character. |
+| uid  | integer | No       | Permits to filter tasks by their related unique identifier. By default, when `uid` query parameter is not set, all the tasks are concerned. It is possible to specify several uid by separating them with the `,` character. |
 | indexUid  | string | No       | Permits to filter tasks by their related index. By default, when `indexUid` query parameter is not set, the tasks of all the indexes are concerned. It is possible to specify several indexes by separating them with the `,` character. |
 | status    | string | No       | Permits to filter tasks by their status. By default, when `status` query parameter is not set, all task statuses are concerned. It's possible to specify several types by separating them with the `,` character.                        |
 | type      | string | No       | Permits to filter tasks by their related type. By default, when `type` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
@@ -786,7 +786,7 @@ Users will not be allowed to use this route without any filters on `POST` `/task
 
 ###### 11.3.1. `uid`
 
-- Type: String
+- Type: Integer
 - Required: False
 - Default: `*`
 
