@@ -717,7 +717,7 @@ This part demonstrates filtering on `/tasks`.
         {
             "uid": 1343,
             "indexUid": "movies",
-            "type": "succeeded",
+            "status": "canceled",
             "type": "documentAdditionOrUpdate",
             "canceledBy": 1,
             ...,
