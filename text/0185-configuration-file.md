@@ -24,7 +24,7 @@ It means the options in the configuration file are overwritten by the environmen
 
 ### 3.3. Default Configuration File
 
-A default config file is defined as `config.toml` and is retrieved by Meilisearch by default in its current working directory.
+By default, Meilisearch will try to read the following named configuration file `./config.toml`, so in its current working directory.
 
 The default configuration file details all configurations keys, some of them are commented.
 
