@@ -466,17 +466,17 @@ When providing `page` or `hitsPerPage` in the query parameters, the `numbered pa
 
 #### 3.1.8.1 Numbered Pagination
 
-By default, `limit` and `offset` are used for pagination. That pagination system, while perfomant, does not provide the required information to create page selection pagination. Upon using `limit`/`offset` pagination, in the returned fields, `estimatedTotalHits` is returned which provides a rough estimation on how many hits may be candidate for a given request. As it is `estimated` it should not be used.
+By default, `limit` and `offset` are used for pagination. That pagination system, while performant, does not provide the required information to create page selection pagination. Upon using `limit`/`offset` pagination, in the returned fields, `estimatedTotalHits` is returned which provides a rough estimation of how many hits may be candidates for a given request. As it is `estimated` it should not be used.
 
-The `numbered pagination` system provides an alternative which tackles the above mentioned issue when the user needs reliable information for its pagination. For example, when creating a pagination with numbers `<< < 1, 2, 3, ...14 > >>`. Nonetheless, it is less performant as the engine needs to compute the `totalHits` exhaustively.
+The `numbered pagination` system provides an alternative that tackles the above-mentioned issue when the user needs reliable information for its pagination. For example, when creating a pagination with numbers `<< < 1, 2, 3, ...14 > >>`. Nonetheless, it is less performant as the engine needs to compute the `totalHits` exhaustively.
 
-With this pagination system it is possible to jump from one page to another using the `page` parameter and decide how many hits should be present in a page with `hitsPerPage`.
+With this pagination system, it is possible to jump from one page to another using the `page` parameter and decide how many hits should be present in a page with `hitsPerPage`.
 
-As soon as the either `page` or `hitsPerPage` is used as a query parameter. In the response object, `limit`, `offset` and `estimatedTotalHits` are removed and new fields are returned:
+As soon as either `page` or `hitsPerPage` is used as a query parameter. In the response object, `limit`, `offset`, and `estimatedTotalHits` are removed and new fields are returned:
 
-- `hitsPerPage`: number of results contained in each search results page.
-- `page`: current search results page. Counting starts at 1.
-- `totalPages`: total number of results pages. Calculated using hitsPerPage value.
+- `hitsPerPage`: number of results in each search results page.
+- `page`: current search results page. The counting starts at 1.
+- `totalPages`: total number of results pages. Calculated using `hitsPerPage` value.
 - `totalHits`: total number of search results.
 
 Both `totalPages` and `totalHits` are computed until they reach the `pagination.maxTotalHits` number from the settings. Default (1000).
