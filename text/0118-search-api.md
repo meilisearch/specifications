@@ -464,7 +464,7 @@ When providing `page` or `hitsPerPage` in the query parameters, the `numbered pa
 
 - 🔴 Sending a value with a different type than `Integer` for `hitsPerPage` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-#### 3.1.8.1 Numbered Pagination
+#### 3.1.8.1. Numbered Pagination
 
 By default, `limit` and `offset` are used for pagination. That pagination system, while performant, does not provide the required information to create page selection pagination. Upon using `limit`/`offset` pagination, in the returned fields, `estimatedTotalHits` is returned which provides a rough estimation of how many hits may be candidates for a given request. As it is `estimated` it should not be used.
 
@@ -483,7 +483,7 @@ Both `totalPages` and `totalHits` are computed until they reach the `pagination.
 
 As opposed to `estimatedTotalHits`, `totalHits` is a reliable information.
 
-##### 3.1.8.1.1 Limit/offset parameters
+##### 3.1.8.1.1. Limit/offset parameters
 
 When either `limit` or `offset` is specified or when neither `limit`, `offset`, `page` and `hitsPerPage` are specific, the response object contains related fields:
 - [`estimatedTotalHits`](#324-estimatedtotalhits)
