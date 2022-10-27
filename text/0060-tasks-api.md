@@ -281,6 +281,8 @@ e.g. A fully qualified `task` object in a `canceled` state.
     "startedAt": "2021-08-10T14:29:18.000000Z",
     "finishedAt": "2021-08-10T14:29:19.000000Z"
 }
+```
+
 e.g. A summarized `task` object in a `202 Accepted` HTTP response returned at index creation.
 
 ```json
@@ -421,11 +423,9 @@ This means:
 
 If a user tries canceling a `succeeded`, `failed`, or `canceled` task, it won’t throw an error. Task cancelation is an atomic transaction; all tasks are successfully canceled, or none aren't.
 
-- 🔴 Sending a task cancelation without filtering query parameters returns a `[missing_filters](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#missing_filters)` error.
+- 🔴 Sending a task cancelation without filtering query parameters returns a `[missing_task_filter](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#missing_task_filter)` error.
 - 🔴 If the `type` parameter value is not consistent with one of the task types, an `[invalid_task_type](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalid_task_type)` error is returned.
 - 🔴 If the `status` parameter value is not consistent with one of the task statuses, an `[invalid_task_status](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalid_task_status)` error is returned.
-- 🔴 If the `type` parameter value is not consistent with one of the task types, an `[invalid_task_type](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalidtasktype)` error is returned.
-- 🔴 If the `status` parameter value is not consistent with one of the task statuses, an `[invalid_task_status](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalidtaskstatus)` error is returned.
 - 🔴 Sending values with a different type than `Integer` being separated by `,` for the `uid` parameter returns an `invalid_task_uid` error.
 - 🔴 Sending an invalid value for the `beforeEnqueuedAt` parameter returns an `invalid_task_date` error.
 - 🔴 Sending an invalid value for the `afterEnqueuedAt` parameter returns an `invalid_task_date` error.
@@ -628,7 +628,93 @@ The tasks API endpoints are filterable by  `uid`, `indexUid`, `type`, `status`, 
 | beforeFinishedAt | string | No       |  Filter tasks based on their finishedAt time. Retrieve tasks finished before the given filter value.  |
 | afterFinishedAt | string | No       | Filter tasks based on their finishedAt time. Retrieve tasks finished after the given filter value.                 |
 
-##### 11.2. Usages examples
+##### 11.2. Query Parameters Behaviors
+
+###### 11.2.1. `uid`
+
+- Type: String
+- Required: False
+- Default: `*`
+
+`uid` is **case-unsensitive**.
+
+###### 11.2.2. `indexUid`
+
+- Type: String
+- Required: False
+- Default: `*`
+
+`indexUid` is **case-sensitive**.
+
+###### 11.2.3. `status`
+
+- Type: String
+- Required: False
+- Default: `*`
+
+- 🔴 If the `status` parameter value is not consistent with one of the task statuses, an [`invalid_task_status`](0061-error-format-and-definitions.md#invalidtaskstatus) error is returned.
+
+###### 11.2.4. `type`
+
+- Type: String
+- Required: False
+- Default: `*`
+
+`type` is **case-insensitive**.
+
+- 🔴 If the `type` parameter value is not consistent with one of the task types, an [`invalid_task_type`](0061-error-format-and-definitions.md#invalidtasktype) error is returned.
+
+###### 11.2.5. `beforeEnqueuedAt` and `afterEnqueuedAt`
+
+- Type: String
+- Required: False
+- Default: `*`
+
+The filter accepts the RFC 3339 format. The following syntaxes are valid:
+
+- `Y-M-D`
+- `Y-M-DTH:M:SZ`
+- `Y-M-DTH:M:S+01:00`
+
+- 🔴 The date filters are exclusive. You can cancel tasks before or after a specified date, meaning it will not be included.
+
+###### 11.2.6. `beforeStartedAt` and `afterStartedAt`
+
+- Type: String
+- Required: False
+- Default: `*`
+
+The filter accepts the RFC 3339 format. The following syntaxes are valid:
+
+- `Y-M-D`
+- `Y-M-DTH:M:SZ`
+- `Y-M-DTH:M:S+01:00`
+
+- 🔴 The date filters are exclusive. You can cancel tasks before or after a specified date, meaning it will not be included.
+
+###### 11.2.7. `beforeFinishedAt` and `afterFinishedAt`
+
+- Type: String
+- Required: False
+- Default: `*`
+
+The filter accepts the RFC 3339 format. The following syntaxes are valid:
+
+- `Y-M-D`
+- `Y-M-DTH:M:SZ`
+- `Y-M-DTH:M:S+01:00`
+
+- 🔴 The date filters are exclusive. You can cancel tasks before or after a specified date, meaning it will not be included.
+
+###### 11.2.8. Select multiple values for the same filter
+
+It is possible to specify multiple values for a filter using the `,` character.
+
+For example, to select the `enqueued` and `processing` tasks of the `movies` and `movie_reviews` indexes, it is possible to express it like this: `/tasks?indexUid=movies,movie_reviews&status=enqueued,processing`
+
+---
+
+##### 11.3. Usages examples
 
 This part demonstrates filtering on `/tasks`.
 
@@ -660,8 +746,6 @@ This part demonstrates filtering on `/tasks`.
     ...
 }
 ```
-
-Users will not be allowed to use this route without any filters on `POST` `/tasks/cancel`, as it may result in canceling everything by mistake. If the request contains no filters, the user will get an error asking them to be more specific.
 
 **Filter `tasks` that have a `failed` `status`**
 
@@ -804,90 +888,6 @@ Users will not be allowed to use this route without any filters on `POST` `/task
 ```
 
 ---
-
-##### 11.3. Query Parameters Behaviors
-
-###### 11.3.1. `uid`
-
-- Type: String
-- Required: False
-- Default: `*`
-
-`uid` is **case-unsensitive**.
-
-###### 11.3.2. `indexUid`
-
-- Type: String
-- Required: False
-- Default: `*`
-
-`indexUid` is **case-sensitive**.
-
-###### 11.3.3. `status`
-
-- Type: String
-- Required: False
-- Default: `*`
-
-- 🔴 If the `status` parameter value is not consistent with one of the task statuses, an [`invalid_task_status`](0061-error-format-and-definitions.md#invalidtaskstatus) error is returned.
-
-###### 11.3.4. `type`
-
-- Type: String
-- Required: False
-- Default: `*`
-
-`type` is **case-insensitive**.
-
-- 🔴 If the `type` parameter value is not consistent with one of the task types, an [`invalid_task_type`](0061-error-format-and-definitions.md#invalidtasktype) error is returned.
-
-###### 11.3.5. `beforeEnqueuedAt` and `afterEnqueuedAt`
-
-- Type: String
-- Required: False
-- Default: `*`
-
-The filter accepts the RFC 3339 format. The following syntaxes are valid:
-
-- `Y-M-D`
-- `Y-M-DTH:M:SZ`
-- `Y-M-DTH:M:S+01:00`
-
-- 🔴 The date filters are exclusive. You can cancel tasks before or after a specified date, meaning it will not be included.
-
-###### 11.3.6. `beforeStartedAt` and `afterStartedAt`
-
-- Type: String
-- Required: False
-- Default: `*`
-
-The filter accepts the RFC 3339 format. The following syntaxes are valid:
-
-- `Y-M-D`
-- `Y-M-DTH:M:SZ`
-- `Y-M-DTH:M:S+01:00`
-
-- 🔴 The date filters are exclusive. You can cancel tasks before or after a specified date, meaning it will not be included.
-
-###### 11.3.7. `beforeFinishedAt` and `afterFinishedAt`
-
-- Type: String
-- Required: False
-- Default: `*`
-
-The filter accepts the RFC 3339 format. The following syntaxes are valid:
-
-- `Y-M-D`
-- `Y-M-DTH:M:SZ`
-- `Y-M-DTH:M:S+01:00`
-
-- 🔴 The date filters are exclusive. You can cancel tasks before or after a specified date, meaning it will not be included.
-
-###### 11.3.8. Select multiple values for the same filter
-
-It is possible to specify multiple values for a filter using the `,` character.
-
-For example, to select the `enqueued` and `processing` tasks of the `movies` and `movie_reviews` indexes, it is possible to express it like this: `/tasks?indexUid=movies,movie_reviews&status=enqueued,processing`
 
 ##### 11.4. Empty `results`
 
