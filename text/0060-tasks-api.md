@@ -49,7 +49,7 @@ List of global tasks by `type`:
 | field      | type    | description                     |
 |------------|---------|---------------------------------|
 | taskUid    | integer | Unique sequential identifier           |
-| indexUid   | string  | Unique index identifier. This field is `null` when the task is a global task |
+| indexUid   | string  | Unique index identifier. This field is `null` when the task is a [global task]() |
 | status     | string  | Status of the task. Value is `enqueued` |
 | type       | string  | Type of the task |
 | enqueuedAt | string  | Represent the date and time as `RFC 3339` format when the task has been enqueued |
