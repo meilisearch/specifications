@@ -638,7 +638,7 @@ The tasks API endpoints are filterable by  `uid`, `indexUid`, `type`, `status`, 
 
 `uid` is **case-unsensitive**.
 
-- 🔴 Sending values with a different type than `Integer` being separated by `,` for the `uid` parameter returns an `[invalid_task_uid](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalid_task_uid))` error.
+- 🔴 Sending values with a different type than `Integer` being separated by `,` for the `uid` parameter returns an [`invalid_task_uid`](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalid_task_uid)) error.
 
 
 ###### 11.2.2. `indexUid`
@@ -698,7 +698,7 @@ The filter accepts the RFC 3339 format. The following syntaxes are valid:
 ###### 11.2.5.5. Date Errors
 
 - 🔴 The date filters are exclusive. You can cancel tasks before or after a specified date, meaning it will not be included.
-- 🔴 Sending an invalid value for the date parameter returns an `[invalid_task_date](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalid_task_date)` error.
+- 🔴 Sending an invalid value for the date parameter returns an [`invalid_task_date`](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalid_task_date) error.
 
 ###### 11.2.6. Select multiple values for the same filter
 
