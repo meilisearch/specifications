@@ -480,9 +480,9 @@ With this page selection system, it is possible to jump from one page to another
 When either `limit` or `offset` is specified or when neither `limit`, `offset`, `page` and `hitsPerPage` are specific, the response object contains related fields:
 - [`estimatedTotalHits`](#324-estimatedtotalhits)
 - [`limit`](#322-limit)
-- [`offset`](#323-offset). 
+- [`offset`](#323-offset)
 
-If in addition to `limit` and/or `offset`, either `page` or `hitsPerPage` is also provided, `limit`/`offset` pagination is ignored.
+If in addition to `limit` and/or `offset`, either `page` or `hitsPerPage` is also provided, `limit` and `offset` parameters are ignored.
 
 For example, given the following query parameters:
 
