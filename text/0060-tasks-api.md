@@ -623,7 +623,7 @@ The tasks API endpoints are filterable by  `uid`, `indexUid`, `type`, `status`, 
 | type      | string | No       | Permits to filter tasks by their related type. By default, when `type` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
 | beforeEnqueuedAt | string | No       |  Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before the given filter value.              |
 | afterEnqueuedAt | string | No       | Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued after the given filter value.  |
-| beforeStartedAt | string | No       | Permits to filter tasks by the time before they were started. By default, when `beforeStartedAt` or `afterStartedAt` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
+| beforeStartedAt | string | No       | Filter tasks based on their startedAt time. Retrieve tasks started before the given value.                |
 | afterStartedAt | string | No       | Filter tasks based on their startedAt time. Retrieve tasks started after the given filter value.                    |
 | beforeFinishedAt | string | No       |  Filter tasks based on their finishedAt time. Retrieve tasks finished before the given filter value.  |
 | afterFinishedAt | string | No       | Filter tasks based on their finishedAt time. Retrieve tasks finished after the given filter value.                 |
