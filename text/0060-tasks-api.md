@@ -813,7 +813,7 @@ Users will not be allowed to use this route without any filters on `POST` `/task
 - Required: False
 - Default: `*`
 
-`uid` is **case-sensitive**.
+`uid` is **case-unsensitive**.
 
 ###### 11.3.2. `indexUid`
 
