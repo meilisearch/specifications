@@ -949,7 +949,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "",
+    "message": "`uid` is not a valid task uid. Task uid can be an integer or a string containing only numeric characters.",
     "code": "invalid_task_uid",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_task_uid"
@@ -972,7 +972,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "",
+    "message": "`beforeEnqueuedAt` field value `:value` is invalid. It should follow the RFC 3339 format to represents a date or datetime in the future or specified as a null value. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
     "code": "invalid_task_date",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_task_date"

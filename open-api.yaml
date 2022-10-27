@@ -313,6 +313,7 @@ components:
             - indexDeletion
             - settingsUpdate
             - dumpCreation
+            - taskCancelation
         details:
           type: object
           description: Details information of the task payload.
@@ -328,7 +329,7 @@ components:
               description: Number of document ids received for documentDeletion task.
             deletedDocuments:
               type: integer
-              description: 'Number of documents finally deleted for documentDeletion and indexDeletion tasks.'
+              description: Number of documents finally deleted for documentDeletion and indexDeletion tasks.
             primaryKey:
               type: string
               description: Value for the primaryKey field encountered if any for indexCreation or indexUpdate task.
@@ -337,6 +338,15 @@ components:
             dumpUid:
               type: string
               description: Identifier generated for the dump for dumpCreation task.
+            matchedTasks:
+              type: integer
+              description: Number of tasks that match the request.
+            canceledTasks:
+              type: integer
+              description: Number of tasks canceled.
+            originalQuery:
+              type: string
+              description: Original filter query.
         error:
           description: Error object containing error details and context when a task has a failed status.
           $ref: '#/components/schemas/error'
@@ -393,6 +403,7 @@ components:
             - indexDeletion
             - settingsUpdate
             - dumpCreation
+            - taskCancelation
         enqueuedAt:
           description: Represent the date and time as a `RFC 3339` format when the task has been enqueued
           $ref: '#/components/schemas/timestamp'
@@ -641,6 +652,7 @@ components:
               - indexes.update
               - indexes.delete
               - tasks.get
+              - tasks.cancel
               - settings.get
               - settings.update
               - stats.get
@@ -731,6 +743,48 @@ components:
       name: status
       in: query
       description: Permits to filter tasks by their status. By default, when `status` query parameter is not set, all task statuses are returned. It's possible to specify several types by separating them with the `,` character.
+      required: false
+      schema:
+        type: string
+    taskBeforeEnqueuedAt:
+      name: beforeEnqueuedAt
+      in: query
+      description: Permits to filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before the given filter value. 
+      required: false
+      schema:
+        type: string
+    taskAfterEnqueuedAt:
+      name: afterEnqueuedAt
+      in: query
+      description: Permits to filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before the given filter value. 
+      required: false
+      schema:
+        type: string
+    taskBeforeStartedAt:
+      name: beforeStartedAt
+      in: query
+      description: Permits to filter tasks based on their startedAt time. Retrieve tasks started before the given value. 
+      required: false
+      schema:
+        type: string
+    taskAfterStartedAt:
+      name: afterStartedAt
+      in: query
+      description: Permits to filter tasks based on their startedAt time. Retrieve tasks started before the given value. 
+      required: false
+      schema:
+        type: string
+    taskBeforeFinishedAt:
+      name: beforeFinishedAt
+      in: query
+      description: Permits to filter tasks based on their finishedAt time. Retrieve tasks finished before the given filter value.
+      required: false
+      schema:
+        type: string
+    taskAfterFinishedAt:
+      name: afterFinishedAt
+      in: query
+      description: Permits to filter tasks based on their finishedAt time. Retrieve tasks finished before the given filter value.
       required: false
       schema:
         type: string
@@ -1012,6 +1066,14 @@ components:
         indexUid: movies
         status: enqueued
         type: dumpCreation
+        enqueuedAt: '2021-01-01T09:39:00.000000Z'
+    202_taskCancelation:
+      summary: 202 Accepted taskCancelation response example
+      value:
+        taskUid: 0
+        indexUid: null
+        status: enqueued
+        type: taskCancelation
         enqueuedAt: '2021-01-01T09:39:00.000000Z'
 tags:
   - name: Indexes
@@ -3406,6 +3468,54 @@ paths:
                     link: 'https://docs.meilisearch.com/errors/#task_not_found'
       operationId: tasks.get
       parameters: []
+      security:
+        - apiKey: []
+  '/tasks/cancel':
+    post:
+      summary: Cancel a task
+      description: 'Cancel a [task](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) '
+      tags:
+        - tasks
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/summarizedTask'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                Missing Task Filter:
+                  value:
+                    message: 'The required query parameters to cancel tasks are missing. Available query parameters are: `uid`, `indexUid`, `status`, `type`, `beforeEnqueuedAt`, `afterEnqueudAt`, `beforeStartedAt`, afterStartedAt`'
+                    code: missing_task_filter
+                    type: invalid_request
+                    link: 'https://docs.meilisearch.com/errors#missing_task_filter'
+                Invalid Task Uid:
+                  value:
+                    message: '`uid` is not a valid task uid. Task uid can be an integer or a string containing only numeric characters.'
+                    code: invalid_task_uid
+                    type: invalid_request
+                    link: 'https://docs.meilisearch.com/errors#invalid_task_uid'
+        '401':
+          $ref: '#/components/responses/401'
+      operationId: tasks.cancel
+      parameters:
+        - $ref: '#/components/parameters/taskUid'
+        - $ref: '#/components/parameters/taskIndexUid'
+        - $ref: '#/components/parameters/taskStatus'
+        - $ref: '#/components/parameters/taskType'
+        - $ref: '#/components/parameters/taskBeforeEnqueuedAt'
+        - $ref: '#/components/parameters/taskAfterEnqueuedAt'
+        - $ref: '#/components/parameters/taskBeforeStartedAt'
+        - $ref: '#/components/parameters/taskAfterStartedAt'
+        - $ref: '#/components/parameters/taskBeforeFinishedAt'
+        - $ref: '#/components/parameters/taskAfterFinishedAt'
       security:
         - apiKey: []
     parameters:
