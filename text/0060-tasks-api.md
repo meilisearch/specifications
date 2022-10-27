@@ -414,7 +414,7 @@ When the request is successful, Meilisearch returns the HTTP code 202 Accepted. 
 If the task you’re canceling is part of a batch, **the whole batch is stopped.** Meilisearch automatically creates a new batch once the current one is stopped and the specified tasks are canceled. The canceled tasks will not be part of the new batch.
 
 This means:
-- When the new batch is created, it may contain tasks that have been requested to be canceled in the meantime
+- When the new batch is created, it may contain tasks that have been enqueued between the batch cancelation and recreation.
 - Any progress the batch made before being canceled is lost
 
 ##### 6.3.4. Errors
