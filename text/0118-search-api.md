@@ -39,11 +39,11 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 | [`facets`](#314-facets)                               | Array of String - String | False    |
 | [`limit`](#315-limit)                                 | Integer                  | False    |
 | [`offset`](#316-offset)                               | Integer                  | False    |
-| [`hitsPerPage`](#317-hitsPerPage)                    | Integer                  | False    |
-| [`page`](#318-page)                                  | String                   | False    |
+| [`page`](#317-page)                                   | String                   | False    |
+| [`hitsPerPage`](#318-hitsperpage)                     | Integer                  | False    |
 | [`attributesToRetrieve`](#319-attributestoretrieve)   | Array of String - String | False    |
-| [`attributesToHighlight`](#3110-attributestohighlight) | Array of String - String | False    |
-| [`highlightPreTag`](#3111-highlightpretag)             | String                   | False    |
+| [`attributesToHighlight`](#3110-attributestohighlight)| Array of String - String | False    |
+| [`highlightPreTag`](#3111-highlightpretag)            | String                   | False    |
 | [`highlightPostTag`](#3112-highlightposttag)          | String                   | False    |
 | [`attributesToCrop`](#3113-attributestocrop)          | Array of String - String | False    |
 | [`cropLength`](#3114-croplength)                      | Integer                  | False    |
@@ -419,7 +419,7 @@ The distribution of the different facets is returned in the `facetDistribution` 
 
 Sets the maximum number of documents to be returned for the search query.
 
-When specified, `limit`/`offset` by-pass the [`page`](#317-page) / [`hitsPerPage`](#318-hitsperpage) parameters (see [explaination](#3181-numbered-pagination)).
+If `page` and/or `hitsPerPage` are provided as well, they by-pass `limit` which is then ignored. See [explaination](#3181-navigating-search-results-by-page-selection).
 
 - 🔴 Sending a value with a different type than `Integer` for `limit` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
@@ -431,7 +431,7 @@ When specified, `limit`/`offset` by-pass the [`page`](#317-page) / [`hitsPerPage
 
 Sets the starting point in the search results, effectively skipping over a given number of documents.
 
-When specified, `limit`/`offset` by-pass the `page` / `hitsPerPage` parameters (see [explaination](#3181-numbered-pagination)).
+If `page` and/or `hitsPerPage` are provided as well, they by-pass `offset` which is then ignored. See [explaination](#3181-navigating-search-results-by-page-selection).
 
 - 🔴 Sending a value with a different type than `Integer` for `offset` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
@@ -446,7 +446,9 @@ Sets the specific results page.
 By default, page is `null`, or `1` if `hitsPerPage` is provided. 
 The first page has a value of `1`, the second `2`, etc...
 
-When providing `page` or `hitsPerPage` in the query parameters, the `numbered pagination` system is enabled, which impacts the returned fields and the performance. See explanation on the [`numbered pagination`](#3181).
+When providing `page` or `hitsPerPage` in the query parameters, the `page selection` system is enabled, which impacts the returned fields and the performance. See explanation on the [`page selection`](#3181-navigating-search-results-by-page-selection).
+
+If `page` and/or `hitsPerPage` are provided as well, they by-pass `offset` which is then ignored. See [explaination](#3181-navigating-search-results-by-page-selection).
 
 - 🔴 Sending a value with a different type than `Integer` for `page` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
@@ -460,17 +462,20 @@ Sets the number of results returned for a query.
 
 By default, `hitsPerPage` is `null`, or `20` if `page` is provided.
 
-When providing `page` or `hitsPerPage` in the query parameters, the `numbered pagination` system is enabled, which impacts the returned fields and the performance. See explanation on the [`numbered pagination`](#3181).
+When providing `page` or `hitsPerPage` in the query parameters, the `page selection` system is enabled, which impacts the returned fields and the performance. See explanation on the [`page selection`](#3181-navigating-search-results-by-page-selection).
+
+If `page` and/or `hitsPerPage` are provided as well, they by-pass `offset` which is then ignored. See [explaination](#3181-navigating-search-results-by-page-selection).
 
 - 🔴 Sending a value with a different type than `Integer` for `hitsPerPage` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-#### 3.1.8.1. Numbered Pagination
+#### 3.1.8.1. Navigating search results by page selection
 
-By default, `limit` and `offset` are used for pagination. That pagination system, while performant, does not provide the required information to create page selection pagination. Upon using `limit`/`offset` pagination, in the returned fields, `estimatedTotalHits` is returned which provides a rough estimation of how many hits may be candidates for a given request. As it is `estimated` it should not be used.
 
-The `numbered pagination` system provides an alternative that tackles the above-mentioned issue when the user needs reliable information for its pagination. For example, when creating a pagination with numbers `<< < 1, 2, 3, ...14 > >>`. Nonetheless, it is less performant as the engine needs to compute the `totalHits` exhaustively.
+By default, `limit` and `offset` are used for pagination. That pagination system, while performant, does not provide the required information to create a correct page selection. Upon using `limit`/`offset` pagination, `estimatedTotalHits` is returned which provides a rough estimation of how many hits may be candidates for a given request.
 
-With this pagination system, it is possible to jump from one page to another using the `page` parameter and decide how many hits should be present in a page with `hitsPerPage`.
+The `page selection` system provides an alternative that tackles the above-mentioned issue when the user needs reliable information for its pagination. For example, when creating a pagination with numbers `<< < 1, 2, 3, ...14 > >>`. Nonetheless, it is less performant as the engine needs to compute the `totalHits` exhaustively.
+
+With this page selection system, it is possible to jump from one page to another using the `page` parameter and decide how many hits should be present in a page with `hitsPerPage`.
 
 As soon as either `page` or `hitsPerPage` is used as a query parameter. In the response object, `limit`, `offset`, and `estimatedTotalHits` are removed and new fields are returned:
 
@@ -489,6 +494,8 @@ When either `limit` or `offset` is specified or when neither `limit`, `offset`, 
 - [`estimatedTotalHits`](#324-estimatedtotalhits)
 - [`limit`](#322-limit)
 - [`offset`](#323-offset). 
+
+If in addition to `limit` and/or `offset`, either `page` or `hitsPerPage` is also provided, `limit`/`offset` pagination is ignored.
 
 For example, given the following query parameters:
 
@@ -523,21 +530,40 @@ The response objects contain these specific fields:
 }
 ```
 
-If in addition to `limit` and/or `offset`, either `page` or `hitsPerPage` is also provided, tje `limit` and `offset` pagination is used.
-
 ##### 3.1.8.1.2 page/hitsPerPage parameters
 
-When either `page` or `hitsPerPage` is specified, and **not** either `limit` or `offset` 
-The response object contains the following related fields: 
+When either `page` or `hitsPerPage` is specified the response object contains the following related fields:
 - [`hitsPerPage`](#326-hitsperpage)
 - [`page`](#325-page)
 - [`totalPages`](#327-totalpages)
 - [`totalHits`](#328-totalhits)
 
+If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` are provided as well, `limit` and `offset` are ignored.
+
 For example, given the following query parameters:
 
 - page: 2
 - hitsPerPage: 10
+
+The response objects contain these specific fields:
+```json
+{
+    "hits": [ 
+        /// ... 10 hits
+    ],
+    /// ... other fields
+    "page": 2,
+    "hitsPerPage": 10,
+    "totalHits": 2100,
+    "totalPages": 210
+}
+```
+
+For example, given the following query parameters:
+
+- page: 2
+- hitsPerPage: 10
+- limit: 1
 
 The response objects contain these specific fields:
 ```json
@@ -807,8 +833,8 @@ Only the documents containing ALL the query words (i.e. in the `q` parameter) ar
 | [`totalPages`](#327-totalpages)                 | Integer    | False    |
 | [`totalHits`](#328-totalhits)                   | Integer    | False    |
 | [`facetDistribution`](#329-facetdistribution)   | Object     | False    |
-| [`processingTimeMs`](#330-processingtimems)     | Integer    | True     |
-| [`query`](#331-query)                           | String     | True     |
+| [`processingTimeMs`](#3210-processingtimems)     | Integer    | True     |
+| [`query`](#3211-query)                           | String     | True     |
 
 #### 3.2.1. `hits`
 
@@ -1043,10 +1069,10 @@ The beginning of a matching term within a field is indicated by `start`, and its
 
 Returns the `limit` search parameter used for the query. 
 This field is returned only when:
-- `limit` or/and `offset` were used as query parameters.
-- `limit`, `offset`, `page`, `hitsPerPage` were not used as a query parameter 
+- `limit` and/opr `offset` are used as query parameters.
+- None of `limit`, `offset`, `page`, `hitsPerPage` are used as a query parameter
 
-See [explaination](#3181-numbered-pagination) on the different paginations.
+See [explaination](#3181-navigating-search-results-by-page-selection) on the different paginations.
 
 > See [3.1.5. `limit`](#315-limit) section.
 
@@ -1055,12 +1081,12 @@ See [explaination](#3181-numbered-pagination) on the different paginations.
 - Type: Integer
 - Required: False
 
-Returns the `offset` search parameter used for the query. This field is returned only when `limit` or/and `offset` was used as a query parameter.
+Returns the `offset` search parameter used for the query.
 This field is returned only when:
-- `limit` or/and `offset` were used as query parameters.
-- `limit`, `offset`, `page`, `hitsPerPage` were not used as query parameter 
+- `limit` and/opr `offset` are used as query parameters.
+- None of `limit`, `offset`, `page`, `hitsPerPage` are used as a query parameter
 
-See [explaination](#3181-numbered-pagination) on the different paginations.
+See [explaination](#3181-navigating-search-results-by-page-selection) on the different paginations.
 
 > See [3.1.6. `offset` section](#316-offset) section.
 
@@ -1071,14 +1097,18 @@ See [explaination](#3181-numbered-pagination) on the different paginations.
 
 Returns the estimated number of candidates for the search query. This field is returned only when `limit` or/and `offset` are used as a query parameter.
 
-See [explaination](#3181-numbered-pagination) on the different paginations.
+This field is returned only when:
+- `limit` and/opr `offset` are used as query parameters.
+- None of `limit`, `offset`, `page`, `hitsPerPage` are used as a query parameter
+
+See [explaination](#3181-navigating-search-results-by-page-selection) on the different paginations.
 
 #### 3.2.5. `page`
 
 - Type: Integer
 - Required: False
 
-Returns the current search results page. This field is returned only when the `numbered pagination` is enabled; see [explaination](#3181-numbered-pagination).
+Returns the current search results page. This field is returned only when the `page selection` feature is enabled; see [explaination](#3181-navigating-search-results-by-page-selection).
 
 > See [3.1.7. `page` section](#317-page) section.
 
@@ -1087,7 +1117,7 @@ Returns the current search results page. This field is returned only when the `n
 - Type: Integer
 - Required: False
 
-Returns the number of results contained in a search result page. This field is returned only when the `numbered pagination` is enabled; see [explaination](#3181-numbered-pagination).
+Returns the number of results contained in a search result page. This field is returned only when the `page selection` feature is enabled; see [explaination](#3181-navigating-search-results-by-page-selection).
 
 
 > See [3.1.7. `hitsPerPage` section](#318-hitsperpage) section.
@@ -1099,8 +1129,7 @@ Returns the number of results contained in a search result page. This field is r
 
 Returns the total number of results pages. Calculated using [`hitsPerPage`]. Both `totalPages` and `totalHits` are computed until they reach the `pagination.maxTotalHits` number from the settings (default `1000`).
 
-This field is returned only when the `numbered pagination` is enabled; see [explaination](#3181-numbered-pagination)..
-
+This field is returned only when the `page selection` feature is enabled; see [explaination](#3181-navigating-search-results-by-page-selection)..
 
 #### 3.2.8. `totalHits`
 
@@ -1109,7 +1138,7 @@ This field is returned only when the `numbered pagination` is enabled; see [expl
 
 Returns the total number of search results. Both `totalPages` and `totalHits` are computed until they reach the `pagination.maxTotalHits` number from the settings (default `1000`).
 
-This field is returned only when the `numbered pagination` is enabled, see [explaination](#3181-numbered-pagination)..
+This field is returned only when the `page selection` feature is enabled, see [explaination](#3181-navigating-search-results-by-page-selection)..
 
 #### 3.2.9. `facetDistribution`
 
