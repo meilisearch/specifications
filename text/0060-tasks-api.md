@@ -415,7 +415,7 @@ If the task you’re canceling is part of a batch, **the whole batch is stopped.
 
 This means:
 - When the new batch is created, it may contain tasks that have been enqueued between the batch cancelation and recreation.
-- Any progress the batch made before being canceled is lost
+- Any progress the batch made before being canceled is lost.
 
 ##### 6.3.4. Errors
 
