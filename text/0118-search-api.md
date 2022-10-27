@@ -470,25 +470,12 @@ If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` ar
 
 #### 3.1.8.1. Navigating search results by page selection
 
+By default, `limit` and `offset` are used for pagination. That pagination system, while performant, does not provide the required information to create a correct page selection. Upon using `limit`/`offset`, `estimatedTotalHits` is returned which provides a rough estimation of how many hits may be candidates for a given request. See [`limit`/`offset` usage](#31811-limitoffset-usage) for further explaination.
 
-By default, `limit` and `offset` are used for pagination. That pagination system, while performant, does not provide the required information to create a correct page selection. Upon using `limit`/`offset` pagination, `estimatedTotalHits` is returned which provides a rough estimation of how many hits may be candidates for a given request.
+The `page selection` system provides an alternative that tackles the above-mentioned issue when the user needs reliable information for its pagination. For example, when creating a pagination with numbers `<< < 1, 2, 3, ...14 > >>`. Nonetheless, it is less performant as the engine needs to compute the `totalHits` exhaustively. 
+With this page selection system, it is possible to jump from one page to another using the `page` parameter and decide how many hits should be present in a page with `hitsPerPage`. See [`page`/`hitsPerPage` usage](#31812-pagehitsperpage-usage) for further explaination.
 
-The `page selection` system provides an alternative that tackles the above-mentioned issue when the user needs reliable information for its pagination. For example, when creating a pagination with numbers `<< < 1, 2, 3, ...14 > >>`. Nonetheless, it is less performant as the engine needs to compute the `totalHits` exhaustively.
-
-With this page selection system, it is possible to jump from one page to another using the `page` parameter and decide how many hits should be present in a page with `hitsPerPage`.
-
-As soon as either `page` or `hitsPerPage` is used as a query parameter. In the response object, `limit`, `offset`, and `estimatedTotalHits` are removed and new fields are returned:
-
-- [`hitsPerPage`](#326-hitsperpage): number of results in each search results page.
-- [`page`](#325-page): current search results page. The counting starts at 1.
-- [`totalPages`](#327-totalpages): total number of results pages. Calculated using `hitsPerPage` value.
-- [`totalHits`](#328-totalhits): total number of search results.
-
-Both `totalPages` and `totalHits` are computed until they reach the `pagination.maxTotalHits` number from the settings. Default (1000).
-
-As opposed to `estimatedTotalHits`, `totalHits` is a reliable information.
-
-##### 3.1.8.1.1. Limit/offset parameters
+##### 3.1.8.1.1. Limit/offset usage
 
 When either `limit` or `offset` is specified or when neither `limit`, `offset`, `page` and `hitsPerPage` are specific, the response object contains related fields:
 - [`estimatedTotalHits`](#324-estimatedtotalhits)
@@ -530,13 +517,16 @@ The response objects contain these specific fields:
 }
 ```
 
-##### 3.1.8.1.2 page/hitsPerPage parameters
+##### 3.1.8.1.2 page/hitsPerPage usage
 
-When either `page` or `hitsPerPage` is specified the response object contains the following related fields:
-- [`hitsPerPage`](#326-hitsperpage)
-- [`page`](#325-page)
-- [`totalPages`](#327-totalpages)
-- [`totalHits`](#328-totalhits)
+As soon as either `page` or `hitsPerPage` is used as a query parameter, in the response object, `limit`, `offset`, and `estimatedTotalHits` are removed and new fields are returned:
+
+- [`hitsPerPage`](#326-hitsperpage): number of results in each search results page.
+- [`page`](#325-page): current search results page. The counting starts at 1.
+- [`totalPages`](#327-totalpages): total number of results pages. Calculated using `hitsPerPage` value.
+- [`totalHits`](#328-totalhits): total number of search results.
+
+Both `totalPages` and `totalHits` are computed until they reach the `pagination.maxTotalHits` number from the settings. Default (1000).
 
 If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` are provided as well, `limit` and `offset` are ignored.
 
