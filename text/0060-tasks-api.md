@@ -809,7 +809,7 @@ Users will not be allowed to use this route without any filters on `POST` `/task
 
 ###### 11.3.1. `uid`
 
-- Type: Integer
+- Type: String
 - Required: False
 - Default: `*`
 
