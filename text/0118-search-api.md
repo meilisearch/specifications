@@ -419,7 +419,7 @@ The distribution of the different facets is returned in the `facetDistribution` 
 
 Sets the maximum number of documents to be returned for the search query.
 
-If `page` and/or `hitsPerPage` are provided as well, they by-pass `limit` which is then ignored. See [explaination](#3181-navigating-search-results-by-page-selection).
+If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` are provided as well, `limit` and `offset` are ignored. See [explaination](#3181-navigating-search-results-by-page-selection).
 
 - 🔴 Sending a value with a different type than `Integer` for `limit` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
@@ -431,7 +431,7 @@ If `page` and/or `hitsPerPage` are provided as well, they by-pass `limit` which 
 
 Sets the starting point in the search results, effectively skipping over a given number of documents.
 
-If `page` and/or `hitsPerPage` are provided as well, they by-pass `offset` which is then ignored. See [explaination](#3181-navigating-search-results-by-page-selection).
+If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` are provided as well, `limit` and `offset` are ignored. See [explaination](#3181-navigating-search-results-by-page-selection).
 
 - 🔴 Sending a value with a different type than `Integer` for `offset` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
@@ -448,7 +448,7 @@ The first page has a value of `1`, the second `2`, etc...
 
 When providing `page` or `hitsPerPage` in the query parameters, the `page selection` system is enabled, which impacts the returned fields and the performance. See explanation on the [`page selection`](#3181-navigating-search-results-by-page-selection).
 
-If `page` and/or `hitsPerPage` are provided as well, they by-pass `offset` which is then ignored. See [explaination](#3181-navigating-search-results-by-page-selection).
+If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` are provided as well, `limit` and `offset` are ignored. See [explaination](#3181-navigating-search-results-by-page-selection).
 
 - 🔴 Sending a value with a different type than `Integer` for `page` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
@@ -464,7 +464,7 @@ By default, `hitsPerPage` is `null`, or `20` if `page` is provided.
 
 When providing `page` or `hitsPerPage` in the query parameters, the `page selection` system is enabled, which impacts the returned fields and the performance. See explanation on the [`page selection`](#3181-navigating-search-results-by-page-selection).
 
-If `page` and/or `hitsPerPage` are provided as well, they by-pass `offset` which is then ignored. See [explaination](#3181-navigating-search-results-by-page-selection).
+If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` are provided as well, `limit` and `offset` are ignored. See [explaination](#3181-navigating-search-results-by-page-selection).
 
 - 🔴 Sending a value with a different type than `Integer` for `hitsPerPage` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
