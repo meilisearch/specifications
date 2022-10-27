@@ -36,7 +36,7 @@ As writing is asynchronous for most of Meilisearch's operations, this API allows
 
 ###### Global task
 
-Some specific tasks are not associated with any particular index and apply to all.
+Some specific tasks are not associated with a particular index and apply to all. They are considered global.
 
 The fully qualified and summarized task objects linked to this kind of task display a `null` value for the `indexUid` field.
 
