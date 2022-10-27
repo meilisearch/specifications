@@ -21,7 +21,7 @@ As writing is asynchronous for most of Meilisearch's operations, this API allows
 | field      | type    | description                                                                                                                                                                                                                   |
 |------------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | uid        | string | Unique sequential identifier                                                                                                                                                                                                  |
-| indexUid   | string  | Unique index identifier. This field is `null` when the task is a [global task](# global-task).                                                   |
+| indexUid   | string  | Unique index identifier. This field is `null` when the task is a [global task](#global-task).                                                   |
 | status     | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`, `canceled`                                                                                                                          |
 | type       | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `documentAdditionOrUpdate`, `documentDeletion`, `settingsUpdate`, `dumpCreation`, `taskCancelation`                                                    |
 | canceledBy | integer | Unique identifier of the `taskCancelation` task that canceled the given task.                                                    |
@@ -49,7 +49,7 @@ List of global tasks by `type`:
 | field      | type    | description                     |
 |------------|---------|---------------------------------|
 | taskUid    | integer | Unique sequential identifier           |
-| indexUid   | string  | Unique index identifier. This field is `null` when the task is a [global task](# global-task) |
+| indexUid   | string  | Unique index identifier. This field is `null` when the task is a [global task](#global-task) |
 | status     | string  | Status of the task. Value is `enqueued` |
 | type       | string  | Type of the task |
 | enqueuedAt | string  | Represent the date and time as `RFC 3339` format when the task has been enqueued |
