@@ -749,28 +749,28 @@ components:
     taskBeforeEnqueuedAt:
       name: beforeEnqueuedAt
       in: query
-      description: Permits to filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before the given filter value. 
+      description: Permits to filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before the given filter value.
       required: false
       schema:
         type: string
     taskAfterEnqueuedAt:
       name: afterEnqueuedAt
       in: query
-      description: Permits to filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before the given filter value. 
+      description: Permits to filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before the given filter value.
       required: false
       schema:
         type: string
     taskBeforeStartedAt:
       name: beforeStartedAt
       in: query
-      description: Permits to filter tasks based on their startedAt time. Retrieve tasks started before the given value. 
+      description: Permits to filter tasks based on their startedAt time. Retrieve tasks started before the given value.
       required: false
       schema:
         type: string
     taskAfterStartedAt:
       name: afterStartedAt
       in: query
-      description: Permits to filter tasks based on their startedAt time. Retrieve tasks started before the given value. 
+      description: Permits to filter tasks based on their startedAt time. Retrieve tasks started before the given value.
       required: false
       schema:
         type: string
