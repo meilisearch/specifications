@@ -444,7 +444,7 @@ If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` ar
 Sets the specific results page.
 
 By default, page is `null`, or `1` if `hitsPerPage` is provided. 
-The first page has a value of `1`, the second `2`, etc...
+The first page has a value of `1`, the second `2`, etc... When `0` is provided as a value, no hits are returned.
 
 When providing `page` or `hitsPerPage` in the query parameters, the `page selection` system is enabled, which impacts the returned fields and the performance. See explanation on the [`page selection`](#3181-navigating-search-results-by-page-selection).
 
@@ -460,7 +460,7 @@ If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` ar
 
 Sets the number of results returned for a query.
 
-By default, `hitsPerPage` is `null`, or `20` if `page` is provided.
+By default, `hitsPerPage` is `null`, or `20` if `page` is provided. When `0` is provided as a value, no hits are returned.
 
 When providing `page` or `hitsPerPage` in the query parameters, the `page selection` system is enabled, which impacts the returned fields and the performance. See explanation on the [`page selection`](#3181-navigating-search-results-by-page-selection).
 
@@ -561,6 +561,23 @@ The response objects contain these specific fields:
     "hits": [ 
         /// ... 10 hits
     ],
+    /// ... other fields
+    "page": 2,
+    "hitsPerPage": 10,
+    "totalHits": 2100,
+    "totalPages": 210
+}
+```
+
+For example, given the following query parameters:
+
+- page: 0
+- hitsPerPage: 10
+
+The response objects contain these specific fields:
+```json
+{
+    "hits": [],
     /// ... other fields
     "page": 2,
     "hitsPerPage": 10,
