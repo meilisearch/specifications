@@ -638,6 +638,9 @@ The tasks API endpoints are filterable by  `uid`, `indexUid`, `type`, `status`, 
 
 `uid` is **case-unsensitive**.
 
+- 🔴 Sending values with a different type than `Integer` being separated by `,` for the `uid` parameter returns an `[invalid_task_uid](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalid_task_uid))` error.
+
+
 ###### 11.2.2. `indexUid`
 
 - Type: String
@@ -664,11 +667,27 @@ The tasks API endpoints are filterable by  `uid`, `indexUid`, `type`, `status`, 
 
 - 🔴 If the `type` parameter value is not consistent with one of the task types, an [`invalid_task_type`](0061-error-format-and-definitions.md#invalidtasktype) error is returned.
 
-###### 11.2.5. `beforeEnqueuedAt` and `afterEnqueuedAt`
+###### 11.2.5. Date Parameters
+
+###### 11.2.5.1. `beforeEnqueuedAt` and `afterEnqueuedAt`
 
 - Type: String
 - Required: False
 - Default: `*`
+
+###### 11.2.5.2. `beforeStartedAt` and `afterStartedAt`
+
+- Type: String
+- Required: False
+- Default: `*`
+
+###### 11.2.5.3. `beforeFinishedAt` and `afterFinishedAt`
+
+- Type: String
+- Required: False
+- Default: `*`
+
+###### 11.2.5.4. Date Format
 
 The filter accepts the RFC 3339 format. The following syntaxes are valid:
 
@@ -676,37 +695,12 @@ The filter accepts the RFC 3339 format. The following syntaxes are valid:
 - `Y-M-DTH:M:SZ`
 - `Y-M-DTH:M:S+01:00`
 
-- 🔴 The date filters are exclusive. You can cancel tasks before or after a specified date, meaning it will not be included.
-
-###### 11.2.6. `beforeStartedAt` and `afterStartedAt`
-
-- Type: String
-- Required: False
-- Default: `*`
-
-The filter accepts the RFC 3339 format. The following syntaxes are valid:
-
-- `Y-M-D`
-- `Y-M-DTH:M:SZ`
-- `Y-M-DTH:M:S+01:00`
+###### 11.2.5.5. Date Errors
 
 - 🔴 The date filters are exclusive. You can cancel tasks before or after a specified date, meaning it will not be included.
+- 🔴 Sending an invalid value for the date parameter returns an `[invalid_task_date](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalid_task_date)` error.
 
-###### 11.2.7. `beforeFinishedAt` and `afterFinishedAt`
-
-- Type: String
-- Required: False
-- Default: `*`
-
-The filter accepts the RFC 3339 format. The following syntaxes are valid:
-
-- `Y-M-D`
-- `Y-M-DTH:M:SZ`
-- `Y-M-DTH:M:S+01:00`
-
-- 🔴 The date filters are exclusive. You can cancel tasks before or after a specified date, meaning it will not be included.
-
-###### 11.2.8. Select multiple values for the same filter
+###### 11.2.6. Select multiple values for the same filter
 
 It is possible to specify multiple values for a filter using the `,` character.
 
