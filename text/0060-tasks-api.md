@@ -20,8 +20,8 @@ As writing is asynchronous for most of Meilisearch's operations, this API allows
 
 | field      | type    | description                                                                                                                                                                                                                   |
 |------------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| uid        | integer | Unique sequential identifier                                                                                                                                                                                                  |
-| indexUid   | string  | Unique index identifier. This field is `null` when the task is a [global task]().                                                   |
+| uid        | string | Unique sequential identifier                                                                                                                                                                                                  |
+| indexUid   | string  | Unique index identifier. This field is `null` when the task is a [global task](# global-task).                                                   |
 | status     | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`, `canceled`                                                                                                                          |
 | type       | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `documentAdditionOrUpdate`, `documentDeletion`, `settingsUpdate`, `dumpCreation`, `taskCancelation`                                                    |
 | canceledBy | integer | Unique identifier of the `taskCancelation` task that canceled the given task.                                                    |
@@ -49,7 +49,7 @@ List of global tasks by `type`:
 | field      | type    | description                     |
 |------------|---------|---------------------------------|
 | taskUid    | integer | Unique sequential identifier           |
-| indexUid   | string  | Unique index identifier. This field is `null` when the task is a [global task]() |
+| indexUid   | string  | Unique index identifier. This field is `null` when the task is a [global task](# global-task) |
 | status     | string  | Status of the task. Value is `enqueued` |
 | type       | string  | Type of the task |
 | enqueuedAt | string  | Represent the date and time as `RFC 3339` format when the task has been enqueued |
@@ -426,13 +426,13 @@ If a user tries canceling a `succeeded`, `failed`, or `canceled` task, it won’
 - 🔴 Sending a task cancelation without filtering query parameters returns a `[missing_task_filter](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#missing_task_filter)` error.
 - 🔴 If the `type` parameter value is not consistent with one of the task types, an `[invalid_task_type](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalid_task_type)` error is returned.
 - 🔴 If the `status` parameter value is not consistent with one of the task statuses, an `[invalid_task_status](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalid_task_status)` error is returned.
-- 🔴 Sending values with a different type than `Integer` being separated by `,` for the `uid` parameter returns an `invalid_task_uid` error.
-- 🔴 Sending an invalid value for the `beforeEnqueuedAt` parameter returns an `invalid_task_date` error.
-- 🔴 Sending an invalid value for the `afterEnqueuedAt` parameter returns an `invalid_task_date` error.
-- 🔴 Sending an invalid value for the `beforeStartedAt` parameter returns an `invalid_task_date` error.
-- 🔴 Sending an invalid value for the `afterStartedAt` parameter returns an `invalid_task_date` error.
-- 🔴 Sending an invalid value for the `beforeFinishedAt` parameter returns an `invalid_task_date` error.
-- 🔴 Sending an invalid value for the `afterFinishedAt` parameter returns an `invalid_task_date` error.
+- 🔴 Sending values with a different type than `Integer` being separated by `,` for the `uid` parameter returns an `[invalid_task_uid](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalid_task_uid))` error.
+- 🔴 Sending an invalid value for the `beforeEnqueuedAt` parameter returns an `[invalid_task_date](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalid_task_date)` error.
+- 🔴 Sending an invalid value for the `afterEnqueuedAt` parameter returns an `[invalid_task_date](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalid_task_date)` error.
+- 🔴 Sending an invalid value for the `beforeStartedAt` parameter returns an `[invalid_task_date](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalid_task_date)` error.
+- 🔴 Sending an invalid value for the `afterStartedAt` parameter returns an `[invalid_task_date](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalid_task_date)` error.
+- 🔴 Sending an invalid value for the `beforeFinishedAt` parameter returns an `[invalid_task_date](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalid_task_date)` error.
+- 🔴 Sending an invalid value for the `afterFinishedAt` parameter returns an `[invalid_task_date](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#invalid_task_date)` error.
 
 The auth layer can return the following errors if Meilisearch is secured (a master-key is defined).
 
@@ -617,15 +617,15 @@ The tasks API endpoints are filterable by  `uid`, `indexUid`, `type`, `status`, 
 
 | parameter | type   | required | description                                                                                                                                                                                                                             |
 |-----------|--------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| uid  | integer | No       | Permits to filter tasks by their related unique identifier. By default, when `uid` query parameter is not set, all the tasks are concerned. It is possible to specify several uid by separating them with the `,` character. |
+| uid  | string | No       | Permits to filter tasks by their related unique identifier. By default, when `uid` query parameter is not set, all the tasks are concerned. It is possible to specify several uid by separating them with the `,` character. |
 | indexUid  | string | No       | Permits to filter tasks by their related index. By default, when `indexUid` query parameter is not set, the tasks of all the indexes are concerned. It is possible to specify several indexUids by separating them with the `,` character. |
 | status    | string | No       | Permits to filter tasks by their status. By default, when `status` query parameter is not set, all task statuses are concerned. It's possible to specify several statuses by separating them with the `,` character.                        |
 | type      | string | No       | Permits to filter tasks by their related type. By default, when `type` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
-| beforeEnqueuedAt | string | No       |  Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before the given filter value.              |
+| beforeEnqueuedAt | string | No       | Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before the given filter value.              |
 | afterEnqueuedAt | string | No       | Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued after the given filter value.  |
 | beforeStartedAt | string | No       | Filter tasks based on their startedAt time. Retrieve tasks started before the given value.                |
 | afterStartedAt | string | No       | Filter tasks based on their startedAt time. Retrieve tasks started after the given filter value.                    |
-| beforeFinishedAt | string | No       |  Filter tasks based on their finishedAt time. Retrieve tasks finished before the given filter value.  |
+| beforeFinishedAt | string | No       | Filter tasks based on their finishedAt time. Retrieve tasks finished before the given filter value.  |
 | afterFinishedAt | string | No       | Filter tasks based on their finishedAt time. Retrieve tasks finished after the given filter value.                 |
 
 ##### 11.2. Query Parameters Behaviors

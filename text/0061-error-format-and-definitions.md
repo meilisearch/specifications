@@ -912,6 +912,75 @@ HTTP Code: `404 Not Found`
 
 ---
 
+## missing_task_filter
+
+`Synchronous`
+
+### Context
+
+This error occurs when the request does not contain any filters and they are mandatory.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "The required query parameters to cancel tasks are missing. Available query parameters are: `uid`, `indexUid`, `status`, `type`, `beforeEnqueuedAt`, `afterEnqueudAt`, `beforeStartedAt`, afterStartedAt`.",
+    "code": "missing_task_filter",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#missing_task_filter"
+}
+```
+
+---
+
+## invalid_task_uid
+
+`Synchronous`
+
+### Context
+
+This error occurs when the request does not contain any filters and they are mandatory.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "",
+    "code": "invalid_task_uid",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_task_uid"
+}
+```
+
+---
+
+## invalid_task_date
+
+`Synchronous`
+
+### Context
+
+This error occurs when the request does not contain any filters and they are mandatory.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "",
+    "code": "invalid_task_date",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_task_date"
+}
+```
+
+---
+
 ## invalid_task_status
 
 ### Context
@@ -1083,29 +1152,6 @@ HTTP Code: `400 Bad Request`
 
 - The `:payloadType` is inferred when the message is generated. e.g. `json`, `ndjson`, `csv`
 - The `:syntaxErrorHelper` is inferred when the message is generated.
-
----
-
-## missing_filters
-
-`Synchronous`
-
-### Context
-
-This error occurs when the request does not contain any filters and they are mandatory.
-
-### Error Definition
-
-HTTP Code: `400 Bad Request`
-
-```json
-{
-    "message": "Query parameters to filter the tasks to cancel are missing. Available query parameters are: `uid`, `indexUid`, `status`, `type`, `beforeEnqueuedAt`, `afterEnqueudAt`, `beforeStartedAt`, afterStartedAt`, `beforeFinishedAt`, `afterFinishedAt`.",
-    "code": "missing_filters",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#missing_filters"
-}
-```
 
 ---
 
