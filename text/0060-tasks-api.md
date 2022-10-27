@@ -38,7 +38,7 @@ As writing is asynchronous for most of Meilisearch's operations, this API allows
 
 Some specific tasks are not associated with any particular index and apply to all.
 
-The fully qualified and summarized task objects linked to this kind of task display a `null` `indexUid` field.
+The fully qualified and summarized task objects linked to this kind of task display a `null` value for the `indexUid` field.
 
 List of global tasks by `type`:
 - `dumpCreation`
