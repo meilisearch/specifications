@@ -147,7 +147,7 @@ List of global tasks by `type`:
 | --- | --- |
 | matchedTasks | The number of tasks that can be canceled based on the request. If the API key doesn’t have access to any of the indexes specified in the request, those tasks will not be included in `matchedTasks`.  |
 | canceledTasks | The number of tasks successfully canceled. If the task fails, this will be `0`. |
-| originalQuery | The filter query used in the /tasks/cancel request. |
+| originalQuery | The extracted URL query parameters used in the originating task cancelation request. |
 
 #### 5. Examples
 
