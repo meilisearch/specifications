@@ -611,7 +611,7 @@ This part demonstrates keyset paging in action on `/tasks`. The items `uid` rema
 
 #### 11. Filtering task resources
 
-The `/tasks` and `/tasks/cancel` endpoints are filterable by  `uid`, `indexUid`, `type`, `status`, `beforeEnqueuedAt`, `afterEnqueuedAt`, `beforeStartedAt`, `afterStartedAt`, `beforeFinishedAt`,  `afterFinishedAt` query parameters.
+The tasks API endpoints are filterable by  `uid`, `indexUid`, `type`, `status`, `beforeEnqueuedAt`, `afterEnqueuedAt`, `beforeStartedAt`, `afterStartedAt`, `beforeFinishedAt`,  `afterFinishedAt` query parameters.
 
 ##### 11.1 Query parameters definition
 
