@@ -1100,7 +1100,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "Query parameters to filter the tasks to cancel are missing. Available query parameters are: `uid`, `indexUid`, `status`, `type`, `beforeEnqueuedAt`, `afterEnqueudAt`, `beforeStartedAt`, afterStartedAt`",
+    "message": "Query parameters to filter the tasks to cancel are missing. Available query parameters are: `uid`, `indexUid`, `status`, `type`, `beforeEnqueuedAt`, `afterEnqueudAt`, `beforeStartedAt`, afterStartedAt`, `beforeFinishedAt`, `afterFinishedAt`.",
     "code": "missing_filters",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#missing_filters"
