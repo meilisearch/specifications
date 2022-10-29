@@ -604,27 +604,34 @@ HTTP Code: `400 Bad Request`
 
 - `:attribute` is inferred when the message is generated.
 
-#### Variant: Using `_geoDistance` as a filter expression
+#### Variant: Using a reserved keyword
 
 ```json
 {
-    "message": "`:reservedKeyword` is a reserved keyword and thus can't be used as a filter expression.",
+    "message": "`:reservedKeyword` is a reserved keyword and thus can't be used as a filter expression. Use the `_geoRadius(latitude, longitude, distance), or _geoBoundingBox((latitude, longitude), (latitude, longitude)) built-in rules to filter on `_geo` coordinates.",
     ...
 }
 ```
 
 - The `:reservedKeyword` is inferred when the message is generated.
 
-#### Variant: Using `_geo` or `_geoPoint` as a filter expression
+#### Variant: Sending an invalid latitude for a geo filter
 
 ```json
 {
-    "message": "`:reservedKeyword` is a reserved keyword and thus can't be used as a filter expression. Use the _geoRadius(latitude, longitude, distance) built-in rule to filter on _geo field coordinates.",
+    "message": "Bad latitude {value}. Latitude must be contained between -90 and 90 degrees.",
     ...
 }
 ```
 
-- The `:reservedKeyword` is inferred when the message is generated.
+#### Variant: Sending an invalid longitude for a geo filter
+
+```json
+{
+    "message": "Bad longitude {value}. Longitude must be contained between -180 and 180 degrees.",
+    ...
+}
+```
 
 #### Variant: Invalid syntax for the `filter` parameter
 
@@ -656,9 +663,7 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Attribute `:attribute` is not sortable. Available sortable attributes are: `:sortableAttributes`.",
-    "code": "invalid_sort",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_sort"
+    ...
 }
 ```
 
@@ -670,15 +675,13 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Attribute `:attribute` is not sortable. This index does not have configured sortable attributes.",
-    "code": "invalid_sort",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_sort"
+    ...
 }
 ```
 
 - The `:attribute` is inferred when the message is generated.
 
-#### Variant: Using `_geoDistance` as a sort expression
+#### Variant: Using reserved keyword as a sort expression
 
 ```json
 {
@@ -687,9 +690,8 @@ HTTP Code: `400 Bad Request`
 }
 ```
 
-- The `:reservedKeyword` is inferred when the message is generated.
+#### Variant: Using a geo reserved keyword as a sort expression
 
-#### Variant: Using `_geo` or `_geoRadius` as a sort expression
 ```json
 {
     "message": "`:reservedKeyword` is a reserved keyword and thus can't be used as a sort expression. Use the _geoPoint(latitude, longitude) built-in rule to sort on _geo field coordinates.",
@@ -699,11 +701,12 @@ HTTP Code: `400 Bad Request`
 
 - The `:reservedKeyword` is inferred when the message is generated.
 
+
 #### Variant: Invalid syntax for the `sort`parameter
 
 ```json
 {
-    "message": "Invalid syntax for the sort parameter: `:syntaxErrorHelper`.",
+    "message": "Invalid syntax for the sort parameter: expected expression ending by `:asc` or `:desc`, found `{name}`.",
     ...
 }
 ```
@@ -716,6 +719,15 @@ HTTP Code: `400 Bad Request`
 {
     "message": "The sort ranking rule must be specified in the ranking rules settings to use the sort parameter at search time.",
     ...
+}
+```
+
+#### Variant: Invalid `_geoPoint` expression
+
+```json
+{
+    "message": "Invalid syntax for the geo parameter: expected expression formated like `_geoPoint(latitude, longitude)` and ending by `:asc` or `:desc`, found `{name}`.",
+    ...,
 }
 ```
 
@@ -735,7 +747,7 @@ These errors occurs when the `_geo` field of a document payload is not valid. Ei
 
 ```json
 {
-    "message": "The `_geo` field in the document with the id: `:documentId` is not an object. Was expecting an object with the `_geo.lat` and `_geo.lng` fields but instead got `:field`.",
+    "message": "The `_geo` field in the document with the id: `{document_id}` is not an object. Was expecting an object with the `_geo.lat` and `_geo.lng` fields but instead got `{value}`.",
     "code": "invalid_geo_field",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
@@ -746,29 +758,62 @@ These errors occurs when the `_geo` field of a document payload is not valid. Ei
 
 ```json
 {
-    "message": "Could not find latitude nor longitude in the document with the id: `:documentId`. Was expecting `_geo.lat` and `_geo.lng` fields.",
+    "message": "Could not find latitude nor longitude in the document with the id: `{document_id}`. Was expecting `_geo.lat` and `_geo.lng` fields.",
     "code": "invalid_geo_field",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
 }
 ```
 
-#### Variant: Missing `_geo.lat` **or** `_geo.lng` field.
+#### Variant: Missing `_geo.lat` field.
 
 ```json
 {
-    "message": "Could not find :coord in the document with the id: `:documentId`. Was expecting a `:field` field.",
+    "message": "Could not find latitude in the document with the id: `:documentId`. Was expecting a `_geo.lat` field.",
     "code": "invalid_geo_field",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
 }
 ```
 
-#### Variant: Coordinate can't be parsed.
+#### Variant: Missing `_geo.lng` field.
 
 ```json
 {
-    "message": "Could not parse :coord in the document with the id: `:documentId`. Was expecting a finite number but instead got `:value`.",
+    "message": "Could not find longitude in the document with the id: `:documentId`. Was expecting a `_geo.lng` field.",
+    "code": "invalid_geo_field",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
+}
+```
+
+#### Variant: Latitude and longitude can't be parsed.
+
+```json
+{
+    "message": "Could not parse latitude nor longitude in the document with the id: `{document_id}`. Was expecting finite numbers but instead got `{lat}` and `{lng}`.",
+    "code": "invalid_geo_field",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
+}
+```
+
+#### Variant: Latitude can't be parsed.
+
+```json
+{
+    "message": "Could not parse latitude in the document with the id: `{document_id}`. Was expecting a finite number but instead got `{value}`.",
+    "code": "invalid_geo_field",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
+}
+```
+
+#### Variant: Longitude can't be parsed.
+
+```json
+{
+    "message": "Could not parse longitude in the document with the id: `{document_id}`. Was expecting a finite number but instead got `{value}`.",
     "code": "invalid_geo_field",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
@@ -776,8 +821,6 @@ These errors occurs when the `_geo` field of a document payload is not valid. Ei
 ```
 
 - The `:documentId` is inferred when the message is generated.
-- The `:coord` is either `latitude` or `longitude` depending on what's wrong.
-- The `:field` is either `_geo.lat` or `_geo.lng` depending on what's wrong.
 
 ---
 

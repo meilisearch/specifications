@@ -159,6 +159,10 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 > Otherwise, Meilisearch will create the index in a lazy way. See [3.2.2.4. Lazy Index Creation](#3224-lazy-index-creation).
 
 - 🔴 Sending an invalid ranking rule returns an [invalid_ranking_rule](0061-error-format-and-definitions.md#invalid_ranking_rule) error in the related asynchronous `task` resource. See [3.3.2.2. Response Definition](#3222-response-definition).
+- 🔴 Specifying a custom ranking rule containing `_geo` or `_geoDistance` returns an [invalid_ranking_rule](0061-error-format-and-definitions.md#invalid_ranking_rule) error in the related asynchronous `task` resource. See [3.3.2.2. Response Definition](#3222-response-definition).
+- 🔴 Specifying a custom ranking rule containing `_geoPoint` returns an [invalid_ranking_rule](0061-error-format-and-definitions.md#invalid_ranking_rule) error in the related asynchronous `task` resource. See [3.3.2.2. Response Definition](#3222-response-definition).
+- 🔴 Specifying a custom ranking rule containing `_geoRadius` returns an [invalid_ranking_rule](0061-error-format-and-definitions.md#invalid_ranking_rule) error in the related asynchronous `task` resource. See [3.3.2.2. Response Definition](#3222-response-definition).
+- 🔴 Specifying a custom ranking rule containing `_geoBoundingBox` returns an [invalid_ranking_rule](0061-error-format-and-definitions.md#invalid_ranking_rule) error in the related asynchronous `task` resource. See [3.3.2.2. Response Definition](#3222-response-definition).
 
 ##### 3.3.2.4. Lazy Index Creation
 
