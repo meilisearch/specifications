@@ -252,16 +252,16 @@ components:
           description: Estimated number of candidates for the search query.
         page:
           type: integer
-          description: Specific results page.
+          description: The specific search results page to fetch.
         hitsPerPage:
           type: integer
-          description: Number of results returned for a query.
+          description: Number of returned results per page.
         totalHits:
           type: integer
           description: Total number of search results.
         totalPages:
           type: integer
-          description: Total number of results pages.
+          description: Number of navigatable results pages for the search query.
         facetDistribution:
           type: object
           additionalProperties:
@@ -1800,11 +1800,11 @@ paths:
                   default: 20
                 page:
                   type: number
-                  description: Specific results page.
+                  description: The specific search results page to fetch.
                   example: 1
                 hitsPerPage:
                   type: number
-                  description: Number of results returned for a query.
+                  description: Number of returned results per page.
                   example: 20
                 sort:
                   $ref: '#/components/schemas/sort'

@@ -39,7 +39,7 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 | [`facets`](#314-facets)                               | Array of String - String | False    |
 | [`limit`](#315-limit)                                 | Integer                  | False    |
 | [`offset`](#316-offset)                               | Integer                  | False    |
-| [`page`](#317-page)                                   | String                   | False    |
+| [`page`](#317-page)                                   | Integer                  | False    |
 | [`hitsPerPage`](#318-hitsperpage)                     | Integer                  | False    |
 | [`attributesToRetrieve`](#319-attributestoretrieve)   | Array of String - String | False    |
 | [`attributesToHighlight`](#3110-attributestohighlight)| Array of String - String | False    |
@@ -431,7 +431,7 @@ If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` ar
 
 Sets the starting point in the search results, effectively skipping over a given number of documents.
 
-If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` are provided as well, `limit` and `offset` are ignored. See [explaination](#3181-navigating-search-results-by-page-selection).
+If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` are provided as well, `limit` and `offset` are ignored. See [details](#3181-navigating-search-results-by-page-selection).
 
 - 🔴 Sending a value with a different type than `Integer` for `offset` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
@@ -441,7 +441,7 @@ If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` ar
 - Required: False
 - Default: `null`
 
-Sets the specific results page.
+Sets the specific results page to fetch.
 
 By default, page is `null`, or `1` if `hitsPerPage` is provided. 
 The first page has a value of `1`, the second `2`, etc... When `0` is provided as a value, no hits are returned.
