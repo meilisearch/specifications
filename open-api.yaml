@@ -47,7 +47,7 @@ components:
       example: 20
     totalPages:
       type: integer
-      description: Returns the total number of results pages. Computed if either `page` or `hitsPerPage` is provided as a query parameter.
+      description: Returns the total number of navigatable results pages for the search query. Computed if either `page` or `hitsPerPage` is provided as a query parameter.
       example: 20
     total:
       type: integer
