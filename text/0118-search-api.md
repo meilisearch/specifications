@@ -579,7 +579,7 @@ The response objects contain these specific fields:
 {
     "hits": [],
     /// ... other fields
-    "page": 2,
+    "page": 0,
     "hitsPerPage": 10,
     "totalHits": 2100,
     "totalPages": 210
