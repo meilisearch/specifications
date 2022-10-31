@@ -39,7 +39,7 @@ components:
       example: 1
     hitsPerPage:
       type: integer
-      description: Sets the number of results returned for a query. If hitsPerPage is not provided as a query parameter, this parameter is ignored.
+      description: Sets the number of results returned per page. If hitsPerPage is not provided as a query parameter, this parameter is ignored.
       example: 20
     totalHits:
       type: integer
