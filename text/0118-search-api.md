@@ -470,10 +470,10 @@ If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` ar
 
 #### 3.1.8.1. Navigating search results by page selection
 
-By default, `limit` and `offset` are used for pagination. That pagination system, while performant, does not provide the required information to create a correct page selection. Upon using `limit`/`offset`, `estimatedTotalHits` is returned which provides a rough estimation of how many hits may be candidates for a given request. See [`limit`/`offset` usage](#31811-limitoffset-usage) for further explaination.
+By default, `limit` and `offset` are used to navigate search results. While being performant, it lacks exhaustiveness to create a seamless page selection navigation. Upon using `limit`/`offset`, `estimatedTotalHits` is returned, which provides a rough estimation of how many hits may be candidates for a given request. See [`limit`/`offset` usage](#31811-limitoffset-usage) for further explanation.
 
-The `page selection` system provides an alternative that tackles the above-mentioned issue when the user needs reliable information for its pagination. For example, when creating a pagination with numbers `<< < 1, 2, 3, ...14 > >>`. Nonetheless, it is less performant as the engine needs to compute the `totalHits` exhaustively. 
-With this page selection system, it is possible to jump from one page to another using the `page` parameter and decide how many hits should be present in a page with `hitsPerPage`. See [`page`/`hitsPerPage` usage](#31812-pagehitsperpage-usage) for further explaination.
+The `page selection` system provides an alternative that tackles the above-mentioned issue when reliable information is needed to navigate results with a page selector. e.g. A page selector component `<< < 1, 2, 3, ...14 > >>`. Nonetheless, it's considered less performant on a larger number of results as the engine needs to compute the `totalHits` exhaustively. 
+With this page selection system, it is possible to jump from one page to another using the `page` parameter and decide how many results should be returned per page with the `hitsPerPage` parameter. See [`page`/`hitsPerPage` usage](#31812-pagehitsperpage-usage) for further explanation.
 
 ##### 3.1.8.1.1. Limit/offset usage
 
@@ -519,10 +519,10 @@ The response objects contain these specific fields:
 
 ##### 3.1.8.1.2 page/hitsPerPage usage
 
-As soon as either `page` or `hitsPerPage` is used as a query parameter, in the response object, `limit`, `offset`, and `estimatedTotalHits` are removed and new fields are returned:
+As soon as either `page` or `hitsPerPage` is used as a query parameter, in the response object, `limit`, `offset`, and `estimatedTotalHits` are removed and page selection related fields are returned:
 
-- [`hitsPerPage`](#326-hitsperpage): number of results in each search results page.
-- [`page`](#325-page): current search results page. The counting starts at 1.
+- [`hitsPerPage`](#326-hitsperpage): number of results per page.
+- [`page`](#325-page): current search results page. The counting starts at `1`.
 - [`totalPages`](#327-totalpages): total number of results pages. Calculated using `hitsPerPage` value.
 - [`totalHits`](#328-totalhits): total number of search results.
 
@@ -643,7 +643,7 @@ Synonyms are also highlighted.
 
 Specifies the string to put **before** every highlighted query terms.
 
-This parameter is applied to the fields configured in `attributesToHighlight`. If there are none, this parameter has no effect. See [3.1.8. `attributesToHighlight`](3110-attributestohighlight) section.
+This parameter is applied to the fields configured in `attributesToHighlight`. If there are none, this parameter has no effect. See [3.1.10. `attributesToHighlight`](3110-attributestohighlight) section.
 
 - 🔴 Sending a value with a different type than `String` for `highlightPreTag` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
@@ -657,7 +657,7 @@ If `attributesToHighlight` is omitted while `highlightPreTag` is specified, ther
 
 Specifies the string to put **after** the highlighted query terms.
 
-This parameter is applied to the fields from `attributesToHighlight`. If there are none, this parameter has no effect. See [3.1.8. `attributesToHighlight`](3110-attributestohighlight) section.
+This parameter is applied to the fields from `attributesToHighlight`. If there are none, this parameter has no effect. See [3.1.10. `attributesToHighlight`](3110-attributestohighlight) section.
 
 - 🔴 Sending a value with a different type than `String` for `highlightPostTag` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
@@ -675,7 +675,7 @@ If `attributesToCrop` is present in the search query, the search results will in
 
 If `"*"` is provided as a value (`attributesToCrop=["*"]`), all the attributes present in `displayedAttributes` setting will be cropped.
 
-The number of words contained in the cropped value is defined by the `cropLength` parameter. See [3.1.1.12. `cropLength`](#3114-croplength) section.
+The number of words contained in the cropped value is defined by the `cropLength` parameter. See [3.1.1.14. `cropLength`](#3114-croplength) section.
 
 The value of `cropLength` can be customized per attribute. See [3.1.12.1. Custom `cropLength` Defined Per Cropped Attribute](#31121-custom-croplength-defined-per-attribute) section.
 
@@ -703,7 +703,7 @@ Tokenizer separators aren't counted as words regarding `cropLength`.
 
 Sets the total number of **words** to keep for the cropped part of an attribute specified in the `attributesToCrop` parameter. It means that if `10` is set for `cropLength`, the cropped part returned in `_formatted` will only be 10 words long.
 
-This parameter is applied to the fields from `attributesToCrop`. If there are none, this parameter has no effect. See [3.1.11. `attributesToCrop`](#3113-attributestocrop) section.
+This parameter is applied to the fields from `attributesToCrop`. If there are none, this parameter has no effect. See [3.1.13. `attributesToCrop`](#3113-attributestocrop) section.
 
 Sending a `0` value deactivates the cropping unless a custom crop length is defined for an attribute inside `attributesToCrop`.
 
@@ -755,13 +755,13 @@ and not like:
 - Required: False
 - Default: `"…"` (U+2026)
 
-Sets which string to add before and/or after the cropped text. See [3.1.11. `attributesToCrop`](#3113-attributestocrop) section.
+Sets which string to add before and/or after the cropped text. See [3.1.13. `attributesToCrop`](#3113-attributestocrop) section.
 
-The specified crop marker is applied by following rules outline in section [3.1.13.1. Applying `cropMarker`](#31131-applyi15-cropmarker).
+The specified crop marker is applied by following rules outline in section [3.1.15.1. Applying `cropMarker`](#31151-applyi15-cropmarker).
 
 Specifying `cropMarker` to `""` or `null` implies that no marker will be applied to the cropped part.
 
-This parameter is applied to the fields configured in `attributesToCrop`. If there are none, this parameter has no effect. See [3.1.11. `attributesToCrop`](#3113-attributestocrop) section.
+This parameter is applied to the fields configured in `attributesToCrop`. If there are none, this parameter has no effect. See [3.1.13. `attributesToCrop`](#3113-attributestocrop) section.
 
 - 🔴 Sending a value with a different type than `String` or `null` for `cropMarker` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
@@ -1076,10 +1076,10 @@ The beginning of a matching term within a field is indicated by `start`, and its
 
 Returns the `limit` search parameter used for the query. 
 This field is returned only when:
-- `limit` and/opr `offset` are used as query parameters.
+- `limit` and/or `offset` are used as query parameters.
 - None of `limit`, `offset`, `page`, `hitsPerPage` are used as a query parameter
 
-See [explaination](#3181-navigating-search-results-by-page-selection) on the different paginations.
+See [details](#3181-navigating-search-results-by-page-selection) on the different ways of navigating search results.
 
 > See [3.1.5. `limit`](#315-limit) section.
 
@@ -1090,10 +1090,10 @@ See [explaination](#3181-navigating-search-results-by-page-selection) on the dif
 
 Returns the `offset` search parameter used for the query.
 This field is returned only when:
-- `limit` and/opr `offset` are used as query parameters.
+- `limit` and/or `offset` are used as query parameters.
 - None of `limit`, `offset`, `page`, `hitsPerPage` are used as a query parameter
 
-See [explaination](#3181-navigating-search-results-by-page-selection) on the different paginations.
+See [explanation](#3181-navigating-search-results-by-page-selection) on the different ways of navigating search results.
 
 > See [3.1.6. `offset` section](#316-offset) section.
 
@@ -1105,17 +1105,17 @@ See [explaination](#3181-navigating-search-results-by-page-selection) on the dif
 Returns the estimated number of candidates for the search query. This field is returned only when `limit` or/and `offset` are used as a query parameter.
 
 This field is returned only when:
-- `limit` and/opr `offset` are used as query parameters.
+- `limit` and/or `offset` are used as query parameters.
 - None of `limit`, `offset`, `page`, `hitsPerPage` are used as a query parameter
 
-See [explaination](#3181-navigating-search-results-by-page-selection) on the different paginations.
+See [details](#3181-navigating-search-results-by-page-selection) on the different ways of navigation search results.
 
 #### 3.2.5. `page`
 
 - Type: Integer
 - Required: False
 
-Returns the current search results page. This field is returned only when the `page selection` feature is enabled; see [explaination](#3181-navigating-search-results-by-page-selection).
+Returns the current search results page. This field is returned only when the `page selection` feature is enabled; see [details](#3181-navigating-search-results-by-page-selection).
 
 > See [3.1.7. `page` section](#317-page) section.
 
@@ -1124,7 +1124,7 @@ Returns the current search results page. This field is returned only when the `p
 - Type: Integer
 - Required: False
 
-Returns the number of results contained in a search result page. This field is returned only when the `page selection` feature is enabled; see [explaination](#3181-navigating-search-results-by-page-selection).
+Returns the number of results per page. This field is returned only when the `page selection` feature is enabled; see [details](#3181-navigating-search-results-by-page-selection).
 
 
 > See [3.1.7. `hitsPerPage` section](#318-hitsperpage) section.
@@ -1136,7 +1136,7 @@ Returns the number of results contained in a search result page. This field is r
 
 Returns the total number of results pages. Calculated using [`hitsPerPage`]. Both `totalPages` and `totalHits` are computed until they reach the `pagination.maxTotalHits` number from the settings (default `1000`).
 
-This field is returned only when the `page selection` feature is enabled; see [explaination](#3181-navigating-search-results-by-page-selection)..
+This field is returned only when the `page selection` feature is enabled; see [details](#3181-navigating-search-results-by-page-selection).
 
 #### 3.2.8. `totalHits`
 
@@ -1145,7 +1145,7 @@ This field is returned only when the `page selection` feature is enabled; see [e
 
 Returns the total number of search results. Both `totalPages` and `totalHits` are computed until they reach the `pagination.maxTotalHits` number from the settings (default `1000`).
 
-This field is returned only when the `page selection` feature is enabled, see [explaination](#3181-navigating-search-results-by-page-selection)..
+This field is returned only when the `page selection` feature is enabled, see [details](#3181-navigating-search-results-by-page-selection).
 
 #### 3.2.9. `facetDistribution`
 
