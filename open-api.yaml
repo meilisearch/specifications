@@ -35,7 +35,7 @@ components:
       example: 0
     page:
       type: integer
-      description: Sets the specific results page. If page is not provided as a query parameter, this parameter is ignored.
+      description: Sets the specific results page to fetch. If page is not provided as a query parameter, this parameter is ignored.
       example: 1
     hitsPerPage:
       type: integer
