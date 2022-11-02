@@ -1046,7 +1046,7 @@ HTTP Code: `400 Bad Request`
 
 ### Context
 
-This error happens when no query parameters are given when a task cancelation request is send.
+This error happens when no query parameters are given when a task cancelation or a task deletion request is sent.
 
 ### Error Definition
 
