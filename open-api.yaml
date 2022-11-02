@@ -3518,6 +3518,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/summarizedTask'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_taskCancelation'
         '400':
           description: Bad Request
           content:
