@@ -446,7 +446,7 @@ Sets the specific results page to fetch.
 By default, page is `null`, or `1` if `hitsPerPage` is provided. 
 The first page has a value of `1`, the second `2`, etc... When `0` is provided as a value, no hits are returned.
 
-When providing `page` or `hitsPerPage` in the query parameters, the `page selection` system is enabled, which impacts the returned fields and the performance. See explanation on the [`page selection`](#3181-navigating-search-results-by-page-selection).
+When providing `page` or `hitsPerPage` in the query parameters, the `page selection` system is enabled, which makes it possible to navigate through the search results pages. See explanation on the [`page selection`](#3181-navigating-search-results-by-page-selection).
 
 If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` are provided as well, `limit` and `offset` are ignored. See [explaination](#3181-navigating-search-results-by-page-selection).
 
@@ -462,7 +462,7 @@ Sets the number of results returned for a query.
 
 By default, `hitsPerPage` is `null`, or `20` if `page` is provided. When `0` is provided as a value, no hits are returned.
 
-When providing `page` or `hitsPerPage` in the query parameters, the `page selection` system is enabled, which impacts the returned fields and the performance. See explanation on the [`page selection`](#3181-navigating-search-results-by-page-selection).
+When providing `page` or `hitsPerPage` in the query parameters, the `page selection` system is enabled, which makes it possible to navigate through the search results pages. See explanation on the [`page selection`](#3181-navigating-search-results-by-page-selection).
 
 If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` are provided as well, `limit` and `offset` are ignored. See [explaination](#3181-navigating-search-results-by-page-selection).
 
