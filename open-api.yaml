@@ -258,7 +258,7 @@ components:
           description: Number of returned results per page.
         totalHits:
           type: integer
-          description: Total number of search results.
+          description: Exhaustive total number of search results for the search query.
         totalPages:
           type: integer
           description: Number of navigatable results pages for the search query.
