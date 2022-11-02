@@ -477,7 +477,7 @@ With this page selection system, it is possible to jump from one page to another
 
 ##### 3.1.8.1.1. Limit/offset usage
 
-When either `limit` or `offset` is specified or when neither `limit`, `offset`, `page` and `hitsPerPage` are specific, the response object contains related fields:
+When either `limit` or `offset` is specified or when neither `limit`, `offset`, `page` and `hitsPerPage` are specified, the response object contains the related fields:
 - [`estimatedTotalHits`](#324-estimatedtotalhits)
 - [`limit`](#322-limit)
 - [`offset`](#323-offset)
