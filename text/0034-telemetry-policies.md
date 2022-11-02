@@ -59,6 +59,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | Dump Created | Occurs when a dump is created via `POST` - `/dumps`. |
 | Tasks Seen | Occurs when tasks are fetched globally via `GET` - `/tasks`. |
 | Tasks Canceled | Occurs when tasks are requested to be canceled via `POST` - `/tasks/cancel`. |
+| Tasks Deleted | Occues when tasks are requested to be deleted via `DELETE`- `/tasks`. |
 | Stats Seen | Occurs when stats are fetched via `GET` - `/stats` or `/indexes/:indexUid/stats`. |
 
 ----
@@ -132,17 +133,17 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `pagination.max_total_hits`                 | The defined value for `pagination.maxTotalHits` property | `1000` | `Settings Updated`, `Pagination Updated` |
 | `faceting.max_values_per_facet`         | The defined value for `faceting.maxValuesPerFacet` property | `100` | `Settings Updated`, `Faceting Updated` |
 | `per_task_uid`                          | `true` if an uid is used to fetch a particular task resource, otherwise `false` | true | `Tasks Seen` |
-| `filtered_by_uid`                       | `true` if tasks are filtered by the `uids` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
-| `filtered_by_index_uid`                 | `true` if tasks are filtered by the `indexUids` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
-| `filtered_by_type`                      | `true` if tasks are filtered by the `types` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
-| `filtered_by_status`                    | `true` if tasks are filtered by the `statuses` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
-| `filtered_by_canceled_by`               | `true` if tasks are filtered by the `canceledBy` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
-| `filtered_by_before_enqueued_at`        | `true` if tasks are filtered by the `beforeEnqueuedAt` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
-| `filtered_by_after_enqueued_at `        | `true` if tasks are filtered by the `afterEnqueuedAt` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
-| `filtered_by_before_started_at`         | `true` if tasks are filtered by the `beforeStartedAt` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
-| `filtered_by_after_started_at`          | `true` if tasks are filtered by the `afterStartedAt` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
-| `filtered_by_before_finished_at`        | `true` if tasks are filtered by the `beforeFinishedAt` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
-| `filtered_by_after_finished_at`         | `true` if tasks are filtered by the `afterFinishedAt` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
+| `filtered_by_uid`                       | `true` if tasks are filtered by the `uids` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled`, `Tasks Deleted` |
+| `filtered_by_index_uid`                 | `true` if tasks are filtered by the `indexUids` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled`, `Tasks Deleted` |
+| `filtered_by_type`                      | `true` if tasks are filtered by the `types` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled`, `Tasks Deleted` |
+| `filtered_by_status`                    | `true` if tasks are filtered by the `statuses` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled`, `Tasks Deleted` |
+| `filtered_by_canceled_by`               | `true` if tasks are filtered by the `canceledBy` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled`, `Tasks Deleted` |
+| `filtered_by_before_enqueued_at`        | `true` if tasks are filtered by the `beforeEnqueuedAt` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled`, `Tasks Deleted` |
+| `filtered_by_after_enqueued_at `        | `true` if tasks are filtered by the `afterEnqueuedAt` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled`, `Tasks Deleted` |
+| `filtered_by_before_started_at`         | `true` if tasks are filtered by the `beforeStartedAt` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled`, `Tasks Deleted` |
+| `filtered_by_after_started_at`          | `true` if tasks are filtered by the `afterStartedAt` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled`, `Tasks Deleted` |
+| `filtered_by_before_finished_at`        | `true` if tasks are filtered by the `beforeFinishedAt` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled`, `Tasks Deleted` |
+| `filtered_by_after_finished_at`         | `true` if tasks are filtered by the `afterFinishedAt` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled`, `Tasks Deleted` |
 | `per_index_uid` | `true` if an uid is used to fetch an index stat resource, otherwise `false` | false | `Stats Seen` |
 | `most_used_matching_strategy`      | Most used word matching strategy among all search requests in this batch | `last` | `Documents Searched POST`, `Documents Searched GET` |
 
@@ -417,6 +418,23 @@ This property allows us to gather essential information to better understand on 
 | filtered_by_index_uid                 | `true` if tasks are filtered by the `indexUids` query parameter, otherwise `false` | false |
 | filtered_by_type                      | `true` if tasks are filtered by the `types` query parameter, otherwise `false` | false |
 | filtered_by_status                    | `true` if tasks are filtered by the `statuses` query parameter, otherwise `false` | false |
+| filtered_by_canceled_by               | `true` if tasks are filtered by the `canceledBy` query parameter, otherwise `false` | false |
+| filtered_by_before_enqueued_at        | `true` if tasks are filtered by the `beforeEnqueuedAt` query parameter, otherwise `false` | false |
+| filtered_by_after_enqueued_at         | `true` if tasks are filtered by the `afterEnqueuedAt` query parameter, otherwise `false` | false |
+| filtered_by_before_started_at         | `true` if tasks are filtered by the `beforeStartedAt` query parameter, otherwise `false` | false |
+| filtered_by_after_started_at          | `true` if tasks are filtered by the `afterStartedAt` query parameter, otherwise `false` | false |
+| filtered_by_before_finished_at        | `true` if tasks are filtered by the `beforeFinishedAt` query parameter, otherwise `false` | false |
+| filtered_by_after_finished_at         | `true` if tasks are filtered by the `afterFinishedAt` query parameter, otherwise `false` | false |
+
+## `Tasks Deleted`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| filtered_by_uid                       | `true` if tasks are filtered by the `uid` query parameter, otherwise `false` | false |
+| filtered_by_index_uid                 | `true` if tasks are filtered by the `indexUid` query parameter, otherwise `false` | false |
+| filtered_by_type                      | `true` if tasks are filtered by the `type` query parameter, otherwise `false` | false |
+| filtered_by_status                    | `true` if tasks are filtered by the `status` query parameter, otherwise `false` | false |
 | filtered_by_canceled_by               | `true` if tasks are filtered by the `canceledBy` query parameter, otherwise `false` | false |
 | filtered_by_before_enqueued_at        | `true` if tasks are filtered by the `beforeEnqueuedAt` query parameter, otherwise `false` | false |
 | filtered_by_after_enqueued_at         | `true` if tasks are filtered by the `afterEnqueuedAt` query parameter, otherwise `false` | false |
