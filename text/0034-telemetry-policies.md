@@ -87,6 +87,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `infos.log_level`                       | Value of `--log-level`/`MEILI_LOG_LEVEL`                | debug             | Every Hour |
 | `infos.max_indexing_memory`                      | Value of `--max-indexing-memory`/`MEILI_MAX_INDEXING_MEMORY` in bytes     | 336042103         | Every Hour |
 | `infos.max_indexing_threads`                   | Value of `--max-indexing-threads`/`MEILI_MAX_INDEXING_THREADS` in integer | 4             | Every Hour |
+| `infos.with_configuration_file`         | `true` if the instance is launched with a configuration file, otherwise `false` | false | Every Hour |
 | `system.distribution`                   | Distribution on which MeiliSearch is launched           | Arch Linux        | Every hour |
 | `system.kernel_version`                 | Kernel version on which MeiliSearch is launched         | 5.14.10           | Every hour |
 | `system.cores`                          | Number of cores                                         | 24                | Every hour |
@@ -179,6 +180,7 @@ This property allows us to gather essential information to better understand on 
 | infos.log_level | Value of `--log-level`/`MEILI_LOG_LEVEL`  | `debug` |
 | infos.max_indexing_memory  | Value of `--max-indexing-memory`/`MEILI_MAX_INDEXING_MEMORY` in bytes     | `336042103` |
 | infos.max_indexing_threads  | Value of `--max-indexing-threads`/`MEILI_MAX_INDEXING_THREADS` in integer | `4` |
+| infos.with_configuration_file | `true` if the instance is launched with a configuration file, otherwise `false` | `false` |
 
 ##### MeiliSearch Statistics `stats`
 
