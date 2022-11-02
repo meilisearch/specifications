@@ -108,6 +108,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `q.max_terms_number`                    | Highest number of terms given for the `q` parameter in this batch | 5 | `Documents Searched POST`, `Documents Searched GET` |
 | `pagination.max_limit`                  | Highest value given for the `limit` parameter in this batch | 60 | `Documents Searched POST`, `Documents Searched GET` |
 | `pagination.max_offset`                 | Highest value given for the `offset` parameter in this batch | 1000 | `Documents Searched POST`, `Documents Searched GET` |
+| `pagination.most_used_navigation`       | Most used search results navigation among all search requests in this batch. `estimated` / `exhaustive` | `estimated` | `Documents Searched POST`, `Documents Searched GET` |
 | `formatting.highlight_pre_tag`       | `true` if `highlightPreTag` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
 | `formatting.highlight_post_tag`       | `true` if `highlightPostTag` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
 | `formatting.crop_length`                | `true` if `cropLength` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
@@ -214,6 +215,7 @@ This property allows us to gather essential information to better understand on 
 | q.max_terms_number | The maximum number of terms for the `q` parameter among all requests in the aggregated event. | `5` |
 | pagination.max_limit | The maximum limit encountered among all requests in the aggregated event. | `20` |
 | pagination.max_offset | The maxium offset encountered among all requests in the aggregated event. | `1000` |
+| pagination.most_used_navigation | Most used search results navigation among all requests in the aggregated event. `estimated` / `exhaustive` | `estimated` |
 | formatting.highlight_pre_tag | Does `highlightPreTag` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.highlight_post_tag | Does `highlightPostTag` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.crop_length | Does `cropLength` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
@@ -243,6 +245,7 @@ This property allows us to gather essential information to better understand on 
 | q.max_terms_number | The maximum number of terms for the `q` parameter among all requests in the aggregated event. | `5` |
 | pagination.max_limit | The maximum limit encountered among all requests in the aggregated event. | `20` |
 | pagination.max_offset | The maxium offset encountered among all requests in the aggregated event. | `1000` |
+| pagination.most_used_navigation | Most used search results navigation among all requests in the aggregated event. `estimated` / `exhaustive` | `estimated` |
 | formatting.highlight_pre_tag | Does `highlightPreTag` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.highlight_post_tag | Does `highlightPostTag` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.crop_length | Does `cropLength` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
