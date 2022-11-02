@@ -279,6 +279,7 @@ components:
           indexUid: movies
           status: succeeded
           type: documentAdditionOrUpdate
+          canceledBy: null
           details:
             receivedDocuments: 10
             indexedDocuments: 10
@@ -314,6 +315,9 @@ components:
             - settingsUpdate
             - dumpCreation
             - taskCancelation
+        canceledBy:
+          type: integer
+          description: The uid if of the related taskCancelation if the task has been canceled.
         details:
           type: object
           description: Details information of the task payload.
@@ -340,13 +344,13 @@ components:
               description: Identifier generated for the dump for dumpCreation task.
             matchedTasks:
               type: integer
-              description: Number of tasks that match the request.
+              description: Number of tasks that match the request for taskCancelation task.
             canceledTasks:
               type: integer
-              description: Number of tasks canceled.
+              description: Number of tasks canceled for taskCancelation task.
             originalQuery:
               type: string
-              description: Original filter query.
+              description: Original filter query for taskCancelation task.
         error:
           description: Error object containing error details and context when a task has a failed status.
           $ref: '#/components/schemas/error'
@@ -370,6 +374,9 @@ components:
         - indexUid
         - status
         - type
+        - canceledBy
+        - details
+        - error
         - enqueuedAt
         - startedAt
         - finishedAt
@@ -721,8 +728,8 @@ components:
     taskUid:
       name: taskUid
       in: path
-      description: The task unique identifier
-      required: true
+      description: Permits to filter tasks by their uid. By default, when `uid` query parameter is not set, all task uids are returned. It's possible to specify several uids by separathing them with the `,` character.
+      required: false
       schema:
         type: number
     taskIndexUid:
@@ -756,7 +763,7 @@ components:
     taskAfterEnqueuedAt:
       name: afterEnqueuedAt
       in: query
-      description: Permits to filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before the given filter value.
+      description: Permits to filter tasks based on their enqueuedAt time. Retrieve tasks enqueued after the given filter value.
       required: false
       schema:
         type: string
@@ -770,7 +777,7 @@ components:
     taskAfterStartedAt:
       name: afterStartedAt
       in: query
-      description: Permits to filter tasks based on their startedAt time. Retrieve tasks started before the given value.
+      description: Permits to filter tasks based on their startedAt time. Retrieve tasks started after the given value.
       required: false
       schema:
         type: string
@@ -784,7 +791,14 @@ components:
     taskAfterFinishedAt:
       name: afterFinishedAt
       in: query
-      description: Permits to filter tasks based on their finishedAt time. Retrieve tasks finished before the given filter value.
+      description: Permits to filter tasks based on their finishedAt time. Retrieve tasks finished after the given filter value.
+      required: false
+      schema:
+        type: string
+    taskCanceledBy:
+      name: canceledBy
+      in: query
+      description: Permits to filter tasks that have been canceled by the given taskCancelation uid.
       required: false
       schema:
         type: string
@@ -3389,9 +3403,11 @@ paths:
                         indexUid: movies
                         status: succeeded
                         type: documentAdditionOrUpdate
+                        canceledBy: null
                         details:
                           receivedDocuments: 79000
                           indexedDocuments: 79000
+                        error: null
                         duration: PT1S
                         enqueuedAt: '2021-01-01T09:39:00.000000Z'
                         startedAt: '2021-01-01T09:39:01.000000Z'
@@ -3400,6 +3416,7 @@ paths:
                         indexUid: movies_Review
                         status: failed
                         type: documentAdditionOrUpdate
+                        canceledBy: null
                         details:
                           receivedDocuments: 67493
                           indexedDocuments: 0
@@ -3419,9 +3436,17 @@ paths:
       parameters:
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/from'
+        - $ref: '#/components/parameters/taskUid'
         - $ref: '#/components/parameters/taskIndexUid'
         - $ref: '#/components/parameters/taskStatus'
         - $ref: '#/components/parameters/taskType'
+        - $ref: '#/components/parameters/taskCanceledBy'
+        - $ref: '#/components/parameters/taskBeforeEnqueuedAt'
+        - $ref: '#/components/parameters/taskAfterEnqueuedAt'
+        - $ref: '#/components/parameters/taskBeforeStartedAt'
+        - $ref: '#/components/parameters/taskAfterStartedAt'
+        - $ref: '#/components/parameters/taskBeforeFinishedAt'
+        - $ref: '#/components/parameters/taskAfterFinishedAt'
       security:
         - apiKey: []
   '/tasks/:taskUid':
@@ -3489,19 +3514,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
-              examples:
-                Missing Task Filter:
-                  value:
-                    message: 'The required query parameters to cancel tasks are missing. Available query parameters are: `uid`, `indexUid`, `status`, `type`, `beforeEnqueuedAt`, `afterEnqueudAt`, `beforeStartedAt`, afterStartedAt`'
-                    code: missing_task_filter
-                    type: invalid_request
-                    link: 'https://docs.meilisearch.com/errors#missing_task_filter'
-                Invalid Task Uid:
-                  value:
-                    message: '`uid` is not a valid task uid. Task uid can be an integer or a string containing only numeric characters.'
-                    code: invalid_task_uid
-                    type: invalid_request
-                    link: 'https://docs.meilisearch.com/errors#invalid_task_uid'
         '401':
           $ref: '#/components/responses/401'
       operationId: tasks.cancel
@@ -3510,6 +3522,7 @@ paths:
         - $ref: '#/components/parameters/taskIndexUid'
         - $ref: '#/components/parameters/taskStatus'
         - $ref: '#/components/parameters/taskType'
+        - $ref: '#/components/parameters/taskCanceledBy'
         - $ref: '#/components/parameters/taskBeforeEnqueuedAt'
         - $ref: '#/components/parameters/taskAfterEnqueuedAt'
         - $ref: '#/components/parameters/taskBeforeStartedAt'
@@ -3518,6 +3531,4 @@ paths:
         - $ref: '#/components/parameters/taskAfterFinishedAt'
       security:
         - apiKey: []
-    parameters:
-      - $ref: '#/components/parameters/taskUid'
 security: []
