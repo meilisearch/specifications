@@ -526,7 +526,7 @@ As soon as either `page` or `hitsPerPage` is used as a query parameter, in the r
 - [`totalPages`](#327-totalpages): total number of results pages. Calculated using `hitsPerPage` value.
 - [`totalHits`](#328-totalhits): total number of search results.
 
-Both `totalPages` and `totalHits` are computed until they reach the `pagination.maxTotalHits` number from the settings. Default (1000).
+Both `totalPages` and `totalHits` are computed until they reach the [`pagination.maxTotalHits`](#https://github.com/meilisearch/specifications/blob/main/text/157-pagination-setting-api.md#311-maxtotalhits) number from the settings.
 
 If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` are provided as well, `limit` and `offset` are ignored.
 
