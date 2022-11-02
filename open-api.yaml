@@ -726,7 +726,7 @@ components:
       schema:
         type: any
     taskUid:
-      name: taskUid
+      name: uid
       in: path
       description: Permits to filter tasks by their uid. By default, when `uid` query parameter is not set, all task uids are returned. It's possible to specify several uids by separathing them with the `,` character.
       required: false
@@ -3492,7 +3492,6 @@ paths:
                     type: invalid_request
                     link: 'https://docs.meilisearch.com/errors/#task_not_found'
       operationId: tasks.get
-      parameters: []
       security:
         - apiKey: []
   '/tasks/cancel':
