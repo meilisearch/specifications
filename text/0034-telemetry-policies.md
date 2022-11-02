@@ -480,7 +480,7 @@ This property allows us to gather essential information to better understand on 
 
 ## `Health Seen`
 
-> The Health Seen event is sent once an hour or when a batch reaches the maximum size of `500kb`. The event's properties are averaged over all requests on `GET` - `/health`.
+> The Health Seen event is sent once an hour or when a batch reaches the maximum size of `500kb`.
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
