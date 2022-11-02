@@ -336,7 +336,7 @@ This property allows us to gather essential information to better understand on 
 
 ## `Documents Deleted`
 
-> The Documents Deleted event is sent once an hour or when a batch reaches the maximum size of `500kb`. The event's properties are averaged over all requests for the event.
+> The Documents Deleted event is sent once an hour or when a batch reaches the maximum size of `500kb`.
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
