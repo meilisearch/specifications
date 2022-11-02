@@ -1134,7 +1134,7 @@ Returns the number of results per page. This field is returned only when the `pa
 - Type: Integer
 - Required: False
 
-Returns the total number of results pages. Calculated using [`hitsPerPage`]. Both `totalPages` and `totalHits` are computed until they reach the `pagination.maxTotalHits` number from the settings (default `1000`).
+Returns the total number of results pages. Calculated using [`hitsPerPage`]. Both `totalPages` and `totalHits` are computed until they reach the [`pagination.maxTotalHits`](#https://github.com/meilisearch/specifications/blob/main/text/157-pagination-setting-api.md#311-maxtotalhits) number from the settings.
 
 This field is returned only when the `page selection` feature is enabled; see [details](#3181-navigating-search-results-by-page-selection).
 
@@ -1143,7 +1143,7 @@ This field is returned only when the `page selection` feature is enabled; see [d
 - Type: Integer
 - Required: False
 
-Returns the total number of search results. Both `totalPages` and `totalHits` are computed until they reach the `pagination.maxTotalHits` number from the settings (default `1000`).
+Returns the total number of search results. Both `totalPages` and `totalHits` are computed until they reach the [`pagination.maxTotalHits`](#https://github.com/meilisearch/specifications/blob/main/text/157-pagination-setting-api.md#311-maxtotalhits) number from the settings.
 
 This field is returned only when the `page selection` feature is enabled, see [details](#3181-navigating-search-results-by-page-selection).
 
