@@ -729,7 +729,7 @@ components:
       name: taskUid
       in: path
       description: The task identifier
-        required: true
+      required: true
       schema:
         type: integer
     taskFilterUid:
