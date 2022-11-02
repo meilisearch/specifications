@@ -726,76 +726,83 @@ components:
       schema:
         type: any
     taskUid:
-      name: uid
+      name: taskUid
       in: path
+      description: The task identifier
+        required: true
+      schema:
+        type: integer
+    taskFilterUid:
+      name: uid
+      in: query
       description: Permits to filter tasks by their uid. By default, when `uid` query parameter is not set, all task uids are returned. It's possible to specify several uids by separathing them with the `,` character.
       required: false
       schema:
         type: number
-    taskIndexUid:
+    taskFilterIndexUid:
       name: indexUid
       in: query
       description: Permits to filter tasks by their related index. By default, when `indexUid` query parameter is not set, the tasks of all the indexes are returned. It is possible to specify several indexes by separating them with the `,` character.
       required: false
       schema:
         type: string
-    taskType:
+    taskFilterType:
       name: type
       in: query
       description: Permits to filter tasks by their related type. By default, when `type` query parameter is not set, all task types are returned. It's possible to specify several types by separating them with the `,` character.
       required: false
       schema:
         type: string
-    taskStatus:
+    taskFilterStatus:
       name: status
       in: query
       description: Permits to filter tasks by their status. By default, when `status` query parameter is not set, all task statuses are returned. It's possible to specify several types by separating them with the `,` character.
       required: false
       schema:
         type: string
-    taskBeforeEnqueuedAt:
+    taskFilterBeforeEnqueuedAt:
       name: beforeEnqueuedAt
       in: query
       description: Permits to filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before the given filter value.
       required: false
       schema:
         type: string
-    taskAfterEnqueuedAt:
+    taskFilterAfterEnqueuedAt:
       name: afterEnqueuedAt
       in: query
       description: Permits to filter tasks based on their enqueuedAt time. Retrieve tasks enqueued after the given filter value.
       required: false
       schema:
         type: string
-    taskBeforeStartedAt:
+    taskFilterBeforeStartedAt:
       name: beforeStartedAt
       in: query
       description: Permits to filter tasks based on their startedAt time. Retrieve tasks started before the given value.
       required: false
       schema:
         type: string
-    taskAfterStartedAt:
+    taskFilterAfterStartedAt:
       name: afterStartedAt
       in: query
       description: Permits to filter tasks based on their startedAt time. Retrieve tasks started after the given value.
       required: false
       schema:
         type: string
-    taskBeforeFinishedAt:
+    taskFilterBeforeFinishedAt:
       name: beforeFinishedAt
       in: query
       description: Permits to filter tasks based on their finishedAt time. Retrieve tasks finished before the given filter value.
       required: false
       schema:
         type: string
-    taskAfterFinishedAt:
+    taskFilterAfterFinishedAt:
       name: afterFinishedAt
       in: query
       description: Permits to filter tasks based on their finishedAt time. Retrieve tasks finished after the given filter value.
       required: false
       schema:
         type: string
-    taskCanceledBy:
+    taskFilterCanceledBy:
       name: canceledBy
       in: query
       description: Permits to filter tasks that have been canceled by the given taskCancelation uid.
@@ -3436,17 +3443,17 @@ paths:
       parameters:
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/from'
-        - $ref: '#/components/parameters/taskUid'
-        - $ref: '#/components/parameters/taskIndexUid'
-        - $ref: '#/components/parameters/taskStatus'
-        - $ref: '#/components/parameters/taskType'
-        - $ref: '#/components/parameters/taskCanceledBy'
-        - $ref: '#/components/parameters/taskBeforeEnqueuedAt'
-        - $ref: '#/components/parameters/taskAfterEnqueuedAt'
-        - $ref: '#/components/parameters/taskBeforeStartedAt'
-        - $ref: '#/components/parameters/taskAfterStartedAt'
-        - $ref: '#/components/parameters/taskBeforeFinishedAt'
-        - $ref: '#/components/parameters/taskAfterFinishedAt'
+        - $ref: '#/components/parameters/taskFilterUid'
+        - $ref: '#/components/parameters/taskFilterIndexUid'
+        - $ref: '#/components/parameters/taskFilterStatus'
+        - $ref: '#/components/parameters/taskFilterType'
+        - $ref: '#/components/parameters/taskFilterCanceledBy'
+        - $ref: '#/components/parameters/taskFilterBeforeEnqueuedAt'
+        - $ref: '#/components/parameters/taskFilterAfterEnqueuedAt'
+        - $ref: '#/components/parameters/taskFilterBeforeStartedAt'
+        - $ref: '#/components/parameters/taskFilterAfterStartedAt'
+        - $ref: '#/components/parameters/taskFilterBeforeFinishedAt'
+        - $ref: '#/components/parameters/taskFilterAfterFinishedAt'
       security:
         - apiKey: []
   '/tasks/:taskUid':
@@ -3469,9 +3476,11 @@ paths:
                     indexUid: movies
                     status: succeeded
                     type: documentAdditionOrUpdate
+                    canceledBy: null
                     details:
                       receivedDocuments: 79000
                       indexedDocuments: 79000
+                    error: null
                     duration: PT1S
                     enqueuedAt: '2021-01-01T09:39:00.000000Z'
                     startedAt: '2021-01-01T09:39:01.000000Z'
@@ -3492,12 +3501,14 @@ paths:
                     type: invalid_request
                     link: 'https://docs.meilisearch.com/errors/#task_not_found'
       operationId: tasks.get
+      parameters:
+        - $ref: '#/components/parameters/taskUid'
       security:
         - apiKey: []
   '/tasks/cancel':
     post:
-      summary: Cancel a task
-      description: 'Cancel a [task](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) '
+      summary: Cancel tasks
+      description: 'Cancel enqueued and/or processing [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) '
       tags:
         - tasks
       responses:
@@ -3517,17 +3528,17 @@ paths:
           $ref: '#/components/responses/401'
       operationId: tasks.cancel
       parameters:
-        - $ref: '#/components/parameters/taskUid'
-        - $ref: '#/components/parameters/taskIndexUid'
-        - $ref: '#/components/parameters/taskStatus'
-        - $ref: '#/components/parameters/taskType'
-        - $ref: '#/components/parameters/taskCanceledBy'
-        - $ref: '#/components/parameters/taskBeforeEnqueuedAt'
-        - $ref: '#/components/parameters/taskAfterEnqueuedAt'
-        - $ref: '#/components/parameters/taskBeforeStartedAt'
-        - $ref: '#/components/parameters/taskAfterStartedAt'
-        - $ref: '#/components/parameters/taskBeforeFinishedAt'
-        - $ref: '#/components/parameters/taskAfterFinishedAt'
+        - $ref: '#/components/parameters/taskFilterUid'
+        - $ref: '#/components/parameters/taskFilterIndexUid'
+        - $ref: '#/components/parameters/taskFilterStatus'
+        - $ref: '#/components/parameters/taskFilterType'
+        - $ref: '#/components/parameters/taskFilterCanceledBy'
+        - $ref: '#/components/parameters/taskFilterBeforeEnqueuedAt'
+        - $ref: '#/components/parameters/taskFilterAfterEnqueuedAt'
+        - $ref: '#/components/parameters/taskFilterBeforeStartedAt'
+        - $ref: '#/components/parameters/taskFilterAfterStartedAt'
+        - $ref: '#/components/parameters/taskFilterBeforeFinishedAt'
+        - $ref: '#/components/parameters/taskFilterAfterFinishedAt'
       security:
         - apiKey: []
 security: []
