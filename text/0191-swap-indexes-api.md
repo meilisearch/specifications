@@ -103,12 +103,12 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
-- 🔴 Sending an `indexes` array not containing **exactly** 2 indexUids for a swap operation object returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending an `indexes` array not containing **exactly** 2 indexUids for a swap operation object returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending an indexUid more than once in the request payload returns a [duplicate_index_found](0061-error-format-and-definitions.md#duplicate_index_found) error.
 
 ###### 3.4.1.3.2. Asynchronous Errors
 
 - 🔴 Sending indexUids that do not exist within the `indexes` field of a swap operation returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
-- 🔴 Sending an indexUid more than once in the request payload returns a [duplicate_index_found](0061-error-format-and-definitions.md#duplicate_index_found) error.
 
 ## 4. Technical Details
 
