@@ -3493,10 +3493,10 @@ paths:
                 $ref: '#/components/schemas/error'
       operationId: tasks.delete
       parameters:
-        - $ref: '#/components/parameters/taskFilterUid'
-        - $ref: '#/components/parameters/taskFilterIndexUid'
-        - $ref: '#/components/parameters/taskFilterStatus'
-        - $ref: '#/components/parameters/taskFilterType'
+        - $ref: '#/components/parameters/taskFilterUids'
+        - $ref: '#/components/parameters/taskFilterIndexUids'
+        - $ref: '#/components/parameters/taskFilterStatuses'
+        - $ref: '#/components/parameters/taskFilterTypes'
         - $ref: '#/components/parameters/taskFilterCanceledBy'
         - $ref: '#/components/parameters/taskFilterBeforeEnqueuedAt'
         - $ref: '#/components/parameters/taskFilterAfterEnqueuedAt'
