@@ -732,31 +732,31 @@ components:
       required: true
       schema:
         type: integer
-    taskFilterUid:
-      name: uid
+    taskFilterUids:
+      name: uids
       in: query
-      description: Permits to filter tasks by their uid. By default, when the `uid` query parameter is not set, all task uids are returned. It's possible to specify several uids by separathing them with the `,` character.
+      description: Permits to filter tasks by their uid. By default, when the `uids` query parameter is not set, all task uids are returned. It's possible to specify several uids by separathing them with the `,` character.
       required: false
       schema:
         type: number
-    taskFilterIndexUid:
-      name: indexUid
+    taskFilterIndexUids:
+      name: indexUids
       in: query
-      description: Permits to filter tasks by their related index. By default, when `indexUid` query parameter is not set, the tasks of all the indexes are returned. It is possible to specify several indexes by separating them with the `,` character.
+      description: Permits to filter tasks by their related index. By default, when `indexUids` query parameter is not set, the tasks of all the indexes are returned. It is possible to specify several indexes by separating them with the `,` character.
       required: false
       schema:
         type: string
-    taskFilterType:
-      name: type
+    taskFilterTypes:
+      name: types
       in: query
-      description: Permits to filter tasks by their related type. By default, when `type` query parameter is not set, all task types are returned. It's possible to specify several types by separating them with the `,` character.
+      description: Permits to filter tasks by their related type. By default, when `types` query parameter is not set, all task types are returned. It's possible to specify several types by separating them with the `,` character.
       required: false
       schema:
         type: string
-    taskFilterStatus:
-      name: status
+    taskFilterStatuses:
+      name: statuses
       in: query
-      description: Permits to filter tasks by their status. By default, when `status` query parameter is not set, all task statuses are returned. It's possible to specify several types by separating them with the `,` character.
+      description: Permits to filter tasks by their status. By default, when `statuses` query parameter is not set, all task statuses are returned. It's possible to specify several statuses by separating them with the `,` character.
       required: false
       schema:
         type: string
@@ -805,7 +805,7 @@ components:
     taskFilterCanceledBy:
       name: canceledBy
       in: query
-      description: Permits to filter tasks using the uid of the task that canceled them.
+      description: Permits to filter tasks using the uid of the task that canceled them. It's possible to specify several task uids by separating them with the `,` character.
       required: false
       schema:
         type: string
@@ -3443,10 +3443,10 @@ paths:
       parameters:
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/from'
-        - $ref: '#/components/parameters/taskFilterUid'
-        - $ref: '#/components/parameters/taskFilterIndexUid'
-        - $ref: '#/components/parameters/taskFilterStatus'
-        - $ref: '#/components/parameters/taskFilterType'
+        - $ref: '#/components/parameters/taskFilterUids'
+        - $ref: '#/components/parameters/taskFilterIndexUids'
+        - $ref: '#/components/parameters/taskFilterStatuses'
+        - $ref: '#/components/parameters/taskFilterTypes'
         - $ref: '#/components/parameters/taskFilterCanceledBy'
         - $ref: '#/components/parameters/taskFilterBeforeEnqueuedAt'
         - $ref: '#/components/parameters/taskFilterAfterEnqueuedAt'
@@ -3531,10 +3531,10 @@ paths:
           $ref: '#/components/responses/401'
       operationId: tasks.cancel
       parameters:
-        - $ref: '#/components/parameters/taskFilterUid'
-        - $ref: '#/components/parameters/taskFilterIndexUid'
-        - $ref: '#/components/parameters/taskFilterStatus'
-        - $ref: '#/components/parameters/taskFilterType'
+        - $ref: '#/components/parameters/taskFilterUids'
+        - $ref: '#/components/parameters/taskFilterIndexUids'
+        - $ref: '#/components/parameters/taskFilterStatuses'
+        - $ref: '#/components/parameters/taskFilterTypes'
         - $ref: '#/components/parameters/taskFilterCanceledBy'
         - $ref: '#/components/parameters/taskFilterBeforeEnqueuedAt'
         - $ref: '#/components/parameters/taskFilterAfterEnqueuedAt'

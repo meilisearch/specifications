@@ -132,10 +132,10 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `pagination.max_total_hits`                 | The defined value for `pagination.maxTotalHits` property | `1000` | `Settings Updated`, `Pagination Updated` |
 | `faceting.max_values_per_facet`         | The defined value for `faceting.maxValuesPerFacet` property | `100` | `Settings Updated`, `Faceting Updated` |
 | `per_task_uid`                          | `true` if an uid is used to fetch a particular task resource, otherwise `false` | true | `Tasks Seen` |
-| `filtered_by_uid`                       | `true` if tasks are filtered by the `uid` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
-| `filtered_by_index_uid`                 | `true` if tasks are filtered by the `indexUid` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
-| `filtered_by_type`                      | `true` if tasks are filtered by the `type` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
-| `filtered_by_status`                    | `true` if tasks are filtered by the `status` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
+| `filtered_by_uid`                       | `true` if tasks are filtered by the `uids` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
+| `filtered_by_index_uid`                 | `true` if tasks are filtered by the `indexUids` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
+| `filtered_by_type`                      | `true` if tasks are filtered by the `types` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
+| `filtered_by_status`                    | `true` if tasks are filtered by the `statuses` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
 | `filtered_by_canceled_by`               | `true` if tasks are filtered by the `canceledBy` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
 | `filtered_by_before_enqueued_at`        | `true` if tasks are filtered by the `beforeEnqueuedAt` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
 | `filtered_by_after_enqueued_at `        | `true` if tasks are filtered by the `afterEnqueuedAt` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled` |
@@ -396,10 +396,10 @@ This property allows us to gather essential information to better understand on 
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | per_task_uid  | `true` if an uid is used to fetch a particular task resource, otherwise `false` | `true` |
-| filtered_by_uid                       | `true` if tasks are filtered by the `uid` query parameter, otherwise `false` | false |
-| filtered_by_index_uid                 | `true` if tasks are filtered by the `indexUid` query parameter, otherwise `false` | false |
-| filtered_by_type                      | `true` if tasks are filtered by the `type` query parameter, otherwise `false` | false |
-| filtered_by_status                    | `true` if tasks are filtered by the `status` query parameter, otherwise `false` | false |
+| filtered_by_uid                       | `true` if tasks are filtered by the `uids` query parameter, otherwise `false` | false |
+| filtered_by_index_uid                 | `true` if tasks are filtered by the `indexUids` query parameter, otherwise `false` | false |
+| filtered_by_type                      | `true` if tasks are filtered by the `types` query parameter, otherwise `false` | false |
+| filtered_by_status                    | `true` if tasks are filtered by the `statuses` query parameter, otherwise `false` | false |
 | filtered_by_canceled_by               | `true` if tasks are filtered by the `canceledBy` query parameter, otherwise `false` | false |
 | filtered_by_before_enqueued_at        | `true` if tasks are filtered by the `beforeEnqueuedAt` query parameter, otherwise `false` | false |
 | filtered_by_after_enqueued_at         | `true` if tasks are filtered by the `afterEnqueuedAt` query parameter, otherwise `false` | false |
@@ -413,10 +413,10 @@ This property allows us to gather essential information to better understand on 
 | Property name | Description | Example |
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
-| filtered_by_uid                       | `true` if tasks are filtered by the `uid` query parameter, otherwise `false` | false |
-| filtered_by_index_uid                 | `true` if tasks are filtered by the `indexUid` query parameter, otherwise `false` | false |
-| filtered_by_type                      | `true` if tasks are filtered by the `type` query parameter, otherwise `false` | false |
-| filtered_by_status                    | `true` if tasks are filtered by the `status` query parameter, otherwise `false` | false |
+| filtered_by_uid                       | `true` if tasks are filtered by the `uids` query parameter, otherwise `false` | false |
+| filtered_by_index_uid                 | `true` if tasks are filtered by the `indexUids` query parameter, otherwise `false` | false |
+| filtered_by_type                      | `true` if tasks are filtered by the `types` query parameter, otherwise `false` | false |
+| filtered_by_status                    | `true` if tasks are filtered by the `statuses` query parameter, otherwise `false` | false |
 | filtered_by_canceled_by               | `true` if tasks are filtered by the `canceledBy` query parameter, otherwise `false` | false |
 | filtered_by_before_enqueued_at        | `true` if tasks are filtered by the `beforeEnqueuedAt` query parameter, otherwise `false` | false |
 | filtered_by_after_enqueued_at         | `true` if tasks are filtered by the `afterEnqueuedAt` query parameter, otherwise `false` | false |

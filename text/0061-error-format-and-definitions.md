@@ -912,13 +912,13 @@ HTTP Code: `404 Not Found`
 
 ---
 
-## invalid_task_uid
+## invalid_task_uids_filter
 
 `Synchronous`
 
 ### Context
 
-This error occurs when the `uid` query parameter contains invalid values.
+This error occurs when the `uids` query parameter contains invalid values.
 
 ### Error Definition
 
@@ -927,9 +927,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Task uid `:uid` is invalid. It should only contains numeric characters separated by `,` character.",
-    "code": "invalid_task_uid",
+    "code": "invalid_task_uids_filter",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_task_uid"
+    "link": "https://docs.meilisearch.com/errors#invalid_task_uids_filter"
 }
 ```
 
@@ -937,7 +937,7 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_task_date
+## invalid_task_date_filter
 
 `Synchronous`
 
@@ -952,9 +952,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Task `:dateFilterName` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
-    "code": "invalid_task_date",
+    "code": "invalid_task_date_filter",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_task_date"
+    "link": "https://docs.meilisearch.com/errors#invalid_task_date_filter"
 }
 ```
 
@@ -963,7 +963,7 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_task_status
+## invalid_task_statuses_filter
 
 `Synchronous`
 
@@ -978,9 +978,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Task status `:status` is invalid. Available task statuses are: `:taskStatuses`.",
-    "code": "invalid_task_status",
+    "code": "invalid_task_statuses_filter",
     "type": "invalid_request",
-    "link":"https://docs.meilisearch.com/errors#invalid_task_status"
+    "link":"https://docs.meilisearch.com/errors#invalid_task_statuses_filter"
 }
 ```
 
@@ -989,7 +989,7 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_task_type
+## invalid_task_types_filter
 
 `Synchronous`
 
@@ -1004,9 +1004,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Task type `:type` is invalid. Available task types are: `:taskTypes`.",
-    "code": "invalid_task_type",
+    "code": "invalid_task_types_filter",
     "type": "invalid_request",
-    "link":"https://docs.meilisearch.com/errors#invalid_task_type"
+    "link":"https://docs.meilisearch.com/errors#invalid_task_types_filter"
 }
 ```
 
@@ -1015,7 +1015,7 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_task_canceled_by
+## invalid_task_canceled_by_filter
 
 `Synchronous`
 
@@ -1030,9 +1030,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Task canceledBy `:canceledBy` is invalid. It should only contains numeric characters.",
-    "code": "invalid_task_type",
+    "code": "invalid_task_canceled_by_filter",
     "type": "invalid_request",
-    "link":"https://docs.meilisearch.com/errors#invalid_task_canceled_by"
+    "link":"https://docs.meilisearch.com/errors#invalid_task_canceled_by_filter"
 }
 ```
 
