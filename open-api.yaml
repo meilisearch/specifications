@@ -317,7 +317,7 @@ components:
             - taskCancelation
         canceledBy:
           type: integer
-          description: The uid if of the related taskCancelation if the task has been canceled.
+          description: The uid of the task that performed the taskCancelation if the task has been canceled.
         details:
           type: object
           description: Details information of the task payload.
@@ -344,13 +344,13 @@ components:
               description: Identifier generated for the dump for dumpCreation task.
             matchedTasks:
               type: integer
-              description: Number of tasks that match the request for taskCancelation task.
+              description: Number of tasks that match the task cancelation request.
             canceledTasks:
               type: integer
-              description: Number of tasks canceled for taskCancelation task.
+              description: Number of tasks canceled.
             originalFilters:
               type: string
-              description: Original filter query for taskCancelation task.
+              description: Filters used for the cancelation task.
         error:
           description: Error object containing error details and context when a task has a failed status.
           $ref: '#/components/schemas/error'
@@ -735,7 +735,7 @@ components:
     taskFilterUid:
       name: uid
       in: query
-      description: Permits to filter tasks by their uid. By default, when `uid` query parameter is not set, all task uids are returned. It's possible to specify several uids by separathing them with the `,` character.
+      description: Permits to filter tasks by their uid. By default, when the `uid` query parameter is not set, all task uids are returned. It's possible to specify several uids by separathing them with the `,` character.
       required: false
       schema:
         type: number
@@ -763,49 +763,49 @@ components:
     taskFilterBeforeEnqueuedAt:
       name: beforeEnqueuedAt
       in: query
-      description: Permits to filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before the given filter value.
+      description: Permits to filter tasks based on their enqueuedAt time. Matches tasks enqueued before the given date.
       required: false
       schema:
         type: string
     taskFilterAfterEnqueuedAt:
       name: afterEnqueuedAt
       in: query
-      description: Permits to filter tasks based on their enqueuedAt time. Retrieve tasks enqueued after the given filter value.
+      description: Permits to filter tasks based on their enqueuedAt time. Matches tasks enqueued after the given date.
       required: false
       schema:
         type: string
     taskFilterBeforeStartedAt:
       name: beforeStartedAt
       in: query
-      description: Permits to filter tasks based on their startedAt time. Retrieve tasks started before the given value.
+      description: Permits to filter tasks based on their startedAt time. Matches tasks started before the given date.
       required: false
       schema:
         type: string
     taskFilterAfterStartedAt:
       name: afterStartedAt
       in: query
-      description: Permits to filter tasks based on their startedAt time. Retrieve tasks started after the given value.
+      description: Permits to filter tasks based on their startedAt time. Matches tasks started after the given date.
       required: false
       schema:
         type: string
     taskFilterBeforeFinishedAt:
       name: beforeFinishedAt
       in: query
-      description: Permits to filter tasks based on their finishedAt time. Retrieve tasks finished before the given filter value.
+      description: Permits to filter tasks based on their finishedAt time. Matches tasks finished before the given date.
       required: false
       schema:
         type: string
     taskFilterAfterFinishedAt:
       name: afterFinishedAt
       in: query
-      description: Permits to filter tasks based on their finishedAt time. Retrieve tasks finished after the given filter value.
+      description: Permits to filter tasks based on their finishedAt time. Matches tasks finished after the given date.
       required: false
       schema:
         type: string
     taskFilterCanceledBy:
       name: canceledBy
       in: query
-      description: Permits to filter tasks that have been canceled by the given taskCancelation uid.
+      description: Permits to filter tasks using the uid of the task that canceled them.
       required: false
       schema:
         type: string
