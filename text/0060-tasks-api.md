@@ -707,9 +707,9 @@ Filter tasks by the `taskCancelation` uid that canceled them. It's possible to s
 
 Date filters accepts the RFC 3339 format. The following syntaxes are valid:
 
-- `Y-M-D`
-- `Y-M-DTH:M:SZ`
-- `Y-M-DTH:M:S+01:00`
+- `YYYY-MM-DD`
+- `YYYY-MM-DDTHH:MM:SSZ`
+- `YYYY-MM-DDTHH:MM:SS+01:00`
 
 ###### 11.2.6.1. `beforeEnqueuedAt` and `afterEnqueuedAt`
 
