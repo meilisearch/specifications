@@ -59,7 +59,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | Dump Created | Occurs when a dump is created via `POST` - `/dumps`. |
 | Tasks Seen | Occurs when tasks are fetched globally via `GET` - `/tasks`. |
 | Tasks Canceled | Occurs when tasks are requested to be canceled via `POST` - `/tasks/cancel`. |
-| Tasks Deleted | Occues when tasks are requested to be deleted via `DELETE`- `/tasks`. |
+| Tasks Deleted | Occurs when tasks are requested to be deleted via `DELETE`- `/tasks`. |
 | Stats Seen | Occurs when stats are fetched via `GET` - `/stats` or `/indexes/:indexUid/stats`. |
 
 ----
