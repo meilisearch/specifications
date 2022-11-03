@@ -146,7 +146,7 @@ List of global tasks by `type`:
 
 | Name          | Description |
 | ------------- | ----------- |
-| matchedTasks  | The number of tasks that can be canceled based on the request. If the API key doesn’t have access to any of the indexes specified in the request via the `indexUid` query parameter, those tasks will not be included in `matchedTasks`. `null` when the task status is enqueued. |
+| matchedTasks  | The number of tasks that can be canceled based on the request. If the API key doesn’t have access to any of the indexes specified in the request via the `indexUid` query parameter, those tasks will not be included in `matchedTasks`. | 
 | canceledTasks | The number of tasks successfully canceled. If the task fails, `0` is displayed. `null` when the task status is enqueud or processing. |
 | originalFilters | The extracted URL query parameters used in the originating task cancelation request. |
 
