@@ -486,7 +486,7 @@ See [0119-instance-options](0119-instance-options.md##3312-max-taskdb-size)
 
 #### 10. Paginate `task` resource lists
 
-The API endpoint `/tasks` is browsable using a keyset-based pagination.
+The API endpoint `GET /tasks` is browsable using a keyset-based pagination.
 
 ##### 10.1. Why a Seek/Keyset based pagination?
 
@@ -647,15 +647,19 @@ The tasks API endpoints are filterable by  `uid`, `indexUid`, `type`, `status`, 
 
 ###### 11.2.1. `uid`
 
+ Filter tasks by their related unique identifier. By default, when `uid` query parameter is not set, all the tasks are concerned. It is possible to specify several uid by separating them with the `,` character.
+
 - Type: Integer
 - Required: False
 - Default: `*`
 
 `uid` is **case-unsensitive**.
 
-- 🔴 Sending values with a different type than `Integer` being separated by `,` for the `uid` parameter returns an [`invalid_task_uid`](0061-error-format-and-definitions.md#invalid_task_uid) error.
+- 🔴 Sending values with a different type than `Integer` being separated by `,` for the `uid` parameter returns an [`invalid_task_uid`](0061-error-format-and-definitions.md#invalid_task_uid) error.
 
 ###### 11.2.2. `indexUid`
+
+Filter tasks by their related index. By default, when `indexUid` query parameter is not set, the tasks of all the indexes are concerned. It is possible to specify several indexUids by separating them with the `,` character.
 
 - Type: String
 - Required: False
@@ -665,6 +669,8 @@ The tasks API endpoints are filterable by  `uid`, `indexUid`, `type`, `status`, 
 
 ###### 11.2.3. `status`
 
+Filter tasks by their status. By default, when `status` query parameter is not set, all task statuses are concerned. It's possible to specify several statuses by separating them with the `,` character.
+
 - Type: String
 - Required: False
 - Default: `*`
@@ -672,6 +678,8 @@ The tasks API endpoints are filterable by  `uid`, `indexUid`, `type`, `status`, 
 - 🔴 If the `status` parameter value is not consistent with one of the task statuses, an [`invalid_task_status`](0061-error-format-and-definitions.md#invalid_task_status) error is returned.
 
 ###### 11.2.4. `type`
+
+Filter tasks by their related type. By default, when `type` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.
 
 - Type: String
 - Required: False
@@ -682,6 +690,8 @@ The tasks API endpoints are filterable by  `uid`, `indexUid`, `type`, `status`, 
 - 🔴 If the `type` parameter value is not consistent with one of the task types, an [`invalid_task_type`](0061-error-format-and-definitions.md#invalid_task_type) error is returned.
 
 ###### 11.2.5. `canceledBy`
+
+Filter tasks by the `taskCancelation` uid that canceled them.
 
 - Type: Integer
 - Required: False
@@ -701,6 +711,8 @@ Date filters accepts the RFC 3339 format. The following syntaxes are valid:
 
 ###### 11.2.6.1. `beforeEnqueuedAt` and `afterEnqueuedAt`
 
+Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before/after the given filter value.
+
 - Type: String
 - Required: False
 - Default: `*`
@@ -710,6 +722,8 @@ Date filters accepts the RFC 3339 format. The following syntaxes are valid:
 
 ###### 11.2.6.2. `beforeStartedAt` and `afterStartedAt`
 
+Filter tasks based on their startedAt time. Retrieve tasks started before/after the given filter value.
+
 - Type: String
 - Required: False
 - Default: `*`
@@ -718,6 +732,8 @@ Date filters accepts the RFC 3339 format. The following syntaxes are valid:
 - 🔴 Sending an invalid value for the date parameter returns an [`invalid_task_date`](0061-error-format-and-definitions.md#invalid_task_date) error.
 
 ###### 11.2.6.3. `beforeFinishedAt` and `afterFinishedAt`
+
+Filter tasks based on their finishedAt time. Retrieve tasks finished before/after the given filter value.
 
 - Type: String
 - Required: False
