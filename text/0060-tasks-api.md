@@ -467,7 +467,7 @@ The auth layer can return the following errors if Meilisearch is secured (a mast
 
 ##### 6.4 Delete tasks | `DELETE` - `/tasks`
 
-###### 6.4.1 Goals
+##### 6.4.1 Goals
 
 Allows users to delete a finished (`succeeded`, `processing` or `canceled`) tasks.
 
@@ -483,11 +483,11 @@ Allows users to delete a finished (`succeeded`, `processing` or `canceled`) task
 }
 ```
 
-###### 6.4.2. Response Definition
+##### 6.4.2. Response Definition
 
 When the request is successful, Meilisearch returns the HTTP code 202 Accepted. The response's content is the summarized representation of the received asynchronous task.
 
-###### 6.4.3. Errors
+##### 6.4.3. Errors
 
 If a user tries deleting an `enqueued`, or `processing` task, it won’t throw an error. Task deletion is an atomic transaction; all tasks are successfully deleted, or none aren't.
 
