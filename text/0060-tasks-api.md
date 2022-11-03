@@ -148,7 +148,7 @@ List of global tasks by `type`:
 | ------------- | ----------- |
 | matchedTasks  | The number of tasks that can be canceled based on the request. If the API key doesn’t have access to any of the indexes specified in the request via the `indexUid` query parameter, those tasks will not be included in `matchedTasks`. `null` when the task status is enqueued. |
 | canceledTasks | The number of tasks successfully canceled. If the task fails, `0` is displayed. `null` when the task status is enqueud or processing. |
-| originalQuery | The extracted URL query parameters used in the originating task cancelation request. |
+| originalFilters | The extracted URL query parameters used in the originating task cancelation request. |
 
 #### 5. Examples
 
@@ -446,7 +446,7 @@ This means:
 
 If a user tries canceling a `succeeded`, `failed`, or `canceled` task, it won’t throw an error. Task cancelation is an atomic transaction; all tasks are successfully canceled, or none aren't.
 
-- 🔴 Sending a task cancelation without filtering query parameters returns a `[missing_task_filter](https://github.com/meilisearch/specifications/blob/main/text/0061-error-format-and-definitions.md#missing_task_filter)` error.
+- 🔴 Sending a task cancelation without filtering query parameters returns a [missing_task_filters](0061-error-format-and-definitions.md#missing_task_filters) error.
 
 The auth layer can return the following errors if Meilisearch is secured (a master-key is defined).
 

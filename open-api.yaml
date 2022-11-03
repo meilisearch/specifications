@@ -348,7 +348,7 @@ components:
             canceledTasks:
               type: integer
               description: Number of tasks canceled for taskCancelation task.
-            originalQuery:
+            originalFilters:
               type: string
               description: Original filter query for taskCancelation task.
         error:
