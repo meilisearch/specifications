@@ -1029,7 +1029,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "Task canceledBy `:canceledBy` is invalid. It should only contains numeric characters.",
+    "message": "Task canceledBy `:canceledBy` is invalid. It should only contains numeric characters separated by `,` character.",
     "code": "invalid_task_canceled_by_filter",
     "type": "invalid_request",
     "link":"https://docs.meilisearch.com/errors#invalid_task_canceled_by_filter"
