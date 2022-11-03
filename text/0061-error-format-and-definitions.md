@@ -858,7 +858,7 @@ HTTP Code: `404 Not Found` when
 
 ### Context
 
-This error happens when the same indexUid is found twice for a `POST`- `swap-indexes` payload.
+This error happens when the same indexUid is used twice in the `POST`- `swap-indexes` payload.
 
 ### Error Definition
 

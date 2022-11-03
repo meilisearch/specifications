@@ -10,7 +10,7 @@ It's critical to deploy a new version of an index without any downtimes to the s
 
 ## 3. Functional Specification
 
-### 3.1. 0 dowtime deployment workflow
+### 3.1. 0 downtime deployment workflow
 
 A user has big changes to make on an index. It could be important document schema or index settings changes.
 
