@@ -854,7 +854,7 @@ HTTP Code: `404 Not Found` when
 
 ## duplicate_index_found
 
-`Asynchronous`
+`Synchronous`
 
 ### Context
 

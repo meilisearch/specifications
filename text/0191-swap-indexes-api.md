@@ -12,9 +12,7 @@ It's critical to deploy a new version of an index without any downtimes to the s
 
 ### 3.1. 0 downtime deployment workflow
 
-A user has big changes to make on an index. It could be important document schema or index settings changes.
-
-The zero-downtimes deployment looks like this:
+A 0 downtime deployment looks like this:
 
 1. Search clients search on `indexA`.
 2. The developer builds a new index `indexB` representing the new index version to deploy to the search clients.
@@ -30,7 +28,7 @@ This means that for a search experience built using multiple indexes, Meilisearc
 
 There is no need to deploy each new version of indexes one by one.
 
-### 3.3. Enqueud Tasks After A Swap Operation Creation
+### 3.3. Enqueued Tasks After A Swap Operation Creation
 
 Tasks enqueued after an `indexSwap` task creation date do not have their `indexUid` modified when the `indexSwap` will succeed. That is, if they are enqueued on `indexA`, they will run on the new version of `indexA`.
 
