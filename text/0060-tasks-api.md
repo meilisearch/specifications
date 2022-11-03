@@ -24,7 +24,7 @@ As writing is asynchronous for most of Meilisearch's operations, this API allows
 | indexUid   | string  | Unique index identifier. This field is `null` when the task is a [global task](#global-task).                                                   |
 | status     | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`, `canceled`                                                                                                                          |
 | type       | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `documentAdditionOrUpdate`, `documentDeletion`, `settingsUpdate`, `dumpCreation`, `taskCancelation`                                                    |
-| canceledBy | integer | Unique identifier of the `taskCancelation` task that canceled the given task. Default is set to `null`.                                                    |
+| canceledBy | integer | Unique identifier of the task that canceled this task. Default is set to `null`.                                                    |
 | details    | object  | Details information for a task payload. See Task Details part.                                                                                                                                                                |
 | error      | object  | Error object containing error details and context when a task has a `failed` status. See [0061-error-format-and-definitions.md](0061-error-format-and-definitions.md). Default is set to `null`. |
 | duration   | string  | Total elapsed time the engine was in processing state expressed as an `ISO-8601` duration format. Times below the second can be expressed with the `.` notation, e.g., `PT0.5S` to express `500ms`. Default is set to `null`. |
@@ -436,7 +436,7 @@ When the request is successful, Meilisearch returns the HTTP code 202 Accepted. 
 
 ##### 6.3.3. Auto-batching
 
-If the task you’re canceling is part of a batch, **the whole batch is stopped.** Meilisearch automatically creates a new batch once the current one is stopped and the specified tasks are canceled. The canceled tasks will not be part of the new batch.
+If the task you’re canceling is part of a batch, **the whole batch is stopped.** Once it is stopped, Meilisearch automatically creates a new batch with the remaining tasks. The canceled tasks are not part of the new batch.
 
 This means:
 - When the new batch is created, it may contain tasks that have been enqueued between the batch cancelation and recreation.
