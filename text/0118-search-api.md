@@ -1124,7 +1124,6 @@ Returns the current search results page. This field is returned only when the `p
 
 Returns the number of results per page. This field is returned only when the `page selection` feature is enabled; see [details](#3181-navigating-search-results-by-page-selection).
 
-
 > See [3.1.7. `hitsPerPage` section](#318-hitsperpage) section.
 
 #### 3.2.7. `totalPages`
