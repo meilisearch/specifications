@@ -1089,7 +1089,7 @@ See [details](#3181-navigating-search-results-by-page-selection) on the differen
 - Required: False
 
 Returns the `offset` search parameter used for the query.
-This field is returned only when None of `page` and `hitsPerPage` are used as a query parameter.
+This field is returned only when none of `page` and `hitsPerPage` are used as a query parameter.
 
 See [explanation](#3181-navigating-search-results-by-page-selection) on the different ways of navigating search results.
 
