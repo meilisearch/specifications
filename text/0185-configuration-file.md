@@ -20,7 +20,7 @@ Teams can easily version, track, and share configuration files. It makes it easi
 
 `Configuration file < Env variables < Command-line options`
 
-It means the options in the configuration file are overwritten by the environment variable set (if they exist) and that can be themself overwritten by the command-line options (if they exist).
+It means the options in the configuration file are overwritten by the environment variables set (if they exist) and that can be themself overwritten by the command-line options (if they exist).
 
 ### 3.3. Default Configuration File
 
