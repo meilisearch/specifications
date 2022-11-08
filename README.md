@@ -33,6 +33,7 @@ To be merged, a specification pull-request should follow the given rules:
 - It must be tagged with:
   - A `vX.X.X` tag indicating in which release the described changes will be introduced.
   - A `QX:YYYY` tag indicating in which quarter and year the described changes will be introduced.
+  - The `⚠ Breaking` tag, if breaking changes are introduced.
   - The `Telemetry` tag, if telemetry changes are introduced.
   - The `OpenAPI` tag, if the [open-api](open-api.yaml) specification will see changes introduced.
 
