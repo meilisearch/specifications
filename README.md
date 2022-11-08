@@ -6,9 +6,11 @@ This repository manages the specifications of the Meilisearch API. Specification
 
 To start a new specification, a new branch must start from `main` or from `release-vX.X.X` if the changes to write are already planned for an upcoming release.
 
-If a new specification file need to be introduced it must follow the pattern: `PR_number-feature-name.md`. e.g. if PR number 12 is about facetting, the newly introduced specification file will be named `0012-facetting.md`.
+If a new specification file need to be introduced, it must follow the pattern: `PR_number-feature-name.md`. e.g. if PR number 12 is about facetting, the newly introduced specification file will be named `0012-facetting.md`.
 
 > Note that a pull request not strictly dealing about a specification conception will be tagged as `Not A Spec`. e.g. A pull-request updating this file will be tagged with the `Not A Spec` label.
+
+The [pull-request template](pull_request_template.md) must be filled in when the pull-request is created.
 
 ## Review State
 
@@ -52,7 +54,7 @@ Meilisearch's feature specifications are made up of five sections, described bel
 
 ### 1. Summary
 
-Summrize the content of the specification with a short paragraph.
+Summarize the specification with a short paragraph.
 
 ### 2. Motivation
 
