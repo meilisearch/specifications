@@ -2,11 +2,13 @@
 
 This repository manages the specifications of the Meilisearch API. Specifications are meant to describe the expected behavior on a high level and point out identified corner cases.
 
-## Draft State
+## Draft State: create a new PR
 
-To start a new specification, a new branch must start from `main` or from `release-vX.X.X` if the changes to write are already planned for an upcoming release.
+To start a new specification, a new branch must start
+- from `release-vX.X.X` if the related changes are already planned for the release `vX.X.X`
+- from `main` if you don't know in which release the changes will be integrated
 
-If a new specification file need to be introduced, it must follow the pattern: `PR_number-feature-name.md`. e.g. if PR number 12 is about facetting, the newly introduced specification file will be named `0012-facetting.md`.
+If a new specification file needs to be introduced, you must create a new file in [this folder](https://github.com/meilisearch/specifications/tree/main/text) following the pattern: `PR_number-feature-name.md`. e.g. if PR number 12 is about facetting, the newly introduced specification file will be named `0012-facetting.md`.
 
 > Note that a pull request not strictly dealing about a specification conception will be tagged as `Not A Spec`. e.g. A pull-request updating this file will be tagged with the `Not A Spec` label.
 
@@ -14,7 +16,7 @@ The [pull-request template](pull_request_template.md) must be filled in when the
 
 ## Review State
 
-Once the specification is ready for review in the owner's eyes, the owner can then switch the PR to open.
+It's up to the maintainers of this repository to decide when the PR is ready to be reviewed and which persons should review it.
 
 The PR must be tagged as `Ready For Review` to enter this stage.
 
@@ -29,7 +31,7 @@ To be validated, it must be reviewed and approved by peers, ideally:
 To be merged, a specification pull-request should follow the given rules:
 
 - It must be approved as described in the [Review State](#review-state) section.
-- It must be branched on a given `release-vX.X.X` branch.
+- The PR must point to the right `release-vX.X.X` branch.
 - It must be tagged with:
   - A `vX.X.X` tag indicating in which release the described changes will be introduced.
   - A `QX:YYYY` tag indicating in which quarter and year the described changes will be introduced.
@@ -41,10 +43,10 @@ To be merged, a specification pull-request should follow the given rules:
 
 # Release Worfklow
 
-The following steps should happens the day a Meilisearch release is shipped:
+The following steps should happen the day a Meilisearch release is shipped:
 
-- Pull-requests describing changes for a release are merged and squashed into the corresponding `release-vX.X.X` branch.
-- `release-vX.X.X` is merged and squashed into `main`.
+- Pull-requests describing changes for a release are squashed and merged into the corresponding `release-vX.X.X` branch.
+- `release-vX.X.X` is squashed and merged into `main`.
 - `open-api.yml` version is deployed on bump.sh.
 
 ---
@@ -59,15 +61,15 @@ Summarize the specification with a short paragraph.
 
 ### 2. Motivation
 
-Explains what use cases does it support.
+Explain which use cases are supported.
 
 ### 3. Functional Specification
 
 This section gives a high level overview of the feature. It should avoid technical language so that it can be understood by a general audience (think user-level).
 
-- Describes the API resource and endpoints. (Methods, URL, query parameters, body definition, status code).
-- Explains the feature through examples.
-- Lists error cases.
+- Describe the API resource and endpoints. (Methods, URL, query parameters, body definition, status code).
+- Explain the feature through examples.
+- List error cases.
 
 ### 4. Technical Details (Optional)
 
