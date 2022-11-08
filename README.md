@@ -42,7 +42,7 @@ To be merged, a specification pull-request should follow the given rules:
 
 The following steps should happens the day a Meilisearch release is shipped:
 
-- Pull-requests describing changes for a release are merged and squashed into the corresponding `release-v.X.X.X` branch.
+- Pull-requests describing changes for a release are merged and squashed into the corresponding `release-vX.X.X` branch.
 - `release-vX.X.X` is merged into `main`.
 - `open-api.yml` version is deployed on bump.sh.
 
