@@ -2,7 +2,7 @@
 
 This repository manages the specifications of the Meilisearch API. Specifications are meant to describe the expected behavior on a high level and point out identified corner cases.
 
-## Draft State: create a new PR
+## Draft State: Create a new PR
 
 To start a new specification, a new branch must start
 - from `release-vX.X.X` if the related changes are already planned for the release `vX.X.X`
