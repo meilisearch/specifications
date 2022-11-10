@@ -75,11 +75,12 @@ Modify the settings of a Meilisearch index.
 | `stopWords`              | Array of String / `null` | false    |
 | `synonyms`               | Object / `null`          | false    |
 | `distinctAttribute`      | String / `null`          | false    |
-| `typoTolerance`          | Object                   | false    |
-| `pagination`             | Object                   | false    |
-| `faceting`               | Object                   | false    |
+| `typoTolerance`          | Object / `null`          | false    |
+| `pagination`             | Object / `null`          | false    |
+| `faceting`               | Object / `null`          | false    |
 
-The request payload accepts partial definitions.
+- The request payload accepts partial definitions, the value of missing fields will remain unchanged.
+- The request payload accepts the `null` value for any setting, which will reset the setting to its default value.
 
 ##### 3.2.2.2. Response Definition
 
