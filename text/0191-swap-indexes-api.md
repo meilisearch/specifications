@@ -117,7 +117,7 @@ When indexes are swapped their data is exchanged. It concerns:
 - The documents
 - The settings
 - The tasks history
-    - `indexUid` field of tasks having been created before the `indexSwap` task `created_at` are updated to keep a practicable history. That is, it's possible to know why an index is in a given point in time state even if it has been swapped because it keeps the task history.
+  - An index swap between index_a and index_b will also replace every mention of index_a by index_b (and vice-versa) in the task history. Enqueued tasks are left unmodified.
 
 ## 5. Future Possibilities
 
