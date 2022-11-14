@@ -695,7 +695,7 @@ components:
       properties:
         indexes:
           type: array
-          description: The two indexeUids to swap in the given operation.
+          description: The two indexUids to swap in the given operation.
       required:
         - indexes
     swapIndexes:
