@@ -700,7 +700,7 @@ components:
         - indexes
     swapIndexes:
       type: array
-      description: Array of swap operation that will be processed atomically.
+      description: Array of swap operations that will be processed atomically.
       required: true
       items:
         $ref: '#/components/schemas/swapOperation'
