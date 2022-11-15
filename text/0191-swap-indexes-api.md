@@ -53,7 +53,7 @@ The payload body expects an array of JSON objects representing swap operations.
 ]
 ```
 
-💡 In the given example, two swap operations will occurs atomically.
+💡 In the given example, two swap operations will occur at the same time and atomically.
 
 `indexA` data will be swapped with `indexA_new` data while `indexB` data will be swapped with `indexB_new` data.
 
