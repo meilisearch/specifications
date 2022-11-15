@@ -828,7 +828,7 @@ HTTP Code: `404 Not Found` when
 
 ```json
 {
-    "message": "Indexes `indexUids` not found.",
+    "message": "Indexes `:indexUids` not found.",
     "code": "index_not_found",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#index_not_found"
