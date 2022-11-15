@@ -3436,7 +3436,7 @@ paths:
     post:
       operationId: indexes.swap
       summary: Swap Indexes
-      description: Deploy a new version of an index without any downtime for clients by swapping documents, settings and task history between two indexes. It is possible to specify several swap operations in an atomic way.
+      description: Deploy a new version of an index without any downtime for clients by swapping documents, settings, and task history between two indexes. Specifying several swap operations that will be processed in an atomic way is possible.
       tags:
         - Indexes
       security:
