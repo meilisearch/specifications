@@ -735,7 +735,7 @@ components:
     taskFilterUids:
       name: uids
       in: query
-      description: Permits to filter tasks by their uid. By default, when the `uids` query parameter is not set, all task uids are returned. It's possible to specify several uids by separathing them with the `,` character.
+      description: Permits to filter tasks by their uid. By default, when the `uids` query parameter is not set, all task uids are returned. It's possible to specify several uids by separating them with the `,` character.
       required: false
       schema:
         type: number
