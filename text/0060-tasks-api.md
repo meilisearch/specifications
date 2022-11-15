@@ -711,7 +711,7 @@ The task types are listed in decreasing order of priority:
 2. `taskDeletion`
 3. `snapshotCreation`
 4. `dumpCreation`
-5. All other task types with no priority order.
+5. All other task types with by their enqueued at order.
 
 ## 3. Future Possibilities
 
