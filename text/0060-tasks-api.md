@@ -444,7 +444,7 @@ This means:
 
 ##### 6.3.4. Errors
 
-If a user tries canceling a `succeeded`, `failed`, or `canceled` task, it won’t throw an error. Task cancelation is an atomic transaction; all tasks are successfully canceled, or none aren't.
+If a user tries canceling a `succeeded`, `failed`, or `canceled` task, it won’t throw an error. Task cancelation is an atomic transaction; all tasks are successfully canceled, or none are.
 
 - 🔴 Sending a task cancelation without filtering query parameters returns a [missing_task_filters](0061-error-format-and-definitions.md#missing_task_filters) error.
 
