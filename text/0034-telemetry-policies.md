@@ -1,7 +1,3 @@
-- Title: Anonymous Analytics Policy
-- Started At: 2021-04-16
-- Updated At: 2021-10-13
-
 # Anonymous Analytics Policy
 
 ## 1. Functional Specification
@@ -62,7 +58,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | StopWords Updated | Occurs when stop words are updated via `PUT` — `/indexes/:indexUid/settings/stop-words`. |
 | Synonyms Updated | Occurs when synonyms are updated via `PUT` — `/indexes/:indexUid/settings/synonyms`. |
 | Dump Created | Occurs when a dump is created via `POST` - `/dumps`. |
-| Tasks Seen | Occurs when tasks are fetched globally via `GET` - `/tasks`. |
+| Tasks Seen | Aggregated event on all received requests via the `GET` - `/tasks` route during one hour or until a batch size reaches `500Kb`. |
 | Stats Seen | Occurs when stats are fetched via `GET` - `/stats` or `/indexes/:indexUid/stats`. |
 | Health Seen | Aggregated event on all received requests via the `GET - /health` route during one hour or until a batch size reaches `500Kb`. |
 | Version Seen | Occurs when `GET - /version` is fetched. |
@@ -147,6 +143,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `typo_tolerance.min_word_size_for_typos.two_typos`| The defined value for `minWordSizeForTypos.twoTypos` property | `9` | `Settings Updated`, `TypoTolerance Updated` |
 | `pagination.max_total_hits`                 | The defined value for `pagination.maxTotalHits` property | `1000` | `Settings Updated`, `Pagination Updated` |
 | `faceting.max_values_per_facet`         | The defined value for `faceting.maxValuesPerFacet` property | `100` | `Settings Updated`, `Faceting Updated` |
+| `distinct_attribute.set` | `true` if a field name is specified as a distrinct attribute, otherwise `false`. | `false` | `Settings Updated`, `DistinctAttribute Updated` | 
 | `displayed_attributes.total`   | Number of displayed attributes. | `3` | `SettingUpdated`, `DisplayedAttributes Updated` |
 | `displayed_attributes.with_wildcard` | `true` if `*` is specified as a displayed attribute, otherwise `false`. | `false` | `SettingUpdated`, `DisplayedAttributes Updated` |
 | `stop_words.total`   | Number of stop words. | `3` | `Settings Updated`, `StopWords Updated` |
@@ -352,6 +349,7 @@ This property allows us to gather essential information to better understand on 
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | searchable_attributes.total | Number of searchable attributes. | `3`|
+| searchable_attributes.with_wildcard | `true` if `*` is specified as a searchable attribute, otherwise `false`. | `false` |
 | ranking_rules.sort_position | Position of the `sort` ranking rule if any, otherwise `null`. | `5` |
 | sortable_attributes.total   | Number of sortable attributes. | `3` |
 | sortable_attributes.has_geo | Indicate if `_geo` is set as a sortable attribute. | `false`|
@@ -364,6 +362,11 @@ This property allows us to gather essential information to better understand on 
 | typo_tolerance.min_word_size_for_typos.two_typos | The defined value for `minWordSizeForTypos.twoTypos` property. | `9` |
 | pagination.max_total_hits                 | The defined value for `pagination.maxTotalHits` property | `1000` |
 | faceting.max_values_per_facet         | The defined value for `faceting.maxValuesPerFacet` property | `100` |
+| distinct_attribute.set | `true` if a field name is specified, otherwise `false`. | `false` |
+| displayed_attributes.total   | Number of displayed attributes. | `3` |
+| displayed_attributes.with_wildcard | `true` if `*` is specified as a displayed attribute, otherwise `false`. | `false` |
+| stop_words.total   | Number of stop words. | `3` |
+| synonyms.total   | Number of synonyms. | `3` |
 
 ---
 
@@ -432,6 +435,7 @@ This property allows us to gather essential information to better understand on 
 | Property name | Description | Example |
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| distinct_attribute.set | `true` if a field name is specified, otherwise `false`. | `false` |
 
 ## `DisplayedAttributes Updated`
 
@@ -463,9 +467,11 @@ This property allows us to gather essential information to better understand on 
 
 ## `Tasks Seen`
 
+> The Tasks Seen event is sent once an hour or when a batch reaches the maximum size of `500Kb`.
+
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| user_agent    | Represents the user-agent encountered on this endpoint in the aggregated event. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | per_task_uid  | `true` if an uid is used to fetch a particular task resource, otherwise `false` | `true` |
 | filtered_by_index_uid | `true` if `GET /tasks` endpoint is filered by `indexUid`, otherwise `false` | `false` |
 | filtered_by_type | `true` if `GET /tasks` endpoint is filered by `type`, otherwise `false` | `false` |
