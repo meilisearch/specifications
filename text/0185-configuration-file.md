@@ -44,7 +44,7 @@ See [Instance Options](0119-instance-options.md) for more details.
 
 ### 3.6. Indication of the loaded configuration file
 
-When Meilisearch is launched, the loaded configuration file is indicated by the `Config file path` key on the stdout.
+When Meilisearch is launched, the loaded configuration file is indicated by the `Config file path` key on stdout.
 
 ```bash
 888b     d888          d8b 888 d8b                                            888
