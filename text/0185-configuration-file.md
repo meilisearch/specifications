@@ -94,5 +94,5 @@ N/A
 
 - Better indicate a syntax error
 - List all loaded configuration at launch on the stdout
-- Introduce toml sections to replace comments to define blocks
+- Introduce toml sections to group options under a common name. e.g. A dump section could contain a `schedule`, `dir`, `interval-sec` and `enable`. That could help navigate the toml.
 - Introduce other formats
