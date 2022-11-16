@@ -24,7 +24,7 @@ It means the options in the configuration file are overwritten by the environmen
 
 ### 3.3. Default Configuration File
 
-By default, Meilisearch will try to read the following named configuration file `./config.toml`, so in its current working directory.
+By default, Meilisearch will try to read the `./config.toml` in the current working directory.
 
 We provide a default configuration file as an example [here](https://github.com/meilisearch/meilisearch/blob/main/config.toml).
 
