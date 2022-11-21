@@ -348,9 +348,9 @@ components:
             canceledTasks:
               type: integer
               description: Number of tasks canceled.
-            originalFilters:
+            originalFilter:
               type: string
-              description: Filters used for the cancelation task.
+              description: Filter used for the cancelation task.
         error:
           description: Error object containing error details and context when a task has a failed status.
           $ref: '#/components/schemas/error'
