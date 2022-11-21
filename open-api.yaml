@@ -325,7 +325,7 @@ components:
               description: Number of documents finally indexed for documentAdditionOrUpdate task or a documentAdditionOrUpdate batch of tasks.
             providedIds:
               type: integer
-              description: Number of document ids matched for documentDeletion task.
+              description: Number of provided document ids for the documentDeletion task.
             deletedDocuments:
               type: integer
               description: 'Number of documents finally deleted for documentDeletion and indexDeletion tasks.'
