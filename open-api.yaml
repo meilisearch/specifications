@@ -323,7 +323,7 @@ components:
             indexedDocuments:
               type: integer
               description: Number of documents finally indexed for documentAdditionOrUpdate task or a documentAdditionOrUpdate batch of tasks.
-            matchedDocuments:
+            providedIds:
               type: integer
               description: Number of document ids matched for documentDeletion task.
             deletedDocuments:
