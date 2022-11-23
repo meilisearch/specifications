@@ -140,7 +140,7 @@ List of global tasks by `type`:
 
 | name    | description  |
 | -----   | ------------ |
-| dumpUid | The generated uid of the dump. `null` when the task status is enqueued or processing. |
+| dumpUid | The generated uid of the dump. `null` when the task status is enqueued, processing, canceled, or failed. |
 
 ##### taskCancelation
 
