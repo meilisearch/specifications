@@ -393,7 +393,7 @@ This property allows us to gather essential information to better understand on 
 | ranking_rules.attribute_position | Position of the `attribute` ranking rule if any, otherwise `null` | `4` |
 | ranking_rules.sort_position | Position of the `sort` ranking rule if any, otherwise `null`. | `5` |
 | ranking_rules.exactness_position | Position of the `exactness` ranking rule if any, otherwise `null`. | `6` |
-| ranking_rules.values | An array representing the ranking rules without the custom asc-desc rules. | `['words', 'typo', 'attribute', 'sort', 'exactness']` |
+| ranking_rules.values | A string representing the ranking rules without the custom asc-desc rules. | `"words, typo, attribute, sort, exactness"` |
 
 ---
 
