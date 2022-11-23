@@ -129,7 +129,13 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `primary_key`                           | Value given for the `primaryKey` parameter if used, otherwise `null` | id | `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`|
 | `payload_type`                          | All `payload_type` encountered in this batch | ["application/json", "text/plain", "application/x-ndjson"] | `Documents Added`, `Documents Updated` |
 | `index_creation`                        | `true` if a document addition or update request triggered index creation in this batch, otherwise `false` | true | `Documents Added`, `Documents Updated` |
-| `ranking_rules.sort_position`           | Position of the `sort` ranking rule | 5 | `Settings Updated`, `Ranking Rules Updated` |
+| `ranking_rules.words_position`          | Position of the `words` ranking rule if any, otherwise `null` | `1`| `Settings Updated`, `Ranking Rules Updated` |
+| `ranking_rules.typo_position`           | Position of the `typo` ranking rule if any, otherwise `null` | `2` | `Settings Updated`, `Ranking Rules Updated` |
+| `ranking_rules.proximity_position`      | Position of the `proximity` ranking rule if any, otherwise `null` | `3` | `Settings Updated`, `Ranking Rules Updated` |
+| `ranking_rules.attribute_position`      | Position of the `attribute` ranking rule if any, otherwise `null` | `4` | `Settings Updated`, `Ranking Rules Updated` |
+| `ranking_rules.sort_position`           | Position of the `sort` ranking rule if any, otherwise `null`. | `5` | `Settings Updated`, `Ranking Rules Updated` |
+| `ranking_rules.exactness_position`      | Position of the `exactness` ranking rule if any, otherwise `null`. | `6` | `Settings Updated`, `Ranking Rules Updated` |
+| `ranking_rules.values`                  | An array representing the ranking rules without the custom asc-desc rules. | `['words', 'typo', 'attribute', 'sort', 'exactness']` | `Settings Updated`, `Ranking Rules Updated` |
 | `sortable_attributes.total`             | Number of sortable attributes | 3 | `Settings Updated`, `SortableAttributes Updated`|
 | `sortable_attributes.has_geo`           | `true` if `_geo` is set as a sortable attribute, otherwise `false` | true | `Settings Updated`, `SortableAttributes Updated` |
 | `filterable_attributes.total`           | Number of filterable attributes | 3 | `Settings Updated`, `FilterableAttributes Updated` |
@@ -143,7 +149,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `typo_tolerance.min_word_size_for_typos.two_typos`| The defined value for `minWordSizeForTypos.twoTypos` property | `9` | `Settings Updated`, `TypoTolerance Updated` |
 | `pagination.max_total_hits`                 | The defined value for `pagination.maxTotalHits` property | `1000` | `Settings Updated`, `Pagination Updated` |
 | `faceting.max_values_per_facet`         | The defined value for `faceting.maxValuesPerFacet` property | `100` | `Settings Updated`, `Faceting Updated` |
-| `distinct_attribute.set` | `true` if a field name is specified as a distrinct attribute, otherwise `false`. | `false` | `Settings Updated`, `DistinctAttribute Updated` | 
+| `distinct_attribute.set` | `true` if a field name is specified as a distrinct attribute, otherwise `false`. | `false` | `Settings Updated`, `DistinctAttribute Updated` |
 | `displayed_attributes.total`   | Number of displayed attributes. | `3` | `SettingUpdated`, `DisplayedAttributes Updated` |
 | `displayed_attributes.with_wildcard` | `true` if `*` is specified as a displayed attribute, otherwise `false`. | `false` | `SettingUpdated`, `DisplayedAttributes Updated` |
 | `stop_words.total`   | Number of stop words. | `3` | `Settings Updated`, `StopWords Updated` |
@@ -350,7 +356,13 @@ This property allows us to gather essential information to better understand on 
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | searchable_attributes.total | Number of searchable attributes. | `3`|
 | searchable_attributes.with_wildcard | `true` if `*` is specified as a searchable attribute, otherwise `false`. | `false` |
+| ranking_rules.words_position | Position of the `words` ranking rule if any, otherwise `null` | `1`|
+| ranking_rules.typo_position | Position of the `typo` ranking rule if any, otherwise `null` | `2` |
+| ranking_rules.proximity_position | Position of the `proximity` ranking rule if any, otherwise `null` | `3` |
+| ranking_rules.attribute_position | Position of the `attribute` ranking rule if any, otherwise `null` | `4` |
 | ranking_rules.sort_position | Position of the `sort` ranking rule if any, otherwise `null`. | `5` |
+| ranking_rules.exactness_position | Position of the `exactness` ranking rule if any, otherwise `null`. | `6` |
+| ranking_rules.values | An array representing the ranking rules without the custom asc-desc rules. | `['words', 'typo', 'attribute', 'sort', 'exactness']` |
 | sortable_attributes.total   | Number of sortable attributes. | `3` |
 | sortable_attributes.has_geo | Indicate if `_geo` is set as a sortable attribute. | `false`|
 | filterable_attributes.total   | Number of filterable attributes. | `3` |
@@ -375,7 +387,13 @@ This property allows us to gather essential information to better understand on 
 | Property name | Description | Example |
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| ranking_rules.words_position | Position of the `words` ranking rule if any, otherwise `null` | `1`|
+| ranking_rules.typo_position | Position of the `typo` ranking rule if any, otherwise `null` | `2` |
+| ranking_rules.proximity_position | Position of the `proximity` ranking rule if any, otherwise `null` | `3` |
+| ranking_rules.attribute_position | Position of the `attribute` ranking rule if any, otherwise `null` | `4` |
 | ranking_rules.sort_position | Position of the `sort` ranking rule if any, otherwise `null`. | `5` |
+| ranking_rules.exactness_position | Position of the `exactness` ranking rule if any, otherwise `null`. | `6` |
+| ranking_rules.values | An array representing the ranking rules without the custom asc-desc rules. | `['words', 'typo', 'attribute', 'sort', 'exactness']` |
 
 ---
 
@@ -472,7 +490,7 @@ This property allows us to gather essential information to better understand on 
 | Property name | Description | Example |
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this endpoint in the aggregated event. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
-| requests.total_received | The total number of received requests in the aggregated event. | `3480` | 
+| requests.total_received | The total number of received requests in the aggregated event. | `3480` |
 | per_task_uid  | `true` if an uid is used to fetch a particular task resource, otherwise `false` | `true` |
 | filtered_by_index_uid | `true` if `GET /tasks` endpoint is filered by `indexUid`, otherwise `false` | `false` |
 | filtered_by_type | `true` if `GET /tasks` endpoint is filered by `type`, otherwise `false` | `false` |
