@@ -135,7 +135,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `ranking_rules.attribute_position`      | Position of the `attribute` ranking rule if any, otherwise `null` | `4` | `Settings Updated`, `Ranking Rules Updated` |
 | `ranking_rules.sort_position`           | Position of the `sort` ranking rule if any, otherwise `null`. | `5` | `Settings Updated`, `Ranking Rules Updated` |
 | `ranking_rules.exactness_position`      | Position of the `exactness` ranking rule if any, otherwise `null`. | `6` | `Settings Updated`, `Ranking Rules Updated` |
-| `ranking_rules.values`                  | An array representing the ranking rules without the custom asc-desc rules. | `['words', 'typo', 'attribute', 'sort', 'exactness']` | `Settings Updated`, `Ranking Rules Updated` |
+| `ranking_rules.values`                  | A string representing the ranking rules without the custom asc-desc rules. | `"words, typo, attribute, sort, exactness"` | `Settings Updated`, `Ranking Rules Updated` |
 | `sortable_attributes.total`             | Number of sortable attributes | 3 | `Settings Updated`, `SortableAttributes Updated`|
 | `sortable_attributes.has_geo`           | `true` if `_geo` is set as a sortable attribute, otherwise `false` | true | `Settings Updated`, `SortableAttributes Updated` |
 | `filterable_attributes.total`           | Number of filterable attributes | 3 | `Settings Updated`, `FilterableAttributes Updated` |
