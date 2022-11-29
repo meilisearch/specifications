@@ -316,6 +316,7 @@ components:
             - dumpCreation
             - taskCancelation
             - taskDeletion
+            - snapshotCreation
         canceledBy:
           type: integer
           description: The uid of the task that performed the taskCancelation if the task has been canceled.
@@ -329,9 +330,9 @@ components:
             indexedDocuments:
               type: integer
               description: Number of documents finally indexed for documentAdditionOrUpdate task or a documentAdditionOrUpdate batch of tasks.
-            receivedDocumentsIds:
+            providedIds:
               type: integer
-              description: Number of document ids received for documentDeletion task.
+              description: Number of provided document ids for the documentDeletion task.
             deletedDocuments:
               type: integer
               description: Number of documents finally deleted for documentDeletion and indexDeletion tasks.
@@ -715,6 +716,20 @@ components:
         - indexes
         - expiresAt
       description: API keys are stored and managed by the master key holder and the default admin key holder. These are the keys used by the technical teams to interact with Meilisearch at the level of the client/server code. API keys can have restrictions on which methods can be accessed via an actions list; they can also expiresAt a specific date time and be restricted to a specific set of indexes.
+    swapOperation:
+      type: object
+      properties:
+        indexes:
+          type: array
+          description: The two indexUids to swap in the given operation.
+      required:
+        - indexes
+    swapIndexes:
+      type: array
+      description: Array of swap operations that will be processed atomically.
+      required: true
+      items:
+        $ref: '#/components/schemas/swapOperation'
   parameters:
     indexUid:
       name: indexUid
@@ -1090,7 +1105,7 @@ components:
       summary: 202 Accepted dumpCreation response example
       value:
         taskUid: 0
-        indexUid: movies
+        indexUid: null
         status: enqueued
         type: dumpCreation
         enqueuedAt: '2021-01-01T09:39:00.000000Z'
@@ -1109,6 +1124,14 @@ components:
         indexUid: null
         status: enqueued
         type: taskDeletion
+        enqueuedAt: '2021-01-01T09:39:00.000000Z'
+    202_indexSwap:
+      summary: 202 Accepted indexSwap response example
+      value:
+        taskUid: 0
+        indexUid: null
+        status: enqueued
+        type: indexSwap
         enqueuedAt: '2021-01-01T09:39:00.000000Z'
 tags:
   - name: Indexes
@@ -3594,4 +3617,37 @@ paths:
         - $ref: '#/components/parameters/taskFilterAfterFinishedAt'
       security:
         - apiKey: []
+  '/swap-indexes':
+    post:
+      operationId: indexes.swap
+      summary: Swap Indexes
+      description: Deploy a new version of an index without any downtime for clients by swapping documents, settings, and task history between two indexes. Specifying several swap operations that will be processed in an atomic way is possible.
+      tags:
+        - Indexes
+      security:
+        - apiKey: []
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
+      request:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/swapIndexes'
+            examples:
+              Example:
+                - indexes: ["indexA", "indexA_new"]
+                - indexes: ["indexB", "indexB_new"]
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_indexSwap'
+        '401':
+          $ref: '#/components/responses/401'
 security: []
