@@ -294,6 +294,19 @@ HTTP Code: `400 Bad Request`
 
 - The `:value` is inferred when the message is generated.
 
+#### Variant: Sending an invalid index uid format in `indexes` field.
+
+```json
+{
+    "message": "`uid` is not a valid index uid. Index uid can be an integer or a string containing only alphanumeric characters, hyphens (-) and underscores (_).",
+    "code": "invalid_api_key_indexes",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_api_key_indexes"
+}
+```
+
+- The `:uid` is inferred when the message is generated.
+
 ---
 
 ## invalid_api_key_expires_at
@@ -814,7 +827,7 @@ This error code is generic. It should not be used. Instead, a clear and precise 
 
 ## index_not_found
 
-`Synchronous`
+`Asynchronous` / `Synchronous`
 
 ### Context
 
@@ -822,7 +835,22 @@ This error happens when a requested index can't be found.
 
 ### Error Definition
 
-HTTP Code: `404 Not Found`
+HTTP Code: `404 Not Found` when
+
+#### Variant: Multiples indexUids can't be found
+
+```json
+{
+    "message": "Indexes `:indexUids` not found.",
+    "code": "index_not_found",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#index_not_found"
+}
+```
+
+- The `:indexUids` is inferred when the message is generated, values are separated by `,`.
+
+#### Variant: An index can't be found
 
 ```json
 {
@@ -834,6 +862,45 @@ HTTP Code: `404 Not Found`
 ```
 
 - The `:indexUid` is inferred when the message is generated.
+
+---
+
+## duplicate_index_found
+
+`Synchronous`
+
+### Context
+
+This error happens when the same indexUid is used twice in the `POST`- `swap-indexes` payload.
+
+### Error Definition
+
+
+#### Variant: A single indexUid is found twice in the payload
+
+```json
+{
+    "message": "Indexes must be declared only once during a swap. `:indexUid` was specified several times.",
+    "code": "duplicate_index_found",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#duplicate_index_found"
+}
+```
+
+- The `:indexUid` is inferred when the message is generated.
+
+#### Variant: Several indexUids are found twice in the payload
+
+```json
+{
+    "message": "Indexes must be declared only once during a swap. `:indexUids` were specified several times.",
+    "code": "duplicate_index_found",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#duplicate_index_found"
+}
+```
+
+- The `:indexUids` is inferred when the message is generated, values are separated by `,`.
 
 ---
 
@@ -912,7 +979,60 @@ HTTP Code: `404 Not Found`
 
 ---
 
-## invalid_task_status
+## invalid_task_uids_filter
+
+`Synchronous`
+
+### Context
+
+This error occurs when the `uids` query parameter contains invalid values.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "Task uid `:uid` is invalid. It should only contains numeric characters separated by `,` character.",
+    "code": "invalid_task_uids_filter",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_task_uids_filter"
+}
+```
+
+- `:uid` is inferred when the message is generated.
+
+---
+
+## invalid_task_date_filter
+
+`Synchronous`
+
+### Context
+
+This error occurs when a task date filter contains an invalid value.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "Task `:dateFilterName` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
+    "code": "invalid_task_date_filter",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_task_date_filter"
+}
+```
+
+- `:dateFilterName` is inferred when the message is generated.
+- `:value` is inferred when the message is generated.
+
+---
+
+## invalid_task_statuses_filter
+
+`Synchronous`
 
 ### Context
 
@@ -925,9 +1045,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Task status `:status` is invalid. Available task statuses are: `:taskStatuses`.",
-    "code": "invalid_task_status",
+    "code": "invalid_task_statuses_filter",
     "type": "invalid_request",
-    "link":"https://docs.meilisearch.com/errors#invalid_task_status"
+    "link":"https://docs.meilisearch.com/errors#invalid_task_statuses_filter"
 }
 ```
 
@@ -936,7 +1056,9 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_task_type
+## invalid_task_types_filter
+
+`Synchronous`
 
 ### Context
 
@@ -949,14 +1071,65 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Task type `:type` is invalid. Available task types are: `:taskTypes`.",
-    "code": "invalid_task_type",
+    "code": "invalid_task_types_filter",
     "type": "invalid_request",
-    "link":"https://docs.meilisearch.com/errors#invalid_task_type"
+    "link":"https://docs.meilisearch.com/errors#invalid_task_types_filter"
 }
 ```
 
 - The `:type` is inferred when the message is generated.
 - The `:taskTypes` is inferred when the message is generated.
+
+---
+
+## invalid_task_canceled_by_filter
+
+`Synchronous`
+
+### Context
+
+This error happens when the `canceledBy` query parameter contains an invalid value.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "Task canceledBy `:canceledBy` is invalid. It should only contains numeric characters separated by `,` character.",
+    "code": "invalid_task_canceled_by_filter",
+    "type": "invalid_request",
+    "link":"https://docs.meilisearch.com/errors#invalid_task_canceled_by_filter"
+}
+```
+
+- `:canceledBy` is inferred when the message is generated.
+
+---
+
+## missing_task_filters
+
+`Synchronous`
+
+### Context
+
+This error happens when no query parameters are given when a task cancelation or a task deletion request is sent.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "Query parameters to filter the tasks to `:operation` are missing. Available query parameters are: `queryParametersNames`",
+    "code": "missing_task_filters",
+    "type": "invalid_request",
+    "link":"https://docs.meilisearch.com/errors#missing_task_filters"
+}
+```
+
+- `:operation` is inferred when the message is generated.
+- `:queryParameterNames` is inferred when the message is generated.
 
 ---
 
@@ -1345,6 +1518,29 @@ HTTP Code: `403 Forbidden`
     "code": "invalid_api_key",
     "type": "auth",
     "link": "https://docs.meilisearch.com/errors#invalid_api_key"
+}
+```
+
+---
+
+## missing_master_key
+
+`Synchronous`
+
+### Context
+
+For some specific protected routes (i.e. `/keys`) the master key must be defined before accessing it. This error indicates to the user that he must first define a master key when launching Meilisearch.
+
+### Error Definition
+
+HTTP Code: `401 Forbidden`
+
+```json
+{
+    "message": "Meilisearch is running without a master key. To access this API endpoint, you must have set a master key at launch.",
+    "code": "missing_master_key",
+    "type": "auth",
+    "link": "https://docs.meilisearch.com/errors#missing_master_key"
 }
 ```
 

@@ -217,10 +217,14 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
-- 🔴 Sending a value with a different type than `Boolean` for the `enabled` field returns an [bad_request](0061-error-format-and-definitions.md#bad_request) error.
-- 🔴 Sending a value with a different type than `Array of String` for the `disableOnAttributes` field returns an [bad_request](0061-error-format-and-definitions.md#bad_request) error.
-- 🔴 Sending a value with a different type than `Array of String` for the `disableOnWords` field returns an [bad_request](0061-error-format-and-definitions.md#bad_request) error.
-- 🔴 Sending a value with a different type than `Integer` for `minWordSizeForTypos` object fields returns an [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value different from `null` or with a different type than `Boolean` for the `enabled` field returns a
+[bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value different from `null` or with a different type than `Array of String` for the `disableOnAttributes`
+field returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value different from `null` or with a different type than `Array of String` for the `disableOnWords` field
+returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value different from `null` or with a different type than `Integer` for `minWordSizeForTypos` object fields
+returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 ###### 3.2.2.2.2.1. Async Errors
 
