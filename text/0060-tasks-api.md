@@ -84,7 +84,7 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 
 | name                | description                          |
 |---------------------|--------------------------------------|
-| receivedDocumentIds | Number of document ids received.     |
+| providedIds    | Number of provided document ids.      |
 | deletedDocuments    | Number of documents finally deleted. |
 
 ##### indexCreation
