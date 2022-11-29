@@ -33,6 +33,22 @@ components:
       type: integer
       description: Offset given for the query. If offset is not provided as a query parameter, this parameter displays the default offset value.
       example: 0
+    page:
+      type: integer
+      description: Sets the specific results page to fetch. If page is not provided as a query parameter, this parameter is ignored.
+      example: 1
+    hitsPerPage:
+      type: integer
+      description: Sets the number of results returned per page. If hitsPerPage is not provided as a query parameter, this parameter is ignored.
+      example: 20
+    totalHits:
+      type: integer
+      description: Returns the total number of search results. Computed if either `page` or `hitsPerPage` is provided as a query parameter.
+      example: 20
+    totalPages:
+      type: integer
+      description: Returns the total number of navigatable results pages for the search query. Computed if either `page` or `hitsPerPage` is provided as a query parameter.
+      example: 20
     total:
       type: integer
       description: Total number of browsable results using offset/limit parameters for the given resource.
@@ -234,6 +250,18 @@ components:
         estimatedTotalHits:
           type: integer
           description: Estimated number of candidates for the search query.
+        page:
+          type: integer
+          description: The specific search results page to fetch.
+        hitsPerPage:
+          type: integer
+          description: Number of returned results per page.
+        totalHits:
+          type: integer
+          description: Exhaustive total number of search results for the search query.
+        totalPages:
+          type: integer
+          description: Number of navigatable results pages for the search query.
         facetDistribution:
           type: object
           additionalProperties:
@@ -260,9 +288,6 @@ components:
           example: ninja
       required:
         - hits
-        - offset
-        - limit
-        - estimatedTotalHits
         - processingTimeMs
         - query
     task:
@@ -279,6 +304,7 @@ components:
           indexUid: movies
           status: succeeded
           type: documentAdditionOrUpdate
+          canceledBy: null
           details:
             receivedDocuments: 10
             indexedDocuments: 10
@@ -311,8 +337,15 @@ components:
             - indexCreation
             - indexUpdate
             - indexDeletion
+            - indexSwap
             - settingsUpdate
             - dumpCreation
+            - taskCancelation
+            - taskDeletion
+            - snapshotCreation
+        canceledBy:
+          type: integer
+          description: The uid of the task that performed the taskCancelation if the task has been canceled.
         details:
           type: object
           description: Details information of the task payload.
@@ -323,12 +356,12 @@ components:
             indexedDocuments:
               type: integer
               description: Number of documents finally indexed for documentAdditionOrUpdate task or a documentAdditionOrUpdate batch of tasks.
-            receivedDocumentsIds:
+            providedIds:
               type: integer
-              description: Number of document ids received for documentDeletion task.
+              description: Number of provided document ids for the documentDeletion task.
             deletedDocuments:
               type: integer
-              description: 'Number of documents finally deleted for documentDeletion and indexDeletion tasks.'
+              description: Number of documents finally deleted for documentDeletion and indexDeletion tasks.
             primaryKey:
               type: string
               description: Value for the primaryKey field encountered if any for indexCreation or indexUpdate task.
@@ -337,6 +370,18 @@ components:
             dumpUid:
               type: string
               description: Identifier generated for the dump for dumpCreation task.
+            matchedTasks:
+              type: integer
+              description: Number of tasks that match the request for taskCancelation or taskDeletion tasks.
+            canceledTasks:
+              type: integer
+              description: Number of tasks canceled for taskCancelation.
+            deletedTasks:
+              type: integer
+              description: Number of tasks deleted for taskDeletion.
+            originalFilter:
+              type: string
+              description: Original filter query for taskCancelation or taskDeletion tasks.
         error:
           description: Error object containing error details and context when a task has a failed status.
           $ref: '#/components/schemas/error'
@@ -360,6 +405,9 @@ components:
         - indexUid
         - status
         - type
+        - canceledBy
+        - details
+        - error
         - enqueuedAt
         - startedAt
         - finishedAt
@@ -391,8 +439,11 @@ components:
             - indexCreation
             - indexUpdate
             - indexDeletion
+            - indexSwap
             - settingsUpdate
             - dumpCreation
+            - taskCancelation
+            - taskDeletion
         enqueuedAt:
           description: Represent the date and time as a `RFC 3339` format when the task has been enqueued
           $ref: '#/components/schemas/timestamp'
@@ -640,7 +691,10 @@ components:
               - indexes.get
               - indexes.update
               - indexes.delete
+              - indexes.swap
               - tasks.get
+              - tasks.cancel
+              - tasks.delete
               - settings.get
               - settings.update
               - stats.get
@@ -690,6 +744,20 @@ components:
         - indexes
         - expiresAt
       description: API keys are stored and managed by the master key holder and the default admin key holder. These are the keys used by the technical teams to interact with Meilisearch at the level of the client/server code. API keys can have restrictions on which methods can be accessed via an actions list; they can also expiresAt a specific date time and be restricted to a specific set of indexes.
+    swapOperation:
+      type: object
+      properties:
+        indexes:
+          type: array
+          description: The two indexUids to swap in the given operation.
+      required:
+        - indexes
+    swapIndexes:
+      type: array
+      description: Array of swap operations that will be processed atomically.
+      required: true
+      items:
+        $ref: '#/components/schemas/swapOperation'
   parameters:
     indexUid:
       name: indexUid
@@ -709,28 +777,84 @@ components:
     taskUid:
       name: taskUid
       in: path
-      description: The task unique identifier
+      description: The task identifier
       required: true
       schema:
+        type: integer
+    taskFilterUids:
+      name: uids
+      in: query
+      description: Permits to filter tasks by their uid. By default, when the `uids` query parameter is not set, all task uids are returned. It's possible to specify several uids by separating them with the `,` character.
+      required: false
+      schema:
         type: number
-    taskIndexUid:
-      name: indexUid
+    taskFilterIndexUids:
+      name: indexUids
       in: query
-      description: Permits to filter tasks by their related index. By default, when `indexUid` query parameter is not set, the tasks of all the indexes are returned. It is possible to specify several indexes by separating them with the `,` character.
+      description: Permits to filter tasks by their related index. By default, when `indexUids` query parameter is not set, the tasks of all the indexes are returned. It is possible to specify several indexes by separating them with the `,` character.
       required: false
       schema:
         type: string
-    taskType:
-      name: type
+    taskFilterTypes:
+      name: types
       in: query
-      description: Permits to filter tasks by their related type. By default, when `type` query parameter is not set, all task types are returned. It's possible to specify several types by separating them with the `,` character.
+      description: Permits to filter tasks by their related type. By default, when `types` query parameter is not set, all task types are returned. It's possible to specify several types by separating them with the `,` character.
       required: false
       schema:
         type: string
-    taskStatus:
-      name: status
+    taskFilterStatuses:
+      name: statuses
       in: query
-      description: Permits to filter tasks by their status. By default, when `status` query parameter is not set, all task statuses are returned. It's possible to specify several types by separating them with the `,` character.
+      description: Permits to filter tasks by their status. By default, when `statuses` query parameter is not set, all task statuses are returned. It's possible to specify several statuses by separating them with the `,` character.
+      required: false
+      schema:
+        type: string
+    taskFilterBeforeEnqueuedAt:
+      name: beforeEnqueuedAt
+      in: query
+      description: Permits to filter tasks based on their enqueuedAt time. Matches tasks enqueued before the given date. Supports RFC 3339 date format.
+      required: false
+      schema:
+        type: string
+    taskFilterAfterEnqueuedAt:
+      name: afterEnqueuedAt
+      in: query
+      description: Permits to filter tasks based on their enqueuedAt time. Matches tasks enqueued after the given date. Supports RFC 3339 date format.
+      required: false
+      schema:
+        type: string
+    taskFilterBeforeStartedAt:
+      name: beforeStartedAt
+      in: query
+      description: Permits to filter tasks based on their startedAt time. Matches tasks started before the given date. Supports RFC 3339 date format.
+      required: false
+      schema:
+        type: string
+    taskFilterAfterStartedAt:
+      name: afterStartedAt
+      in: query
+      description: Permits to filter tasks based on their startedAt time. Matches tasks started after the given date. Supports RFC 3339 date format.
+      required: false
+      schema:
+        type: string
+    taskFilterBeforeFinishedAt:
+      name: beforeFinishedAt
+      in: query
+      description: Permits to filter tasks based on their finishedAt time. Matches tasks finished before the given date. Supports RFC 3339 date format.
+      required: false
+      schema:
+        type: string
+    taskFilterAfterFinishedAt:
+      name: afterFinishedAt
+      in: query
+      description: Permits to filter tasks based on their finishedAt time. Matches tasks finished after the given date. Supports RFC 3339 date format.
+      required: false
+      schema:
+        type: string
+    taskFilterCanceledBy:
+      name: canceledBy
+      in: query
+      description: Permits to filter tasks using the uid of the task that canceled them. It's possible to specify several task uids by separating them with the `,` character.
       required: false
       schema:
         type: string
@@ -756,6 +880,20 @@ components:
       schema:
         type: number
         default: 0
+    page:
+      name: page
+      in: query
+      description: Sets the specific results page.
+      schema:
+        type: number
+        default: 1
+    hitsPerPage:
+      name: hitsPerPage
+      in: query
+      description: Sets the number of results returned for a query. If hitsPerPage is not provided as a query parameter, this parameter is ignored.
+      schema:
+        type: number
+        default: 20
     from:
       name: from
       in: query
@@ -1009,9 +1147,33 @@ components:
       summary: 202 Accepted dumpCreation response example
       value:
         taskUid: 0
-        indexUid: movies
+        indexUid: null
         status: enqueued
         type: dumpCreation
+        enqueuedAt: '2021-01-01T09:39:00.000000Z'
+    202_taskCancelation:
+      summary: 202 Accepted taskCancelation response example
+      value:
+        taskUid: 0
+        indexUid: null
+        status: enqueued
+        type: taskCancelation
+        enqueuedAt: '2021-01-01T09:39:00.000000Z'
+    202_taskDeletion:
+      summary: 202 Accepted taskDeletion response example
+      value:
+        taskUid: 0
+        indexUid: null
+        status: enqueued
+        type: taskDeletion
+        enqueuedAt: '2021-01-01T09:39:00.000000Z'
+    202_indexSwap:
+      summary: 202 Accepted indexSwap response example
+      value:
+        taskUid: 0
+        indexUid: null
+        status: enqueued
+        type: indexSwap
         enqueuedAt: '2021-01-01T09:39:00.000000Z'
 tags:
   - name: Indexes
@@ -1630,6 +1792,8 @@ paths:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/hitsPerPage'
         - $ref: '#/components/parameters/showMatchesPosition'
         - $ref: '#/components/parameters/matchingStrategy'
       responses:
@@ -1757,6 +1921,14 @@ paths:
                   type: number
                   description: Maximum number of documents returned.
                   default: 20
+                page:
+                  type: number
+                  description: The specific search results page to fetch.
+                  example: 1
+                hitsPerPage:
+                  type: number
+                  description: Number of returned results per page.
+                  example: 20
                 sort:
                   $ref: '#/components/schemas/sort'
             examples:
@@ -3327,9 +3499,11 @@ paths:
                         indexUid: movies
                         status: succeeded
                         type: documentAdditionOrUpdate
+                        canceledBy: null
                         details:
                           receivedDocuments: 79000
                           indexedDocuments: 79000
+                        error: null
                         duration: PT1S
                         enqueuedAt: '2021-01-01T09:39:00.000000Z'
                         startedAt: '2021-01-01T09:39:01.000000Z'
@@ -3338,6 +3512,7 @@ paths:
                         indexUid: movies_Review
                         status: failed
                         type: documentAdditionOrUpdate
+                        canceledBy: null
                         details:
                           receivedDocuments: 67493
                           indexedDocuments: 0
@@ -3357,9 +3532,53 @@ paths:
       parameters:
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/from'
-        - $ref: '#/components/parameters/taskIndexUid'
-        - $ref: '#/components/parameters/taskStatus'
-        - $ref: '#/components/parameters/taskType'
+        - $ref: '#/components/parameters/taskFilterUids'
+        - $ref: '#/components/parameters/taskFilterIndexUids'
+        - $ref: '#/components/parameters/taskFilterStatuses'
+        - $ref: '#/components/parameters/taskFilterTypes'
+        - $ref: '#/components/parameters/taskFilterCanceledBy'
+        - $ref: '#/components/parameters/taskFilterBeforeEnqueuedAt'
+        - $ref: '#/components/parameters/taskFilterAfterEnqueuedAt'
+        - $ref: '#/components/parameters/taskFilterBeforeStartedAt'
+        - $ref: '#/components/parameters/taskFilterAfterStartedAt'
+        - $ref: '#/components/parameters/taskFilterBeforeFinishedAt'
+        - $ref: '#/components/parameters/taskFilterAfterFinishedAt'
+      security:
+        - apiKey: []
+    delete:
+      summary: Delete tasks
+      description: 'Delete finished [tasks](https://docs.meilisearch.com/lean/advanced/asynchronous_operations.html)'
+      tags:
+        - tasks
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schema/summarizedTask'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_taskDeletion'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      operationId: tasks.delete
+      parameters:
+        - $ref: '#/components/parameters/taskFilterUids'
+        - $ref: '#/components/parameters/taskFilterIndexUids'
+        - $ref: '#/components/parameters/taskFilterStatuses'
+        - $ref: '#/components/parameters/taskFilterTypes'
+        - $ref: '#/components/parameters/taskFilterCanceledBy'
+        - $ref: '#/components/parameters/taskFilterBeforeEnqueuedAt'
+        - $ref: '#/components/parameters/taskFilterAfterEnqueuedAt'
+        - $ref: '#/components/parameters/taskFilterBeforeStartedAt'
+        - $ref: '#/components/parameters/taskFilterAfterStartedAt'
+        - $ref: '#/components/parameters/taskFilterBeforeFinishedAt'
+        - $ref: '#/components/parameters/taskFilterAfterFinishedAt'
       security:
         - apiKey: []
   '/tasks/:taskUid':
@@ -3382,9 +3601,11 @@ paths:
                     indexUid: movies
                     status: succeeded
                     type: documentAdditionOrUpdate
+                    canceledBy: null
                     details:
                       receivedDocuments: 79000
                       indexedDocuments: 79000
+                    error: null
                     duration: PT1S
                     enqueuedAt: '2021-01-01T09:39:00.000000Z'
                     startedAt: '2021-01-01T09:39:01.000000Z'
@@ -3405,9 +3626,80 @@ paths:
                     type: invalid_request
                     link: 'https://docs.meilisearch.com/errors/#task_not_found'
       operationId: tasks.get
-      parameters: []
+      parameters:
+        - $ref: '#/components/parameters/taskUid'
       security:
         - apiKey: []
-    parameters:
-      - $ref: '#/components/parameters/taskUid'
+  '/tasks/cancel':
+    post:
+      summary: Cancel tasks
+      description: 'Cancel enqueued and/or processing [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) '
+      tags:
+        - tasks
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/summarizedTask'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_taskCancelation'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '401':
+          $ref: '#/components/responses/401'
+      operationId: tasks.cancel
+      parameters:
+        - $ref: '#/components/parameters/taskFilterUids'
+        - $ref: '#/components/parameters/taskFilterIndexUids'
+        - $ref: '#/components/parameters/taskFilterStatuses'
+        - $ref: '#/components/parameters/taskFilterTypes'
+        - $ref: '#/components/parameters/taskFilterCanceledBy'
+        - $ref: '#/components/parameters/taskFilterBeforeEnqueuedAt'
+        - $ref: '#/components/parameters/taskFilterAfterEnqueuedAt'
+        - $ref: '#/components/parameters/taskFilterBeforeStartedAt'
+        - $ref: '#/components/parameters/taskFilterAfterStartedAt'
+        - $ref: '#/components/parameters/taskFilterBeforeFinishedAt'
+        - $ref: '#/components/parameters/taskFilterAfterFinishedAt'
+      security:
+        - apiKey: []
+  '/swap-indexes':
+    post:
+      operationId: indexes.swap
+      summary: Swap Indexes
+      description: Deploy a new version of an index without any downtime for clients by swapping documents, settings, and task history between two indexes. Specifying several swap operations that will be processed in an atomic way is possible.
+      tags:
+        - Indexes
+      security:
+        - apiKey: []
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
+      request:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/swapIndexes'
+            examples:
+              Example:
+                - indexes: ["indexA", "indexA_new"]
+                - indexes: ["indexB", "indexB_new"]
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_indexSwap'
+        '401':
+          $ref: '#/components/responses/401'
 security: []
