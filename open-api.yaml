@@ -337,6 +337,7 @@ components:
             - indexCreation
             - indexUpdate
             - indexDeletion
+            - indexSwap
             - settingsUpdate
             - dumpCreation
             - taskCancelation
@@ -372,9 +373,6 @@ components:
             matchedTasks:
               type: integer
               description: Number of tasks that match the request for taskCancelation or taskDeletion tasks.
-            canceledTasks:
-              type: integer
-              description: Number of tasks canceled for taskCancelation.
             deletedTasks:
               type: integer
               description: Number of tasks deleted for taskDeletion.
@@ -438,6 +436,7 @@ components:
             - indexCreation
             - indexUpdate
             - indexDeletion
+            - indexSwap
             - settingsUpdate
             - dumpCreation
             - taskCancelation
@@ -689,6 +688,7 @@ components:
               - indexes.get
               - indexes.update
               - indexes.delete
+              - indexes.swap
               - tasks.get
               - tasks.cancel
               - tasks.delete

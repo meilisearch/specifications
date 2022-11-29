@@ -23,8 +23,8 @@ As writing is asynchronous for most of Meilisearch's operations, this API allows
 | uid        | string  | Unique sequential identifier                                                                                                                                                                                                  |
 | indexUid   | string  | Unique index identifier. This field is `null` when the task is a [global task](#global-task).                                                                                                                                 |
 | status     | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`, `canceled`                                                                                                                           |
-| type       | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `indexSwap`, `documentAdditionOrUpdate`, `documentDeletion`, `settingsUpdate`, `dumpCreation`, `taskCancelation`, `snapshotCreation`   |                                                   |
-| canceledBy | integer | Unique identifier of the task that canceled this task. Default is set to `null`.                                                                                                                                              |                                                                                         
+| type       | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `indexSwap`, `documentAdditionOrUpdate`, `documentDeletion`, `settingsUpdate`, `dumpCreation`, `taskCancelation`, `taskDeletion`, `snapshotCreation`   |                                                   |
+| canceledBy | integer | Unique identifier of the task that canceled this task. Default is set to `null`.                                                                                                                                              |
 | details    | object  | Details information for a task payload. See Task Details part.                                                                                                                                                                |
 | error      | object  | Error object containing error details and context when a task has a `failed` status. See [0061-error-format-and-definitions.md](0061-error-format-and-definitions.md). Default is set to `null`.                              |
 | duration   | string  | Total elapsed time the engine was in processing state expressed as an `ISO-8601` duration format. Times below the second can be expressed with the `.` notation, e.g., `PT0.5S` to express `500ms`. Default is set to `null`. |
@@ -156,7 +156,7 @@ List of global tasks by `type`:
 
 | Name          | Description |
 | ------------- | ----------- |
-| matchedTasks  | The number of tasks that can be canceled based on the request. If the API key doesn’t have access to any of the indexes specified in the request via the `indexUids` query parameter, those tasks will not be included in `matchedTasks`. | 
+| matchedTasks  | The number of tasks that can be canceled based on the request. If the API key doesn’t have access to any of the indexes specified in the request via the `indexUids` query parameter, those tasks will not be included in `matchedTasks`. |
 | canceledTasks | The number of tasks successfully canceled. If the task fails, `0` is displayed. `null` when the task status is enqueued or processing. |
 | originalFilter | The extracted URL query parameters used in the originating task cancelation request. |
 
@@ -363,7 +363,7 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
             "uid": 0,
             "indexUid": "movies",
             "status": "succeeded",
-            "type": "documentAdditionOrUpdate", 
+            "type": "documentAdditionOrUpdate",
             "canceledBy": null,
             "details": {
                 "receivedDocuments": 100,
@@ -693,7 +693,7 @@ The tasks API endpoints are filterable by  `uids`, `indexUids`, `types`, `status
 | indexUids  | string | No       | Permits to filter tasks by their related index. By default, when `indexUids` query parameter is not set, the tasks of all the indexes are concerned. It is possible to specify several indexUids by separating them with the `,` character. |
 | statuses    | string | No       | Permits to filter tasks by their status. By default, when `statuses` query parameter is not set, all task statuses are concerned. It's possible to specify several statuses by separating them with the `,` character.                        |
 | types      | string | No       | Permits to filter tasks by their related type. By default, when `types` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
-| canceledBy | integer | No | Permits to filter tasks by the `taskCancelation` uid that canceled them. It's possible to specify several task uids by separating them with the `,` character. | 
+| canceledBy | integer | No | Permits to filter tasks by the `taskCancelation` uid that canceled them. It's possible to specify several task uids by separating them with the `,` character. |
 | beforeEnqueuedAt | string | No       | Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before the given filter value.              |
 | afterEnqueuedAt | string | No       | Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued after the given filter value.  |
 | beforeStartedAt | string | No       | Filter tasks based on their startedAt time. Retrieve tasks started before the given value.                |
