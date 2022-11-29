@@ -1,7 +1,3 @@
-- Title: Anonymous Analytics Policy
-- Started At: 2021-04-16
-- Updated At: 2021-10-13
-
 # Anonymous Analytics Policy
 
 ## 1. Functional Specification
@@ -46,6 +42,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | Documents Searched GET | Aggregated event on all received requests via the `GET` - `/indexes/:indexUid/search` route during one hour or until a batch size reaches `500Kb`. |
 | Documents Added | Aggregated event on all received requests via the `POST` - `/indexes/:indexUid/documents` route during one hour or until a batch size reaches `500Kb`. |
 | Documents Updated | Aggregated event on all received requests via the `PUT` - `/indexes/:indexUid/documents` route during one hour or until a batch size reaches `500Kb`. |
+| Documents Deleted | Aggregated event on all received requests via the `DELETE` - `/indexes/:indexUid/documents`, `DELETE` - `/indexes/:indexUid/documents/:documentId`, `POST` - `indexes/:indexUid/documents/delete-batch` routes during one hour or until a batch size reaches `500Kb`.  |
 | Index Created | Occurs when an index is created via `POST` - `/indexes`. |
 | Index Updated | Occurs when an index is updated via `PUT` - `/indexes/:indexUid`. |
 | Settings Updated | Occurs when the settings are updated via `POST` - `/indexes/:indexUid/settings`. |
@@ -56,10 +53,15 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | TypoTolerance Updated | Occurs when typo tolerance settings are updated via `POST` - `/indexes/:indexUid/settings/typo-tolerance`. |
 | Pagination Updated | Occurs when pagination settings are updated via `PATCH` — `/indexes/:indexUid/settings/pagination`. |
 | Faceting Updated | Occurs when faceting settings are updated via `PATCH` — `/indexes/:indexUid/settings/faceting`. |
+| DistinctAttribute Updated | Occurs when distinct attribute setting is updated via `PUT` — `/indexes/:indexUid/settings/distinct-attribute`. |
+| DisplayedAttributes Updated | Occurs when displayed attributes are updated via `PUT` — `/indexes/:indexUid/settings/displayed-attributes`. |
+| StopWords Updated | Occurs when stop words are updated via `PUT` — `/indexes/:indexUid/settings/stop-words`. |
+| Synonyms Updated | Occurs when synonyms are updated via `PUT` — `/indexes/:indexUid/settings/synonyms`. |
 | Dump Created | Occurs when a dump is created via `POST` - `/dumps`. |
-| Tasks Seen | Occurs when tasks are fetched globally via `GET` - `/tasks`. |
+| Tasks Seen | Aggregated event on all received requests via the `GET` - `/tasks` route during one hour or until a batch size reaches `500Kb`. |
 | Stats Seen | Occurs when stats are fetched via `GET` - `/stats` or `/indexes/:indexUid/stats`. |
-
+| Health Seen | Aggregated event on all received requests via the `GET - /health` route during one hour or until a batch size reaches `500Kb`. |
+| Version Seen | Occurs when `GET - /version` is fetched. |
 ----
 
 #### Summarized Metrics/Events table
@@ -87,6 +89,13 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `infos.log_level`                       | Value of `--log-level`/`MEILI_LOG_LEVEL`                | debug             | Every Hour |
 | `infos.max_indexing_memory`                      | Value of `--max-indexing-memory`/`MEILI_MAX_INDEXING_MEMORY` in bytes     | 336042103         | Every Hour |
 | `infos.max_indexing_threads`                   | Value of `--max-indexing-threads`/`MEILI_MAX_INDEXING_THREADS` in integer | 4             | Every Hour |
+| `infos.ssl_auth_path` | `true` if `--ssl-auth-path`/`MEILI_SSL_AUTH_PATH` is specified, otherwise `false` | false |Every Hour |
+| `infos.ssl_cert_path` | `true` if `--ssl-cert-path`/`MEILI_SSL_CERT_PATH` is specified, otherwise `false` | false | Every Hour |
+| `infos.ssl_key_path`  | `true` if `--ssl-key-path`/`MEILI_SSL_KEY_PATH` is specified, otherwise `false` | false |Every Hour |
+| `infos.ssl_ocsp_path` | `true` if `--ssl-ocsp-path`/`MEILI_SSL_OCSP_PATH` is specified, otherwise `false` | false | Every Hour |
+| `infos.ssl_require_auth` | Value of `--ssl-require-auth`/`MEILI_SSL_REQUIRE_AUTH` as a boolean | false | Every Hour |
+| `infos.ssl_resumption` | `true` if `--ssl-resumption`/`MEILI_SSL_RESUMPTION` is specified, otherwise `false` | false | Every Hour |
+| `infos.ssl_tickets` | `true` if `--ssl-tickets`/`MEILI_SSL_TICKETS` is specified, otherwise `false` | false | Every Hour |
 | `infos.with_configuration_file`         | `true` if the instance is launched with a configuration file, otherwise `false` | false | Every Hour |
 | `system.distribution`                   | Distribution on which MeiliSearch is launched           | Arch Linux        | Every hour |
 | `system.kernel_version`                 | Kernel version on which MeiliSearch is launched         | 5.14.10           | Every hour |
@@ -97,11 +106,11 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `stats.database_size`                   | Database size. Expressed in `Bytes`                     | 2621440           | Every hour |
 | `stats.indexes_number`                  | Number of indexes                                       | 2                 | Every hour |
 | `start_since_days`                      | Number of days since instance was launched              | 365               | Every hour |
-| `user_agent`                            | User-agent header encountered during one or more API calls | ["Meilisearch Ruby (v2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `TypoTolerance Updated`, `Pagination Updated`, `Faceting Updated`, `Dump Created`, `Tasks Seen`, `Stats Seen` |
+| `user_agent`                            | User-agent header encountered during one or more API calls | ["Meilisearch Ruby (v2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Documents Deleted`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `TypoTolerance Updated`, `Pagination Updated`, `Faceting Updated`, `DistinctAttribute Updated`, `DisplayedAttributes Updated`, `StopWords Updated`, `Synonyms Updated`, `Dump Created`, `Tasks Seen`, `Stats Seen`, `Health Seen`, `Version Seen` |
 | `requests.99th_response_time`           | Highest latency from among the fastest 99% of successful search requests | 57ms    | `Documents Searched POST`, `Documents Searched GET`|
-| `requests.total_succeeded`              | Total number of successful search requests in this batch | 3456 | `Documents Searched POST`, `Documents Searched GET` |
-| `requests.total_failed`                 | Total number of failed search requests in this batch    | 24   | `Documents Searched POST`, `Documents Searched GET` |
-| `requests.total_received`               | Total number of received search requests in this batch  | 3480 | `Documents Searched POST`, `Documents Searched GET` |
+| `requests.total_succeeded`              | Total number of successful requests in this batch | 3456 | `Documents Searched POST`, `Documents Searched GET` |
+| `requests.total_failed`                 | Total number of failed requests in this batch    | 24   | `Documents Searched POST`, `Documents Searched GET` |
+| `requests.total_received`               | Total number of received requests in this batch  | 3480 | `Documents Searched POST`, `Documents Searched GET`, `Documents Deleted`, `Health Seen`, `Tasks Seen` |
 | `sort.with_geoPoint`                    | `true` if the sort rule `_geoPoint` was used in this batch, otherwise `false` | true | `Documents Searched POST`, `Documents Searched GET` |
 | `sort.avg_criteria_number`              | Average number of sort criteria among all requests containing the `sort` parameter in this batch | 2 | `Documents Searched POST`, `Documents Searched GET` |
 | `filter.with_geoRadius`                 | `true` if the filter rule `_geoRadius` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
@@ -109,21 +118,31 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `q.max_terms_number`                    | Highest number of terms given for the `q` parameter in this batch | 5 | `Documents Searched POST`, `Documents Searched GET` |
 | `pagination.max_limit`                  | Highest value given for the `limit` parameter in this batch | 60 | `Documents Searched POST`, `Documents Searched GET` |
 | `pagination.max_offset`                 | Highest value given for the `offset` parameter in this batch | 1000 | `Documents Searched POST`, `Documents Searched GET` |
+| `formatting.max_attributes_to_retrieve` | The maximum number of attributes to retrieve encountered among all requests in this batch. | 100 | `Documents Searched POST`, `Documents Searched GET` |
+| `formatting.max_attributes_to_highlight` | The maximum number of attributes to highlight encountered among all requests in this batch. | 100 | `Documents Searched POST`, `Documents Searched GET` |
 | `formatting.highlight_pre_tag`       | `true` if `highlightPreTag` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
 | `formatting.highlight_post_tag`       | `true` if `highlightPostTag` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
+| `formatting.max_attributes_to_crop` | The maximum number of attributes to crop encountered among all requests in this batch. | 100 | `Documents Searched POST`, `Documents Searched GET` |
 | `formatting.crop_length`                | `true` if `cropLength` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
 | `formatting.crop_marker`                | `true` if `cropMarker` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
 | `formatting.show_matches_position`                    | `true` if `showMatchesPosition` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
-| `facets`                                | `true` if `facets` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
+| `facets.avg_facets_number` | The average number of facets among all the requests containing the `facets` parameter in this batch. `"facets": []` equals to `0` while not sending `facets` does not influence the average in the aggregated event. | `10` | `Documents Searched POST`, `Documents Searched GET` |
 | `primary_key`                           | Value given for the `primaryKey` parameter if used, otherwise `null` | id | `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`|
 | `payload_type`                          | All `payload_type` encountered in this batch | ["application/json", "text/plain", "application/x-ndjson"] | `Documents Added`, `Documents Updated` |
 | `index_creation`                        | `true` if a document addition or update request triggered index creation in this batch, otherwise `false` | true | `Documents Added`, `Documents Updated` |
-| `ranking_rules.sort_position`           | Position of the `sort` ranking rule | 5 | `Settings Updated`, `Ranking Rules Updated` |
+| `ranking_rules.words_position`          | Position of the `words` ranking rule if any, otherwise `null` | `1`| `Settings Updated`, `Ranking Rules Updated` |
+| `ranking_rules.typo_position`           | Position of the `typo` ranking rule if any, otherwise `null` | `2` | `Settings Updated`, `Ranking Rules Updated` |
+| `ranking_rules.proximity_position`      | Position of the `proximity` ranking rule if any, otherwise `null` | `3` | `Settings Updated`, `Ranking Rules Updated` |
+| `ranking_rules.attribute_position`      | Position of the `attribute` ranking rule if any, otherwise `null` | `4` | `Settings Updated`, `Ranking Rules Updated` |
+| `ranking_rules.sort_position`           | Position of the `sort` ranking rule if any, otherwise `null`. | `5` | `Settings Updated`, `Ranking Rules Updated` |
+| `ranking_rules.exactness_position`      | Position of the `exactness` ranking rule if any, otherwise `null`. | `6` | `Settings Updated`, `Ranking Rules Updated` |
+| `ranking_rules.values`                  | A string representing the ranking rules without the custom asc-desc rules. | `"words, typo, attribute, sort, exactness"` | `Settings Updated`, `Ranking Rules Updated` |
 | `sortable_attributes.total`             | Number of sortable attributes | 3 | `Settings Updated`, `SortableAttributes Updated`|
 | `sortable_attributes.has_geo`           | `true` if `_geo` is set as a sortable attribute, otherwise `false` | true | `Settings Updated`, `SortableAttributes Updated` |
 | `filterable_attributes.total`           | Number of filterable attributes | 3 | `Settings Updated`, `FilterableAttributes Updated` |
 | `filterable_attributes.has_geo`         | `true` if `_geo` is set as a filterable attribute, otherwise `false` | false | `Settings Updated`, `FilterableAttributes Updated`|
 | `searchable_attributes.total`           | Number of searchable attributes | 4 | `Settings Updated`, `SearchableAttributes Updated` |
+| `searchable_attributes.with_wildcard`  | `true` if `*` is specified as a searchable attribute, otherwise `false`. | `false` | `Settings Updated`, `SearchableAttributes Updated` |
 | `typo_tolerance.enabled`                          | Whether the typo tolerance is enabled | `true` | `Settings Updated`, `TypoTolerance Updated` |
 | `typo_tolerance.disable_on_attributes`              | `true` if at least one value is defined | `false` | `Settings Updated`, `TypoTolerance Updated` |
 | `typo_tolerance.disable_on_words`                   | `true` if at least one value is defined | `false` | `Settings Updated`,  `TypoTolerance Updated` |
@@ -131,12 +150,20 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `typo_tolerance.min_word_size_for_typos.two_typos`| The defined value for `minWordSizeForTypos.twoTypos` property | `9` | `Settings Updated`, `TypoTolerance Updated` |
 | `pagination.max_total_hits`                 | The defined value for `pagination.maxTotalHits` property | `1000` | `Settings Updated`, `Pagination Updated` |
 | `faceting.max_values_per_facet`         | The defined value for `faceting.maxValuesPerFacet` property | `100` | `Settings Updated`, `Faceting Updated` |
+| `distinct_attribute.set` | `true` if a field name is specified as a distrinct attribute, otherwise `false`. | `false` | `Settings Updated`, `DistinctAttribute Updated` |
+| `displayed_attributes.total`   | Number of displayed attributes. | `3` | `SettingUpdated`, `DisplayedAttributes Updated` |
+| `displayed_attributes.with_wildcard` | `true` if `*` is specified as a displayed attribute, otherwise `false`. | `false` | `SettingUpdated`, `DisplayedAttributes Updated` |
+| `stop_words.total`   | Number of stop words. | `3` | `Settings Updated`, `StopWords Updated` |
+| `synonyms.total`   | Number of synonyms. | `3` | `Settings Updated`, `Synonyms Updated` |
 | `per_task_uid`                          | `true` if an uid is used to fetch a particular task resource, otherwise `false` | true | `Tasks Seen` |
-| `filtered_by_index_uid`                 | `true` if `GET /tasks` endpoint is filered by `indexUid`, otherwise `false` | false | `Tasks Seen` |
-| `filtered_by_type`                      | `true` if `GET /tasks` endpoint is filered by `type`, otherwise `false` | false | `Tasks Seen` |
-| `filtered_by_status`                    | `true` if `GET /tasks` endpoint is filered by `status`, otherwise `false` | false | `Tasks Seen` |
+| `filtered_by_index_uid`                 | `true` if `GET /tasks` endpoint is filtered by `indexUid`, otherwise `false` | false | `Tasks Seen` |
+| `filtered_by_type`                      | `true` if `GET /tasks` endpoint is filtered by `type`, otherwise `false` | false | `Tasks Seen` |
+| `filtered_by_status`                    | `true` if `GET /tasks` endpoint is filtered by `status`, otherwise `false` | false | `Tasks Seen` |
 | `per_index_uid` | `true` if an uid is used to fetch an index stat resource, otherwise `false` | false | `Stats Seen` |
-| `most_used_matching_strategy`      | Most used word matching strategy among all search requests in this batch | `last` | `Documents Searched POST`, `Documents Searched GET` |
+| `matching_strategy.most_used_strategy`      | Most used word matching strategy among all search requests in this batch | `last` | `Documents Searched POST`, `Documents Searched GET` |
+| `per_document_id` | `true` if `DELETE /indexes/:indexUid/documents/:documentUid` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
+| `clear_all` | `true` if `DELETE /indexes/:indexUid/documents` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
+| `per_batch` | `true` if `POST /indexes/:indexUid/documents/delete-batch` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
 
 ----
 
@@ -180,6 +207,13 @@ This property allows us to gather essential information to better understand on 
 | infos.log_level | Value of `--log-level`/`MEILI_LOG_LEVEL`  | `debug` |
 | infos.max_indexing_memory  | Value of `--max-indexing-memory`/`MEILI_MAX_INDEXING_MEMORY` in bytes     | `336042103` |
 | infos.max_indexing_threads  | Value of `--max-indexing-threads`/`MEILI_MAX_INDEXING_THREADS` in integer | `4` |
+| infos.ssl_auth_path | `true` if `--ssl-auth-path`/`MEILI_SSL_AUTH_PATH` is specified, otherwise `false` | false |
+| infos.ssl_cert_path | `true` if `--ssl-cert-path`/`MEILI_SSL_CERT_PATH` is specified, otherwise `false` | false |
+| infos.ssl_key_path | `true` if `--ssl-key-path`/`MEILI_SSL_KEY_PATH` is specified, otherwise `false` | false |
+| infos.ssl_ocsp_path | `true` if `--ssl-ocsp-path`/`MEILI_SSL_OCSP_PATH` is specified, otherwise `false` | false |
+| infos.ssl_require_auth | Value of `--ssl-require-auth`/`MEILI_SSL_REQUIRE_AUTH` as a boolean | false |
+| infos.ssl_resumption | `true` if `--ssl-resumption`/`MEILI_SSL_RESUMPTION` is specified, otherwise `false` | false |
+| infos.ssl_tickets | `true` if `--ssl-tickets`/`MEILI_SSL_TICKETS` is specified, otherwise `false` | false |
 | infos.with_configuration_file | `true` if the instance is launched with a configuration file, otherwise `false` | `false` |
 
 ##### MeiliSearch Statistics `stats`
@@ -215,14 +249,17 @@ This property allows us to gather essential information to better understand on 
 | filter.most_used_syntax | The most used filter syntax among all the requests containing the requests containing the `filter` parameter in the aggregated event. `string` / `array` / `mixed` | `mixed` |
 | q.max_terms_number | The maximum number of terms for the `q` parameter among all requests in the aggregated event. | `5` |
 | pagination.max_limit | The maximum limit encountered among all requests in the aggregated event. | `20` |
-| pagination.max_offset | The maxium offset encountered among all requests in the aggregated event. | `1000` |
+| pagination.max_offset | The maximum offset encountered among all requests in the aggregated event. | `1000` |
+| formatting.max_attributes_to_retrieve | The maximum number of attributes to retrieve encountered among all requests in the aggregated event. | `100` |
+| formatting.max_attributes_to_highlight | The maximum number of attributes to highlight encountered among all requests in the aggregated event. | `100` |
 | formatting.highlight_pre_tag | Does `highlightPreTag` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.highlight_post_tag | Does `highlightPostTag` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
+| formatting.max_attributes_to_crop | The maximum number of attributes to crop encountered among all requests in the aggregated event. | `100` |
 | formatting.crop_length | Does `cropLength` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.crop_marker | Does `cropMarker` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.show_matches_position | Does `showMatchesPosition` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
-| facets | Does `facets` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
-| most_used_matching_strategy | Most used word matching strategy among all search requests in the aggregated event. `last` / `all` | `last` |
+| facets.avg_facets_number | The average number of facets among all the requests containing the `facets` parameter in the aggregated event. `"facets": []` equals to `0` while not sending `facets` does not influence the average in the aggregated event. | `10` |
+| matching_strategy.most_used_strategy | Most used word matching strategy among all search requests in the aggregated event. `last` / `all` | `last` |
 
 ---
 
@@ -244,14 +281,17 @@ This property allows us to gather essential information to better understand on 
 | filter.most_used_syntax | The most used filter syntax among all the requests containing the requests containing the `filter` parameter in the aggregated event. `string` / `array` / `mixed` | `mixed` |
 | q.max_terms_number | The maximum number of terms for the `q` parameter among all requests in the aggregated event. | `5` |
 | pagination.max_limit | The maximum limit encountered among all requests in the aggregated event. | `20` |
-| pagination.max_offset | The maxium offset encountered among all requests in the aggregated event. | `1000` |
+| pagination.max_offset | The maximum offset encountered among all requests in the aggregated event. | `1000` |
+| formatting.max_attributes_to_retrieve | The maximum number of attributes to retrieve encountered among all requests in the aggregated event. | `100` |
+| formatting.max_attributes_to_highlight | The maximum number of attributes to highlight encountered among all requests in the aggregated event. | `100` |
 | formatting.highlight_pre_tag | Does `highlightPreTag` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.highlight_post_tag | Does `highlightPostTag` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
+| formatting.max_attributes_to_crop | The maximum number of attributes to crop encountered among all requests in the aggregated event. | `100` |
 | formatting.crop_length | Does `cropLength` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.crop_marker | Does `cropMarker` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.show_matches_position | Does `showMatchesPosition` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
-| facets | Does `facets` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
-| most_used_matching_strategy | Most used word matching strategy among all search requests in the aggregated event. `last` / `all` | `last` |
+| facets.avg_facets_number | The average number of facets among all the requests containing the `facets` parameter in the aggregated event. `"facets": []` equals to `0` while not sending `facets` does not influence the average in the aggregated event. | `10` |
+| matching_strategy.most_used_strategy | Most used word matching strategy among all search requests in the aggregated event. `last` / `all` | `last` |
 
 ---
 
@@ -299,14 +339,32 @@ This property allows us to gather essential information to better understand on 
 
 ---
 
-## `Settings Updated`
+## `Documents Deleted`
 
+> The Documents Deleted event is sent once an hour or when a batch reaches the maximum size of `500kb`.
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents all the user-agents encountered on this endpoint in the aggregated event. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| requests.total_received | The total number of received requests in the aggregated event. | `3480` |
+| per_document_id | `true` if `DELETE /indexes/:indexUid/documents/:documentUid` endpoint is called in the aggregated event, otherwise `false` | `false` |
+| clear_all | `true` if `DELETE /indexes/:indexUid/documents` endpoint is called in the aggregated event, otherwise `false` | `false` |
+| per_batch | `true` if `POST /indexes/:indexUid/documents/delete-batch` endpoint is called in the aggregated event, otherwise `false` | `false` |
+
+## `Settings Updated`
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | searchable_attributes.total | Number of searchable attributes. | `3`|
+| searchable_attributes.with_wildcard | `true` if `*` is specified as a searchable attribute, otherwise `false`. | `false` |
+| ranking_rules.words_position | Position of the `words` ranking rule if any, otherwise `null` | `1`|
+| ranking_rules.typo_position | Position of the `typo` ranking rule if any, otherwise `null` | `2` |
+| ranking_rules.proximity_position | Position of the `proximity` ranking rule if any, otherwise `null` | `3` |
+| ranking_rules.attribute_position | Position of the `attribute` ranking rule if any, otherwise `null` | `4` |
 | ranking_rules.sort_position | Position of the `sort` ranking rule if any, otherwise `null`. | `5` |
+| ranking_rules.exactness_position | Position of the `exactness` ranking rule if any, otherwise `null`. | `6` |
+| ranking_rules.values | A string representing the ranking rules without the custom asc-desc rules. | `"words, typo, attribute, sort, exactness"` |
 | sortable_attributes.total   | Number of sortable attributes. | `3` |
 | sortable_attributes.has_geo | Indicate if `_geo` is set as a sortable attribute. | `false`|
 | filterable_attributes.total   | Number of filterable attributes. | `3` |
@@ -318,6 +376,11 @@ This property allows us to gather essential information to better understand on 
 | typo_tolerance.min_word_size_for_typos.two_typos | The defined value for `minWordSizeForTypos.twoTypos` property. | `9` |
 | pagination.max_total_hits                 | The defined value for `pagination.maxTotalHits` property | `1000` |
 | faceting.max_values_per_facet         | The defined value for `faceting.maxValuesPerFacet` property | `100` |
+| distinct_attribute.set | `true` if a field name is specified, otherwise `false`. | `false` |
+| displayed_attributes.total   | Number of displayed attributes. | `3` |
+| displayed_attributes.with_wildcard | `true` if `*` is specified as a displayed attribute, otherwise `false`. | `false` |
+| stop_words.total   | Number of stop words. | `3` |
+| synonyms.total   | Number of synonyms. | `3` |
 
 ---
 
@@ -326,7 +389,13 @@ This property allows us to gather essential information to better understand on 
 | Property name | Description | Example |
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| ranking_rules.words_position | Position of the `words` ranking rule if any, otherwise `null` | `1`|
+| ranking_rules.typo_position | Position of the `typo` ranking rule if any, otherwise `null` | `2` |
+| ranking_rules.proximity_position | Position of the `proximity` ranking rule if any, otherwise `null` | `3` |
+| ranking_rules.attribute_position | Position of the `attribute` ranking rule if any, otherwise `null` | `4` |
 | ranking_rules.sort_position | Position of the `sort` ranking rule if any, otherwise `null`. | `5` |
+| ranking_rules.exactness_position | Position of the `exactness` ranking rule if any, otherwise `null`. | `6` |
+| ranking_rules.values | A string representing the ranking rules without the custom asc-desc rules. | `"words, typo, attribute, sort, exactness"` |
 
 ---
 
@@ -354,11 +423,13 @@ This property allows us to gather essential information to better understand on 
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | searchable_attributes.total   | Number of searchable attributes. | `3` |
+| searchable_attributes.with_wildcard | `true` if `*` is specified as a searchable attribute, otherwise `false`. | `false` |
 
 ## `TypoTolerance Updated`
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | typo_tolerance.enabled        | Whether the typo tolerance is enabled | `true` |
 | typo_tolerance.disable_on_attributes | `true` if at least one value is defined for `disableOnAttributes` property. | `false` |
 | typo_tolerance.disable_on_words    | `true` if at least one value is defined for `disableOnWords` property. | `false` |
@@ -369,13 +440,44 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | pagination.max_total_hits | The defined value for `maxTotalHits` property | `1000` |
 
 ## `Faceting Updated`
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | faceting.max_values_per_facet | The defined value for `maxValuesPerFacet` property | `100` |
+
+## `DistinctAttribute Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| distinct_attribute.set | `true` if a field name is specified, otherwise `false`. | `false` |
+
+## `DisplayedAttributes Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| displayed_attributes.total   | Number of displayed attributes. | `3` |
+| displayed_attributes.with_wildcard | `true` if `*` is specified as a displayed attribute, otherwise `false`. | `false` |
+
+## `StopWords Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| stop_words.total   | Number of stop words. | `3` |
+
+## `Synonyms Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| synonyms.total   | Number of synonyms. | `3` |
 
 ## `Dump Created`
 
@@ -385,9 +487,12 @@ This property allows us to gather essential information to better understand on 
 
 ## `Tasks Seen`
 
+> The Tasks Seen event is sent once an hour or when a batch reaches the maximum size of `500Kb`.
+
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| user_agent    | Represents the user-agent encountered on this endpoint in the aggregated event. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| requests.total_received | The total number of received requests in the aggregated event. | `3480` |
 | per_task_uid  | `true` if an uid is used to fetch a particular task resource, otherwise `false` | `true` |
 | filtered_by_index_uid | `true` if `GET /tasks` endpoint is filered by `indexUid`, otherwise `false` | `false` |
 | filtered_by_type | `true` if `GET /tasks` endpoint is filered by `type`, otherwise `false` | `false` |
@@ -399,6 +504,21 @@ This property allows us to gather essential information to better understand on 
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | per_index_uid | `true` if an uid is used to fetch an index stat resource, otherwise `false` | `true` |
+
+## `Health Seen`
+
+> The Health Seen event is sent once an hour or when a batch reaches the maximum size of `500kb`.
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents all the user-agents encountered on this endpoint in the aggregated event. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| requests.total_received | The total number of received requests in the aggregated event. | `3480` |
+
+## `Version Seen`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 
 ---
 
