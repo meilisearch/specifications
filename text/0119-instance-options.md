@@ -153,7 +153,7 @@ Configures the instance's environment. Value must be either `production` or `dev
 
 **Environment variable**: `MEILI_HTTP_ADDR`
 **CLI option**: `--http-addr`
-**Default value**: `"127.0.0.1:7700"`
+**Default value**: `"localhost:7700"`
 **Expected value**: an HTTP address and port
 
 Sets the HTTP address and port Meilisearch will use.
