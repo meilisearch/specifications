@@ -201,6 +201,7 @@ Gives the total number of API keys that can be browsed.
 
 ###### 3.2.4.2.3. Errors
 
+- 🔴 Accessing this route while a master key is not set for the instance returns a [missing_master_key](0061-error-format-and-definitions.md#missing_master_key) error.
 - 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
 - 🔴 Accessing this route without the master key returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
@@ -279,6 +280,7 @@ See [API Key Resource Representation](#3241-api-key-resource-representation) sec
 
 ###### 3.2.4.3.3. Errors
 
+- 🔴 Accessing this route while a master key is not set for the instance returns a [missing_master_key](0061-error-format-and-definitions.md#missing_master_key) error.
 - 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
 - 🔴 Accessing this route without the master key or an API key missing the `keys.get` permission returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
@@ -330,6 +332,7 @@ See [API Key Resource Representation](#3241-api-key-resource-representation) sec
 
 ###### 3.2.4.4.3. Errors
 
+- 🔴 Accessing this route while a master key is not set for the instance returns a [missing_master_key](0061-error-format-and-definitions.md#missing_master_key) error.
 - 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
 - 🔴 Accessing this route without the master key or an API key missing the `keys.create` permission returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 - 🔴 Omitting Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
@@ -368,6 +371,7 @@ See [API Key Resource Representation](#3241-api-key-resource-representation) sec
 
 ###### 3.2.4.5.3. Errors
 
+- 🔴 Accessing this route while a master key is not set for the instance returns a [missing_master_key](0061-error-format-and-definitions.md#missing_master_key) error.
 - 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
 - 🔴 Accessing this route without the master key or an API key missing the `keys.update` permission returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 - 🔴 Attempting to access an API key that does not exist returns a [api_key_not_found](0061-error-format-and-definitions.md#api_key_not_found) error.
@@ -395,6 +399,7 @@ Returns a `204 No-Content` HTTP code when the request is successful.
 
 ###### 3.2.4.6.3. Errors
 
+- 🔴 Accessing this route while a master key is not set for the instance returns a [missing_master_key](0061-error-format-and-definitions.md#missing_master_key) error.
 - 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
 - 🔴 Accessing this route without the master key or an API key missing the `keys.delete` permission returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 - 🔴 Attempting to access an API key that does not exist returns a [`api_key_not_found`](0061-error-format-and-definitions.md#api_key_not_found) error.

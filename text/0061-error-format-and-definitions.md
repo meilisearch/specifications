@@ -1350,6 +1350,29 @@ HTTP Code: `403 Forbidden`
 
 ---
 
+## missing_master_key
+
+`Synchronous`
+
+### Context
+
+For some specific protected routes (i.e. `/keys`) the master key must be defined before accessing it. This error indicates to the user that he must first define a master key when launching Meilisearch.
+
+### Error Definition
+
+HTTP Code: `401 Forbidden`
+
+```json
+{
+    "message": "Meilisearch is running without a master key. To access this API endpoint, you must have set a master key at launch.",
+    "code": "missing_master_key",
+    "type": "auth",
+    "link": "https://docs.meilisearch.com/errors#missing_master_key"
+}
+```
+
+---
+
 ## 2. Technical details
 N/A
 
