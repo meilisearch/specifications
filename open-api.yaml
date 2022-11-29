@@ -373,6 +373,9 @@ components:
             matchedTasks:
               type: integer
               description: Number of tasks that match the request for taskCancelation or taskDeletion tasks.
+            canceledTasks:
+              type: integer
+              description: Number of tasks canceled for taskCancelation.
             deletedTasks:
               type: integer
               description: Number of tasks deleted for taskDeletion.
