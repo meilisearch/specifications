@@ -294,6 +294,19 @@ HTTP Code: `400 Bad Request`
 
 - The `:value` is inferred when the message is generated.
 
+#### Variant: Sending an invalid index uid format in `indexes` field.
+
+```json
+{
+    "message": "`uid` is not a valid index uid. Index uid can be an integer or a string containing only alphanumeric characters, hyphens (-) and underscores (_).",
+    "code": "invalid_api_key_indexes",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_api_key_indexes"
+}
+```
+
+- The `:uid` is inferred when the message is generated.
+
 ---
 
 ## invalid_api_key_expires_at
@@ -1399,6 +1412,29 @@ HTTP Code: `403 Forbidden`
     "code": "invalid_api_key",
     "type": "auth",
     "link": "https://docs.meilisearch.com/errors#invalid_api_key"
+}
+```
+
+---
+
+## missing_master_key
+
+`Synchronous`
+
+### Context
+
+For some specific protected routes (i.e. `/keys`) the master key must be defined before accessing it. This error indicates to the user that he must first define a master key when launching Meilisearch.
+
+### Error Definition
+
+HTTP Code: `401 Forbidden`
+
+```json
+{
+    "message": "Meilisearch is running without a master key. To access this API endpoint, you must have set a master key at launch.",
+    "code": "missing_master_key",
+    "type": "auth",
+    "link": "https://docs.meilisearch.com/errors#missing_master_key"
 }
 ```
 

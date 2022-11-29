@@ -120,6 +120,7 @@ The expected behavior of each flag is described in the list above.
 - [SSL require auth](#3327-ssl-require-auth)
 - [SSL resumption](#3328-ssl-resumption)
 - [SSL tickets](#3329-ssl-tickets)
+- [Config file path](#3330-config-file-path)
 
 #### 3.3.1. Database path
 
@@ -153,7 +154,7 @@ Configures the instance's environment. Value must be either `production` or `dev
 
 **Environment variable**: `MEILI_HTTP_ADDR`
 **CLI option**: `--http-addr`
-**Default value**: `"127.0.0.1:7700"`
+**Default value**: `"localhost:7700"`
 **Expected value**: an HTTP address and port
 
 Sets the HTTP address and port Meilisearch will use.
@@ -194,7 +195,7 @@ Sets the directory where Meilisearch will create dump files. If the directory do
 
 #### 3.3.7. Import dump
 
-**Environment variable**: N/A
+**Environment variable**: `MEILI_IMPORT_DUMP`
 **CLI option**: `--import-dump`
 **Default value**: `none`
 **Expected value**: a filepath pointing to a `.dump` file
@@ -207,7 +208,7 @@ More regarding dump behaviors in this [spec](https://github.com/meilisearch/spec
 
 #### 3.3.8. Ignore missing dump
 
-**Environment variable**: N/A
+**Environment variable**: `MEILI_IGNORE_MISSING_DUMP`
 **CLI option**: `--ignore-missing-dump`
 **Default**: Disabled
 
@@ -221,7 +222,7 @@ More information in this [section of the spec](https://github.com/meilisearch/sp
 
 #### 3.3.9. Ignore dump if DB exists
 
-**Environment variable**: N/A
+**Environment variable**: `MEILI_IGNORE_DUMP_IF_DB_EXISTS`
 **CLI option**: `--ignore-dump-if-db-exists`
 **Default**: Disabled
 
@@ -249,7 +250,7 @@ Defines how much detail should be present in Meilisearch's logs.
 **Default value**: `107374182400` (100 GiB)
 **Expected value**: an integer (`104857600`) or a human readable size (`100Mb`)
 
-Sets the maximum size of the index. Value must be given in bytes or explicitly stating a base unit. For example, the default value can be written as `107374182400`, `'107.7Gb'`, or `'107374 Mb'`.
+Sets the maximum size for an index. Value must be given in bytes or explicitly stating a base unit. For example, the default value can be written as `107374182400`, `'107.7Gb'`, or `'107374 Mb'`.
 
 The `index` stores processed data and is different from the `task` database, which handles pending tasks.
 
@@ -303,7 +304,7 @@ Defines the interval between each snapshot. Value must be given in seconds.
 
 #### 3.3.17. Import snapshot
 
-**Environment variable**: N/A
+**Environment variable**: `MEILI_IMPORT_SNAPSHOT`
 **CLI option**: `--import-snapshot`
 **Default value**: `None`
 **Expected value**: a filepath pointing to a snapshot file
@@ -319,7 +320,7 @@ This behavior can be modified with the `--ignore-snapshot-if-db-exists` and `--i
 
 #### 3.3.18. Ignore missing snapshot
 
-**Environment variable**: N/A
+**Environment variable**: `MEILI_IGNORE_MISSING_SNAPSHOT`
 **CLI option**: `--ignore-missing-snapshot`
 **Default**: Disabled
 
@@ -331,7 +332,7 @@ This command will throw an error if `--import-snapshot` is not defined.
 
 #### 3.3.19. Ignore snapshot if DB exists
 
-**Environment variable**: N/A
+**Environment variable**: `MEILI_IGNORE_SNAPSHOT_IF_DB_EXISTS`
 **CLI option**: `--ignore-snapshot-if-db-exists`
 **Default**: Disabled
 
@@ -456,6 +457,16 @@ Activates SSL session resumption.
 ⚠️ This command-line option does not take any values. Assigning a value will throw an error.
 
 Activates SSL tickets.
+
+#### 3.3.30. Config file path
+
+**Environment variable**: `MEILI_CONFIG_FILE_PATH`
+**CLI option**: `--config-file-path`
+**Default**: `./config.toml`
+
+Define the config file to load at Meilisearch launch.
+
+See [Configuration File](0185-configuration-file.md) specification details.
 
 ## 4. Technical Aspects
 
