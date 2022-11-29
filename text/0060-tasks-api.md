@@ -8,7 +8,7 @@ This specification describes the API endpoints for handling asynchronous tasks.
 
 ### II. Motivation
 
-As writing is asynchronous for most of Meilisearch's operations, this API allows users to track the progress of asynchronous tasks, know and understand why a task has failed, and cancel specific tasks being enqueued or processing.
+As writing is asynchronous for most of Meilisearch's operations, this API allows users to track the progress of asynchronous tasks, know and understand why a task has failed, and cancel specific tasks being enqueued or processing. It's also possible to delete tasks being in a finished state.
 
 ### III. Explanation
 
@@ -44,6 +44,7 @@ List of global tasks by `type`:
 
 - `dumpCreation`
 - `taskCancelation`
+- `taskDeletion`
 
 ##### Summarized `task` Object for `202 Accepted`
 
@@ -83,6 +84,7 @@ List of global tasks by `type`:
 | settingsUpdate           |
 | dumpCreation             |
 | taskCancelation          |
+| taskDeletion             |
 | snapshotCreation         |
 
 > 👍 Type values follow a `camelCase` naming convention.
@@ -157,6 +159,14 @@ List of global tasks by `type`:
 | matchedTasks  | The number of tasks that can be canceled based on the request. If the API key doesn’t have access to any of the indexes specified in the request via the `indexUids` query parameter, those tasks will not be included in `matchedTasks`. | 
 | canceledTasks | The number of tasks successfully canceled. If the task fails, `0` is displayed. `null` when the task status is enqueued or processing. |
 | originalFilter | The extracted URL query parameters used in the originating task cancelation request. |
+
+##### taskDeletion
+
+| Name          | Description |
+|---------------|-------------|
+| matchedTasks  | The number of tasks that can be deleted based on the request. If the API key doesn’t have access to any of the indexes specified in the request via the `indexUid` query parameter, those tasks will not be included in `matchedTasks`. |
+| deletedTasks | The number of tasks successfully deleted. If the task fails, `0` is displayed. `null` when the task status is enqueud or processing. |
+| originalFilter | The extracted URL query parameters used in the originating task deletion request. |
 
 ##### snapshotCreation
 N/A
@@ -459,7 +469,42 @@ This means:
 
 If a user tries canceling a `succeeded`, `failed`, or `canceled` task, it won’t throw an error. Task cancelation is an atomic transaction; all tasks are successfully canceled, or none are.
 
-- 🔴 Sending a task cancelation without filtering query parameters returns a [missing_task_filters](0061-error-format-and-definitions.md#missing_task_filters) error.
+- 🔴 Sending a task cancelation without filtering query parameters returns a [missing_task_filters](0061-error-format-and-definitions.md#missing_task_filters) error.
+
+The auth layer can return the following errors if Meilisearch is secured (a master-key is defined).
+
+- 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route with a key that does not have the required permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+
+---
+
+##### 6.4 Delete tasks | `DELETE` - `/tasks`
+
+##### 6.4.1 Goals
+
+Allows users to delete a finished (`succeeded`, `processing` or `canceled`) tasks.
+
+`202` - Response body - `/tasks`
+
+```json
+{
+    "taskUid": 0,
+    "indexUid": null,
+    "status": "enqueued",
+    "type": "taskDeletion",
+    "enqueuedAt": "2021-08-12T10:00:00.000000Z"
+}
+```
+
+##### 6.4.2. Response Definition
+
+When the request is successful, Meilisearch returns the HTTP code 202 Accepted. The response's content is the summarized representation of the received asynchronous task.
+
+##### 6.4.3. Errors
+
+If a user tries deleting an `enqueued`, or `processing` task, it won’t throw an error. Task deletion is an atomic transaction; all tasks are successfully deleted, or none aren't.
+
+- 🔴 Sending a task deletion without filtering query parameters returns a [missing_task_filters](0061-error-format-and-definitions.md#missing_task_filters) error.
 
 The auth layer can return the following errors if Meilisearch is secured (a master-key is defined).
 
@@ -472,7 +517,7 @@ The auth layer can return the following errors if Meilisearch is secured (a mast
 
 ##### Context
 
-This error happens when a requested task can't be found.
+This error happens when a requested task can't be found. Fetching a deleted task returns a `task_not_found` error.
 
 ##### Error Definition
 

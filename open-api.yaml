@@ -315,6 +315,7 @@ components:
             - settingsUpdate
             - dumpCreation
             - taskCancelation
+            - taskDeletion
             - snapshotCreation
         canceledBy:
           type: integer
@@ -345,13 +346,16 @@ components:
               description: Identifier generated for the dump for dumpCreation task.
             matchedTasks:
               type: integer
-              description: Number of tasks that match the task cancelation request.
+              description: Number of tasks that match the request for taskCancelation or taskDeletion tasks.
             canceledTasks:
               type: integer
-              description: Number of tasks canceled.
+              description: Number of tasks canceled for taskCancelation.
+            deletedTasks:
+              type: integer
+              description: Number of tasks deleted for taskDeletion.
             originalFilter:
               type: string
-              description: Filter used for the cancelation task.
+              description: Original filter query for taskCancelation or taskDeletion tasks.
         error:
           description: Error object containing error details and context when a task has a failed status.
           $ref: '#/components/schemas/error'
@@ -412,6 +416,7 @@ components:
             - settingsUpdate
             - dumpCreation
             - taskCancelation
+            - taskDeletion
         enqueuedAt:
           description: Represent the date and time as a `RFC 3339` format when the task has been enqueued
           $ref: '#/components/schemas/timestamp'
@@ -661,6 +666,7 @@ components:
               - indexes.delete
               - tasks.get
               - tasks.cancel
+              - tasks.delete
               - settings.get
               - settings.update
               - stats.get
@@ -1110,6 +1116,14 @@ components:
         indexUid: null
         status: enqueued
         type: taskCancelation
+        enqueuedAt: '2021-01-01T09:39:00.000000Z'
+    202_taskDeletion:
+      summary: 202 Accepted taskDeletion response example
+      value:
+        taskUid: 0
+        indexUid: null
+        status: enqueued
+        type: taskDeletion
         enqueuedAt: '2021-01-01T09:39:00.000000Z'
     202_indexSwap:
       summary: 202 Accepted indexSwap response example
@@ -3466,6 +3480,42 @@ paths:
       parameters:
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/from'
+        - $ref: '#/components/parameters/taskFilterUids'
+        - $ref: '#/components/parameters/taskFilterIndexUids'
+        - $ref: '#/components/parameters/taskFilterStatuses'
+        - $ref: '#/components/parameters/taskFilterTypes'
+        - $ref: '#/components/parameters/taskFilterCanceledBy'
+        - $ref: '#/components/parameters/taskFilterBeforeEnqueuedAt'
+        - $ref: '#/components/parameters/taskFilterAfterEnqueuedAt'
+        - $ref: '#/components/parameters/taskFilterBeforeStartedAt'
+        - $ref: '#/components/parameters/taskFilterAfterStartedAt'
+        - $ref: '#/components/parameters/taskFilterBeforeFinishedAt'
+        - $ref: '#/components/parameters/taskFilterAfterFinishedAt'
+      security:
+        - apiKey: []
+    delete:
+      summary: Delete tasks
+      description: 'Delete finished [tasks](https://docs.meilisearch.com/lean/advanced/asynchronous_operations.html)'
+      tags:
+        - tasks
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schema/summarizedTask'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_taskDeletion'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      operationId: tasks.delete
+      parameters:
         - $ref: '#/components/parameters/taskFilterUids'
         - $ref: '#/components/parameters/taskFilterIndexUids'
         - $ref: '#/components/parameters/taskFilterStatuses'
