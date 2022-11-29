@@ -20,13 +20,13 @@ As writing is asynchronous for most of Meilisearch's operations, this API allows
 
 | field      | type    | description                                                                                                                                                                                                                   |
 |------------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| uid        | string | Unique sequential identifier                                                                                                                                                                                                  |
-| indexUid   | string  | Unique index identifier. This field is `null` when the task is a [global task](#global-task).                                                   |
-| status     | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`, `canceled`                                                                                                                          |
-| type       | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `documentAdditionOrUpdate`, `documentDeletion`, `settingsUpdate`, `dumpCreation`, `taskCancelation`                                                    |
-| canceledBy | integer | Unique identifier of the task that canceled this task. Default is set to `null`.                                                    |
+| uid        | string  | Unique sequential identifier                                                                                                                                                                                                  |
+| indexUid   | string  | Unique index identifier. This field is `null` when the task is a [global task](#global-task).                                                                                                                                 |
+| status     | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`, `canceled`                                                                                                                           |
+| type       | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `indexSwap`, `documentAdditionOrUpdate`, `documentDeletion`, `settingsUpdate`, `dumpCreation`, `taskCancelation`, `snapshotCreation`   |                                                   |
+| canceledBy | integer | Unique identifier of the task that canceled this task. Default is set to `null`.                                                                                                                                              |                                                                                         
 | details    | object  | Details information for a task payload. See Task Details part.                                                                                                                                                                |
-| error      | object  | Error object containing error details and context when a task has a `failed` status. See [0061-error-format-and-definitions.md](0061-error-format-and-definitions.md). Default is set to `null`. |
+| error      | object  | Error object containing error details and context when a task has a `failed` status. See [0061-error-format-and-definitions.md](0061-error-format-and-definitions.md). Default is set to `null`.                              |
 | duration   | string  | Total elapsed time the engine was in processing state expressed as an `ISO-8601` duration format. Times below the second can be expressed with the `.` notation, e.g., `PT0.5S` to express `500ms`. Default is set to `null`. |
 | enqueuedAt | string  | Represent the date and time as `RFC 3339` format when the task has been enqueued                                                                                                                                              |
 | startedAt  | string  | Represent the date and time as `RFC 3339` format when the task has been dequeued and started to be processed. Default is set to `null`. |
@@ -77,11 +77,13 @@ List of global tasks by `type`:
 | indexCreation            |
 | indexUpdate              |
 | indexDeletion            |
+| indexSwap                |
 | documentAdditionOrUpdate |
 | documentDeletion         |
 | settingsUpdate           |
 | dumpCreation             |
 | taskCancelation          |
+| snapshotCreation         |
 
 > 👍 Type values follow a `camelCase` naming convention.
 
@@ -98,8 +100,8 @@ List of global tasks by `type`:
 
 | name                | description                          |
 |---------------------|--------------------------------------|
-| receivedDocumentIds | Number of document ids received.     |
-| deletedDocuments    | Number of documents finally deleted. `null` when the task status is enqueued or processing. |
+| providedIds         | Number of provided document ids.     |
+| deletedDocuments    | Number of documents finally deleted. |
 
 ##### indexCreation
 
@@ -119,6 +121,12 @@ List of global tasks by `type`:
 | name             | description                                                                          |
 |------------------|--------------------------------------------------------------------------------------|
 | deletedDocuments | Number of deleted documents. Should be all documents contained in the deleted index. `null` when the task status is enqueued or processing. |
+
+##### indexSwap
+
+| name             | description                                                                          |
+|------------------|--------------------------------------------------------------------------------------|
+| swaps            | Object containing the payload originating the `indexSwap` task creation              |
 
 ##### settingsUpdate
 
@@ -149,6 +157,11 @@ List of global tasks by `type`:
 | matchedTasks  | The number of tasks that can be canceled based on the request. If the API key doesn’t have access to any of the indexes specified in the request via the `indexUids` query parameter, those tasks will not be included in `matchedTasks`. | 
 | canceledTasks | The number of tasks successfully canceled. If the task fails, `0` is displayed. `null` when the task status is enqueued or processing. |
 | originalFilter | The extracted URL query parameters used in the originating task cancelation request. |
+
+##### snapshotCreation
+N/A
+
+The `details` object is specified to `null` for a `snapshotCreation` task.
 
 #### 5. Examples
 
@@ -936,7 +949,17 @@ If no results match the filters. A response is returned with an empty `results` 
 
 ## 2. Technical details
 
-n/a
+### 2.1. Tasks Priority
+
+The tasks are processed given a order of priority. That is, if a task `B` of a higher priority is enqueued after an enqueued `task A`, `task B` will be processed first.
+
+The task types are listed in decreasing order of priority:
+
+1. `taskCancelation`
+2. `taskDeletion`
+3. `snapshotCreation`
+4. `dumpCreation`
+5. All other task types with by their enqueued at order.
 
 ## 3. Future Possibilities
 
@@ -944,3 +967,4 @@ n/a
 - Add dedicated task type names modifying a sub-setting. e.g. `SearchableAttributesUpdate`.
 - Add an archived state for old `tasks`.
 - Add the `API Key` identity that added a `task`.
+- Make dump import visible as a task.
