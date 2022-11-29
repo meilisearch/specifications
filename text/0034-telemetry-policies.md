@@ -96,6 +96,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `infos.ssl_require_auth` | Value of `--ssl-require-auth`/`MEILI_SSL_REQUIRE_AUTH` as a boolean | false | Every Hour |
 | `infos.ssl_resumption` | `true` if `--ssl-resumption`/`MEILI_SSL_RESUMPTION` is specified, otherwise `false` | false | Every Hour |
 | `infos.ssl_tickets` | `true` if `--ssl-tickets`/`MEILI_SSL_TICKETS` is specified, otherwise `false` | false | Every Hour |
+| `infos.with_configuration_file`         | `true` if the instance is launched with a configuration file, otherwise `false` | false | Every Hour |
 | `system.distribution`                   | Distribution on which MeiliSearch is launched           | Arch Linux        | Every hour |
 | `system.kernel_version`                 | Kernel version on which MeiliSearch is launched         | 5.14.10           | Every hour |
 | `system.cores`                          | Number of cores                                         | 24                | Every hour |
@@ -213,6 +214,7 @@ This property allows us to gather essential information to better understand on 
 | infos.ssl_require_auth | Value of `--ssl-require-auth`/`MEILI_SSL_REQUIRE_AUTH` as a boolean | false |
 | infos.ssl_resumption | `true` if `--ssl-resumption`/`MEILI_SSL_RESUMPTION` is specified, otherwise `false` | false |
 | infos.ssl_tickets | `true` if `--ssl-tickets`/`MEILI_SSL_TICKETS` is specified, otherwise `false` | false |
+| infos.with_configuration_file | `true` if the instance is launched with a configuration file, otherwise `false` | `false` |
 
 ##### MeiliSearch Statistics `stats`
 
