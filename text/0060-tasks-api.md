@@ -4,11 +4,11 @@
 
 ### I. Summary
 
-This specification describes the API endpoints for viewing asynchronous tasks.
+This specification describes the API endpoints for handling asynchronous tasks.
 
 ### II. Motivation
 
-As writing is asynchronous for most of Meilisearch's operations, this API makes it possible to track the progress of asynchronous tasks, to know and understand why a task failed and also serves as consulting the history of operations that happened.
+As writing is asynchronous for most of Meilisearch's operations, this API allows users to track the progress of asynchronous tasks, know and understand why a task has failed, and cancel specific tasks being enqueued or processing. It's also possible to delete tasks being in a finished state.
 
 ### III. Explanation
 
@@ -20,27 +20,40 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 
 | field      | type    | description                                                                                                                                                                                                                   |
 |------------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| uid        | integer | Unique sequential identifier                                                                                                                                                                                                  |
-| indexUid   | string  | Unique index identifier. This field is `null` when the task type is `dumpCreation`.                                                                                                                                                                                                                                        |
-| status     | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`                                                                                                                                       |
-| type       | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `indexSwap`, `documentAdditionOrUpdate`, `documentDeletion`, `settingsUpdate`, `dumpCreation`, `snapshopCreation`            |
+| uid        | string  | Unique sequential identifier                                                                                                                                                                                                  |
+| indexUid   | string  | Unique index identifier. This field is `null` when the task is a [global task](#global-task).                                                                                                                                 |
+| status     | string  | Status of the task. Possible values are `enqueued`, `processing`, `succeeded`, `failed`, `canceled`                                                                                                                           |
+| type       | string  | Type of the task. Possible values are `indexCreation`, `indexUpdate`, `indexDeletion`, `indexSwap`, `documentAdditionOrUpdate`, `documentDeletion`, `settingsUpdate`, `dumpCreation`, `taskCancelation`, `snapshotCreation`   |                                                   |
+| canceledBy | integer | Unique identifier of the task that canceled this task. Default is set to `null`.                                                                                                                                              |                                                                                         
 | details    | object  | Details information for a task payload. See Task Details part.                                                                                                                                                                |
-| error      | object  | Error object containing error details and context when a task has a `failed` status. See [0061-error-format-and-definitions.md](0061-error-format-and-definitions.md)                                                         |
+| error      | object  | Error object containing error details and context when a task has a `failed` status. See [0061-error-format-and-definitions.md](0061-error-format-and-definitions.md). Default is set to `null`.                              |
 | duration   | string  | Total elapsed time the engine was in processing state expressed as an `ISO-8601` duration format. Times below the second can be expressed with the `.` notation, e.g., `PT0.5S` to express `500ms`. Default is set to `null`. |
 | enqueuedAt | string  | Represent the date and time as `RFC 3339` format when the task has been enqueued                                                                                                                                              |
-| startedAt  | string  | Represent the date and time as `RFC 3339` format when the task has been dequeued and started to be processed. Default is set to `null`                                                                                        |
-| finishedAt | string  | Represent the date and time as `RFC 3339` format when the task has `failed` or `succeeded`. Default is set to `null`                                                                                                          |
+| startedAt  | string  | Represent the date and time as `RFC 3339` format when the task has been dequeued and started to be processed. Default is set to `null`. |
+| finishedAt | string  | Represent the date and time as `RFC 3339` format when the task has a `failed`, `succeeded` or `canceled` status. Default is set to `null`. |
 
 > 💡 The order of the fields must be returned in this order.
+
+###### Global task
+
+Some specific tasks are not associated with a particular index and apply to all. They are considered global.
+
+The fully qualified and summarized task objects linked to this kind of task display a `null` value for the `indexUid` field.
+
+List of global tasks by `type`:
+
+- `dumpCreation`
+- `taskCancelation`
+- `taskDeletion`
 
 ##### Summarized `task` Object for `202 Accepted`
 
 | field      | type    | description                     |
 |------------|---------|---------------------------------|
 | taskUid    | integer | Unique sequential identifier           |
-| indexUid   | string  | Unique index identifier. This field is `null` when the task type is `dumpCreation`. |
+| indexUid   | string  | Unique index identifier. This field is `null` when the task is a [global task](#global-task) |
 | status     | string  | Status of the task. Value is `enqueued` |
-| type       | string  | Type of the task. |
+| type       | string  | Type of the task |
 | enqueuedAt | string  | Represent the date and time as `RFC 3339` format when the task has been enqueued |
 
 
@@ -56,6 +69,7 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 | processing |
 | succeeded  |
 | failed     |
+| canceled   |
 
 #### 3. `type` field enum
 
@@ -69,6 +83,8 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 | documentDeletion         |
 | settingsUpdate           |
 | dumpCreation             |
+| taskCancelation          |
+| taskDeletion             |
 | snapshotCreation         |
 
 > 👍 Type values follow a `camelCase` naming convention.
@@ -80,13 +96,13 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 | name              | description                          |
 |-------------------|--------------------------------------|
 | receivedDocuments | Number of documents received.        |
-| indexedDocuments  | Number of documents finally indexed. |
+| indexedDocuments  | Number of documents finally indexed. `null` when the task status is enqueued or processing. |
 
 ##### documentDeletion
 
 | name                | description                          |
 |---------------------|--------------------------------------|
-| providedIds    | Number of provided document ids.      |
+| providedIds         | Number of provided document ids.     |
 | deletedDocuments    | Number of documents finally deleted. |
 
 ##### indexCreation
@@ -106,7 +122,7 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 
 | name             | description                                                                          |
 |------------------|--------------------------------------------------------------------------------------|
-| deletedDocuments | Number of deleted documents. Should be all documents contained in the deleted index. |
+| deletedDocuments | Number of deleted documents. Should be all documents contained in the deleted index. `null` when the task status is enqueued or processing. |
 
 ##### indexSwap
 
@@ -134,11 +150,23 @@ As writing is asynchronous for most of Meilisearch's operations, this API makes 
 
 | name    | description  |
 | -----   | ------------ |
-| dumpUid | The generated uid of the dump |
+| dumpUid | The generated uid of the dump. `null` when the task status is enqueued, processing, canceled, or failed. |
 
-Since the creation of a dump is not a task associated with a particular index, it is only present on the `GET` - `/tasks` and `GET` - `tasks/:task_uid` endpoints.
+##### taskCancelation
 
-Fully qualified and summarized task objects related to a dump creation display a `null` `indexUid` field.
+| Name          | Description |
+| ------------- | ----------- |
+| matchedTasks  | The number of tasks that can be canceled based on the request. If the API key doesn’t have access to any of the indexes specified in the request via the `indexUids` query parameter, those tasks will not be included in `matchedTasks`. | 
+| canceledTasks | The number of tasks successfully canceled. If the task fails, `0` is displayed. `null` when the task status is enqueued or processing. |
+| originalFilter | The extracted URL query parameters used in the originating task cancelation request. |
+
+##### taskDeletion
+
+| Name          | Description |
+|---------------|-------------|
+| matchedTasks  | The number of tasks that can be deleted based on the request. If the API key doesn’t have access to any of the indexes specified in the request via the `indexUid` query parameter, those tasks will not be included in `matchedTasks`. |
+| deletedTasks | The number of tasks successfully deleted. If the task fails, `0` is displayed. `null` when the task status is enqueud or processing. |
+| originalFilter | The extracted URL query parameters used in the originating task deletion request. |
 
 ##### snapshotCreation
 N/A
@@ -155,6 +183,7 @@ e.g. A fully qualified `task` object in an `enqueued` state.
     "indexUid": "movies",
     "status": "enqueued",
     "type": "settingsUpdate",
+    "canceledBy": null,
     "details": {
         "rankingRules": [
             "typo",
@@ -165,6 +194,7 @@ e.g. A fully qualified `task` object in an `enqueued` state.
             "exactness"
         ]
     },
+    "error": null,
     "duration": null,
     "enqueuedAt": "2021-08-10T14:29:17.000000Z",
     "startedAt": null,
@@ -180,6 +210,7 @@ e.g. A fully qualified `task` object in a `processing` state.
     "indexUid": "movies",
     "status": "processing",
     "type": "settingsUpdate",
+    "canceledBy": null,
     "details": {
         "rankingRules": [
             "typo",
@@ -190,6 +221,7 @@ e.g. A fully qualified `task` object in a `processing` state.
             "exactness"
         ]
     },
+    "error": null,
     "duration": null,
     "enqueuedAt": "2021-08-10T14:29:17.000000Z",
     "startedAt": "2021-08-10T14:29:18.000000Z",
@@ -205,6 +237,7 @@ e.g. A fully qualified `task` object in a `succeeded` state.
     "indexUid": "movies",
     "status": "succeeded",
     "type": "settingsUpdate",
+    "canceledBy": null,
     "details": {
         "rankingRules": [
             "typo",
@@ -215,6 +248,7 @@ e.g. A fully qualified `task` object in a `succeeded` state.
             "exactness"
         ]
     },
+    "error": null,
     "duration": "PT1S",
     "enqueuedAt": "2021-08-10T14:29:17.000000Z",
     "startedAt": "2021-08-10T14:29:18.000000Z",
@@ -230,6 +264,7 @@ e.g. A fully qualified `task` object in a `failed` state.
     "indexUid": "movies",
     "status": "failed",
     "type": "settingsUpdate",
+    "canceledBy": null,
     "details": {
         "rankingRules": [
             "typo",
@@ -254,6 +289,33 @@ e.g. A fully qualified `task` object in a `failed` state.
 }
 ```
 
+e.g. A fully qualified `task` object in a `canceled` state.
+
+```json
+{
+    "uid": 0,
+    "indexUid": "movies",
+    "status": "canceled",
+    "type": "settingsUpdate",
+    "canceledBy": 1,
+    "details": {
+        "rankingRules": [
+            "typo",
+            "ranking:desc",
+            "words",
+            "proximity",
+            "attribute",
+            "exactness"
+        ]
+    },
+    "error": null,
+    "duration": "PT1S",
+    "enqueuedAt": "2021-08-10T14:29:17.000000Z",
+    "startedAt": "2021-08-10T14:29:18.000000Z",
+    "finishedAt": "2021-08-10T14:29:19.000000Z"
+}
+```
+
 e.g. A summarized `task` object in a `202 Accepted` HTTP response returned at index creation.
 
 ```json
@@ -270,9 +332,9 @@ e.g. A summarized `task` object in a `202 Accepted` HTTP response returned at in
 
 #### 6. APIs endpoints
 
-**Get all tasks** | `GET` - `/tasks`
+##### 6.1. Get all tasks | `GET` - `/tasks`
 
-##### Goals
+##### 6.1.1. Goals
 
 Allows users to list tasks globally regardless of the indexes involved. Particularly useful to visualize all the tasks.
 
@@ -286,6 +348,12 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
             "indexUid": "movies_reviews",
             "status": "enqueued",
             "type": "documentAdditionOrUpdate",
+            "canceledBy": null,
+            "details": {
+                "receivedDocuments": 100,
+                "indexedDocuments": null
+            },
+            "error": null,
             "duration": null,
             "enqueuedAt": "2021-08-12T10:00:00.000000Z",
             "startedProcessingAt": null,
@@ -295,11 +363,13 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
             "uid": 0,
             "indexUid": "movies",
             "status": "succeeded",
-            "type": "documentAdditionOrUpdate",
+            "type": "documentAdditionOrUpdate", 
+            "canceledBy": null,
             "details": {
                 "receivedDocuments": 100,
                 "indexedDocuments": 100
             },
+            "error": null,
             "duration": "PT16S",
             "enqueuedAt": "2021-08-11T09:25:53.000000Z",
             "startedAt": "2021-08-11T10:03:00.000000Z",
@@ -309,7 +379,7 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
 }
 ```
 
-##### Requirements
+##### 6.1.2. Requirements
 
 > 💡 `task` objects are contained in a `results` array.
 >
@@ -319,7 +389,7 @@ Allows users to list tasks globally regardless of the indexes involved. Particul
 >
 > 💡 When an index is deleted, its tasks remain accessible on the global `/tasks` endpoint.
 
-##### Errors
+##### 6.1.3. Errors
 
 The auth layer can return the following errors if Meilisearch is secured (a master-key is defined).
 
@@ -328,9 +398,9 @@ The auth layer can return the following errors if Meilisearch is secured (a mast
 
 ---
 
-**Get a task by uid** | `GET` - `/tasks/{uid}`
+##### 6.2. Get a task by uid | `GET` - `/tasks/{uid}`
 
-##### Goals
+##### 6.2.1. Goals
 
 Allows users to get a detailed `task` object retrieved by the `uid` field regardless of the index involved.
 
@@ -342,6 +412,11 @@ Allows users to get a detailed `task` object retrieved by the `uid` field regard
     "indexUid": "movies",
     "status": "enqueued",
     "type": "documentAdditionOrUpdate",
+    "canceledBy": null,
+    "details": {
+      ...
+    },
+    "error": null,
     "duration": null,
     "enqueuedAt": "2021-08-12T10:00:00.000000Z",
     "startedAt": null,
@@ -349,7 +424,7 @@ Allows users to get a detailed `task` object retrieved by the `uid` field regard
 }
 ```
 
-##### Errors
+##### 6.2.2. Errors
 
 - 🔴 If the task does not exist, the API returns a `404 Not Found` - `task_not_found` error.
 
@@ -360,11 +435,89 @@ The auth layer can return the following errors if Meilisearch is secured (a mast
 
 ---
 
-#### 6. `task_not_found` error
+##### 6.3. Cancel tasks | `POST` - `/tasks/cancel`
+
+##### 6.3.1. Goals
+
+Allows users to cancel an `enqueued` or `processing` task. Particularly useful if a long or heavy task blocks the queue.
+
+`202` - Response body - `/tasks/cancel`
+
+```json
+{
+    "taskUid": 0,
+    "indexUid": null,
+    "status": "enqueued",
+    "type": "taskCancelation",
+    "enqueuedAt": "2021-08-12T10:00:00.000000Z"
+}
+```
+
+##### 6.3.2. Response Definition
+
+When the request is successful, Meilisearch returns the HTTP code 202 Accepted. The response's content is the summarized representation of the received asynchronous task.
+
+##### 6.3.3. Auto-batching
+
+If the task you’re canceling is part of a batch, **the whole batch is stopped.** Once it is stopped, Meilisearch automatically creates a new batch with the remaining tasks. The canceled tasks are not part of the new batch.
+
+This means:
+- When the new batch is created, it may contain tasks that have been enqueued between the batch cancelation and recreation.
+- Any progress the batch made before being canceled is lost.
+
+##### 6.3.4. Errors
+
+If a user tries canceling a `succeeded`, `failed`, or `canceled` task, it won’t throw an error. Task cancelation is an atomic transaction; all tasks are successfully canceled, or none are.
+
+- 🔴 Sending a task cancelation without filtering query parameters returns a [missing_task_filters](0061-error-format-and-definitions.md#missing_task_filters) error.
+
+The auth layer can return the following errors if Meilisearch is secured (a master-key is defined).
+
+- 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route with a key that does not have the required permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+
+---
+
+##### 6.4 Delete tasks | `DELETE` - `/tasks`
+
+##### 6.4.1 Goals
+
+Allows users to delete a finished (`succeeded`, `processing` or `canceled`) tasks.
+
+`202` - Response body - `/tasks`
+
+```json
+{
+    "taskUid": 0,
+    "indexUid": null,
+    "status": "enqueued",
+    "type": "taskDeletion",
+    "enqueuedAt": "2021-08-12T10:00:00.000000Z"
+}
+```
+
+##### 6.4.2. Response Definition
+
+When the request is successful, Meilisearch returns the HTTP code 202 Accepted. The response's content is the summarized representation of the received asynchronous task.
+
+##### 6.4.3. Errors
+
+If a user tries deleting an `enqueued`, or `processing` task, it won’t throw an error. Task deletion is an atomic transaction; all tasks are successfully deleted, or none aren't.
+
+- 🔴 Sending a task deletion without filtering query parameters returns a [missing_task_filters](0061-error-format-and-definitions.md#missing_task_filters) error.
+
+The auth layer can return the following errors if Meilisearch is secured (a master-key is defined).
+
+- 🔴 Accessing this route without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
+- 🔴 Accessing this route with a key that does not have the required permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
+
+---
+
+#### 7. `task_not_found` error
 
 ##### Context
 
-This error happens when a requested task can't be found.
+This error happens when a requested task can't be found. Fetching a deleted task returns a `task_not_found` error.
 
 ##### Error Definition
 
@@ -381,23 +534,23 @@ HTTP Code: `404 Not Found`
 
 - The `:taskUid` is inferred when the message is generated.
 
-#### 7. `MEILI_MAX_TASK_DB_SIZE` env var and `--max-task-db-size` CLI option
+#### 8. `MEILI_MAX_TASK_DB_SIZE` env var and `--max-task-db-size` CLI option
 
 See [0119-instance-options](0119-instance-options.md##3312-max-taskdb-size)
 
-#### 8. Asynchronous Write Operations on Index resource
+#### 9. Asynchronous Write Operations on Index resource
 
 - 💡 Automatic index creation using the `/indexes/:indexToCreate/documents` route generates a `documentAdditionOrUpdate` task that also handles index creation.
 
-#### 9. Paginate `task` resource lists
+#### 10. Paginate `task` resource lists
 
-The API endpoint `/tasks` is browsable using a keyset-based pagination.
+The API endpoint `GET /tasks` is browsable using a keyset-based pagination.
 
-##### 9.1 Why a Seek/Keyset based pagination?
+##### 10.1. Why a Seek/Keyset based pagination?
 
 Keyset-based pagination is more appropriate when the data can grow or shrink quickly in terms of magnitude.
 
-###### 9.1.1 Pros
+###### 10.1.1. Pros
 
 The performance is better than the not-so-good but old pagination with `offset`/`limit`.
 
@@ -405,11 +558,11 @@ Seek/Keyset pagination keeps the results consistent between each page as the dat
 
 Moreover, the performance is superior to traditional pagination since the computational complexity remains constant to reach the identifier marking the beginning of the new slice to be returned from a hash table.
 
-###### 9.1.2 Cons
+###### 10.1.2. Cons
 
 The main drawback of this type of pagination is that it does not navigate within a finite number of pages. It is also limited to a precise sorting criterion on unique identifiers ordered sequentially.
 
-##### 9.2 Response attributes
+##### 10.2. Response attributes
 
 | field | type | description                          |
 |-------|------|--------------------------------------|
@@ -417,14 +570,14 @@ The main drawback of this type of pagination is that it does not navigate within
 | from | integer | The first task uid returned |
 | next | integer - nullable  | Represents the value to send in `from` to fetch the next slice of the results. The first item for the next slice starts at this exact number. When the returned value is null, it means that all the data have been browsed in the given order. |
 
-##### 9.3 GET query parameters
+##### 10.3. GET query parameters
 
 | field | type | required | description  |
 |-------|------|----------|--------------|
 | limit | integer  | No       | Default `20`. Limit on the number of tasks to be returned. |
 | from | integer  | No       | Limit results to tasks with uids equal to and lower than this uid. |
 
-##### 9.4 Usage examples
+##### 10.4. Usage examples
 
 This part demonstrates keyset paging in action on `/tasks`. The items `uid` remains sorted sequentially and can be used to navigate a list of `tasks` objects.
 
@@ -513,34 +666,152 @@ This part demonstrates keyset paging in action on `/tasks`. The items `uid` rema
 
 - 💡 `next` response parameter is null because there are no more `tasks` to fetch. It means that the response represents the last slice of results for the given resource list.
 
-##### 9.5 Behaviors for `limit` and `from` query parameters
+##### 10.5. Behaviors for `limit` and `from` query parameters
 
-###### 9.5.1 `limit`
+###### 10.5.1. `limit`
 
 - If `limit` is not set, the default value is chosen.
 
-###### 9.5.2 `from`
+###### 10.5.2. `from`
 
 - If `from` is set with an out of bounds task `uid`, the response returns the tasks that are the nearest to the specified uid, the `next` field is set to the next page. It will be equivalent to call the `/tasks` route without any parameter.
 
-###### 9.5.3 Errors
+###### 10.5.3. Errors
 
 - 🔴 Sending a value with a different type than `Integer` for `limit` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 - 🔴 Sending a value with a different type than `Integer` for `from` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-#### 10. Filtering task resources
+#### 11. Filtering task resources
 
-The `/tasks` endpoint is filterable by `indexUid`, `type` and `status` query parameters.
+The tasks API endpoints are filterable by  `uids`, `indexUids`, `types`, `statuses`, `canceledBy`, `beforeEnqueuedAt`, `afterEnqueuedAt`, `beforeStartedAt`, `afterStartedAt`, `beforeFinishedAt`,  `afterFinishedAt` query parameters.
 
-##### 10.1. Query parameters definition
+##### 11.1 Query parameters definition
 
 | parameter | type   | required | description                                                                                                                                                                                                                             |
 |-----------|--------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| indexUid  | string | No       | Permits to filter tasks by their related index. By default, when `indexUid` query parameter is not set, the tasks of all the indexes are returned. It is possible to specify several indexes by separating them with the `,` character. |
-| status    | string | No       | Permits to filter tasks by their status. By default, when `status` query parameter is not set, all task statuses are returned. It's possible to specify several types by separating them with the `,` character.                        |
-| type      | string | No       | Permits to filter tasks by their related type. By default, when `type` query parameter is not set, all task types are returned. It's possible to specify several types by separating them with the `,` character.                       |
+| uids  | integer | No       | Permits to filter tasks by their related unique identifier. By default, when `uids` query parameter is not set, all the tasks are concerned. It is possible to specify several uid by separating them with the `,` character. |
+| indexUids  | string | No       | Permits to filter tasks by their related index. By default, when `indexUids` query parameter is not set, the tasks of all the indexes are concerned. It is possible to specify several indexUids by separating them with the `,` character. |
+| statuses    | string | No       | Permits to filter tasks by their status. By default, when `statuses` query parameter is not set, all task statuses are concerned. It's possible to specify several statuses by separating them with the `,` character.                        |
+| types      | string | No       | Permits to filter tasks by their related type. By default, when `types` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
+| canceledBy | integer | No | Permits to filter tasks by the `taskCancelation` uid that canceled them. It's possible to specify several task uids by separating them with the `,` character. | 
+| beforeEnqueuedAt | string | No       | Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before the given filter value.              |
+| afterEnqueuedAt | string | No       | Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued after the given filter value.  |
+| beforeStartedAt | string | No       | Filter tasks based on their startedAt time. Retrieve tasks started before the given value.                |
+| afterStartedAt | string | No       | Filter tasks based on their startedAt time. Retrieve tasks started after the given filter value.                    |
+| beforeFinishedAt | string | No       | Filter tasks based on their finishedAt time. Retrieve tasks finished before the given filter value.  |
+| afterFinishedAt | string | No       | Filter tasks based on their finishedAt time. Retrieve tasks finished after the given filter value.                 |
 
-##### 10.2. Usages examples
+##### 11.2. Query Parameters Behaviors
+
+###### 11.2.1. `uids`
+
+ Filter tasks by their related unique identifier. By default, when `uids` query parameter is not set, all the tasks are concerned. It is possible to specify several uid by separating them with the `,` character.
+
+- Type: Integer
+- Required: False
+- Default: `*`
+
+`uids` is **case-unsensitive**.
+
+- 🔴 Sending values with a different type than `Integer` being separated by `,` for the `uid` parameter returns an [`invalid_task_uids_filter`](0061-error-format-and-definitions.md#invalid_task_uids_filter) error.
+
+###### 11.2.2. `indexUids`
+
+Filter tasks by their related index. By default, when `indexUids` query parameter is not set, the tasks of all the indexes are concerned. It is possible to specify several indexUids by separating them with the `,` character.
+
+- Type: String
+- Required: False
+- Default: `*`
+
+`indexUids` is **case-sensitive**.
+
+###### 11.2.3. `statuses`
+
+Filter tasks by their status. By default, when `statuses` query parameter is not set, all task statuses are concerned. It's possible to specify several statuses by separating them with the `,` character.
+
+- Type: String
+- Required: False
+- Default: `*`
+
+`statuses` is **case-insensitive**.
+
+- 🔴 If the `statuses` parameter value is not consistent with one of the task statuses, an [`invalid_task_statuses_filter`](0061-error-format-and-definitions.md#invalid_task_statuses_filter) error is returned.
+
+###### 11.2.4. `types`
+
+Filter tasks by their related type. By default, when `types` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.
+
+- Type: String
+- Required: False
+- Default: `*`
+
+`types` is **case-insensitive**.
+
+- 🔴 If the `types` parameter value is not consistent with one of the task types, an [`invalid_task_types_filter`](0061-error-format-and-definitions.md#invalid_task_types_filter) error is returned.
+
+###### 11.2.5. `canceledBy`
+
+Filter tasks by the `taskCancelation` uid that canceled them. It's possible to specify several task uids by separating them with the `,` character.
+
+- Type: Integer
+- Required: False
+- Default: `null`
+
+`canceledBy` is **case-insensitive**.
+
+- 🔴Sending a value with a different type than `Integer` for the `canceledBy` parameter returns an [`invalid_task_canceled_by_filter`](0061-error-format-and-definitions.md#invalid_task_canceled_by_filter) error.
+
+###### 11.2.6. Date Parameters
+
+Date filters accepts the RFC 3339 format. The following syntaxes are valid:
+
+- `YYYY-MM-DD`
+- `YYYY-MM-DDTHH:MM:SSZ`
+- `YYYY-MM-DDTHH:MM:SS+01:00`
+
+###### 11.2.6.1. `beforeEnqueuedAt` and `afterEnqueuedAt`
+
+Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before/after the given filter value.
+
+- Type: String
+- Required: False
+- Default: `*`
+
+- 🔴 The date filters are exclusive. It means the given value will not be included.
+- 🔴 Sending an invalid value for the date parameter returns an [`invalid_task_date_filter`](0061-error-format-and-definitions.md#invalid_task_date_filter) error.
+
+###### 11.2.6.2. `beforeStartedAt` and `afterStartedAt`
+
+Filter tasks based on their startedAt time. Retrieve tasks started before/after the given filter value.
+
+- Type: String
+- Required: False
+- Default: `*`
+
+- 🔴 The date filters are exclusive. It means the given value will not be included.
+- 🔴 Sending an invalid value for the date parameter returns an [`invalid_task_date_filter`](0061-error-format-and-definitions.md#invalid_task_date_filter) error.
+
+###### 11.2.6.3. `beforeFinishedAt` and `afterFinishedAt`
+
+Filter tasks based on their finishedAt time. Retrieve tasks finished before/after the given filter value.
+
+- Type: String
+- Required: False
+- Default: `*`
+
+- 🔴 The date filters are exclusive. It means the given value will not be included.
+- 🔴 Sending an invalid value for the date parameter returns an [`invalid_task_date_filter`](0061-error-format-and-definitions.md#invalid_task_date_filter) error.
+
+
+###### 11.2.7. Select multiple values for the same filter
+
+It is possible to specify multiple values for a filter using the `,` character.
+
+For example, to select the `enqueued` and `processing` tasks of the `movies` and `movie_reviews` indexes, it is possible to express it like this: `/tasks?indexUids=movies,movie_reviews&statuses=enqueued,processing`
+
+---
+
+##### 11.3. Usages examples
 
 This part demonstrates filtering on `/tasks`.
 
@@ -575,7 +846,7 @@ This part demonstrates filtering on `/tasks`.
 
 **Filter `tasks` that have a `failed` `status`**
 
-`GET` - `/tasks?status=failed`
+`GET` - `/tasks?statuses=failed`
 
 ```json
 {
@@ -602,7 +873,7 @@ This part demonstrates filtering on `/tasks`.
 
 **Filter `tasks` that are of `documentAdditionOrUpdate` type**
 
-`GET` - `/tasks?type=documentAdditionOrUpdate`
+`GET` - `/tasks?types=documentAdditionOrUpdate`
 
 ```json
 {
@@ -627,9 +898,38 @@ This part demonstrates filtering on `/tasks`.
 }
 ```
 
+**Filter `canceled` tasks by `canceledBy` parameter**
+
+`GET` `tasks?canceledBy=1`
+
+```json
+{
+    "results": [
+        {
+            "uid": 1350,
+            "indexUid": "movies",
+            "status": "canceled",
+            "type": "documentAdditionOrUpdate",
+            "canceledBy": 1,
+            ...,
+        },
+        ...,
+        {
+            "uid": 1343,
+            "indexUid": "movies",
+            "status": "canceled",
+            "type": "documentAdditionOrUpdate",
+            "canceledBy": 1,
+            ...,
+        }
+    ],
+    ...
+}
+```
+
 **Filter `tasks` that are of `documentAdditionOrUpdate` type and have a `failed` status**
 
-`GET` - `/tasks?type=documentAdditionOrUpdate&status=failed`
+`GET` - `/tasks?types=documentAdditionOrUpdate&statuses=failed`
 
 ```json
 {
@@ -655,11 +955,11 @@ This part demonstrates filtering on `/tasks`.
 ```
 
 - 💡 Filters can be used together. The two parameters are cumulated and a `AND` operation is performed between the two filters. An OR operation between filters is not supported.
-- `type` and `status` query parameters can be read as is `type=documentsAdditionOrUpdate AND status=failed`.
+- `types` and `statuses` query parameters can be read as is `types=documentsAdditionOrUpdate AND statuses=failed`.
 
 **Filter `tasks` by an non-existent `indexUid`**
 
-`GET` - `/tasks?indexUid=aaaaa`
+`GET` - `/tasks?indexUids=aaaaa`
 
 ```json
 {
@@ -668,49 +968,29 @@ This part demonstrates filtering on `/tasks`.
 }
 ```
 
-- If the `indexUid` parameter value contains an inexistent index, it returns an empty `results` array.
+- If the `indexUids` query parameter value contains an inexistent index, it returns an empty `results` array.
+
+**Cancel all the tasks with filter**
+
+`POST` - `/tasks/cancel?statuses=processing,enqueued`
+
+```json
+{
+    "taskUid": 1,
+    "indexUid": null,
+    "status": "enqueued",
+    "type": "taskCancelation",
+    "enqueuedAt": "2021-08-12T10:00:00.000000Z"
+}
+```
 
 ---
 
-##### 10.3. Behaviors for `indexUid`, `status` and `type` query parameters.
-
-###### 10.3.1. `indexUid`
-
-- Type: String
-- Required: False
-- Default: `*`
-
-`indexUid` is **case-sensitive**.
-
-###### 10.3.2. `status`
-
-- Type: String
-- Required: False
-- Default: `*`
-
-`status ` is **case-insensitive**.
-
-- 🔴 If the `status` parameter value is not consistent with one of the task statuses, an [`invalid_task_status`](0061-error-format-and-definitions.md#invalidtaskstatus) error is returned.
-
-###### 10.3.3. `type`
-
-- Type: String
-- Required: False
-- Default: `*`
-
-`type` is **case-insensitive**.
-
-- 🔴 If the `type` parameter value is not consistent with one of the task types, an [`invalid_task_type`](0061-error-format-and-definitions.md#invalidtasktype) error is returned.
-
-###### 10.3.4. Select multiple values for the same filter
-
-It is possible to specify multiple values for a filter using the `,` character.
-
-For example, to select the `enqueued` and `processing` tasks of the `movies` and `movie_reviews` indexes, it is possible to express it like this: `/tasks?indexUid=movies,movie_reviews&status=enqueued,processing`
-
-##### 10.4. Empty `results`
+##### 11.4. Empty `results`
 
 If no results match the filters. A response is returned with an empty `results` array.
+
+---
 
 ## 2. Technical details
 

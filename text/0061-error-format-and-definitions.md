@@ -979,7 +979,60 @@ HTTP Code: `404 Not Found`
 
 ---
 
-## invalid_task_status
+## invalid_task_uids_filter
+
+`Synchronous`
+
+### Context
+
+This error occurs when the `uids` query parameter contains invalid values.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "Task uid `:uid` is invalid. It should only contains numeric characters separated by `,` character.",
+    "code": "invalid_task_uids_filter",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_task_uids_filter"
+}
+```
+
+- `:uid` is inferred when the message is generated.
+
+---
+
+## invalid_task_date_filter
+
+`Synchronous`
+
+### Context
+
+This error occurs when a task date filter contains an invalid value.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "Task `:dateFilterName` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
+    "code": "invalid_task_date_filter",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_task_date_filter"
+}
+```
+
+- `:dateFilterName` is inferred when the message is generated.
+- `:value` is inferred when the message is generated.
+
+---
+
+## invalid_task_statuses_filter
+
+`Synchronous`
 
 ### Context
 
@@ -992,9 +1045,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Task status `:status` is invalid. Available task statuses are: `:taskStatuses`.",
-    "code": "invalid_task_status",
+    "code": "invalid_task_statuses_filter",
     "type": "invalid_request",
-    "link":"https://docs.meilisearch.com/errors#invalid_task_status"
+    "link":"https://docs.meilisearch.com/errors#invalid_task_statuses_filter"
 }
 ```
 
@@ -1003,7 +1056,9 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_task_type
+## invalid_task_types_filter
+
+`Synchronous`
 
 ### Context
 
@@ -1016,14 +1071,65 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Task type `:type` is invalid. Available task types are: `:taskTypes`.",
-    "code": "invalid_task_type",
+    "code": "invalid_task_types_filter",
     "type": "invalid_request",
-    "link":"https://docs.meilisearch.com/errors#invalid_task_type"
+    "link":"https://docs.meilisearch.com/errors#invalid_task_types_filter"
 }
 ```
 
 - The `:type` is inferred when the message is generated.
 - The `:taskTypes` is inferred when the message is generated.
+
+---
+
+## invalid_task_canceled_by_filter
+
+`Synchronous`
+
+### Context
+
+This error happens when the `canceledBy` query parameter contains an invalid value.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "Task canceledBy `:canceledBy` is invalid. It should only contains numeric characters separated by `,` character.",
+    "code": "invalid_task_canceled_by_filter",
+    "type": "invalid_request",
+    "link":"https://docs.meilisearch.com/errors#invalid_task_canceled_by_filter"
+}
+```
+
+- `:canceledBy` is inferred when the message is generated.
+
+---
+
+## missing_task_filters
+
+`Synchronous`
+
+### Context
+
+This error happens when no query parameters are given when a task cancelation or a task deletion request is sent.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "Query parameters to filter the tasks to `:operation` are missing. Available query parameters are: `queryParametersNames`",
+    "code": "missing_task_filters",
+    "type": "invalid_request",
+    "link":"https://docs.meilisearch.com/errors#missing_task_filters"
+}
+```
+
+- `:operation` is inferred when the message is generated.
+- `:queryParameterNames` is inferred when the message is generated.
 
 ---
 
