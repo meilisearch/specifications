@@ -45,6 +45,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | Documents Deleted | Aggregated event on all received requests via the `DELETE` - `/indexes/:indexUid/documents`, `DELETE` - `/indexes/:indexUid/documents/:documentId`, `POST` - `indexes/:indexUid/documents/delete-batch` routes during one hour or until a batch size reaches `500Kb`.  |
 | Index Created | Occurs when an index is created via `POST` - `/indexes`. |
 | Index Updated | Occurs when an index is updated via `PUT` - `/indexes/:indexUid`. |
+| Indexes Swapped | Occurs when indexes are swapped via `POST` - `/swap-indexes`. |
 | Settings Updated | Occurs when the settings are updated via `POST` - `/indexes/:indexUid/settings`. |
 | SearchableAttributes Updated | Occurs when searchable attributes are updated via `POST` - `/indexes/:indexUid/settings/searchable-attributes`. |
 | RankingRules Updated | Occurs when ranking rules are updated via `POST` - `/indexes/:indexUid/settings/ranking-rules`. |
@@ -160,6 +161,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `filtered_by_type`                      | `true` if `GET /tasks` endpoint is filtered by `type`, otherwise `false` | false | `Tasks Seen` |
 | `filtered_by_status`                    | `true` if `GET /tasks` endpoint is filtered by `status`, otherwise `false` | false | `Tasks Seen` |
 | `per_index_uid` | `true` if an uid is used to fetch an index stat resource, otherwise `false` | false | `Stats Seen` |
+| `swap_operation_number`            | The number of swap operation given in `POST /swap-indexes` API call | 2 | `Indexes Swapped` | 
 | `matching_strategy.most_used_strategy`      | Most used word matching strategy among all search requests in this batch | `last` | `Documents Searched POST`, `Documents Searched GET` |
 | `per_document_id` | `true` if `DELETE /indexes/:indexUid/documents/:documentUid` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
 | `clear_all` | `true` if `DELETE /indexes/:indexUid/documents` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
@@ -310,6 +312,15 @@ This property allows us to gather essential information to better understand on 
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered for this API call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | primary_key   | The field's name used as a primary key if set, otherwise `null`. | `id` |
+
+---
+
+## `Indexes Swapped`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered for this API call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| swap_operation_number   | The number of swap operation given for this API call. | `2` |
 
 ---
 
