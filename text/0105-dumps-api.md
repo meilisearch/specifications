@@ -95,10 +95,11 @@ The following table describes which version of the dump correspond to which vers
 | Dump version | Meilisearch version                  | Highest compatibility dump version |
 |--------------|--------------------------------------|------------------------------------|
 | `v1`         | `v0.20.0` and below                  | `v3`                               |
-| `v2`         | `v0.21.0` and `v0.21.1`              | `v5`                               |
-| `v3`         | From `v0.22.0` to `v0.24.0` included | `v5`                               |
-| `v4`         | From `v0.25.0` to `v0.27.2` included | `v5`                               |
-| `v5`         | `v0.28.0` and later                  | -                                  |
+| `v2`         | `v0.21.0` and `v0.21.1`              | `v6`                               |
+| `v3`         | From `v0.22.0` to `v0.24.0` included | `v6`                               |
+| `v4`         | From `v0.25.0` to `v0.27.2` included | `v6`                               |
+| `v5`         | From `v0.28.0` to `v0.29.1` included | `v6`                               |
+| `v6`         | `v0.30.0` and later                  | `v6`                               |
 
 What does "Highest compatibility dump version" means?
 
