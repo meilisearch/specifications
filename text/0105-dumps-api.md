@@ -101,7 +101,7 @@ The following table describes which version of the dump correspond to which vers
 | `v5`         | From `v0.28.0` to `v0.29.1` included |
 | `v6`         | `v0.30.0` and later                  |
 
-All dumps created before and up to Meilisearch v1.0 can be imported in Meilisearch v1.0.
+All dumps created before and up to Meilisearch v1.0 can be imported into Meilisearch v1.X.Y.
 
 ## 4. Technical Aspects
 
