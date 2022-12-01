@@ -96,7 +96,7 @@ The expected behavior of each flag is described in the list above.
 - [HTTP address & port binding](#333-http-address--port-binding)
 - [Master key](#334-master-key)
 - [Disable analytics](#335-disable-analytics)
-- [Dumps destination](#336-dumps-destination)
+- [Dump destination](#336-dump-destination)
 - [Import dump](#337-import-dump)
 - [Ignore missing dump](#338-ignore-missing-dump)
 - [Ignore dump if DB exists](#339-ignore-dump-if-db-exists)
@@ -184,10 +184,10 @@ If no master key is provided in a `development` environment, all routes will be 
 
 Deactivates Meilisearch's built-in telemetry collect when enabled.
 
-#### 3.3.6. Dumps destination
+#### 3.3.6. Dump destination
 
-**Environment variable**: `MEILI_DUMPS_DIR`
-**CLI option**: `--dumps-dir`
+**Environment variable**: `MEILI_DUMP_DIR`
+**CLI option**: `--dump-dir`
 **Default value**: `dumps/`
 **Expected value**: a filepath pointing to a valid directory
 

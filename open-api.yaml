@@ -1227,7 +1227,7 @@ paths:
       operationId: dumps.create
       summary: Create a Dump
       description: |
-        Triggers a dump creation process. Once the process is complete, a dump is created in the [dumps directory](https://docs.meilisearch.com/reference/features/configuration.html#dumps-destination). If the dumps directory does not exist yet, it will be created.
+        Triggers a dump creation process. Once the process is complete, a dump is created in the [dump directory](https://docs.meilisearch.com/reference/features/configuration.html#dumps-destination). If the dump directory does not exist yet, it will be created.
       tags:
         - Dumps
       security:
