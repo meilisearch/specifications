@@ -3398,6 +3398,7 @@ paths:
                 properties:
                   databaseSize:
                     type: number
+                    deprecated: true
                   lastUpdate:
                     $ref: '#/components/schemas/timestamp'
                   indexes:
@@ -3468,6 +3469,7 @@ paths:
       description: 'Get all [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html)'
       tags:
         - tasks
+      deprecated: true
       responses:
         '200':
           description: OK
