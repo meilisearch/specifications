@@ -96,7 +96,7 @@ The expected behavior of each flag is described in the list above.
 - [HTTP address & port binding](#333-http-address--port-binding)
 - [Master key](#334-master-key)
 - [Disable analytics](#335-disable-analytics)
-- [Dump destination](#336-dump-destination)
+- [Dump directory](#336-dump-directory)
 - [Import dump](#337-import-dump)
 - [Ignore missing dump](#338-ignore-missing-dump)
 - [Ignore dump if DB exists](#339-ignore-dump-if-db-exists)
