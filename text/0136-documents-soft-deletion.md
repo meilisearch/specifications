@@ -19,18 +19,11 @@ Instead of deleting the documents, Meilisearch marks them internally as deleted 
 That's fast but takes up space; thus, at some point, we need to _really_ delete the soft-deleted documents.
 
 This can happen for two reasons;
-- When 90% of the total available space is used.
-- When 10% of the total space is dedicated to the soft deleted documents.
+1. when there are more soft-deleted documents than regular documents in the database, or
+2. when the soft-deleted documents occupy more disk space than a fixed threshold.
 
-The idea is good, but there are two technical issues;
-
-1. We don't know the size a document really occupies.
-  This means we don't know the size used by the soft deleted documents.
-  That can be imprecise in the case of a really heterogeneous dataset with large and small documents.
-2. We don't know the total available space. The only information available to Meilisearch is the `max-index-size` which is by default at 100GB, but Meilisearch could be deployed on a smaller disk.
-
-The second point could be a real issue for the case of someone who has very few documents but update them frequently on a small disk without updating the `max-index-size` parameter.
-The soft-deleted documents would grow until they use 10GB of disk even though the user only has about 100MB of documents.
+Reason (2) presents the drawback that we don't know the precise disk space taken by a document, for technical reasons. Since the information we have is the total size taken by all documents (soft-deleted or not) and the number of documents, we approximate the size of a document to the average size of a document.
+This means that if a few outliers are updated/deleted, they can take up much more disk space than the fixed threshold.
 
 ## 4. Future Possibilities
 
