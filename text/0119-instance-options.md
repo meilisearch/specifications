@@ -142,12 +142,13 @@ Configures the instance's environment. Value must be either `production` or `dev
 
 `production`:
 
-- Setting a master key is **mandatory**
+- Setting a master key of at least 16 characters is **mandatory**
 - The search preview interface is disabled
 
 `development`:
 
 - Setting a master key is **optional**
+- Setting a master key of at least 16 characters is **optional**
 - Search preview is enabled
 
 #### 3.3.3. HTTP address & port binding
@@ -170,7 +171,7 @@ Sets the instance's master key, automatically protecting all routes except [`GET
 
 You must supply an alphanumeric string when using this option.
 
-Providing a master key is mandatory when `--env` is set to `production`; if none is given, then Meilisearch will throw an error and refuse to launch.
+Providing a master key of at least 16 characters is mandatory when `--env` is set to `production`; if none is given, or if it is too short, then Meilisearch will throw an error and refuse to launch.
 
 If no master key is provided in a `development` environment, all routes will be unprotected and publicly accessible.
 
@@ -476,4 +477,3 @@ N/A
 
 - Redo the command-line to create a more interactive CLI
 - Autocomplete for the options when using the Meilisearch CLI
-- Minimal requirement when setting the master key, for example, a minimal number of characters
