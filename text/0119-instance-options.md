@@ -468,6 +468,17 @@ Define the config file to load at Meilisearch launch.
 
 See [Configuration File](0185-configuration-file.md) specification details.
 
+
+#### 3.3.31. Generate master-key
+
+**Environment variable**: `MEILI_GENERATE_MASTER_KEY`
+**CLI option**: `--generate-master-key`
+**Default**: Disabled
+
+⚠️ This command-line option does not take any values. Assigning a value will throw an error.
+
+Generate a safe to use master key and exit without error.
+
 ## 4. Technical Aspects
 
 N/A
