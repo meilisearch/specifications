@@ -429,7 +429,7 @@ This error happens when a user tries to update an index primary key while the in
 
 ---
 
-## primary_key_no_candidate_found
+## index_primary_key_no_candidate_found
 
 `Asynchronous`
 
@@ -442,15 +442,15 @@ This error occurs when the engine does not find an identifier in the payload doc
 ```json
 {
     "message": "The primary key inference process failed because the engine did not find any field ending with `id` in its name. Please specify the primary key manually using the `primaryKey` query parameter.",
-    "code": "primary_key_no_candidate_found",
+    "code": "index_primary_key_no_candidate_found",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#primary_key_no_candidate_found"
+    "link": "https://docs.meilisearch.com/errors#index_primary_key_no_candidate_found"
 }
 ```
 
 ---
 
-## primary_key_multiple_candidates_found
+## index_primary_key_multiple_candidates_found
 
 `Asynchronous`
 
@@ -459,9 +459,9 @@ This error occurs when the engine does not find an identifier in the payload doc
 ```json
 {
     "message": "The primary key inference process failed because the engine found `:numCandidates` fields ending with `id` in their name, such as '`:firstCandidate`' and '`:secondCandidate`'. Please specify the primary key manually using the `primaryKey` query parameter.",
-    "code": "primary_key_multiple_candidates_found",
+    "code": "index_primary_key_multiple_candidates_found",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#primary_key_multiple_candidates_found"
+    "link": "https://docs.meilisearch.com/errors#index_primary_key_multiple_candidates_found"
 }
 ```
 
