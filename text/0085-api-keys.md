@@ -41,10 +41,10 @@ At the first launch of Meilisearch with a master key, Meilisearch automatically 
 
 If the master key is removed at Meilisearch launch, the previously generated API keys no longer secure the Meilisearch instance.
 
-If Meilisearch is launched with the `production` value for the `MEILI_ENV` environment variable or the `--env` CLI option, a master key of at least 16 characters is mandatory. If the master key is omitted in that particular case, or is too short, Meilisearch launch is aborted and displays an error:
+If Meilisearch is launched with the `production` value for the `MEILI_ENV` environment variable or the `--env` CLI option, a master key of at least 16 bytes is mandatory. If the master key is omitted in that particular case, or is too short, Meilisearch launch is aborted and displays an error:
 
 - `In production mode, you must provide a master key to secure your instance. It can be specified via the MEILI_MASTER_KEY environment variable or the --master-key launch option.` if the key is omitted.
-- `Error: In production mode, the master key must be of at least 16 characters, but the provided key is only :numChars characters long.` if the key is too short (`:numChars` is inferred in the error message).
+- `Error: In production mode, the master key must be of at least 16 bytes, but the provided key is only :numBytes bytes long.` if the key is too short (`:numBytes` is inferred in the error message).
 
 The master key must be composed of valid utf-8 characters. It is advisable to enclose it in `'` when specified via the `--master-key` option.
 
