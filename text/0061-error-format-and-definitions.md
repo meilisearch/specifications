@@ -1467,6 +1467,27 @@ HTTP Code: `404 Not Found` when
 
 ---
 
+## invalid_swap_indexes
+
+`Synchronous`
+
+### Context
+
+This error happens when an `indexes` array not containing **exactly** 2 indexUids for a swap operation object is specified in the payload.
+
+### Error Definition
+
+```json
+{
+    "message": "//TODO.",
+    "code": "invalid_swap_indexes",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_swap_indexes"
+}
+```
+
+---
+
 ## invalid_swap_duplicate_index_found
 
 `Synchronous`
