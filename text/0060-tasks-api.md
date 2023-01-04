@@ -678,8 +678,8 @@ This part demonstrates keyset paging in action on `/tasks`. The items `uid` rema
 
 ###### 10.5.3. Errors
 
-- 🔴 Sending a value with a different type than `Integer` for `limit` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
-- 🔴 Sending a value with a different type than `Integer` for `from` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Integer` for `limit` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error. //TODO
+- 🔴 Sending a value with a different type than `Integer` for `from` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error. //TODO
 
 #### 11. Filtering task resources
 

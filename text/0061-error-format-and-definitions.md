@@ -608,7 +608,7 @@ HTTP Code: `400 Bad Request`
 
 ## invalid_settings_ranking_rules
 
-`Asynchronous` / `Synchronous`
+`Asynchronous` / `Synchronous` (//TODO: make it fully synchronous)
 
 ### Context
 
@@ -777,7 +777,7 @@ HTTP Code: `400 Bad Request`
 
 - The `:fieldName` is inferred when the message is generated.
 
-#### Variant: `minWordSizeForTypos` object of the `typo` resource is invalid.
+#### Variant: `minWordSizeForTypos` object of the `typo` resource is invalid. (//TODO: make it synchronous)
 
 ```json
 {

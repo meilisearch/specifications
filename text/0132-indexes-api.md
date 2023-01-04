@@ -103,6 +103,8 @@ The results are sorted in ascending alphanumeric order from the `uid` field.
 
 Sets the starting point in the results, effectively skipping over a given number of indexes.
 
+//TODO
+
 ###### 3.2.1.1.2. `limit`
 
 - Type: Integer
@@ -110,6 +112,8 @@ Sets the starting point in the results, effectively skipping over a given number
 - Default: `20`
 
 Sets the maximum number of indexes to be returned by the current request.
+
+//TODO
 
 ##### 3.2.1.2. Response Definition
 
