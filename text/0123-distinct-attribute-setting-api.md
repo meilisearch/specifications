@@ -169,5 +169,4 @@ Modifying this index setting cause documents to be re-indexed.
 
 ## 5. Future Possibilities
 
-- Add dedicated error to avoid using generic `bad_request` error code
 - Return an error when `distinctAttribute` is specified as an empty string

@@ -122,5 +122,4 @@ N/A
 
 ## 5. Future Possibilities
 
-- Add dedicated error to avoid using generic `bad_request` error code
 - Return an error when `displayedAttributes` is defined as an empty array

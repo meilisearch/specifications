@@ -115,4 +115,4 @@ Meilisearch favors search speed and makes a trade-off on indexing speed by compu
 Modifying this index setting cause documents to be re-indexed.
 
 ## 5. Future Possibilities
-N/A
+n/a

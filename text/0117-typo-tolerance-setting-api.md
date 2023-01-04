@@ -296,4 +296,4 @@ The `typo` ranking rule favors candidates with the least typos. That is, if a do
 - Expose `typoTolerance` resource as a search parameter to override index settings.
 - Add the possibility to disable the typo tolerance feature on all numeric fields.
 - Add different modes of result matching for the typo feature. e.g. `default`/`min`/`strict`
-- Introduce synchronous `invalid_typo_tolerance_{fieldName}` error with a better error message than the one provided by serde.
+- Introduce synchronous `invalid_settings_typo_tolerance_{fieldName}` error code granularity.

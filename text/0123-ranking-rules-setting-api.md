@@ -201,5 +201,4 @@ The first ranking rule is applied to all documents, while each subsequent rule i
 
 ## 5. Future Possibilities
 
-- Add dedicated error to avoid using generic `bad_request` error code
 - Return an error when `rankingRules` is defined as an empty array

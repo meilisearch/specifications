@@ -213,5 +213,4 @@ For example, although `League of Legends` and `LOL` can be synonymous, it will n
 
 ## 5. Future Possibilities
 
-- Add dedicated error to avoid using generic `bad_request` error code
 - Automatically declare mutual association
