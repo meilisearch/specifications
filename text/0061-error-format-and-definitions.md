@@ -9,18 +9,11 @@
 
 ### I. Summary
 
-The error format is updated to no longer contain unnecessary `error` prefix terms in the names of these attributes. e.g. `errorType` becomes `type`. The context is clear enough to understand that this is an `error` object.
-
-This specification also serves as a reference point for the complete list of API errors that the user may encounter.
-
-#### Summary Key Points
-
-- `error` is removed from the attributes name and `type` values.
-- An exhaustive list of API errors is defined with their message variants. See Errors List part.
+This specification serves as a reference point for the complete list of API errors that the user may encounter.
 
 ### II. Motivation
 
-The motivation is to stabilize the current `error` resource to a version that conforms to our API convention and thus allows future evolutions on a more solid base. This specification avoids adding unnecessary information in the error object's attribute names.
+The motivation is to stabilize the current `error` resource to a version that conforms to our API convention and thus allows future evolutions on a more solid base.
 
 The second motivation is to describe in an exhaustive way all the errors that the user may encounter during his use of the API. This list will be kept up to date.
 
@@ -30,12 +23,12 @@ The second motivation is to describe in an exhaustive way all the errors that th
 
 ##### Attributes
 
-| Field name | type   | Description                                                              |
-|------------|--------|--------------------------------------------------------------------------|
-| message    | string |  A human-readable message providing context and details about the error. |
-| code       | string |  A short string indicating the error code reported.                      |
-| type       | string |  The type of error returned. `invalid_request`, `internal`, `auth`.      |
-| link       | string |  An URL to the related error-page details for further information.       |
+| Field name | type   | Description                                                                   |
+|------------|--------|-------------------------------------------------------------------------------|
+| message    | string |  A human-readable message providing context and details about the error.      |
+| code       | string |  A string indicating the error code reported.                                 |
+| type       | string |  The type of error returned. `invalid_request`, `internal`, `system`, `auth`. |
+| link       | string |  An URL to the related error-page details for further information.            |
 
 ##### Json Response Example
 
@@ -56,9 +49,10 @@ e.g. 401 Unauthorized Response example
 
 | type            | description                                                                                       |
 |-----------------|---------------------------------------------------------------------------------------------------|
-| invalid_request | This type of error is usually due to a user input error. It is accompanied by an HTTP code `4xx`. |
-| internal        | Usually, this type of error is returned because the search engine can't operate due to machine or configuration constraints. It can be due to limits being reached, such as the size of the disk, the size limit of an index, etc. It can also be an unexpected error. It is accompanied by an HTTP code `5xx`.  |
-| auth   | This type of error is returned when it comes to authentication and authorization. It is accompanied by an HTTP code `4xx`. |
+| invalid_request | This type of error is used to indicate an input error. It is accompanied by an HTTP code `4xx`. |
+| internal        | This type of error is returned when the search engine can't operate under normal condition.  Most of the time, it's indicating an unexpected error. It is accompanied by an HTTP code `5xx`.  |
+| system          | This type of error is used to indicate a system limits being reached, such as the size of the disk, the size limit of an index, etc. It is accompanied by an HTTP code `5xx`. |
+| auth            | This type of error is returned when it comes to authentication and authorization. It is accompanied by an HTTP code `4xx`. |
 
 ---
 
@@ -1559,13 +1553,13 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_task_date_filter
+## invalid_task_before_enqueued_at_filter
 
 `Synchronous`
 
 ### Context
 
-This error occurs when a task date filter contains an invalid value.
+This error occurs when `beforeEnqueuedAt` task filter contains an invalid value.
 
 ### Error Definition
 
@@ -1574,9 +1568,139 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Task `:dateFilterName` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
-    "code": "invalid_task_date_filter",
+    "code": "invalid_task_before_enqueued_at_filter",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_task_date_filter"
+    "link": "https://docs.meilisearch.com/errors#invalid_task_before_enqueued_at_filter"
+}
+```
+
+- `:dateFilterName` is inferred when the message is generated.
+- `:value` is inferred when the message is generated.
+
+---
+
+## invalid_task_after_enqueued_at_filter
+
+`Synchronous`
+
+### Context
+
+This error occurs when `afterEnqueuedAt` task filter contains an invalid value.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "Task `:dateFilterName` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
+    "code": "invalid_task_after_enqueued_at_filter",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_task_after_enqueued_at_filter"
+}
+```
+
+- `:dateFilterName` is inferred when the message is generated.
+- `:value` is inferred when the message is generated.
+
+---
+
+## invalid_task_before_started_at_filter
+
+`Synchronous`
+
+### Context
+
+This error occurs when `beforeStartedAt` task filter contains an invalid value.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "Task `:dateFilterName` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
+    "code": "invalid_task_before_started_at_filter",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_task_before_started_at_filter"
+}
+```
+
+- `:dateFilterName` is inferred when the message is generated.
+- `:value` is inferred when the message is generated.
+
+---
+
+## invalid_task_after_started_at_filter
+
+`Synchronous`
+
+### Context
+
+This error occurs when `afterStartedAt` task filter contains an invalid value.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "Task `:dateFilterName` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
+    "code": "invalid_task_after_started_at_filter",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_task_after_started_at_filter"
+}
+```
+
+- `:dateFilterName` is inferred when the message is generated.
+- `:value` is inferred when the message is generated.
+
+---
+
+## invalid_task_before_finished_at_filter
+
+`Synchronous`
+
+### Context
+
+This error occurs when `beforeFinishedAt` task filter contains an invalid value.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "Task `:dateFilterName` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
+    "code": "invalid_task_before_finished_at_filter",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_task_before_finished_at_filter"
+}
+```
+
+- `:dateFilterName` is inferred when the message is generated.
+- `:value` is inferred when the message is generated.
+
+---
+
+## invalid_task_after_finished_at_filter
+
+`Synchronous`
+
+### Context
+
+This error occurs when `afterFinishedAt` task filter contains an invalid value.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "Task `:dateFilterName` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
+    "code": "invalid_task_after_finished_at_filter",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_task_after_finished_at_filter"
 }
 ```
 
@@ -1984,29 +2108,6 @@ This error occurs when the user tries to add documents and the maximum size of t
 
 ---
 
-## no_space_left_on_device
-
-`Asynchronous` / `Synchronous`
-
-### Context
-
-This error occurs when the host system partition has reached its maximum capacity and no longer accepts writes.
-
-### Error Definition
-
-HTTP Code: `500 Internal Server Error`
-
-```json
-{
-    "message": "There is no more space left on the device. Consider increasing the size of the disk/partition.",
-    "code": "no_space_left_on_device",
-    "type": "internal",
-    "link": "https://docs.meilisearch.com/errors#no_space_left_on_device"
-}
-```
-
----
-
 ## invalid_store_file
 
 `Asynchronous` / `Synchronous`
@@ -2027,6 +2128,39 @@ HTTP Code: `500 Internal Server Error`
     "link": "https://docs.meilisearch.com/errors#invalid_store_file"
 }
 ```
+
+---
+
+# system type
+
+## no_space_left_on_device
+
+`Asynchronous` / `Synchronous`
+
+### Context
+
+This error occurs when the host system partition has reached its maximum capacity and no longer accepts writes.
+
+### Error Definition
+
+HTTP Code: `500 Internal Server Error`
+
+```json
+{
+    "message": "There is no more space left on the device. Consider increasing the size of the disk/partition.",
+    "code": "no_space_left_on_device",
+    "type": "system",
+    "link": "https://docs.meilisearch.com/errors#no_space_left_on_device"
+}
+```
+
+---
+
+## too_many_open_files //TODO
+
+---
+
+## io_error //TODO
 
 ---
 

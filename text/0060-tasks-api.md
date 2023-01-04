@@ -778,7 +778,8 @@ Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before/afte
 - Default: `*`
 
 - 🔴 The date filters are exclusive. It means the given value will not be included.
-- 🔴 Sending an invalid value for the date parameter returns an [`invalid_task_date_filter`](0061-error-format-and-definitions.md#invalid_task_date_filter) error.
+- 🔴 Sending an invalid value for `beforeEnqueuedAt` parameter returns an [`invalid_task_before_enqueued_at_filter`](0061-error-format-and-definitions.md#invalid_task_before_enqueued_at_filter) error.
+- 🔴 Sending an invalid value for `afterEnqueuedAt` parameter returns an [`invalid_task_after_enqueued_at_filter`](0061-error-format-and-definitions.md#invalid_task_after_enqueued_at_filter) error.
 
 ###### 11.2.6.2. `beforeStartedAt` and `afterStartedAt`
 
@@ -789,7 +790,8 @@ Filter tasks based on their startedAt time. Retrieve tasks started before/after 
 - Default: `*`
 
 - 🔴 The date filters are exclusive. It means the given value will not be included.
-- 🔴 Sending an invalid value for the date parameter returns an [`invalid_task_date_filter`](0061-error-format-and-definitions.md#invalid_task_date_filter) error.
+- 🔴 Sending an invalid value for `beforeStartedAt` parameter returns an [`invalid_task_before_started_at_filter`](0061-error-format-and-definitions.md#invalid_task_before_started_at_filter) error.
+- 🔴 Sending an invalid value for `afterStartedAt` parameter returns an [`invalid_task_after_started_at_filter`](0061-error-format-and-definitions.md#invalid_task_after_started_at_filter) error.
 
 ###### 11.2.6.3. `beforeFinishedAt` and `afterFinishedAt`
 
@@ -800,7 +802,8 @@ Filter tasks based on their finishedAt time. Retrieve tasks finished before/afte
 - Default: `*`
 
 - 🔴 The date filters are exclusive. It means the given value will not be included.
-- 🔴 Sending an invalid value for the date parameter returns an [`invalid_task_date_filter`](0061-error-format-and-definitions.md#invalid_task_date_filter) error.
+- 🔴 Sending an invalid value for `beforeFinishedAt` parameter returns an [`invalid_task_before_finished_at_filter`](0061-error-format-and-definitions.md#invalid_task_before_finished_at_filter) error.
+- 🔴 Sending an invalid value for `afterFinishedAt` parameter returns an [`invalid_task_after_finished_at_filter`](0061-error-format-and-definitions.md#invalid_task_after_finished_at_filter) error.
 
 
 ###### 11.2.7. Select multiple values for the same filter
