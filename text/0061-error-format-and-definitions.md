@@ -865,7 +865,7 @@ HTTP Code: `404 Not Found` when
 
 ---
 
-## duplicate_index_found
+## invalid_swap_duplicate_index_found
 
 `Synchronous`
 
@@ -883,7 +883,7 @@ This error happens when the same indexUid is used twice in the `POST`- `swap-ind
     "message": "Indexes must be declared only once during a swap. `:indexUid` was specified several times.",
     "code": "duplicate_index_found",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#duplicate_index_found"
+    "link": "https://docs.meilisearch.com/errors#invalid_swap_duplicate_index_found"
 }
 ```
 
@@ -896,7 +896,7 @@ This error happens when the same indexUid is used twice in the `POST`- `swap-ind
     "message": "Indexes must be declared only once during a swap. `:indexUids` were specified several times.",
     "code": "duplicate_index_found",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#duplicate_index_found"
+    "link": "https://docs.meilisearch.com/errors#invalid_swap_duplicate_index_found"
 }
 ```
 

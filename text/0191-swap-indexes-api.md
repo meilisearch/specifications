@@ -102,7 +102,7 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
 - 🔴 Sending an `indexes` array not containing **exactly** 2 indexUids for a swap operation object returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
-- 🔴 Sending an indexUid more than once in the request payload returns a [duplicate_index_found](0061-error-format-and-definitions.md#duplicate_index_found) error.
+- 🔴 Sending an indexUid more than once in the request payload returns a [invalid_swap_duplicate_index_found](0061-error-format-and-definitions.md#invalid_swap_duplicate_index_found) error.
 
 ###### 3.4.1.3.2. Asynchronous Errors
 
