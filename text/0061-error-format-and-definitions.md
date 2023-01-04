@@ -500,7 +500,7 @@ The maximum number of fields for a document is `65,535`. When this number is exc
 
 ### Context
 
-This error occurs when the user provided displayed attributes settings is invalid regarding its expected format.
+This error occurs when a value type different of `Array of String`, `[]`,  or `null` is specified.
 
 ### Error Definition
 
@@ -523,7 +523,7 @@ HTTP Code: `400 Bad Request`
 
 ### Context
 
-This error occurs when the user provided searchable attributes settings is invalid regarding its expected format.
+This error occurs when a value type different of `Array of String`, `[]`,  or `null` is specified.
 
 ### Error Definition
 
@@ -546,7 +546,7 @@ HTTP Code: `400 Bad Request`
 
 ### Context
 
-This error occurs when the user provided filterable attributes settings is invalid regarding its expected format.
+This error occurs when a value type different of `Array of String`, `[]`,  or `null` is specified.
 
 ### Error Definition
 
@@ -569,7 +569,7 @@ HTTP Code: `400 Bad Request`
 
 ### Context
 
-This error occurs when the user provided sortable attributes settings is invalid regarding its expected format.
+This error occurs when a value type different of `Array of String`, `[]`,  or `null` is specified.
 
 ### Error Definition
 
@@ -592,7 +592,12 @@ HTTP Code: `400 Bad Request`
 
 ### Context
 
-This error occurs when the user specifies an invalid format for the settings payload, a non-existent ranking rule, a malformed custom ranking rule in the settings payload, or tries to specify a custom ranking rule on the reserved keywords `_geo` and `_geoDistance`.
+This error occurs when:
+
+- an invalid format for the settings payload is specified
+- a non-existent ranking rule is specified,
+- a malformed custom ranking rule is specified
+- a custom ranking rule is specified for a reserved keyword.
 
 ### Error Definition
 
@@ -658,7 +663,7 @@ This error occurs when the user specifies an invalid format for the settings pay
 
 ### Context
 
-This error occurs when the user provided stop words settings is invalid regarding its expected format.
+This error occurs when a value type different of `Array of String`, `[]`,  or `null` is specified.
 
 ### Error Definition
 
@@ -681,7 +686,7 @@ HTTP Code: `400 Bad Request`
 
 ### Context
 
-This error occurs when the user provided synonyms settings is invalid regarding its expected format.
+This error occurs when a value type different of `Object`,  or `null` is specified.
 
 ### Error Definition
 
@@ -695,6 +700,7 @@ HTTP Code: `400 Bad Request`
     "link": "https://docs.meilisearch.com/errors#invalid_settings_synonyms"
 }
 ```
+
 ---
 
 ## invalid_settings_distinct_attribute
@@ -703,7 +709,7 @@ HTTP Code: `400 Bad Request`
 
 ### Context
 
-This error occurs when the user provided distinct attribute settings is invalid regarding its expected format.
+This error occurs when a value type different of `String` or `null` is specified.
 
 ### Error Definition
 
@@ -726,11 +732,19 @@ HTTP Code: `400 Bad Request`
 
 ### Context
 
+This error when:
+
+- a value different from `null` or with a different type than `Boolean` is specified for the `enabled` field
+- a value different from `null` or with a different type than `Array of String` is specified for the `disableOnAttributes` field
+- a value different from `null` or with a different type than `Array of String` is specified for the `disableOnWords` field
+- a value different from `null` or with a different type than `Integer` is specified for the `minWordSizeForTypos` object fields.
+- invalid integer values are specified for the `minWordSizeForTypos` object fields.
+
 ### Error Definition
 
 HTTP Code: `400 Bad Request`
 
-#### Variant: `enabled`, `disableOnAttributes`, `disableOnWords` properties are invalid regaring their expected format.
+#### Variant: `enabled`, `disableOnAttributes`, `disableOnWords` properties are invalid regarding their expected format.
 
 ```json
 {
@@ -762,7 +776,7 @@ HTTP Code: `400 Bad Request`
 
 ### Context
 
-This error occurs when the user provided faceting settings is invalid regarding its expected format.
+This error occurs when a value different from `null` or with a different type than `Integer` is specified for the `maxValuesPerFacet` field.
 
 ### Error Definition
 
@@ -785,7 +799,7 @@ HTTP Code: `400 Bad Request`
 
 ### Context
 
-This error occurs when the user provided pagination settings is invalid regarding its expected format.
+This error occurs when a value different from `null` or with a different type than `Integer` is specified for the `maxTotalHits` field.
 
 ### Error Definition
 
@@ -1165,6 +1179,7 @@ HTTP Code: `400 Bad Request`
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_attributes_to_highlight"
 }
+```
 
 ---
 
@@ -1187,6 +1202,7 @@ HTTP Code: `400 Bad Request`
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_show_matches_position"
 }
+```
 
 ---
 
@@ -1212,6 +1228,7 @@ HTTP Code: `400 Bad Request`
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_facets"
 }
+```
 
 ---
 
@@ -1234,6 +1251,7 @@ HTTP Code: `400 Bad Request`
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_highlight_pre_tag"
 }
+```
 
 ---
 
@@ -1256,6 +1274,7 @@ HTTP Code: `400 Bad Request`
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_highlight_post_tag"
 }
+```
 
 ---
 
@@ -1278,7 +1297,7 @@ HTTP Code: `400 Bad Request`
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_crop_marker"
 }
-
+```
 
 ---
 
@@ -1301,6 +1320,7 @@ HTTP Code: `400 Bad Request`
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_matching_strategy"
 }
+```
 
 ---
 
