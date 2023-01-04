@@ -1304,7 +1304,7 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_geo_field
+## invalid_document_geo_field
 
 `Asynchronous`
 
@@ -1319,9 +1319,9 @@ These errors occurs when the `_geo` field of a document payload is not valid. Ei
 ```json
 {
     "message": "The `_geo` field in the document with the id: `:documentId` is not an object. Was expecting an object with the `_geo.lat` and `_geo.lng` fields but instead got `:field`.",
-    "code": "invalid_geo_field",
+    "code": "invalid_document_geo_field",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
+    "link": "https://docs.meilisearch.com/errors#invalid_document_geo_field"
 }
 ```
 
@@ -1330,9 +1330,7 @@ These errors occurs when the `_geo` field of a document payload is not valid. Ei
 ```json
 {
     "message": "Could not find latitude nor longitude in the document with the id: `:documentId`. Was expecting `_geo.lat` and `_geo.lng` fields.",
-    "code": "invalid_geo_field",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
+    ...
 }
 ```
 
@@ -1341,9 +1339,7 @@ These errors occurs when the `_geo` field of a document payload is not valid. Ei
 ```json
 {
     "message": "Could not find :coord in the document with the id: `:documentId`. Was expecting a `:field` field.",
-    "code": "invalid_geo_field",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
+    ...
 }
 ```
 
@@ -1352,9 +1348,7 @@ These errors occurs when the `_geo` field of a document payload is not valid. Ei
 ```json
 {
     "message": "Could not parse :coord in the document with the id: `:documentId`. Was expecting a finite number but instead got `:value`.",
-    "code": "invalid_geo_field",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_geo_field"
+    ...
 }
 ```
 
