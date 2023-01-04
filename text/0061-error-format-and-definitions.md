@@ -355,7 +355,10 @@ This error happens when a user tries to create an index that already exists.
 
 ### Context
 
-This error happens when a user tries to create an index with an invalid uid format.
+This error happens when:
+
+- a value with a different type than `string` for `uid` is specified //TODO variant
+- a user tries to create an index with an invalid uid format
 
 ### Error Definition
 
@@ -371,6 +374,29 @@ HTTP Code: `400 Bad Request`
 ```
 
 - The `:uid` is inferred when the message is generated.
+
+---
+
+## invalid_index_primary_key
+
+`Synchronous`
+
+### Context
+
+This error occurs when a value with a different type than `string` or `null` is specified for the `primaryKey` field.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+     "message": "//TODO",
+    "code": "invalid_index_primary_key",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_index_primary_key"
+}
+```
 
 ---
 
