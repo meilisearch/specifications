@@ -802,13 +802,17 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_filter
+## invalid_search_parameter_filter
 
 `Synchronous`
 
 ### Context
 
-This error occurs at search time when there is a syntax error in the `filter` parameter, when an attribute expressed in the filter is not defined in the `filterableAttributes` list or when a reserved keywords like `_geo`, `_geoDistance` and `_geoPoint` is used as a filter.
+This error occurs when:
+
+- there is a syntax error in the `filter` parameter
+- an attribute expressed in the filter is not defined in the `filterableAttributes` list
+- a reserved keyword like `_geo`, `_geoDistance` and `_geoPoint` is used as a filter
 
 ### Error Definition
 
@@ -819,9 +823,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Attribute `:attribute` is not filterable. Available filterable attributes are: `:filterableAttributes`.",
-    "code": "invalid_filter",
+    "code": "invalid_search_parameter_filter",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_filter"
+    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_filter"
 }
 ```
 
@@ -833,9 +837,7 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Attribute `:attribute` is not filterable. This index does not have configured filterable attributes.",
-    "code": "invalid_filter",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_filter"
+    ...
 }
 ```
 
@@ -876,13 +878,17 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_sort
+## invalid_search_parameter_sort
 
 `Synchronous`
 
 ### Context
 
-This error occurs at search time when there is a syntax error in the `sort` parameter, when an attribute expressed in the sort is not defined in the `sortableAttributes` list, sort at search time while the `sort` ranking rule is missing from the settings, or using reserved keywords like `_geo`, `_geoDistance` and `_geoRadius` as a sort expression.
+This error occurs when:
+
+- there is a syntax error in the `sort` parameter
+- an attribute expressed in the sort is not defined in the `sortableAttributes` list, sort at search time while the `sort` ranking rule is missing from the settings
+- a reserved keyword like `_geo`, `_geoDistance` and `_geoRadius` is used as a sort expression
 
 ### Error Definition:
 
@@ -893,9 +899,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Attribute `:attribute` is not sortable. Available sortable attributes are: `:sortableAttributes`.",
-    "code": "invalid_sort",
+    "code": "invalid_search_parameter_sort",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_sort"
+    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_sort"
 }
 ```
 
@@ -907,9 +913,7 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Attribute `:attribute` is not sortable. This index does not have configured sortable attributes.",
-    "code": "invalid_sort",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_sort"
+    ...
 }
 ```
 
@@ -955,6 +959,348 @@ HTTP Code: `400 Bad Request`
     ...
 }
 ```
+
+---
+
+## invalid_search_parameter_q
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `String` or `null` for `q` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_search_parameter_q",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_q"
+}
+```
+
+---
+
+## invalid_search_parameter_offset
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `Integer` for `offset` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_search_parameter_offset",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_offset"
+}
+```
+
+---
+
+## invalid_search_parameter_limit
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `Integer` for `limit` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_search_parameter_limit",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_limit"
+}
+```
+
+---
+
+## invalid_search_parameter_page
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `Integer` for `page` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_search_parameter_page",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_page"
+}
+```
+
+---
+
+## invalid_search_parameter_hits_per_page
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `Integer` for `hitsPerPage` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_search_parameter_hits_per_page",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_hits_per_page"
+}
+```
+
+---
+
+## invalid_search_parameter_attributes_to_retrieve
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `Array of String`, `String` or `null` for `attributesToRetrieve` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_search_parameter_attributes_to_retrieve",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_attributes_to_retrieve"
+}
+```
+
+---
+
+## invalid_search_parameter_attributes_to_crop
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `Array[String]`, `String` or `null` for `attributesToCrop` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_search_parameter_attributes_to_crop",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_attributes_to_crop"
+}
+```
+
+---
+
+## invalid_search_parameter_crop_length
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `Integer` for `cropLength` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_search_parameter_crop_length",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_crop_length"
+}
+```
+
+---
+
+## invalid_search_parameter_attributes_to_highlight
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `Array[String]`, `String` or `null` for `attributesToHighlight` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_search_parameter_attributes_to_highlight",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_attributes_to_highlight"
+}
+
+---
+
+## invalid_search_parameter_show_matches_position
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `Boolean` or `null` for `showMatchesPosition` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_search_parameter_show_matches_position",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_show_matches_position"
+}
+
+---
+
+## invalid_search_parameter_facets
+
+`Synchronous`
+
+### Context
+
+This error occurs when:
+
+- A value with a different type than `Array of String`, `String` or `null` for `facets` is specified.
+- A field not defined as a `filterableAttributes` for `facets` is specified. //TODO: CATCH-UP VARIANT
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_search_parameter_facets",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_facets"
+}
+
+---
+
+## invalid_search_parameter_highlight_pre_tag
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `String` for `highlightPreTag` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_search_parameter_highlight_pre_tag",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_highlight_pre_tag"
+}
+
+---
+
+## invalid_search_parameter_highlight_post_tag
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `String` for `highlightPostTag` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_search_parameter_highlight_post_tag",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_highlight_post_tag"
+}
+
+---
+
+## invalid_search_parameter_crop_marker
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `String` or `null` for `cropMarker` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_search_parameter_crop_marker",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_crop_marker"
+}
+
+
+---
+
+## invalid_search_parameter_matching_strategy
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `String` and other than `last` or `all` as a value for `matchingStrategy` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_search_parameter_matching_strategy",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_matching_strategy"
+}
 
 ---
 
@@ -1045,7 +1391,7 @@ HTTP Code: `413 Payload Too Large`
 
 ### Context
 
-This error code is generic. It should not be used. Instead, a clear and precise error code should be determined.
+This error code is generic. It should not be avoided. Instead, a clear and precise error code should be determined.
 
 ---
 
@@ -1079,9 +1425,7 @@ HTTP Code: `404 Not Found` when
 ```json
 {
     "message": "Index `:indexUid` not found.",
-    "code": "index_not_found",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#index_not_found"
+    ...
 }
 ```
 
@@ -1105,7 +1449,7 @@ This error happens when the same indexUid is used twice in the `POST`- `swap-ind
 ```json
 {
     "message": "Indexes must be declared only once during a swap. `:indexUid` was specified several times.",
-    "code": "duplicate_index_found",
+    "code": "invalid_swap_duplicate_index_found",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_swap_duplicate_index_found"
 }
@@ -1118,9 +1462,7 @@ This error happens when the same indexUid is used twice in the `POST`- `swap-ind
 ```json
 {
     "message": "Indexes must be declared only once during a swap. `:indexUids` were specified several times.",
-    "code": "duplicate_index_found",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_swap_duplicate_index_found"
+    ...
 }
 ```
 
