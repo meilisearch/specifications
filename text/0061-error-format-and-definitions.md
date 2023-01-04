@@ -332,32 +332,6 @@ HTTP Code: `400 Bad Request`
 
 - The `:value` is inferred when the message is generated.
 
----
-
-## invalid_typo_tolerance_min_word_size_for_typos
-
-`Asynchronous`
-
-### Context
-
-This error happens when the `minWordSizeForTypos` object of the `typo` resource is invalid.
-
-### Error Definition
-
-```json
-{
-    "message": "`minWordSizeForTypos` setting is invalid. `oneTypo` and `twoTypos` fields should be between `0` and `255`, and `twoTypos` should be greater or equals to `oneTypo` but found `oneTypo: :oneTypo` and twoTypos: twoTypos`.",
-    "code": "invalid_typo_tolerance_min_word_size_for_typos",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_typo_tolerance_min_word_size_for_typos"
-}
-```
-
-- The `:oneTypo` is inferred when the message is generated.
-- The `:twoTypos` is inferred when the message is generated.
-
----
-
 ## index_already_exists
 
 `Asynchronous`
@@ -520,24 +494,124 @@ The maximum number of fields for a document is `65,535`. When this number is exc
 
 ---
 
-## invalid_ranking_rule
+## invalid_settings_displayed_attributes
 
-`Asynchronous`
+`Synchronous`
 
 ### Context
 
-This error occurs when the user specifies a non-existent ranking rule, a malformed custom ranking rule in the settings payload, or tries to specify a custom ranking rule on the reserved keywords `_geo` and `_geoDistance`.
+This error occurs when the user provided displayed attributes settings is invalid regarding its expected format.
 
 ### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_settings_displayed_attributes",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_settings_displayed_attributes"
+}
+```
+
+---
+
+## invalid_settings_searchable_attributes
+
+`Synchronous`
+
+### Context
+
+This error occurs when the user provided searchable attributes settings is invalid regarding its expected format.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_settings_searchable_attributes",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_settings_searchable_attributes"
+}
+```
+
+---
+
+## invalid_settings_filterable_attributes
+
+`Synchronous`
+
+### Context
+
+This error occurs when the user provided filterable attributes settings is invalid regarding its expected format.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_settings_filterable_attributes",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_settings_filterable_attributes"
+}
+```
+
+---
+
+## invalid_settings_sortable_attributes
+
+`Synchronous`
+
+### Context
+
+This error occurs when the user provided sortable attributes settings is invalid regarding its expected format.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_settings_sortable_attributes",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_settings_sortable_attributes"
+}
+```
+
+---
+
+## invalid_settings_ranking_rules
+
+`Asynchronous` / `Synchronous`
+
+### Context
+
+This error occurs when the user specifies an invalid format for the settings payload, a non-existent ranking rule, a malformed custom ranking rule in the settings payload, or tries to specify a custom ranking rule on the reserved keywords `_geo` and `_geoDistance`.
+
+### Error Definition
+
+#### Variant: Sending an invalid format
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_settings_raking_rules",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_settings_ranking_rules"
+}
+```
 
 #### Variant: Sending an inexistent ranking rule or an invalid custom ranking rule syntax.
 
 ```json
 {
     "message": "`:rankingRule` ranking rule is invalid. Valid ranking rules are words, typo, sort, proximity, attribute, exactness and custom ranking rules.",
-    "code": "invalid_ranking_rule",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_ranking_rule"
 }
 ```
 
@@ -575,6 +649,156 @@ This error occurs when the user specifies a non-existent ranking rule, a malform
 ```
 
 - The `:reservedKeyword` is inferred when the message is generated.
+
+---
+
+## invalid_settings_stop_words
+
+`Synchronous`
+
+### Context
+
+This error occurs when the user provided stop words settings is invalid regarding its expected format.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_settings_stop_words",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_settings_stop_words"
+}
+```
+
+---
+
+## invalid_settings_synonyms
+
+`Synchronous`
+
+### Context
+
+This error occurs when the user provided synonyms settings is invalid regarding its expected format.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_settings_synonyms",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_settings_synonyms"
+}
+```
+---
+
+## invalid_settings_distinct_attribute
+
+`Synchronous`
+
+### Context
+
+This error occurs when the user provided distinct attribute settings is invalid regarding its expected format.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_settings_distinct_attribute",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_settings_distinct_attribute"
+}
+```
+
+---
+
+## invalid_settings_typo_tolerance
+
+`Asynchronous` / `Synchronous`
+
+### Context
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+#### Variant: `enabled`, `disableOnAttributes`, `disableOnWords` properties are invalid regaring their expected format.
+
+```json
+{
+    "message": "`:fieldName` setting is invalid. //TODO",
+    "code": "invalid_settings_typo_tolerance",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_settings_typo_tolerance"
+}
+```
+
+- The `:fieldName` is inferred when the message is generated.
+
+#### Variant: `minWordSizeForTypos` object of the `typo` resource is invalid.
+
+```json
+{
+    "message": "`minWordSizeForTypos` setting is invalid. `oneTypo` and `twoTypos` fields should be between `0` and `255`, and `twoTypos` should be greater or equals to `oneTypo` but found `oneTypo: :oneTypo` and twoTypos: twoTypos`.",
+}
+```
+
+- The `:oneTypo` is inferred when the message is generated.
+- The `:twoTypos` is inferred when the message is generated.
+
+---
+
+## invalid_settings_faceting
+
+`Synchronous`
+
+### Context
+
+This error occurs when the user provided faceting settings is invalid regarding its expected format.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_settings_faceting",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_settings_faceting"
+}
+```
+
+---
+
+## invalid_settings_pagination
+
+`Synchronous`
+
+### Context
+
+This error occurs when the user provided pagination settings is invalid regarding its expected format.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_settings_pagination",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_settings_pagination"
+}
+```
 
 ---
 

@@ -150,7 +150,7 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
-- 🔴 Sending a request payload value type different of `Array of String`, `[]`,  or `null` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a request payload value type different of `Array of String`, `[]`,  or `null` returns an [invalid_settings_ranking_rules](0061-error-format-and-definitions.md#invalid_settings_ranking_rules) error.
 
 ###### 3.3.2.3.1. Async Errors
 
@@ -158,7 +158,7 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 
 > Otherwise, Meilisearch will create the index in a lazy way. See [3.2.2.4. Lazy Index Creation](#3224-lazy-index-creation).
 
-- 🔴 Sending an invalid ranking rule returns an [invalid_ranking_rule](0061-error-format-and-definitions.md#invalid_ranking_rule) error in the related asynchronous `task` resource. See [3.3.2.2. Response Definition](#3222-response-definition).
+- 🔴 Sending an invalid ranking rule returns an [invalid_settings_ranking_rules](0061-error-format-and-definitions.md#invalid_settings_ranking_rules) error in the related asynchronous `task` resource. See [3.3.2.2. Response Definition](#3222-response-definition).
 
 ##### 3.3.2.4. Lazy Index Creation
 

@@ -102,7 +102,7 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
 - 🔴 Sending a value different from `null` or with a different type than `Integer` for the `maxValuesPerFacet` field returns
-a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+an [invalid_settings_faceting](0061-error-format-and-definitions.md#invalid_settings_faceting) error.
 
 ###### 3.2.2.2.2.1. Async Errors
 
