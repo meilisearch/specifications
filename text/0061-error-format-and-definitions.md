@@ -1495,31 +1495,6 @@ HTTP Code: `404 Not Found`
 
 ---
 
-## dump_not_found
-
-`Synchronous`
-
-### Context
-
-This error happens when a requested dump can't be found.
-
-### Error Definition
-
-HTTP Code: `404 Not Found`
-
-```json
-{
-    "message": "Dump `:dumpId` not found.",
-    "code": "dump_not_found",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#dump_not_found"
-}
-```
-
-- The `:dumpId` is inferred when the message is generated.
-
----
-
 ## task_not_found
 
 `Synchronous`
