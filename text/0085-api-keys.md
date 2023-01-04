@@ -181,12 +181,16 @@ An array containing the fetched API keys.
 
 Gives the `offset` parameter used for the query.
 
+//TODO
+
 ###### `limit`
 
 - Type: Integer
 - Required: True
 
 Gives the `limit` parameter used for the query.
+
+//TODO
 
 ###### `total`
 
@@ -316,7 +320,7 @@ Create an API key.
 | indexes.swap     | Provides access to `POST` `/swap-indexes`. See [Swap Indexes API](0191-swap-indexes-api.md) specification. |
 | tasks.get        | Provides access to `GET` `/tasks`. **⚠️Non-authorized `indexes` are omitted from the response on `/tasks`**. Also add access to `GET` `/indexes/:authorizedIndexes/tasks` routes.                                                |
 | tasks.cancel     | Provides access to `POST` `/tasks/cancel`. route.                                                                                                                                                                                         |
-| tasks.delete     | Provides access to `DELETE` `/tasks` route. | 
+| tasks.delete     | Provides access to `DELETE` `/tasks` route. |
 | settings.get     | Provides access to `GET` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes.                                                                                                            |
 | settings.update  | Provides access to `POST / DELETE` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes.                                                                                                  |
 | stats.get        | Provides access to `GET` `/stats/`. **⚠️Non-authorized `indexes` are omitted from the response on `/stats`**. Also add access to `GET` `/indexes/:authorizedIndexes/stats`.                                                      |
