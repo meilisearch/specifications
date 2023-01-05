@@ -1650,7 +1650,7 @@ HTTP Code: `413 Payload Too Large`
 
 ### Context
 
-This error code is generic. It should not be avoided. Instead, a clear and precise error code should be determined.
+This error code is generic. It should not be used. Instead, a clear and precise error code should be determined.
 
 ---
 
