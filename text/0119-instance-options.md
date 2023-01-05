@@ -112,7 +112,6 @@ The expected behavior of each flag is described in the list above.
 - [Ignore snapshot if DB exists](#3319-ignore-snapshot-if-db-exists)
 - [Max memory usage when indexing](#3320-max-memory-usage-when-indexing)
 - [Max indexing threads](#3321-max-indexing-threads)
-- [Disable auto-batching](#3322-disable-auto-batching)
 - [SSL authentication path](#3323-ssl-authentication-path)
 - [SSL certificates path](#3324-ssl-certificates-path)
 - [SSL key path](#3325-ssl-key-path)
@@ -373,12 +372,6 @@ Users have to be aware that requiring the totality of the threads for the indexa
 Obviously, multi-threading is not possible in machines with only one processor core.
 
 If the number set is higher than the real number of core available in the machine, Meilisearch will use the maximum number of available cores.
-
-#### 3.3.22. Disable auto-batching
-
-**Environment variable**: `MEILI_DISABLE_AUTO_BATCHING`
-**CLI option**: `--disable-auto-batching`
-**Default**: Enable
 
 ⚠️ This command-line option does not take any values. Assigning a value will throw an error.
 

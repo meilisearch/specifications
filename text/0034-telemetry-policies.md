@@ -89,7 +89,6 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `infos.max_index_size`                  | Value of `--max-index-size`/`MEILI_INDEX_SIZE` in bytes | 336042103 | Every Hour |
 | `infos.max_task_db_size`                | Value of `--max-task-db-size`/`MEILI_MAX_TASK_DB_SIZE` in bytes | 336042103 | Every Hour |
 | `infos.http_payload_size_limit`         | Value of `--http-payload-size-limit`/`MEILI_HTTP_PAYLOAD_SIZE_LIMIT` in bytes | 336042103 | Every Hour |
-| `infos.disable_auto_batching`            | `true` if `--disable-auto-batching`/`MEILI_DISABLE_AUTO_BATCHING` is specified to true, otherwise `false` | `true` | Every Hour |
 | `infos.log_level`                       | Value of `--log-level`/`MEILI_LOG_LEVEL`                | debug             | Every Hour |
 | `infos.max_indexing_memory`                      | Value of `--max-indexing-memory`/`MEILI_MAX_INDEXING_MEMORY` in bytes     | 336042103         | Every Hour |
 | `infos.max_indexing_threads`                   | Value of `--max-indexing-threads`/`MEILI_MAX_INDEXING_THREADS` in integer | 4             | Every Hour |
@@ -217,7 +216,6 @@ This property allows us to gather essential information to better understand on 
 | infos.max_index_size | Value of `--max-index-size`/`MEILI_INDEX_SIZE` in bytes | `336042103` |
 | infos.max_task_db_size | Value of `--max-task-db-size`/`MEILI_MAX_TASK_DB_SIZE` in bytes | `336042103` |
 | infos.http_payload_size_limit | Value of `--http-payload-size-limit`/`MEILI_HTTP_PAYLOAD_SIZE_LIMIT` in bytes | `336042103` |
-| infos.disable_auto_batching | `true` if `--disable-auto-batching`/`MEILI_DISABLE_AUTO_BATCHING` is specified to true, otherwise `false` | `true` |
 | infos.log_level | Value of `--log-level`/`MEILI_LOG_LEVEL`  | `debug` |
 | infos.max_indexing_memory  | Value of `--max-indexing-memory`/`MEILI_MAX_INDEXING_MEMORY` in bytes     | `336042103` |
 | infos.max_indexing_threads  | Value of `--max-indexing-threads`/`MEILI_MAX_INDEXING_THREADS` in integer | `4` |
