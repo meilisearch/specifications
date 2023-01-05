@@ -441,7 +441,7 @@ This error occurs when the engine does not find an identifier in the payload doc
 
 ```json
 {
-    "message": "The primary key inference process failed because the engine did not find any field ending with `id` in its name. Please specify the primary key manually using the `primaryKey` query parameter.",
+    "message": "The primary key inference failed as the engine did not find any field ending with `id` in its name. Please specify the primary key manually using the `primaryKey` query parameter.",
     "code": "index_primary_key_no_candidate_found",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#index_primary_key_no_candidate_found"
@@ -458,7 +458,7 @@ This error occurs when the engine does not find an identifier in the payload doc
 
 ```json
 {
-    "message": "The primary key inference process failed because the engine found `:numCandidates` fields ending with `id` in their name, such as '`:firstCandidate`' and '`:secondCandidate`'. Please specify the primary key manually using the `primaryKey` query parameter.",
+    "message": "The primary key inference failed as the engine found `:numCandidates` fields ending with `id` in their names: '`:firstCandidate`' and '`:secondCandidate`'. Please specify the primary key manually using the `primaryKey` query parameter.",
     "code": "index_primary_key_multiple_candidates_found",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#index_primary_key_multiple_candidates_found"
