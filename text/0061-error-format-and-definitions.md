@@ -1687,14 +1687,13 @@ HTTP Code: `404 Not Found`
 
 ---
 
-## invalid_task_uids_filter
+## invalid_task_uids
 
 `Synchronous`
 
 ### Context
 
-This error occurs when the `uids` query parameter contains invalid values.
-
+This error occurs when the `uids` query parameter filter is invalid.
 ### Error Definition
 
 HTTP Code: `400 Bad Request`
@@ -1702,9 +1701,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Task uid `:uid` is invalid. It should only contains numeric characters separated by `,` character.",
-    "code": "invalid_task_uids_filter",
+    "code": "invalid_task_uids",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_task_uids_filter"
+    "link": "https://docs.meilisearch.com/errors#invalid_task_uids"
 }
 ```
 
@@ -1712,13 +1711,13 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_task_before_enqueued_at_filter
+## invalid_task_before_enqueued_at
 
 `Synchronous`
 
 ### Context
 
-This error occurs when `beforeEnqueuedAt` task filter contains an invalid value.
+This error occurs when the `beforeEnqueuedAt` query parameter filter is invalid.
 
 ### Error Definition
 
@@ -1727,9 +1726,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Task `:dateFilterName` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
-    "code": "invalid_task_before_enqueued_at_filter",
+    "code": "invalid_task_before_enqueued_at",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_task_before_enqueued_at_filter"
+    "link": "https://docs.meilisearch.com/errors#invalid_task_before_enqueued_at"
 }
 ```
 
@@ -1738,13 +1737,13 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_task_after_enqueued_at_filter
+## invalid_task_after_enqueued_at
 
 `Synchronous`
 
 ### Context
 
-This error occurs when `afterEnqueuedAt` task filter contains an invalid value.
+This error occurs when the `afterEnqueuedAt` query parameter filter is invalid.
 
 ### Error Definition
 
@@ -1753,9 +1752,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Task `:dateFilterName` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
-    "code": "invalid_task_after_enqueued_at_filter",
+    "code": "invalid_task_after_enqueued_at",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_task_after_enqueued_at_filter"
+    "link": "https://docs.meilisearch.com/errors#invalid_task_after_enqueued_at"
 }
 ```
 
@@ -1764,13 +1763,13 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_task_before_started_at_filter
+## invalid_task_before_started_at
 
 `Synchronous`
 
 ### Context
 
-This error occurs when `beforeStartedAt` task filter contains an invalid value.
+This error occurs when the `beforeStartedAt` query parameter filter is invalid.
 
 ### Error Definition
 
@@ -1779,9 +1778,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Task `:dateFilterName` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
-    "code": "invalid_task_before_started_at_filter",
+    "code": "invalid_task_before_started_at",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_task_before_started_at_filter"
+    "link": "https://docs.meilisearch.com/errors#invalid_task_before_started_at"
 }
 ```
 
@@ -1790,13 +1789,13 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_task_after_started_at_filter
+## invalid_task_after_started_at
 
 `Synchronous`
 
 ### Context
 
-This error occurs when `afterStartedAt` task filter contains an invalid value.
+This error occurs when the `afterStartedAt` query parameter filter is invalid.
 
 ### Error Definition
 
@@ -1805,9 +1804,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Task `:dateFilterName` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
-    "code": "invalid_task_after_started_at_filter",
+    "code": "invalid_task_after_started_at",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_task_after_started_at_filter"
+    "link": "https://docs.meilisearch.com/errors#invalid_task_after_started_at"
 }
 ```
 
@@ -1816,13 +1815,13 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_task_before_finished_at_filter
+## invalid_task_before_finished_at
 
 `Synchronous`
 
 ### Context
 
-This error occurs when `beforeFinishedAt` task filter contains an invalid value.
+This error occurs when the `beforeFinishedAt` query parameter filter is invalid.
 
 ### Error Definition
 
@@ -1831,9 +1830,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Task `:dateFilterName` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
-    "code": "invalid_task_before_finished_at_filter",
+    "code": "invalid_task_before_finished_at",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_task_before_finished_at_filter"
+    "link": "https://docs.meilisearch.com/errors#invalid_task_before_finished_at"
 }
 ```
 
@@ -1842,13 +1841,13 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_task_after_finished_at_filter
+## invalid_task_after_finished_at
 
 `Synchronous`
 
 ### Context
 
-This error occurs when `afterFinishedAt` task filter contains an invalid value.
+This error occurs when the `afterFinishedAt` query parameter filter is invalid.
 
 ### Error Definition
 
@@ -1857,9 +1856,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Task `:dateFilterName` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
-    "code": "invalid_task_after_finished_at_filter",
+    "code": "invalid_task_after_finished_at",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_task_after_finished_at_filter"
+    "link": "https://docs.meilisearch.com/errors#invalid_task_after_finished_at"
 }
 ```
 
@@ -1868,13 +1867,13 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_task_statuses_filter
+## invalid_task_statuses
 
 `Synchronous`
 
 ### Context
 
-This error happens when a requested task status is invalid.
+This error happens when the `status` query parameter filter is invalid.
 
 #### Error Definition
 
@@ -1883,9 +1882,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Task status `:status` is invalid. Available task statuses are: `:taskStatuses`.",
-    "code": "invalid_task_statuses_filter",
+    "code": "invalid_task_statuses",
     "type": "invalid_request",
-    "link":"https://docs.meilisearch.com/errors#invalid_task_statuses_filter"
+    "link":"https://docs.meilisearch.com/errors#invalid_task_statuses"
 }
 ```
 
@@ -1894,13 +1893,13 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_task_types_filter
+## invalid_task_types
 
 `Synchronous`
 
 ### Context
 
-This error happens when a requested task type is invalid.
+This error happens when the `types` query parameter filter is invalid.
 
 ### Error Definition
 
@@ -1909,9 +1908,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Task type `:type` is invalid. Available task types are: `:taskTypes`.",
-    "code": "invalid_task_types_filter",
+    "code": "invalid_task_types",
     "type": "invalid_request",
-    "link":"https://docs.meilisearch.com/errors#invalid_task_types_filter"
+    "link":"https://docs.meilisearch.com/errors#invalid_task_types"
 }
 ```
 
@@ -1920,13 +1919,13 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_task_canceled_by_filter
+## invalid_task_canceled_by
 
 `Synchronous`
 
 ### Context
 
-This error happens when the `canceledBy` query parameter contains an invalid value.
+This error happens when the `canceledBy` query parameter filter is invalid.
 
 ### Error Definition
 
@@ -1935,9 +1934,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Task canceledBy `:canceledBy` is invalid. It should only contains numeric characters separated by `,` character.",
-    "code": "invalid_task_canceled_by_filter",
+    "code": "invalid_task_canceled_by",
     "type": "invalid_request",
-    "link":"https://docs.meilisearch.com/errors#invalid_task_canceled_by_filter"
+    "link":"https://docs.meilisearch.com/errors#invalid_task_canceled_by"
 }
 ```
 
@@ -1968,6 +1967,52 @@ HTTP Code: `400 Bad Request`
 
 - `:operation` is inferred when the message is generated.
 - `:queryParameterNames` is inferred when the message is generated.
+
+---
+
+## invalid_task_limit
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `Integer` for `limit` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_task_limit",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_task_limit"
+}
+```
+
+---
+
+## invalid_task_from
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `Integer` for `from` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_task_from",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_task_from"
+}
+```
 
 ---
 
