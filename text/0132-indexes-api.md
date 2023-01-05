@@ -103,8 +103,6 @@ The results are sorted in ascending alphanumeric order from the `uid` field.
 
 Sets the starting point in the results, effectively skipping over a given number of indexes.
 
-//TODO
-
 ###### 3.2.1.1.2. `limit`
 
 - Type: Integer
@@ -112,8 +110,6 @@ Sets the starting point in the results, effectively skipping over a given number
 - Default: `20`
 
 Sets the maximum number of indexes to be returned by the current request.
-
-//TODO
 
 ##### 3.2.1.2. Response Definition
 
@@ -174,6 +170,8 @@ Fetch an index of a Meilisearch instance.
 ##### 3.2.2.2. Errors
 
 - 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
+- 🔴 Sending a value with a different type than `Integer` or `null` for `offset` will return a [invalid_index_offset](0061-error-format-and-definitions.md#invalid_index_offset) error.
+- 🔴 Sending a value with a different type than `Integer` or `null` for `limit` will return a [invalid_index_limit](0061-error-format-and-definitions.md#invalid_index_limit) error.
 
 #### 3.2.3. `POST` - `indexes`
 

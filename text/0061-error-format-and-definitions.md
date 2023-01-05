@@ -426,6 +426,52 @@ HTTP Code: `400 Bad Request`
 
 ---
 
+## invalid_index_limit
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `Integer` for `limit` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_index_limit",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_index_limit"
+}
+```
+
+---
+
+## invalid_index_offset
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `Integer` for `offset` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_index_offset",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_index_offset"
+}
+```
+
+---
+
 ## invalid_index_primary_key
 
 `Synchronous`
