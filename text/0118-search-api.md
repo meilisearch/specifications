@@ -66,7 +66,7 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 
 > `q` supports the [Phrase Query](0043-phrase-query.md) expression.
 
-- 🔴 Sending a value with a different type than `String` or `null` for `q` returns an [invalid_search_parameter_q](0061-error-format-and-definitions.md#invalid_search_parameter_q) error.
+- 🔴 Sending a value with a different type than `String` or `null` for `q` returns an [invalid_search_q](0061-error-format-and-definitions.md#invalid_search_q) error.
 
 #### 3.1.2. `filter`
 
@@ -78,9 +78,9 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 
 Attributes used as filter criteria must be added to the `filterableAttributes` list of an index settings. See [Filterable Attributes Setting API](0123-filterable-attributes-setting-api.md).
 
-- 🔴 Sending a value with a different type than `String`(GET/POST), `Array of (Array of String, String) (POST)`, or `null` for `filter` returns an [invalid_search_parameter_filter](0061-error-format-and-definitions.md#invalid_search_parameter_filter) error.
-- 🔴 Sending an invalid syntax for `filter` returns an [invalid_search_parameter_filter](0061-error-format-and-definitions.md#invalid_search_parameter_filter) error.
-- 🔴 Sending a field not defined as a `filterableAttributes` for `filter` returns an [invalid_search_parameter_filter](0061-error-format-and-definitions.md#invalid_search_parameter_filter) error.
+- 🔴 Sending a value with a different type than `String`(GET/POST), `Array of (Array of String, String) (POST)`, or `null` for `filter` returns an [invalid_search_filter](0061-error-format-and-definitions.md#invalid_search_filter) error.
+- 🔴 Sending an invalid syntax for `filter` returns an [invalid_search_filter](0061-error-format-and-definitions.md#invalid_search_filter) error.
+- 🔴 Sending a field not defined as a `filterableAttributes` for `filter` returns an [invalid_search_filter](0061-error-format-and-definitions.md#invalid_search_filter) error.
 
 ##### 3.1.2.1. String Syntax
 
@@ -381,9 +381,9 @@ is equivalent to:
 
 Attributes used as sort criteria must be added to the `sortableAttributes list of an index settings. See [Sortable Attributes Setting API](0123-sortable-attributes-setting-api.md).
 
-- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `sort` returns an [invalid_search_parameter_sort](0061-error-format-and-definitions.md#invalid_search_parameter_sort) error.
-- 🔴 Sending an invalid syntax for `sort` returns an [invalid_search_parameter_sort](0061-error-format-and-definitions.md#invalid_search_parameter_sort) error.
-- 🔴 Sending a field not defined as a `sortableAttributes` for `sort` returns an [invalid_search_parameter_sort](0061-error-format-and-definitions.md#invalid_search_parameter_sort) error.
+- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `sort` returns an [invalid_search_sort](0061-error-format-and-definitions.md#invalid_search_sort) error.
+- 🔴 Sending an invalid syntax for `sort` returns an [invalid_search_sort](0061-error-format-and-definitions.md#invalid_search_sort) error.
+- 🔴 Sending a field not defined as a `sortableAttributes` for `sort` returns an [invalid_search_sort](0061-error-format-and-definitions.md#invalid_search_sort) error.
 
 > See [Sort](0055-sort.md)
 
@@ -404,8 +404,8 @@ This parameter can take two values:
 
 Attributes used in `facets` must be added to the `filterableAttributes` list of an index settings. See [Filterable Attributes Setting API](0123-filterable-attributes-setting-api.md).
 
-- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `facets` returns an [invalid_search_parameter_facets](0061-error-format-and-definitions.md#invalid_search_parameter_facets) error.
-- 🔴 Sending a field not defined as a `filterableAttributes` for `facets` returns an [invalid_search_parameter_facets](0061-error-format-and-definitions.md#invalid_search_parameter_facets) error.
+- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `facets` returns an [invalid_search_facets](0061-error-format-and-definitions.md#invalid_search_facets) error.
+- 🔴 Sending a field not defined as a `filterableAttributes` for `facets` returns an [invalid_search_facets](0061-error-format-and-definitions.md#invalid_search_facets) error.
 
 The distribution of the different facets is returned in the `facetDistribution` response parameter.
 
@@ -419,7 +419,7 @@ Sets the maximum number of documents to be returned for the search query.
 
 If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` are provided as well, `limit` and `offset` are ignored. See [explaination](#3181-navigating-search-results-by-page-selection).
 
-- 🔴 Sending a value with a different type than `Integer` for `limit` returns an [invalid_search_parameter_limit](0061-error-format-and-definitions.md#invalid_search_parameter_limit) error.
+- 🔴 Sending a value with a different type than `Integer` for `limit` returns an [invalid_search_limit](0061-error-format-and-definitions.md#invalid_search_limit) error.
 
 #### 3.1.6. `offset`
 
@@ -431,7 +431,7 @@ Sets the starting point in the search results, effectively skipping over a given
 
 If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` are provided as well, `limit` and `offset` are ignored. See [details](#3181-navigating-search-results-by-page-selection).
 
-- 🔴 Sending a value with a different type than `Integer` for `offset` returns an [invalid_search_parameter_offset](0061-error-format-and-definitions.md#invalid_search_parameter_offset) error.
+- 🔴 Sending a value with a different type than `Integer` for `offset` returns an [invalid_search_offset](0061-error-format-and-definitions.md#invalid_search_offset) error.
 
 #### 3.1.7. `page`
 
@@ -448,7 +448,7 @@ When providing `page` or `hitsPerPage` in the query parameters, the `page select
 
 If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` are provided as well, `limit` and `offset` are ignored. See [explaination](#3181-navigating-search-results-by-page-selection).
 
-- 🔴 Sending a value with a different type than `Integer` for `page` returns an [invalid_search_parameter_page](0061-error-format-and-definitions.md#invalid_search_parameter_page) error.
+- 🔴 Sending a value with a different type than `Integer` for `page` returns an [invalid_search_page](0061-error-format-and-definitions.md#invalid_search_page) error.
 
 #### 3.1.8. `hitsPerPage`
 
@@ -464,7 +464,7 @@ When providing `page` or `hitsPerPage` in the query parameters, the `page select
 
 If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` are provided as well, `limit` and `offset` are ignored. See [explaination](#3181-navigating-search-results-by-page-selection).
 
-- 🔴 Sending a value with a different type than `Integer` for `hitsPerPage` returns an [invalid_search_parameter_hits_per_page](0061-error-format-and-definitions.md#invalid_search_parameter_hits_per_page) error.
+- 🔴 Sending a value with a different type than `Integer` for `hitsPerPage` returns an [invalid_search_hits_per_page](0061-error-format-and-definitions.md#invalid_search_hits_per_page) error.
 
 #### 3.1.8.1. Navigating search results by page selection
 
@@ -597,7 +597,7 @@ If no value is specified, the default value of `attributesToRetrieve` is used (`
 
 > If an attribute is missing from `displayedAttributes` index setting, `attributesToRetrieve` silently ignore it, and the field doesn't appear in the returned search results.
 
-- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `attributesToRetrieve` returns an [invalid_search_parameter_attributes_to_retrieve](0061-error-format-and-definitions.md#invalid_search_parameter_attributes_to_retrieve) error.
+- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `attributesToRetrieve` returns an [invalid_search_attributes_to_retrieve](0061-error-format-and-definitions.md#invalid_search_attributes_to_retrieve) error.
 
 #### 3.1.10. `attributesToHighlight`
 
@@ -615,7 +615,7 @@ Highlighted parts are surrounded by the [`highlightPreTag`](3111-highlightpretag
 
 `attributesToHighlight` only works on values of the following types: `string`, `number`, `array`, `object`. When highlighted, number attributes are transformed to string.
 
-- 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToHighlight` returns an [invalid_search_parameter_attributes_to_highlight](0061-error-format-and-definitions.md#invalid_search_parameter_attributes_to_highlight) error.
+- 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToHighlight` returns an [invalid_search_attributes_to_highlight](0061-error-format-and-definitions.md#invalid_search_attributes_to_highlight) error.
 
 ##### 3.1.10.1. searchableAttributes
 
@@ -643,7 +643,7 @@ Specifies the string to put **before** every highlighted query terms.
 
 This parameter is applied to the fields configured in `attributesToHighlight`. If there are none, this parameter has no effect. See [3.1.10. `attributesToHighlight`](3110-attributestohighlight) section.
 
-- 🔴 Sending a value with a different type than `String` for `highlightPreTag` returns an [invalid_search_parameter_highlight_pre_tag](0061-error-format-and-definitions.md#invalid_search_parameter_highlight_pre_tag) error.
+- 🔴 Sending a value with a different type than `String` for `highlightPreTag` returns an [invalid_search_highlight_pre_tag](0061-error-format-and-definitions.md#invalid_search_highlight_pre_tag) error.
 
 If `attributesToHighlight` is omitted while `highlightPreTag` is specified, there is no error.
 
@@ -657,7 +657,7 @@ Specifies the string to put **after** the highlighted query terms.
 
 This parameter is applied to the fields from `attributesToHighlight`. If there are none, this parameter has no effect. See [3.1.10. `attributesToHighlight`](3110-attributestohighlight) section.
 
-- 🔴 Sending a value with a different type than `String` for `highlightPostTag` returns an [invalid_search_parameter_highlight_post_tag](0061-error-format-and-definitions.md#invalid_search_parameter_highlight_post_tag) error.
+- 🔴 Sending a value with a different type than `String` for `highlightPostTag` returns an [invalid_search_highlight_post_tag](0061-error-format-and-definitions.md#invalid_search_highlight_post_tag) error.
 
 If `attributesToHighlight` is omitted while `highlightPostTag` is specified, there is no error.
 
@@ -679,7 +679,7 @@ The value of `cropLength` can be customized per attribute. See [3.1.12.1. Custom
 
 The engine adds a marker by default in front of and/or behind the part selected by the cropper. This marker is customizable. See [3.1.13. `cropMarker`](#3115-cropmarker) section.
 
-- 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToCrop` returns an [invalid_search_parameter_attributes_to_crop](0061-error-format-and-definitions.md#invalid_search_parameter_attributes_to_crop) error.
+- 🔴 Sending a value with a different type than `Array[String]`(POST), `String`(GET) or `null` for `attributesToCrop` returns an [invalid_search_attributes_to_crop](0061-error-format-and-definitions.md#invalid_search_attributes_to_crop) error.
 
 ##### 3.1.13.2. searchableAttributes
 
@@ -705,7 +705,7 @@ This parameter is applied to the fields from `attributesToCrop`. If there are no
 
 Sending a `0` value deactivates the cropping unless a custom crop length is defined for an attribute inside `attributesToCrop`.
 
-- 🔴 Sending a value with a different type than `Integer` for `cropLength` returns an [invalid_search_parameter_crop_length](0061-error-format-and-definitions.md#invalid_search_parameter_crop_length) error.
+- 🔴 Sending a value with a different type than `Integer` for `cropLength` returns an [invalid_search_crop_length](0061-error-format-and-definitions.md#invalid_search_crop_length) error.
 
 ##### 3.1.14.1. Custom `cropLength` Defined Per Attribute.
 
@@ -761,7 +761,7 @@ Specifying `cropMarker` to `""` or `null` implies that no marker will be applied
 
 This parameter is applied to the fields configured in `attributesToCrop`. If there are none, this parameter has no effect. See [3.1.13. `attributesToCrop`](#3113-attributestocrop) section.
 
-- 🔴 Sending a value with a different type than `String` or `null` for `cropMarker` returns an [invalid_search_parameter_crop_marker](0061-error-format-and-definitions.md#invalid_search_parameter_crop_marker) error.
+- 🔴 Sending a value with a different type than `String` or `null` for `cropMarker` returns an [invalid_search_crop_marker](0061-error-format-and-definitions.md#invalid_search_crop_marker) error.
 
 ##### 3.1.15.1. Applying `cropMarker`
 
@@ -803,7 +803,7 @@ Adds a `_matchesPosition` object to the search response that contains the locati
 
 It's useful when more control is needed than offered by the built-in highlighting/cropping features.
 
-- 🔴 Sending a value with a different type than `Boolean` or `null` for `showMatchesPosition` returns an [invalid_search_parameter_show_matches_position](0061-error-format-and-definitions.md#invalid_search_parameter_show_matches_position) error.
+- 🔴 Sending a value with a different type than `Boolean` or `null` for `showMatchesPosition` returns an [invalid_search_show_matches_position](0061-error-format-and-definitions.md#invalid_search_show_matches_position) error.
 
 #### 3.1.17. `matchingStrategy`
 
@@ -815,7 +815,7 @@ Defines which strategy to use to match the query terms within the documents as s
 
 Two different strategies are available, `last` and `all`. By default, the `last` strategy is chosen.
 
-- 🔴 Sending a value with a different type than `String` and other than `last` or `all` as a value for `matchingStrategy` returns an [invalid_search_parameter_matching_strategy](0061-error-format-and-definitions.md#invalid_search_parameter_matching_strategy) error.
+- 🔴 Sending a value with a different type than `String` and other than `last` or `all` as a value for `matchingStrategy` returns an [invalid_search_matching_strategy](0061-error-format-and-definitions.md#invalid_search_matching_strategy) error.
 
 ##### 3.1.17.1. `last` strategy
 

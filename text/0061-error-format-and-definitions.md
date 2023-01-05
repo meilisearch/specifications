@@ -994,7 +994,7 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_search_parameter_filter
+## invalid_search_filter
 
 `Synchronous`
 
@@ -1015,9 +1015,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Attribute `:attribute` is not filterable. Available filterable attributes are: `:filterableAttributes`.",
-    "code": "invalid_search_parameter_filter",
+    "code": "invalid_search_filter",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_filter"
+    "link": "https://docs.meilisearch.com/errors#invalid_search_filter"
 }
 ```
 
@@ -1070,7 +1070,7 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_search_parameter_sort
+## invalid_search_sort
 
 `Synchronous`
 
@@ -1091,9 +1091,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "Attribute `:attribute` is not sortable. Available sortable attributes are: `:sortableAttributes`.",
-    "code": "invalid_search_parameter_sort",
+    "code": "invalid_search_sort",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_sort"
+    "link": "https://docs.meilisearch.com/errors#invalid_search_sort"
 }
 ```
 
@@ -1154,7 +1154,7 @@ HTTP Code: `400 Bad Request`
 
 ---
 
-## invalid_search_parameter_q
+## invalid_search_q
 
 `Synchronous`
 
@@ -1169,15 +1169,15 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "//TODO",
-    "code": "invalid_search_parameter_q",
+    "code": "invalid_search_q",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_q"
+    "link": "https://docs.meilisearch.com/errors#invalid_search_q"
 }
 ```
 
 ---
 
-## invalid_search_parameter_offset
+## invalid_search_offset
 
 `Synchronous`
 
@@ -1192,15 +1192,15 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "//TODO",
-    "code": "invalid_search_parameter_offset",
+    "code": "invalid_search_offset",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_offset"
+    "link": "https://docs.meilisearch.com/errors#invalid_search_offset"
 }
 ```
 
 ---
 
-## invalid_search_parameter_limit
+## invalid_search_limit
 
 `Synchronous`
 
@@ -1215,15 +1215,15 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "//TODO",
-    "code": "invalid_search_parameter_limit",
+    "code": "invalid_search_limit",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_limit"
+    "link": "https://docs.meilisearch.com/errors#invalid_search_limit"
 }
 ```
 
 ---
 
-## invalid_search_parameter_page
+## invalid_search_page
 
 `Synchronous`
 
@@ -1238,15 +1238,15 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "//TODO",
-    "code": "invalid_search_parameter_page",
+    "code": "invalid_search_page",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_page"
+    "link": "https://docs.meilisearch.com/errors#invalid_search_page"
 }
 ```
 
 ---
 
-## invalid_search_parameter_hits_per_page
+## invalid_search_hits_per_page
 
 `Synchronous`
 
@@ -1261,15 +1261,15 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "//TODO",
-    "code": "invalid_search_parameter_hits_per_page",
+    "code": "invalid_search_hits_per_page",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_hits_per_page"
+    "link": "https://docs.meilisearch.com/errors#invalid_search_hits_per_page"
 }
 ```
 
 ---
 
-## invalid_search_parameter_attributes_to_retrieve
+## invalid_search_attributes_to_retrieve
 
 `Synchronous`
 
@@ -1284,15 +1284,15 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "//TODO",
-    "code": "invalid_search_parameter_attributes_to_retrieve",
+    "code": "invalid_search_attributes_to_retrieve",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_attributes_to_retrieve"
+    "link": "https://docs.meilisearch.com/errors#invalid_search_attributes_to_retrieve"
 }
 ```
 
 ---
 
-## invalid_search_parameter_attributes_to_crop
+## invalid_search_attributes_to_crop
 
 `Synchronous`
 
@@ -1307,15 +1307,15 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "//TODO",
-    "code": "invalid_search_parameter_attributes_to_crop",
+    "code": "invalid_search_attributes_to_crop",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_attributes_to_crop"
+    "link": "https://docs.meilisearch.com/errors#invalid_search_attributes_to_crop"
 }
 ```
 
 ---
 
-## invalid_search_parameter_crop_length
+## invalid_search_crop_length
 
 `Synchronous`
 
@@ -1330,15 +1330,15 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "//TODO",
-    "code": "invalid_search_parameter_crop_length",
+    "code": "invalid_search_crop_length",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_crop_length"
+    "link": "https://docs.meilisearch.com/errors#invalid_search_crop_length"
 }
 ```
 
 ---
 
-## invalid_search_parameter_attributes_to_highlight
+## invalid_search_attributes_to_highlight
 
 `Synchronous`
 
@@ -1353,15 +1353,15 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "//TODO",
-    "code": "invalid_search_parameter_attributes_to_highlight",
+    "code": "invalid_search_attributes_to_highlight",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_attributes_to_highlight"
+    "link": "https://docs.meilisearch.com/errors#invalid_search_attributes_to_highlight"
 }
 ```
 
 ---
 
-## invalid_search_parameter_show_matches_position
+## invalid_search_show_matches_position
 
 `Synchronous`
 
@@ -1376,15 +1376,15 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "//TODO",
-    "code": "invalid_search_parameter_show_matches_position",
+    "code": "invalid_search_show_matches_position",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_show_matches_position"
+    "link": "https://docs.meilisearch.com/errors#invalid_search_show_matches_position"
 }
 ```
 
 ---
 
-## invalid_search_parameter_facets
+## invalid_search_facets
 
 `Synchronous`
 
@@ -1402,15 +1402,15 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "//TODO",
-    "code": "invalid_search_parameter_facets",
+    "code": "invalid_search_facets",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_facets"
+    "link": "https://docs.meilisearch.com/errors#invalid_search_facets"
 }
 ```
 
 ---
 
-## invalid_search_parameter_highlight_pre_tag
+## invalid_search_highlight_pre_tag
 
 `Synchronous`
 
@@ -1425,15 +1425,15 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "//TODO",
-    "code": "invalid_search_parameter_highlight_pre_tag",
+    "code": "invalid_search_highlight_pre_tag",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_highlight_pre_tag"
+    "link": "https://docs.meilisearch.com/errors#invalid_search_highlight_pre_tag"
 }
 ```
 
 ---
 
-## invalid_search_parameter_highlight_post_tag
+## invalid_search_highlight_post_tag
 
 `Synchronous`
 
@@ -1448,15 +1448,15 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "//TODO",
-    "code": "invalid_search_parameter_highlight_post_tag",
+    "code": "invalid_search_highlight_post_tag",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_highlight_post_tag"
+    "link": "https://docs.meilisearch.com/errors#invalid_search_highlight_post_tag"
 }
 ```
 
 ---
 
-## invalid_search_parameter_crop_marker
+## invalid_search_crop_marker
 
 `Synchronous`
 
@@ -1471,15 +1471,15 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "//TODO",
-    "code": "invalid_search_parameter_crop_marker",
+    "code": "invalid_search_crop_marker",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_crop_marker"
+    "link": "https://docs.meilisearch.com/errors#invalid_search_crop_marker"
 }
 ```
 
 ---
 
-## invalid_search_parameter_matching_strategy
+## invalid_search_matching_strategy
 
 `Synchronous`
 
@@ -1494,9 +1494,9 @@ HTTP Code: `400 Bad Request`
 ```json
 {
     "message": "//TODO",
-    "code": "invalid_search_parameter_matching_strategy",
+    "code": "invalid_search_matching_strategy",
     "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_search_parameter_matching_strategy"
+    "link": "https://docs.meilisearch.com/errors#invalid_search_matching_strategy"
 }
 ```
 
