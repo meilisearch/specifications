@@ -91,31 +91,6 @@ HTTP code `400 Bad Request`
 
 ---
 
-## missing_parameter
-
-`Synchronous`
-
-### Context
-
-This error happens when a field is mandatory and missing in the given payload.
-
-### Error Definition
-
-HTTP Code: `400 Bad Request`
-
-```json
-{
-    "message": "`:fieldName` field is mandatory.",
-    "code": "missing_parameter",
-    "type": "invalid_request",
-    "link":"https://docs.meilisearch.com/errors#missing_parameter"
-}
-```
-
-- The `:fieldname` is inferred when the message is generated.
-
----
-
 ## immutable_field
 
 `Synchronous` / `Asynchronous`
@@ -163,6 +138,75 @@ HTTP Code: `409 Conflict`
 ```
 
 - The `:value` is inferred when the message is generated.
+
+---
+
+## missing_api_key_actions
+
+`Synchronous`
+
+### Context
+
+This error happens when `actions` is missing from the post api key resource payload.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+     "message": "//TODO",
+    "code": "missing_api_key_actions",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#missing_api_key_actions"
+}
+```
+
+---
+
+## missing_api_key_indexes
+
+`Synchronous`
+
+### Context
+
+This error happens when `indexes` is missing from the post api key resource payload.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+     "message": "//TODO",
+    "code": "missing_api_key_indexes",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#missing_api_key_indexes"
+}
+```
+
+---
+
+## missing_api_key_expires_at
+
+`Synchronous`
+
+### Context
+
+This error happens when `expiresAt` is missing from the post api key resource payload.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+     "message": "//TODO",
+    "code": "missing_api_key_expires_at",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#missing_api_key_expires_at"
+}
+```
 
 ---
 
@@ -395,6 +439,29 @@ This error happens when a user tries to create an index that already exists.
 ```
 
 - The `:uid` is inferred when the message is generated.
+
+---
+
+## missing_index_uid
+
+`Synchronous`
+
+### Context
+
+This error happens when `uid` is missing from the post index resource payload.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+     "message": "//TODO",
+    "code": "missing_index_uid",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#missing_index_uid"
+}
+```
 
 ---
 
