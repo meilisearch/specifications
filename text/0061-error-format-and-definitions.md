@@ -2486,9 +2486,7 @@ HTTP Code: `401 Forbidden`
 ---
 
 ## 2. Technical details
-N/A
+n/a
 
 ## 3. Future Possibilities
-
-- Add a `parameter` attribute in the `error` object to indicate which request parameter caused an error.
-- Add more specific error types. For example, explode internal errors into several distinct types.
+n/a
