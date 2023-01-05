@@ -148,6 +148,8 @@ Fetch the API keys of a Meilisearch instance.
 
 Sets the starting point in the results, effectively skipping over a given number of API keys.
 
+- 🔴 Sending a value with a different type than `Integer` for `offset` returns an [invalid_api_key_offset](0061-error-format-and-definitions.md#invalid_api_key_offset) error.
+
 ###### `limit`
 
 - Type: Integer
@@ -155,6 +157,8 @@ Sets the starting point in the results, effectively skipping over a given number
 - Default: `20`
 
 Sets the maximum number of documents to be returned by the current request.
+
+- 🔴 Sending a value with a different type than `Integer` for `limit` returns an [invalid_api_key_limit](0061-error-format-and-definitions.md#invalid_api_key_limit) error.
 
 ###### 3.2.4.2.2. Response Definition
 
@@ -181,16 +185,12 @@ An array containing the fetched API keys.
 
 Gives the `offset` parameter used for the query.
 
-//TODO
-
 ###### `limit`
 
 - Type: Integer
 - Required: True
 
 Gives the `limit` parameter used for the query.
-
-//TODO
 
 ###### `total`
 
@@ -348,9 +348,9 @@ See [API Key Resource Representation](#3241-api-key-resource-representation) sec
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending a different payload type than the Content-Type header returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
 - 🔴 Sending an invalid json format returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
-- 🔴 Omitting `actions` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
-- 🔴 Omitting `indexes` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
-- 🔴 Omitting `expiresAt` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
+- 🔴 Omitting `actions` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error. //TODO
+- 🔴 Omitting `indexes` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error. //TODO
+- 🔴 Omitting `expiresAt` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error. //TODO
 - 🔴 Sending an `uid` field that already exists returns an [api_key_already_exists](0061-error-format-and-definitions.md#api_key_already_exists) error.
 - 🔴 Sending an invalid value for the `uid` field returns an [invalid_api_key_uid](0061-error-format-and-definitions.md#invalid_api_key_uid) error.
 - 🔴 Sending an invalid value for the `actions` field returns an [invalid_api_key_actions](0061-error-format-and-definitions.md#invalid_api_key_actions) error.

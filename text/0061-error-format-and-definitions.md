@@ -23,12 +23,12 @@ The second motivation is to describe in an exhaustive way all the errors that th
 
 ##### Attributes
 
-| Field name | type   | Description                                                                   |
-|------------|--------|-------------------------------------------------------------------------------|
-| message    | string |  A human-readable message providing context and details about the error.      |
-| code       | string |  A string indicating the error code reported.                                 |
-| type       | string |  The type of error returned. `invalid_request`, `internal`, `system`, `auth`. |
-| link       | string |  An URL to the related error-page details for further information.            |
+| Field name | type   | Description                                                                       |
+|------------|--------|-----------------------------------------------------------------------------------|
+| message    | string |  A human-readable message providing context and details about the error.          |
+| code       | string |  A string indicating the error code reported.                                     |
+| type       | string |  The type of error returned. `invalid_request`, `internal`, `system`, and `auth`. |
+| link       | string |  An URL to the related error-page details for further information.                |
 
 ##### Json Response Example
 
@@ -165,6 +165,7 @@ HTTP Code: `409 Conflict`
 - The `:value` is inferred when the message is generated.
 
 ---
+
 ## invalid_api_key_uid
 
 `Synchronous`
@@ -325,6 +326,54 @@ HTTP Code: `400 Bad Request`
 ```
 
 - The `:value` is inferred when the message is generated.
+
+___
+
+## invalid_api_key_offset
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `Integer` for `offset` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_api_key_offset",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_api_key_offset"
+}
+```
+
+---
+
+## invalid_api_key_limit
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `Integer` for `limit` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_api_key_limit",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_api_key_limit"
+}
+```
+
+---
 
 ## index_already_exists
 
