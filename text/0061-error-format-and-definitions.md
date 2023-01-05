@@ -540,6 +540,69 @@ This error occurs when the value of a document identifier does not meet the requ
 
 ---
 
+## invalid_document_fields
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `String` for `fields` is specified.
+
+### Error Definition
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_document_fields",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_document_fields"
+}
+```
+
+---
+
+## invalid_document_limit
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `Integer` for `limit` is specified.
+
+### Error Definition
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_document_limit",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_document_limit"
+}
+```
+
+---
+
+## invalid_document_offset
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `Integer` for `offset` is specified.
+
+### Error Definition
+
+```json
+{
+    "message": "//TODO",
+    "code": "invalid_document_offset",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_document_offset"
+}
+```
+
+---
+
 ## document_fields_limit_reached
 
 `Synchronous` — The error can be synchronous if a document with a number higher than the allowed field limit is sent.
