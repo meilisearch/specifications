@@ -91,13 +91,13 @@ HTTP code `400 Bad Request`
 
 ---
 
-## immutable_field
+## immutable_api_key_uid
 
-`Synchronous` / `Asynchronous`
+`Synchronous`
 
 ### Context
 
-This error happens when an immutable field is given in a payload dedicated to modify a resource.
+This error happens when the `uid` field is given in a payload dedicated to modify an API Key.
 
 ### Error Definition
 
@@ -105,16 +105,152 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "The `:fieldName` field cannot be modified for the given resource.",
-    "code": "immutable_field",
+    "message": "The `uid` field cannot be modified for the given resource.",
+    "code": "immutable_api_key_uid",
     "type": "invalid_request",
-    "link":"https://docs.meilisearch.com/errors#immutable_field"
+    "link":"https://docs.meilisearch.com/errors#immutable_api_key_uid"
 }
 ```
 
-- The `:fieldName` is inferred when the message is generated.
-
 --
+
+## immutable_api_key_key
+
+`Synchronous`
+
+### Context
+
+This error happens when the `key` field is given in a payload dedicated to modify an API Key.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "The `key` field cannot be modified for the given resource.",
+    "code": "immutable_api_key_uid",
+    "type": "invalid_request",
+    "link":"https://docs.meilisearch.com/errors#immutable_api_key_key"
+}
+```
+
+---
+
+## immutable_api_key_actions
+
+`Synchronous`
+
+### Context
+
+This error happens when the `actions` field is given in a payload dedicated to modify an API Key.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "The `actions` field cannot be modified for the given resource.",
+    "code": "immutable_api_key_actions",
+    "type": "invalid_request",
+    "link":"https://docs.meilisearch.com/errors#immutable_api_key_actions"
+}
+```
+
+---
+
+## immutable_api_key_indexes
+
+`Synchronous`
+
+### Context
+
+This error happens when the `indexes` field is given in a payload dedicated to modify an API Key.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "The `indexes` field cannot be modified for the given resource.",
+    "code": "immutable_api_key_indexes",
+    "type": "invalid_request",
+    "link":"https://docs.meilisearch.com/errors#immutable_api_key_indexes"
+}
+```
+
+---
+
+## immutable_api_key_expires_at
+
+`Synchronous`
+
+### Context
+
+This error happens when the `expiresAt` field is given in a payload dedicated to modify an API Key.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "The `expiresAt` field cannot be modified for the given resource.",
+    "code": "immutable_api_key_expires_at",
+    "type": "invalid_request",
+    "link":"https://docs.meilisearch.com/errors#immutable_api_key_expires_at"
+}
+```
+
+___
+
+## immutable_api_key_created_at
+
+`Synchronous`
+
+### Context
+
+This error happens when the `createdAt` field is given in a payload dedicated to modify an API Key.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "The `createdAt` field cannot be modified for the given resource.",
+    "code": "immutable_api_key_created_at",
+    "type": "invalid_request",
+    "link":"https://docs.meilisearch.com/errors#immutable_api_key_created_at"
+}
+```
+
+---
+
+## immutable_api_key_updated_at
+
+`Synchronous`
+
+### Context
+
+This error happens when the `updatedAt` field is given in a payload dedicated to modify an API Key.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "The `updatedAt` field cannot be modified for the given resource.",
+    "code": "immutable_api_key_updated_at",
+    "type": "invalid_request",
+    "link":"https://docs.meilisearch.com/errors#immutable_api_key_updated_at"
+}
+```
+
+---
 
 ## api_key_already_exists
 

@@ -390,8 +390,13 @@ See [API Key Resource Representation](#3241-api-key-resource-representation) sec
 - 🔴 Sending an invalid json format returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
 - 🔴 Sending an invalid value for the `name` field returns an [invalid_api_key_name](0061-error-format-and-definitions.md#invalid_api_key_name) error.
 - 🔴 Sending an invalid value for the `description` field returns an [invalid_api_key_description](0061-error-format-and-definitions.md#invalid_api_key_description) error.
-- 🔴 Sending `uid`, `key`, `actions`, `indexes`, `expiresAt`, `createdAt`, `updatedAt` in the payload request returns an [immutable_field](0061-error-format-and-definitions.md#immutable_field) error.
-
+- 🔴 Sending `uid` in the payload request returns an [immutable_api_key_uid](0061-error-format-and-definitions.md#immutable_api_key_uid) error.
+- 🔴 Sending `key` in the payload request returns an [immutable_api_key_key](0061-error-format-and-definitions.md#immutable_api_key_key) error.
+- 🔴 Sending `actions` in the payload request returns an [immutable_api_key_actions](0061-error-format-and-definitions.md#immutable_api_key_actions) error.
+- 🔴 Sending `indexes` in the payload request returns an [immutable_api_key_indexes](0061-error-format-and-definitions.md#immutable_api_key_indexes) error.
+- 🔴 Sending `expiresAt` in the payload request returns an [immutable_api_key_expires_at](0061-error-format-and-definitions.md#immutable_api_key_expires_at) error.
+- 🔴 Sending `createdAt` in the payload request returns an [immutable_api_key_created_at](0061-error-format-and-definitions.md#immutable_api_key_created_at) error.
+- 🔴 Sending `updatedAt` in the payload request returns an [immutable_api_key_updated_at](0061-error-format-and-definitions.md#immutable_api_key_updated_at) error.
 
 ##### 3.2.4.6. `DELETE` - `/keys/:uid_or_key`
 
