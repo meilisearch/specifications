@@ -713,7 +713,7 @@ The tasks API endpoints are filterable by  `uids`, `indexUids`, `types`, `status
 
 `uids` is **case-unsensitive**.
 
-- 🔴 Sending values with a different type than `Integer` being separated by `,` for the `uid` parameter returns an [`invalid_task_uids`](0061-error-format-and-definitions.md#invalid_task_uids) error.
+- 🔴 Sending values with a different type than `Integer` being separated by `,` for the `uids` parameter returns an [`invalid_task_uids`](0061-error-format-and-definitions.md#invalid_task_uids) error.
 
 ###### 11.2.2. `indexUids`
 
@@ -724,6 +724,8 @@ Filter tasks by their related index. By default, when `indexUids` query paramete
 - Default: `*`
 
 `indexUids` is **case-sensitive**.
+
+- 🔴 Sending an invalid index uid format returns an [`invalid_task_index_uids`](0061-error-format-and-definitions.md#invalid_task_uids) error is returned.
 
 ###### 11.2.3. `statuses`
 

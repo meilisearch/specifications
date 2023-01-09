@@ -1,9 +1,4 @@
-- Title: Error Format and Definitions
-- Start Date: 2021-08-13
-- Specification PR: [#61](https://github.com/meilisearch/specifications/pull/61)
-- Discovery Issue: [#44](https://github.com/meilisearch/product/issues/44#issuecomment-896121211)
-
-# Error Format
+# Error Format and Definitions
 
 ## 1. Functional Specification
 
@@ -72,7 +67,9 @@ Errors can be returned in two different ways: `Synchronous` or `Asynchronous`.
 
 ### Context
 
-This error code is generic. It should not be used. Instead, a clear and precise error code should be determined to guide the user efficiently.
+This error code is generic. Whenever an error is thrown for a resource field, a clear and precise error code should be determined to guide the user efficiently.
+
+E.g. Sending an unknow field for a resource raises a generic `bad_request` error.
 
 ### Error Definition
 
@@ -80,14 +77,12 @@ HTTP code `400 Bad Request`
 
 ```json
 {
-    "message": ":errorMessage",
+    "message": "`:deserr_helper`at `:deserr_location`",
     "code": "bad_request",
     "type": "invalid_request",
     "link":"https://docs.meilisearch.com/errors#bad_request"
 }
 ```
-
-- The `:errorMessage` is inferred when the message is generated.
 
 ---
 
@@ -273,8 +268,6 @@ HTTP Code: `409 Conflict`
 }
 ```
 
-- The `:value` is inferred when the message is generated.
-
 ---
 
 ## missing_api_key_actions
@@ -291,7 +284,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-     "message": "//TODO",
+    "message": "`actions` field is mandatory.",
     "code": "missing_api_key_actions",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#missing_api_key_actions"
@@ -314,7 +307,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-     "message": "//TODO",
+    "message": "`indexes` field is mandatory.",
     "code": "missing_api_key_indexes",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#missing_api_key_indexes"
@@ -337,7 +330,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-     "message": "//TODO",
+    "message": "`expiresAt` field is mandatory.",
     "code": "missing_api_key_expires_at",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#missing_api_key_expires_at"
@@ -367,8 +360,6 @@ HTTP Code: `400 Bad Request`
 }
 ```
 
-- The `:value` is inferred when the message is generated.
-
 ---
 
 ## invalid_api_key_name
@@ -391,8 +382,6 @@ HTTP Code: `400 Bad Request`
     "link": "https://docs.meilisearch.com/errors#invalid_api_key_name"
 }
 ```
-
-- The `:value` is inferred when the message is generated.
 
 ---
 
@@ -417,8 +406,6 @@ HTTP Code: `400 Bad Request`
 }
 ```
 
-- The `:value` is inferred when the message is generated.
-
 ---
 
 ## invalid_api_key_actions
@@ -441,8 +428,6 @@ HTTP Code: `400 Bad Request`
     "link": "https://docs.meilisearch.com/errors#invalid_api_key_actions"
 }
 ```
-
-- The `:value` is inferred when the message is generated.
 
 ---
 
@@ -467,20 +452,14 @@ HTTP Code: `400 Bad Request`
 }
 ```
 
-- The `:value` is inferred when the message is generated.
-
-#### Variant: Sending an invalid index uid format in `indexes` field.
+#### Variant: Sending an invalid index uid format in the `indexes` field.
 
 ```json
 {
     "message": "`uid` is not a valid index uid. Index uid can be an integer or a string containing only alphanumeric characters, hyphens (-) and underscores (_).",
-    "code": "invalid_api_key_indexes",
-    "type": "invalid_request",
-    "link": "https://docs.meilisearch.com/errors#invalid_api_key_indexes"
+    ...
 }
 ```
-
-- The `:uid` is inferred when the message is generated.
 
 ---
 
@@ -505,8 +484,6 @@ HTTP Code: `400 Bad Request`
 }
 ```
 
-- The `:value` is inferred when the message is generated.
-
 ___
 
 ## invalid_api_key_offset
@@ -523,7 +500,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper`at `:deserr_location`",
     "code": "invalid_api_key_offset",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_api_key_offset"
@@ -546,7 +523,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper`at `:deserr_location`",
     "code": "invalid_api_key_limit",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_api_key_limit"
@@ -574,8 +551,6 @@ This error happens when a user tries to create an index that already exists.
 }
 ```
 
-- The `:uid` is inferred when the message is generated.
-
 ---
 
 ## missing_index_uid
@@ -592,7 +567,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-     "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "missing_index_uid",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#missing_index_uid"
@@ -609,23 +584,32 @@ HTTP Code: `400 Bad Request`
 
 This error happens when:
 
-- a value with a different type than `string` for `uid` is specified //TODO variant
-- a user tries to create an index with an invalid uid format
+- a value with a different type than `String` for `uid` is specified
+- an invalid index uid format is specified
 
 ### Error Definition
 
 HTTP Code: `400 Bad Request`
 
+#### Variant: Sending a different type than `String` for `uid`
+
 ```json
 {
-     "message": "`uid` is not a valid index uid. Index uid can be an integer or a string containing only alphanumeric characters, hyphens (-) and underscores (_).",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_index_uid",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_index_uid"
 }
 ```
 
-- The `:uid` is inferred when the message is generated.
+#### Variant: Sending an invalid `String` for `uid`
+
+```json
+{
+    "message": "`:uid` is not a valid index uid. Index uid can be an integer or a string containing only alphanumeric characters, hyphens (-) and underscores (_).",
+    ...
+}
+```
 
 ---
 
@@ -643,7 +627,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_index_limit",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_index_limit"
@@ -666,7 +650,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_index_offset",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_index_offset"
@@ -689,7 +673,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-     "message": "//TODO",
+     "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_index_primary_key",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_index_primary_key"
@@ -716,8 +700,6 @@ This error happens when a user tries to update an index primary key while the in
     "link": "https://docs.meilisearch.com/errors#index_primary_key_already_exists"
 }
 ```
-
-- The `:primaryKey` is inferred when the message is generated.
 
 ---
 
@@ -761,9 +743,6 @@ This error occurs when the engine does not find the primary key previously defin
 }
 ```
 
-- The `:primaryKey` is inferred when the message is generated. This is the value of the primaryKey attribute of the related index object.
-- The `:documentRepresentation` is inferred when the message is generated.
-
 ---
 
 ## invalid_document_id
@@ -785,8 +764,6 @@ This error occurs when the value of a document identifier does not meet the requ
 }
 ```
 
-- The `:documentId` is inferred when the message is generated.
-
 ---
 
 ## invalid_document_fields
@@ -799,9 +776,11 @@ This error occurs if a value with a different type than `String` for `fields` is
 
 ### Error Definition
 
+HTTP Code: `400 Bad Request`
+
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_document_fields",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_document_fields"
@@ -820,9 +799,11 @@ This error occurs if a value with a different type than `Integer` for `limit` is
 
 ### Error Definition
 
+HTTP Code: `400 Bad Request`
+
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_document_limit",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_document_limit"
@@ -841,9 +822,11 @@ This error occurs if a value with a different type than `Integer` for `offset` i
 
 ### Error Definition
 
+HTTP Code: `400 Bad Request`
+
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_document_offset",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_document_offset"
@@ -863,6 +846,8 @@ This error occurs if a value with a different type than `Integer` for `offset` i
 The maximum number of fields for a document is `65,535`. When this number is exceeded, this error is returned. This error is returned within a `task` for a `documentsAddition` or `documentsPartial` operation.
 
 ### Error Definition
+
+HTTP Code: `400 Bad Request` when `Synchronous`
 
 ```json
 {
@@ -889,7 +874,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_settings_displayed_attributes",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_displayed_attributes"
@@ -912,7 +897,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_settings_searchable_attributes",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_searchable_attributes"
@@ -935,7 +920,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_settings_filterable_attributes",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_filterable_attributes"
@@ -958,7 +943,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_settings_sortable_attributes",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_sortable_attributes"
@@ -969,7 +954,7 @@ HTTP Code: `400 Bad Request`
 
 ## invalid_settings_ranking_rules
 
-`Asynchronous` / `Synchronous` (//TODO: make it fully synchronous)
+`Asynchronous` / `Synchronous`
 
 ### Context
 
@@ -982,12 +967,14 @@ This error occurs when:
 
 ### Error Definition
 
+HTTP Code: `400 Bad Request` when `Synchronous`
+
 #### Variant: Sending an invalid format
 
 ```json
 {
-    "message": "//TODO",
-    "code": "invalid_settings_raking_rules",
+    "message": "`:deserr_helper` at `:deserr_location`",
+    "code": "invalid_settings_ranking_rules",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_ranking_rules"
 }
@@ -1001,8 +988,6 @@ This error occurs when:
 }
 ```
 
-- The `:rankingRule` is inferred when the message is generated. It could be a misspelled ranking rule like `Wards` instead of `Words` or a custom ranking rule expressed with a syntax error.
-
 #### Variant: Specifying a custom ranking rule on reserved fields `_geo` or `_geoDistance`
 
 ```json
@@ -1011,8 +996,6 @@ This error occurs when:
     ...
 }
 ```
-
-- The `:reservedKeyword` is inferred when the message is generated.
 
 #### Variant: Specifying a custom ranking rule on reserved expression `_geoPoint`
 
@@ -1023,8 +1006,6 @@ This error occurs when:
 }
 ```
 
-- The `:reservedKeyword` is inferred when the message is generated.
-
 #### Variant: Specifying a custom ranking rule on reserved expression `_geoRadius`
 
 ```json
@@ -1033,8 +1014,6 @@ This error occurs when:
     ...
 }
 ```
-
-- The `:reservedKeyword` is inferred when the message is generated.
 
 ---
 
@@ -1052,7 +1031,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_settings_stop_words",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_stop_words"
@@ -1075,7 +1054,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_settings_synonyms",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_synonyms"
@@ -1098,7 +1077,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_settings_distinct_attribute",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_distinct_attribute"
@@ -1123,31 +1102,26 @@ This error when:
 
 ### Error Definition
 
-HTTP Code: `400 Bad Request`
+HTTP Code: `400 Bad Request` when `Synchronous`
 
 #### Variant: `enabled`, `disableOnAttributes`, `disableOnWords` properties are invalid regarding their expected format.
 
 ```json
 {
-    "message": "`:fieldName` setting is invalid. //TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_settings_typo_tolerance",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_typo_tolerance"
 }
 ```
 
-- The `:fieldName` is inferred when the message is generated.
-
-#### Variant: `minWordSizeForTypos` object of the `typo` resource is invalid. (//TODO: make it synchronous)
+#### Variant: `minWordSizeForTypos` object of the `typo` resource is invalid.
 
 ```json
 {
-    "message": "`minWordSizeForTypos` setting is invalid. `oneTypo` and `twoTypos` fields should be between `0` and `255`, and `twoTypos` should be greater or equals to `oneTypo` but found `oneTypo: :oneTypo` and twoTypos: twoTypos`.",
+    "message": "`minWordSizeForTypos` setting is invalid. `oneTypo` and `twoTypos` fields should be between `0` and `255`, and `twoTypos` should be greater or equals to `oneTypo` but found oneTypo: `:oneTypo` and twoTypos: `:twoTypos`.",
 }
 ```
-
-- The `:oneTypo` is inferred when the message is generated.
-- The `:twoTypos` is inferred when the message is generated.
 
 ---
 
@@ -1165,7 +1139,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_settings_faceting",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_faceting"
@@ -1188,7 +1162,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_settings_pagination",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_pagination"
@@ -1224,8 +1198,7 @@ HTTP Code: `400 Bad Request`
 }
 ```
 
-- The `:attribute` is inferred when the message is generated.
-- The `:filterableAttributes` is inferred when the message is generated. It contains the list of filterable attributes separated by a comma. `filterableAttribute1, filterableAttribute2, ...`
+- `:filterableAttributes` contains the list of filterable attributes separated by a comma. `filterableAttribute1, filterableAttribute2, ...`
 
 #### Variant: Filtering on a non filterable attribute when `filterableAttributes` is empty
 
@@ -1236,8 +1209,6 @@ HTTP Code: `400 Bad Request`
 }
 ```
 
-- `:attribute` is inferred when the message is generated.
-
 #### Variant: Using `_geoDistance` as a filter expression
 
 ```json
@@ -1246,8 +1217,6 @@ HTTP Code: `400 Bad Request`
     ...
 }
 ```
-
-- The `:reservedKeyword` is inferred when the message is generated.
 
 #### Variant: Using `_geo` or `_geoPoint` as a filter expression
 
@@ -1258,8 +1227,6 @@ HTTP Code: `400 Bad Request`
 }
 ```
 
-- The `:reservedKeyword` is inferred when the message is generated.
-
 #### Variant: Invalid syntax for the `filter` parameter
 
 ```json
@@ -1268,8 +1235,6 @@ HTTP Code: `400 Bad Request`
     ...
 }
 ```
-
-- The `:syntaxErrorHelper` is inferred when the message is generated.
 
 ---
 
@@ -1300,8 +1265,7 @@ HTTP Code: `400 Bad Request`
 }
 ```
 
-- The `:attribute` is inferred when the message is generated.
-- The `:sortableAttributes` is inferred when the message is generated. It contains the list of sortable attributes separated by a comma. `sortableAttribute1, sortableAttribute2, ...`
+- `:sortableAttributes` contains the list of sortable attributes separated by a comma. `sortableAttribute1, sortableAttribute2, ...`
 
 #### Variant: Sorting on a non sortable attribute when `sortableAttributes` is empty
 
@@ -1312,8 +1276,6 @@ HTTP Code: `400 Bad Request`
 }
 ```
 
-- The `:attribute` is inferred when the message is generated.
-
 #### Variant: Using `_geoDistance` as a sort expression
 
 ```json
@@ -1323,8 +1285,6 @@ HTTP Code: `400 Bad Request`
 }
 ```
 
-- The `:reservedKeyword` is inferred when the message is generated.
-
 #### Variant: Using `_geo` or `_geoRadius` as a sort expression
 ```json
 {
@@ -1332,8 +1292,6 @@ HTTP Code: `400 Bad Request`
     ...
 }
 ```
-
-- The `:reservedKeyword` is inferred when the message is generated.
 
 #### Variant: Invalid syntax for the `sort`parameter
 
@@ -1343,8 +1301,6 @@ HTTP Code: `400 Bad Request`
     ...
 }
 ```
-
-- The `:syntaxErrorHelper` is inferred when the message is generated.
 
 #### Variant: Specifying `sort` at search time while the sort ranking rule isn't set in the ranking rules settings
 
@@ -1371,7 +1327,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_search_q",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_q"
@@ -1394,7 +1350,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_search_offset",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_offset"
@@ -1417,7 +1373,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_search_limit",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_limit"
@@ -1440,7 +1396,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_search_page",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_page"
@@ -1463,7 +1419,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_search_hits_per_page",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_hits_per_page"
@@ -1486,7 +1442,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_search_attributes_to_retrieve",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_attributes_to_retrieve"
@@ -1509,7 +1465,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_search_attributes_to_crop",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_attributes_to_crop"
@@ -1532,7 +1488,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_search_crop_length",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_crop_length"
@@ -1555,7 +1511,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_search_attributes_to_highlight",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_attributes_to_highlight"
@@ -1578,7 +1534,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_search_show_matches_position",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_show_matches_position"
@@ -1596,18 +1552,29 @@ HTTP Code: `400 Bad Request`
 This error occurs when:
 
 - A value with a different type than `Array of String`, `String` or `null` for `facets` is specified.
-- A field not defined as a `filterableAttributes` for `facets` is specified. //TODO: CATCH-UP VARIANT
+- A field not defined as a `filterableAttributes` for `facets` is specified.
 
 ### Error Definition
 
 HTTP Code: `400 Bad Request`
 
+#### Variant: An type is given for `facets`
+
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_search_facets",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_facets"
+}
+```
+
+#### Variant: A given field for `facets` is not specified as a `filterableAttributes` settings
+
+```json
+{
+    "message": "Invalid facet distribution, the fields `:fieldName` are not set as filterable.",
+    ...
 }
 ```
 
@@ -1627,7 +1594,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_search_highlight_pre_tag",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_highlight_pre_tag"
@@ -1650,7 +1617,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_search_highlight_post_tag",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_highlight_post_tag"
@@ -1673,7 +1640,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_search_crop_marker",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_crop_marker"
@@ -1696,7 +1663,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper` at `:deserr_location`",
     "code": "invalid_search_matching_strategy",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_matching_strategy"
@@ -1753,7 +1720,6 @@ These errors occurs when the `_geo` field of a document payload is not valid. Ei
 }
 ```
 
-- The `:documentId` is inferred when the message is generated.
 - The `:coord` is either `latitude` or `longitude` depending on what's wrong.
 - The `:field` is either `_geo.lat` or `_geo.lng` depending on what's wrong.
 
@@ -1800,7 +1766,7 @@ This error happens when a requested index can't be found.
 
 ### Error Definition
 
-HTTP Code: `404 Not Found` when
+HTTP Code: `404 Not Found` when `Synchronous`
 
 #### Variant: Multiples indexUids can't be found
 
@@ -1813,7 +1779,7 @@ HTTP Code: `404 Not Found` when
 }
 ```
 
-- The `:indexUids` is inferred when the message is generated, values are separated by `,`.
+- `:indexUids` values are separated by `,`.
 
 #### Variant: An index can't be found
 
@@ -1824,8 +1790,6 @@ HTTP Code: `404 Not Found` when
 }
 ```
 
-- The `:indexUid` is inferred when the message is generated.
-
 ---
 
 ## invalid_swap_indexes
@@ -1834,16 +1798,30 @@ HTTP Code: `404 Not Found` when
 
 ### Context
 
-This error happens when an `indexes` array not containing **exactly** 2 indexUids for a swap operation object is specified in the payload.
+This error happens when:
+
+- an `indexes` array not containing **exactly** 2 index uids for a swap operation object is specified in the payload
+- An index name is invalid in the `indexes` array.
 
 ### Error Definition
 
+#### Variant: `indexes` does not contains **exactly** 2 index uids
+
 ```json
 {
-    "message": "//TODO.",
+    "message": "Two indexes must be given for each swap. The list `:indexesList` contains `:indexesNumber` indexes.",
     "code": "invalid_swap_indexes",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_swap_indexes"
+}
+```
+
+#### Variant: `indexes` contains one index uid being invalid
+
+```json
+{
+    "message": "`:uid` is not a valid index uid. Index uid can be an integer or a string containing only alphanumeric characters, hyphens (-) and underscores (_).",
+    ...
 }
 ```
 
@@ -1871,8 +1849,6 @@ This error happens when the same indexUid is used twice in the `POST`- `swap-ind
 }
 ```
 
-- The `:indexUid` is inferred when the message is generated.
-
 #### Variant: Several indexUids are found twice in the payload
 
 ```json
@@ -1882,7 +1858,7 @@ This error happens when the same indexUid is used twice in the `POST`- `swap-ind
 }
 ```
 
-- The `:indexUids` is inferred when the message is generated, values are separated by `,`.
+- `:indexUids` values are separated by `,`.
 
 ---
 
@@ -1907,8 +1883,6 @@ HTTP Code: `404 Not Found`
 }
 ```
 
-- The `:documentId` is inferred when the message is generated.
-
 ---
 
 ## task_not_found
@@ -1932,8 +1906,6 @@ HTTP Code: `404 Not Found`
 }
 ```
 
-- The `:taskUid` is inferred when the message is generated.
-
 ---
 
 ## invalid_task_uids
@@ -1943,6 +1915,7 @@ HTTP Code: `404 Not Found`
 ### Context
 
 This error occurs when the `uids` query parameter filter is invalid.
+
 ### Error Definition
 
 HTTP Code: `400 Bad Request`
@@ -1956,7 +1929,26 @@ HTTP Code: `400 Bad Request`
 }
 ```
 
-- `:uid` is inferred when the message is generated.
+---
+
+## invalid_task_index_uids
+
+### Context
+
+This error occurs when the `indexUids` query parameter contains an invalid index uid.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "`:uid` is not a valid index uid. Index uid can be an integer or a string containing only alphanumeric characters, hyphens (-) and underscores (_).",
+    "code": "invalid_task_index_uids",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_task_index_uids"
+}
+```
 
 ---
 
@@ -1974,15 +1966,12 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "Task `:dateFilterName` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
+    "message": "Task `beforeEnqueuedAt` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
     "code": "invalid_task_before_enqueued_at",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_task_before_enqueued_at"
 }
 ```
-
-- `:dateFilterName` is inferred when the message is generated.
-- `:value` is inferred when the message is generated.
 
 ---
 
@@ -2000,15 +1989,12 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "Task `:dateFilterName` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
+    "message": "Task `afterEnqueuedAt` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
     "code": "invalid_task_after_enqueued_at",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_task_after_enqueued_at"
 }
 ```
-
-- `:dateFilterName` is inferred when the message is generated.
-- `:value` is inferred when the message is generated.
 
 ---
 
@@ -2026,15 +2012,12 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "Task `:dateFilterName` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
+    "message": "Task `beforeStartedAt` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
     "code": "invalid_task_before_started_at",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_task_before_started_at"
 }
 ```
-
-- `:dateFilterName` is inferred when the message is generated.
-- `:value` is inferred when the message is generated.
 
 ---
 
@@ -2052,15 +2035,12 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "Task `:dateFilterName` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
+    "message": "Task `afterStartedAt` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
     "code": "invalid_task_after_started_at",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_task_after_started_at"
 }
 ```
-
-- `:dateFilterName` is inferred when the message is generated.
-- `:value` is inferred when the message is generated.
 
 ---
 
@@ -2078,15 +2058,12 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "Task `:dateFilterName` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
+    "message": "Task `beforeFinishedAt` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
     "code": "invalid_task_before_finished_at",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_task_before_finished_at"
 }
 ```
-
-- `:dateFilterName` is inferred when the message is generated.
-- `:value` is inferred when the message is generated.
 
 ---
 
@@ -2104,15 +2081,12 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "Task `:dateFilterName` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
+    "message": "Task `afterFinishedAt` `:value` is invalid. It should follow the RFC 3339 format. e.g. 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'.",
     "code": "invalid_task_after_finished_at",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_task_after_finished_at"
 }
 ```
-
-- `:dateFilterName` is inferred when the message is generated.
-- `:value` is inferred when the message is generated.
 
 ---
 
@@ -2137,9 +2111,6 @@ HTTP Code: `400 Bad Request`
 }
 ```
 
-- The `:status` is inferred when the message is generated.
-- The `:taskStatuses` is inferred when the message is generated.
-
 ---
 
 ## invalid_task_types
@@ -2162,9 +2133,6 @@ HTTP Code: `400 Bad Request`
     "link":"https://docs.meilisearch.com/errors#invalid_task_types"
 }
 ```
-
-- The `:type` is inferred when the message is generated.
-- The `:taskTypes` is inferred when the message is generated.
 
 ---
 
@@ -2189,8 +2157,6 @@ HTTP Code: `400 Bad Request`
 }
 ```
 
-- `:canceledBy` is inferred when the message is generated.
-
 ---
 
 ## missing_task_filters
@@ -2214,9 +2180,6 @@ HTTP Code: `400 Bad Request`
 }
 ```
 
-- `:operation` is inferred when the message is generated.
-- `:queryParameterNames` is inferred when the message is generated.
-
 ---
 
 ## invalid_task_limit
@@ -2233,7 +2196,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper`at `:deserr_location`",
     "code": "invalid_task_limit",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_task_limit"
@@ -2256,7 +2219,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "//TODO",
+    "message": "`:deserr_helper`at `:deserr_location`",
     "code": "invalid_task_from",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_task_from"
@@ -2284,8 +2247,6 @@ HTTP Code: `404 Not Found`
     "link": "https://docs.meilisearch.com/errors#api_key_not_found"
 ```
 
-- The `:apiKey` is inferred when the message is generated.
-
 ---
 
 ## invalid_content_type
@@ -2309,7 +2270,7 @@ HTTP Code: `415 Unsupported Media Type`
 }
 ```
 
-- The `:contentTypeList` is inferred when the message is generated. The values are separated by a `,` char. e.g. `application/json`, `text/csv`.
+- `:contentTypeList` values are separated by a `,` char. e.g. `application/json`, `text/csv`.
 
 ---
 
@@ -2334,7 +2295,7 @@ HTTP Code: `415 Unsupported Media Type`
 }
 ```
 
-- The `:contentTypeList` is inferred when the message is generated. The values are separated by a `,` char. e.g. `application/json`, `text/csv`.
+- `:contentTypeList` values are separated by a `,` char. e.g. `application/json`, `text/csv`.
 
 ---
 
@@ -2359,7 +2320,7 @@ HTTP Code: `400 Bad Request`
 }
 ```
 
-- The `:payloadType` is inferred when the message is generated. e.g. `json`, `ndjson`, `csv`
+- `:payloadType` is e.g. `json`, `ndjson`, `csv`
 
 ---
 
@@ -2386,8 +2347,7 @@ HTTP Code: `400 Bad Request`
 }
 ```
 
-- The `:payloadType` is inferred when the message is generated. e.g. `json`, `ndjson`, `csv`
-- The `:syntaxErrorHelper` is inferred when the message is generated.
+- `:payloadType` is e.g. `json`, `ndjson`, `csv`
 
 ---
 
@@ -2403,7 +2363,7 @@ This error code occurs when an unknown and undetermined error has occurred at th
 
 ### Error Definition
 
-HTTP Code: `500 Internal Server Error`
+HTTP Code: `500 Internal Server Error` when `Synchronous`
 
 ```json
 {
@@ -2413,8 +2373,6 @@ HTTP Code: `500 Internal Server Error`
     "link": "https://docs.meilisearch.com/errors#internal"
 }
 ```
-
-- The `:reason` is inferred when the message is generated. e.g. `Internal: decoding failed`
 
 ---
 
@@ -2437,8 +2395,6 @@ This error occurs when an index creation could not be completed for various reas
 }
 ```
 
-- The `:reason` is inferred when the message is generated. e.g. `Write Permission denied`
-
 ---
 
 ## index_not_accessible
@@ -2451,7 +2407,7 @@ This error occurs when an index creation could not be completed for various reas
 
 ### Error Definition
 
-HTTP Code: `500 Internal Server Error`
+HTTP Code: `500 Internal Server Error` when `Synchronous`
 
 ```json
 {
@@ -2461,8 +2417,6 @@ HTTP Code: `500 Internal Server Error`
     "link": "https://docs.meilisearch.com/errors#index_not_accessible"
 }
 ```
-
-- The `:reason` is inferred when the message is generated. e.g. `Read Permission denied`
 
 ---
 
@@ -2476,7 +2430,7 @@ This error occurs when a document cannot be found in the system due to an incons
 
 ### Error Definition
 
-HTTP Code: `500 Internal Server Error`
+HTTP Code: `500 Internal Server Error` when `Synchronous`
 
 ```json
 {
@@ -2486,9 +2440,6 @@ HTTP Code: `500 Internal Server Error`
     "link": "https://docs.meilisearch.com/errors#unretrievable_document"
 }
 ```
-
-- The `documentId` is inferred when the message is generated.
-- The `:reason` is inferred when the message is generated.
 
 ---
 
@@ -2502,7 +2453,7 @@ This error occurs when the database is in an inconsistent state due to an uncont
 
 ### Error Definition
 
-HTTP Code: `500 Internal Server Error`
+HTTP Code: `500 Internal Server Error` when `Synchronous`
 
 ```json
 {
@@ -2534,8 +2485,6 @@ This error occurs during the dump creation process. The dump creation was interr
 }
 ```
 
-- The `:reason` is inferred when the message is generated. e.g. `Permission denied`
-
 ---
 
 ## database_size_limit_reached
@@ -2557,7 +2506,7 @@ This error occurs when the user tries to add documents and the maximum size of t
 }
 ```
 
-- The `:databaseSizeLimit` is inferred when the message is generated. e.g. `100GiB`
+- `:databaseSizeLimit` is e.g. `100GiB`
 
 ---
 
@@ -2571,7 +2520,7 @@ This error occurs when the `data.ms` folder is in an inconsistent state. It can 
 
 ### Error Definition
 
-HTTP Code: `500 Internal Server Error`
+HTTP Code: `500 Internal Server Error` when `Synchronous`
 
 ```json
 {
@@ -2596,11 +2545,11 @@ This error occurs when the host system partition has reached its maximum capacit
 
 ### Error Definition
 
-HTTP Code: `500 Internal Server Error`
+HTTP Code: `500 Internal Server Error` when `Synchronous`
 
 ```json
 {
-    "message": "There is no more space left on the device. Consider increasing the size of the disk/partition.",
+    "message": "`:kernelMessage`",
     "code": "no_space_left_on_device",
     "type": "system",
     "link": "https://docs.meilisearch.com/errors#no_space_left_on_device"
@@ -2609,11 +2558,49 @@ HTTP Code: `500 Internal Server Error`
 
 ---
 
-## too_many_open_files //TODO
+## too_many_open_files
+
+`Asynchronous` / `Synchronous` when `Synchronous`
+
+### Context
+
+This error occurs when the host system can't open more files.
+
+### Error Definition
+
+HTTP Code: `500 Internal Server Error`
+
+```json
+{
+    "message": "`:kernelMessage`",
+    "code": "too_many_open_files",
+    "type": "system",
+    "link": "https://docs.meilisearch.com/errors#too_many_open_files"
+}
+```
 
 ---
 
-## io_error //TODO
+## io_error
+
+`Asynchronous` / `Synchronous` when `Synchronous`
+
+### Context
+
+This error generally occurs when the host system have no space left on device or when the database doesn't have read or write right.
+
+### Error Definition
+
+HTTP Code: `500 Internal Server Error`
+
+```json
+{
+    "message": "`:kernelMessage`. This error generally happens when you have no space left on device or when your database doesn't have read or write right.",
+    "code": "io_error",
+    "type": "system",
+    "link": "https://docs.meilisearch.com/errors#io_error"
+}
+```
 
 ---
 
