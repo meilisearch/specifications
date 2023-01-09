@@ -843,7 +843,7 @@ HTTP Code: `400 Bad Request`
 
 ### Context
 
-The maximum number of fields for a document is `65,535`. When this number is exceeded, this error is returned. This error is returned within a `task` for a `documentsAddition` or `documentsPartial` operation.
+The maximum number of fields for a document is `65,535`. When this number is exceeded, this error is returned. This error is returned within a `task` for a `documentAdditionOrUpdate` operation.
 
 ### Error Definition
 
@@ -961,9 +961,9 @@ HTTP Code: `400 Bad Request`
 This error occurs when:
 
 - an invalid format for the settings payload is specified
-- a non-existent ranking rule is specified,
+- a non-existent ranking rule is specified
 - a malformed custom ranking rule is specified
-- a custom ranking rule is specified for a reserved keyword.
+- a custom ranking rule is specified for a reserved keyword
 
 ### Error Definition
 

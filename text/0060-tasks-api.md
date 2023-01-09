@@ -761,7 +761,7 @@ Filter tasks by the `taskCancelation` uid that canceled them. It's possible to s
 
 `canceledBy` is **case-insensitive**.
 
-- 🔴Sending a value with a different type than `Integer` for the `canceledBy` parameter returns an [`invalid_task_canceled_by`](0061-error-format-and-definitions.md#invalid_task_canceled_by) error.
+- 🔴 Sending a value with a different type than `Integer` for the `canceledBy` parameter returns an [`invalid_task_canceled_by`](0061-error-format-and-definitions.md#invalid_task_canceled_by) error.
 
 ###### 11.2.6. Date Parameters
 

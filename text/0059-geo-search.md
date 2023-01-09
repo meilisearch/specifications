@@ -205,9 +205,7 @@ Following the [`sort` specification feature](https://github.com/meilisearch/spec
 
 #### Related Ranking Rules Settings API Errors
 
-- 🔴 Specifying a custom ranking rule with `_geo` or `_geoDistance` returns an [invalid_settings_ranking_rules](0061-error-format-and-definitions.md#invalid_settings_ranking_rules) error.
-- 🔴 Specifying a custom ranking rule with `_geoPoint` returns an [invalid_settings_ranking_rules](0061-error-format-and-definitions.md#invalid_settings_ranking_rules) error.
-- 🔴 Specifying a custom ranking rule with `_geoRadius` returns an [invalid_settings_ranking_rules](0061-error-format-and-definitions.md#invalid_settings_ranking_rules) error.
+- 🔴 Specifying a custom ranking rule with `_geo`, `_geoDistance`, `_geoPoint`, or `_geoRadius` returns an [invalid_settings_ranking_rules](0061-error-format-and-definitions.md#invalid_settings_ranking_rules) error.
 
 ---
 
