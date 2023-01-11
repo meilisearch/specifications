@@ -89,7 +89,7 @@ Error: dump doesn't exist at ":pathToDumps/:missingFile"
 When starting a new Meilisearch version, if Meilisearch tries to read an old data.ms and but cannot read it, the following message should appear:
 
 ```
-Error: Your database version (*old_version*) is incompatible with your current engine (*new_version*). To migrate data between Meilisearch versions, follow our guide on https://docs.meilisearch.com/learn/advanced/updating.html
+Error: Your database version (`:old_version`) is incompatible with your current engine (`:new_version`). To migrate data between Meilisearch versions, follow our guide on https://docs.meilisearch.com/learn/advanced/updating.html
 ```
 
 ---
