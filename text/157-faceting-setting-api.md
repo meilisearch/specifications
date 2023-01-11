@@ -62,6 +62,7 @@ All properties must be returned when the resource is retrieved.
 
 ##### 3.2.2.1.2. Errors
 
+- 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 - 🔴 If the index does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
 #### 3.2.2.2. `PATCH` - `indexes/:index_uid/settings/faceting`
@@ -101,6 +102,7 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
+- 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 - 🔴 Sending a value different from `null` or with a different type than `Integer` for the `maxValuesPerFacet` field returns
 an [invalid_settings_faceting](0061-error-format-and-definitions.md#invalid_settings_faceting) error.
 
@@ -125,6 +127,8 @@ When the request is in a successful state, Meilisearch returns the HTTP code `20
 See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted).
 
 ##### 3.2.2.3.2. Errors
+
+- 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 
 ###### 3.2.2.3.2.1. Asynchronous Index Not Found Error
 

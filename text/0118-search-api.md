@@ -14,6 +14,7 @@ Meilisearch exposes 2 routes to perform search requests:
 - GET `indexes/:index_uid/search`
 - POST `indexes/:index_uid/search`
 
+- 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 - 🔴 If the index does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
 If a master key is used to secure a Meilisearch instance, the auth layer returns the following errors:

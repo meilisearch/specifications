@@ -169,6 +169,7 @@ Fetch an index of a Meilisearch instance.
 
 ##### 3.2.2.2. Errors
 
+- 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 - 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 - 🔴 Sending a value with a different type than `Integer` or `null` for `offset` will return a [invalid_index_offset](0061-error-format-and-definitions.md#invalid_index_offset) error.
 - 🔴 Sending a value with a different type than `Integer` or `null` for `limit` will return a [invalid_index_limit](0061-error-format-and-definitions.md#invalid_index_limit) error.
@@ -199,7 +200,7 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
 - 🔴 Omitting `uid` field from the payload returns a [missing_index_uid](0061-error-format-and-definitions.md#missing_index_uid) error.
 - 🔴 Sending a value with a different type than `string` for `uid` will return a [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
-- 🔴 Sending an invalid `uid` returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
+- 🔴 Sending an invalid index uid format for `uid` returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 - 🔴 Sending a value with a different type than `string` or `null` for `primaryKey` will return a [invalid_index_primary_key](0061-error-format-and-definitions.md#invalid_index_primary_key) error.
 
 ###### 3.2.3.3.1. Async Errors
@@ -232,6 +233,7 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
+- 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 - 🔴 Sending a payload containing other than `primaryKey` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 ###### 3.2.4.3.1. Async Errors
@@ -250,6 +252,8 @@ When the request is successful, Meilisearch returns the HTTP code `202 Accepted`
 See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted).
 
 ##### 3.2.4.2. Errors
+
+- 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 
 ###### 3.2.4.2.1 Async Errors
 

@@ -441,7 +441,6 @@ The final key could be generated with openssl as below:
 
     echo -n $HYPHENATED_UUID | openssl dgst -sha256 -hmac $MASTER_KEY
 
-
 ### 4.2. Synchronous write of `API Key` resources
 
 Writing to `/keys` endpoints are synchronous in order to return errors directly to the user when he performs an operation on them. This means that API key management operations do not appear as a task on `/tasks`.
