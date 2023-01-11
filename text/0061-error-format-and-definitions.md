@@ -977,7 +977,7 @@ HTTP Code: `400 Bad Request`
 
 ## invalid_settings_ranking_rules
 
-`Asynchronous` / `Synchronous`
+`Synchronous`
 
 ### Context
 
