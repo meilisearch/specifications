@@ -311,7 +311,7 @@ This command will throw an error if:
 
 This behavior can be modified with the `--ignore-snapshot-if-db-exists` and `--ignore-missing-snapshot` options, respectively.
 
-#### 3.3.16. Ignore missing snapshot
+#### 3.3.17. Ignore missing snapshot
 
 **Environment variable**: `MEILI_IGNORE_MISSING_SNAPSHOT`
 **CLI option**: `--ignore-missing-snapshot`
