@@ -227,6 +227,7 @@ field returns an [invalid_settings_typo_tolerance](0061-error-format-and-definit
 returns an [invalid_settings_typo_tolerance](0061-error-format-and-definitions.md#invalid_settings_typo_tolerance) error.
 - 🔴 Sending a value different from `null` or with a different type than `Integer` for `minWordSizeForTypos` object fields
 returns an [invalid_settings_typo_tolerance](0061-error-format-and-definitions.md#invalid_settings_typo_tolerance) error.
+- 🔴 Sending invalid values for `oneTypo` AND `twoTypos` being specified for the `minWordSizeForTypos` object fields returns an [invalid_settings_typo_tolerance](0061-error-format-and-definitions.md#invalid_settings_typo_tolerance) error.
 
 ###### 3.2.2.2.2.1. Async Errors
 
@@ -234,7 +235,7 @@ returns an [invalid_settings_typo_tolerance](0061-error-format-and-definitions.m
 
 > Otherwise, Meilisearch will create the index in a lazy way. See [3.2.2.2.3. Lazy Index Creation](#32223-lazy-index-creation).
 
-- 🔴 Sending invalid integer values for the `minWordSizeForTypos` object fields returns an [invalid_settings_typo_tolerance](0061-error-format-and-definitions.md#invalid_settings_typo_tolerance) error.
+- 🔴 When sending invalid values with either `oneTypo` OR `twoTypos` being specified for the `minWordSizeForTypos` object fields returns an [invalid_settings_typo_tolerance](0061-error-format-and-definitions.md#invalid_settings_typo_tolerance) error.
 
 ##### 3.2.2.2.3. Lazy Index Creation
 

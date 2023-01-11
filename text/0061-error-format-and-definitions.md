@@ -1121,7 +1121,8 @@ This error when:
 - a value different from `null` or with a different type than `Array of String` is specified for the `disableOnAttributes` field
 - a value different from `null` or with a different type than `Array of String` is specified for the `disableOnWords` field
 - a value different from `null` or with a different type than `Integer` is specified for the `minWordSizeForTypos` object fields.
-- invalid integer values are specified for the `minWordSizeForTypos` object fields.
+- only one of the fields `oneTypo` or `twoTypos` for the `minWordSizeForTypos` is specified and the value provided is invalid. (`Asynchronous`)
+- both `oneTypo` and `twoTypos` fields are specified for the `minWordSizeForTypos` and the values provided are invalid. (`Synchronous`)
 
 ### Error Definition
 
@@ -1138,7 +1139,7 @@ HTTP Code: `400 Bad Request` when `Synchronous`
 }
 ```
 
-#### Variant: `minWordSizeForTypos` object of the `typo` resource is invalid.
+#### Variant: `minWordSizeForTypos` object is invalid.
 
 ```json
 {
