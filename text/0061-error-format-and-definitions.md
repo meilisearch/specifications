@@ -585,7 +585,7 @@ HTTP Code: `400 Bad Request`
 This error happens when:
 
 - a value with a different type than `String` for `uid` is specified
-- an invalid index uid format is specified
+- an invalid index uid format is specified in the `:indexUid` path parameter
 
 ### Error Definition
 
@@ -608,6 +608,29 @@ HTTP Code: `400 Bad Request`
 {
     "message": "`:uid` is not a valid index uid. Index uid can be an integer or a string containing only alphanumeric characters, hyphens (-) and underscores (_).",
     ...
+}
+```
+
+---
+
+## immutable_index_uid
+
+`Synchronous`
+
+### Context
+
+This error happens when the `uid` field is given in a payload dedicated to modify an index.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "The `uid` field cannot be modified for the given resource.",
+    "code": "immutable_index_uid",
+    "type": "invalid_request",
+    "link":"https://docs.meilisearch.com/errors#immutable_index_uid"
 }
 ```
 

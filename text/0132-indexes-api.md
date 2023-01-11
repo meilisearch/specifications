@@ -234,7 +234,7 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
 - 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
-- 🔴 Sending a payload containing other than `primaryKey` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending `uid` in the payload request returns an [immutable_index_uid](0061-error-format-and-definitions.md#immutable_index_uid) error.
 
 ###### 3.2.4.3.1. Async Errors
 
