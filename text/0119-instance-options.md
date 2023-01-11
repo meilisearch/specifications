@@ -171,9 +171,47 @@ Sets the instance's master key, automatically protecting all routes except [`GET
 
 You must supply an alphanumeric string when using this option.
 
-Providing a master key of at least 16 bytes is mandatory when `--env` is set to `production`; if none is given, or if it is too short, then Meilisearch will throw an error and refuse to launch.
-
 If no master key is provided in a `development` environment, all routes will be unprotected and publicly accessible.
+
+##### 3.3.4.1. Error and Warning messages
+
+Providing a master key of at least 16 bytes is mandatory when `--env` is set to `production`; if none is given, Meilisearch will throw an error and refuse to launch.
+
+```
+Error: In production mode, you must provide a master key to secure your instance. It can be specified via the MEILI_MASTER_KEY environment variable or the --master-key launch option.
+
+We generated a secure master key for you (you can safely copy this token):
+
+>> export MEILI_MASTER_KEY=`:suggestedMasterKey` <<
+```
+
+Providing a master key of at least 16 bytes is mandatory when `--env` is set to `production`; if it is given but too short then, Meilisearch will throw an error and refuse to launch.
+
+```
+Error: In production mode, the master key must be of at least 16 bytes, but the provided key is only `:numBytes` bytes long
+
+We generated a secure master key for you (you can safely copy this token):
+
+>> export MEILI_MASTER_KEY=`:suggestedMasterKey` <<
+```
+
+Providing a master key of less than 16 bytes when `--env` is set to `development` displays a warning message.
+
+```
+The provided master key is too short (< 16 bytes)
+A master key of at least 16 bytes will be required when switching to the production environment.
+```
+
+Not providing a master key when `--env` is set to `development` displays a warning message.
+
+```
+No master key found; The server will accept unidentified requests. If you need some protection in development mode, please export a key:
+
+export MEILI_MASTER_KEY=`:suggestedMasterKey`
+
+A master key of at least 16 bytes will be required when switching to the production environment.
+```
+
 
 #### 3.3.5. Disable analytics
 

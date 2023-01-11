@@ -41,10 +41,13 @@ At the first launch of Meilisearch with a master key, Meilisearch automatically 
 
 If the master key is removed at Meilisearch launch, the previously generated API keys no longer secure the Meilisearch instance.
 
-If Meilisearch is launched with the `production` value for the `MEILI_ENV` environment variable or the `--env` CLI option, a master key of at least 16 bytes is mandatory. If the master key is omitted in that particular case, or is too short, Meilisearch launch is aborted and displays an error:
+If Meilisearch is launched with the `production` value for the `MEILI_ENV` environment variable or the `--env` CLI option, a master key of at least 16 bytes is mandatory.
 
-- `In production mode, you must provide a master key to secure your instance. It can be specified via the MEILI_MASTER_KEY environment variable or the --master-key launch option.` if the key is omitted.
-- `Error: In production mode, the master key must be of at least 16 bytes, but the provided key is only :numBytes bytes long.` if the key is too short (`:numBytes` is inferred in the error message).
+If the master key is omitted in that particular case, or is too short, Meilisearch launch is aborted and displays an error.
+
+If Meilisearch is launched with the `development` value for the `MEILI_ENV` environment variable or the `--env` CLI option, Meilisearch displays warning messages given different cases.
+
+See [`MEILI_MASTER_KEY`/`--master-key` launch option](0119-instance-options#334-master-key).
 
 The master key must be composed of valid utf-8 characters. It is advisable to enclose it in `'` when specified via the `--master-key` option.
 
@@ -317,7 +320,7 @@ Create an API key.
 | indexes.swap     | Provides access to `POST` `/swap-indexes`. See [Swap Indexes API](0191-swap-indexes-api.md) specification. |
 | tasks.get        | Provides access to `GET` `/tasks`. **⚠️Non-authorized `indexes` are omitted from the response on `/tasks`**. Also add access to `GET` `/indexes/:authorizedIndexes/tasks` routes.                                                |
 | tasks.cancel     | Provides access to `POST` `/tasks/cancel`. route.                                                                                                                                                                                         |
-| tasks.delete     | Provides access to `DELETE` `/tasks` route. | 
+| tasks.delete     | Provides access to `DELETE` `/tasks` route. |
 | settings.get     | Provides access to `GET` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes.                                                                                                            |
 | settings.update  | Provides access to `POST / DELETE` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes.                                                                                                  |
 | stats.get        | Provides access to `GET` `/stats/`. **⚠️Non-authorized `indexes` are omitted from the response on `/stats`**. Also add access to `GET` `/indexes/:authorizedIndexes/stats`.                                                      |
