@@ -689,17 +689,17 @@ The tasks API endpoints are filterable by  `uids`, `indexUids`, `types`, `status
 
 | parameter | type   | required | description                                                                                                                                                                                                                             |
 |-----------|--------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| uids  | integer | No       | Permits to filter tasks by their related unique identifier. By default, when `uids` query parameter is not set, all the tasks are concerned. It is possible to specify several uid by separating them with the `,` character. |
-| indexUids  | string | No       | Permits to filter tasks by their related index. By default, when `indexUids` query parameter is not set, the tasks of all the indexes are concerned. It is possible to specify several indexUids by separating them with the `,` character. |
-| statuses    | string | No       | Permits to filter tasks by their status. By default, when `statuses` query parameter is not set, all task statuses are concerned. It's possible to specify several statuses by separating them with the `,` character.                        |
-| types      | string | No       | Permits to filter tasks by their related type. By default, when `types` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
+| uids  | integer | No       | Permits to filter tasks by their related unique identifier. By default, when `uids` query parameter is not set or set to `*`, all the tasks are concerned. It is possible to specify several uid by separating them with the `,` character. |
+| indexUids  | string | No       | Permits to filter tasks by their related index. By default, when `indexUids` query parameter is not set or set to `*`, the tasks of all the indexes are concerned. It is possible to specify several indexUids by separating them with the `,` character. |
+| statuses    | string | No       | Permits to filter tasks by their status. By default, when `statuses` query parameter is not set or set to `*`, all task statuses are concerned. It's possible to specify several statuses by separating them with the `,` character.                        |
+| types      | string | No       | Permits to filter tasks by their related type. By default, when `types` query parameter is not set or set to `*`, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
 | canceledBy | integer | No | Permits to filter tasks by the `taskCancelation` uid that canceled them. It's possible to specify several task uids by separating them with the `,` character. |
-| beforeEnqueuedAt | string | No       | Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before the given filter value.              |
-| afterEnqueuedAt | string | No       | Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued after the given filter value.  |
-| beforeStartedAt | string | No       | Filter tasks based on their startedAt time. Retrieve tasks started before the given value.                |
-| afterStartedAt | string | No       | Filter tasks based on their startedAt time. Retrieve tasks started after the given filter value.                    |
-| beforeFinishedAt | string | No       | Filter tasks based on their finishedAt time. Retrieve tasks finished before the given filter value.  |
-| afterFinishedAt | string | No       | Filter tasks based on their finishedAt time. Retrieve tasks finished after the given filter value.                 |
+| beforeEnqueuedAt | string | No       | Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before the given filter value. By default, when `beforeEnqueuedAt` query parameter is not set or set to `*`, all task are selected.             |
+| afterEnqueuedAt | string | No       | Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued after the given filter value. By default, when `afterEnqueuedAt` query parameter is not set or set to `*`, all task are selected.  |
+| beforeStartedAt | string | No       | Filter tasks based on their startedAt time. Retrieve tasks started before the given value. By default, when `beforeStartedAt` query parameter is not set or set to `*`, all task are selected.               |
+| afterStartedAt | string | No       | Filter tasks based on their startedAt time. Retrieve tasks started after the given filter value. By default, when `afterStartedAt` query parameter is not set or set to `*`, all task are selected.                   |
+| beforeFinishedAt | string | No       | Filter tasks based on their finishedAt time. Retrieve tasks finished before the given filter value. By default, when `beforeFinishedAt` query parameter is not set or set to `*`, all task are selected. |
+| afterFinishedAt | string | No       | Filter tasks based on their finishedAt time. Retrieve tasks finished after the given filter value. By default, when `afterFinishedAt` query parameter is not set or set to `*`, all task are selected.                |
 
 ##### 11.2. Query Parameters Behaviors
 
