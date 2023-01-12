@@ -636,6 +636,52 @@ HTTP Code: `400 Bad Request`
 
 ---
 
+## immutable_index_created_at
+
+`Synchronous`
+
+### Context
+
+This error happens when the `createdAt` field is given in a payload dedicated to modify an index.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "The `createdAt` field cannot be modified for the given resource.",
+    "code": "immutable_index_created_at",
+    "type": "invalid_request",
+    "link":"https://docs.meilisearch.com/errors#immutable_index_created_at"
+}
+```
+
+---
+
+## immutable_index_updated_at
+
+`Synchronous`
+
+### Context
+
+This error happens when the `updatedAt` field is given in a payload dedicated to modify an index.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "The `updatedAt` field cannot be modified for the given resource.",
+    "code": "immutable_index_updated_at",
+    "type": "invalid_request",
+    "link":"https://docs.meilisearch.com/errors#immutable_index_updated_at"
+}
+```
+
+---
+
 ## invalid_index_limit
 
 `Synchronous`

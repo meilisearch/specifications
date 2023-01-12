@@ -235,6 +235,8 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
 - 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 - 🔴 Sending `uid` in the payload request returns an [immutable_index_uid](0061-error-format-and-definitions.md#immutable_index_uid) error.
+- 🔴 Sending `createdAt` in the payload request returns an [immutable_created_at](0061-error-format-and-definitions.md#immutable_index_created_at) error.
+- 🔴 Sending `updatedAt` in the payload request returns an [immutable_updated_at](0061-error-format-and-definitions.md#immutable_index_updated_at) error.
 
 ###### 3.2.4.3.1. Async Errors
 
