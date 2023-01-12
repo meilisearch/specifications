@@ -1862,6 +1862,29 @@ HTTP Code: `404 Not Found` when `Synchronous`
 
 ---
 
+## missing_swap_indexes
+
+`Synchronous`
+
+### Context
+
+This error happens when `indexes` is missing from a swap operation object.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "`indexes` field is mandatory.",
+    "code": "missing_swap_indexes",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#missing_swap_indexes"
+}
+```
+
+---
+
 ## invalid_swap_indexes
 
 `Synchronous`
