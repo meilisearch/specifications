@@ -103,7 +103,7 @@ HTTP Code: `400 Bad Request`
     "message": "The `uid` field cannot be modified for the given resource.",
     "code": "immutable_api_key_uid",
     "type": "invalid_request",
-    "link":"https://docs.meilisearch.com/errors#immutable_api_key_uid"
+    "link": "https://docs.meilisearch.com/errors#immutable_api_key_uid"
 }
 ```
 
