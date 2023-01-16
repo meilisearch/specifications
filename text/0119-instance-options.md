@@ -188,7 +188,7 @@ We generated a secure master key for you (you can safely copy this token):
 Providing a master key of at least 16 bytes is mandatory when `--env` is set to `production`; if it is given but too short then, Meilisearch will throw an error and refuse to launch.
 
 ```
-Error: In production mode, the master key must be of at least 16 bytes, but the provided key is only `:numBytes` bytes long
+Error: In production mode, the master key must be of at least 16 bytes, but the provided key is only `:numBytes` bytes long.
 
 We generated a secure master key for you (you can safely copy this token):
 
