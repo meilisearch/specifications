@@ -205,11 +205,13 @@ A master key of at least 16 bytes will be required when switching to the product
 Not providing a master key when `--env` is set to `development` displays a warning message.
 
 ```
-No master key found; The server will accept unidentified requests. If you need some protection in development mode, please export a key:
-
-export MEILI_MASTER_KEY=`:suggestedMasterKey`
+No master key found; The server will accept unidentified requests.
 
 A master key of at least 16 bytes will be required when switching to the production environment.
+
+If you need some protection in development mode, we generated a secure master key for you (you can safely copy this token):
+
+>> export MEILI_MASTER_KEY=`:suggestedMasterKey` <<
 ```
 
 
