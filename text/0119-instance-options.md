@@ -198,8 +198,15 @@ We generated a secure master key for you (you can safely copy this token):
 Providing a master key of less than 16 bytes when `--env` is set to `development` displays a warning message.
 
 ```
-The provided master key is too short (< 16 bytes)
+Meilisearch started with a master key considered unsafe for production use.
+
 A master key of at least 16 bytes will be required when switching to the production environment.
+
+We generated a new secure master key for you (you can safely copy this token):
+
+>> export MEILI_MASTER_KEY=`:suggestedMasterKey` <<
+
+Restart Meilisearch after executing the command above to use this new and secure master key.
 ```
 
 Not providing a master key when `--env` is set to `development` displays a warning message.
@@ -212,6 +219,8 @@ A master key of at least 16 bytes will be required when switching to the product
 If you need some protection in development mode, we generated a secure master key for you (you can safely copy this token):
 
 >> export MEILI_MASTER_KEY=`:suggestedMasterKey` <<
+
+Restart Meilisearch after executing the command above to use this new and secure master key.
 ```
 
 
