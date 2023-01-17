@@ -77,7 +77,7 @@ HTTP code `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper`at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "bad_request",
     "type": "invalid_request",
     "link":"https://docs.meilisearch.com/errors#bad_request"
@@ -500,7 +500,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper`at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_api_key_offset",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_api_key_offset"
@@ -523,7 +523,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper`at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_api_key_limit",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_api_key_limit"
@@ -567,7 +567,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "missing_index_uid",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#missing_index_uid"
@@ -595,7 +595,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_index_uid",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_index_uid"
@@ -696,7 +696,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_index_limit",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_index_limit"
@@ -719,7 +719,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_index_offset",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_index_offset"
@@ -742,7 +742,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-     "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_index_primary_key",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_index_primary_key"
@@ -849,7 +849,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_document_fields",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_document_fields"
@@ -872,7 +872,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_document_limit",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_document_limit"
@@ -895,7 +895,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_document_offset",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_document_offset"
@@ -943,7 +943,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_settings_displayed_attributes",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_displayed_attributes"
@@ -966,7 +966,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_settings_searchable_attributes",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_searchable_attributes"
@@ -989,7 +989,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_settings_filterable_attributes",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_filterable_attributes"
@@ -1012,7 +1012,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_settings_sortable_attributes",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_sortable_attributes"
@@ -1042,7 +1042,7 @@ HTTP Code: `400 Bad Request` when `Synchronous`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_settings_ranking_rules",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_ranking_rules"
@@ -1100,7 +1100,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_settings_stop_words",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_stop_words"
@@ -1123,7 +1123,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_settings_synonyms",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_synonyms"
@@ -1146,7 +1146,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_settings_distinct_attribute",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_distinct_attribute"
@@ -1178,7 +1178,7 @@ HTTP Code: `400 Bad Request` when `Synchronous`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_settings_typo_tolerance",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_typo_tolerance"
@@ -1209,7 +1209,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_settings_faceting",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_faceting"
@@ -1232,7 +1232,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_settings_pagination",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_settings_pagination"
@@ -1397,7 +1397,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_search_q",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_q"
@@ -1420,7 +1420,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_search_offset",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_offset"
@@ -1443,7 +1443,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_search_limit",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_limit"
@@ -1466,7 +1466,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_search_page",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_page"
@@ -1489,7 +1489,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_search_hits_per_page",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_hits_per_page"
@@ -1512,7 +1512,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_search_attributes_to_retrieve",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_attributes_to_retrieve"
@@ -1535,7 +1535,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_search_attributes_to_crop",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_attributes_to_crop"
@@ -1558,7 +1558,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_search_crop_length",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_crop_length"
@@ -1581,7 +1581,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_search_attributes_to_highlight",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_attributes_to_highlight"
@@ -1604,7 +1604,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_search_show_matches_position",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_show_matches_position"
@@ -1632,7 +1632,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_search_facets",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_facets"
@@ -1664,7 +1664,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_search_highlight_pre_tag",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_highlight_pre_tag"
@@ -1687,7 +1687,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_search_highlight_post_tag",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_highlight_post_tag"
@@ -1710,7 +1710,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_search_crop_marker",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_crop_marker"
@@ -1733,7 +1733,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper` at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_search_matching_strategy",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_search_matching_strategy"
@@ -2289,7 +2289,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper`at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_task_limit",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_task_limit"
@@ -2312,7 +2312,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`:deserr_helper`at `:deserr_location`",
+    "message": "`:deserr_helper`",
     "code": "invalid_task_from",
     "type": "invalid_request",
     "link": "https://docs.meilisearch.com/errors#invalid_task_from"
