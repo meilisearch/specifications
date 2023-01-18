@@ -42,7 +42,7 @@ By default, a search for `Leather jacket` would return all documents. This might
 
 By setting `product_id` as the `distinctAttribute` setting, the different variations of an item will be ignored.
 
-***Request payload `POST`- `/indexes/products/settings/distinct-attribute`***
+***Request payload `PUT`- `/indexes/products/settings/distinct-attribute`***
 
 ```json
 "product_id"

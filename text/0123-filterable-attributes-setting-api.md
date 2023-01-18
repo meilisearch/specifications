@@ -94,7 +94,6 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 ##### 3.3.3.3. Errors
 
 - 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
-- 🔴 Sending an invalid `:index_uid` format as the path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 
 ###### 3.3.3.3.1. Asynchronous Index Not Found Error
 

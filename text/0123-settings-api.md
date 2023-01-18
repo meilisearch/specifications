@@ -95,7 +95,7 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
-- 🔴 Sending an invalid `:index_uid` format as the path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
+ - 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 
 Errors related to a sub-resource are described in its respective specification. See [3.1. Sub Resource Settings API List](#31-sub-resource-settings-api-list).
 
@@ -125,7 +125,7 @@ See [3.1. Sub Settings API Resource List](#31-sub-settings-api-resource-list) to
 
 ##### 3.2.3.3. Errors
 
-- 🔴 Sending an invalid `:index_uid` format as the path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
+ - 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 
 Errors related to a sub-resource are described in its respective specification. See [3.1. Sub Resource Settings API List](#31-sub-resource-settings-api-list).
 

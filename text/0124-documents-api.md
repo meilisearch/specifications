@@ -157,7 +157,7 @@ Gives the total number of documents that can be browsed in the related index.
 
 ##### 3.1.1.4. Errors
 
-- 🔴 Sending an invalid `:index_uid` format as the path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
+ - 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 - 🔴 Sending a value with a different type than `Integer` or `null` for `offset` will return a [invalid_document_offset](0061-error-format-and-definitions.md#invalid_document_offset) error.
 - 🔴 Sending a value with a different type than `Integer` or `null` for `limit` will return a [invalid_document_limit](0061-error-format-and-definitions.md#invalid_document_limit) error.
 - 🔴 Sending a value with a different type than `String` or `null` for `fields` will return a [invalid_document_fields](0061-error-format-and-definitions.md#invalid_document_fields) error.
@@ -303,12 +303,12 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
 - 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
-- 🔴 Sending a value with a different type than `String` or `null` for `primaryKey` will return a [invalid_index_primary_key](0061-error-format-and-definitions.md#invalid_index_primary_key) error.
+- 🔴 Sending a value with a different type than `String` or `null` for the `primaryKey` parameter will return a [invalid_index_primary_key](0061-error-format-and-definitions.md#invalid_index_primary_key) error.
 
 ###### 3.1.3.4.1. Async Errors
 
 - 🔴 When Meilisearch is secured, if the API Key do not have the `indexes.create` action defined, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error in the related asynchronous `task` resource. See [3.2.2.2. Response Definition](#3222-response-definition).
-- 🔴 Sending a `uid` that already exists returns an [index_already_exists](0061-error-format-and-definitions.md#index_already_exists) error.
+- 🔴 When updating the `primaryKey`, if the previous `primaryKey` value has already been used for a document, the API returns an [index_primary_key_already_exists](0061-error-format-and-definitions.md#index_primary_key_already_exists) error.
 
 ##### 3.1.3.5. Lazy Index Creation
 
@@ -321,7 +321,6 @@ Add a list of documents or update them if they already exist.
 If the provided index does not exist, it will be created. See [3.1.4.5. Lazy Index Creation](#3145-lazy-index-creation)
 
 If an already existing document (same identifier) is set, the old document will be only partially updated according to the fields of the new document. Thus, any fields not present in the new document are kept and remain unchanged.
-
 
 This endpoint accepts various content-type:
 
@@ -378,12 +377,12 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
 - 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
-- 🔴 Sending a value with a different type than `String` or `null` for `primaryKey` will return a [invalid_index_primary_key](0061-error-format-and-definitions.md#invalid_index_primary_key) error.
+- 🔴 Sending a value with a different type than `String` or `null` for the `primaryKey` parameter will return a [invalid_index_primary_key](0061-error-format-and-definitions.md#invalid_index_primary_key) error.
 
 ###### 3.1.4.4.1. Async Errors
 
+- 🔴 When Meilisearch is secured, if the API Key do not have the `indexes.create` action defined, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error in the related asynchronous `task` resource. See [3.2.2.2. Response Definition](#3222-response-definition).
 - 🔴 When updating the `primaryKey`, if the previous `primaryKey` value has already been used for a document, the API returns an [index_primary_key_already_exists](0061-error-format-and-definitions.md#index_primary_key_already_exists) error.
-- 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
 ##### 3.1.4.5. Lazy Index Creation
 
@@ -458,6 +457,8 @@ When the request is successful, Meilisearch returns the HTTP code `202 Accepted`
 See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted).
 
 ##### 3.1.6.4. Errors
+
+- 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 
 ###### 3.1.6.4.1. Async Errors
 
