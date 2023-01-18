@@ -180,9 +180,9 @@ Providing a master key of at least 16 bytes is mandatory when `--env` is set to 
 ```
 Error: You must provide a master key to secure your instance in a production environment. It can be specified via the MEILI_MASTER_KEY environment variable or the --master-key launch option.
 
-We generated a secure master key for you (you can safely copy this token):
+We generated a secure master key for you (you can safely use this token):
 
->> export MEILI_MASTER_KEY=`:suggestedMasterKey` <<
+>> --master-key `:suggestedMasterKey` <<
 ```
 
 Providing a master key of at least 16 bytes is mandatory when `--env` is set to `production`; if it is given but too short then, Meilisearch will throw an error and refuse to launch.
@@ -190,9 +190,9 @@ Providing a master key of at least 16 bytes is mandatory when `--env` is set to 
 ```
 Error: The master key must be at least 16 bytes in a production environment. The provided key is only `:numBytes` bytes.
 
-We generated a secure master key for you (you can safely copy this token):
+We generated a secure master key for you (you can safely use this token):
 
->> export MEILI_MASTER_KEY=`:suggestedMasterKey` <<
+>> --master-key `:suggestedMasterKey` <<
 ```
 
 Providing a master key of less than 16 bytes when `--env` is set to `development` displays a warning message.
@@ -202,9 +202,9 @@ Meilisearch started with a master key considered unsafe for use in a production 
 
 A master key of at least 16 bytes will be required when switching to a production environment.
 
-We generated a new secure master key for you (you can safely copy this token):
+We generated a new secure master key for you (you can safely use this token):
 
->> export MEILI_MASTER_KEY=`:suggestedMasterKey` <<
+>> --master-key `:suggestedMasterKey` <<
 
 Restart Meilisearch after executing the command above to use this new and secure master key.
 ```
@@ -216,9 +216,9 @@ No master key was found. The server will accept unidentified requests.
 
 A master key of at least 16 bytes will be required when switching to a production environment.
 
-If you need protection in a development environment, we generated a secure master key for you (you can safely copy this token):
+If you need protection in a development environment, we generated a secure master key for you (you can safely use this token):
 
->> export MEILI_MASTER_KEY=`:suggestedMasterKey` <<
+>> --master-key `:suggestedMasterKey` <<
 
 Restart Meilisearch after executing the command above to use this new and secure master key.
 ```
