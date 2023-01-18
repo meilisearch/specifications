@@ -178,7 +178,7 @@ If no master key is provided in a `development` environment, all routes will be 
 Providing a master key of at least 16 bytes is mandatory when `--env` is set to `production`; if none is given, Meilisearch will throw an error and refuse to launch.
 
 ```
-Error: In production mode, you must provide a master key to secure your instance. It can be specified via the MEILI_MASTER_KEY environment variable or the --master-key launch option.
+Error: You must provide a master key to secure your instance in a production environment. It can be specified via the MEILI_MASTER_KEY environment variable or the --master-key launch option.
 
 We generated a secure master key for you (you can safely copy this token):
 
@@ -188,7 +188,7 @@ We generated a secure master key for you (you can safely copy this token):
 Providing a master key of at least 16 bytes is mandatory when `--env` is set to `production`; if it is given but too short then, Meilisearch will throw an error and refuse to launch.
 
 ```
-Error: In production mode, the master key must be of at least 16 bytes, but the provided key is only `:numBytes` bytes long.
+Error: The master key must be at least 16 bytes in a production environment. The provided key is only `:numBytes` bytes.
 
 We generated a secure master key for you (you can safely copy this token):
 
@@ -198,9 +198,9 @@ We generated a secure master key for you (you can safely copy this token):
 Providing a master key of less than 16 bytes when `--env` is set to `development` displays a warning message.
 
 ```
-Meilisearch started with a master key considered unsafe for production use.
+Meilisearch started with a master key considered unsafe for use in a production environment.
 
-A master key of at least 16 bytes will be required when switching to the production environment.
+A master key of at least 16 bytes will be required when switching to a production environment.
 
 We generated a new secure master key for you (you can safely copy this token):
 
@@ -212,11 +212,11 @@ Restart Meilisearch after executing the command above to use this new and secure
 Not providing a master key when `--env` is set to `development` displays a warning message.
 
 ```
-No master key found; The server will accept unidentified requests.
+No master key was found. The server will accept unidentified requests.
 
-A master key of at least 16 bytes will be required when switching to the production environment.
+A master key of at least 16 bytes will be required when switching to a production environment.
 
-If you need some protection in development mode, we generated a secure master key for you (you can safely copy this token):
+If you need protection in a development environment, we generated a secure master key for you (you can safely copy this token):
 
 >> export MEILI_MASTER_KEY=`:suggestedMasterKey` <<
 
