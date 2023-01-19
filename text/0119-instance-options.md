@@ -206,7 +206,7 @@ We generated a new secure master key for you (you can safely use this token):
 
 >> --master-key `:suggestedMasterKey` <<
 
-Restart Meilisearch after executing the command above to use this new and secure master key.
+Restart Meilisearch with the argument above to use this new and secure master key.
 ```
 
 Not providing a master key when `--env` is set to `development` displays a warning message.
@@ -220,7 +220,7 @@ If you need protection in a development environment, we generated a secure maste
 
 >> --master-key `:suggestedMasterKey` <<
 
-Restart Meilisearch after executing the command above to use this new and secure master key.
+Restart Meilisearch with the argument above to use this new and secure master key.
 ```
 
 
