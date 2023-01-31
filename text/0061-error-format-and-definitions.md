@@ -2490,29 +2490,6 @@ This error occurs when an index creation could not be completed for various reas
 
 ---
 
-## index_not_accessible
-
-`Asynchronous` / `Synchronous`
-
-### Context
-
- This error occurs when an index cannot be accessed for various reasons.
-
-### Error Definition
-
-HTTP Code: `500 Internal Server Error` when `Synchronous`
-
-```json
-{
-    "message": "The index `:uid` can't be accessed due to `:reason`.",
-    "code": "index_not_accessible",
-    "type": "internal",
-    "link": "https://docs.meilisearch.com/errors#index_not_accessible"
-}
-```
-
----
-
 ## unretrievable_document
 
 `Asynchronous` / `Synchronous`
