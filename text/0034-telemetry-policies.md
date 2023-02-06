@@ -76,7 +76,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `infos.env`                             | MeiliSearch env                                         | production        | Every hour   |
 | `infos.db_path`                         | `true` if `--db-path`/`MEILI_DB_PATH` is specified, otherwise `false` | true | Every Hour |
 | `infos.import_dump`                     | `true` if `--import-dump` is specified, otherwise `false` | true | Every Hour |
-| `infos.dumps_dir`                       | `true` if `--dumps-dir`/`MEILI_DUMPS_DIR` is specified, otherwise `false` | true | Every Hour |
+| `infos.dump_dir`                       | `true` if `--dump-dir`/`MEILI_DUMP_DIR` is specified, otherwise `false` | true | Every Hour |
 | `infos.ignore_missing_dump`             | `true` if `--ignore-missing-dump` is specified to true, otherwise `false` | true | Every Hour |
 | `infos.ignore_dump_if_db_exists`        | `true` if `--ignore-dump-if-db-exists` is specified to true, otherwise `false` | true | Every Hour |
 | `infos.import_snapshot`                 | `true` if `--import-snapshot` is specified, otherwise `false` | true | Every Hour |
@@ -86,8 +86,6 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `infos.ignore_missing_snapshot`         | `true` if `--ignore_missing_snapshot` is specified to true, otherwise `false` | true | Every Hour |
 | `infos.ignore_snapshot_if_db_exists`    | `true` if `--ignore_snapshot_if_db_exists` is specified to true, otherwise `false` | true | Every Hour |
 | `infos.http_addr`                       | `true` if `--http-addr`/`MEILI_HTTP_ADDR` is specified, otherwise `false` | true| Every Hour |
-| `infos.max_index_size`                  | Value of `--max-index-size`/`MEILI_INDEX_SIZE` in bytes | 336042103 | Every Hour |
-| `infos.max_task_db_size`                | Value of `--max-task-db-size`/`MEILI_MAX_TASK_DB_SIZE` in bytes | 336042103 | Every Hour |
 | `infos.http_payload_size_limit`         | Value of `--http-payload-size-limit`/`MEILI_HTTP_PAYLOAD_SIZE_LIMIT` in bytes | 336042103 | Every Hour |
 | `infos.disable_auto_batching`            | `true` if `--disable-auto-batching`/`MEILI_DISABLE_AUTO_BATCHING` is specified to true, otherwise `false` | `true` | Every Hour |
 | `infos.log_level`                       | Value of `--log-level`/`MEILI_LOG_LEVEL`                | debug             | Every Hour |
@@ -173,7 +171,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `filtered_by_before_finished_at`        | `true` if tasks are filtered by the `beforeFinishedAt` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled`, `Tasks Deleted` |
 | `filtered_by_after_finished_at`         | `true` if tasks are filtered by the `afterFinishedAt` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled`, `Tasks Deleted` |
 | `per_index_uid` | `true` if an uid is used to fetch an index stat resource, otherwise `false` | false | `Stats Seen` |
-| `swap_operation_number`            | The number of swap operation given in `POST /swap-indexes` API call | 2 | `Indexes Swapped` | 
+| `swap_operation_number`            | The number of swap operation given in `POST /swap-indexes` API call | 2 | `Indexes Swapped` |
 | `matching_strategy.most_used_strategy`      | Most used word matching strategy among all search requests in this batch | `last` | `Documents Searched POST`, `Documents Searched GET` |
 | `per_document_id` | `true` if `DELETE /indexes/:indexUid/documents/:documentUid` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
 | `clear_all` | `true` if `DELETE /indexes/:indexUid/documents` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
@@ -204,7 +202,7 @@ This property allows us to gather essential information to better understand on 
 | infos.env | Value of `--env`/`MEILI_ENV` | `production` |
 | infos.db_path | `true` if `--db-path`/`MEILI_DB_PATH` is specified, otherwise `false` | `true`|
 | infos.import_dump | `true` if `--import-dump` is specified, otherwise `false` | `true` |
-| infos.dumps_dir | `true` if `--dumps-dir`/`MEILI_DUMPS_DIR` is specified, otherwise `false` | `true` |
+| infos.dump_dir | `true` if `--dump-dir`/`MEILI_DUMP_DIR` is specified, otherwise `false` | `true` |
 | infos.ignore_missing_dump | `true` if `--ignore-missing-dump` is specified to true, otherwise `false` | `true` |
 | infos.ignore_dump_if_db_exists | `true` if `--ignore-dump-if-db-exists` is specified to true, otherwise `false` | `true` |
 | infos.import_snapshot | `true` if `--import-snapshot` is specified, otherwise `false` | `true` |
@@ -214,8 +212,6 @@ This property allows us to gather essential information to better understand on 
 | infos.ignore_missing_snapshot | `true` if `--ignore-missing-snapshot` is specified to true, otherwise `false` | `true` |
 | infos.ignore_snapshot_if_db_exists | `true` if `--ignore-snapshot-if-db-exists` is specified to true, otherwise `false` | `true` |
 | infos.http_addr | `true` if `--http-addr`/`MEILI_HTTP_ADDR` is specified, otherwise `false` | `true`|
-| infos.max_index_size | Value of `--max-index-size`/`MEILI_INDEX_SIZE` in bytes | `336042103` |
-| infos.max_task_db_size | Value of `--max-task-db-size`/`MEILI_MAX_TASK_DB_SIZE` in bytes | `336042103` |
 | infos.http_payload_size_limit | Value of `--http-payload-size-limit`/`MEILI_HTTP_PAYLOAD_SIZE_LIMIT` in bytes | `336042103` |
 | infos.disable_auto_batching | `true` if `--disable-auto-batching`/`MEILI_DISABLE_AUTO_BATCHING` is specified to true, otherwise `false` | `true` |
 | infos.log_level | Value of `--log-level`/`MEILI_LOG_LEVEL`  | `debug` |

@@ -96,31 +96,29 @@ The expected behavior of each flag is described in the list above.
 - [HTTP address & port binding](#333-http-address--port-binding)
 - [Master key](#334-master-key)
 - [Disable analytics](#335-disable-analytics)
-- [Dumps destination](#336-dumps-destination)
+- [Dump directory](#336-dump-directory)
 - [Import dump](#337-import-dump)
 - [Ignore missing dump](#338-ignore-missing-dump)
 - [Ignore dump if DB exists](#339-ignore-dump-if-db-exists)
 - [Log level](#3310-log-level)
-- [Max index size](#3311-max-index-size)
-- [Max TASK_DB size](#3312-max-task_db-size)
-- [Payload limit size](#3313-payload-limit-size)
-- [Schedule snapshot creation](#3314-schedule-snapshot-creation)
-- [Snapshot destination](#3315-snapshot-destination)
-- [Snapshot interval](#3316-snapshot-interval)
-- [Import snapshot](#3317-import-snapshot)
-- [Ignore missing snapshot](#3318-ignore-missing-snapshot)
-- [Ignore snapshot if DB exists](#3319-ignore-snapshot-if-db-exists)
-- [Max memory usage when indexing](#3320-max-memory-usage-when-indexing)
-- [Max indexing threads](#3321-max-indexing-threads)
-- [Disable auto-batching](#3322-disable-auto-batching)
-- [SSL authentication path](#3323-ssl-authentication-path)
-- [SSL certificates path](#3324-ssl-certificates-path)
-- [SSL key path](#3325-ssl-key-path)
-- [SSL OCSP path](#3326-ssl-ocsp-path)
-- [SSL require auth](#3327-ssl-require-auth)
-- [SSL resumption](#3328-ssl-resumption)
-- [SSL tickets](#3329-ssl-tickets)
-- [Config file path](#3330-config-file-path)
+- [Payload limit size](#3311-payload-limit-size)
+- [Schedule snapshot creation](#3312-schedule-snapshot-creation)
+- [Snapshot destination](#3313-snapshot-destination)
+- [Snapshot interval](#3314-snapshot-interval)
+- [Import snapshot](#3315-import-snapshot)
+- [Ignore missing snapshot](#3316-ignore-missing-snapshot)
+- [Ignore snapshot if DB exists](#3317-ignore-snapshot-if-db-exists)
+- [Max memory usage when indexing](#3318-max-memory-usage-when-indexing)
+- [Max indexing threads](#3319-max-indexing-threads)
+- [Disable auto-batching](#3320-disable-auto-batching)
+- [SSL authentication path](#3321-ssl-authentication-path)
+- [SSL certificates path](#3322-ssl-certificates-path)
+- [SSL key path](#3323-ssl-key-path)
+- [SSL OCSP path](#3324-ssl-ocsp-path)
+- [SSL require auth](#3325-ssl-require-auth)
+- [SSL resumption](#3326-ssl-resumption)
+- [SSL tickets](#3327-ssl-tickets)
+- [Config file path](#3328-config-file-path)
 
 #### 3.3.1. Database path
 
@@ -142,12 +140,13 @@ Configures the instance's environment. Value must be either `production` or `dev
 
 `production`:
 
-- Setting a master key is **mandatory**
+- Setting a master key of at least 16 bytes is **mandatory**
 - The search preview interface is disabled
 
 `development`:
 
 - Setting a master key is **optional**
+- Setting a master key of at least 16 bytes is **optional**
 - Search preview is enabled
 
 #### 3.3.3. HTTP address & port binding
@@ -170,9 +169,58 @@ Sets the instance's master key, automatically protecting all routes except [`GET
 
 You must supply an alphanumeric string when using this option.
 
-Providing a master key is mandatory when `--env` is set to `production`; if none is given, then Meilisearch will throw an error and refuse to launch.
-
 If no master key is provided in a `development` environment, all routes will be unprotected and publicly accessible.
+
+##### 3.3.4.1. Error and Warning messages
+
+Providing a master key of at least 16 bytes is mandatory when `--env` is set to `production`; if none is given, Meilisearch will throw an error and refuse to launch.
+
+```
+Error: You must provide a master key to secure your instance in a production environment. It can be specified via the MEILI_MASTER_KEY environment variable or the --master-key launch option.
+
+We generated a secure master key for you (you can safely use this token):
+
+>> --master-key `:suggestedMasterKey` <<
+```
+
+Providing a master key of at least 16 bytes is mandatory when `--env` is set to `production`; if it is given but too short then, Meilisearch will throw an error and refuse to launch.
+
+```
+Error: The master key must be at least 16 bytes in a production environment. The provided key is only `:numBytes` bytes.
+
+We generated a secure master key for you (you can safely use this token):
+
+>> --master-key `:suggestedMasterKey` <<
+```
+
+Providing a master key of less than 16 bytes when `--env` is set to `development` displays a warning message.
+
+```
+Meilisearch started with a master key considered unsafe for use in a production environment.
+
+A master key of at least 16 bytes will be required when switching to a production environment.
+
+We generated a new secure master key for you (you can safely use this token):
+
+>> --master-key `:suggestedMasterKey` <<
+
+Restart Meilisearch with the argument above to use this new and secure master key.
+```
+
+Not providing a master key when `--env` is set to `development` displays a warning message.
+
+```
+No master key was found. The server will accept unidentified requests.
+
+A master key of at least 16 bytes will be required when switching to a production environment.
+
+If you need protection in a development environment, we generated a secure master key for you (you can safely use this token):
+
+>> --master-key `:suggestedMasterKey` <<
+
+Restart Meilisearch with the argument above to use this new and secure master key.
+```
+
 
 #### 3.3.5. Disable analytics
 
@@ -184,10 +232,10 @@ If no master key is provided in a `development` environment, all routes will be 
 
 Deactivates Meilisearch's built-in telemetry collect when enabled.
 
-#### 3.3.6. Dumps destination
+#### 3.3.6. Dump directory
 
-**Environment variable**: `MEILI_DUMPS_DIR`
-**CLI option**: `--dumps-dir`
+**Environment variable**: `MEILI_DUMP_DIR`
+**CLI option**: `--dump-dir`
 **Default value**: `dumps/`
 **Expected value**: a filepath pointing to a valid directory
 
@@ -239,33 +287,11 @@ More information in this [section of the spec](https://github.com/meilisearch/sp
 **Environment variable**: `MEILI_LOG_LEVEL`
 **CLI option**: `--log-level`
 **Default value**: `'INFO'`
-**Expected value**: one of `ERROR`, `WARN`, `INFO`, `DEBUG`, OR `TRACE`
+**Expected value**: one of `ERROR`, `WARN`, `INFO`, `DEBUG`, `TRACE`, or `OFF`
 
 Defines how much detail should be present in Meilisearch's logs.
 
-#### 3.3.11. Max index size
-
-**Environment variable**: `MEILI_MAX_INDEX_SIZE`
-**CLI option**: `--max-index-size`
-**Default value**: `107374182400` (100 GiB)
-**Expected value**: an integer (`104857600`) or a human readable size (`100Mb`)
-
-Sets the maximum size for an index. Value must be given in bytes or explicitly stating a base unit. For example, the default value can be written as `107374182400`, `'107.7Gb'`, or `'107374 Mb'`.
-
-The `index` stores processed data and is different from the `task` database, which handles pending tasks.
-
-#### 3.3.12. Max TASK_DB size
-
-**Environment variable**: `MEILI_MAX_TASK_DB_SIZE`
-**CLI option**: `--max-task-db-size`
-**Default value**: `107374182400` (100 GiB)
-**Expected value**: an integer (`104857600`) or a human readable size (`100Mb`)
-
-Sets the maximum size of the `task` database. Value must be given in bytes or explicitly stating a base unit. For example, the default value can be written as `107374182400`, `'107.7Gb'`, or `'107374 Mb'`.
-
-The `task` database handles pending tasks. This is different from the `index` database, which only stores processed data.
-
-#### 3.3.13. Payload limit size
+#### 3.3.11. Payload limit size
 
 **Environment variable**: `MEILI_HTTP_PAYLOAD_SIZE_LIMIT`
 **CLI option**: `--http-payload-size-limit`
@@ -274,7 +300,7 @@ The `task` database handles pending tasks. This is different from the `index` da
 
 Sets the maximum size of accepted payloads. Value must be given in bytes or explicitly stating a base unit. For example, the default value can be written as `107374182400`, `'107.7Gb'`, or `'107374 Mb'`.
 
-#### 3.3.14. Schedule snapshot creation
+#### 3.3.12. Schedule snapshot creation
 
 **Environment variable**: `MEILI_SCHEDULE_SNAPSHOT`
 **CLI option**: `--schedule-snapshot`
@@ -284,7 +310,7 @@ Sets the maximum size of accepted payloads. Value must be given in bytes or expl
 
 Activates scheduled snapshots when enabled. Snapshots are disabled by default.
 
-#### 3.3.15. Snapshot destination
+#### 3.3.13. Snapshot destination
 
 **Environment variable**: `MEILI_SNAPSHOT_DIR`
 **CLI option**: `--snapshot-dir`
@@ -293,7 +319,7 @@ Activates scheduled snapshots when enabled. Snapshots are disabled by default.
 
 Sets the directory where Meilisearch will store snapshots. If the directory does not exist when a snapshot is generated it will be created.
 
-#### 3.3.16. Snapshot interval
+#### 3.3.14. Snapshot interval
 
 **Environment variable**: `MEILI_SNAPSHOT_INTERVAL_SEC`
 **CLI option**: `--snapshot-interval-sec`
@@ -302,7 +328,7 @@ Sets the directory where Meilisearch will store snapshots. If the directory does
 
 Defines the interval between each snapshot. Value must be given in seconds.
 
-#### 3.3.17. Import snapshot
+#### 3.3.15. Import snapshot
 
 **Environment variable**: `MEILI_IMPORT_SNAPSHOT`
 **CLI option**: `--import-snapshot`
@@ -318,7 +344,7 @@ This command will throw an error if:
 
 This behavior can be modified with the `--ignore-snapshot-if-db-exists` and `--ignore-missing-snapshot` options, respectively.
 
-#### 3.3.18. Ignore missing snapshot
+#### 3.3.16. Ignore missing snapshot
 
 **Environment variable**: `MEILI_IGNORE_MISSING_SNAPSHOT`
 **CLI option**: `--ignore-missing-snapshot`
@@ -330,7 +356,7 @@ Prevents a Meilisearch instance from throwing an error when `--import-snapshot` 
 
 This command will throw an error if `--import-snapshot` is not defined.
 
-#### 3.3.19. Ignore snapshot if DB exists
+#### 3.3.17. Ignore snapshot if DB exists
 
 **Environment variable**: `MEILI_IGNORE_SNAPSHOT_IF_DB_EXISTS`
 **CLI option**: `--ignore-snapshot-if-db-exists`
@@ -342,7 +368,7 @@ Prevents a Meilisearch instance with an existing database from throwing an error
 
 This command will throw an error if `--import-snapshot` is not defined.
 
-#### 3.3.20. Max memory usage when indexing
+#### 3.3.18. Max memory usage when indexing
 
 **Environment variable**: `MEILI_MAX_INDEXING_MEMORY`
 **CLI option**: `--max-indexing-memory`
@@ -358,7 +384,7 @@ Value must be given in bytes or explicitly stating a base unit. For example, the
 - This command-line option does not perfectly ensure the RAM usage but helps you manage multiple Meilisearch engines on the same machine (for example, using Kubernetes). The search engine cannot guarantee the exact usage of the RAM.
 - If the number set is higher than the real available RAM in the machine, we cannot prevent Meilisearch from crashing.
 
-#### 3.3.21. Max indexing threads
+#### 3.3.19. Max indexing threads
 
 **Environment variable**: `MEILI_MAX_INDEXING_THREADS`
 **CLI option**: `--max-indexing-threads`
@@ -374,7 +400,7 @@ Obviously, multi-threading is not possible in machines with only one processor c
 
 If the number set is higher than the real number of core available in the machine, Meilisearch will use the maximum number of available cores.
 
-#### 3.3.22. Disable auto-batching
+#### 3.3.20. Disable auto-batching
 
 **Environment variable**: `MEILI_DISABLE_AUTO_BATCHING`
 **CLI option**: `--disable-auto-batching`
@@ -384,7 +410,7 @@ If the number set is higher than the real number of core available in the machin
 
 Disable the [auto-batching feature](./0096-auto-batching.md).
 
-#### 3.3.23. SSL authentication path
+#### 3.3.21. SSL authentication path
 
 **Environment variable**: `MEILI_SSL_AUTH_PATH`
 **CLI option**: `--ssl-auth-path`
@@ -393,7 +419,7 @@ Disable the [auto-batching feature](./0096-auto-batching.md).
 
 Enables client authentication in the specified path.
 
-#### 3.3.24. SSL certificates path
+#### 3.3.22. SSL certificates path
 
 **Environment variable**: `MEILI_SSL_CERT_PATH`
 **CLI option**: `--ssl-cert-path`
@@ -404,7 +430,7 @@ Sets the server's SSL certificates.
 
 Value must be a path to PEM-formatted certificates. The first certificate should certify the KEYFILE supplied by `--ssl-key-path`. The last certificate should be a root CA.
 
-#### 3.3.25. SSL key path
+#### 3.3.23. SSL key path
 
 **Environment variable**: `MEILI_SSL_KEY_PATH`
 **CLI option**: `--ssl-key-path`
@@ -415,7 +441,7 @@ Sets the server's SSL keyfiles.
 
 Value must be a path to an RSA private key or PKCS8-encoded private key, both in PEM format.
 
-#### 3.3.26. SSL OCSP path
+#### 3.3.24. SSL OCSP path
 
 **Environment variable**: `MEILI_SSL_OCSP_PATH`
 **CLI option**: `--ssl-ocsp-path`
@@ -426,7 +452,7 @@ Sets the server's OCSP file. *Optional*
 
 Reads DER-encoded OCSP response from OCSPFILE and staple to certificate.
 
-#### 3.3.27. SSL require auth
+#### 3.3.25. SSL require auth
 
 **Environment variable**: `MEILI_SSL_REQUIRE_AUTH`
 **CLI option**: `--ssl-require-auth`
@@ -438,7 +464,7 @@ Makes SSL authentication mandatory.
 
 Sends a fatal alert if the client does not complete client authentication.
 
-#### 3.3.28. SSL resumption
+#### 3.3.26. SSL resumption
 
 **Environment variable**: `MEILI_SSL_RESUMPTION`
 **CLI option**: `--ssl-resumption`
@@ -448,7 +474,7 @@ Sends a fatal alert if the client does not complete client authentication.
 
 Activates SSL session resumption.
 
-#### 3.3.29. SSL tickets
+#### 3.3.27. SSL tickets
 
 **Environment variable**: `MEILI_SSL_TICKETS`
 **CLI option**: `--ssl-tickets`
@@ -458,7 +484,7 @@ Activates SSL session resumption.
 
 Activates SSL tickets.
 
-#### 3.3.30. Config file path
+#### 3.3.28. Config file path
 
 **Environment variable**: `MEILI_CONFIG_FILE_PATH`
 **CLI option**: `--config-file-path`
@@ -476,4 +502,3 @@ N/A
 
 - Redo the command-line to create a more interactive CLI
 - Autocomplete for the options when using the Meilisearch CLI
-- Minimal requirement when setting the master key, for example, a minimal number of characters

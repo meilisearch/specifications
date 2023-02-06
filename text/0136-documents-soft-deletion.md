@@ -2,41 +2,34 @@
 
 ## 1. Summary
 
-This specification describes the internals of the documents soft-deletion algorithm.
+This specification describes the internals of the document soft-deletion algorithm.
 
 ## 2. Motivation
 
 Deleting documents is extremely slow and can happen when;
-- A user delete a single document.
-- A user delete a batch of documents.
-- A user update one or multiple documents (i.e., the primary key is the same, but the document's content is not the same).
+- A user deletes a single document.
+- A user deletes a batch of documents.
+- A user updates one or multiple documents (i.e., the primary key is the same, but the document's content is not the same).
 
-The purpose of the documents soft-deletion feature is to make the deletion of documents almost instantaneous by **not** deleting the document when asked.
+The purpose of the document soft-deletion feature is to make the deletion of documents almost instantaneous by **not** deleting the document when asked.
 
 ## 3. Functional Specification
 
-Instead of deleting the documents, Meilisearch mark them internally as deleted and then exclude them from all the other algorithms of the engine.
-That's fast but takes space; thus, at some point, we need to _really_ delete the soft deleted documents.
+Instead of deleting the documents, Meilisearch marks them internally as deleted and then excludes them from all the other algorithms of the engine.
+That's fast but takes up space; thus, at some point, we need to _really_ delete the soft-deleted documents.
 
 This can happen for two reasons;
-- When 90% of the total available space is used.
-- When 10% of the total space is dedicated to the soft deleted documents.
+1. when there are more soft-deleted documents than regular documents in the database, or
+2. when the soft-deleted documents occupy more disk space than a fixed threshold.
 
-The idea is good, but there are two technical issues;
-
-1. We don't know the size a document really occupies.
-  This means we don't know the size used by the soft deleted documents.
-  That can be imprecise in the case of a really heterogeneous dataset with large and small documents.
-2. We don't know the total available space. The only information available to meilisearch is the `max-index-size` which is by default at 100GB, but meilisearch could be deployed on a smaller disk.
-
-The second point could be a real issue for the case of someone who has very few documents but update them frequently on a small disk without updating the `max-index-size` parameter.
-The soft-deleted documents would grow until they use 10GB of disk even though the user only has like 100MB of documents.
+Reason (2) presents the drawback that we don't know the precise disk space taken by a document, for technical reasons. Since the information we have is the total size taken by all documents (soft-deleted or not) and the number of documents, we approximate the size of a document to the average size of a document.
+This means that if a few outliers are updated/deleted, they can take up much more disk space than the fixed threshold.
 
 ## 4. Future Possibilities
 
 - Work again on the way to get the size of the disk the `data.ms` is currently running on. This would improve the analytics as well.
-- Provide a cli parameter to select how much space can be used to store the soft deleted documents.
+- Provide a CLI parameter to select how much space can be used to store the soft deleted documents.
   - It could be expressed as a real size or in terms of percentage.
-- Provide a route to delete the soft deleted documents.
-  - It could be useful if a user **know** he will have a lot of updates during the day but nothing around midnight, for example.
-  - It would allow a user to clear the soft deleted when meilisearch is not under pressure to ensure all your updates stay fast during the day.
+- Provide a route to delete the soft-deleted documents.
+  - It could be useful if a user **knows** they will have a lot of updates during the day but nothing around midnight, for example.
+  - It would allow a user to clear the soft-deleted when Meilisearch is not under pressure to ensure all your updates stay fast during the day.

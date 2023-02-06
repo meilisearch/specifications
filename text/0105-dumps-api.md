@@ -16,7 +16,7 @@ The dumps exist to upgrade a MeiliSearch instance from a previous version to a m
 - A dump creation status can be tracked using the `GET - /tasks/:task_uid` endpoint.
 - MeiliSearch can only create one dump at a time.
 - By default, dumps are created in a folder named `dumps`, and can be found in the same directory as the MeiliSearch binary.
-- The `dumps` directory can be customized using the `--dumps-dir` configuration option. If the dump directory does not already exist when the dump creation process is called, MeiliSearch will create it.
+- The `dumps` directory can be customized using the `--dump-dir` configuration option. If the dump directory does not already exist when the dump creation process is called, MeiliSearch will create it.
 - A `.dump` file can be imported using the `--import-dump` command-line flag.
 - The MeiliSearch server starts when the dump is fully imported and indexed.
 - By default, importing a dump when a database already exists (a non-empty data.ms folder in the same directory as the MeiliSearch binary) will stop the process and throw an error.
@@ -54,11 +54,11 @@ The uid of the generated dump can be found in the task details.
 
 ### 3.3. CLI Definition
 
-#### 3.3.1. `--dumps-dir`
+#### 3.3.1. `--dump-dir`
 
 By default, MeiliSearch creates dumps in a directory called `dumps` at the root of your MeiliSearch.
 
-The destination can be modified with the `--dumps-dir` flag. e.g. `--dumps-dir myDumps`
+The destination can be modified with the `--dump-dir` flag. e.g. `--dump-dir myDumps`
 
 #### 3.3.2. `--import-dump`
 
@@ -92,19 +92,16 @@ To handle dump and Meilisearch version compatibility, it is necessary to also ve
 
 The following table describes which version of the dump correspond to which version of Meilisearch
 
-| Dump version | Meilisearch version                  | Highest compatibility dump version |
-|--------------|--------------------------------------|------------------------------------|
-| `v1`         | `v0.20.0` and below                  | `v3`                               |
-| `v2`         | `v0.21.0` and `v0.21.1`              | `v6`                               |
-| `v3`         | From `v0.22.0` to `v0.24.0` included | `v6`                               |
-| `v4`         | From `v0.25.0` to `v0.27.2` included | `v6`                               |
-| `v5`         | From `v0.28.0` to `v0.29.1` included | `v6`                               |
-| `v6`         | `v0.30.0` and later                  | `v6`                               |
+| Dump version | Meilisearch version                  |
+|--------------|--------------------------------------|
+| `v1`         | `v0.20.0` and below                  |
+| `v2`         | `v0.21.0` and `v0.21.1`              |
+| `v3`         | From `v0.22.0` to `v0.24.0` included |
+| `v4`         | From `v0.25.0` to `v0.27.2` included |
+| `v5`         | From `v0.28.0` to `v0.29.1` included |
+| `v6`         | `v0.30.0` and later                  |
 
-What does "Highest compatibility dump version" means?
-
-For maintainance reasons, we cannot guarantee the compatibility from old dump versions to the newest ones.
-Concretely, if the user wants to upgrade from Meilisearch `v0.19.0` (dump `v1`) to `v0.26.0` (dump `v4`), migration should be done in two steps. First, import your `v0.19.0` dump into an instance running any version of Meilisearch between v0.21 and v0.24. Second, export another dump from this instance and import it to a final instance running with `v0.26.0`.
+All dumps created before and up to Meilisearch v1.0 can be imported into Meilisearch v1.X.Y.
 
 ## 4. Technical Aspects
 
