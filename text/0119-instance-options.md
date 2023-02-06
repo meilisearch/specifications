@@ -46,10 +46,10 @@ Command-line options take precedence over environment variables. If the same con
 
 The options that do not expect any value when using the command-line option accepts the following value when using the corresponding environment variable: `n`, `no`, `f`, `false`, `off`, and `0` as `false`. An absent environment variable will also be considered as `false`. Everything else is considered `true`.
 
-Example with the snapshort creation:
-- `export MEILI_SCHEDULE_SNAPSHOT=yes` means the snapshot creation is enabled.
-- `export MEILI_SCHEDULE_SNAPSHOT=off` means the snapshot creation is disabled.
-- No variable set means the snapshot creation is disabled.
+Example with the option to make SSL mandatory:
+- `export MEILI_SSL_REQUIRE_AUTH=yes` means that mandatory SSL is enabled.
+- `export MEILI_SSL_REQUIRE_AUTH=off` means that mandatory SSL is disabled.
+- No variable set means that mandatory SSL is disabled.
 
 ### 3.2. Error behavior
 
@@ -76,7 +76,7 @@ error: The argument '--db-path <DB_PATH>' requires a value but none was supplied
 ❌ Wrong
 
 ```bash
-./meilisearch --schedule-snapshot yes
+./meilisearch --ssl-require-auth yes
 
 error: Found argument 'yes' which wasn't expected, or isn't valid in this context
 ```
@@ -84,7 +84,7 @@ error: Found argument 'yes' which wasn't expected, or isn't valid in this contex
 ✅ Correct
 
 ```bash
-./meilisearch --schedule-snapshot
+./meilisearch --ssl-require-auth
 ```
 
 The expected behavior of each flag is described in the list above.
@@ -102,23 +102,22 @@ The expected behavior of each flag is described in the list above.
 - [Ignore dump if DB exists](#339-ignore-dump-if-db-exists)
 - [Log level](#3310-log-level)
 - [Payload limit size](#3311-payload-limit-size)
-- [Schedule snapshot creation](#3312-schedule-snapshot-creation)
+- [Schedule snapshot creation](#3311-schedule-snapshot-creation)
 - [Snapshot destination](#3313-snapshot-destination)
-- [Snapshot interval](#3314-snapshot-interval)
-- [Import snapshot](#3315-import-snapshot)
-- [Ignore missing snapshot](#3316-ignore-missing-snapshot)
-- [Ignore snapshot if DB exists](#3317-ignore-snapshot-if-db-exists)
-- [Max memory usage when indexing](#3318-max-memory-usage-when-indexing)
-- [Max indexing threads](#3319-max-indexing-threads)
-- [Disable auto-batching](#3320-disable-auto-batching)
-- [SSL authentication path](#3321-ssl-authentication-path)
-- [SSL certificates path](#3322-ssl-certificates-path)
-- [SSL key path](#3323-ssl-key-path)
-- [SSL OCSP path](#3324-ssl-ocsp-path)
-- [SSL require auth](#3325-ssl-require-auth)
-- [SSL resumption](#3326-ssl-resumption)
-- [SSL tickets](#3327-ssl-tickets)
-- [Config file path](#3328-config-file-path)
+- [Import snapshot](#3314-import-snapshot)
+- [Ignore missing snapshot](#3315-ignore-missing-snapshot)
+- [Ignore snapshot if DB exists](#3316-ignore-snapshot-if-db-exists)
+- [Max memory usage when indexing](#3317-max-memory-usage-when-indexing)
+- [Max indexing threads](#3318-max-indexing-threads)
+- [Disable auto-batching](#3319-disable-auto-batching)
+- [SSL authentication path](#3320-ssl-authentication-path)
+- [SSL certificates path](#3321-ssl-certificates-path)
+- [SSL key path](#3322-ssl-key-path)
+- [SSL OCSP path](#3323-ssl-ocsp-path)
+- [SSL require auth](#3324-ssl-require-auth)
+- [SSL resumption](#3325-ssl-resumption)
+- [SSL tickets](#3326-ssl-tickets)
+- [Config file path](#3327-config-file-path)
 
 #### 3.3.1. Database path
 
@@ -304,11 +303,14 @@ Sets the maximum size of accepted payloads. Value must be given in bytes or expl
 
 **Environment variable**: `MEILI_SCHEDULE_SNAPSHOT`
 **CLI option**: `--schedule-snapshot`
-**Default**: Disabled
+**Default when absent**: Disabled
+**Optional value**: an integer
 
-⚠️ This command-line option does not take any values. Assigning a value will throw an error.
+⚠️ This command-line option takes an **optional** integer value. Passing the flag with no value implies the default value of 86400.
 
-Activates scheduled snapshots when enabled. Snapshots are disabled by default.
+- Omitting the flag, not defining `MEILI_SCHEDULE_SNAPSHOT`, or specifying `schedule_snapshot=false` in the configuration file disables the scheduled snapshots, and is the default behavior.
+- Passing the flag without a value or specifying `schedule_snapshot=true` in the configuration file enables the scheduled snapshot with the default interval of 86400 seconds between each snapshot.
+- Passing the flag with an integer value, defining the `MEILI_SCHEDULE_SNAPSHOT` to an integer value, or specifying `schedule_snapshot=x` with `x` an integer value in the configuration file enables the scheduled snapshots with an interval between each snapshot of the specified integer value, in seconds.
 
 #### 3.3.13. Snapshot destination
 
@@ -319,16 +321,7 @@ Activates scheduled snapshots when enabled. Snapshots are disabled by default.
 
 Sets the directory where Meilisearch will store snapshots. If the directory does not exist when a snapshot is generated it will be created.
 
-#### 3.3.14. Snapshot interval
-
-**Environment variable**: `MEILI_SNAPSHOT_INTERVAL_SEC`
-**CLI option**: `--snapshot-interval-sec`
-**Default value**: `86400` (1 day)
-**Expected value**: an integer
-
-Defines the interval between each snapshot. Value must be given in seconds.
-
-#### 3.3.15. Import snapshot
+#### 3.3.14. Import snapshot
 
 **Environment variable**: `MEILI_IMPORT_SNAPSHOT`
 **CLI option**: `--import-snapshot`
@@ -344,7 +337,7 @@ This command will throw an error if:
 
 This behavior can be modified with the `--ignore-snapshot-if-db-exists` and `--ignore-missing-snapshot` options, respectively.
 
-#### 3.3.16. Ignore missing snapshot
+#### 3.3.15. Ignore missing snapshot
 
 **Environment variable**: `MEILI_IGNORE_MISSING_SNAPSHOT`
 **CLI option**: `--ignore-missing-snapshot`
@@ -356,7 +349,7 @@ Prevents a Meilisearch instance from throwing an error when `--import-snapshot` 
 
 This command will throw an error if `--import-snapshot` is not defined.
 
-#### 3.3.17. Ignore snapshot if DB exists
+#### 3.3.16. Ignore snapshot if DB exists
 
 **Environment variable**: `MEILI_IGNORE_SNAPSHOT_IF_DB_EXISTS`
 **CLI option**: `--ignore-snapshot-if-db-exists`
@@ -368,7 +361,7 @@ Prevents a Meilisearch instance with an existing database from throwing an error
 
 This command will throw an error if `--import-snapshot` is not defined.
 
-#### 3.3.18. Max memory usage when indexing
+#### 3.3.17. Max memory usage when indexing
 
 **Environment variable**: `MEILI_MAX_INDEXING_MEMORY`
 **CLI option**: `--max-indexing-memory`
@@ -384,7 +377,7 @@ Value must be given in bytes or explicitly stating a base unit. For example, the
 - This command-line option does not perfectly ensure the RAM usage but helps you manage multiple Meilisearch engines on the same machine (for example, using Kubernetes). The search engine cannot guarantee the exact usage of the RAM.
 - If the number set is higher than the real available RAM in the machine, we cannot prevent Meilisearch from crashing.
 
-#### 3.3.19. Max indexing threads
+#### 3.3.18. Max indexing threads
 
 **Environment variable**: `MEILI_MAX_INDEXING_THREADS`
 **CLI option**: `--max-indexing-threads`
@@ -400,7 +393,7 @@ Obviously, multi-threading is not possible in machines with only one processor c
 
 If the number set is higher than the real number of core available in the machine, Meilisearch will use the maximum number of available cores.
 
-#### 3.3.20. Disable auto-batching
+#### 3.3.19. Disable auto-batching
 
 **Environment variable**: `MEILI_DISABLE_AUTO_BATCHING`
 **CLI option**: `--disable-auto-batching`
@@ -410,7 +403,7 @@ If the number set is higher than the real number of core available in the machin
 
 Disable the [auto-batching feature](./0096-auto-batching.md).
 
-#### 3.3.21. SSL authentication path
+#### 3.3.20. SSL authentication path
 
 **Environment variable**: `MEILI_SSL_AUTH_PATH`
 **CLI option**: `--ssl-auth-path`
@@ -419,7 +412,7 @@ Disable the [auto-batching feature](./0096-auto-batching.md).
 
 Enables client authentication in the specified path.
 
-#### 3.3.22. SSL certificates path
+#### 3.3.21. SSL certificates path
 
 **Environment variable**: `MEILI_SSL_CERT_PATH`
 **CLI option**: `--ssl-cert-path`
@@ -430,7 +423,7 @@ Sets the server's SSL certificates.
 
 Value must be a path to PEM-formatted certificates. The first certificate should certify the KEYFILE supplied by `--ssl-key-path`. The last certificate should be a root CA.
 
-#### 3.3.23. SSL key path
+#### 3.3.22. SSL key path
 
 **Environment variable**: `MEILI_SSL_KEY_PATH`
 **CLI option**: `--ssl-key-path`
@@ -441,7 +434,7 @@ Sets the server's SSL keyfiles.
 
 Value must be a path to an RSA private key or PKCS8-encoded private key, both in PEM format.
 
-#### 3.3.24. SSL OCSP path
+#### 3.3.23. SSL OCSP path
 
 **Environment variable**: `MEILI_SSL_OCSP_PATH`
 **CLI option**: `--ssl-ocsp-path`
@@ -452,7 +445,7 @@ Sets the server's OCSP file. *Optional*
 
 Reads DER-encoded OCSP response from OCSPFILE and staple to certificate.
 
-#### 3.3.25. SSL require auth
+#### 3.3.24. SSL require auth
 
 **Environment variable**: `MEILI_SSL_REQUIRE_AUTH`
 **CLI option**: `--ssl-require-auth`
@@ -464,7 +457,7 @@ Makes SSL authentication mandatory.
 
 Sends a fatal alert if the client does not complete client authentication.
 
-#### 3.3.26. SSL resumption
+#### 3.3.25. SSL resumption
 
 **Environment variable**: `MEILI_SSL_RESUMPTION`
 **CLI option**: `--ssl-resumption`
@@ -474,7 +467,7 @@ Sends a fatal alert if the client does not complete client authentication.
 
 Activates SSL session resumption.
 
-#### 3.3.27. SSL tickets
+#### 3.3.26. SSL tickets
 
 **Environment variable**: `MEILI_SSL_TICKETS`
 **CLI option**: `--ssl-tickets`
@@ -484,7 +477,7 @@ Activates SSL session resumption.
 
 Activates SSL tickets.
 
-#### 3.3.28. Config file path
+#### 3.3.27. Config file path
 
 **Environment variable**: `MEILI_CONFIG_FILE_PATH`
 **CLI option**: `--config-file-path`
