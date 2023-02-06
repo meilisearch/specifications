@@ -674,8 +674,8 @@ This part demonstrates keyset paging in action on `/tasks`. The items `uid` rema
 
 ###### 9.5.3. Errors
 
-- 🔴 Sending a value with a different type than `Integer` for `limit` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
-- 🔴 Sending a value with a different type than `Integer` for `from` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Integer` for `limit` returns an [invalid_task_limit](0061-error-format-and-definitions.md#invalid_task_limit) error.
+- 🔴 Sending a value with a different type than `Integer` for `from` returns an [invalid_task_from](0061-error-format-and-definitions.md#invalid_task_from) error.
 
 #### 10. Filtering task resources
 
@@ -709,7 +709,7 @@ The tasks API endpoints are filterable by  `uids`, `indexUids`, `types`, `status
 
 `uids` is **case-unsensitive**.
 
-- 🔴 Sending values with a different type than `Integer` being separated by `,` for the `uid` parameter returns an [`invalid_task_uids_filter`](0061-error-format-and-definitions.md#invalid_task_uids_filter) error.
+- 🔴 Sending values with a different type than `Integer` being separated by `,` for the `uids` parameter returns an [`invalid_task_uids`](0061-error-format-and-definitions.md#invalid_task_uids) error.
 
 ###### 10.2.2. `indexUids`
 
@@ -721,6 +721,8 @@ Filter tasks by their related index. By default, when `indexUids` query paramete
 
 `indexUids` is **case-sensitive**.
 
+- 🔴 Sending an invalid index uid format returns an [`invalid_task_index_uids`](0061-error-format-and-definitions.md#invalid_task_uids) error is returned.
+
 ###### 10.2.3. `statuses`
 
 Filter tasks by their status. By default, when `statuses` query parameter is not set, all task statuses are concerned. It's possible to specify several statuses by separating them with the `,` character.
@@ -731,7 +733,7 @@ Filter tasks by their status. By default, when `statuses` query parameter is not
 
 `statuses` is **case-insensitive**.
 
-- 🔴 If the `statuses` parameter value is not consistent with one of the task statuses, an [`invalid_task_statuses_filter`](0061-error-format-and-definitions.md#invalid_task_statuses_filter) error is returned.
+- 🔴 If the `statuses` parameter value is not consistent with one of the task statuses, an [`invalid_task_statuses`](0061-error-format-and-definitions.md#invalid_task_statuses) error is returned.
 
 ###### 10.2.4. `types`
 
@@ -743,7 +745,7 @@ Filter tasks by their related type. By default, when `types` query parameter is 
 
 `types` is **case-insensitive**.
 
-- 🔴 If the `types` parameter value is not consistent with one of the task types, an [`invalid_task_types_filter`](0061-error-format-and-definitions.md#invalid_task_types_filter) error is returned.
+- 🔴 If the `types` parameter value is not consistent with one of the task types, an [`invalid_task_types`](0061-error-format-and-definitions.md#invalid_task_types) error is returned.
 
 ###### 10.2.5. `canceledBy`
 
@@ -755,7 +757,7 @@ Filter tasks by the `taskCancelation` uid that canceled them. It's possible to s
 
 `canceledBy` is **case-insensitive**.
 
-- 🔴Sending a value with a different type than `Integer` for the `canceledBy` parameter returns an [`invalid_task_canceled_by_filter`](0061-error-format-and-definitions.md#invalid_task_canceled_by_filter) error.
+- 🔴 Sending a value with a different type than `Integer` for the `canceledBy` parameter returns an [`invalid_task_canceled_by`](0061-error-format-and-definitions.md#invalid_task_canceled_by) error.
 
 ###### 10.2.6. Date Parameters
 
@@ -774,7 +776,8 @@ Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before/afte
 - Default: `*`
 
 - 🔴 The date filters are exclusive. It means the given value will not be included.
-- 🔴 Sending an invalid value for the date parameter returns an [`invalid_task_date_filter`](0061-error-format-and-definitions.md#invalid_task_date_filter) error.
+- 🔴 Sending an invalid value for `beforeEnqueuedAt` parameter returns an [`invalid_task_before_enqueued_at`](0061-error-format-and-definitions.md#invalid_task_before_enqueued_at) error.
+- 🔴 Sending an invalid value for `afterEnqueuedAt` parameter returns an [`invalid_task_after_enqueued_at`](0061-error-format-and-definitions.md#invalid_task_after_enqueued_at) error.
 
 ###### 10.2.6.2. `beforeStartedAt` and `afterStartedAt`
 
@@ -785,7 +788,8 @@ Filter tasks based on their startedAt time. Retrieve tasks started before/after 
 - Default: `*`
 
 - 🔴 The date filters are exclusive. It means the given value will not be included.
-- 🔴 Sending an invalid value for the date parameter returns an [`invalid_task_date_filter`](0061-error-format-and-definitions.md#invalid_task_date_filter) error.
+- 🔴 Sending an invalid value for `beforeStartedAt` parameter returns an [`invalid_task_before_started_at`](0061-error-format-and-definitions.md#invalid_task_before_started_at) error.
+- 🔴 Sending an invalid value for `afterStartedAt` parameter returns an [`invalid_task_after_started_at`](0061-error-format-and-definitions.md#invalid_task_after_started_at) error.
 
 ###### 10.2.6.3. `beforeFinishedAt` and `afterFinishedAt`
 
@@ -796,7 +800,8 @@ Filter tasks based on their finishedAt time. Retrieve tasks finished before/afte
 - Default: `*`
 
 - 🔴 The date filters are exclusive. It means the given value will not be included.
-- 🔴 Sending an invalid value for the date parameter returns an [`invalid_task_date_filter`](0061-error-format-and-definitions.md#invalid_task_date_filter) error.
+- 🔴 Sending an invalid value for `beforeFinishedAt` parameter returns an [`invalid_task_before_finished_at`](0061-error-format-and-definitions.md#invalid_task_before_finished_at) error.
+- 🔴 Sending an invalid value for `afterFinishedAt` parameter returns an [`invalid_task_after_finished_at`](0061-error-format-and-definitions.md#invalid_task_after_finished_at) error.
 
 
 ###### 10.2.7. Select multiple values for the same filter

@@ -152,6 +152,8 @@ Fetch the API keys of a Meilisearch instance.
 
 Sets the starting point in the results, effectively skipping over a given number of API keys.
 
+- 🔴 Sending a value with a different type than `Integer` for `offset` returns an [invalid_api_key_offset](0061-error-format-and-definitions.md#invalid_api_key_offset) error.
+
 ###### `limit`
 
 - Type: Integer
@@ -159,6 +161,8 @@ Sets the starting point in the results, effectively skipping over a given number
 - Default: `20`
 
 Sets the maximum number of documents to be returned by the current request.
+
+- 🔴 Sending a value with a different type than `Integer` for `limit` returns an [invalid_api_key_limit](0061-error-format-and-definitions.md#invalid_api_key_limit) error.
 
 ###### 3.2.4.2.2. Response Definition
 
@@ -348,9 +352,9 @@ See [API Key Resource Representation](#3241-api-key-resource-representation) sec
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending a different payload type than the Content-Type header returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
 - 🔴 Sending an invalid json format returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
-- 🔴 Omitting `actions` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
-- 🔴 Omitting `indexes` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
-- 🔴 Omitting `expiresAt` field from the payload returns a [missing_parameter](0061-error-format-and-definitions.md#missing_parameter) error.
+- 🔴 Omitting `actions` field from the payload returns a [missing_api_key_actions](0061-error-format-and-definitions.md#missing_api_key_actions) error.
+- 🔴 Omitting `indexes` field from the payload returns a [missing_api_key_indexes](0061-error-format-and-definitions.md#missing_api_key_indexes) error.
+- 🔴 Omitting `expiresAt` field from the payload returns a [missing_api_key_expires_at](0061-error-format-and-definitions.md#missing_api_key_expires_at) error.
 - 🔴 Sending an `uid` field that already exists returns an [api_key_already_exists](0061-error-format-and-definitions.md#api_key_already_exists) error.
 - 🔴 Sending an invalid value for the `uid` field returns an [invalid_api_key_uid](0061-error-format-and-definitions.md#invalid_api_key_uid) error.
 - 🔴 Sending an invalid value for the `actions` field returns an [invalid_api_key_actions](0061-error-format-and-definitions.md#invalid_api_key_actions) error.
@@ -390,8 +394,13 @@ See [API Key Resource Representation](#3241-api-key-resource-representation) sec
 - 🔴 Sending an invalid json format returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
 - 🔴 Sending an invalid value for the `name` field returns an [invalid_api_key_name](0061-error-format-and-definitions.md#invalid_api_key_name) error.
 - 🔴 Sending an invalid value for the `description` field returns an [invalid_api_key_description](0061-error-format-and-definitions.md#invalid_api_key_description) error.
-- 🔴 Sending `uid`, `key`, `actions`, `indexes`, `expiresAt`, `createdAt`, `updatedAt` in the payload request returns an [immutable_field](0061-error-format-and-definitions.md#immutable_field) error.
-
+- 🔴 Sending `uid` in the payload request returns an [immutable_api_key_uid](0061-error-format-and-definitions.md#immutable_api_key_uid) error.
+- 🔴 Sending `key` in the payload request returns an [immutable_api_key_key](0061-error-format-and-definitions.md#immutable_api_key_key) error.
+- 🔴 Sending `actions` in the payload request returns an [immutable_api_key_actions](0061-error-format-and-definitions.md#immutable_api_key_actions) error.
+- 🔴 Sending `indexes` in the payload request returns an [immutable_api_key_indexes](0061-error-format-and-definitions.md#immutable_api_key_indexes) error.
+- 🔴 Sending `expiresAt` in the payload request returns an [immutable_api_key_expires_at](0061-error-format-and-definitions.md#immutable_api_key_expires_at) error.
+- 🔴 Sending `createdAt` in the payload request returns an [immutable_api_key_created_at](0061-error-format-and-definitions.md#immutable_api_key_created_at) error.
+- 🔴 Sending `updatedAt` in the payload request returns an [immutable_api_key_updated_at](0061-error-format-and-definitions.md#immutable_api_key_updated_at) error.
 
 ##### 3.2.4.6. `DELETE` - `/keys/:uid_or_key`
 
@@ -435,7 +444,6 @@ The final key is then an HMAC with the master key, as the secret, and the `uid`,
 The final key could be generated with openssl as below:
 
     echo -n $HYPHENATED_UUID | openssl dgst -sha256 -hmac $MASTER_KEY
-
 
 ### 4.2. Synchronous write of `API Key` resources
 
