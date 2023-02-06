@@ -92,19 +92,16 @@ To handle dump and Meilisearch version compatibility, it is necessary to also ve
 
 The following table describes which version of the dump correspond to which version of Meilisearch
 
-| Dump version | Meilisearch version                  | Highest compatibility dump version |
-|--------------|--------------------------------------|------------------------------------|
-| `v1`         | `v0.20.0` and below                  | `v3`                               |
-| `v2`         | `v0.21.0` and `v0.21.1`              | `v6`                               |
-| `v3`         | From `v0.22.0` to `v0.24.0` included | `v6`                               |
-| `v4`         | From `v0.25.0` to `v0.27.2` included | `v6`                               |
-| `v5`         | From `v0.28.0` to `v0.29.1` included | `v6`                               |
-| `v6`         | `v0.30.0` and later                  | `v6`                               |
+| Dump version | Meilisearch version                  |
+|--------------|--------------------------------------|
+| `v1`         | `v0.20.0` and below                  |
+| `v2`         | `v0.21.0` and `v0.21.1`              |
+| `v3`         | From `v0.22.0` to `v0.24.0` included |
+| `v4`         | From `v0.25.0` to `v0.27.2` included |
+| `v5`         | From `v0.28.0` to `v0.29.1` included |
+| `v6`         | `v0.30.0` and later                  |
 
-What does "Highest compatibility dump version" means?
-
-For maintainance reasons, we cannot guarantee the compatibility from old dump versions to the newest ones.
-Concretely, if the user wants to upgrade from Meilisearch `v0.19.0` (dump `v1`) to `v0.26.0` (dump `v4`), migration should be done in two steps. First, import your `v0.19.0` dump into an instance running any version of Meilisearch between v0.21 and v0.24. Second, export another dump from this instance and import it to a final instance running with `v0.26.0`.
+All dumps created before and up to Meilisearch v1.0 can be imported into Meilisearch v1.X.Y.
 
 ## 4. Technical Aspects
 
