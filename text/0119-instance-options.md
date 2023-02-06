@@ -287,7 +287,7 @@ More information in this [section of the spec](https://github.com/meilisearch/sp
 **Environment variable**: `MEILI_LOG_LEVEL`
 **CLI option**: `--log-level`
 **Default value**: `'INFO'`
-**Expected value**: one of `ERROR`, `WARN`, `INFO`, `DEBUG`, OR `TRACE`
+**Expected value**: one of `ERROR`, `WARN`, `INFO`, `DEBUG`, `TRACE`, or `OFF`
 
 Defines how much detail should be present in Meilisearch's logs.
 
