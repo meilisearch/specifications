@@ -102,22 +102,21 @@ The expected behavior of each flag is described in the list above.
 - [Ignore dump if DB exists](#339-ignore-dump-if-db-exists)
 - [Log level](#3310-log-level)
 - [Payload limit size](#3311-payload-limit-size)
-- [Schedule snapshot creation](#3311-schedule-snapshot-creation)
+- [Schedule snapshot creation](#3312-schedule-snapshot-creation)
 - [Snapshot destination](#3313-snapshot-destination)
 - [Import snapshot](#3314-import-snapshot)
 - [Ignore missing snapshot](#3315-ignore-missing-snapshot)
 - [Ignore snapshot if DB exists](#3316-ignore-snapshot-if-db-exists)
 - [Max memory usage when indexing](#3317-max-memory-usage-when-indexing)
 - [Max indexing threads](#3318-max-indexing-threads)
-- [Disable auto-batching](#3319-disable-auto-batching)
-- [SSL authentication path](#3320-ssl-authentication-path)
-- [SSL certificates path](#3321-ssl-certificates-path)
-- [SSL key path](#3322-ssl-key-path)
-- [SSL OCSP path](#3323-ssl-ocsp-path)
-- [SSL require auth](#3324-ssl-require-auth)
-- [SSL resumption](#3325-ssl-resumption)
-- [SSL tickets](#3326-ssl-tickets)
-- [Config file path](#3327-config-file-path)
+- [SSL authentication path](#3319-ssl-authentication-path)
+- [SSL certificates path](#3320-ssl-certificates-path)
+- [SSL key path](#3321-ssl-key-path)
+- [SSL OCSP path](#3322-ssl-ocsp-path)
+- [SSL require auth](#3323-ssl-require-auth)
+- [SSL resumption](#3324-ssl-resumption)
+- [SSL tickets](#3325-ssl-tickets)
+- [Config file path](#3326-config-file-path)
 
 #### 3.3.1. Database path
 
@@ -393,17 +392,7 @@ Obviously, multi-threading is not possible in machines with only one processor c
 
 If the number set is higher than the real number of core available in the machine, Meilisearch will use the maximum number of available cores.
 
-#### 3.3.19. Disable auto-batching
-
-**Environment variable**: `MEILI_DISABLE_AUTO_BATCHING`
-**CLI option**: `--disable-auto-batching`
-**Default**: Enable
-
-⚠️ This command-line option does not take any values. Assigning a value will throw an error.
-
-Disable the [auto-batching feature](./0096-auto-batching.md).
-
-#### 3.3.20. SSL authentication path
+#### 3.3.19. SSL authentication path
 
 **Environment variable**: `MEILI_SSL_AUTH_PATH`
 **CLI option**: `--ssl-auth-path`
@@ -412,7 +401,7 @@ Disable the [auto-batching feature](./0096-auto-batching.md).
 
 Enables client authentication in the specified path.
 
-#### 3.3.21. SSL certificates path
+#### 3.3.20. SSL certificates path
 
 **Environment variable**: `MEILI_SSL_CERT_PATH`
 **CLI option**: `--ssl-cert-path`
@@ -423,7 +412,7 @@ Sets the server's SSL certificates.
 
 Value must be a path to PEM-formatted certificates. The first certificate should certify the KEYFILE supplied by `--ssl-key-path`. The last certificate should be a root CA.
 
-#### 3.3.22. SSL key path
+#### 3.3.21. SSL key path
 
 **Environment variable**: `MEILI_SSL_KEY_PATH`
 **CLI option**: `--ssl-key-path`
@@ -434,7 +423,7 @@ Sets the server's SSL keyfiles.
 
 Value must be a path to an RSA private key or PKCS8-encoded private key, both in PEM format.
 
-#### 3.3.23. SSL OCSP path
+#### 3.3.22. SSL OCSP path
 
 **Environment variable**: `MEILI_SSL_OCSP_PATH`
 **CLI option**: `--ssl-ocsp-path`
@@ -445,7 +434,7 @@ Sets the server's OCSP file. *Optional*
 
 Reads DER-encoded OCSP response from OCSPFILE and staple to certificate.
 
-#### 3.3.24. SSL require auth
+#### 3.3.23. SSL require auth
 
 **Environment variable**: `MEILI_SSL_REQUIRE_AUTH`
 **CLI option**: `--ssl-require-auth`
@@ -457,7 +446,7 @@ Makes SSL authentication mandatory.
 
 Sends a fatal alert if the client does not complete client authentication.
 
-#### 3.3.25. SSL resumption
+#### 3.3.24. SSL resumption
 
 **Environment variable**: `MEILI_SSL_RESUMPTION`
 **CLI option**: `--ssl-resumption`
@@ -467,7 +456,7 @@ Sends a fatal alert if the client does not complete client authentication.
 
 Activates SSL session resumption.
 
-#### 3.3.26. SSL tickets
+#### 3.3.25. SSL tickets
 
 **Environment variable**: `MEILI_SSL_TICKETS`
 **CLI option**: `--ssl-tickets`
@@ -477,7 +466,7 @@ Activates SSL session resumption.
 
 Activates SSL tickets.
 
-#### 3.3.27. Config file path
+#### 3.3.26. Config file path
 
 **Environment variable**: `MEILI_CONFIG_FILE_PATH`
 **CLI option**: `--config-file-path`

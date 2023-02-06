@@ -44,14 +44,6 @@ All tasks are part of a batch identified by an internal `batchUid` field. A task
 - Tasks within the same batch share the same values for the `startedAt`, `finishedAt`, `duration` fields, and the same `error` object if an error occurs for a `task` during the batch processing.
 - If a batch contains many `tasks`, the `task` `details` `indexedDocuments` is identical in all `tasks` belonging to the same processed `batch`.
 
-### 3.2. Auto-batching mechanisms options
-
-### 3.2.1. `--disable-auto-batching`
-
-By default, the auto-batching feature is enabled.
-
-The auto-batching feature can be desactivated by passing the command flag `--disable-auto-batching` (or the environment variable `MEILI_DISABLE_AUTO_BATCHING`) to Meilisearch at launch.
-
 ## 4. Technical Aspects
 N/A
 
