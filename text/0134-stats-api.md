@@ -71,8 +71,8 @@ Lists every field in the index and the total number of documents in the index co
 
 ##### 3.1.1.4. Errors
 
+- 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 - 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
-
 
 #### 3.1.2. `GET` - `stats`
 

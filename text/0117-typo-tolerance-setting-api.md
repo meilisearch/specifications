@@ -174,6 +174,7 @@ All properties must be returned when the resource is retrieved.
 
 ##### 3.2.2.1.2. Errors
 
+- 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 - 🔴 If the index does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
 #### 3.2.2.2. `PATCH` - `indexes/:index_uid/settings/typo-tolerance`
@@ -217,14 +218,16 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
-- 🔴 Sending a value different from `null` or with a different type than `Boolean` for the `enabled` field returns a
-[bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
+- 🔴 Sending a value different from `null` or with a different type than `Boolean` for the `enabled` field returns an
+[invalid_settings_typo_tolerance](0061-error-format-and-definitions.md#invalid_settings_typo_tolerance) error.
 - 🔴 Sending a value different from `null` or with a different type than `Array of String` for the `disableOnAttributes`
-field returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+field returns an [invalid_settings_typo_tolerance](0061-error-format-and-definitions.md#invalid_settings_typo_tolerance) error.
 - 🔴 Sending a value different from `null` or with a different type than `Array of String` for the `disableOnWords` field
-returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+returns an [invalid_settings_typo_tolerance](0061-error-format-and-definitions.md#invalid_settings_typo_tolerance) error.
 - 🔴 Sending a value different from `null` or with a different type than `Integer` for `minWordSizeForTypos` object fields
-returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+returns an [invalid_settings_typo_tolerance](0061-error-format-and-definitions.md#invalid_settings_typo_tolerance) error.
+- 🔴 Sending invalid values for `oneTypo` AND `twoTypos` being specified for the `minWordSizeForTypos` object fields returns an [invalid_settings_typo_tolerance](0061-error-format-and-definitions.md#invalid_settings_typo_tolerance) error.
 
 ###### 3.2.2.2.2.1. Async Errors
 
@@ -232,7 +235,7 @@ returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 > Otherwise, Meilisearch will create the index in a lazy way. See [3.2.2.2.3. Lazy Index Creation](#32223-lazy-index-creation).
 
-- 🔴 Sending invalid integer values for the `minWordSizeForTypos` object fields returns an [invalid_typo_tolerance_min_word_size_for_typos](0061-error-format-and-definitions.md#invalid_typo_min_word_size_for_typos) error.
+- 🔴 When sending invalid values with either `oneTypo` OR `twoTypos` being specified for the `minWordSizeForTypos` object fields returns an [invalid_settings_typo_tolerance](0061-error-format-and-definitions.md#invalid_settings_typo_tolerance) error.
 
 ##### 3.2.2.2.3. Lazy Index Creation
 
@@ -249,6 +252,8 @@ When the request is in a successful state, Meilisearch returns the HTTP code `20
 See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted).
 
 ##### 3.2.2.3.2. Errors
+
+- 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 
 ###### 3.2.2.3.2.1. Asynchronous Index Not Found Error
 
@@ -296,4 +301,4 @@ The `typo` ranking rule favors candidates with the least typos. That is, if a do
 - Expose `typoTolerance` resource as a search parameter to override index settings.
 - Add the possibility to disable the typo tolerance feature on all numeric fields.
 - Add different modes of result matching for the typo feature. e.g. `default`/`min`/`strict`
-- Introduce synchronous `invalid_typo_tolerance_{fieldName}` error with a better error message than the one provided by serde.
+- Introduce synchronous `invalid_settings_typo_tolerance_{fieldName}` error code granularity.

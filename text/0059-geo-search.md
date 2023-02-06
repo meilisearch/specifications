@@ -117,7 +117,7 @@ csv format example
 }
 ```
 
-- 🔴 Giving a bad formed `_geo` that do not conform to the format causes the `update` payload to fail. A new `invalid_geo_field` error is given in the `update` object.
+- 🔴 Giving a bad formed `_geo` that do not conform to the format causes the `task` payload to fail and returns an [invalid_document_geo_field](0061-error-format-and-definitions.md#invalid_document_geo_field) error.
 
 ---
 
@@ -148,10 +148,8 @@ csv format example
 }
 ```
 
-- 🔴 Specifying parameters that do not conform to the `_geoRadius` signature causes the API to return an `invalid_filter` error. The error message should indicate how `_geoRadius` should be used. See `_geoRadius` built-in filter rule definition part.
-- 🔴 Using `_geoDistance` in a filter expression causes the API to return an `invalid_filter` error. `message` should be `:reservedKeyword is a reserved keyword and thus can't be used as a filter expression.`
-- 🔴 Using `_geo` in a filter expression causes the API to return an `invalid_filter` error. `message` should be `:reservedKeyword is a reserved keyword and thus can't be used as a filter expression. Use the _geoRadius(latitude, longitude, distance) built-in rule to filter on _geo field coordinates.`
-- 🔴 Using `_geoPoint` in a filter expression causes the API to return an `invalid_filter` error. `message` should be `:reservedKeyword is a reserved keyword and thus can't be used as a filter expression. Use the _geoRadius(latitude, longitude, distance) built-in rule to filter on _geo field coordinates.`
+- 🔴 Specifying parameters that do not conform to the `_geoRadius` signature causes the API to return an [invalid_search_parameter_filter](0061-error-format-and-definitions.md#invalid_search_parameter_filter) error.
+- 🔴 Using `_geoDistance`, `_geo` or `_geoPoint` in a filter expression causes the API to return an [invalid_search_parameter_filter](0061-error-format-and-definitions.md#invalid_search_parameter_filter) error.
 
 ---
 
@@ -185,10 +183,8 @@ Following the [`sort` specification feature](https://github.com/meilisearch/spec
     "sort": "_geoPoint({lat, lng}):asc,price:desc"
 }
 ```
-- 🔴 Specifying parameters that do not conform to the `_geoPoint` signature causes the API to return an `invalid_sort` error. The error message should indicate how `_geoPoint` should be used. See `_geoPoint` built-in sort rule definition part.
-- 🔴 Using `_geoDistance` in a sort expression causes the API to return an `invalid_sort` error. `message` should be `:reservedKeyword is a reserved keyword and thus can't be used as a sort expression.`
-- 🔴 Using `_geo` in a sort expression causes the API to return an `invalid_sort` error. `message` should be `:reservedKeyword is a reserved keyword and thus can't be used as a sort expression. Use the _geoPoint(latitude, longitude) built-in rule to sort on _geo field coordinates.`
-- 🔴 Using `_geoRadius` in a sort expression causes the API to return an `invalid_sort` error. `message` should be `:reservedKeyword is a reserved keyword and thus can't be used as a sort expression. Use the _geoPoint(latitude, longitude) built-in rule to sort on _geo field coordinates.`
+- 🔴 Specifying parameters that do not conform to the `_geoPoint` signature causes the API to return an [invalid_search_parameter_sort](0061-error-format-and-definitions.md#invalid_search_parameter_sort) error.
+- 🔴 Using `_geoDistance`, `_geo` or `_geoRadius` in a sort expression causes the API to return an[invalid_search_parameter_sort](0061-error-format-and-definitions.md#invalid_search_parameter_sort) error.
 
 ---
 
@@ -207,29 +203,10 @@ Following the [`sort` specification feature](https://github.com/meilisearch/spec
 
 ---
 
-### `invalid_criterion` error changes
+#### Related Ranking Rules Settings API Errors
 
-The error is currently marked as an internal error thus the name is not explicit and consistent with the term `Ranking Rule` a user can encounter in the documentation and in the API resource name. A new definition of this error is proposed.
+- 🔴 Specifying a custom ranking rule with `_geo`, `_geoDistance`, `_geoPoint`, or `_geoRadius` returns an [invalid_settings_ranking_rules](0061-error-format-and-definitions.md#invalid_settings_ranking_rules) error.
 
-#### invalid_ranking_rule
-
-#### Context
-
-This error is raised asynchronously when the user tries to specify an invalid ranking rule in the ranking rules setting.
-
-#### Error Definition
-
-```json
-    "message": ":rankingRule ranking rule is invalid. Valid ranking rules are words, typo, sort, proximity, attribute, exactness and custom ranking rules."
-    "code": "invalid_ranking_rule"
-    "type": "invalid_request"
-    "link": "https://docs.meilisearch.com/errors#invalid_ranking_rule"
-```
-
-- 🔴 Specifying an invalid ranking rule name raises an `invalid_ranking_rule` error. See `message` defined in the error definition part.
-- 🔴 Specifying a custom ranking rule with `_geo` or `_geoDistance` raises an `invalid_ranking_rule` error. The message is `:reservedKeyword is a reserved keyword and thus can't be used as a ranking rule.`.
-- 🔴 Specifying a custom ranking rule with `_geoPoint` raises an `invalid_ranking_rule` error. The message is `_geoPoint is a reserved keyword and thus can't be used as a ranking rule. _geoPoint can only be used for sorting at search time`.
-- 🔴 Specifying a custom ranking rule with `_geoRadius` raises an `invalid_ranking_rule` error. The message is `_geoRadius is a reserved keyword and thus can't be used as a ranking rule. _geoRadius can only be used for filtering at search time`.
 ---
 
 ### IV. Finalized Key Changes

@@ -150,15 +150,15 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
-- 🔴 Sending a request payload value type different of `Array of String`, `[]`,  or `null` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+ - 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
+- 🔴 Sending a request payload value type different of `Array of String`, `[]`,  or `null` returns an [invalid_settings_ranking_rules](0061-error-format-and-definitions.md#invalid_settings_ranking_rules) error.
+- 🔴 Sending an invalid ranking rule returns an [invalid_settings_ranking_rules](0061-error-format-and-definitions.md#invalid_settings_ranking_rules) error in the related asynchronous `task` resource. See [3.3.2.2. Response Definition](#3222-response-definition).
 
 ###### 3.3.2.3.1. Async Errors
 
 - 🔴 When Meilisearch is secured, if the API Key do not have the `indexes.create` action defined, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error in the related asynchronous `task` resource. See [3.3.2.2. Response Definition](#3222-response-definition).
 
 > Otherwise, Meilisearch will create the index in a lazy way. See [3.2.2.4. Lazy Index Creation](#3224-lazy-index-creation).
-
-- 🔴 Sending an invalid ranking rule returns an [invalid_ranking_rule](0061-error-format-and-definitions.md#invalid_ranking_rule) error in the related asynchronous `task` resource. See [3.3.2.2. Response Definition](#3222-response-definition).
 
 ##### 3.3.2.4. Lazy Index Creation
 
@@ -175,6 +175,8 @@ When the request is in a successful state, Meilisearch returns the HTTP code `20
 See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted).
 
 ##### 3.3.3.3. Errors
+
+ - 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 
 ###### 3.3.3.3.1. Asynchronous Index Not Found Error
 
@@ -201,5 +203,4 @@ The first ranking rule is applied to all documents, while each subsequent rule i
 
 ## 5. Future Possibilities
 
-- Add dedicated error to avoid using generic `bad_request` error code
 - Return an error when `rankingRules` is defined as an empty array
