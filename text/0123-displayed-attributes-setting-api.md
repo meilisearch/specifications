@@ -49,6 +49,7 @@ Fetch the `displayedAttributes` setting of a Meilisearch index.
 
 ##### 3.3.1.2. Errors
 
+- 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 - 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
 #### 3.3.2. `PUT` - `indexes/:index_uid/settings/displayed-attributes`
@@ -78,7 +79,8 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
-- 🔴 Sending a request payload value type different of `Array of String`, `[]`,  or `null` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
+- 🔴 Sending a request payload value type different of `Array of String`, `[]`,  or `null` returns an [invalid_settings_displayed_attributes](0061-error-format-and-definitions.md#invalid_settings_displayed_attributes) error.
 
 ###### 3.3.2.3.1. Async Errors
 
@@ -102,6 +104,8 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 
 ##### 3.3.3.3. Errors
 
+- 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
+
 ###### 3.3.3.3.1. Asynchronous Index Not Found Error
 
 - 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error in the related async `task` resource. See [3.3.3.1. Response Definition](#3331-response-definition).
@@ -122,5 +126,4 @@ N/A
 
 ## 5. Future Possibilities
 
-- Add dedicated error to avoid using generic `bad_request` error code
 - Return an error when `displayedAttributes` is defined as an empty array
