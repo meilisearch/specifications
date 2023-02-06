@@ -84,6 +84,14 @@ If the `--ignore-missing-dump` flag is not specified and the file cannot be foun
 Error: dump doesn't exist at ":pathToDumps/:missingFile"
 ```
 
+#### 3.3.5 Other dump related errors
+
+When starting a new Meilisearch version, if Meilisearch tries to read an old data.ms and but cannot read it, the following message should appear:
+
+```
+Error: Your database version (`:old_version`) is incompatible with your current engine (`:new_version`). To migrate data between Meilisearch versions, follow our guide on https://docs.meilisearch.com/learn/advanced/updating.html
+```
+
 ---
 
 ### 3.4. Dump version support
