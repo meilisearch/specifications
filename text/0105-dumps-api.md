@@ -16,7 +16,7 @@ The dumps exist to upgrade a MeiliSearch instance from a previous version to a m
 - A dump creation status can be tracked using the `GET - /tasks/:task_uid` endpoint.
 - MeiliSearch can only create one dump at a time.
 - By default, dumps are created in a folder named `dumps`, and can be found in the same directory as the MeiliSearch binary.
-- The `dumps` directory can be customized using the `--dumps-dir` configuration option. If the dump directory does not already exist when the dump creation process is called, MeiliSearch will create it.
+- The `dumps` directory can be customized using the `--dump-dir` configuration option. If the dump directory does not already exist when the dump creation process is called, MeiliSearch will create it.
 - A `.dump` file can be imported using the `--import-dump` command-line flag.
 - The MeiliSearch server starts when the dump is fully imported and indexed.
 - By default, importing a dump when a database already exists (a non-empty data.ms folder in the same directory as the MeiliSearch binary) will stop the process and throw an error.
@@ -54,11 +54,11 @@ The uid of the generated dump can be found in the task details.
 
 ### 3.3. CLI Definition
 
-#### 3.3.1. `--dumps-dir`
+#### 3.3.1. `--dump-dir`
 
 By default, MeiliSearch creates dumps in a directory called `dumps` at the root of your MeiliSearch.
 
-The destination can be modified with the `--dumps-dir` flag. e.g. `--dumps-dir myDumps`
+The destination can be modified with the `--dump-dir` flag. e.g. `--dump-dir myDumps`
 
 #### 3.3.2. `--import-dump`
 
