@@ -140,12 +140,13 @@ Configures the instance's environment. Value must be either `production` or `dev
 
 `production`:
 
-- Setting a master key is **mandatory**
+- Setting a master key of at least 16 bytes is **mandatory**
 - The search preview interface is disabled
 
 `development`:
 
 - Setting a master key is **optional**
+- Setting a master key of at least 16 bytes is **optional**
 - Search preview is enabled
 
 #### 3.3.3. HTTP address & port binding
@@ -168,9 +169,58 @@ Sets the instance's master key, automatically protecting all routes except [`GET
 
 You must supply an alphanumeric string when using this option.
 
-Providing a master key is mandatory when `--env` is set to `production`; if none is given, then Meilisearch will throw an error and refuse to launch.
-
 If no master key is provided in a `development` environment, all routes will be unprotected and publicly accessible.
+
+##### 3.3.4.1. Error and Warning messages
+
+Providing a master key of at least 16 bytes is mandatory when `--env` is set to `production`; if none is given, Meilisearch will throw an error and refuse to launch.
+
+```
+Error: You must provide a master key to secure your instance in a production environment. It can be specified via the MEILI_MASTER_KEY environment variable or the --master-key launch option.
+
+We generated a secure master key for you (you can safely use this token):
+
+>> --master-key `:suggestedMasterKey` <<
+```
+
+Providing a master key of at least 16 bytes is mandatory when `--env` is set to `production`; if it is given but too short then, Meilisearch will throw an error and refuse to launch.
+
+```
+Error: The master key must be at least 16 bytes in a production environment. The provided key is only `:numBytes` bytes.
+
+We generated a secure master key for you (you can safely use this token):
+
+>> --master-key `:suggestedMasterKey` <<
+```
+
+Providing a master key of less than 16 bytes when `--env` is set to `development` displays a warning message.
+
+```
+Meilisearch started with a master key considered unsafe for use in a production environment.
+
+A master key of at least 16 bytes will be required when switching to a production environment.
+
+We generated a new secure master key for you (you can safely use this token):
+
+>> --master-key `:suggestedMasterKey` <<
+
+Restart Meilisearch with the argument above to use this new and secure master key.
+```
+
+Not providing a master key when `--env` is set to `development` displays a warning message.
+
+```
+No master key was found. The server will accept unidentified requests.
+
+A master key of at least 16 bytes will be required when switching to a production environment.
+
+If you need protection in a development environment, we generated a secure master key for you (you can safely use this token):
+
+>> --master-key `:suggestedMasterKey` <<
+
+Restart Meilisearch with the argument above to use this new and secure master key.
+```
+
 
 #### 3.3.5. Disable analytics
 
@@ -452,4 +502,3 @@ N/A
 
 - Redo the command-line to create a more interactive CLI
 - Autocomplete for the options when using the Meilisearch CLI
-- Minimal requirement when setting the master key, for example, a minimal number of characters
