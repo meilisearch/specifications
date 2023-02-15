@@ -534,23 +534,19 @@ HTTP Code: `404 Not Found`
 
 - The `:taskUid` is inferred when the message is generated.
 
-#### 8. `MEILI_MAX_TASK_DB_SIZE` env var and `--max-task-db-size` CLI option
-
-See [0119-instance-options](0119-instance-options.md##3312-max-taskdb-size)
-
-#### 9. Asynchronous Write Operations on Index resource
+#### 8. Asynchronous Write Operations on Index resource
 
 - 💡 Automatic index creation using the `/indexes/:indexToCreate/documents` route generates a `documentAdditionOrUpdate` task that also handles index creation.
 
-#### 10. Paginate `task` resource lists
+#### 9. Paginate `task` resource lists
 
 The API endpoint `GET /tasks` is browsable using a keyset-based pagination.
 
-##### 10.1. Why a Seek/Keyset based pagination?
+##### 9.1. Why a Seek/Keyset based pagination?
 
 Keyset-based pagination is more appropriate when the data can grow or shrink quickly in terms of magnitude.
 
-###### 10.1.1. Pros
+###### 9.1.1. Pros
 
 The performance is better than the not-so-good but old pagination with `offset`/`limit`.
 
@@ -558,11 +554,11 @@ Seek/Keyset pagination keeps the results consistent between each page as the dat
 
 Moreover, the performance is superior to traditional pagination since the computational complexity remains constant to reach the identifier marking the beginning of the new slice to be returned from a hash table.
 
-###### 10.1.2. Cons
+###### 9.1.2. Cons
 
 The main drawback of this type of pagination is that it does not navigate within a finite number of pages. It is also limited to a precise sorting criterion on unique identifiers ordered sequentially.
 
-##### 10.2. Response attributes
+##### 9.2. Response attributes
 
 | field | type | description                          |
 |-------|------|--------------------------------------|
@@ -570,14 +566,14 @@ The main drawback of this type of pagination is that it does not navigate within
 | from | integer | The first task uid returned |
 | next | integer - nullable  | Represents the value to send in `from` to fetch the next slice of the results. The first item for the next slice starts at this exact number. When the returned value is null, it means that all the data have been browsed in the given order. |
 
-##### 10.3. GET query parameters
+##### 9.3. GET query parameters
 
 | field | type | required | description  |
 |-------|------|----------|--------------|
 | limit | integer  | No       | Default `20`. Limit on the number of tasks to be returned. |
 | from | integer  | No       | Limit results to tasks with uids equal to and lower than this uid. |
 
-##### 10.4. Usage examples
+##### 9.4. Usage examples
 
 This part demonstrates keyset paging in action on `/tasks`. The items `uid` remains sorted sequentially and can be used to navigate a list of `tasks` objects.
 
@@ -666,44 +662,44 @@ This part demonstrates keyset paging in action on `/tasks`. The items `uid` rema
 
 - 💡 `next` response parameter is null because there are no more `tasks` to fetch. It means that the response represents the last slice of results for the given resource list.
 
-##### 10.5. Behaviors for `limit` and `from` query parameters
+##### 9.5. Behaviors for `limit` and `from` query parameters
 
-###### 10.5.1. `limit`
+###### 9.5.1. `limit`
 
 - If `limit` is not set, the default value is chosen.
 
-###### 10.5.2. `from`
+###### 9.5.2. `from`
 
 - If `from` is set with an out of bounds task `uid`, the response returns the tasks that are the nearest to the specified uid, the `next` field is set to the next page. It will be equivalent to call the `/tasks` route without any parameter.
 
-###### 10.5.3. Errors
+###### 9.5.3. Errors
 
-- 🔴 Sending a value with a different type than `Integer` for `limit` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
-- 🔴 Sending a value with a different type than `Integer` for `from` returns a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
+- 🔴 Sending a value with a different type than `Integer` for `limit` returns an [invalid_task_limit](0061-error-format-and-definitions.md#invalid_task_limit) error.
+- 🔴 Sending a value with a different type than `Integer` for `from` returns an [invalid_task_from](0061-error-format-and-definitions.md#invalid_task_from) error.
 
-#### 11. Filtering task resources
+#### 10. Filtering task resources
 
 The tasks API endpoints are filterable by  `uids`, `indexUids`, `types`, `statuses`, `canceledBy`, `beforeEnqueuedAt`, `afterEnqueuedAt`, `beforeStartedAt`, `afterStartedAt`, `beforeFinishedAt`,  `afterFinishedAt` query parameters.
 
-##### 11.1 Query parameters definition
+##### 10.1 Query parameters definition
 
 | parameter | type   | required | description                                                                                                                                                                                                                             |
 |-----------|--------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| uids  | integer | No       | Permits to filter tasks by their related unique identifier. By default, when `uids` query parameter is not set, all the tasks are concerned. It is possible to specify several uid by separating them with the `,` character. |
-| indexUids  | string | No       | Permits to filter tasks by their related index. By default, when `indexUids` query parameter is not set, the tasks of all the indexes are concerned. It is possible to specify several indexUids by separating them with the `,` character. |
-| statuses    | string | No       | Permits to filter tasks by their status. By default, when `statuses` query parameter is not set, all task statuses are concerned. It's possible to specify several statuses by separating them with the `,` character.                        |
-| types      | string | No       | Permits to filter tasks by their related type. By default, when `types` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
+| uids  | integer | No       | Permits to filter tasks by their related unique identifier. By default, when `uids` query parameter is not set or set to `*`, all the tasks are concerned. It is possible to specify several uid by separating them with the `,` character. |
+| indexUids  | string | No       | Permits to filter tasks by their related index. By default, when `indexUids` query parameter is not set or set to `*`, the tasks of all the indexes are concerned. It is possible to specify several indexUids by separating them with the `,` character. |
+| statuses    | string | No       | Permits to filter tasks by their status. By default, when `statuses` query parameter is not set or set to `*`, all task statuses are concerned. It's possible to specify several statuses by separating them with the `,` character.                        |
+| types      | string | No       | Permits to filter tasks by their related type. By default, when `types` query parameter is not set or set to `*`, all task types are concerned. It's possible to specify several types by separating them with the `,` character.                       |
 | canceledBy | integer | No | Permits to filter tasks by the `taskCancelation` uid that canceled them. It's possible to specify several task uids by separating them with the `,` character. |
-| beforeEnqueuedAt | string | No       | Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before the given filter value.              |
-| afterEnqueuedAt | string | No       | Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued after the given filter value.  |
-| beforeStartedAt | string | No       | Filter tasks based on their startedAt time. Retrieve tasks started before the given value.                |
-| afterStartedAt | string | No       | Filter tasks based on their startedAt time. Retrieve tasks started after the given filter value.                    |
-| beforeFinishedAt | string | No       | Filter tasks based on their finishedAt time. Retrieve tasks finished before the given filter value.  |
-| afterFinishedAt | string | No       | Filter tasks based on their finishedAt time. Retrieve tasks finished after the given filter value.                 |
+| beforeEnqueuedAt | string | No       | Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before the given filter value. By default, when `beforeEnqueuedAt` query parameter is not set or set to `*`, all task are selected.             |
+| afterEnqueuedAt | string | No       | Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued after the given filter value. By default, when `afterEnqueuedAt` query parameter is not set or set to `*`, all task are selected.  |
+| beforeStartedAt | string | No       | Filter tasks based on their startedAt time. Retrieve tasks started before the given value. By default, when `beforeStartedAt` query parameter is not set or set to `*`, all task are selected.               |
+| afterStartedAt | string | No       | Filter tasks based on their startedAt time. Retrieve tasks started after the given filter value. By default, when `afterStartedAt` query parameter is not set or set to `*`, all task are selected.                   |
+| beforeFinishedAt | string | No       | Filter tasks based on their finishedAt time. Retrieve tasks finished before the given filter value. By default, when `beforeFinishedAt` query parameter is not set or set to `*`, all task are selected. |
+| afterFinishedAt | string | No       | Filter tasks based on their finishedAt time. Retrieve tasks finished after the given filter value. By default, when `afterFinishedAt` query parameter is not set or set to `*`, all task are selected.                |
 
-##### 11.2. Query Parameters Behaviors
+##### 10.2. Query Parameters Behaviors
 
-###### 11.2.1. `uids`
+###### 10.2.1. `uids`
 
  Filter tasks by their related unique identifier. By default, when `uids` query parameter is not set, all the tasks are concerned. It is possible to specify several uid by separating them with the `,` character.
 
@@ -713,9 +709,9 @@ The tasks API endpoints are filterable by  `uids`, `indexUids`, `types`, `status
 
 `uids` is **case-unsensitive**.
 
-- 🔴 Sending values with a different type than `Integer` being separated by `,` for the `uid` parameter returns an [`invalid_task_uids_filter`](0061-error-format-and-definitions.md#invalid_task_uids_filter) error.
+- 🔴 Sending values with a different type than `Integer` being separated by `,` for the `uids` parameter returns an [`invalid_task_uids`](0061-error-format-and-definitions.md#invalid_task_uids) error.
 
-###### 11.2.2. `indexUids`
+###### 10.2.2. `indexUids`
 
 Filter tasks by their related index. By default, when `indexUids` query parameter is not set, the tasks of all the indexes are concerned. It is possible to specify several indexUids by separating them with the `,` character.
 
@@ -725,7 +721,9 @@ Filter tasks by their related index. By default, when `indexUids` query paramete
 
 `indexUids` is **case-sensitive**.
 
-###### 11.2.3. `statuses`
+- 🔴 Sending an invalid index uid format returns an [`invalid_task_index_uids`](0061-error-format-and-definitions.md#invalid_task_uids) error is returned.
+
+###### 10.2.3. `statuses`
 
 Filter tasks by their status. By default, when `statuses` query parameter is not set, all task statuses are concerned. It's possible to specify several statuses by separating them with the `,` character.
 
@@ -735,9 +733,9 @@ Filter tasks by their status. By default, when `statuses` query parameter is not
 
 `statuses` is **case-insensitive**.
 
-- 🔴 If the `statuses` parameter value is not consistent with one of the task statuses, an [`invalid_task_statuses_filter`](0061-error-format-and-definitions.md#invalid_task_statuses_filter) error is returned.
+- 🔴 If the `statuses` parameter value is not consistent with one of the task statuses, an [`invalid_task_statuses`](0061-error-format-and-definitions.md#invalid_task_statuses) error is returned.
 
-###### 11.2.4. `types`
+###### 10.2.4. `types`
 
 Filter tasks by their related type. By default, when `types` query parameter is not set, all task types are concerned. It's possible to specify several types by separating them with the `,` character.
 
@@ -747,9 +745,9 @@ Filter tasks by their related type. By default, when `types` query parameter is 
 
 `types` is **case-insensitive**.
 
-- 🔴 If the `types` parameter value is not consistent with one of the task types, an [`invalid_task_types_filter`](0061-error-format-and-definitions.md#invalid_task_types_filter) error is returned.
+- 🔴 If the `types` parameter value is not consistent with one of the task types, an [`invalid_task_types`](0061-error-format-and-definitions.md#invalid_task_types) error is returned.
 
-###### 11.2.5. `canceledBy`
+###### 10.2.5. `canceledBy`
 
 Filter tasks by the `taskCancelation` uid that canceled them. It's possible to specify several task uids by separating them with the `,` character.
 
@@ -759,9 +757,9 @@ Filter tasks by the `taskCancelation` uid that canceled them. It's possible to s
 
 `canceledBy` is **case-insensitive**.
 
-- 🔴Sending a value with a different type than `Integer` for the `canceledBy` parameter returns an [`invalid_task_canceled_by_filter`](0061-error-format-and-definitions.md#invalid_task_canceled_by_filter) error.
+- 🔴 Sending a value with a different type than `Integer` for the `canceledBy` parameter returns an [`invalid_task_canceled_by`](0061-error-format-and-definitions.md#invalid_task_canceled_by) error.
 
-###### 11.2.6. Date Parameters
+###### 10.2.6. Date Parameters
 
 Date filters accepts the RFC 3339 format. The following syntaxes are valid:
 
@@ -769,7 +767,7 @@ Date filters accepts the RFC 3339 format. The following syntaxes are valid:
 - `YYYY-MM-DDTHH:MM:SSZ`
 - `YYYY-MM-DDTHH:MM:SS+01:00`
 
-###### 11.2.6.1. `beforeEnqueuedAt` and `afterEnqueuedAt`
+###### 10.2.6.1. `beforeEnqueuedAt` and `afterEnqueuedAt`
 
 Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before/after the given filter value.
 
@@ -778,9 +776,10 @@ Filter tasks based on their enqueuedAt time. Retrieve tasks enqueued before/afte
 - Default: `*`
 
 - 🔴 The date filters are exclusive. It means the given value will not be included.
-- 🔴 Sending an invalid value for the date parameter returns an [`invalid_task_date_filter`](0061-error-format-and-definitions.md#invalid_task_date_filter) error.
+- 🔴 Sending an invalid value for `beforeEnqueuedAt` parameter returns an [`invalid_task_before_enqueued_at`](0061-error-format-and-definitions.md#invalid_task_before_enqueued_at) error.
+- 🔴 Sending an invalid value for `afterEnqueuedAt` parameter returns an [`invalid_task_after_enqueued_at`](0061-error-format-and-definitions.md#invalid_task_after_enqueued_at) error.
 
-###### 11.2.6.2. `beforeStartedAt` and `afterStartedAt`
+###### 10.2.6.2. `beforeStartedAt` and `afterStartedAt`
 
 Filter tasks based on their startedAt time. Retrieve tasks started before/after the given filter value.
 
@@ -789,9 +788,10 @@ Filter tasks based on their startedAt time. Retrieve tasks started before/after 
 - Default: `*`
 
 - 🔴 The date filters are exclusive. It means the given value will not be included.
-- 🔴 Sending an invalid value for the date parameter returns an [`invalid_task_date_filter`](0061-error-format-and-definitions.md#invalid_task_date_filter) error.
+- 🔴 Sending an invalid value for `beforeStartedAt` parameter returns an [`invalid_task_before_started_at`](0061-error-format-and-definitions.md#invalid_task_before_started_at) error.
+- 🔴 Sending an invalid value for `afterStartedAt` parameter returns an [`invalid_task_after_started_at`](0061-error-format-and-definitions.md#invalid_task_after_started_at) error.
 
-###### 11.2.6.3. `beforeFinishedAt` and `afterFinishedAt`
+###### 10.2.6.3. `beforeFinishedAt` and `afterFinishedAt`
 
 Filter tasks based on their finishedAt time. Retrieve tasks finished before/after the given filter value.
 
@@ -800,10 +800,11 @@ Filter tasks based on their finishedAt time. Retrieve tasks finished before/afte
 - Default: `*`
 
 - 🔴 The date filters are exclusive. It means the given value will not be included.
-- 🔴 Sending an invalid value for the date parameter returns an [`invalid_task_date_filter`](0061-error-format-and-definitions.md#invalid_task_date_filter) error.
+- 🔴 Sending an invalid value for `beforeFinishedAt` parameter returns an [`invalid_task_before_finished_at`](0061-error-format-and-definitions.md#invalid_task_before_finished_at) error.
+- 🔴 Sending an invalid value for `afterFinishedAt` parameter returns an [`invalid_task_after_finished_at`](0061-error-format-and-definitions.md#invalid_task_after_finished_at) error.
 
 
-###### 11.2.7. Select multiple values for the same filter
+###### 10.2.7. Select multiple values for the same filter
 
 It is possible to specify multiple values for a filter using the `,` character.
 
@@ -811,7 +812,7 @@ For example, to select the `enqueued` and `processing` tasks of the `movies` and
 
 ---
 
-##### 11.3. Usages examples
+##### 10.3. Usages examples
 
 This part demonstrates filtering on `/tasks`.
 
@@ -986,7 +987,7 @@ This part demonstrates filtering on `/tasks`.
 
 ---
 
-##### 11.4. Empty `results`
+##### 10.4. Empty `results`
 
 If no results match the filters. A response is returned with an empty `results` array.
 

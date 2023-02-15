@@ -138,6 +138,7 @@ Instead of using `RUST_LOG`, we create a `MEILI_LOG_LEVEL` environment variable 
 | INFO  | Default Log Level. It displays high level informations of events occuring in the search engine.                   |
 | DEBUG | Used for debugging and development purposes.  More verbose than INFO.                                             |
 | TRACE | Display everything happening at engine level. Can be useful for rust developers dealing with complex issues       |
+| OFF   | Disable the logs.                                                                                                 |
 
 
 ##### Log Format
@@ -149,7 +150,7 @@ Instead of using `RUST_LOG`, we create a `MEILI_LOG_LEVEL` environment variable 
 ###### Mandatory log format part. E.g [TIME_FORMAT LOG_LEVEL MODULE] part.
 
 - Time when the request was started to process (in rfc3339 format)
-- Log levels are  `ERROR`, `WARN`, `INFO`, `DEBUG`, `TRACE`.
+- Log levels are  `ERROR`, `WARN`, `INFO`, `DEBUG`, `TRACE`, `OFF`.
 - The module part gives information about the module that records the log.
 
 ###### HTTP Call
