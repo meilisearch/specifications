@@ -456,7 +456,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`uid` is not a valid index uid. Index uid can be an integer or a string containing only alphanumeric characters, hyphens (-) and underscores (_).",
+    "message": "`uid` is not a valid index uid pattern. Index uid patterns can be an integer or a string containing only alphanumeric characters, hyphens (-), underscores (_), and optionally end with a star (*).",
     ...
 }
 ```
