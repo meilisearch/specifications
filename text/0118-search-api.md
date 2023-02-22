@@ -94,7 +94,7 @@ expression     = or
 or             = and ("OR" WS+ and)*
 and            = not ("AND" WS+ not)*
 not            = ("NOT" WS+ not) | primary
-primary        = "(" WS* expression WS* ")" | geoRadius | in | condition | exists | not_exists | to
+primary        = "(" WS* expression WS* ")" | geoRadius | geoBoundingBox | in | condition | exists | not_exists | to
 in             = attribute "IN" WS* "[" value_list "]"
 condition      = attribute ("=" | "!=" | ">" | ">=" | "<" | "<=") value
 exists         = attribute "EXISTS"
@@ -163,6 +163,7 @@ The grammar for the value of a filterable attribute is the same as the grammar f
 - OR: `filter OR filter`
 - NOT: `NOT filter`
 - GeoSearch: `_geoRadius(lat, lng, distance)`
+- GeoSearch: `_geoBoundingBox([lat, lng], [lat, lng])`
 
 ###### 3.1.2.1.5 Equality
 
@@ -350,7 +351,8 @@ attribute != value1 AND attribute != value2 AND ...
 
 ###### 3.1.2.1.12 Geo Search
 
-The `_geoRadius` operator selects the documents whose geographical coordinates fall within a certain range of a given coordinate. See [GeoSearch](0059-geo-search.md) for more information.
+- The `_geoRadius` operator selects the documents whose geographical coordinates fall within a certain range of a given coordinate. See [GeoSearch](0059-geo-search.md) for more information.
+- The `_geoBoundingBox` operator selects the documents whose geographical coordinates fall within a square described by the given coordinates. See [GeoSearch](0059-geo-search.md) for more information.
 
 ##### 3.1.2.2. Array Syntax
 

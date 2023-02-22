@@ -191,7 +191,7 @@ Following the [`sort` specification feature](https://github.com/meilisearch/spec
 }
 ```
 - 🔴 Specifying parameters that do not conform to the `_geoPoint` signature causes the API to return an [invalid_search_parameter_sort](0061-error-format-and-definitions.md#invalid_search_parameter_sort) error.
-- 🔴 Using `_geoDistance`, `_geo` or `_geoRadius` in a sort expression causes the API to return an[invalid_search_parameter_sort](0061-error-format-and-definitions.md#invalid_search_parameter_sort) error.
+- 🔴 Using `_geoDistance`, `_geo`, `_geoRadius` or `_geoBoundingBox` in a sort expression causes the API to return an[invalid_search_parameter_sort](0061-error-format-and-definitions.md#invalid_search_parameter_sort) error.
 
 ---
 
@@ -206,13 +206,13 @@ Following the [`sort` specification feature](https://github.com/meilisearch/spec
 - Type: int
 - Not required
 
-> 💡 `_geoDistance` response field is only computed and shown when the end-user have sorted documents around a `_geoPoint`. So if the end-user filters documents using a `_geoRadius` built-in filter without sorting them around a `_geoPoint`, this field `_geoDistance` will not appear in the search response.
+> 💡 `_geoDistance` response field is only computed and shown when the end-user have sorted documents around a `_geoPoint`. So if the end-user filters documents using a `_geoRadius/_geoBoundingBox` built-in filter without sorting them around a `_geoPoint`, this field `_geoDistance` will not appear in the search response.
 
 ---
 
 #### Related Ranking Rules Settings API Errors
 
-- 🔴 Specifying a custom ranking rule with `_geo`, `_geoDistance`, `_geoPoint`, or `_geoRadius` returns an [invalid_settings_ranking_rules](0061-error-format-and-definitions.md#invalid_settings_ranking_rules) error.
+- 🔴 Specifying a custom ranking rule with `_geo`, `_geoDistance`, `_geoPoint`, `_geoRadius` or `_geoBoundinBox` returns an [invalid_settings_ranking_rules](0061-error-format-and-definitions.md#invalid_settings_ranking_rules) error.
 
 ---
 
