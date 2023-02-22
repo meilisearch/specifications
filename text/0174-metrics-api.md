@@ -1,6 +1,6 @@
 # Metrics API
 
-This endpoint is currently in beta.
+This endpoint is currently experimental.
 
 This means that it can break at any time between two minor versions as long as it is not stabilized.
 
