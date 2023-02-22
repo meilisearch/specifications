@@ -18,7 +18,7 @@ Improve the capabilities of a Meilisearch instance regarding observability and e
 
 ### 3.1. Activating the feature
 
-By default, the `/metrics` endpoint is not accessible. To activate it, the `--enable-metrics-route` CLI option or `MEILI_ENABLE_METRICS_ROUTE` env var must be specified at launch. See [Instance Options](0119-instance-options.md)
+By default, the `/metrics` endpoint is not accessible. To activate it, the `--experimental-enable-metrics` CLI option or `MEILI_EXPERIMENTAL_ENABLE_METRICS` env var must be specified at launch. See [Instance Options](0119-instance-options.md)
 
 ### 3.2. `metrics` API resource definition
 
@@ -130,7 +130,7 @@ meilisearch_total_index 2
 
 #### 3.3.2. Errors
 
-- 🔴 If `--enable-metrics-route` CLI option / `MEILI_ENABLE_METRICS_ROUTE` env var is not specified at launch, the API returns a `404 Not Found` HTTP response.
+- 🔴 If `--experimental-enable-metrics` CLI option / `MEILI_EXPERIMENTAL_ENABLE_METRICS` env var is not specified at launch, the API returns a `404 Not Found` HTTP response.
 
 ##### 3.3.2.1 Auth Errors
 
