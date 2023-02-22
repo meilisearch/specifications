@@ -171,7 +171,7 @@ curl \
 - 🔴 Sending a payload excessing the limit will lead to a 413 Payload Too Large - **payload_too_large** error code.
 - 🔴 Sending an invalid CSV format will lead to a 400 bad_request - **malformed_payload** error code.
 - 🔴 Sending a CSV header that does not conform to the specification will lead to a 400 bad_request - **malformed_payload** error code.
-- 🔴 Sending an invalid csv delimiter: not exactly one ASCII char. This will lead to a 400 bad_request - **invalid_index_csv_delimiter** error code.
+- 🔴 Sending an invalid csv delimiter: not exactly one ASCII char. This will lead to a 400 bad_request - **invalid_document_csv_delimiter** error code.
 
 ##### Errors Definition
 
