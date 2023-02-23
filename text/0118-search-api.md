@@ -1162,7 +1162,9 @@ If a field distributed as a facet contains no value, it is returned as a `facetD
 - Type: Object
 - Required: False
 
-When using the `facets` parameter, the distributed facets that stricly contain numeric values are displayed in a `facetStats` object that contains, per facet, the numeric `min` and `max` values of the hits returned by the search query.
+When using the `facets` parameter, the distributed facets that contain some numeric values are displayed in a `facetStats` object that contains, per facet, the numeric `min` and `max` values of the hits returned by the search query.
+
+If none of the hits returned by the search query have a numeric value for a facet, this facet is not part of the `facetStats` object.
 
 It ignores string values even if parseable. e.g `"21"` isn't considered by the engine when computing the `facetStats` `min` and `max`.
 
