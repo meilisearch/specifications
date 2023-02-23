@@ -410,6 +410,8 @@ Attributes used in `facets` must be added to the `filterableAttributes` list of 
 
 The distribution of the different facets is returned in the `facetDistribution` response parameter.
 
+Statistics are computed and returned within the `facetStats` object for distributed facets that contain only strictly numerical values. See [`facetStats`](#3210-facetstats) section.
+
 #### 3.1.5. `limit`
 
 - Type: Integer
@@ -839,8 +841,9 @@ Only the documents containing ALL the query words (i.e. in the `q` parameter) ar
 | [`totalPages`](#327-totalpages)                 | Integer    | False    |
 | [`totalHits`](#328-totalhits)                   | Integer    | False    |
 | [`facetDistribution`](#329-facetdistribution)   | Object     | False    |
-| [`processingTimeMs`](#3210-processingtimems)    | Integer    | True     |
-| [`query`](#3211-query)                          | String     | True     |
+| [`facetStats`](#3210-facetstats)                | Object     | False    |
+| [`processingTimeMs`](#3211-processingtimems)    | Integer    | True     |
+| [`query`](#3212-query)                          | String     | True     |
 
 #### 3.2.1. `hits`
 
@@ -1152,16 +1155,27 @@ Added to the search response when `facets` is set for a search query. It contain
 
 If a field distributed as a facet contains no value, it is returned as a `facetDistribution` field with an empty object as value.
 
-> See [3.1.4. `facet`](#314-facets) section.
+> See [3.1.4. `facets`](#314-facets) section.
 
-#### 3.2.10. `processingTimeMs`
+#### 3.2.10. `facetStats`
+
+- Type: Object
+- Required: False
+
+When using the `facets` parameter at search to distribute facets, the facets that strictly contains numeric values are displayed in a `facetStats` object that contains, per facet, the numeric `min` and `max` values of the hits returned by the search query.
+
+It ignores string values even if parseable. e.g `"21"` isn't considered by the engine when computing the `facetStats` `min` and `max`.
+
+> See [3.1.4. `facets`](#314-facets) section.
+
+#### 3.2.11. `processingTimeMs`
 
 - Type: Integer
 - Required: True
 
 Processing time of the search query in **milliseconds**.
 
-#### 3.2.11. `query`
+#### 3.2.12. `query`
 
 - Type: String
 - Required: True
