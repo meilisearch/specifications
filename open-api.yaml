@@ -1840,6 +1840,19 @@ paths:
                               length: 5
                             - start: 155
                               length: 5
+                    facetDistributions:
+                      genres:
+                        action: 273
+                        animation: 118
+                        adventure: 132
+                        fantasy: 67
+                        comedy: 475
+                        mystery: 70
+                        thriller: 217
+                    facetStats:
+                      price:
+                        min: 1
+                        max: 4999.99
                     limit: 0
                     offset: 0
                     estimatedTotalHits: 0
@@ -1995,6 +2008,19 @@ paths:
                               length: 5
                             - start: 155
                               length: 5
+                    facetDistributions:
+                      genres:
+                        action: 273
+                        animation: 118
+                        adventure: 132
+                        fantasy: 67
+                        comedy: 475
+                        mystery: 70
+                        thriller: 217
+                    facetStats:
+                      price:
+                        min: 1
+                        max: 4999.99
                     limit: 0
                     offset: 0
                     estimatedTotalHits: 0
