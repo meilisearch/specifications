@@ -3707,7 +3707,7 @@ paths:
       - $ref: '#/components/parameters/taskUid'
   /metrics:
     get:
-      summary: (BETA) Get prometheus format metrics for observability and monitoring
+      summary: (EXPERIMENTAL) Get prometheus format metrics for observability and monitoring
       description: 'See [technical specification](https://github.com/meilisearch/specifications/blob/main/text/0174-metrics-api.md)'
       tags:
         - stats
