@@ -290,7 +290,11 @@ components:
               type: number
               description: The maximum value for the numerical facet being distributed.
           description: |
-            When using the facets parameter at to distribute facets, the facets that stricly contain numeric values are displayed in a facetStats object that contains, per facet, the numeric min and max values of the hits returned by the search query.
+            When using the facets parameter, the distributed facets that stricly contain numeric values are displayed in a facetStats object that contains, per facet, the numeric min and max values of the hits returned by the search query.
+          example:
+            price:
+              min: 1
+              max: 4999.99
         processingTimeMs:
           type: integer
           description: Processing time of the query.
