@@ -1840,7 +1840,7 @@ paths:
                               length: 5
                             - start: 155
                               length: 5
-                    facetDistributions:
+                    facetDistribution:
                       genres:
                         action: 273
                         animation: 118
@@ -2008,7 +2008,7 @@ paths:
                               length: 5
                             - start: 155
                               length: 5
-                    facetDistributions:
+                    facetDistribution:
                       genres:
                         action: 273
                         animation: 118
