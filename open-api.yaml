@@ -279,6 +279,18 @@ components:
               comedy: 475
               mystery: 70
               thriller: 217
+        facetStats:
+          type: object
+          additionalProperties:
+            type: object
+            min:
+              type: number
+              description: The minimum value for the numerical facet being distributed.
+            max:
+              type: number
+              description: The maximum value for the numerical facet being distributed.
+          description: |
+            When using the facets parameter at to distribute facets, the facets that stricly contain numeric values are displayed in a facetStats object that contains, per facet, the numeric min and max values of the hits returned by the search query.
         processingTimeMs:
           type: integer
           description: Processing time of the query.
