@@ -3225,25 +3225,24 @@ paths:
                 - queries
             examples:
               Example:
-                - value:
-                    indexUid: movies
-                    q: Harry
-                    offset: 0
-                    limit: 20
-                    filter: (genres = Horror AND genres = Mystery) OR release_date > 523242000
-                    facets:
-                      - genres
-                      - author
-                    attributesToRetrieve:
-                      - title
-                      - overview
-                    attributesToCrop:
-                      - overview
-                    cropLength: 20
-                    attributesToHighlight:
-                      - overview
-                    showMatchesPosition: true
-                    wordsMatchingStrategy: all
+                - indexUid: movies
+                  q: Harry
+                  offset: 0
+                  limit: 20
+                  filter: (genres = Horror AND genres = Mystery) OR release_date > 523242000
+                  facets:
+                    - genres
+                    - author
+                  attributesToRetrieve:
+                    - title
+                    - overview
+                  attributesToCrop:
+                    - overview
+                  cropLength: 20
+                  attributesToHighlight:
+                    - overview
+                  showMatchesPosition: true
+                  wordsMatchingStrategy: all
       responses:
         '200':
           description: Ok
@@ -3264,31 +3263,30 @@ paths:
                         $ref: '#/components/schemas/searchResponse/properties'
               examples:
                 Example:
-                  - value:
-                      indexUid: movies
-                      hits:
-                        - id: 25684
+                  - indexUid: movies
+                    hits:
+                      - id: 25684
+                        title: American Ninja 5
+                        poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
+                        overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
+                        release_date: 725846400
+                        _formatted:
+                          id: 25684
                           title: American Ninja 5
                           poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
-                          overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
+                          overview: 'When a scientists daughter is kidnapped, American <em>Ninja</em>, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the <em>ninja</em>.'
                           release_date: 725846400
-                          _formatted:
-                            id: 25684
-                            title: American Ninja 5
-                            poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
-                            overview: 'When a scientists daughter is kidnapped, American <em>Ninja</em>, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the <em>ninja</em>.'
-                            release_date: 725846400
-                          _matchesPosition:
-                            overview:
-                              - start: 49
-                                length: 5
-                              - start: 155
-                                length: 5
-                      limit: 0
-                      offset: 0
-                      estimatedTotalHits: 0
-                      query: string
-                      processingTimeMs: 0
+                        _matchesPosition:
+                          overview:
+                            - start: 49
+                              length: 5
+                            - start: 155
+                              length: 5
+                    limit: 0
+                    offset: 0
+                    estimatedTotalHits: 0
+                    query: string
+                    processingTimeMs: 0
         '401':
           $ref: '#/components/responses/401'
       parameters:
