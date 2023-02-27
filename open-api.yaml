@@ -3186,7 +3186,7 @@ paths:
   /multi-search:
     post:
       operationId: multi_search
-      summary: Make multiple search queries in a single request
+      summary: Multiple Search
       description: |
         Make multiple search queries in a single request.
 
