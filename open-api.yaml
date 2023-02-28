@@ -3225,24 +3225,25 @@ paths:
                 - queries
             examples:
               Example:
-                - indexUid: movies
-                  q: Harry
-                  offset: 0
-                  limit: 20
-                  filter: (genres = Horror AND genres = Mystery) OR release_date > 523242000
-                  facets:
-                    - genres
-                    - author
-                  attributesToRetrieve:
-                    - title
-                    - overview
-                  attributesToCrop:
-                    - overview
-                  cropLength: 20
-                  attributesToHighlight:
-                    - overview
-                  showMatchesPosition: true
-                  wordsMatchingStrategy: all
+                queries:
+                  - indexUid: movies
+                    q: Harry
+                    offset: 0
+                    limit: 20
+                    filter: (genres = Horror AND genres = Mystery) OR release_date > 523242000
+                    facets:
+                      - genres
+                      - author
+                    attributesToRetrieve:
+                      - title
+                      - overview
+                    attributesToCrop:
+                      - overview
+                    cropLength: 20
+                    attributesToHighlight:
+                      - overview
+                    showMatchesPosition: true
+                    wordsMatchingStrategy: all
       responses:
         '200':
           description: Ok
@@ -3263,7 +3264,8 @@ paths:
                         $ref: '#/components/schemas/searchResponse/properties'
               examples:
                 Example:
-                  - indexUid: movies
+                  results:
+                    - indexUid: movies
                     hits:
                       - id: 25684
                         title: American Ninja 5
