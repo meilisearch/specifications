@@ -1295,7 +1295,7 @@ tags:
       * A POST route: this is the preferred route when using API authentication, as it allows [preflight request](https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request) caching and better performances.
       * A GET route: the usage of this route is discouraged, unless you have good reason to do otherwise (specific caching abilities for example).
       Other than the differences mentioned above, the two routes are strictly equivalent.
-      * A multi-search route allowing to perform multiple search queries in a single HTTP request.
+      * A POST multi-search route allowing to perform multiple search queries in a single HTTP request.
   - name: Tasks
     description: |
       The `tasks` route gives information about the progress of the [asynchronous operations](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html).
@@ -3188,9 +3188,9 @@ paths:
       operationId: multi_search
       summary: Multiple Search
       description: |
-        Make multiple search queries in a single request.
+        Make multiple search queries in a single HTTP request.
 
-        The queries can span different indexes or lookup the results of different filters on the same index.
+        The queries can span different indexes or lookup the results of different filters on the same index. Each query has its own results set.
       tags:
         - Search
       security:
