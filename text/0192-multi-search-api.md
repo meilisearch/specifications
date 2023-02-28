@@ -2,7 +2,14 @@
 
 ## 1. Summary
 
-The multi-search endpoint performs a batch of search queries as if using the [search API](./0118-search-api.md).
+The multi-search endpoint performs a batch of search queries as if using the [search API](./0118-search-api.md) for an index.
+
+This endpoint allows, for example:
+
+- Execute different search queries on the same index
+- Execute the same search query on different indexes
+
+Each search query has its own results set.
 
 ## 2. Motivation
 
@@ -28,6 +35,8 @@ If any of the search queries fail to execute, the response returns the correspon
 - 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
+- 🔴 Sending an inexistent `indexUid` in a query object returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
+- 🔴 Sending an invalid format for the `indexUid` property in a query object returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 
 ### 3.1. Search Payload Parameters
 
