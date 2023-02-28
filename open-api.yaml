@@ -3266,29 +3266,29 @@ paths:
                 Example:
                   results:
                     - indexUid: movies
-                    hits:
-                      - id: 25684
-                        title: American Ninja 5
-                        poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
-                        overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
-                        release_date: 725846400
-                        _formatted:
-                          id: 25684
+                      hits:
+                        - id: 25684
                           title: American Ninja 5
                           poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
-                          overview: 'When a scientists daughter is kidnapped, American <em>Ninja</em>, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the <em>ninja</em>.'
+                          overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
                           release_date: 725846400
-                        _matchesPosition:
-                          overview:
-                            - start: 49
-                              length: 5
-                            - start: 155
-                              length: 5
-                    limit: 0
-                    offset: 0
-                    estimatedTotalHits: 0
-                    query: string
-                    processingTimeMs: 0
+                          _formatted:
+                            id: 25684
+                            title: American Ninja 5
+                            poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
+                            overview: 'When a scientists daughter is kidnapped, American <em>Ninja</em>, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the <em>ninja</em>.'
+                            release_date: 725846400
+                          _matchesPosition:
+                            overview:
+                              - start: 49
+                                length: 5
+                              - start: 155
+                                length: 5
+                      limit: 0
+                      offset: 0
+                      estimatedTotalHits: 0
+                      query: string
+                      processingTimeMs: 0
         '401':
           $ref: '#/components/responses/401'
       parameters:
