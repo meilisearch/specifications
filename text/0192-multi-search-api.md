@@ -75,7 +75,7 @@ Search queries:
 {
    "queries": [ { "indexUid": "movie", "q": "wonder" }, { "indexUid": "books", "q": "king" } ]
 }
-'''
+```
 
 Search results:
 ```json
