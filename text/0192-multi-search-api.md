@@ -7,7 +7,7 @@ The multi-search endpoint performs a batch of search queries as if using the [se
 This endpoint allows, for example:
 
 - Execute different search queries on the same index
-- Execute the same search query on different indexes
+- Execute search queries on different indexes
 
 Each search query has its own results set.
 
@@ -26,7 +26,7 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 - 🔴 Accessing these routes without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
 - 🔴 Accessing these routes with a key that does not have permissions (i.e. other than the master key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
-If any of the search queries fail to execute, the response returns the corresponding error instead of the array of results.
+If any of the search queries fail to execute, the response returns the corresponding error instead of the array of results. If multiple queries would have failed, only the first encountered failure is returned.
 
 `POST` HTTP verb errors:
 
@@ -66,7 +66,34 @@ Each element of this array is a JSON object with the required field `indexUid`, 
 
 Results of the search queries as an array of search results.
 
-Each element of this array is a JSON object representing the results of the search query with the same index in the `queries` array from the request, and an additional `indexUid` field that is equal to the `indexUid` field in that search query.
+Each element in this array contains the results of the search queries in the same order they have been requested. Additionally to the [usual fields returned by a search result](./0118-search-api.md#31-formatting-search-results), an `indexUid` field is present with the index UID on which the search has been performed.
+
+example:
+
+Search queries:
+```json
+{
+   "queries": [ { "indexUid": "movie", "q": "wonder" }, { "indexUid": "books", "q": "king" } ]
+}
+'''
+
+Search results:
+```json
+{
+   "results": [ 
+      {
+         "indexUid": "movie",
+         "hits": [ { "title": "wonderwoman" } ],
+         // other search results fields: processingTimeMs, limit, ...
+      },
+      {
+         "indexUid": "books",
+         "hits": [ { "title": "king kong theory" } ],
+         // other search results fields: processingTimeMs, limit, ...
+      },
+   ]
+}
+```
 
 The other fields of an element from the `results` array are identical to the fields of the [response from the other search routes](./0118-search-api.md#31-formatting-search-results).
 
