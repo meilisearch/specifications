@@ -2,13 +2,7 @@
 
 ## 1. Summary
 
-The multi-search endpoint performs a batch of search queries as if using the [search API](./0118-search-api.md) for an index.
-
-This endpoint allows, for example:
-
-- Execute different search queries on the same index
-- Execute search queries on different indexes
-
+The multi-search endpoint performs multiple search queries on one or more indexes by bundling them into a single request.
 Each search query has its own results set.
 
 ## 2. Motivation
@@ -26,7 +20,7 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 - 🔴 Accessing these routes without the `Authorization` header returns a [missing_authorization_header](0061-error-format-and-definitions.md#missing_authorization_header) error.
 - 🔴 Accessing these routes with a key that does not have permissions (i.e. other than the master key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
-If any of the search queries fail to execute, the response returns the corresponding error instead of the array of results. If multiple queries would have failed, only the first encountered failure is returned.
+If any of the search queries fail to execute, the response returns the corresponding error instead of the array of results. If multiple queries fail, only the first encountered failure is returned.
 
 `POST` HTTP verb errors:
 
