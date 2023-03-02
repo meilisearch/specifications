@@ -325,7 +325,6 @@ This property allows us to gather essential information to better understand on 
 | indexes.total_distinct_index_count | The total number of distinct indexes queries for the aggregated event. | `6023`
 | indexes.total_single_index | The total number of calls where only one index where queried. | `2007`
 
-
 ## `Index Created`
 
 | Property name | Description | Example |
