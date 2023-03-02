@@ -273,7 +273,11 @@ The auth layer can return the following errors if Meilisearch is secured (a mast
 - 🔴 Accessing this route with a key that does not have the required permissions (i.e. other than the master-key) returns an [invalid_api_key](0061-error-format-and-definitions.md#invalid_api_key) error.
 
 ## 4. Technical Details
-N/A
+
+- Meilisearch can accommodate an **arbitrary number** of indexes as long as the disk size they take is under 2TiB.
+- If having indexes bigger than 2TiB, then Meilisearch can still accommodate them as long as the sum of the disk sizes taken by any group of 20 of the existing indexes is below the size of the virtual address space devoted to a process by the OS (around 80 TiB on x64 Linux).
+- While indexes bigger in size than 2TiB are supported, the performance of making updates to these big indexes might be reduced.
+- While Meilisearch supports an arbitrary number of indexes, having hundreds of indexes accessed at random will trigger more reads from disk and might be slower, the number of concurrently accessed indexes should be limited if possible. For instance, if requiring multi-tenancy, consider using [tenant tokens](./0089-tenant-tokens.md) in a single index rather than creating one index per tenant.
 
 ## 5. Future Possibilities
 
