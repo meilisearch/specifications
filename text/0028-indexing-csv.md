@@ -273,4 +273,3 @@ n/a
 
 - Provide an interface in the future dashboard to upload CSV data into an index and optionally provide the headers types.
 - Set a payload limit directly related to the type of data format. Currently, the payload size is equivalent to [JSON payload size](https://docs.meilisearch.com/reference/features/configuration.html#payload-limit-size). Metrics on feature usage and configuration update should help to choose a better suited value for this type of data format.
-- Accepts more common CSV separators
