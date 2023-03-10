@@ -22,9 +22,9 @@ The PR must be tagged as `Ready For Review` to enter this stage.
 
 To be validated, it must be reviewed and approved by peers, ideally:
 
+- One person from the Engine team.
 - One person from the Integration team.
-- One person from the Core team.
-- One person from the Product team.
+- One person from the Documentation team.
 
 ## Merge State
 
