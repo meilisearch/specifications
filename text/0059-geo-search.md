@@ -15,7 +15,7 @@ The purpose of this specification is to add a first iteration of the **geosearch
 
 - Documents MUST have a `_geo` reserved object to be geosearchable.
 - Filter documents by a given geo radius using the built-in filter `_geoRadius({lat}, {lng}, {distance_in_meters})`.
-- Filter documents by a given geo bounding box using the built-in filter `_geoBoundingBox([{lat}, {lng}], [{lat, lng}])`. The first pair of coordinates represents the top left corner of the bounding box, while the second pair represents the bottom right corner.
+- Filter documents by a given geo bounding box using the built-in filter `_geoBoundingBox([{lat}, {lng}], [{lat, lng}])`. The first pair of coordinates represents the top right corner of the bounding box, while the second pair represents the bottom left corner.
 - It is possible to cumulate several geosearch filters within the `filter` field.
 - Sort documents in ascending/descending order around a geo point. e.g. `_geoPoint({lat}, {lng}):asc`.
 - It is possible to filter and/or sort by geographical criteria of the user's choice.
@@ -138,6 +138,8 @@ csv format example
 - Name: `_geoBoundingBox`
 - Signature: ([{lat:float}:required, {lng:float}:required)], [{lat:float}:required, {lng:float}:required])
 - Not required
+
+The first pair of coordinates represents the top right corner of the bounding box, while the second pair represents the bottom left corner.
 
 >  The `_geo` field has to be set in `filterableAttributes` setting by the developer to activate geo filtering capabilities at search.
 
