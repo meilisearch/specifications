@@ -660,6 +660,109 @@ components:
         - numberOfDocuments
         - isIndexing
         - fieldDistribution
+    searchQuery:
+      type: object
+      additionalProperties: false
+      properties:
+        q:
+          type: string
+          description: Query string.
+          default: '""'
+          example: '"Back to the future"'
+        attributesToRetrieve:
+          type: array
+          description: 'Array of attributes whose fields will be present in the returned documents. Defaults to the [displayedAttributes list](https://docs.meilisearch.com/reference/features/settings.html#displayed-attributes) which contains by default all attributes found in the documents.'
+          items:
+            type: string
+            example: '["title", "overview"]'
+            default: '["*"]'
+        attributesToHighlight:
+          type: array
+          description: Array of attributes whose values will contain highlighted matching terms. Highlighted attributes are returned in `_formatted` response object.
+          items:
+            type: string
+            example: '["title", "overview"]'
+            default: '[]'
+        highlightPreTag:
+          type: string
+          description: Specify the tag to put before the highlighted query terms.
+          example: '<mark>'
+          default: '<em>'
+        highlightPostTag:
+          type: string
+          description: Specify the tag to put after the highlighted query terms.
+          example: '</mark>'
+          default: '</em>'
+        attributesToCrop:
+          type: array
+          description: Array of attributes whose values have to be cropped. Cropped attributes are returned in `_formatted` response object.
+          items:
+            type: string
+            example: '["overview", "author"]'
+            default: '[]'
+        cropMarker:
+          type: string
+          description: Sets the crop marker to apply before and/or after cropped part selected within an attribute defined in `attributesToCrop` parameter.
+          default: '…'
+        cropLength:
+          type: number
+          description: Sets the total number of **words** to keep for the cropped part of an attribute specified in the `attributesToCrop` parameter.
+          default: 10
+        showMatchesPosition:
+          type: boolean
+          description: Defines whether an `_matchesPosition` object that contains information about the matches should be returned or not.
+          default: false
+        matchingStrategy:
+          type: string
+          description: Defines which strategy to use to match the query terms within the documents as search results. Two different strategies are available, `last` and `all`. By default, the `last` strategy is chosen.
+          default: 'last'
+        filter:
+          $ref: '#/components/schemas/filter'
+        facets:
+          type: array
+          description: 'Array of attributes whose fields will be distributed as a facet. If you have [set up filterableAttributes](https://docs.meilisearch.com/reference/features/settings.html#filterable-attributes), you can retrieve the count of matching terms for each [facets](https://docs.meilisearch.com/reference/features/filtering_and_faceted_search.html#faceted-search).[Learn more about facet distribution in the dedicated guide](https://docs.meilisearch.com/reference/features/search_parameters.html#facet-distribution)'
+          items:
+            type: string
+            example: '["genres", "author"]'
+            default: '[]'
+        offset:
+          type: number
+          description: Number of documents to skip.
+          default: 0
+        limit:
+          type: number
+          description: Maximum number of documents returned.
+          default: 20
+        page:
+          type: number
+          description: The specific search results page to fetch.
+          example: 1
+        hitsPerPage:
+          type: number
+          description: Number of returned results per page.
+          example: 20
+        sort:
+          $ref: '#/components/schemas/sort'
+      examples:
+        Example:
+          value:
+            q: Harry
+            offset: 0
+            limit: 20
+            filter: (genres = Horror AND genres = Mystery) OR release_date > 523242000
+            facets:
+              - genres
+              - author
+            attributesToRetrieve:
+              - title
+              - overview
+            attributesToCrop:
+              - overview
+            cropLength: 20
+            attributesToHighlight:
+              - overview
+            showMatchesPosition: true
+            wordsMatchingStrategy: all
     error:
       title: error
       type: object
@@ -1212,10 +1315,11 @@ tags:
       [Learn more about documents](https://docs.meilisearch.com/learn/core_concepts/documents.html).
   - name: Search
     description: |
-      Meilisearch exposes 2 routes to perform searches:
+      Meilisearch exposes 3 routes to perform searches:
       * A POST route: this is the preferred route when using API authentication, as it allows [preflight request](https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request) caching and better performances.
       * A GET route: the usage of this route is discouraged, unless you have good reason to do otherwise (specific caching abilities for example).
       Other than the differences mentioned above, the two routes are strictly equivalent.
+      * A POST multi-search route allowing to perform multiple search queries in a single HTTP request.
   - name: Tasks
     description: |
       The `tasks` route gives information about the progress of the [asynchronous operations](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html).
@@ -1890,108 +1994,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              additionalProperties: false
-              properties:
-                q:
-                  type: string
-                  description: Query string.
-                  default: '""'
-                  example: '"Back to the future"'
-                attributesToRetrieve:
-                  type: array
-                  description: 'Array of attributes whose fields will be present in the returned documents. Defaults to the [displayedAttributes list](https://docs.meilisearch.com/reference/features/settings.html#displayed-attributes) which contains by default all attributes found in the documents.'
-                  items:
-                    type: string
-                    example: '["title", "overview"]'
-                    default: '["*"]'
-                attributesToHighlight:
-                  type: array
-                  description: Array of attributes whose values will contain highlighted matching terms. Highlighted attributes are returned in `_formatted` response object.
-                  items:
-                    type: string
-                    example: '["title", "overview"]'
-                    default: '[]'
-                highlightPreTag:
-                  type: string
-                  description: Specify the tag to put before the highlighted query terms.
-                  example: '<mark>'
-                  default: '<em>'
-                highlightPostTag:
-                  type: string
-                  description: Specify the tag to put after the highlighted query terms.
-                  example: '</mark>'
-                  default: '</em>'
-                attributesToCrop:
-                  type: array
-                  description: Array of attributes whose values have to be cropped. Cropped attributes are returned in `_formatted` response object.
-                  items:
-                    type: string
-                    example: '["overview", "author"]'
-                    default: '[]'
-                cropMarker:
-                  type: string
-                  description: Sets the crop marker to apply before and/or after cropped part selected within an attribute defined in `attributesToCrop` parameter.
-                  default: '…'
-                cropLength:
-                  type: number
-                  description: Sets the total number of **words** to keep for the cropped part of an attribute specified in the `attributesToCrop` parameter.
-                  default: 10
-                showMatchesPosition:
-                  type: boolean
-                  description: Defines whether an `_matchesPosition` object that contains information about the matches should be returned or not.
-                  default: false
-                matchingStrategy:
-                  type: string
-                  description: Defines which strategy to use to match the query terms within the documents as search results. Two different strategies are available, `last` and `all`. By default, the `last` strategy is chosen.
-                  default: 'last'
-                filter:
-                  $ref: '#/components/schemas/filter'
-                facets:
-                  type: array
-                  description: 'Array of attributes whose fields will be distributed as a facet. If you have [set up filterableAttributes](https://docs.meilisearch.com/reference/features/settings.html#filterable-attributes), you can retrieve the count of matching terms for each [facets](https://docs.meilisearch.com/reference/features/filtering_and_faceted_search.html#faceted-search).[Learn more about facet distribution in the dedicated guide](https://docs.meilisearch.com/reference/features/search_parameters.html#facet-distribution)'
-                  items:
-                    type: string
-                    example: '["genres", "author"]'
-                    default: '[]'
-                offset:
-                  type: number
-                  description: Number of documents to skip.
-                  default: 0
-                limit:
-                  type: number
-                  description: Maximum number of documents returned.
-                  default: 20
-                page:
-                  type: number
-                  description: The specific search results page to fetch.
-                  example: 1
-                hitsPerPage:
-                  type: number
-                  description: Number of returned results per page.
-                  example: 20
-                sort:
-                  $ref: '#/components/schemas/sort'
-            examples:
-              Example:
-                value:
-                  q: Harry
-                  offset: 0
-                  limit: 20
-                  filter: (genres = Horror AND genres = Mystery) OR release_date > 523242000
-                  facets:
-                    - genres
-                    - author
-                  attributesToRetrieve:
-                    - title
-                    - overview
-                  attributesToCrop:
-                    - overview
-                  cropLength: 20
-                  attributesToHighlight:
-                    - overview
-                  showMatchesPosition: true
-                  wordsMatchingStrategy: all
+              $ref: '#/components/schemas/searchQuery'
       responses:
         '200':
           description: Ok
@@ -3234,6 +3237,116 @@ paths:
           description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
+  /multi-search:
+    post:
+      operationId: multi_search
+      summary: Multi Search
+      description: |
+        Make multiple search queries in a single HTTP request.
+
+        The queries can span different indexes or lookup the results of different filters on the same index. Each query has its own results set.
+      tags:
+        - Search
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                queries:
+                  type: array
+                  description: Array of the search queries to be performed.
+                  items:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      indexUid:
+                        type: string
+                        description: The unique identifier of the index to be searched.
+                      $ref: '#/components/schemas/searchQuery/properties'
+                    examples:
+                      Example:
+                        value:
+                          indexUid: movies
+                          $ref: '#components/schemas/searchQuery/examples/Example/value'
+                    required:
+                      - indexUid
+              required:
+                - queries
+            examples:
+              Example:
+                queries:
+                  - indexUid: movies
+                    q: Harry
+                    offset: 0
+                    limit: 20
+                    filter: (genres = Horror AND genres = Mystery) OR release_date > 523242000
+                    facets:
+                      - genres
+                      - author
+                    attributesToRetrieve:
+                      - title
+                      - overview
+                    attributesToCrop:
+                      - overview
+                    cropLength: 20
+                    attributesToHighlight:
+                      - overview
+                    showMatchesPosition: true
+                    wordsMatchingStrategy: all
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        indexUid:
+                          type: string
+                          description: The unique identifier of the searched index.
+                        $ref: '#/components/schemas/searchResponse/properties'
+              examples:
+                Example:
+                  results:
+                    - indexUid: movies
+                      hits:
+                        - id: 25684
+                          title: American Ninja 5
+                          poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
+                          overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
+                          release_date: 725846400
+                          _formatted:
+                            id: 25684
+                            title: American Ninja 5
+                            poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
+                            overview: 'When a scientists daughter is kidnapped, American <em>Ninja</em>, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the <em>ninja</em>.'
+                            release_date: 725846400
+                          _matchesPosition:
+                            overview:
+                              - start: 49
+                                length: 5
+                              - start: 155
+                                length: 5
+                      limit: 0
+                      offset: 0
+                      estimatedTotalHits: 0
+                      query: string
+                      processingTimeMs: 0
+        '401':
+          $ref: '#/components/responses/401'
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
   /keys:
     get:
       operationId: keys.list

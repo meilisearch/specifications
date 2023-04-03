@@ -1856,7 +1856,9 @@ This error happens when a requested index can't be found.
 
 ### Error Definition
 
-HTTP Code: `404 Not Found` when `Synchronous`
+HTTP Code when `Synchronous`:
+- if the index uid was specified as part of the URL, `404 Not Found`
+- if the index uid was specified as part of the POST body, `400 Bad Request`
 
 #### Variant: Multiples indexUids can't be found
 
