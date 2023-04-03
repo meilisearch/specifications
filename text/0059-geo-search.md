@@ -33,7 +33,7 @@ According to our user feedback, the lack of a geosearch feature is mentioned as 
 
 #### **As a developer, I want to add geospatial coordinates to a document so that the document can be geosearchable.**
 
-- Introduce a reserved field `_geo` for documents to store geo spatial data from an **object** made of `lat` and `lng` fields for a **JSON format**.
+- Introduce a reserved field `_geo` for documents to store geo spatial data from an **object** made of `lat` and `lng` fields for a **JSON format**. If the `_geo` field is set to `null`, my document won't be geosearchable.
 - Introduce a reserved column `_geo` for documents to store geo spatial data from a **string** made of `lat,lng` for a **CSV format**.
 
 ##### **JSON Format**
