@@ -456,7 +456,7 @@ HTTP Code: `400 Bad Request`
 
 ```json
 {
-    "message": "`uid` is not a valid index uid. Index uid can be an integer or a string containing only alphanumeric characters, hyphens (-) and underscores (_).",
+    "message": "`uid` is not a valid index uid pattern. Index uid patterns can be an integer or a string containing only alphanumeric characters, hyphens (-), underscores (_), and optionally end with a star (*).",
     ...
 }
 ```
@@ -1095,7 +1095,7 @@ HTTP Code: `400 Bad Request` when `Synchronous`
 }
 ```
 
-#### Variant: Specifying a custom ranking rule on reserved expression `_geoRadius`
+#### Variant: Specifying a custom ranking rule on reserved expressions `_geoRadius` / `_geoBoundingBox`
 
 ```json
 {
@@ -1856,7 +1856,9 @@ This error happens when a requested index can't be found.
 
 ### Error Definition
 
-HTTP Code: `404 Not Found` when `Synchronous`
+HTTP Code when `Synchronous`:
+- if the index uid was specified as part of the URL, `404 Not Found`
+- if the index uid was specified as part of the POST body, `400 Bad Request`
 
 #### Variant: Multiples indexUids can't be found
 
@@ -2762,6 +2764,28 @@ HTTP Code: `401 Forbidden`
     "link": "https://docs.meilisearch.com/errors#missing_master_key"
 }
 ```
+
+---
+
+## invalid_document_csv_delimiter
+
+`Synchronous`
+
+### Context
+
+The csv delimiter must be exactly one char long, and this char must be an ASCII character.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "Invalid value in parameter `csvDelimiter`: expected a string of one character, but found the following string of 5 characters: `doggo`",
+    "code": "invalid_document_csv_delimiter",
+    "type": "invalid_request"
+    "link": "https://docs.meilisearch.com/errors#invalid_document_csv_delimiter",
+}```
 
 ---
 

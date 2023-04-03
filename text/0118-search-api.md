@@ -94,7 +94,7 @@ expression     = or
 or             = and ("OR" WS+ and)*
 and            = not ("AND" WS+ not)*
 not            = ("NOT" WS+ not) | primary
-primary        = "(" WS* expression WS* ")" | geoRadius | in | condition | exists | not_exists | to
+primary        = "(" WS* expression WS* ")" | geoRadius | geoBoundingBox | in | condition | exists | not_exists | to
 in             = attribute "IN" WS* "[" value_list "]"
 condition      = attribute ("=" | "!=" | ">" | ">=" | "<" | "<=") value
 exists         = attribute "EXISTS"
@@ -163,6 +163,7 @@ The grammar for the value of a filterable attribute is the same as the grammar f
 - OR: `filter OR filter`
 - NOT: `NOT filter`
 - GeoSearch: `_geoRadius(lat, lng, distance)`
+- GeoSearch: `_geoBoundingBox([lat, lng], [lat, lng])`
 
 ###### 3.1.2.1.5 Equality
 
@@ -350,7 +351,8 @@ attribute != value1 AND attribute != value2 AND ...
 
 ###### 3.1.2.1.12 Geo Search
 
-The `_geoRadius` operator selects the documents whose geographical coordinates fall within a certain range of a given coordinate. See [GeoSearch](0059-geo-search.md) for more information.
+- The `_geoRadius` operator selects the documents whose geographical coordinates fall within a certain range of a given coordinate. See [GeoSearch](0059-geo-search.md) for more information.
+- The `_geoBoundingBox` operator selects the documents whose geographical coordinates fall within a square described by the given coordinates. See [GeoSearch](0059-geo-search.md) for more information.
 
 ##### 3.1.2.2. Array Syntax
 
@@ -409,6 +411,8 @@ Attributes used in `facets` must be added to the `filterableAttributes` list of 
 - 🔴 Sending a field not defined as a `filterableAttributes` for `facets` returns an [invalid_search_facets](0061-error-format-and-definitions.md#invalid_search_facets) error.
 
 The distribution of the different facets is returned in the `facetDistribution` response parameter.
+
+Statistics are computed and returned within the `facetStats` object for distributed facets. See [`facetStats`](#3210-facetstats) section.
 
 #### 3.1.5. `limit`
 
@@ -839,8 +843,9 @@ Only the documents containing ALL the query words (i.e. in the `q` parameter) ar
 | [`totalPages`](#327-totalpages)                 | Integer    | False    |
 | [`totalHits`](#328-totalhits)                   | Integer    | False    |
 | [`facetDistribution`](#329-facetdistribution)   | Object     | False    |
-| [`processingTimeMs`](#3210-processingtimems)    | Integer    | True     |
-| [`query`](#3211-query)                          | String     | True     |
+| [`facetStats`](#3210-facetstats)                | Object     | False    |
+| [`processingTimeMs`](#3211-processingtimems)    | Integer    | True     |
+| [`query`](#3212-query)                          | String     | True     |
 
 #### 3.2.1. `hits`
 
@@ -1152,16 +1157,29 @@ Added to the search response when `facets` is set for a search query. It contain
 
 If a field distributed as a facet contains no value, it is returned as a `facetDistribution` field with an empty object as value.
 
-> See [3.1.4. `facet`](#314-facets) section.
+> See [3.1.4. `facets`](#314-facets) section.
 
-#### 3.2.10. `processingTimeMs`
+#### 3.2.10. `facetStats`
+
+- Type: Object
+- Required: False
+
+When using the `facets` parameter, the distributed facets that contain some numeric values are displayed in a `facetStats` object that contains, per facet, the numeric `min` and `max` values for that facet of all documents matching the search query.
+
+If none of the hits returned by the search query have a numeric value for a facet, this facet is not part of the `facetStats` object.
+
+It ignores string values even if parseable. e.g `"21"` isn't considered by the engine when computing the `facetStats` `min` and `max`.
+
+> See [3.1.4. `facets`](#314-facets) section.
+
+#### 3.2.11. `processingTimeMs`
 
 - Type: Integer
 - Required: True
 
 Processing time of the search query in **milliseconds**.
 
-#### 3.2.11. `query`
+#### 3.2.12. `query`
 
 - Type: String
 - Required: True

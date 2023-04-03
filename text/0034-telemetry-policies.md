@@ -40,6 +40,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | Launched   | Occurs when MeiliSearch is launched the first time. |
 | Documents Searched POST | Aggregated event on all received requests via the `POST` - `indexes/:indexUid/search` route during one hour or until a batch size reaches `500Kb`. |
 | Documents Searched GET | Aggregated event on all received requests via the `GET` - `/indexes/:indexUid/search` route during one hour or until a batch size reaches `500Kb`. |
+| Documents Searched by Multi-Search POST | Aggregated event on all received requests via the `POST`- `/multi-search` route during one hour or until a batch size reaches `500Kb`. |
 | Documents Added | Aggregated event on all received requests via the `POST` - `/indexes/:indexUid/documents` route during one hour or until a batch size reaches `500Kb`. |
 | Documents Updated | Aggregated event on all received requests via the `PUT` - `/indexes/:indexUid/documents` route during one hour or until a batch size reaches `500Kb`. |
 | Documents Deleted | Aggregated event on all received requests via the `DELETE` - `/indexes/:indexUid/documents`, `DELETE` - `/indexes/:indexUid/documents/:documentId`, `POST` - `indexes/:indexUid/documents/delete-batch` routes during one hour or until a batch size reaches `500Kb`.  |
@@ -97,6 +98,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `infos.ssl_resumption` | `true` if `--ssl-resumption`/`MEILI_SSL_RESUMPTION` is specified, otherwise `false` | false | Every Hour |
 | `infos.ssl_tickets` | `true` if `--ssl-tickets`/`MEILI_SSL_TICKETS` is specified, otherwise `false` | false | Every Hour |
 | `infos.with_configuration_file`         | `true` if the instance is launched with a configuration file, otherwise `false` | false | Every Hour |
+| `infos.experimental_enable_metrics` | `true` if  `--experimental-enable-metrics`/`MEILI_EXPERIMENTAL_ENABLE_METRICS` is specified at launch, otherwise `false` | `false` | Every Hour |
 | `system.distribution`                   | Distribution on which MeiliSearch is launched           | Arch Linux        | Every hour |
 | `system.kernel_version`                 | Kernel version on which MeiliSearch is launched         | 5.14.10           | Every hour |
 | `system.cores`                          | Number of cores                                         | 24                | Every hour |
@@ -106,14 +108,15 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `stats.database_size`                   | Database size. Expressed in `Bytes`                     | 2621440           | Every hour |
 | `stats.indexes_number`                  | Number of indexes                                       | 2                 | Every hour |
 | `start_since_days`                      | Number of days since instance was launched              | 365               | Every hour |
-| `user_agent`                            | User-agent header encountered during one or more API calls | ["Meilisearch Ruby (v2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Documents Deleted`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `TypoTolerance Updated`, `Pagination Updated`, `Faceting Updated`, `DistinctAttribute Updated`, `DisplayedAttributes Updated`, `StopWords Updated`, `Synonyms Updated`, `Dump Created`, `Tasks Seen`, `Stats Seen`, `Health Seen`, `Version Seen` |
+| `user_agent`                            | User-agent header encountered during one or more API calls | ["Meilisearch Ruby (v2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Documents Deleted`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `TypoTolerance Updated`, `Pagination Updated`, `Faceting Updated`, `DistinctAttribute Updated`, `DisplayedAttributes Updated`, `StopWords Updated`, `Synonyms Updated`, `Dump Created`, `Tasks Seen`, `Stats Seen`, `Health Seen`, `Version Seen`, `Documents Searched by Multi-Search POST` |
 | `requests.99th_response_time`           | Highest latency from among the fastest 99% of successful search requests | 57ms    | `Documents Searched POST`, `Documents Searched GET`|
-| `requests.total_succeeded`              | Total number of successful requests in this batch | 3456 | `Documents Searched POST`, `Documents Searched GET` |
-| `requests.total_failed`                 | Total number of failed requests in this batch    | 24   | `Documents Searched POST`, `Documents Searched GET` |
-| `requests.total_received`               | Total number of received requests in this batch  | 3480 | `Documents Searched POST`, `Documents Searched GET`, `Documents Deleted`, `Health Seen`, `Tasks Seen` |
+| `requests.total_succeeded`              | Total number of successful requests in this batch | 3456 | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched by Multi-Search POST` |
+| `requests.total_failed`                 | Total number of failed requests in this batch    | 24   | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched by Multi-Search POST` |
+| `requests.total_received`               | Total number of received requests in this batch  | 3480 | `Documents Searched POST`, `Documents Searched GET`, `Documents Deleted`, `Health Seen`, `Tasks Seen`, `Documents Searched by Multi-Search POST` |
 | `sort.with_geoPoint`                    | `true` if the sort rule `_geoPoint` was used in this batch, otherwise `false` | true | `Documents Searched POST`, `Documents Searched GET` |
 | `sort.avg_criteria_number`              | Average number of sort criteria among all requests containing the `sort` parameter in this batch | 2 | `Documents Searched POST`, `Documents Searched GET` |
 | `filter.with_geoRadius`                 | `true` if the filter rule `_geoRadius` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
+| `filter.with_geoBoundingBox`            | `true` if the filter rule `_geoBoundingBox` was used in this batch, otherwise `false`| false | `Documents Searched POST`, `Documents Searched GET` |
 | `filter.most_used_syntax`               | Most used filter syntax among all requests containing the `filter` parameter in this batch | string | `Documents Searched POST`, `Documents Searched GET` |
 | `q.max_terms_number`                    | Highest number of terms given for the `q` parameter in this batch | 5 | `Documents Searched POST`, `Documents Searched GET` |
 | `pagination.max_limit`                  | Highest value given for the `limit` parameter in this batch | 60 | `Documents Searched POST`, `Documents Searched GET` |
@@ -169,6 +172,11 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `filtered_by_before_finished_at`        | `true` if tasks are filtered by the `beforeFinishedAt` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled`, `Tasks Deleted` |
 | `filtered_by_after_finished_at`         | `true` if tasks are filtered by the `afterFinishedAt` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled`, `Tasks Deleted` |
 | `per_index_uid` | `true` if an uid is used to fetch an index stat resource, otherwise `false` | false | `Stats Seen` |
+| searches.avg_search_count | The average number of search queries received per call for the aggregated event. | `4.2` | `Documents Searched by Multi-Search POST` |
+| searches.total_search_count | The total number of search queries received for the aggregated event. | `16023` | `Documents Searched by Multi-Search POST` |
+| indexes.avg_distinct_index_count | The average number of queried indexes received per call for the aggregated event. | `1.2` | `Documents Searched by Multi-Search POST`
+| indexes.total_distinct_index_count | The total number of distinct indexes queries for the aggregated event. | `6023` | `Documents Searched by Multi-Search POST`
+| indexes.total_single_index | The total number of calls where only one index where queried. | `2007` | `Documents Searched by Multi-Search POST`
 | `swap_operation_number`            | The number of swap operation given in `POST /swap-indexes` API call | 2 | `Indexes Swapped` |
 | `matching_strategy.most_used_strategy`      | Most used word matching strategy among all search requests in this batch | `last` | `Documents Searched POST`, `Documents Searched GET` |
 | `per_document_id` | `true` if `DELETE /indexes/:indexUid/documents/:documentUid` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
@@ -221,6 +229,7 @@ This property allows us to gather essential information to better understand on 
 | infos.ssl_resumption | `true` if `--ssl-resumption`/`MEILI_SSL_RESUMPTION` is specified, otherwise `false` | false |
 | infos.ssl_tickets | `true` if `--ssl-tickets`/`MEILI_SSL_TICKETS` is specified, otherwise `false` | false |
 | infos.with_configuration_file | `true` if the instance is launched with a configuration file, otherwise `false` | `false` |
+| infos.experimental_enable_metrics | `true` if  `--experimental-enable-metrics`/`MEILI_EXPERIMENTAL_ENABLE_METRICS` is specified at launch, otherwise `false` | `false` |
 
 ##### MeiliSearch Statistics `stats`
 
@@ -251,6 +260,7 @@ This property allows us to gather essential information to better understand on 
 | sort.with_geoPoint | Does the built-in sort rule _geoPoint rule has been used in the aggregated event? | `true` |
 | sort.avg_criteria_number | The average number of sort criteria among all the requests containing the `sort` parameter in the aggregated event. `"sort": []` equals to `0` while not sending `sort` does not influence the average. | `2` |
 | filter.with_geoRadius | Does the built-in filter rule _geoRadius has been used in the aggregated event? | `false` |
+| filter.with_geoBoundingBox | Does the built-in filter rule _geoBoundingBox has been used in the aggregated event?| `false` |
 | filter.avg_criteria_number | The average number of filter criteria among all the requests containing the `filter` parameter in the aggregated event. `"filter": []` equals to `0` while not sending `filter` does not influence the average in the aggregated event. | `4` |
 | filter.most_used_syntax | The most used filter syntax among all the requests containing the requests containing the `filter` parameter in the aggregated event. `string` / `array` / `mixed` | `mixed` |
 | q.max_terms_number | The maximum number of terms for the `q` parameter among all requests in the aggregated event. | `5` |
@@ -284,6 +294,7 @@ This property allows us to gather essential information to better understand on 
 | sort.with_geoPoint | Does the built-in sort rule _geoPoint rule has been used in the aggregated event? | `true` |
 | sort.avg_criteria_number | The average number of sort criteria among all the requests containing the `sort` parameter in the aggregated event. `"sort": []` equals to `0` while not sending `sort` does not influence the average. | `2` |
 | filter.with_geoRadius | Does the built-in filter rule _geoRadius has been used in the aggregated event? | `false` |
+| filter.with_geoBoundingBox | Does the built-in filter rule _geoBoundingBox has been used in the aggregated event?| `false` |
 | filter.avg_criteria_number | The average number of filter criteria among all the requests containing the `filter` parameter in the aggregated event. `"filter": []` equals to `0` while not sending `filter` does not influence the average in the aggregated event. | `4` |
 | filter.most_used_syntax | The most used filter syntax among all the requests containing the requests containing the `filter` parameter in the aggregated event. `string` / `array` / `mixed` | `mixed` |
 | q.max_terms_number | The maximum number of terms for the `q` parameter among all requests in the aggregated event. | `5` |
@@ -302,6 +313,22 @@ This property allows us to gather essential information to better understand on 
 | matching_strategy.most_used_strategy | Most used word matching strategy among all search requests in the aggregated event. `last` / `all` | `last` |
 
 ---
+
+#### `Documents Searched by Multi-Search POST`
+
+> The Documents Searched event is sent once an hour or when a batch reaches the maximum size of `500kb`. The event's properties are averaged over all requests on `POST` - `/multi-search`.
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents all the user-agents encountered on this endpoint in the aggregated event.| `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| requests.total_succeeded | The number of succeeded calls on the endpoint for the aggregated event. | `3456` |
+| requests.total_failed | The number of calls on the endpoint for the aggregated event. | `24` |
+| requests.total_received | The number of calls on the endpoint for the aggregated event. | `3480` |
+| searches.avg_search_count | The average number of search queries received per call for the aggregated event. | `4.2` |
+| searches.total_search_count | The total number of search queries received for the aggregated event. | `16023` |
+| indexes.avg_distinct_index_count | The average number of queried indexes received per call for the aggregated event. | `1.2`
+| indexes.total_distinct_index_count | The total number of distinct indexes queries for the aggregated event. | `6023`
+| indexes.total_single_index | The total number of calls where only one index where queried. | `2007`
 
 ## `Index Created`
 

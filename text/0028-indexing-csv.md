@@ -19,6 +19,7 @@ Also, in order to boost write performance CSV data format is more suited than JS
 
 - The header of the csv payload allows to name the attributes and type them.
 - `text/csv` Content-Type header is now supported.
+- A new query parameter, `csvDelimiter`, has been introduced to customize the csv delimiter used in the document. It can change between two `documentAddition`.
 - The error cases have been strengthened and completed. See Errors part.
 
 ### II. Motivation
@@ -43,11 +44,15 @@ While there's [RFC 4180](https://tools.ietf.org/html/rfc4180) as a try to add a 
 
 - The following CSV lines will represent a document for Meilisearch.
 - A `,` character must separate each cell.
-- A CSV value should be enclosed in double-quotes when it contains a comma character or a newline to escape it.
+- A CSV value should be enclosed in double-quotes when it contains the delimiter character or a newline to escape it.
 - Using double-quotes to enclose fields, then a double-quote appearing inside a field must be escaped by preceding it with another double quote as mentioned in [RFC 4180](https://tools.ietf.org/html/rfc4180).
 - Float value should be written with a `.` character, like `3.14`.
 - CSV text should be encoded in UTF8.
 - The format can't handle array cell values. We are providing `nd-json` format to deal with theses types of attribute in a easier way.
+- A `csvDelimiter` query parameter is available to customize the delimiter used in the documents.
+  - This `csvDelimiter` is optional. By default, the `,` character is used.
+  - The separator must be one [ascii char](https://www.rfc-editor.org/rfc/rfc20).
+  - The separator can't be used with another Content-Type, or else it'll throw an error.
 
 ##### `null` value
 
@@ -166,6 +171,7 @@ curl \
 - 🔴 Sending a payload excessing the limit will lead to a 413 Payload Too Large - **payload_too_large** error code.
 - 🔴 Sending an invalid CSV format will lead to a 400 bad_request - **malformed_payload** error code.
 - 🔴 Sending a CSV header that does not conform to the specification will lead to a 400 bad_request - **malformed_payload** error code.
+- 🔴 Sending an invalid csv delimiter: not exactly one ASCII char. This will lead to a 400 bad_request - **invalid_document_csv_delimiter** error code.
 
 ##### Errors Definition
 
@@ -267,4 +273,3 @@ n/a
 
 - Provide an interface in the future dashboard to upload CSV data into an index and optionally provide the headers types.
 - Set a payload limit directly related to the type of data format. Currently, the payload size is equivalent to [JSON payload size](https://docs.meilisearch.com/reference/features/configuration.html#payload-limit-size). Metrics on feature usage and configuration update should help to choose a better suited value for this type of data format.
-- Accepts more common CSV separators
