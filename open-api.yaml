@@ -192,7 +192,7 @@ components:
         - Mixed: `["something > 1 AND genres=comedy", "genres=horror OR title=batman"]`
 
         > info
-        > _geoRadius({lat}, {lng}, {distance_in_meters}) built-in filter rule can be used to filter documents within a geo circle.
+        > _geoRadius({lat}, {lng}, {distance_in_meters}) and _geoBoundingBox([{lat, lng}], [{lat}, {lng}]) built-in filter rules can be used to filter documents within geo shapes.
 
         > warn
         > Attribute(s) used in `filter` should be declared as filterable attributes. See [Filtering and Faceted Search](https://docs.meilisearch.com/reference/features/filtering_and_faceted_search.html).
@@ -1028,7 +1028,7 @@ components:
         - Mixed: `["something > 1 AND genres=comedy", "genres=horror OR title=batman"]`
 
         > info
-        > _geoRadius({lat}, {lng}, {distance_in_meters}) built-in filter rule can be used to filter documents within a geo circle.
+        > _geoRadius({lat}, {lng}, {distance_in_meters}) and _geoBoundingBox([{lat, lng}], [{lat}, {lng}]) built-in filter rules can be used to filter documents within geo shapes.
 
         > warn
         > Attribute(s) used in `filter` should be declared as filterable attributes. See [Filtering and Faceted Search](https://docs.meilisearch.com/reference/features/filtering_and_faceted_search.html).

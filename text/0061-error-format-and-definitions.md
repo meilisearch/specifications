@@ -1095,7 +1095,7 @@ HTTP Code: `400 Bad Request` when `Synchronous`
 }
 ```
 
-#### Variant: Specifying a custom ranking rule on reserved expression `_geoRadius`
+#### Variant: Specifying a custom ranking rule on reserved expressions `_geoRadius` / `_geoBoundingBox`
 
 ```json
 {
