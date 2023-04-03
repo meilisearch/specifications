@@ -2765,6 +2765,28 @@ HTTP Code: `401 Forbidden`
 
 ---
 
+## invalid_document_csv_delimiter
+
+`Synchronous`
+
+### Context
+
+The csv delimiter must be exactly one char long, and this char must be an ASCII character.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "Invalid value in parameter `csvDelimiter`: expected a string of one character, but found the following string of 5 characters: `doggo`",
+    "code": "invalid_document_csv_delimiter",
+    "type": "invalid_request"
+    "link": "https://docs.meilisearch.com/errors#invalid_document_csv_delimiter",
+}```
+
+---
+
 ## 2. Technical details
 n/a
 
