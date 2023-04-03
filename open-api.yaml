@@ -279,6 +279,22 @@ components:
               comedy: 475
               mystery: 70
               thriller: 217
+        facetStats:
+          type: object
+          additionalProperties:
+            type: object
+            min:
+              type: number
+              description: The minimum value for the numerical facet being distributed.
+            max:
+              type: number
+              description: The maximum value for the numerical facet being distributed.
+          description: |
+            When using the facets parameter, the distributed facets that contain some numeric values are displayed in a facetStats object that contains, per facet, the numeric min and max values of the hits returned by the search query. If none of the hits returned by the search query have a numeric value for a facet, this facet is not part of the facetStats object.
+          example:
+            price:
+              min: 1
+              max: 4999.99
         processingTimeMs:
           type: integer
           description: Processing time of the query.
@@ -1836,6 +1852,19 @@ paths:
                               length: 5
                             - start: 155
                               length: 5
+                    facetDistribution:
+                      genres:
+                        action: 273
+                        animation: 118
+                        adventure: 132
+                        fantasy: 67
+                        comedy: 475
+                        mystery: 70
+                        thriller: 217
+                    facetStats:
+                      price:
+                        min: 1
+                        max: 4999.99
                     limit: 0
                     offset: 0
                     estimatedTotalHits: 0
@@ -1991,6 +2020,19 @@ paths:
                               length: 5
                             - start: 155
                               length: 5
+                    facetDistribution:
+                      genres:
+                        action: 273
+                        animation: 118
+                        adventure: 132
+                        fantasy: 67
+                        comedy: 475
+                        mystery: 70
+                        thriller: 217
+                    facetStats:
+                      price:
+                        min: 1
+                        max: 4999.99
                     limit: 0
                     offset: 0
                     estimatedTotalHits: 0
