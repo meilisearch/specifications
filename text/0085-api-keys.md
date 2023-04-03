@@ -327,7 +327,8 @@ Create an API key.
 | tasks.delete     | Provides access to `DELETE` `/tasks` route. |
 | settings.get     | Provides access to `GET` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes.                                                                                                            |
 | settings.update  | Provides access to `POST / DELETE` `/indexes/:authorizedIndexes/settings` and `/indexes/:authorizedIndexes/settings/*` routes.                                                                                                  |
-| stats.get        | Provides access to `GET` `/stats/`. **⚠️Non-authorized `indexes` are omitted from the response on `/stats`**. Also add access to `GET` `/indexes/:authorizedIndexes/stats`.                                                      |
+| stats.get        | Provides access to `GET` `/stats`. **⚠️Non-authorized `indexes` are omitted from the response on `/stats`**. Also add access to `GET` `/indexes/:authorizedIndexes/stats`.                                                      |
+| metrics.get      | Provides access to `GET` `/metrics` route. **A restriction on `indexes` stops you from calling the route.** |
 | dumps.create     | Provides access to `POST` `/dumps` route. **As dumps are not scoped by indexes, a restriction on `indexes` does not affect this action.**                                                                                       |
 | version          | Provides access to `GET` `/version` route.                                                                                                                                                                                      |
 | keys.get         | Provides access to `GET` `/keys` route.                                                                                                                                                                                         |
