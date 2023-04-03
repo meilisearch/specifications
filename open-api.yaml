@@ -677,7 +677,7 @@ components:
           readOnly: true
         actions:
           type: array
-          description: 'A list of actions permitted for the key. ["*"] for all actions.'
+          description: 'A list of actions permitted for the key. ["*"] for all actions. The * character can be used as a wildcard when located at the last position. e.g. `documents.*` to authorize access on all documents endpoints.'
           uniqueItems: false
           items:
             type: string
@@ -707,7 +707,7 @@ components:
               - keys.delete
         indexes:
           type: array
-          description: 'A list of accesible indexes permitted for the key. ["*"] for all indexes.'
+          description: 'A list of accesible indexes permitted for the key. ["*"] for all indexes. The * character can be used as a wildcard when located at the last position. e.g. "products_*"" to allow access to all indexes whose names start with "products_".'
           items:
             type: string
             example: movies
