@@ -2634,6 +2634,7 @@ HTTP Code: `500 Internal Server Error` when `Synchronous`
 ### Context
 
 This error occurs when the host system partition has reached its maximum capacity and no longer accepts writes.
+It can also happens when the task queue reaches its limit of ~10GiB of tasks (~10M tasks).
 
 ### Error Definition
 
@@ -2642,6 +2643,17 @@ HTTP Code: `500 Internal Server Error` when `Synchronous`
 ```json
 {
     "message": "`:kernelMessage`",
+    "code": "no_space_left_on_device",
+    "type": "system",
+    "link": "https://docs.meilisearch.com/errors#no_space_left_on_device"
+}
+```
+
+In the case of the task queue being full the HTTP Code returned is `422 Unprocessable Entity` when `Synchronous`.
+
+```json
+{
+    "message": "Meilisearch cannot receive write operations because the limit of the task database has been reached. Please delete tasks to continue performing write operations.",
     "code": "no_space_left_on_device",
     "type": "system",
     "link": "https://docs.meilisearch.com/errors#no_space_left_on_device"
