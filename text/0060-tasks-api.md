@@ -505,6 +505,7 @@ When the request is successful, Meilisearch returns the HTTP code 202 Accepted. 
 If a user tries deleting an `enqueued`, or `processing` task, it won’t throw an error. Task deletion is an atomic transaction; all tasks are successfully deleted, or none aren't.
 
 - 🔴 Sending a task deletion without filtering query parameters returns a [missing_task_filters](0061-error-format-and-definitions.md#missing_task_filters) error.
+- 🔴 Sending a task once the task queue is full will throw a [`no_space_left_on_device`](0061-error-format-and-definitions.md#no_space_left_on_device) error. Once this state is reached, the only possible action is to delete tasks.
 
 The auth layer can return the following errors if Meilisearch is secured (a master-key is defined).
 
