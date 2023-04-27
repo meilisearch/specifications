@@ -159,6 +159,12 @@ The grammar for the value of a filterable attribute is the same as the grammar f
 - In:
     * `attribute IN[value, value, etc.]`
     * `attribute NOT IN[value, value, etc.]`
+- IS NULL:
+    * `attribute IS NULL`
+    * `attribute IS NOT NULL`
+- IS EMPTY:
+    * `attribute IS EMPTY`
+    * `attribute IS NOT EMPTY`
 - AND: `filter AND filter`
 - OR: `filter OR filter`
 - NOT: `NOT filter`
@@ -372,6 +378,42 @@ is equivalent to:
 {
     "filter": "(genres = Comedy OR genres = Romance) AND (director = 'Mati Diop')"
 }
+```
+
+###### 3.1.2.1.13 Is Empty
+
+The `IS EMPTY` operator selects the documents for which the filterable attribute exists and is empty. If the attribute doesn't exists then it is not empty and the document will not be returned. It is a postfix operator that takes an attribute name as argument.
+
+The negated form of `IS EMPTY` can be written in two ways:
+```
+attribute IS NOT EMPTY
+NOT attribute IS EMPTY
+```
+Both forms are equivalent. They select the documents for which the attribute is not empty.
+
+For example, with the documents:
+```json
+[{
+    "id": 0,
+    "colour": []
+},
+{
+    "id": 1,
+    "colour": null
+},
+{
+    "id": 2,
+    "colour": ""
+},
+{
+    "id": 3,
+    "colour": {}
+},
+{
+    "id": 4
+}]
+```
+Then the filter `colour IS EMPTY` selects the document ids `[0,2,3]` while the filter `colour IS NOT EMPTY` or `NOT colour IS EMPTY` selects the document ids `[1,4]`.
 ```
 
 #### 3.1.3. `sort`
