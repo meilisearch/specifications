@@ -360,7 +360,7 @@ attribute != value1 AND attribute != value2 AND ...
 - The `_geoRadius` operator selects the documents whose geographical coordinates fall within a certain range of a given coordinate. See [GeoSearch](0059-geo-search.md) for more information.
 - The `_geoBoundingBox` operator selects the documents whose geographical coordinates fall within a square described by the given coordinates. See [GeoSearch](0059-geo-search.md) for more information.
 
-###### 3.1.2.1.13 IS EMPTY
+###### 3.1.2.1.12 IS EMPTY
 
 The `IS EMPTY` operator selects the documents for which the filterable attribute exists and is empty. If the attribute doesn't exists then it is not empty and the document will not be returned. It is a postfix operator that takes an attribute name as argument.
 
