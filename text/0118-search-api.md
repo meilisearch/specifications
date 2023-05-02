@@ -156,7 +156,7 @@ The grammar for the value of a filterable attribute is the same as the grammar f
 - Exists:
     * `attribute EXISTS`
     * `attribute NOT EXISTS`
-- In:
+- IN:
     * `attribute IN[value, value, etc.]`
     * `attribute NOT IN[value, value, etc.]`
 - IS EMPTY:
