@@ -76,7 +76,7 @@ the search result should be displayed as
       "label": "t-shirt",
       "price": 4.99,
       "colors": "red",
-      "description": "Hey, you will rock at summer time.",
+      "description": "Thus, you will rock at summer time.",
       "contains_a_dog_picture": false
     }
   ],
