@@ -1664,6 +1664,7 @@ paths:
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/filter'
     post:
       operationId: indexes.documents.create
       summary: Add or replace documents
@@ -1805,6 +1806,65 @@ paths:
           description: Not Found
     parameters:
       - $ref: '#/components/parameters/indexUid'
+  '/indexes/{indexUid}/documents/fetch':
+    post:
+      operationId: indexes.documents.list
+      summary: Get Documents
+      description: |
+        Get [documents](https://docs.meilisearch.com/learn/core_concepts/documents.html) by batch.
+      tags:
+        - Documents
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/document'
+                  limit:
+                    $ref: '#/components/schemas/limit'
+                  offset:
+                    $ref: '#/components/schemas/offset'
+                  total:
+                    $ref: '#/components/schemas/total'
+                required:
+                  - results
+                  - limit
+                  - offset
+                  - total
+              examples:
+                Example:
+                  value:
+                    results:
+                      - id: 25684
+                        title: American Ninja 5
+                        poster: 'https://image.tmdb.org/t/p/w1280/iuAQVI4mvjI83wnirpD8GVNRVuY.jpg'
+                        overview: 'When a scientists daughter is kidnapped, American Ninja, attempts to find her, but this time he teams up with a youngster he has trained in the ways of the ninja.'
+                        release_date: 725846400
+                      - id: 45881
+                        title: The Bridge of San Luis Rey
+                        poster: 'https://image.tmdb.org/t/p/w500/4X7quIcdkc24Cveg5XdpfRqxtYA.jpg'
+                        overview: "The Bridge of San Luis Rey is American author Thornton Wilder's second novel, first published in 1927 to worldwide acclaim. It tells the story of several interrelated people who die in the collapse of an Inca rope-fiber suspension bridge in Peru, and the events that lead up to their being on the bridge.[ A friar who has witnessed the tragic accident then goes about inquiring into the lives of the victims, seeking some sort of cosmic answer to the question of why each had to die. The novel won the Pulitzer Prize in 1928."
+                        release_date: 1072915200
+                    limit: 20
+                    offset: 0
+                    total: 2
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/filter'
   '/indexes/{indexUid}/documents/delete-batch':
     post:
       operationId: indexes.documents.removeBatch
