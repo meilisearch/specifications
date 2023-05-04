@@ -878,6 +878,29 @@ HTTP Code: `400 Bad Request`
 
 ---
 
+## invalid_document_filter
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `String`, `Array of String` or `Array of array of String` for `filter` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "`:deserr_helper`",
+    "code": "invalid_document_filter",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_document_filter"
+}
+```
+
+---
+
 ## invalid_document_limit
 
 `Synchronous`

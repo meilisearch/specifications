@@ -20,7 +20,7 @@ Documents are stored inside indexes.
 
 Manipulate documents of a Meilisearch index.
 
-- [3.1.1. `GET` - `indexes/:index_uid/documents`](#311-get---indexesindexuiddocuments)
+- [3.1.1. `GET` - `indexes/:index_uid/documents`](#311-get-indexesindexuiddocuments-and-post-indexesindexuiddocumentsfetch)
 - [3.1.2. `GET` - `indexes/:index_uid/documents/:document_id`](#312-get---indexesindexuiddocumentsdocumentid)
 - [3.1.3. `POST` - `indexes/:index_uid/documents`](#313-post---indexesindexuiddocuments)
 - [3.1.4. `PUT` - `indexes/:index_uid/documents`](#314-put---indexesindexuiddocuments)
@@ -28,13 +28,17 @@ Manipulate documents of a Meilisearch index.
 - [3.1.6. `DELETE` - `indexes/:index_uid/documents/:document_id`](#316-delete---indexesindexuiddocumentsdocumentid)
 - [3.1.7. `POST` - `indexes/:index_uid/documents/delete-batch`](#317-post---indexesindexuiddocumentsdelete-batch)
 
-#### 3.1.1. `GET` - `indexes/:index_uid/documents`
+#### 3.1.1. `GET` - `indexes/:index_uid/documents` and `POST` - `indexes/:index_uid/documents/fetch`
+
+Meilisearch exposes 2 routes to get the documents:
+- GET `indexes/:index_uid/documents`
+- POST `indexes/:index_uid/documents/fetch`
 
 List all documents of a Meilisearch index.
 
 The query parameters `offset` and `limit` permit browsing through all documents of an index.
 
-Meilisearch orders documents depending on the hash of their id.
+Meilisearch orders documents depending on the order they were inserted in the db.
 
 ##### 3.1.1.1. Path Parameters
 
@@ -51,11 +55,12 @@ Unique identifier of an index.
 
 ##### 3.1.1.2. Query Parameters
 
-| Field                    | Type                     | Required |
-|--------------------------|--------------------------|----------|
-| `offset`                 | Integer / `null`         | false    |
-| `limit`                  | String / `null`          | false    |
-| `fields`                 | String / `null`          | false    |
+| Field                    | Type                      | Required |
+|--------------------------|---------------------------|----------|
+| `offset`                 | Integer / `null`          | false    |
+| `limit`                  | String / `null`           | false    |
+| `fields`                 | Array of Strings / `null` | false    |
+| `filter`                 | filter / `null`           | false    |
 
 ###### 3.1.1.2.1. `offset`
 
@@ -75,7 +80,7 @@ Sets the maximum number of documents to be returned by the current request.
 
 ###### 3.1.1.2.3. `fields`
 
-- Type: String
+- Type: Array of Strings
 - Required: False
 - Default: `*`
 
@@ -91,6 +96,17 @@ If `fields` is not specified, all attributes from the documents are returned in 
 > Specified fields have to be separated by a comma. e.g. `&fields=title,description`
 
 > The index setting `displayedAttributes` has no impact on this endpoint.
+
+###### 3.1.1.2.4. `filter`
+
+- Type: String | Array of array of Strings
+- Required: False
+- Default: null
+
+Refine the results by selecting documents that match the given filter.
+In the case of the POST route, it is possible to send the filter in the form of an array of array of strings akin to the search route.
+
+Attributes used as filter criteria must be added to the `filterableAttributes` list of an index settings. See [Filterable Attributes Setting API](0123-filterable-attributes-setting-api.md).
 
 ##### 3.1.1.3. Response Definition
 
@@ -161,6 +177,7 @@ Gives the total number of documents that can be browsed in the related index.
 - 🔴 Sending a value with a different type than `Integer` or `null` for `offset` will return a [invalid_document_offset](0061-error-format-and-definitions.md#invalid_document_offset) error.
 - 🔴 Sending a value with a different type than `Integer` or `null` for `limit` will return a [invalid_document_limit](0061-error-format-and-definitions.md#invalid_document_limit) error.
 - 🔴 Sending a value with a different type than `String` or `null` for `fields` will return a [invalid_document_fields](0061-error-format-and-definitions.md#invalid_document_fields) error.
+- 🔴 Sending a value with a different type than `filter` or `null` for `filter` will return a [invalid_document_filter](0061-error-format-and-definitions.md#invalid_document_filter) error.
 
 #### 3.1.2. `GET` - `indexes/:index_uid/documents/:document_id`
 
@@ -252,7 +269,7 @@ This endpoint accepts various content-type:
 
 - [`application/json`](0135-indexing-json.md)
 - [`text/csv`](0028-indexing-csv.md)
-- [`application/x-ndjson`](0028-indexing-ndjson.md)
+- [`application/x-ndjson`](0029-indexing-ndjson.md)
 
 ##### 3.1.3.1. Path Parameters
 
@@ -326,7 +343,7 @@ This endpoint accepts various content-type:
 
 - [`application/json`](0135-indexing-json.md)
 - [`text/csv`](0028-indexing-csv.md)
-- [`application/x-ndjson`](0028-indexing-ndjson.md)
+- [`application/x-ndjson`](0029-indexing-ndjson.md)
 
 ##### 3.1.4.1. Path Parameters
 
