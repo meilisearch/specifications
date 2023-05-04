@@ -519,7 +519,7 @@ e.g.
 
 ##### 3.1.7.3. Response Definition
 
-When the request is successful, Meilisearch returns the HTTP code `202 Accepted`. The response's content is the summarized representation of the received asynchronous task.
+When the request is successful, Meilisearch returns the HTTP code `202 Accepted`. The response's content is the summarized representation of the received asynchronous task with the type `documentDeletion`.
 
 See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted).
 
@@ -537,11 +537,63 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 
 - 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
-#### 3.1.8. General Errors
+#### 3.1.8. `POST` - `indexes/:index_uid/documents/delete`
+
+Delete a selection of documents based on a filter.
+
+##### 3.1.8.1. Path Parameters
+
+| Field                    | Type                     | Required |
+|--------------------------|--------------------------|----------|
+| `index_uid`              | String                   | True     |
+
+###### 3.1.8.1.1. `index_uid`
+
+- Type: String
+- Required: True
+
+Unique identifier of an index.
+
+##### 3.1.8.2 Request Payload Definition
+
+A filter.
+
+- Type: String or array of array of strings
+- Required: True
+
+e.g.
+
+```json
+{
+  "filter": "doggo = 'bernese mountain'
+}
+```
+
+##### 3.1.8.3. Response Definition
+
+When the request is successful, Meilisearch returns the HTTP code `202 Accepted`. The response's content is the summarized representation of the received asynchronous task with the type `documentDeletion`.
+
+See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted).
+
+##### 3.1.8.4. Errors
+
+- 🔴 Omitting Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
+- 🔴 Sending an empty Content-Type returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
+- 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
+- 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
+- 🔴 Sending an invalid payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
+- 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
+- 🔴 Sending a value with an invalid or empty filter will return an [invalid_document_delete_filter](0061-error-format-and-definitions.md#invalid_document_delete_filter) error.
+
+###### 3.1.8.4.1 Async Errors
+
+- 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
+
+#### 3.1.9. General Errors
 
 These errors apply to all endpoints described here.
 
-##### 3.1.8.1 Auth Errors
+##### 3.1.9.1 Auth Errors
 
 The auth layer can return the following errors if Meilisearch is secured (a master-key is defined).
 

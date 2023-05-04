@@ -901,6 +901,45 @@ HTTP Code: `400 Bad Request`
 
 ---
 
+## invalid_document_delete_filter
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `String`, `Array of String` or `Array of array of String` for `filter` is specified.
+Or if the filter is empty.
+
+### Error Definition
+
+In the first case:
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "`:deserr_helper`",
+    "code": "invalid_document_delete_filter",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_document_filter"
+}
+```
+
+Or, if the filter is missing.
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "Sending an empty filter is forbidden.",
+    "code": "invalid_document_delete_filter",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_document_filter"
+}
+```
+
+---
+
 ## invalid_document_limit
 
 `Synchronous`
