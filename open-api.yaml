@@ -1808,7 +1808,7 @@ paths:
       - $ref: '#/components/parameters/indexUid'
   '/indexes/{indexUid}/documents/fetch':
     post:
-      operationId: indexes.documents.list
+      operationId: indexes.documents.fetch
       summary: Get Documents
       description: |
         Get [documents](https://docs.meilisearch.com/learn/core_concepts/documents.html) by batch.
