@@ -177,7 +177,7 @@ Gives the total number of documents that can be browsed in the related index.
 - 🔴 Sending a value with a different type than `Integer` or `null` for `offset` will return a [invalid_document_offset](0061-error-format-and-definitions.md#invalid_document_offset) error.
 - 🔴 Sending a value with a different type than `Integer` or `null` for `limit` will return a [invalid_document_limit](0061-error-format-and-definitions.md#invalid_document_limit) error.
 - 🔴 Sending a value with a different type than `String` or `null` for `fields` will return a [invalid_document_fields](0061-error-format-and-definitions.md#invalid_document_fields) error.
-- 🔴 Sending a value with a different type than `filter` or `null` for `filter` will return a [invalid_document_filter](0061-error-format-and-definitions.md#invalid_document_filter) error.
+- 🔴 Sending a value with a different type than `String`, `Array of strings`, `Array of array of strings` or `null` for `filter` will return a [invalid_document_filter](0061-error-format-and-definitions.md#invalid_document_filter) error.
 
 #### 3.1.2. `GET` - `indexes/:index_uid/documents/:document_id`
 
