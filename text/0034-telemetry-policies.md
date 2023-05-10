@@ -44,6 +44,8 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | Documents Added | Aggregated event on all received requests via the `POST` - `/indexes/:indexUid/documents` route during one hour or until a batch size reaches `500Kb`. |
 | Documents Updated | Aggregated event on all received requests via the `PUT` - `/indexes/:indexUid/documents` route during one hour or until a batch size reaches `500Kb`. |
 | Documents Deleted | Aggregated event on all received requests via the `DELETE` - `/indexes/:indexUid/documents`, `DELETE` - `/indexes/:indexUid/documents/:documentId`, `POST` - `indexes/:indexUid/documents/delete-batch` routes during one hour or until a batch size reaches `500Kb`.  |
+| Documents Fetched GET | Aggregated event on all received requests via the `GET` - `/indexes/:indexUid/documents` or `GET` - `/indexes/:indexUid/documents/:doc_id` routes during one hour or until a batch size reaches `500Kb`. |
+| Documents Fetched POST | Aggregated event on all received requests via the `POST` - `/indexes/:indexUid/documents/fetch` routes during one hour or until a batch size reaches `500Kb`.  |
 | Index Created | Occurs when an index is created via `POST` - `/indexes`. |
 | Index Updated | Occurs when an index is updated via `PUT` - `/indexes/:indexUid`. |
 | Indexes Swapped | Occurs when indexes are swapped via `POST` - `/swap-indexes`. |
@@ -179,7 +181,11 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | indexes.total_single_index | The total number of calls where only one index where queried. | `2007` | `Documents Searched by Multi-Search POST`
 | `swap_operation_number`            | The number of swap operation given in `POST /swap-indexes` API call | 2 | `Indexes Swapped` |
 | `matching_strategy.most_used_strategy`      | Most used word matching strategy among all search requests in this batch | `last` | `Documents Searched POST`, `Documents Searched GET` |
-| `per_document_id` | `true` if `DELETE /indexes/:indexUid/documents/:documentUid` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
+| `per_document_id` | `true` if `DELETE /indexes/:indexUid/documents/:documentUid` or `GET /indexes/:indexUid/documents/:doc_id` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted`, `Documents Fetched GET` |
+| `per_filter` | `true` if `POST /indexes/:indexUid/documents/fetch` or `GET /indexes/:indexUid/documents/` endpoint was used with a filter in this batch, otherwise `false` | false | `Documents Fetched POST`, `Documents Fetched GET` |
+| `total_received` | Total number of request received in this batch | 325 | `Documents Fetched GET`, `Documents Fetched POST` |
+| `max_limit` | Highest value given for the `limit` parameter in this batch | 60 | `Documents Fetched POST`, `Documents Fetched GET` |
+| `max_offset` | Highest value given for the `offset` parameter in this batch | 1000 | `Documents Fetched POST`, `Documents Fetched GET` |
 | `clear_all` | `true` if `DELETE /indexes/:indexUid/documents` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
 | `per_batch` | `true` if `POST /indexes/:indexUid/documents/delete-batch` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
 
@@ -394,6 +400,30 @@ This property allows us to gather essential information to better understand on 
 | per_document_id | `true` if `DELETE /indexes/:indexUid/documents/:documentUid` endpoint is called in the aggregated event, otherwise `false` | `false` |
 | clear_all | `true` if `DELETE /indexes/:indexUid/documents` endpoint is called in the aggregated event, otherwise `false` | `false` |
 | per_batch | `true` if `POST /indexes/:indexUid/documents/delete-batch` endpoint is called in the aggregated event, otherwise `false` | `false` |
+
+## `Documents Fetched GET`
+
+> The Documents Fetched GET event is sent once an hour or when a batch reaches the maximum size of `500kb`.
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| `total_received` | Total number of request received in this batch | 325 | `Documents Fetched GET`, `Documents Fetched POST` |
+| `per_document_id` | `true` if `GET /indexes/:indexUid/documents/:doc_id` endpoint was used in this batch, otherwise `false` | false |
+| `per_filter` | `true` if `GET /indexes/:indexUid/documents` endpoint was used with a filter in this batch, otherwise `false` | false |
+| `max_limit` | Highest value given for the `limit` parameter in this batch | 60 |
+| `max_offset` | Highest value given for the `offset` parameter in this batch | 1000 |
+
+## `Documents Fetched POST`
+
+> The Documents Fetched POST event is sent once an hour or when a batch reaches the maximum size of `500kb`.
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| `total_received` | Total number of request received in this batch | 325 | `Documents Fetched GET`, `Documents Fetched POST` |
+| `per_document_id` | `false` | false |
+| `per_filter` | `true` if `POST /indexes/:indexUid/documents/fetch` endpoint was used with a filter in this batch, otherwise `false` | false |
+| `max_limit` | Highest value given for the `limit` parameter in this batch | 60 |
+| `max_offset` | Highest value given for the `offset` parameter in this batch | 1000 |
 
 ## `Settings Updated`
 
