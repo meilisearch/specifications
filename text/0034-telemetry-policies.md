@@ -114,15 +114,15 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `requests.99th_response_time`           | Highest latency from among the fastest 99% of successful search requests | 57ms    | `Documents Searched POST`, `Documents Searched GET`|
 | `requests.total_succeeded`              | Total number of successful requests in this batch | 3456 | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched by Multi-Search POST` |
 | `requests.total_failed`                 | Total number of failed requests in this batch    | 24   | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched by Multi-Search POST` |
-| `requests.total_received`               | Total number of received requests in this batch  | 3480 | `Documents Searched POST`, `Documents Searched GET`, `Documents Deleted`, `Health Seen`, `Tasks Seen`, `Documents Searched by Multi-Search POST` |
+| `requests.total_received`               | Total number of received requests in this batch  | 3480 | `Documents Searched POST`, `Documents Searched GET`, `Documents Deleted`, `Documents Fetched GET`, `Documents Fetched POST`, `Health Seen`, `Tasks Seen`, `Documents Searched by Multi-Search POST` |
 | `sort.with_geoPoint`                    | `true` if the sort rule `_geoPoint` was used in this batch, otherwise `false` | true | `Documents Searched POST`, `Documents Searched GET` |
 | `sort.avg_criteria_number`              | Average number of sort criteria among all requests containing the `sort` parameter in this batch | 2 | `Documents Searched POST`, `Documents Searched GET` |
 | `filter.with_geoRadius`                 | `true` if the filter rule `_geoRadius` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
 | `filter.with_geoBoundingBox`            | `true` if the filter rule `_geoBoundingBox` was used in this batch, otherwise `false`| false | `Documents Searched POST`, `Documents Searched GET` |
 | `filter.most_used_syntax`               | Most used filter syntax among all requests containing the `filter` parameter in this batch | string | `Documents Searched POST`, `Documents Searched GET` |
 | `q.max_terms_number`                    | Highest number of terms given for the `q` parameter in this batch | 5 | `Documents Searched POST`, `Documents Searched GET` |
-| `pagination.max_limit`                  | Highest value given for the `limit` parameter in this batch | 60 | `Documents Searched POST`, `Documents Searched GET` |
-| `pagination.max_offset`                 | Highest value given for the `offset` parameter in this batch | 1000 | `Documents Searched POST`, `Documents Searched GET` |
+| `pagination.max_limit`                  | Highest value given for the `limit` parameter in this batch | 60 | `Documents Searched POST`, `Documents Searched GET`, `Documents Fetched GET`, `Documents Fetched POST` |
+| `pagination.max_offset`                 | Highest value given for the `offset` parameter in this batch | 1000 | `Documents Searched POST`, `Documents Searched GET`, `Documents Fetched GET`, `Documents Fetched POST` |
 | `pagination.most_used_navigation`       | Most used search results navigation among all search requests in this batch. `estimated` / `exhaustive` | `estimated` | `Documents Searched POST`, `Documents Searched GET` |
 | `formatting.max_attributes_to_retrieve` | The maximum number of attributes to retrieve encountered among all requests in this batch. | 100 | `Documents Searched POST`, `Documents Searched GET` |
 | `formatting.max_attributes_to_highlight` | The maximum number of attributes to highlight encountered among all requests in this batch. | 100 | `Documents Searched POST`, `Documents Searched GET` |
@@ -183,9 +183,6 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `matching_strategy.most_used_strategy`      | Most used word matching strategy among all search requests in this batch | `last` | `Documents Searched POST`, `Documents Searched GET` |
 | `per_document_id` | `true` if `DELETE /indexes/:indexUid/documents/:documentUid` or `GET /indexes/:indexUid/documents/:doc_id` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted`, `Documents Fetched GET` |
 | `per_filter` | `true` if `POST /indexes/:indexUid/documents/fetch` or `GET /indexes/:indexUid/documents/` endpoint was used with a filter in this batch, otherwise `false` | false | `Documents Fetched POST`, `Documents Fetched GET` |
-| `total_received` | Total number of request received in this batch | 325 | `Documents Fetched GET`, `Documents Fetched POST` |
-| `max_limit` | Highest value given for the `limit` parameter in this batch | 60 | `Documents Fetched POST`, `Documents Fetched GET` |
-| `max_offset` | Highest value given for the `offset` parameter in this batch | 1000 | `Documents Fetched POST`, `Documents Fetched GET` |
 | `clear_all` | `true` if `DELETE /indexes/:indexUid/documents` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
 | `per_batch` | `true` if `POST /indexes/:indexUid/documents/delete-batch` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
 
@@ -407,11 +404,11 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| `total_received` | Total number of request received in this batch | 325 | `Documents Fetched GET`, `Documents Fetched POST` |
+| `requests.total_received` | Total number of request received in this batch | 325 |
 | `per_document_id` | `true` if `GET /indexes/:indexUid/documents/:doc_id` endpoint was used in this batch, otherwise `false` | false |
 | `per_filter` | `true` if `GET /indexes/:indexUid/documents` endpoint was used with a filter in this batch, otherwise `false` | false |
-| `max_limit` | Highest value given for the `limit` parameter in this batch | 60 |
-| `max_offset` | Highest value given for the `offset` parameter in this batch | 1000 |
+| `pagination.max_limit` | Highest value given for the `limit` parameter in this batch | 60 |
+| `pagination.max_offset` | Highest value given for the `offset` parameter in this batch | 1000 |
 
 ## `Documents Fetched POST`
 
@@ -419,11 +416,11 @@ This property allows us to gather essential information to better understand on 
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
-| `total_received` | Total number of request received in this batch | 325 | `Documents Fetched GET`, `Documents Fetched POST` |
+| `requests.total_received` | Total number of request received in this batch | 325 |
 | `per_document_id` | `false` | false |
 | `per_filter` | `true` if `POST /indexes/:indexUid/documents/fetch` endpoint was used with a filter in this batch, otherwise `false` | false |
-| `max_limit` | Highest value given for the `limit` parameter in this batch | 60 |
-| `max_offset` | Highest value given for the `offset` parameter in this batch | 1000 |
+| `pagination.max_limit` | Highest value given for the `limit` parameter in this batch | 60 |
+| `pagination.max_offset` | Highest value given for the `offset` parameter in this batch | 1000 |
 
 ## `Settings Updated`
 
