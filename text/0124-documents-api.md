@@ -20,7 +20,7 @@ Documents are stored inside indexes.
 
 Manipulate documents of a Meilisearch index.
 
-- [3.1.1. `GET` - `indexes/:index_uid/documents`](#311-get-indexesindexuiddocuments-and-post-indexesindexuiddocumentsfetch)
+- [3.1.1. Fetch documents](#311-fetch-documents)
 - [3.1.2. `GET` - `indexes/:index_uid/documents/:document_id`](#312-get---indexesindexuiddocumentsdocumentid)
 - [3.1.3. `POST` - `indexes/:index_uid/documents`](#313-post---indexesindexuiddocuments)
 - [3.1.4. `PUT` - `indexes/:index_uid/documents`](#314-put---indexesindexuiddocuments)
@@ -28,7 +28,7 @@ Manipulate documents of a Meilisearch index.
 - [3.1.6. `DELETE` - `indexes/:index_uid/documents/:document_id`](#316-delete---indexesindexuiddocumentsdocumentid)
 - [3.1.7. `POST` - `indexes/:index_uid/documents/delete-batch`](#317-post---indexesindexuiddocumentsdelete-batch)
 
-#### 3.1.1. `GET` - `indexes/:index_uid/documents` and `POST` - `indexes/:index_uid/documents/fetch`
+#### 3.1.1. Fetch documents
 
 Meilisearch exposes 2 routes to get the documents:
 - GET `indexes/:index_uid/documents`
