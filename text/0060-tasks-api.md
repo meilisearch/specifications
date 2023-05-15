@@ -103,7 +103,7 @@ List of global tasks by `type`:
 | name                | description                          |
 |---------------------|--------------------------------------|
 | providedIds         | Number of provided document ids.     |
-| originalFilter      | The filter used to delete documents. |
+| originalFilter      | The filter used to delete documents. Only present if the deletion provided a filter. |
 | deletedDocuments    | Number of documents finally deleted. |
 
 ##### indexCreation
