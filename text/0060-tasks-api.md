@@ -1010,16 +1010,9 @@ The task types are listed in decreasing order of priority:
 
 ### 2.2. Auto deletion of tasks
 
-Since Meilisearch can't store tasks forever, at some point, it needs to free up some space in its queue.
-The engine will try to delete the 100k last finished tasks upon reaching 1M total tasks stored.
+Since Meilisearch can't store tasks forever, at some point, it needs to free up some space in its queue. The engine will try to delete the 100k last finished tasks upon reaching 1M total tasks stored.
 
-That means after a batch finishes processing and right before processing the following enqueued tasks,
-Meilisearch will check the number of tasks currently written in its queue.
-If this number is more than 1M, the engine will enqueue a new task that automatically deletes
-the last 100k **finished** tasks.
-That means if there are only 2k finished tasks, only these ones will be deleted.
-And if all the tasks in the queue are still enqueued, then nothing will be deleted, and the engine
-will continue to process the next enqueued tasks.
+That means after a batch finishes processing and right before processing the following enqueued tasks, Meilisearch will check the number of tasks currently written in its queue. If this number is more than 1M, the engine will enqueue a new task that automatically deletes the last 100k **finished** tasks. That means if there are only 2k finished tasks, only these ones will be deleted. And if all the tasks in the queue are still enqueued, then nothing will be deleted, and the engine will continue to process the next enqueued tasks.
 
 ## 3. Future Possibilities
 
