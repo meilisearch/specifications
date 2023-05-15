@@ -118,6 +118,7 @@ The expected behavior of each flag is described in the list above.
 - [SSL tickets](#3325-ssl-tickets)
 - [Config file path](#3326-config-file-path)
 - [Experimental enable Metrics](#3327-experimental-enable-metrics)
+- [Experimental reduce indexing memory usage](#3328-experimental-reduce-indexing-memory-usage)
 
 #### 3.3.1. Database path
 
@@ -486,6 +487,16 @@ See [Configuration File](0185-configuration-file.md) specification details.
 ⚠️ This command-line option does not take any values. Assigning a value will throw an error.
 
 Activate the `/metrics` endpoint to collect Meilisearch metrics for monitoring purposes. See [0174-metrics-api.md](0174-metrics-api.md).
+
+#### 3.3.28. Experimental Reduce Indexing Memory Usage
+
+**Environment variable**: `MEILI_EXPERIMENTAL_REDUCE_INDEXING_MEMORY_USAGE`
+**CLI option**: `--experimental-reduce-indexing-memory-usage`
+**Default**: Disabled
+
+⚠️ This command-line option does not take any values. Assigning a value will throw an error.
+
+Enables the `MDB_WRITEMAP` option of LMDB, making the internal key-value store use much less RAM than usual.
 
 ## 4. Technical Aspects
 
