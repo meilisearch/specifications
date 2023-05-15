@@ -4,7 +4,7 @@
 
 ### I. Summary
 
-This specification describes the behaviour of the task queue and the API endpoints for handling asynchronous operations.
+This specification describes the behavior of the task queue and the API endpoints for handling asynchronous operations.
 
 ### II. Motivation
 
