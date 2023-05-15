@@ -98,7 +98,8 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `infos.ssl_resumption` | `true` if `--ssl-resumption`/`MEILI_SSL_RESUMPTION` is specified, otherwise `false` | false | Every Hour |
 | `infos.ssl_tickets` | `true` if `--ssl-tickets`/`MEILI_SSL_TICKETS` is specified, otherwise `false` | false | Every Hour |
 | `infos.with_configuration_file`         | `true` if the instance is launched with a configuration file, otherwise `false` | false | Every Hour |
-| `infos.experimental_enable_metrics` | `true` if  `--experimental-enable-metrics`/`MEILI_EXPERIMENTAL_ENABLE_METRICS` is specified at launch, otherwise `false` | `false` | Every Hour |
+| `infos.experimental_enable_metrics`     | `true` if  `--experimental-enable-metrics`/`MEILI_EXPERIMENTAL_ENABLE_METRICS` is specified at launch, otherwise `false` | `false` | Every Hour |
+| `infos.experimental_reduce_indexing_memory_usage`     | `true` if  `--experimental-reduce-indexing-memory-usage`/`MEILI_EXPERIMENTAL_REDUCE_INDEXING_MEMORY_USAGE` is specified at launch, otherwise `false` | `false` | Every Hour |
 | `system.distribution`                   | Distribution on which MeiliSearch is launched           | Arch Linux        | Every hour |
 | `system.kernel_version`                 | Kernel version on which MeiliSearch is launched         | 5.14.10           | Every hour |
 | `system.cores`                          | Number of cores                                         | 24                | Every hour |
