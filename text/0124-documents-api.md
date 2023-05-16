@@ -565,7 +565,7 @@ e.g.
 
 ```json
 {
-  "filter": "doggo = 'bernese mountain'
+  "filter": "doggo = 'bernese mountain'"
 }
 ```
 
