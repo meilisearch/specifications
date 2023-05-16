@@ -31,8 +31,8 @@ Manipulate documents of a Meilisearch index.
 #### 3.1.1. (Fetch Documents) - `GET` - `indexes/:index_uid/documents` and `POST` - `indexes/:index_uid/documents/fetch
 
 Meilisearch exposes 2 routes to get the documents:
-- GET `indexes/:index_uid/documents`
-- POST `indexes/:index_uid/documents/fetch`
+- GET `indexes/:index_uid/documents`, which gets its parameters as query parameters.
+- POST `indexes/:index_uid/documents/fetch`, which gets its parameters in a json payload.
 
 List all documents of a Meilisearch index.
 
@@ -53,7 +53,11 @@ Meilisearch orders documents depending on the order they were inserted in the db
 
 Unique identifier of an index.
 
-##### 3.1.1.2. Query Parameters
+##### 3.1.1.2. Parameters
+
+The following parameters need to be send as:
+- Query parameter for the `GET` - `indexes/:index_uid/documents` route.
+- Json body for the `POST `indexes/:index_uid/documents/fetch` route.
 
 | Field                    | Type                      | Required |
 |--------------------------|---------------------------|----------|
@@ -61,6 +65,8 @@ Unique identifier of an index.
 | `limit`                  | String / `null`           | false    |
 | `fields`                 | Array of Strings / `null` | false    |
 | `filter`                 | filter / `null`           | false    |
+
+In the case of the query parameter, as always, the `filter` can only be a string, while it can be either a string, an array of strings, or an array of array of strings for the json body.
 
 ###### 3.1.1.2.1. `offset`
 
