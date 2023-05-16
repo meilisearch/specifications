@@ -61,8 +61,8 @@ The following parameters need to be send as:
 
 | Field                    | Type                      | Required |
 |--------------------------|---------------------------|----------|
-| `offset`                 | Integer / `null`          | false    |
-| `limit`                  | String / `null`           | false    |
+| `offset`                 | Integer                   | false    |
+| `limit`                  | Integer                   | false    |
 | `fields`                 | Array of Strings / `null` | false    |
 | `filter`                 | filter / `null`           | false    |
 
