@@ -903,7 +903,7 @@ HTTP Code: `400 Bad Request`
 
 ## invalid_document_delete_filter
 
-`Synchronous`
+`Synchronous` / `Asynchronous`
 
 ### Context
 

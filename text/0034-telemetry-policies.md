@@ -183,7 +183,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `matching_strategy.most_used_strategy`      | Most used word matching strategy among all search requests in this batch | `last` | `Documents Searched POST`, `Documents Searched GET` |
 | `per_document_id` | `true` if `DELETE /indexes/:indexUid/documents/:documentUid` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
 | `per_batch` | `true` if `POST /indexes/:indexUid/documents/delete-batch` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
-| `per_filter`| `true` if `POST /indexes/:indexUid/documents/delete` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
+| `per_filter`| `true` if `POST /indexes/:indexUid/documents/delete` endpoint was used in this batch, otherwise `false` | false | `Documents Fetched GET`, `Documents Fetched POST`, `Documents Deleted` |
 | `clear_all` | `true` if `DELETE /indexes/:indexUid/documents` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
 
 ----
