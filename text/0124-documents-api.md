@@ -583,7 +583,8 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
 - 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
-- 🔴 Sending a value with an invalid or empty filter will return an [invalid_document_delete_filter](0061-error-format-and-definitions.md#invalid_document_delete_filter) error.
+- 🔴 Sending a value without a filter will return a [missing_document_filter](0061-error-format-and-definitions.md#missing_document_filter) error.
+- 🔴 Sending a value with an invalid or empty filter will return an [invalid_document_filter](0061-error-format-and-definitions.md#invalid_document_filter) error.
 
 ###### 3.1.8.4.1 Async Errors
 
