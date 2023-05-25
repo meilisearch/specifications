@@ -1208,7 +1208,7 @@ components:
           examples:
             Payload Too Large:
               value:
-                message: The provided payload reached the size limit.
+                message: The provided payload reached the size limit. The maximum accepted payload size is 20.00 MiB.
                 code: payload_too_large
                 type: invalid_request
                 link: 'https://docs.meilisearch.com/errors#payload_too_large'
