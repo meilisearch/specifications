@@ -33,15 +33,17 @@ A metric is composed by several fields:
 
 Meilisearch returns the metrics specified in the table below.
 
-| Name                                                                      | Type      |
-|---------------------------------------------------------------------------|-----------|
-| [`http_requests_total`](#321-http_requests_total)                         | counter   |
-| [`http_response_time_seconds`](#322-http_response_time_seconds)           | histogram |
-| [`meilisearch_database_size_bytes`](#323-meilisearch_database_size_bytes) | gauge     |
-| [`meilisearch_index_docs_count`](#324-meilisearch_index_docs_count)       | gauge     |
-| [`meilisearch_index_count`](#325-meilisearch_index_count)                 | gauge     |
+| Name                                                                                   | Type      |
+|----------------------------------------------------------------------------------------|-----------|
+| [`meilisearch_http_requests_total`](#321-meilisearch_http_requests_total)              | counter   |
+| [`meilisearch_http_response_time_seconds`](#322-meilisearch_http_response_time_seconds)| histogram |
+| [`meilisearch_db_size_bytes`](#323-meilisearch_db_size_bytes)                          | gauge     |
+| [`meilisearch_used_db_size_bytes`](#324-meilisearch_used_db_size_bytes)                | gauge     |
+| [`meilisearch_index_docs_count`](#325-meilisearch_index_docs_count)                    | gauge     |
+| [`meilisearch_index_count`](#326-meilisearch_index_count)                              | gauge     |
+| [`meilisearch_nb_tasks`](#327-meilisearch_nb_tasks)                                    | counter   |
 
-#### 3.2.1 `http_requests_total`
+#### 3.2.1 `meilisearch_http_requests_total`
 
 Returns the number of times an API resource is accessed.
 
@@ -51,7 +53,7 @@ Returns the number of times an API resource is accessed.
 http_requests_total{method=":httpMethod",path=":resourcePath"} :numberOfRequest
 ```
 
-#### 3.2.2. `http_responses_time_seconds`
+#### 3.2.2. `meilisearch_http_response_time_seconds`
 
 Returns a time histogram showing the number of times an API resource call goes into a time bucket (expressed in second).
 
@@ -77,7 +79,7 @@ http_response_time_seconds_sum{method=":httpMethod",path=":resourcePath"} :numbe
 http_response_time_seconds_count{method=":httpMethod",path=":resourcePath"} :numberOfRequest
 ```
 
-#### 3.2.3. `meilisearch_database_size_bytes`
+#### 3.2.3. `meilisearch_db_size_bytes`
 
 Returns the size of the database in bytes.
 
@@ -87,7 +89,17 @@ Returns the size of the database in bytes.
 meilisearch_db_size_bytes :databaseSizeInBytes
 ```
 
-#### 3.2.4. `meilisearch_index_docs_count`
+#### 3.2.4. `meilisearch_used_db_size_bytes`
+
+Returns the size of the database actually used by meilisearch in bytes.
+
+```
+# HELP meilisearch_used_db_size_bytes Meilisearch Used DB Size In Bytes
+# TYPE meilisearch_used_db_size_bytes gauge
+meilisearch_used_db_size_bytes :databaseSizeInBytes
+```
+
+#### 3.2.5. `meilisearch_index_docs_count`
 
 Returns the number of documents for an index.
 
@@ -97,7 +109,7 @@ Returns the number of documents for an index.
 meilisearch_index_docs_count{index=":indexUid"} :numberOfDocuments
 ```
 
-#### 3.2.5. `meilisearch_index_count`
+#### 3.2.6. `meilisearch_index_count`
 
 Returns the total number of index for the Meilisearch instance.
 
@@ -106,6 +118,24 @@ Returns the total number of index for the Meilisearch instance.
 # TYPE meilisearch_index_count gauge
 meilisearch_index_count :numberOfIndex
 ````
+
+#### 3.2.7. `meilisearch_nb_tasks`
+
+Returns the total number of index for the Meilisearch instance.
+
+```
+# HELP meilisearch_nb_tasks Meilisearch Number of tasks
+# TYPE meilisearch_nb_tasks gauge
+meilisearch_nb_tasks{kind=":kind",value=":value"} :number
+````
+
+Here is a list of available kind and associated values:
+
+| Kind      | values                                                                 |
+|-----------|------------------------------------------------------------------------|
+| indexes   | Any created indexes                                                    |
+| statuses  | Any task statuses (i.e.: succeeded, failed, enqueued, etc...)          |
+| types     | Any task types (i.e.: documentAdditionOrUpdate, settingsUpdate, etc...)|
 
 ### 3.3. API Endpoints Definition
 
