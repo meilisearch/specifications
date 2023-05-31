@@ -76,7 +76,7 @@ http_response_time_seconds_bucket{method=":httpMethod",path=":resourcePath",le="
 http_response_time_seconds_bucket{method=":httpMethod",path=":resourcePath",le="1"} :numberOfRequest
 http_response_time_seconds_bucket{method=":httpMethod",path=":resourcePath",le="+Inf"} :numberOfRequest
 http_response_time_seconds_sum{method=":httpMethod",path=":resourcePath"} :numberOfRequest
-http_response_time_seconds_count{method=":httpMethod",path=":resourcePath"} :numberOfRequest
+meilisearch_http_response_time_seconds_count{method=":httpMethod",path=":resourcePath"} :numberOfRequest
 ```
 
 #### 3.2.3. `meilisearch_db_size_bytes`
