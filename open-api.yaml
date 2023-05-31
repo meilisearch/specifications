@@ -1816,6 +1816,39 @@ paths:
         - Documents
       security:
         - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                offset:
+                  type: number
+                  description: Number of documents to skip.
+                  default: 0
+                limit:
+                  type: number
+                  description: Maximum number of documents returned.
+                  default: 20
+                fields:
+                  type: array
+                  description: 'Array of attributes whose fields will be present in the returned documents. By default all attributes will be returned.'
+                  items:
+                    type: string
+                    example: '["title", "overview"]'
+                    default: '["*"]'
+                filter:
+                  $ref: '#/components/schemas/filter'
+            examples:
+              Example:
+                value:
+                  offset: 2
+                  limit: 5
+                  fields:
+                    - name
+                    - picture
+                  filter: 'doggo = "bernese mountain"'
       responses:
         '200':
           description: Ok
@@ -1860,11 +1893,6 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           description: Not Found
-      parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/fields'
-        - $ref: '#/components/parameters/filter'
   '/indexes/{indexUid}/documents/delete-batch':
     post:
       operationId: indexes.documents.removeBatch
@@ -1926,21 +1954,6 @@ paths:
             schema:
               type: object
               properties:
-                offset:
-                  type: number
-                  description: Number of documents to skip.
-                  default: 0
-                limit:
-                  type: number
-                  description: Maximum number of documents returned.
-                  default: 20
-                fields:
-                  type: array
-                  description: 'Array of attributes whose fields will be present in the returned documents. By default all attributes will be returned.'
-                  items:
-                    type: string
-                    example: '["title", "overview"]'
-                    default: '["*"]'
                 filter:
                   $ref: '#/components/schemas/filter'
             examples:
