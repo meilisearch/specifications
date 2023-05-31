@@ -81,7 +81,8 @@ meilisearch_http_response_time_seconds_count{method=":httpMethod",path=":resourc
 
 #### 3.2.3. `meilisearch_db_size_bytes`
 
-Returns the size of the database in bytes.
+Returns the “real” size of the database on disk in bytes.
+It includes all the lmdb memory mapped files plus all the files contained in the `data.ms` directory (mainly the updates files that were not processed yet).
 
 ```
 # HELP meilisearch_db_size_bytes Meilisearch Db Size In Bytes
@@ -92,6 +93,8 @@ meilisearch_db_size_bytes :databaseSizeInBytes
 #### 3.2.4. `meilisearch_used_db_size_bytes`
 
 Returns the size of the database actually used by meilisearch in bytes.
+Include all the same files as `meilisearch_db_size_bytes` except that when it comes to an LMDB database, we only count the pages used by meilisearch.
+This means if you see a large gap between both metrics, adding documents will probably re-use freed pages instead of growing `meilisearch_db_size_bytes`.
 
 ```
 # HELP meilisearch_used_db_size_bytes Meilisearch Used DB Size In Bytes
