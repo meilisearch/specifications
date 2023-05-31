@@ -50,7 +50,7 @@ Returns the number of times an API resource is accessed.
 ```
 # HELP http_requests_total HTTP requests total
 # TYPE http_requests_total counter
-http_requests_total{method=":httpMethod",path=":resourcePath"} :numberOfRequest
+meilisearch_http_requests_total{method=":httpMethod",path=":resourcePath"} :numberOfRequest
 ```
 
 #### 3.2.2. `meilisearch_http_response_time_seconds`
