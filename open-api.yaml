@@ -3885,37 +3885,75 @@ paths:
               type: string
               examples:
                 sampleResponse: '
-                  # HELP http_requests_total HTTP requests total
-                  # TYPE http_requests_total counter
-                  http_requests_total{method="GET",path="/metrics"} 3
                   # HELP http_response_time_seconds HTTP response times
                   # TYPE http_response_time_seconds histogram
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.0005"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.0008"} 1
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.00085"} 1
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.0009"} 1
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.00095"} 1
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.001"} 1
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.00105"} 1
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.0011"} 1
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.00115"} 1
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.0012"} 1
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.0015"} 1
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.002"} 1
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.003"} 1
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="1"} 2
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="+Inf"} 2
-                  http_response_time_seconds_sum{method="GET",path="/metrics"} 0.0056515409999999995
-                  http_response_time_seconds_count{method="GET",path="/metrics"} 2
-                  # HELP meilisearch_db_size_bytes Meilisearch Db Size In Bytes
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.001"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.002"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.003"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.004"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.005"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.006"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.007"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.008"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.009"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.01"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.02"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.03"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.04"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.05"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.06"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.07"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.08"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.09"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.1"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.2"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.3"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.4"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.5"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.6"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.7"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.8"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.9"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="1"} 0
+                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="+Inf"} 0
+                  http_response_time_seconds_sum{method="GET",path="/metrics"} 0
+                  http_response_time_seconds_count{method="GET",path="/metrics"} 0
+                  # HELP meilisearch_db_size_bytes Meilisearch DB Size In Bytes
                   # TYPE meilisearch_db_size_bytes gauge
-                  meilisearch_db_size_bytes 155648
+                  meilisearch_db_size_bytes 983040
+                  # HELP meilisearch_http_requests_total Meilisearch HTTP requests total
+                  # TYPE meilisearch_http_requests_total counter
+                  meilisearch_http_requests_total{method="GET",path="/metrics"} 1
                   # HELP meilisearch_index_count Meilisearch Index Count
                   # TYPE meilisearch_index_count gauge
                   meilisearch_index_count 1
                   # HELP meilisearch_index_docs_count Meilisearch Index Docs Count
                   # TYPE meilisearch_index_docs_count gauge
-                  meilisearch_index_docs_count{index="movies"} 0'
+                  meilisearch_index_docs_count{index="mieli"} 1
+                  # HELP meilisearch_nb_tasks Meilisearch Number of tasks
+                  # TYPE meilisearch_nb_tasks gauge
+                  meilisearch_nb_tasks{kind="indexes",value="mieli"} 6
+                  meilisearch_nb_tasks{kind="statuses",value="canceled"} 0
+                  meilisearch_nb_tasks{kind="statuses",value="enqueued"} 0
+                  meilisearch_nb_tasks{kind="statuses",value="failed"} 2
+                  meilisearch_nb_tasks{kind="statuses",value="processing"} 0
+                  meilisearch_nb_tasks{kind="statuses",value="succeeded"} 4
+                  meilisearch_nb_tasks{kind="types",value="documentAdditionOrUpdate"} 2
+                  meilisearch_nb_tasks{kind="types",value="documentDeletion"} 2
+                  meilisearch_nb_tasks{kind="types",value="documentDeletionByFilter"} 0
+                  meilisearch_nb_tasks{kind="types",value="dumpCreation"} 0
+                  meilisearch_nb_tasks{kind="types",value="indexCreation"} 2
+                  meilisearch_nb_tasks{kind="types",value="indexDeletion"} 0
+                  meilisearch_nb_tasks{kind="types",value="indexSwap"} 0
+                  meilisearch_nb_tasks{kind="types",value="indexUpdate"} 0
+                  meilisearch_nb_tasks{kind="types",value="settingsUpdate"} 0
+                  meilisearch_nb_tasks{kind="types",value="snapshotCreation"} 0
+                  meilisearch_nb_tasks{kind="types",value="taskCancelation"} 0
+                  meilisearch_nb_tasks{kind="types",value="taskDeletion"} 0
+                  # HELP meilisearch_used_db_size_bytes Meilisearch Used DB Size In Bytes
+                  # TYPE meilisearch_used_db_size_bytes gauge
+                  meilisearch_used_db_size_bytes 344064'
       operationId: metrics.get
       parameters: []
       security:
