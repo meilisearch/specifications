@@ -124,7 +124,7 @@ meilisearch_index_count :numberOfIndex
 
 #### 3.2.7. `meilisearch_nb_tasks`
 
-Returns the total number of index for the Meilisearch instance.
+Returns the total number of tasks for the Meilisearch instance parametrized by the kind of task and its value (see the table below).
 
 ```
 # HELP meilisearch_nb_tasks Meilisearch Number of tasks
