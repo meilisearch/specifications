@@ -156,9 +156,15 @@ The grammar for the value of a filterable attribute is the same as the grammar f
 - Exists:
     * `attribute EXISTS`
     * `attribute NOT EXISTS`
-- In:
+- IN:
     * `attribute IN[value, value, etc.]`
     * `attribute NOT IN[value, value, etc.]`
+- IS EMPTY:
+    * `attribute IS EMPTY`
+    * `attribute IS NOT EMPTY`
+- IS NULL:
+    * `attribute IS NULL`
+    * `attribute IS NOT NULL`
 - AND: `filter AND filter`
 - OR: `filter OR filter`
 - NOT: `NOT filter`
@@ -298,7 +304,7 @@ size = 0 OR NOT size = 2                   -> selects [0,1]
 NOT (NOT size = 0)                         -> selects [0]
 ```
 
-###### 3.1.2.1.10 Exists
+###### 3.1.2.1.10 EXISTS
 
 The `EXISTS` operator selects the documents for which the filterable attribute exists, even if its value is `null` or an empty array. It is a postfix operator that takes an attribute name as argument.
 
@@ -325,7 +331,7 @@ For example, with the documents:
 ```
 Then the filter `colour EXISTS` selects the document ids `[0,1]` while the filter `colour NOT EXISTS` or `NOT colour EXISTS` selects the document ids `[2]`.
 
-###### 3.1.2.1.11 In
+###### 3.1.2.1.11 IN
 
 The `IN[..]` operator is a more concise way to combine equality operators. It is a postfix operator that takes an attribute name on the left hand side and an array of values on the right hand side. An array of value is a comma-separated list of values delimited by square brackets.
 
@@ -353,6 +359,82 @@ attribute != value1 AND attribute != value2 AND ...
 
 - The `_geoRadius` operator selects the documents whose geographical coordinates fall within a certain range of a given coordinate. See [GeoSearch](0059-geo-search.md) for more information.
 - The `_geoBoundingBox` operator selects the documents whose geographical coordinates fall within a square described by the given coordinates. See [GeoSearch](0059-geo-search.md) for more information.
+
+###### 3.1.2.1.12 IS EMPTY
+
+The `IS EMPTY` operator selects the documents for which the filterable attribute exists and is empty. If the attribute doesn't exists then it is not empty and the document will not be returned. It is a postfix operator that takes an attribute name as argument.
+
+The negated form of `IS EMPTY` can be written in two ways:
+```
+attribute IS NOT EMPTY
+NOT attribute IS EMPTY
+```
+Both forms are equivalent. They select the documents for which the attribute is not empty.
+
+Here is the list of JSON values that are considered empty:
+ - `""`
+ - `[]`
+ - `{}`
+
+For example, with the documents:
+```json
+[{
+    "id": 0,
+    "colour": []
+},
+{
+    "id": 1,
+    "colour": null
+},
+{
+    "id": 2,
+    "colour": ""
+},
+{
+    "id": 3,
+    "colour": {}
+},
+{
+    "id": 4
+}]
+```
+Then the filter `colour IS EMPTY` selects the document ids `[0,2,3]` while the filter `colour IS NOT EMPTY` or `NOT colour IS EMPTY` selects the document ids `[1,4]`.
+
+###### 3.1.2.1.13 IS NULL
+
+The `IS NULL` operator selects the documents for which the filterable attribute exists and is `null`. If the attribute doesn't exists then it is not `null` and the document will not be returned. It is a postfix operator that takes an attribute name as argument.
+
+The negated form of `IS NULL` can be written in two ways:
+```
+attribute IS NOT NULL
+NOT attribute IS NULL
+```
+Both forms are equivalent. They select the documents for which the attribute is not `null`.
+
+For example, with the documents:
+```json
+[{
+    "id": 0,
+    "colour": []
+},
+{
+    "id": 1,
+    "colour": null
+},
+{
+    "id": 2,
+    "colour": ""
+},
+{
+    "id": 3,
+    "colour": {}
+},
+{
+    "id": 4
+}]
+```
+Then the filter `colour IS NULL` selects the document ids `[1]` while the filter `colour IS NOT NULL` or `NOT colour IS NULL` selects the document ids `[0,2,3,4]`.
+
 
 ##### 3.1.2.2. Array Syntax
 
