@@ -20,7 +20,7 @@ Documents are stored inside indexes.
 
 Manipulate documents of a Meilisearch index.
 
-- [3.1.1. `GET` - `indexes/:index_uid/documents`](#311-get---indexesindexuiddocuments)
+- [3.1.1. (Fetch Documents) - `GET` - `indexes/:index_uid/documents` and `POST` - `indexes/:index_uid/documents/fetch](#311-fetch-documents-get-indexesindexuiddocuments-and-post-indexesindexuiddocumentsfetch)
 - [3.1.2. `GET` - `indexes/:index_uid/documents/:document_id`](#312-get---indexesindexuiddocumentsdocumentid)
 - [3.1.3. `POST` - `indexes/:index_uid/documents`](#313-post---indexesindexuiddocuments)
 - [3.1.4. `PUT` - `indexes/:index_uid/documents`](#314-put---indexesindexuiddocuments)
@@ -28,13 +28,17 @@ Manipulate documents of a Meilisearch index.
 - [3.1.6. `DELETE` - `indexes/:index_uid/documents/:document_id`](#316-delete---indexesindexuiddocumentsdocumentid)
 - [3.1.7. `POST` - `indexes/:index_uid/documents/delete-batch`](#317-post---indexesindexuiddocumentsdelete-batch)
 
-#### 3.1.1. `GET` - `indexes/:index_uid/documents`
+#### 3.1.1. (Fetch Documents) - `GET` - `indexes/:index_uid/documents` and `POST` - `indexes/:index_uid/documents/fetch
+
+Meilisearch exposes 2 routes to get the documents:
+- GET `indexes/:index_uid/documents`, which gets its parameters as query parameters.
+- POST `indexes/:index_uid/documents/fetch`, which gets its parameters in a JSON payload.
 
 List all documents of a Meilisearch index.
 
 The query parameters `offset` and `limit` permit browsing through all documents of an index.
 
-Meilisearch orders documents depending on the hash of their id.
+Meilisearch orders documents depending on the order they were inserted in the db.
 
 ##### 3.1.1.1. Path Parameters
 
@@ -49,13 +53,20 @@ Meilisearch orders documents depending on the hash of their id.
 
 Unique identifier of an index.
 
-##### 3.1.1.2. Query Parameters
+##### 3.1.1.2. Parameters
 
-| Field                    | Type                     | Required |
-|--------------------------|--------------------------|----------|
-| `offset`                 | Integer / `null`         | false    |
-| `limit`                  | String / `null`          | false    |
-| `fields`                 | String / `null`          | false    |
+The following parameters need to be send as:
+- Query parameter for the `GET` - `indexes/:index_uid/documents` route.
+- JSON body for the `POST `indexes/:index_uid/documents/fetch` route.
+
+| Field                    | Type                      | Required |
+|--------------------------|---------------------------|----------|
+| `offset`                 | Integer                   | false    |
+| `limit`                  | Integer                   | false    |
+| `fields`                 | Array of Strings / `null` | false    |
+| `filter`                 | filter / `null`           | false    |
+
+In the case of the query parameter, as always, the `filter` can only be a string, while it can be either a string, an array of strings, or an array of array of strings for the JSON body.
 
 ###### 3.1.1.2.1. `offset`
 
@@ -75,7 +86,7 @@ Sets the maximum number of documents to be returned by the current request.
 
 ###### 3.1.1.2.3. `fields`
 
-- Type: String
+- Type: Array of Strings
 - Required: False
 - Default: `*`
 
@@ -91,6 +102,17 @@ If `fields` is not specified, all attributes from the documents are returned in 
 > Specified fields have to be separated by a comma. e.g. `&fields=title,description`
 
 > The index setting `displayedAttributes` has no impact on this endpoint.
+
+###### 3.1.1.2.4. `filter`
+
+- Type: String | Array of array of Strings
+- Required: False
+- Default: null
+
+Refine the results by selecting documents that match the given filter.
+In the case of the POST route, it is possible to send the filter in the form of an array of array of strings akin to the search route.
+
+Attributes used as filter criteria must be added to the `filterableAttributes` list of an index settings. See [Filterable Attributes Setting API](0123-filterable-attributes-setting-api.md).
 
 ##### 3.1.1.3. Response Definition
 
@@ -161,6 +183,7 @@ Gives the total number of documents that can be browsed in the related index.
 - 🔴 Sending a value with a different type than `Integer` or `null` for `offset` will return a [invalid_document_offset](0061-error-format-and-definitions.md#invalid_document_offset) error.
 - 🔴 Sending a value with a different type than `Integer` or `null` for `limit` will return a [invalid_document_limit](0061-error-format-and-definitions.md#invalid_document_limit) error.
 - 🔴 Sending a value with a different type than `String` or `null` for `fields` will return a [invalid_document_fields](0061-error-format-and-definitions.md#invalid_document_fields) error.
+- 🔴 Sending a value with a different type than `String`, `Array of strings`, `Array of array of strings` or `null` for `filter` will return a [invalid_document_filter](0061-error-format-and-definitions.md#invalid_document_filter) error.
 
 #### 3.1.2. `GET` - `indexes/:index_uid/documents/:document_id`
 
@@ -252,7 +275,7 @@ This endpoint accepts various content-type:
 
 - [`application/json`](0135-indexing-json.md)
 - [`text/csv`](0028-indexing-csv.md)
-- [`application/x-ndjson`](0028-indexing-ndjson.md)
+- [`application/x-ndjson`](0029-indexing-ndjson.md)
 
 ##### 3.1.3.1. Path Parameters
 
@@ -326,7 +349,7 @@ This endpoint accepts various content-type:
 
 - [`application/json`](0135-indexing-json.md)
 - [`text/csv`](0028-indexing-csv.md)
-- [`application/x-ndjson`](0028-indexing-ndjson.md)
+- [`application/x-ndjson`](0029-indexing-ndjson.md)
 
 ##### 3.1.4.1. Path Parameters
 
@@ -496,7 +519,7 @@ e.g.
 
 ##### 3.1.7.3. Response Definition
 
-When the request is successful, Meilisearch returns the HTTP code `202 Accepted`. The response's content is the summarized representation of the received asynchronous task.
+When the request is successful, Meilisearch returns the HTTP code `202 Accepted`. The response's content is the summarized representation of the received asynchronous task with the type `documentDeletion`.
 
 See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted).
 
@@ -514,11 +537,64 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 
 - 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
-#### 3.1.8. General Errors
+#### 3.1.8. `POST` - `indexes/:index_uid/documents/delete`
+
+Delete a selection of documents based on a filter.
+
+##### 3.1.8.1. Path Parameters
+
+| Field                    | Type                     | Required |
+|--------------------------|--------------------------|----------|
+| `index_uid`              | String                   | True     |
+
+###### 3.1.8.1.1. `index_uid`
+
+- Type: String
+- Required: True
+
+Unique identifier of an index.
+
+##### 3.1.8.2 Request Payload Definition
+
+A filter.
+
+- Type: String or array of array of strings
+- Required: True
+
+e.g.
+
+```json
+{
+  "filter": "doggo = 'bernese mountain'"
+}
+```
+
+##### 3.1.8.3. Response Definition
+
+When the request is successful, Meilisearch returns the HTTP code `202 Accepted`. The response's content is the summarized representation of the received asynchronous task with the type `documentDeletion`.
+
+See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted).
+
+##### 3.1.8.4. Errors
+
+- 🔴 Omitting Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
+- 🔴 Sending an empty Content-Type returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
+- 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
+- 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
+- 🔴 Sending an invalid payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
+- 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
+- 🔴 Sending a value without a filter will return a [missing_document_filter](0061-error-format-and-definitions.md#missing_document_filter) error.
+- 🔴 Sending a value with an invalid or empty filter will return an [invalid_document_filter](0061-error-format-and-definitions.md#invalid_document_filter) error.
+
+###### 3.1.8.4.1 Async Errors
+
+- 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
+
+#### 3.1.9. General Errors
 
 These errors apply to all endpoints described here.
 
-##### 3.1.8.1 Auth Errors
+##### 3.1.9.1 Auth Errors
 
 The auth layer can return the following errors if Meilisearch is secured (a master-key is defined).
 
