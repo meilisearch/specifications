@@ -38,9 +38,9 @@ While there's [RFC 4180](https://tools.ietf.org/html/rfc4180) as a try to add a 
 
 - CSV data format needs to contain a first line representing the list of attributes with the optionally chosen type separated from the attribute name by `:` character. The type is case insensitive.
 
-> An attribute can be specificed with two types: `string` or `number`. A missing type will be interpreted as a `string` by default.
+> An attribute can be specificed with three types: `string`, `boolean` or `number`. A missing type will be interpreted as a `string` by default.
 >
-> Valid headline example: "id:number","title:string","author","price:number"
+> Valid headline example: "id:number","title:string","author","price:number","cute:boolean"
 
 - The following CSV lines will represent a document for Meilisearch.
 - A `,` character must separate each cell.
@@ -57,14 +57,15 @@ While there's [RFC 4180](https://tools.ietf.org/html/rfc4180) as a try to add a 
 ##### `null` value
 
 - If a field is of type `string`, then an empty cell is considered as a `null` value (e.g. `,,`), anything else is turned into a string value (e.g. `, ,` is a single whitespace string)
-- If a field is of type `number`, when the trimmed field is empty, it's considered as a `null` value (e.g. `,,` `, ,`); otherwise Meilisearch try to parse the number.
+- If a field is of type `number`, when the trimmed field is empty, it's considered as a `null` value (e.g. `,,` `, ,`); otherwise, Meilisearch tries to parse the number.
+- If a field is of type `boolean`, when the trimmed field is empty, it's considered as a `null` value (e.g. `,,` `, ,`); otherwise, Meilisearch tries to parse the boolean as either `true` or `false`.
 
 ##### Example with a comma inside a cell
 
 Given the CSV payload
 ```
-"id:number","label","price:number","colors","description"
-"1","t-shirt","4.99","red","Thus, you will rock at summer time."
+"id:number","label","price:number","colors","description","contains_a_dog_picture:boolean"
+"1","t-shirt","4.99","red","Thus, you will rock at summer time.","false"
 ```
 the search result should be displayed as
 ```json
@@ -75,7 +76,8 @@ the search result should be displayed as
       "label": "t-shirt",
       "price": 4.99,
       "colors": "red",
-      "description": "Hey, you will rock at summer time."
+      "description": "Thus, you will rock at summer time.",
+      "contains_a_dog_picture": false
     }
   ],
   ...
@@ -172,6 +174,7 @@ curl \
 - 🔴 Sending an invalid CSV format will lead to a 400 bad_request - **malformed_payload** error code.
 - 🔴 Sending a CSV header that does not conform to the specification will lead to a 400 bad_request - **malformed_payload** error code.
 - 🔴 Sending an invalid csv delimiter: not exactly one ASCII char. This will lead to a 400 bad_request - **invalid_document_csv_delimiter** error code.
+- 🔴 Sending a CSV cell with the type `number` or `boolean` that can't be parsed will lead to a 400 bad_request - **malformed_payload** error code.
 
 ##### Errors Definition
 
