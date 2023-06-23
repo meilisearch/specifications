@@ -51,6 +51,7 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 | [`cropMarker`](#3115-cropmarker)                      | String                   | False    |
 | [`showMatchesPosition`](#3116-showmatchesposition)    | Boolean                  | False    |
 | [`matchingStrategy`](#3117-matchingStrategy)          | String                   | False    |
+| [`vector`](#3118-vector) `EXPERIMENTAL`               | Array of Float           | False    |
 
 
 #### 3.1.1. `q`
@@ -912,22 +913,33 @@ The documents containing ALL the query words (i.e. in the `q` parameter) are ret
 
 Only the documents containing ALL the query words (i.e. in the `q` parameter) are returned by Meilisearch. If Meilisearch doesn't have enough documents to fit the requested `limit`, it returns the documents found without trying to match more documents.
 
+#### 3.1.18. `vector` `EXPERIMENTAL`
+
+- Type: Array of Float
+- Required: False
+- Default: []
+
+Request the nearest documents based on the query vector embedding being given.
+
+//TODO Describes errors
+
 ### 3.2. Search Response Properties
 
-| Field                                           | Type       | Required |
-|-------------------------------------------------|------------|----------|
-| [`hits`](#321-hits)                             | Array[Hit] | True     |
-| [`limit`](#322-limit)                           | Integer    | False    |
-| [`offset`](#323-offset)                         | Integer    | False    |
-| [`estimatedTotalHits`](#324-estimatedTotalHits) | Integer    | False    |
-| [`page`](#325-page)                             | Integer    | False    |
-| [`hitsPerPage`](#326-hitsperpage)               | Integer    | False    |
-| [`totalPages`](#327-totalpages)                 | Integer    | False    |
-| [`totalHits`](#328-totalhits)                   | Integer    | False    |
-| [`facetDistribution`](#329-facetdistribution)   | Object     | False    |
-| [`facetStats`](#3210-facetstats)                | Object     | False    |
-| [`processingTimeMs`](#3211-processingtimems)    | Integer    | True     |
-| [`query`](#3212-query)                          | String     | True     |
+| Field                                           | Type           | Required  |
+|-------------------------------------------------|----------------|-----------|
+| [`hits`](#321-hits)                             | Array[Hit]     | True      |
+| [`limit`](#322-limit)                           | Integer        | False     |
+| [`offset`](#323-offset)                         | Integer        | False     |
+| [`estimatedTotalHits`](#324-estimatedTotalHits) | Integer        | False     |
+| [`page`](#325-page)                             | Integer        | False     |
+| [`hitsPerPage`](#326-hitsperpage)               | Integer        | False     |
+| [`totalPages`](#327-totalpages)                 | Integer        | False     |
+| [`totalHits`](#328-totalhits)                   | Integer        | False     |
+| [`facetDistribution`](#329-facetdistribution)   | Object         | False     |
+| [`facetStats`](#3210-facetstats)                | Object         | False     |
+| [`processingTimeMs`](#3211-processingtimems)    | Integer        | True      |
+| [`query`](#3212-query)                          | String         | True      |
+| [`vector`](#3213-vector) `EXPERIMENTAL`         | Array of Float | False     |
 
 #### 3.2.1. `hits`
 
@@ -944,11 +956,12 @@ A search result can contain special properties. See [3.2.1.1. `hit` Special Prop
 
 ##### 3.2.1.1. `hit` Special Properties
 
-| Field                                        | Type    | Required |
-|----------------------------------------------|---------|----------|
-| [`_geoDistance`](#32111-geodistance)         | Integer | False    |
-| [`_formatted`](#32112-formatted)             | Object  | False    |
-| [`_matchesPosition`](#32113-matchesposition) | Object  | False    |
+| Field                                                             | Type    | Required |
+|-------------------------------------------------------------------|---------|----------|
+| [`_geoDistance`](#32111-geodistance)                              | Integer | False    |
+| [`_formatted`](#32112-formatted)                                  | Object  | False    |
+| [`_matchesPosition`](#32113-matchesposition)                      | Object  | False    |
+| [`_semanticSimilarity`](#32114-semanticsimilarity) `EXPERIMENTAL` | Float   | False    |
 
 ###### 3.2.1.1.1. `_geoDistance`
 
@@ -1155,6 +1168,15 @@ The beginning of a matching term within a field is indicated by `start`, and its
 
 > See [3.1.14. `showMatchesPosition`](#3116-showmatchesposition) section.
 
+###### 3.2.1.1.4. `_semanticSimilarity` `EXPERIMENTAL`
+
+- Type: Float
+- Required: False
+
+Contains the semantic similarity score of the document for a vector search when `vector` has been provided. The score is represented as a dot product.
+
+> See [3.1.18 `vector`](#3118-vector-experimental)
+
 #### 3.2.2. `limit`
 
 - Type: Integer
@@ -1270,6 +1292,15 @@ Processing time of the search query in **milliseconds**.
 Query originating the response. Equals to the `q` search parameter.
 
 > See [3.1.1. `q`](#311-q) section.
+
+#### 3.2.13. `vector` `EXPERIMENTAL`
+
+- Type: Array of Float
+- Required: False
+
+Vector query embedding originating the response. Equals to the `vector` search parameter if specified.
+
+> See [3.1.18. `vector`](#3118-vector-experimental)
 
 ## 2. Technical Details
 n/a
