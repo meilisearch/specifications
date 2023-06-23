@@ -17,6 +17,7 @@ This settings will host the parameters to configure the faceting behavior for an
 | Field                                            | Type            | Required |
 |--------------------------------------------------|-----------------|----------|
 | [maxValuesPerFacet](#311-maxValuesPerFacet)      | Integer         | False    |
+| [sortFacetValuesBy](#312-sortFacetValuesBy)      | Object          | False    |
 
 #### 3.1.1. `maxValuesPerFacet`
 
@@ -33,6 +34,18 @@ The value of 100 ensures good performance and prevents malicious users from scra
 Increasing this value can degrade performance as well as expose the data of an instance to scrapping.
 
 The facets that are returned are sorted in ascending lexicographical order.
+
+#### 3.1.2 `sortFacetValuesBy`
+
+- Type: Object
+- Required: False
+- Default:
+
+```json
+{
+    "*": "alpha"
+}
+```
 
 ## 3.2. API Endpoints Definition
 
