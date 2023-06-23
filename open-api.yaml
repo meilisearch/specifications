@@ -176,6 +176,21 @@ components:
         _geoDistance:
           type: number
           description: 'Using _geoPoint({lat}, {lng}) built-in sort rule at search leads the engine to return a _geoDistance within the search results. This field represents the distance in meters of the document from the specified _geoPoint.'
+    facetHit:
+      type: object
+      additionalProperties: true
+      examples:
+        - value: Romance
+          count: 25
+      description: FacetHit object represents a matched facet value for a facet search.
+      properties:
+        value:
+          type: string
+          description: The facet value being matched.
+          additionalProperties: true
+        count:
+          type: integer
+          description: The number of document containing the matched facet value.
     documentId:
       oneOf:
         - type: number
@@ -306,6 +321,27 @@ components:
         - hits
         - processingTimeMs
         - query
+    facetSearchResponse:
+      type: object
+      additionalProperties: false
+      title: ''
+      properties:
+        facetHits:
+          type: array
+          description: Array of facet hits
+          items:
+            $ref: '#/components/schemas/facetHit'
+        facetQuery:
+          type: string
+          description: Facet query originating the response.
+          example: ninja
+        processingTimeMs:
+          type: integer
+          description: Processing time of the facet search query.
+      required:
+        - facetHits
+        - facetQuery
+        - processingTimeMs
     task:
       type: object
       description: |
@@ -762,7 +798,37 @@ components:
             attributesToHighlight:
               - overview
             showMatchesPosition: true
-            wordsMatchingStrategy: all
+            matchingStrategy: all
+    facetSearchQuery:
+      type: object
+      additionalProperties: false
+      properties:
+        facetName:
+          type: string
+          required: true
+          description: Query string.
+          example: '"genres"'
+        facetQuery:
+          type: string
+          description:
+          default: '""'
+          example: '"Horror"'
+        q:
+          type: string
+          description: 'Additional search parameter. If additional search parameters are set, the method will return facet values that both: - Match the face query - Are contained in the records matching the additional search parameters'
+          default: '""'
+          example: '"Back to the future"'
+        matchingStrategy:
+          type: string
+          description: 'Additional search parameter. If additional search parameters are set, the method will return facet values that both: - Match the face query - Are contained in the records matching the additional search parameters'
+          default: 'last'
+        filter:
+          $ref: '#/components/schemas/filter'
+      examples:
+        Example:
+          value:
+            facetName: genres
+            facetQuery: Romance
     error:
       title: error
       type: object
@@ -1315,11 +1381,13 @@ tags:
       [Learn more about documents](https://docs.meilisearch.com/learn/core_concepts/documents.html).
   - name: Search
     description: |
-      Meilisearch exposes 3 routes to perform searches:
+      Meilisearch exposes 3 routes to perform document searches:
       * A POST route: this is the preferred route when using API authentication, as it allows [preflight request](https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request) caching and better performances.
       * A GET route: the usage of this route is discouraged, unless you have good reason to do otherwise (specific caching abilities for example).
       Other than the differences mentioned above, the two routes are strictly equivalent.
       * A POST multi-search route allowing to perform multiple search queries in a single HTTP request.
+      Meilisearch exposes 1 route to perform facet searches:
+      * A POST facet-search route allowing to perform a facet search query on a facet in a single HTTP request.
   - name: Tasks
     description: |
       The `tasks` route gives information about the progress of the [asynchronous operations](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html).
@@ -2173,6 +2241,48 @@ paths:
                     offset: 0
                     estimatedTotalHits: 0
                     query: string
+                    processingTimeMs: 0
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+      parameters:
+        - $ref: '#/components/parameters/Content-Type'
+    parameters:
+      - $ref: '#/components/parameters/indexUid'
+  '/indexes/{indexUid}/facet-search':
+    post:
+      operationId: indexes.documents.facet.search
+      summary: Facet Search
+      description: |
+        Search for facet values matching a specific query for a facet. When many values exist for a facet, users need to be able to discover non-show values they can select in order to refine their faceted search.
+      tags:
+        - Search
+        - Facet
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/facetSearchQuery'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/facetSearchResponse'
+              examples:
+                Example:
+                  value:
+                    facetHits:
+                      - value: Romance
+                        count: 25
+                      - value: Romantic
+                        count: 3
+                    facetQuery: Rom
                     processingTimeMs: 0
         '401':
           $ref: '#/components/responses/401'
@@ -3430,7 +3540,7 @@ paths:
                     attributesToHighlight:
                       - overview
                     showMatchesPosition: true
-                    wordsMatchingStrategy: all
+                    matchingStrategy: all
       responses:
         '200':
           description: Ok

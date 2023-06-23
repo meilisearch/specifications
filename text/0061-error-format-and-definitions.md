@@ -1810,6 +1810,80 @@ HTTP Code: `400 Bad Request`
 
 ---
 
+## missing_facet_search_facet_name
+
+`Synchronous`
+
+### Context
+
+This error occurs if `facetName` isn't specified when making a facet search call.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "`:deserr_helper`",
+    "code": "missing_facet_search_facet_name",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#missing_facet_search_facet_name"
+}
+```
+
+---
+
+## invalid_facet_search_facet_name
+
+`Synchronous`
+
+### Context
+
+This errors occurs when the provided value for `facetName`:
+
+- Is not a string
+- Is not defined in the `filterableAttributes` index setting
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "`:deserr_helper`",
+    "code": "invalid_facet_search_facet_name",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_facet_search_facet_name"
+}
+```
+
+---
+
+## invalid_facet_search_facet_query
+
+`Synchronous`
+
+### Context
+
+This errors occurs when the provided value for `facetQuery`:
+
+- Is not a string or null
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "`:deserr_helper`",
+    "code": "invalid_facet_search_facet_query",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_facet_search_facet_query"
+}
+```
+
+---
+
 ## invalid_document_geo_field
 
 `Asynchronous`
