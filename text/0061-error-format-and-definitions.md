@@ -1886,6 +1886,38 @@ These errors occurs when the `_geo` field of a document payload is not valid. Ei
 
 ---
 
+## invalid_document_vectors_field
+
+`Asynchronous`
+
+### Context
+
+These errors occurs when the `_vectors` field of a document payload is not valid. Either due to the type of it or the number of dimensions.
+
+### Error Definition
+
+#### Variant: `_vectors` field is not an arry of floats.
+
+```json
+{
+    "message": "The `_vectors` field in the document with the id: `:documentId` is not an array. Was expecting an array of floats or an array of arrays of floats but instead got `:field`",
+    "code": "invalid_document_vectors_type",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_document_vectors_type"
+}
+```
+
+#### Variant: Number of dimensions is not correct
+
+```json
+{
+    "message": "Invalid vector dimensions: expected: `:expected`, found: `:found`.",
+    ...
+}
+```
+
+---
+
 ## payload_too_large
 
 `Synchronous`
