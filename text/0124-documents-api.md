@@ -268,7 +268,7 @@ While the body of a document can contain any pair of keys and values, Meilisearc
 | Field                                                    | Type                     | Required |
 |----------------------------------------------------------|--------------------------|----------|
 | [`_geo`](#3131-_geo)                                     | String | Object          | False    |
-| [`_vectors`](#3132-_vectors-experimental) `EXPERIMENTAL` | Array[Array of Float]    | False    |
+| [`_vectors`](#3132-_vectors-experimental) `EXPERIMENTAL` | Array of Float | Array[Array of Float]    | False    |
 
 ##### 3.1.3.1. `_geo`
 
@@ -278,10 +278,10 @@ Refer to the [geo search specification](0059-geo-search.md)
 
 ##### 3.1.3.2. `_vectors` `EXPERIMENTAL`
 
-Type: Array[Array of Float]
+Type: Array of Float | Array[Array of Float]
 Required: False
 
-Holds a vectorized representation of a document. It is possible to send several vectorized representations of the same document.
+Holds a vectorized representation of a document. It is possible to send either one or several vectorized representations of the same document.
 
 #### 3.1.4. `POST` - `indexes/:index_uid/documents`
 

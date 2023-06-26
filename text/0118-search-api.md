@@ -961,7 +961,7 @@ A search result can contain special properties. See [3.2.1.1. `hit` Special Prop
 | [`_geoDistance`](#32111-geodistance)                              | Integer | False    |
 | [`_formatted`](#32112-formatted)                                  | Object  | False    |
 | [`_matchesPosition`](#32113-matchesposition)                      | Object  | False    |
-| [`_semanticSimilarity`](#32114-semanticsimilarity) `EXPERIMENTAL` | Float   | False    |
+| [`_semanticScore`](#32114-semanticsimilarity) `EXPERIMENTAL` | Float   | False    |
 
 ###### 3.2.1.1.1. `_geoDistance`
 
@@ -1168,7 +1168,7 @@ The beginning of a matching term within a field is indicated by `start`, and its
 
 > See [3.1.14. `showMatchesPosition`](#3116-showmatchesposition) section.
 
-###### 3.2.1.1.4. `_semanticSimilarity` `EXPERIMENTAL`
+###### 3.2.1.1.4. `_semanticScore` `EXPERIMENTAL`
 
 - Type: Float
 - Required: False
