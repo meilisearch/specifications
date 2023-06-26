@@ -47,6 +47,21 @@ The facets that are returned are sorted in ascending lexicographical order.
 }
 ```
 
+Defines how facet values are sorted. By default, all facets (`*`) are sorted by name, alphanumerically in ascending order (`alpha`).
+
+It is possible to sort them by the number of documents containing a facet value in descending order using `count`.
+
+It is possible to specify a particular order for a facet.
+
+```json
+{
+    "*": "alpha",
+    "genre": "count"
+}
+```
+
+In this example, values from facets other than `genres` will be displayed sorted by their name in ascending alphanumeric order, while values from the `genres` facet will be sorted in descending order by the count of the number of documents containing each value.
+
 ## 3.2. API Endpoints Definition
 
 ### 3.2.1. Global Settings API Endpoints Definition
@@ -67,7 +82,10 @@ Allow fetching the current definition of the faceting setting for an index.
 
 ```json
     {
-        "maxValuesPerFacet": 100
+        "maxValuesPerFacet": 100,
+        "sortFacetValuesBy": {
+            "*": "alpha"
+        }
     }
 ```
 
@@ -118,6 +136,7 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 - 🔴 Sending a value different from `null` or with a different type than `Integer` for the `maxValuesPerFacet` field returns
 an [invalid_settings_faceting](0061-error-format-and-definitions.md#invalid_settings_faceting) error.
+- TODO: ERRORS DEFINITION
 
 ###### 3.2.2.2.2.1. Async Errors
 
