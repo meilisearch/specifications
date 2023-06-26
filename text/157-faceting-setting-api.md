@@ -181,5 +181,4 @@ The auth layer can return the following errors if Meilisearch is secured (a mast
 n/a
 
 ## 3. Future Possibilities
-
-- Introduces a field to define the sorting of facets. e.g `sort` by `count`/`alphanumeric`
+n/a
