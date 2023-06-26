@@ -3887,7 +3887,7 @@ paths:
                 sampleResponse: '
                   # HELP http_response_time_seconds HTTP response times
                   # TYPE http_response_time_seconds histogram
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0"} 0
                   http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.001"} 0
                   http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.002"} 0
                   http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.003"} 0
