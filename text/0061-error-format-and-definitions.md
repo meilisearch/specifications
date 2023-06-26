@@ -1474,6 +1474,29 @@ HTTP Code: `400 Bad Request`
 
 ---
 
+## invalid_search_vector
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `Array of Float` or `null` for `vector` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "`:deserr_helper`",
+    "code": "invalid_search_vector",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_search_vector"
+}
+```
+
+---
+
 ## invalid_search_offset
 
 `Synchronous`
