@@ -669,6 +669,11 @@ components:
           description: Query string.
           default: '""'
           example: '"Back to the future"'
+        vector:
+          type: array
+          description: Query vector.
+          default: 'null'
+          example: '[0.8, 0.145, 0.26, 0.3]'
         attributesToRetrieve:
           type: array
           description: 'Array of attributes whose fields will be present in the returned documents. Defaults to the [displayedAttributes list](https://docs.meilisearch.com/reference/features/settings.html#displayed-attributes) which contains by default all attributes found in the documents.'
@@ -1680,6 +1685,8 @@ paths:
 
         > info
         > Use the reserved `_geo` object to add geo coordinates to a document. `_geo` is an object made of `lat` and `lng` field.
+        >
+        > Use the reserved `_vectors` arrays of floats to add embeddings to a document. `_vectors` is an array of floats or multiple arrays of floats in an outter array.
       tags:
         - Documents
       security:
@@ -1734,6 +1741,8 @@ paths:
 
         > info
         > Use the reserved `_geo` object to add geo coordinates to a document. `_geo` is an object made of `lat` and `lng` field.
+        >
+        > Use the reserved `_vectors` arrays of floats to add embeddings to a document. `_vectors` is an array of floats or multiple arrays of floats in an outter array.
       tags:
         - Documents
       security:
