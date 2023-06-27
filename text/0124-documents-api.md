@@ -283,6 +283,8 @@ Required: False
 
 Holds a vectorized representation of a document. It is possible to send either one or several vectorized representations of the same document.
 
+- 🔴 Sending a value with a different type than `Array of Float`, `Array[Array of Float]` or `null` as a value for `_vectors` returns an [invalid_document_vectors_field](0061-error-format-and-definitions.md#invalid_document_vectors_field) error.
+- 🔴 Sending a value for `_vectors` whose length differs from another document `_vectors` field returns an [invalid_document_vectors_field](0061-error-format-and-definitions.md#invalid_document_vectors_field) error.
 #### 3.1.4. `POST` - `indexes/:index_uid/documents`
 
 Add a list of documents or replace them if they already exist.

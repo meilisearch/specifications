@@ -122,7 +122,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `filter.with_geoBoundingBox`            | `true` if the filter rule `_geoBoundingBox` was used in this batch, otherwise `false`| false | `Documents Searched POST`, `Documents Searched GET` |
 | `filter.most_used_syntax`               | Most used filter syntax among all requests containing the `filter` parameter in this batch | string | `Documents Searched POST`, `Documents Searched GET` |
 | `q.max_terms_number`                    | Highest number of terms given for the `q` parameter in this batch | 5 | `Documents Searched POST`, `Documents Searched GET` |
-| `vector.max_vector_size`                | Highest number of dimensions given for the `vector` parameter in this batch | 1536 | `Documents Searched POST`, `Documents Searched GET` |
+| `vector.max_vector_size`                | Highest number of dimensions given for the `vector` parameter in this batch | 1536 | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched by Multi-Search POST` |
 | `pagination.max_limit`                  | Highest value given for the `limit` parameter in this batch | 60 | `Documents Searched POST`, `Documents Searched GET`, `Documents Fetched GET`, `Documents Fetched POST` |
 | `pagination.max_offset`                 | Highest value given for the `offset` parameter in this batch | 1000 | `Documents Searched POST`, `Documents Searched GET`, `Documents Fetched GET`, `Documents Fetched POST` |
 | `pagination.most_used_navigation`       | Most used search results navigation among all search requests in this batch. `estimated` / `exhaustive` | `estimated` | `Documents Searched POST`, `Documents Searched GET` |
@@ -269,7 +269,6 @@ This property allows us to gather essential information to better understand on 
 | filter.avg_criteria_number | The average number of filter criteria among all the requests containing the `filter` parameter in the aggregated event. `"filter": []` equals to `0` while not sending `filter` does not influence the average in the aggregated event. | `4` |
 | filter.most_used_syntax | The most used filter syntax among all the requests containing the requests containing the `filter` parameter in the aggregated event. `string` / `array` / `mixed` | `mixed` |
 | q.max_terms_number | The maximum number of terms for the `q` parameter among all requests in the aggregated event. | `5` |
-| vector.max_vector_size | The maximum number of dimensions for the `vector` parameter among all requests in the aggregated event. | `1536` |
 | vector.max_vector_size | The maximum number of dimensions for the `vector` parameter among all requests in the aggregated event. | `1536` |
 | pagination.max_limit | The maximum limit encountered among all requests in the aggregated event. | `20` |
 | pagination.max_offset | The maximum offset encountered among all requests in the aggregated event. | `1000` |

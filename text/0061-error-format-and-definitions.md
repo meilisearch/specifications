@@ -1480,7 +1480,9 @@ HTTP Code: `400 Bad Request`
 
 ### Context
 
-This error occurs if a value with a different type than `Array of Float` or `null` for `vector` is specified.
+This error occurs for the listed reasons:
+- if a value with a different type than `Array of Float` or `null` for `vector` is specified.
+- if the vector length differs from the documents `_vectors` length.
 
 ### Error Definition
 
@@ -1896,7 +1898,7 @@ These errors occurs when the `_vectors` field of a document payload is not valid
 
 ### Error Definition
 
-#### Variant: `_vectors` field is not an arry of floats.
+#### Variant: `_vectors` field value type is invalid
 
 ```json
 {

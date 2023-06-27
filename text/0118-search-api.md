@@ -921,7 +921,8 @@ Only the documents containing ALL the query words (i.e. in the `q` parameter) ar
 
 Request the nearest documents based on the query vector embedding being given.
 
-//TODO Describes errors
+- 🔴 Sending a value with a different type than `Array of Float` or `null` as a value for `vector` returns an [invalid_search_vector](0061-error-format-and-definitions.md#invalid_search_vector) error.
+- 🔴 Sending a value for `vector` whose length differs from the documents `_vectors` length returns an [invalid_search_vector](0061-error-format-and-definitions.md#invalid_search_vector) error.
 
 ### 3.2. Search Response Properties
 
@@ -961,7 +962,7 @@ A search result can contain special properties. See [3.2.1.1. `hit` Special Prop
 | [`_geoDistance`](#32111-geodistance)                              | Integer | False    |
 | [`_formatted`](#32112-formatted)                                  | Object  | False    |
 | [`_matchesPosition`](#32113-matchesposition)                      | Object  | False    |
-| [`_semanticScore`](#32114-semanticsimilarity) `EXPERIMENTAL` | Float   | False    |
+| [`_semanticScore`](#32114-semanticscore) `EXPERIMENTAL` | Float   | False    |
 
 ###### 3.2.1.1.1. `_geoDistance`
 
