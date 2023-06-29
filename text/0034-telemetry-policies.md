@@ -68,6 +68,9 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | Stats Seen | Occurs when stats are fetched via `GET` - `/stats` or `/indexes/:indexUid/stats`. |
 | Health Seen | Aggregated event on all received requests via the `GET - /health` route during one hour or until a batch size reaches `500Kb`. |
 | Version Seen | Occurs when `GET - /version` is fetched. |
+| Experimental features Seen | Occurs when `GET - /experimental-features` is fetched. |
+| Experimental features Updated | Occurs when experimental features are updated via `PATCH - /experimental-features` |
+
 
 ----
 
@@ -111,7 +114,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `stats.database_size`                   | Database size. Expressed in `Bytes`                     | 2621440           | Every hour |
 | `stats.indexes_number`                  | Number of indexes                                       | 2                 | Every hour |
 | `start_since_days`                      | Number of days since instance was launched              | 365               | Every hour |
-| `user_agent`                            | User-agent header encountered during one or more API calls | ["Meilisearch Ruby (v2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Documents Deleted`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `TypoTolerance Updated`, `Pagination Updated`, `Faceting Updated`, `DistinctAttribute Updated`, `DisplayedAttributes Updated`, `StopWords Updated`, `Synonyms Updated`, `Dump Created`, `Tasks Seen`, `Stats Seen`, `Health Seen`, `Version Seen`, `Documents Searched by Multi-Search POST` |
+| `user_agent`                            | User-agent header encountered during one or more API calls | ["Meilisearch Ruby (v2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Documents Deleted`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `TypoTolerance Updated`, `Pagination Updated`, `Faceting Updated`, `DistinctAttribute Updated`, `DisplayedAttributes Updated`, `StopWords Updated`, `Synonyms Updated`, `Dump Created`, `Tasks Seen`, `Stats Seen`, `Health Seen`, `Version Seen`, `Documents Searched by Multi-Search POST`, `Experimental features Seen`, `Experimental features Updated` |
 | `requests.99th_response_time`           | Highest latency from among the fastest 99% of successful search requests | 57ms    | `Documents Searched POST`, `Documents Searched GET`|
 | `requests.total_succeeded`              | Total number of successful requests in this batch | 3456 | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched by Multi-Search POST` |
 | `requests.total_failed`                 | Total number of failed requests in this batch    | 24   | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched by Multi-Search POST` |
@@ -186,6 +189,8 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `per_batch` | `true` if `POST /indexes/:indexUid/documents/delete-batch` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
 | `per_filter`| `true` if `POST /indexes/:indexUid/documents/delete` endpoint was used in this batch, otherwise `false` | false | `Documents Fetched GET`, `Documents Fetched POST`, `Documents Deleted` |
 | `clear_all` | `true` if `DELETE /indexes/:indexUid/documents` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
+| vector_store | Whether the [vector store](./0193-experimental-features.md#vector-store) feature is enabled. | `true` | `Experimental features Updated` |
+| score_details | Whether the [score details](./0193-experimental-features.md#score-details) feature is enabled. | `true` | `Experimental features Updated` |
 
 ----
 
@@ -634,6 +639,21 @@ This property allows us to gather essential information to better understand on 
 | Property name | Description | Example |
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+
+## `Experimental features Seen`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+
+## `Experimental features Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| vector_store | Whether the [vector store](./0193-experimental-features.md#vector-store) feature is enabled. | `true` |
+| score_details | Whether the [score details](./0193-experimental-features.md#score-details) feature is enabled. | `true` |
+
 
 ---
 
