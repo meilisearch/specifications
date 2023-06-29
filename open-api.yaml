@@ -824,6 +824,8 @@ components:
               - keys.create
               - keys.update
               - keys.delete
+              - experimental.get
+              - experimental.update
         indexes:
           type: array
           description: 'A list of accesible indexes permitted for the key. ["*"] for all indexes. The * character can be used as a wildcard when located at the last position. e.g. "products_*"" to allow access to all indexes whose names start with "products_".'
@@ -1349,6 +1351,10 @@ tags:
       During a [dump export](https://docs.meilisearch.com/reference/api/dump.html#create-a-dump), all indexes of the current instance are exported—together with their documents and settings—and saved as a single `.dump` file.
       During a dump import, all indexes contained in the indicated `.dump` file are imported along with their associated documents and settings. Any existing index with the same uid as an index in the dump file will be overwritten.
       Dump imports are [performed at launch](https://docs.meilisearch.com/reference/features/configuration.html#import-dump) using an option.
+  - name: Experimental
+    description: |
+      The `experimental-features` endpoint allows enabling and disabling [experimental features](https://github.com/meilisearch/engine-team/blob/main/resources/experimental-features.md) at runtime.
+      Experimental features are features that are not yet covered by [Meilisearch's stability guarantee](https://github.com/meilisearch/engine-team/blob/main/resources/versioning-policy.md) and that could break between minor and patch Meilisearch versions.
 paths:
   /dumps:
     post:
@@ -4004,12 +4010,93 @@ paths:
           $ref: '#/components/responses/401'
     parameters:
       - $ref: '#/components/parameters/taskUid'
+  '/experimental-features':
+    get:
+      operationId: experimental.get
+      security:
+        - apiKey: []
+      summary: (EXPERIMENTAL) Get the status of runtime experimental features
+      description: 'Get the status of all experimental features that can be toggled at runtime'
+      tags:
+        - Experimental
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  vectorStore:
+                    type: boolean
+                  scoreDetails:
+                    type: boolean
+                required:
+                  - vectorStore
+                  - scoreDetails
+              examples:
+                Default status of the features:
+                  value:
+                    vectorStore: false
+                    scoreDetails: false
+        '401':
+          $ref: '#/components/responses/401'
+    patch:
+      operationId: experimental.update
+      security:
+        - apiKey: []
+      summary: (EXPERIMENTAL) Set the status of runtime experimental features
+      description: 'Set the status of experimental features that can be toggled at runtime'
+      tags:
+        - Experimental
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                vectorStore:
+                  type: boolean
+                scoreDetails:
+                  type: boolean
+              additionalProperties: false
+            examples:
+              Example:
+                value:
+                  vectorStore: true
+                  scoreDetails: false
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  vectorStore:
+                    type: boolean
+                  scoreDetails:
+                    type: boolean
+                required:
+                  - vectorStore
+                  - scoreDetails
+              examples:
+                Updated status of the feature:
+                  value:
+                    vectorStore: true
+                    scoreDetails: false
+        '401':
+          $ref: '#/components/responses/401'
   /metrics:
     get:
       summary: (EXPERIMENTAL) Get prometheus format metrics for observability and monitoring
       description: 'See [technical specification](https://github.com/meilisearch/specifications/blob/main/text/0174-metrics-api.md)'
       tags:
-        - stats
+        - Stats
+        - Experimental
       responses:
         '200':
           description: OK
