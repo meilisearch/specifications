@@ -2512,6 +2512,31 @@ HTTP Code: `400 Bad Request`
 
 - `:payloadType` is e.g. `json`, `ndjson`, `csv`
 
+## feature_not_enabled
+
+`Synchronous`
+
+### Context
+
+This error occurs when a request was made using an [experimental feature](./0193-experimental-features.md) that wasn't enabled.
+
+### Error definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+  "message": "{:action} requires enabling the `{:featureName}` experimental feature. See {:productDiscussion}",
+  "code": "feature_not_enabled",
+  "type": "invalid_request",
+  "link": "https://docs.meilisearch.com/errors#feature_not_enabled"
+}
+```
+
+- `:action` is the action that is not permitted without enabling the feature, e.g. "Getting the metrics"
+- `:featureName` is the name of the feature that needs enabling, e.g. "Prometheus Metrics"
+- `:productDiscussion` is the link to the product discussion that is tracking the feature
+
 ---
 
 # internal type

@@ -335,6 +335,8 @@ Create an API key.
 | keys.create      | Provides access to `POST` `/keys` route.                                                                                                                                                                                        |
 | keys.update      | Provides access to `PATCH` `/keys` routes.                                                                                                                                                                                      |
 | keys.delete      | Provides access to `DELETE` `/keys` routes.                                                                                                                                                                                     |
+| experimental.get | Provides access to `GET` `/experimental-features` routes.                                                                                                                                                                                     |
+| experimental.update | Provides access to `PATCH` `/experimental-features` routes.                                                                                                                                                                                     |
 
 ###### 3.2.4.4.3. Response Definition
 
