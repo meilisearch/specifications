@@ -69,7 +69,7 @@ Errors can be returned in two different ways: `Synchronous` or `Asynchronous`.
 
 This error code is generic. Whenever an error is thrown for a resource field, a clear and precise error code should be determined to guide the user efficiently.
 
-E.g. Sending an unknow field for a resource raises a generic `bad_request` error.
+E.g. Sending an unknown field for a resource raises a generic `bad_request` error.
 
 ### Error Definition
 
