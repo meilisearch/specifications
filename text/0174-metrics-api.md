@@ -1,6 +1,6 @@
 # Metrics API
 
-This endpoint is currently experimental.
+This endpoint is currently [experimental](./0193-experimental-features.md).
 
 This means that it can break at any time between two minor versions as long as it is not stabilized.
 
