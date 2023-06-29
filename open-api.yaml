@@ -3767,7 +3767,7 @@ paths:
       summary: Get all tasks
       description: 'Get all [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html)'
       tags:
-        - tasks
+        - Tasks
       responses:
         '200':
           description: OK
@@ -3849,7 +3849,7 @@ paths:
       summary: Delete tasks
       description: 'Delete finished [tasks](https://docs.meilisearch.com/lean/advanced/asynchronous_operations.html)'
       tags:
-        - tasks
+        - Tasks
       responses:
         '202':
           description: Accepted
@@ -3886,7 +3886,7 @@ paths:
       summary: Get a task
       description: 'Get a [task](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) '
       tags:
-        - tasks
+        - Tasks
       responses:
         '200':
           description: OK
@@ -3935,7 +3935,7 @@ paths:
       summary: Cancel tasks
       description: 'Cancel enqueued and/or processing [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) '
       tags:
-        - tasks
+        - Tasks
       responses:
         '202':
           description: Accepted
