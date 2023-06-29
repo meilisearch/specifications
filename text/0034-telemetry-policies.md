@@ -157,6 +157,8 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `typo_tolerance.min_word_size_for_typos.two_typos`| The defined value for `minWordSizeForTypos.twoTypos` property | `9` | `Settings Updated`, `TypoTolerance Updated` |
 | `pagination.max_total_hits`                 | The defined value for `pagination.maxTotalHits` property | `1000` | `Settings Updated`, `Pagination Updated` |
 | `faceting.max_values_per_facet`         | The defined value for `faceting.maxValuesPerFacet` property | `100` | `Settings Updated`, `Faceting Updated` |
+| `faceting.sort_facet_values_by_star_count` | Whether the user set all fields to be sort by count | `true` | `Settings Updated`, `Faceting Updated` |
+| `faceting.sort_facet_values_by_total`      | The number of different values that were set | `10` | `Settings Updated`, `Faceting Updated` |
 | `distinct_attribute.set` | `true` if a field name is specified as a distrinct attribute, otherwise `false`. | `false` | `Settings Updated`, `DistinctAttribute Updated` |
 | `displayed_attributes.total`   | Number of displayed attributes. | `3` | `SettingUpdated`, `DisplayedAttributes Updated` |
 | `displayed_attributes.with_wildcard` | `true` if `*` is specified as a displayed attribute, otherwise `false`. | `false` | `SettingUpdated`, `DisplayedAttributes Updated` |
@@ -449,6 +451,8 @@ This property allows us to gather essential information to better understand on 
 | typo_tolerance.min_word_size_for_typos.two_typos | The defined value for `minWordSizeForTypos.twoTypos` property. | `9` |
 | pagination.max_total_hits                 | The defined value for `pagination.maxTotalHits` property | `1000` |
 | faceting.max_values_per_facet         | The defined value for `faceting.maxValuesPerFacet` property | `100` |
+| faceting.sort_facet_values_by_star_count | Whether the user set all fields to be sort by count | `true` |
+| faceting.sort_facet_values_by_total | The number of different values that were set | `10` |
 | distinct_attribute.set | `true` if a field name is specified, otherwise `false`. | `false` |
 | displayed_attributes.total   | Number of displayed attributes. | `3` |
 | displayed_attributes.with_wildcard | `true` if `*` is specified as a displayed attribute, otherwise `false`. | `false` |
@@ -522,6 +526,8 @@ This property allows us to gather essential information to better understand on 
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | faceting.max_values_per_facet | The defined value for `maxValuesPerFacet` property | `100` |
+| faceting.sort_facet_values_by_star_count | Whether the user set all fields to be sort by count | `true` |
+| faceting.sort_facet_values_by_total | The number of different values that were set | `10` |
 
 ## `DistinctAttribute Updated`
 
