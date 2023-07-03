@@ -32,25 +32,27 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 
 ### 3.1. Search Payload Parameters
 
-| Field                                                 | Type                     | Required |
-|-------------------------------------------------------|--------------------------|----------|
-| [`q`](#311-q)                                         | String                   | False    |
-| [`filter`](#312-filter)                               | Array of String - String | False    |
-| [`sort`](#313-sort)                                   | Array of String - String | False    |
-| [`facets`](#314-facets)                               | Array of String - String | False    |
-| [`limit`](#315-limit)                                 | Integer                  | False    |
-| [`offset`](#316-offset)                               | Integer                  | False    |
-| [`page`](#317-page)                                   | Integer                  | False    |
-| [`hitsPerPage`](#318-hitsperpage)                     | Integer                  | False    |
-| [`attributesToRetrieve`](#319-attributestoretrieve)   | Array of String - String | False    |
-| [`attributesToHighlight`](#3110-attributestohighlight)| Array of String - String | False    |
-| [`highlightPreTag`](#3111-highlightpretag)            | String                   | False    |
-| [`highlightPostTag`](#3112-highlightposttag)          | String                   | False    |
-| [`attributesToCrop`](#3113-attributestocrop)          | Array of String - String | False    |
-| [`cropLength`](#3114-croplength)                      | Integer                  | False    |
-| [`cropMarker`](#3115-cropmarker)                      | String                   | False    |
-| [`showMatchesPosition`](#3116-showmatchesposition)    | Boolean                  | False    |
-| [`matchingStrategy`](#3117-matchingStrategy)          | String                   | False    |
+| Field                                                         | Type                     | Required |
+|---------------------------------------------------------------|--------------------------|----------|
+| [`q`](#311-q)                                                 | String                   | False    |
+| [`filter`](#312-filter)                                       | Array of String - String | False    |
+| [`sort`](#313-sort)                                           | Array of String - String | False    |
+| [`facets`](#314-facets)                                       | Array of String - String | False    |
+| [`limit`](#315-limit)                                         | Integer                  | False    |
+| [`offset`](#316-offset)                                       | Integer                  | False    |
+| [`page`](#317-page)                                           | Integer                  | False    |
+| [`hitsPerPage`](#318-hitsperpage)                             | Integer                  | False    |
+| [`attributesToRetrieve`](#319-attributestoretrieve)           | Array of String - String | False    |
+| [`attributesToHighlight`](#3110-attributestohighlight)        | Array of String - String | False    |
+| [`highlightPreTag`](#3111-highlightpretag)                    | String                   | False    |
+| [`highlightPostTag`](#3112-highlightposttag)                  | String                   | False    |
+| [`attributesToCrop`](#3113-attributestocrop)                  | Array of String - String | False    |
+| [`cropLength`](#3114-croplength)                              | Integer                  | False    |
+| [`cropMarker`](#3115-cropmarker)                              | String                   | False    |
+| [`showMatchesPosition`](#3116-showmatchesposition)            | Boolean                  | False    |
+| [`showRankingScore`](#3117-showrankingscore)                  | Boolean                  | False    |
+| [`showRankingScoreDetails`](#3118-showrankingscoredetails)    | Boolean                  | False    |
+| [`matchingStrategy`](#3119-matchingStrategy)                  | String                   | False    |
 
 
 #### 3.1.1. `q`
@@ -533,7 +535,7 @@ The first page has a value of `1`, the second `2`, etc... When `0` is provided a
 
 When providing `page` or `hitsPerPage` in the query parameters, the `page selection` system is enabled, which makes it possible to navigate through the search results pages. See explanation on the [`page selection`](#3181-navigating-search-results-by-page-selection).
 
-If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` are provided as well, `limit` and `offset` are ignored. See [explaination](#3181-navigating-search-results-by-page-selection).
+If in addition to either `page` and/or `hitsPerPage`, `limit` and/or `offset` are provided as well, `limit` and `offset` are ignored. See [explanation](#3181-navigating-search-results-by-page-selection).
 
 - 🔴 Sending a value with a different type than `Integer` for `page` returns an [invalid_search_page](0061-error-format-and-definitions.md#invalid_search_page) error.
 
@@ -892,7 +894,32 @@ It's useful when more control is needed than offered by the built-in highlightin
 
 - 🔴 Sending a value with a different type than `Boolean` or `null` for `showMatchesPosition` returns an [invalid_search_show_matches_position](0061-error-format-and-definitions.md#invalid_search_show_matches_position) error.
 
-#### 3.1.17. `matchingStrategy`
+#### 3.1.17. `showRankingScore`
+
+- Type: Boolean
+- Required: False
+- Default: `false`
+
+Adds a [`_rankingScore`](#32114-rankingscore) number to each document in the search response, representing the relevancy score of a document according to the applied ranking rules and relative to a search query. Higher is better.
+
+`1.0` indicates a perfect match, `0.0` no match at all (Meilisearch should not return documents that don't match the query).
+
+- 🔴 Sending a value with a different type than `Boolean` or `null` for `showRankingScore` returns an [invalid_search_ranking_score](0061-error-format-and-definitions.md#invalid_search_show_ranking_score) error.
+
+#### 3.1.18. `showRankingScoreDetails`
+
+(EXPERIMENTAL)
+
+- Type: Object
+- Required: False
+- Default: `false`
+
+Adds a [`_rankingScoreDetails`](#32115-rankingscoredetails) object to each document in the search response, containing information about the score of that document for each applied ranking rule.
+
+- 🔴 Sending a value with a different type than `Boolean` or `null` for `showRankingScoreDetails` returns an [invalid_search_ranking_score_details](0061-error-format-and-definitions.md#invalid_search_show_ranking_score_details) error.
+- 🔴 Using that field while the [`score details`](./0193-experimental-features.md#score-details) experimental feature has not been enabled returns a [feature_not_enabled](0061-error-format-and-definitions.md#feature_not_enabled) error.
+
+#### 3.1.19. `matchingStrategy`
 
 - Type: String
 - Required: False
@@ -940,15 +967,17 @@ Results of the search query as an array of documents.
 
 > The search parameters `attributesToRetrieve` influence the returned payload for a hit. See [3.1.7. `attributesToRetrieve`](#319-attributestoretrieve) section.
 
-A search result can contain special properties. See [3.2.1.1. `hit` Special Properties](#3211-hits-special-properties) section.
+A search result can contain special properties. See [3.2.1.1. `hit` Special Properties](#3211-hit-special-properties) section.
 
 ##### 3.2.1.1. `hit` Special Properties
 
-| Field                                        | Type    | Required |
-|----------------------------------------------|---------|----------|
-| [`_geoDistance`](#32111-geodistance)         | Integer | False    |
-| [`_formatted`](#32112-formatted)             | Object  | False    |
-| [`_matchesPosition`](#32113-matchesposition) | Object  | False    |
+| Field                                                | Type    | Required |
+|------------------------------------------------------|---------|----------|
+| [`_geoDistance`](#32111-geodistance)                 | Integer | False    |
+| [`_formatted`](#32112-formatted)                     | Object  | False    |
+| [`_matchesPosition`](#32113-matchesposition)         | Object  | False    |
+| [`_rankingScore`](#32114-rankingscore)               | Number  | False    |
+| [`_rankingScoreDetails`](#32115-rankingscoredetails) | Object  | False    |
 
 ###### 3.2.1.1.1. `_geoDistance`
 
@@ -1154,6 +1183,28 @@ The beginning of a matching term within a field is indicated by `start`, and its
 `start` and `length` are measured in bytes and not the number of characters. For example, `ü` represents two bytes but one character.
 
 > See [3.1.14. `showMatchesPosition`](#3116-showmatchesposition) section.
+
+###### 3.2.1.1.4. `_rankingScore`
+
+- Type: Number
+- Required: False
+
+The relevancy score of a document relative to the search query. Higher is better.
+
+`1.0` indicates a perfect match, `0.0` no match at all (Meilisearch should not return documents that don't match the query).
+
+> See [Ranking Score](./0195-ranking-score.md#31-ranking-score) for details.
+
+###### 3.2.1.1.5. `_rankingScoreDetails`
+
+- Type: Object
+- Required: False
+
+(EXPERIMENTAL) The ranking score of a document per each ranking rule and relative to the search query.
+
+This object features one field for each applied ranking rule, whose values are an object with at least the field `order` indicating in which order this ranking rule has been applied.
+
+> See [Ranking Score details](./0195-ranking-score.md#32-ranking-score-details) for details.
 
 #### 3.2.2. `limit`
 
