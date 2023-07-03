@@ -923,8 +923,8 @@ Defines which `searchableAttributes` the query will search on.
 
 - If `attributesToSearchOn` is not set or set to `null`, then the query will search on all `searchableAttributes`.
 - Sending the attributes in a different order than the order set in the settings `searchableAttributes` doesn't reorder the fields' rank for the `Attributes` ranking rule
-- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `attributesToSearchOn` returns an [invalid_attributes_to_search_on](0061-error-format-and-definitions.md#invalid_attributes_to_search_on) error.
-- 🔴 Sending an attribute that is not part of the settings `searchableAttributes` list returns an [invalid_attributes_to_search_on](0061-error-format-and-definitions.md#invalid_attributes_to_search_on) error.
+- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `attributesToSearchOn` returns an [invalid_attributes_to_search_on](0061-error-format-and-definitions.md#invalid_search_attributes_to_search_on) error.
+- 🔴 Sending an attribute that is not part of the settings `searchableAttributes` list returns an [invalid_attributes_to_search_on](0061-error-format-and-definitions.md#invalid_search_attributes_to_search_on) error.
 
 
 ### 3.2. Search Response Properties
