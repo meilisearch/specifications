@@ -1808,6 +1808,49 @@ HTTP Code: `400 Bad Request`
 }
 ```
 
+## invalid_search_attributes_to_search_on
+
+`Synchronous`
+
+### Context
+
+This error occurs if a value with a different type than `Array of String`(POST), `String`(GET) or `null` and other than attributes names contained in the settings `searchableAttributes` as a value for `attributesToSearchOn` is specified.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "`:deserr_helper`",
+    "code": "invalid_search_attributes_to_search_on",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_search_attributes_to_search_on"
+}
+```
+
+#### Variant: one of the values is not part of the settings `searchableAttributes` list
+
+```json
+{
+    "message": "Attribute `:value` is not searchable. Available searchable attributes are: `:searchableAttributes`.",
+    "code": "invalid_search_attributes_to_search_on",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_search_attributes_to_search_on"
+}
+```
+
+#### Variant: one of the values is not part of the settings `searchableAttributes` list and not all of the `searchableAttributes` are displayable
+
+```json
+{
+    "message": "Attribute `:value` is not searchable. Available searchable attributes are: `:DisplayableSearchableAttributes, <..hidden-attributes>`.",
+    "code": "invalid_search_attributes_to_search_on",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_search_attributes_to_search_on"
+}
+```
+
 ---
 
 ## invalid_document_geo_field
