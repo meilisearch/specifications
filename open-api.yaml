@@ -716,6 +716,10 @@ components:
           type: string
           description: Defines which strategy to use to match the query terms within the documents as search results. Two different strategies are available, `last` and `all`. By default, the `last` strategy is chosen.
           default: 'last'
+        attributesToSearchOn:
+          type: array
+          description: Defines which `searchableAttributes` the query will search on.
+          default: 'null'
         filter:
           $ref: '#/components/schemas/filter'
         facets:
