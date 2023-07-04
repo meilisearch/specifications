@@ -44,7 +44,7 @@ The score of a document is independent of what other documents are contained in 
 
 Additionally, the following can impact score independence:
 
-- if the `attribute` ranking rule is used, but `searchableAttributes` has not been specified, then the score is dependent on all the fields that appear in documents and their precise order, as determined by Meilisearch.
+- If the `attribute` ranking rule is used, but `searchableAttributes` has not been specified, then the score is dependent on all the fields that appear in documents and their precise order, as determined by Meilisearch.
 the score is dependent on the search query.
 
 Depending on the use case, it can be meaningful to compare scores coming from indexes with settings that are different:
@@ -97,7 +97,7 @@ The table below details these rule-specific fields.
 
 `Sort` and `geosort` ranking rules appear as fields in the score details, but with the following difference:
 
-- Their key follows the following format: `{:attribute-sorted-on}:{:sort-direction}`, with the `:attribute-sorted-on` the name of the attribute that is being sorted on, and the `:sort-direction` either `asc` if the sort is in ascending order, or `desc` if the sort is in descending order. For the `geosort` ranking rule, it is similarly `_geoPoint({:lat}, {:lng}):{:sort-direction}`, with the `:lat` and `:lng` being the latitude and resp. longitude of the point that serves as base to sort by distance.
+- Their key follows the following format: `{:attribute-sorted-on}:{:sort-direction}`, with the `:attribute-sorted-on` the name of the attribute that is being sorted on, and the `:sort-direction` either `asc` if the sort is in ascending order, or `desc` if the sort is in descending order. For the `geosort` ranking rule, it is similarly `_geoPoint({:lat}, {:lng}):{:sort-direction}`, with the `:lat` and `:lng` being the latitude and respective longitude of the point that serves as base to sort by distance.
 - They don't have a `score` field, but instead they have a `value` field, representing the value used to sort the document. It is typically the value of the sorted attribute for the document, but can sometimes be a subvalue (case where the value is an array of values).
 - For the `geosort`, there is an additional `distance` field representing the distance between the target point and the point used in the document to sort the document.
 
@@ -136,7 +136,7 @@ The following is an example of a `_scoreDetails` returned for a document matchin
         "score": 1
     },
     "release_date:asc": {
-        "order": 5,x
+        "order": 5,
         "value": 1165881600
     }
 }
@@ -176,7 +176,7 @@ Furthermore, the `value` that was used to sort the document is also hidden and r
 
 The engine optimizes search by skipping the application of ranking rules when there's only one remaining document (no tie to break).
 
-To compute an accurate score, however, all ranking rules must be applied, so this optimization is disabled as soon as a score is requested in the search request. When no score are requested, the optimization is active.
+To compute an accurate score, however, all ranking rules must be applied, so this optimization is disabled as soon as a score is requested in the search request. When no scores are requested, the optimization is active.
 
 ## 5. Future Possibilities
 
