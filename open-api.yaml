@@ -3885,40 +3885,40 @@ paths:
               type: string
               examples:
                 sampleResponse: '
-                  # HELP http_response_time_seconds HTTP response times
-                  # TYPE http_response_time_seconds histogram
+                  # HELP meilisearch_http_response_time_seconds HTTP response times
+                  # TYPE meilisearch_http_response_time_seconds histogram
                   meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.001"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.002"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.003"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.004"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.005"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.006"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.007"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.008"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.009"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.01"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.02"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.03"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.04"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.05"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.06"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.07"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.08"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.09"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.1"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.2"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.3"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.4"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.5"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.6"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.7"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.8"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.9"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="1"} 0
-                  http_response_time_seconds_bucket{method="GET",path="/metrics",le="+Inf"} 0
-                  http_response_time_seconds_sum{method="GET",path="/metrics"} 0
-                  http_response_time_seconds_count{method="GET",path="/metrics"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.001"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.002"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.003"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.004"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.005"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.006"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.007"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.008"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.009"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.01"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.02"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.03"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.04"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.05"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.06"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.07"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.08"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.09"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.1"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.2"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.3"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.4"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.5"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.6"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.7"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.8"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="0.9"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="1"} 0
+                  meilisearch_http_response_time_seconds_bucket{method="GET",path="/metrics",le="+Inf"} 0
+                  meilisearch_http_response_time_seconds_sum{method="GET",path="/metrics"} 0
+                  meilisearch_http_response_time_seconds_count{method="GET",path="/metrics"} 0
                   # HELP meilisearch_db_size_bytes Meilisearch DB Size In Bytes
                   # TYPE meilisearch_db_size_bytes gauge
                   meilisearch_db_size_bytes 983040
