@@ -191,8 +191,8 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `clear_all` | `true` if `DELETE /indexes/:indexUid/documents` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
 | vector_store | Whether the [vector store](./0193-experimental-features.md#vector-store) feature is enabled. | `true` | `Experimental features Updated` |
 | score_details | Whether the [score details](./0193-experimental-features.md#score-details) feature is enabled. | `true` | `Experimental features Updated` |
-| scoring.show_ranking_score | Was `showRankingScore` used in the aggregated event? If yes, `true`, otherwise `false` | `false` | `Documents Searched POST`, `Documents Searched GET` |
-| scoring.show_ranking_score_details | Was `showRankingScoreDetails` used in the aggregated event? If yes, `true`, otherwise `false` | `false` | `Documents Searched POST`, `Documents Searched GET` |
+| scoring.show_ranking_score | Was `showRankingScore` used in the aggregated event? If yes, `true`, otherwise `false` | `false` | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched by Multi-Search POST` |
+| scoring.show_ranking_score_details | Was `showRankingScoreDetails` used in the aggregated event? If yes, `true`, otherwise `false` | `false` | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched GET` |
 
 ----
 
