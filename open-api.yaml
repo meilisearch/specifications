@@ -719,7 +719,7 @@ components:
         attributesToSearchOn:
           type: array
           description: Defines which `searchableAttributes` the query will search on.
-          default: 'null'
+          default: '["*"]'
         filter:
           $ref: '#/components/schemas/filter'
         facets:
