@@ -1894,7 +1894,7 @@ These errors occurs when the `_geo` field of a document payload is not valid. Ei
 
 ### Context
 
-These errors occurs when the `_vectors` field of a document payload is not valid. Either due to the type of it or the number of dimensions.
+This error occurs when the `_vectors` field of a document payload is not valid either due to the type of it or the number of dimensions.
 
 ### Error Definition
 
