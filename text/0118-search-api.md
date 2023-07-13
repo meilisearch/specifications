@@ -917,7 +917,7 @@ Only the documents containing ALL the query words (i.e. in the `q` parameter) ar
 
 - Type: Array of String (POST) | String (GET)
 - Required: False
-- Default: `null`
+- Default: `["*"]`
 
 Defines which `searchableAttributes` the query will search on.
 
