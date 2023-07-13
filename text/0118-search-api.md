@@ -919,7 +919,7 @@ Only the documents containing ALL the query words (i.e. in the `q` parameter) ar
 - Required: False
 - Default: []
 
-Request the nearest documents based on the query vector embedding being given.
+Request the nearest documents based on the query vector embedding given.
 
 - 🔴 Sending a value with a different type than `Array of Float` or `null` as a value for `vector` returns an [invalid_search_vector](0061-error-format-and-definitions.md#invalid_search_vector) error.
 - 🔴 Sending a value for `vector` whose length differs from the documents `_vectors` length returns an [invalid_search_vector](0061-error-format-and-definitions.md#invalid_search_vector) error.
