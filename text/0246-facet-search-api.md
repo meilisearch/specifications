@@ -55,7 +55,7 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 - Required: False
 - Default: `null`
 
-`facetQuery` contains the terms to search within the facet values contained in the index documents.
+`facetQuery` contains the terms to search within the facet values of the `facetName`.
 
 > When `facetQuery` isn't specified, Meilisearch performs a **placeholder search**. A placeholder search returns all facet values for the searched facet, limited by the [maxValuesPerFacet index setting](157-faceting-setting-api.md#311-maxvaluesperfacet).
 > It supports **prefix search**
