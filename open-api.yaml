@@ -1742,7 +1742,7 @@ paths:
         > info
         > Use the reserved `_geo` object to add geo coordinates to a document. `_geo` is an object made of `lat` and `lng` field.
         >
-        > Use the reserved `_vectors` arrays of floats to add embeddings to a document. `_vectors` is an array of floats or multiple arrays of floats in an outter array.
+        > Use the reserved `_vectors` arrays of floats to add embeddings to a document. `_vectors` is an array of floats or multiple arrays of floats in an outer array.
       tags:
         - Documents
       security:
