@@ -42,6 +42,8 @@ Meilisearch returns the metrics specified in the table below.
 | [`meilisearch_index_docs_count`](#325-meilisearch_index_docs_count)                    | gauge     |
 | [`meilisearch_index_count`](#326-meilisearch_index_count)                              | gauge     |
 | [`meilisearch_nb_tasks`](#327-meilisearch_nb_tasks)                                    | counter   |
+| [`meilisearch_last_update`](#328-meilisearch_last_update)                              | gauge     |
+| [`meilisearch_is_indexing`](#329-meilisearch_is_indexing)                              | gauge     |
 
 #### 3.2.1 `meilisearch_http_requests_total`
 
@@ -139,6 +141,26 @@ Here is a list of available kind and associated values:
 | indexes   | Any created indexes                                                    |
 | statuses  | Any task statuses (i.e.: succeeded, failed, enqueued, etc...)          |
 | types     | Any task types (i.e.: documentAdditionOrUpdate, settingsUpdate, etc...)|
+
+#### 3.2.8. `meilisearch_last_update`
+
+Returns the timestamp of the last update.
+
+```
+# HELP meilisearch_last_update Meilisearch Last Update
+# TYPE meilisearch_last_update gauge
+meilisearch_last_update :unixTimestamp
+````
+
+#### 3.2.8. `meilisearch_is_indexing`
+
+Returns `1` if Meilisearch is indexing or `0` if not.
+
+```
+# HELP meilisearch_is_indexing Meilisearch Is Indexing
+# TYPE meilisearch_is_indexing gauge
+meilisearch_is_indexing :isIndexing
+````
 
 ### 3.3. API Endpoints Definition
 

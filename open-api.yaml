@@ -3951,6 +3951,12 @@ paths:
                   meilisearch_nb_tasks{kind="types",value="snapshotCreation"} 0
                   meilisearch_nb_tasks{kind="types",value="taskCancelation"} 0
                   meilisearch_nb_tasks{kind="types",value="taskDeletion"} 0
+                  # HELP meilisearch_last_update Meilisearch Last Update
+                  # TYPE meilisearch_last_update gauge
+                  meilisearch_last_update 1689768676
+                  # HELP meilisearch_is_indexing Meilisearch Is Indexing
+                  # TYPE meilisearch_is_indexing gauge
+                  meilisearch_is_indexing 1
                   # HELP meilisearch_used_db_size_bytes Meilisearch Used DB Size In Bytes
                   # TYPE meilisearch_used_db_size_bytes gauge
                   meilisearch_used_db_size_bytes 344064'
