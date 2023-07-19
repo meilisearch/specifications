@@ -61,7 +61,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | DisplayedAttributes Updated | Occurs when displayed attributes are updated via `PUT` — `/indexes/:indexUid/settings/displayed-attributes`. |
 | StopWords Updated | Occurs when stop words are updated via `PUT` — `/indexes/:indexUid/settings/stop-words`. |
 | separatorTokens Updated | Occurs when separator tokens are updated via `PUT` — `/indexes/:indexUid/settings/separator-tokens`. |
-| nonSeparatorTokens Updated | Occurs when non separator tokens are updated via `PUT` — `/indexes/:indexUid/settings/non-separator-tokens`. |
+| NonSeparatorTokens Updated | Occurs when non separator tokens are updated via `PUT` — `/indexes/:indexUid/settings/non-separator-tokens`. |
 | Synonyms Updated | Occurs when synonyms are updated via `PUT` — `/indexes/:indexUid/settings/synonyms`. |
 | Dump Created | Occurs when a dump is created via `POST` - `/dumps`. |
 | Tasks Canceled | Occurs when tasks are requested to be canceled via `POST` - `/tasks/cancel`. |
