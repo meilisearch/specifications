@@ -60,7 +60,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | DistinctAttribute Updated | Occurs when distinct attribute setting is updated via `PUT` — `/indexes/:indexUid/settings/distinct-attribute`. |
 | DisplayedAttributes Updated | Occurs when displayed attributes are updated via `PUT` — `/indexes/:indexUid/settings/displayed-attributes`. |
 | StopWords Updated | Occurs when stop words are updated via `PUT` — `/indexes/:indexUid/settings/stop-words`. |
-| separatorTokens Updated | Occurs when separator tokens are updated via `PUT` — `/indexes/:indexUid/settings/separator-tokens`. |
+| SeparatorTokens Updated | Occurs when separator tokens are updated via `PUT` — `/indexes/:indexUid/settings/separator-tokens`. |
 | NonSeparatorTokens Updated | Occurs when non separator tokens are updated via `PUT` — `/indexes/:indexUid/settings/non-separator-tokens`. |
 | Synonyms Updated | Occurs when synonyms are updated via `PUT` — `/indexes/:indexUid/settings/synonyms`. |
 | Dump Created | Occurs when a dump is created via `POST` - `/dumps`. |
