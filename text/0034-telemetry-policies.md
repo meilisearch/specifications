@@ -191,6 +191,8 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `clear_all` | `true` if `DELETE /indexes/:indexUid/documents` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
 | vector_store | Whether the [vector store](./0193-experimental-features.md#vector-store) feature is enabled. | `true` | `Experimental features Updated` |
 | score_details | Whether the [score details](./0193-experimental-features.md#score-details) feature is enabled. | `true` | `Experimental features Updated` |
+| scoring.show_ranking_score | Was `showRankingScore` used in the aggregated event? If yes, `true`, otherwise `false` | `false` | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched by Multi-Search POST` |
+| scoring.show_ranking_score_details | Was `showRankingScoreDetails` used in the aggregated event? If yes, `true`, otherwise `false` | `false` | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched GET` |
 
 ----
 
@@ -283,9 +285,11 @@ This property allows us to gather essential information to better understand on 
 | formatting.max_attributes_to_crop | The maximum number of attributes to crop encountered among all requests in the aggregated event. | `100` |
 | formatting.crop_length | Does `cropLength` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.crop_marker | Does `cropMarker` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
-| formatting.show_matches_position | Does `showMatchesPosition` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
+| formatting.show_matches_position | Was `showMatchesPosition` used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | facets.avg_facets_number | The average number of facets among all the requests containing the `facets` parameter in the aggregated event. `"facets": []` equals to `0` while not sending `facets` does not influence the average in the aggregated event. | `10` |
 | matching_strategy.most_used_strategy | Most used word matching strategy among all search requests in the aggregated event. `last` / `all` | `last` |
+| scoring.show_ranking_score | Was `showRankingScore` used in the aggregated event? If yes, `true`, otherwise `false` | `false` |
+| scoring.show_ranking_score_details | Was `showRankingScoreDetails` used in the aggregated event? If yes, `true`, otherwise `false` | `false` |
 
 ---
 
@@ -320,6 +324,8 @@ This property allows us to gather essential information to better understand on 
 | formatting.show_matches_position | Does `showMatchesPosition` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | facets.avg_facets_number | The average number of facets among all the requests containing the `facets` parameter in the aggregated event. `"facets": []` equals to `0` while not sending `facets` does not influence the average in the aggregated event. | `10` |
 | matching_strategy.most_used_strategy | Most used word matching strategy among all search requests in the aggregated event. `last` / `all` | `last` |
+| scoring.show_ranking_score | Was `showRankingScore` used in the aggregated event? If yes, `true`, otherwise `false` | `false` |
+| scoring.show_ranking_score_details | Was `showRankingScoreDetails` used in the aggregated event? If yes, `true`, otherwise `false` | `false` |
 
 ---
 
