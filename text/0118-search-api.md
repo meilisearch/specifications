@@ -53,6 +53,8 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 | [`showRankingScore`](#3117-showrankingscore)                  | Boolean                  | False    |
 | [`showRankingScoreDetails`](#3118-showrankingscoredetails)    | Boolean                  | False    |
 | [`matchingStrategy`](#3119-matchingStrategy)                  | String                   | False    |
+| [`attributesToSearchOn`](#3120-attributesToSearchOn)          | Array of String - String | False    |
+| [`vector`](#3121-vector) `EXPERIMENTAL`                       | Array of Float           | False    |
 
 
 #### 3.1.1. `q`
@@ -931,30 +933,55 @@ Two different strategies are available, `last` and `all`. By default, the `last`
 
 - 🔴 Sending a value with a different type than `String` and other than `last` or `all` as a value for `matchingStrategy` returns an [invalid_search_matching_strategy](0061-error-format-and-definitions.md#invalid_search_matching_strategy) error.
 
-##### 3.1.17.1. `last` strategy
+##### 3.1.19.1. `last` strategy
 
 The documents containing ALL the query words (i.e. in the `q` parameter) are returned first by Meilisearch. If Meilisearch doesn't have enough documents to fit the requested `limit`, it iteratively ignores the query words from the last typed word to the first typed word to match more documents.
 
-##### 3.1.17.2. `all` strategy
+##### 3.1.19.2. `all` strategy
 
 Only the documents containing ALL the query words (i.e. in the `q` parameter) are returned by Meilisearch. If Meilisearch doesn't have enough documents to fit the requested `limit`, it returns the documents found without trying to match more documents.
 
+#### 3.1.20. `attributesToSearchOn`
+
+- Type: Array of String (POST) | String (GET)
+- Required: False
+- Default: `["*"]`
+
+Defines which `searchableAttributes` the query will search on.
+
+- If `attributesToSearchOn` is not set, set to `["*"]` or set to `null`, then the query will search on all `searchableAttributes`.
+- Sending the attributes in a different order than the order set in the settings `searchableAttributes` doesn't reorder the fields' rank for the `Attributes` ranking rule
+- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `attributesToSearchOn` returns an [invalid_attributes_to_search_on](0061-error-format-and-definitions.md#invalid_search_attributes_to_search_on) error.
+- 🔴 Sending an attribute that is not part of the settings `searchableAttributes` list returns an [invalid_attributes_to_search_on](0061-error-format-and-definitions.md#invalid_search_attributes_to_search_on) error.
+
+#### 3.1.21. `vector` `EXPERIMENTAL`
+
+- Type: Array of Float
+- Required: False
+- Default: []
+
+Request the nearest documents based on the query vector embedding given.
+
+- 🔴 Sending a value with a different type than `Array of Float` or `null` as a value for `vector` returns an [invalid_search_vector](0061-error-format-and-definitions.md#invalid_search_vector) error.
+- 🔴 Sending a value for `vector` whose length differs from the documents `_vectors` length returns an [invalid_search_vector](0061-error-format-and-definitions.md#invalid_search_vector) error.
+
 ### 3.2. Search Response Properties
 
-| Field                                           | Type       | Required |
-|-------------------------------------------------|------------|----------|
-| [`hits`](#321-hits)                             | Array[Hit] | True     |
-| [`limit`](#322-limit)                           | Integer    | False    |
-| [`offset`](#323-offset)                         | Integer    | False    |
-| [`estimatedTotalHits`](#324-estimatedTotalHits) | Integer    | False    |
-| [`page`](#325-page)                             | Integer    | False    |
-| [`hitsPerPage`](#326-hitsperpage)               | Integer    | False    |
-| [`totalPages`](#327-totalpages)                 | Integer    | False    |
-| [`totalHits`](#328-totalhits)                   | Integer    | False    |
-| [`facetDistribution`](#329-facetdistribution)   | Object     | False    |
-| [`facetStats`](#3210-facetstats)                | Object     | False    |
-| [`processingTimeMs`](#3211-processingtimems)    | Integer    | True     |
-| [`query`](#3212-query)                          | String     | True     |
+| Field                                           | Type           | Required  |
+|-------------------------------------------------|----------------|-----------|
+| [`hits`](#321-hits)                             | Array[Hit]     | True      |
+| [`limit`](#322-limit)                           | Integer        | False     |
+| [`offset`](#323-offset)                         | Integer        | False     |
+| [`estimatedTotalHits`](#324-estimatedTotalHits) | Integer        | False     |
+| [`page`](#325-page)                             | Integer        | False     |
+| [`hitsPerPage`](#326-hitsperpage)               | Integer        | False     |
+| [`totalPages`](#327-totalpages)                 | Integer        | False     |
+| [`totalHits`](#328-totalhits)                   | Integer        | False     |
+| [`facetDistribution`](#329-facetdistribution)   | Object         | False     |
+| [`facetStats`](#3210-facetstats)                | Object         | False     |
+| [`processingTimeMs`](#3211-processingtimems)    | Integer        | True      |
+| [`query`](#3212-query)                          | String         | True      |
+| [`vector`](#3213-vector) `EXPERIMENTAL`         | Array of Float | False     |
 
 #### 3.2.1. `hits`
 
@@ -978,6 +1005,7 @@ A search result can contain special properties. See [3.2.1.1. `hit` Special Prop
 | [`_matchesPosition`](#32113-matchesposition)         | Object  | False    |
 | [`_rankingScore`](#32114-rankingscore)               | Number  | False    |
 | [`_rankingScoreDetails`](#32115-rankingscoredetails) | Object  | False    |
+| [`_semanticScore`](#32116-semanticscore) `EXPERIMENTAL` | Float   | False    |
 
 ###### 3.2.1.1.1. `_geoDistance`
 
@@ -1206,6 +1234,15 @@ This object features one field for each applied ranking rule, whose values are a
 
 > See [Ranking Score details](./0195-ranking-score.md#32-ranking-score-details) for details.
 
+###### 3.2.1.1.6. `_semanticScore` `EXPERIMENTAL`
+
+- Type: Float
+- Required: False
+
+Contains the semantic similarity score of the document for a vector search when `vector` has been provided. The score is represented as a dot product.
+
+> See [3.1.18 `vector`](#3118-vector-experimental)
+
 #### 3.2.2. `limit`
 
 - Type: Integer
@@ -1321,6 +1358,15 @@ Processing time of the search query in **milliseconds**.
 Query originating the response. Equals to the `q` search parameter.
 
 > See [3.1.1. `q`](#311-q) section.
+
+#### 3.2.13. `vector` `EXPERIMENTAL`
+
+- Type: Array of Float
+- Required: False
+
+Vector query embedding originating the response. Equals to the `vector` search parameter if specified.
+
+> See [3.1.18. `vector`](#3118-vector-experimental)
 
 ## 2. Technical Details
 n/a

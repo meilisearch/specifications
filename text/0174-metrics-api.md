@@ -33,25 +33,29 @@ A metric is composed of several fields:
 
 Meilisearch returns the metrics specified in the table below.
 
-| Name                                                                      | Type      |
-|---------------------------------------------------------------------------|-----------|
-| [`http_requests_total`](#321-http_requests_total)                         | counter   |
-| [`http_response_time_seconds`](#322-http_response_time_seconds)           | histogram |
-| [`meilisearch_database_size_bytes`](#323-meilisearch_database_size_bytes) | gauge     |
-| [`meilisearch_index_docs_count`](#324-meilisearch_index_docs_count)       | gauge     |
-| [`meilisearch_index_count`](#325-meilisearch_index_count)                 | gauge     |
+| Name                                                                                   | Type      |
+|----------------------------------------------------------------------------------------|-----------|
+| [`meilisearch_http_requests_total`](#321-meilisearch_http_requests_total)              | counter   |
+| [`meilisearch_http_response_time_seconds`](#322-meilisearch_http_response_time_seconds)| histogram |
+| [`meilisearch_db_size_bytes`](#323-meilisearch_db_size_bytes)                          | gauge     |
+| [`meilisearch_used_db_size_bytes`](#324-meilisearch_used_db_size_bytes)                | gauge     |
+| [`meilisearch_index_docs_count`](#325-meilisearch_index_docs_count)                    | gauge     |
+| [`meilisearch_index_count`](#326-meilisearch_index_count)                              | gauge     |
+| [`meilisearch_nb_tasks`](#327-meilisearch_nb_tasks)                                    | counter   |
+| [`meilisearch_last_update`](#328-meilisearch_last_update)                              | gauge     |
+| [`meilisearch_is_indexing`](#329-meilisearch_is_indexing)                              | gauge     |
 
-#### 3.2.1 `http_requests_total`
+#### 3.2.1 `meilisearch_http_requests_total`
 
 Returns the number of times an API resource is accessed.
 
 ```
 # HELP http_requests_total HTTP requests total
 # TYPE http_requests_total counter
-http_requests_total{method=":httpMethod",path=":resourcePath"} :numberOfRequest
+meilisearch_http_requests_total{method=":httpMethod",path=":resourcePath"} :numberOfRequest
 ```
 
-#### 3.2.2. `http_responses_time_seconds`
+#### 3.2.2. `meilisearch_http_response_time_seconds`
 
 Returns a time histogram showing the number of times an API resource call goes into a time bucket (expressed in second).
 
@@ -74,12 +78,13 @@ http_response_time_seconds_bucket{method=":httpMethod",path=":resourcePath",le="
 http_response_time_seconds_bucket{method=":httpMethod",path=":resourcePath",le="1"} :numberOfRequest
 http_response_time_seconds_bucket{method=":httpMethod",path=":resourcePath",le="+Inf"} :numberOfRequest
 http_response_time_seconds_sum{method=":httpMethod",path=":resourcePath"} :numberOfRequest
-http_response_time_seconds_count{method=":httpMethod",path=":resourcePath"} :numberOfRequest
+meilisearch_http_response_time_seconds_count{method=":httpMethod",path=":resourcePath"} :numberOfRequest
 ```
 
-#### 3.2.3. `meilisearch_database_size_bytes`
+#### 3.2.3. `meilisearch_db_size_bytes`
 
-Returns the size of the database in bytes.
+Returns the “real” size of the database on disk in bytes.
+It includes all the lmdb memory mapped files plus all the files contained in the `data.ms` directory (mainly the updates files that were not processed yet).
 
 ```
 # HELP meilisearch_db_size_bytes Meilisearch Db Size In Bytes
@@ -87,7 +92,19 @@ Returns the size of the database in bytes.
 meilisearch_db_size_bytes :databaseSizeInBytes
 ```
 
-#### 3.2.4. `meilisearch_index_docs_count`
+#### 3.2.4. `meilisearch_used_db_size_bytes`
+
+Returns the size of the database actually used by meilisearch in bytes.
+Include all the same files as `meilisearch_db_size_bytes` except that when it comes to an LMDB database, we only count the pages used by meilisearch.
+This means if you see a large gap between both metrics, adding documents will probably re-use freed pages instead of growing `meilisearch_db_size_bytes`.
+
+```
+# HELP meilisearch_used_db_size_bytes Meilisearch Used DB Size In Bytes
+# TYPE meilisearch_used_db_size_bytes gauge
+meilisearch_used_db_size_bytes :databaseSizeInBytes
+```
+
+#### 3.2.5. `meilisearch_index_docs_count`
 
 Returns the number of documents for an index.
 
@@ -97,7 +114,7 @@ Returns the number of documents for an index.
 meilisearch_index_docs_count{index=":indexUid"} :numberOfDocuments
 ```
 
-#### 3.2.5. `meilisearch_index_count`
+#### 3.2.6. `meilisearch_index_count`
 
 Returns the total number of indexes for the Meilisearch instance.
 
@@ -105,6 +122,44 @@ Returns the total number of indexes for the Meilisearch instance.
 # HELP meilisearch_index_count Meilisearch Index Count
 # TYPE meilisearch_index_count gauge
 meilisearch_index_count :numberOfIndex
+````
+
+#### 3.2.7. `meilisearch_nb_tasks`
+
+Returns the total number of tasks for the Meilisearch instance parametrized by the kind of task and its value (see the table below).
+
+```
+# HELP meilisearch_nb_tasks Meilisearch Number of tasks
+# TYPE meilisearch_nb_tasks gauge
+meilisearch_nb_tasks{kind=":kind",value=":value"} :number
+````
+
+Here is a list of available kind and associated values:
+
+| Kind      | values                                                                 |
+|-----------|------------------------------------------------------------------------|
+| indexes   | Any created indexes                                                    |
+| statuses  | Any task statuses (i.e.: succeeded, failed, enqueued, etc...)          |
+| types     | Any task types (i.e.: documentAdditionOrUpdate, settingsUpdate, etc...)|
+
+#### 3.2.8. `meilisearch_last_update`
+
+Returns the timestamp of the last update.
+
+```
+# HELP meilisearch_last_update Meilisearch Last Update
+# TYPE meilisearch_last_update gauge
+meilisearch_last_update :unixTimestamp
+````
+
+#### 3.2.8. `meilisearch_is_indexing`
+
+Returns `1` if Meilisearch is indexing or `0` if not.
+
+```
+# HELP meilisearch_is_indexing Meilisearch Is Indexing
+# TYPE meilisearch_is_indexing gauge
+meilisearch_is_indexing :isIndexing
 ````
 
 ### 3.3. API Endpoints Definition
@@ -144,5 +199,5 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 N/A
 
 ## 5. Future Possibilities
-
 - Merge `/stats` with `/metrics`. A header could specify the preferred format. e.g `application/json` (similar to actual `stats` resource) or `text/plain` (Prometheus)
+
