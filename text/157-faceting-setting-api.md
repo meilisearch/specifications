@@ -17,6 +17,7 @@ This settings will host the parameters to configure the faceting behavior for an
 | Field                                            | Type            | Required |
 |--------------------------------------------------|-----------------|----------|
 | [maxValuesPerFacet](#311-maxValuesPerFacet)      | Integer         | False    |
+| [sortFacetValuesBy](#312-sortFacetValuesBy)      | Object          | False    |
 
 #### 3.1.1. `maxValuesPerFacet`
 
@@ -33,6 +34,33 @@ The value of 100 ensures good performance and prevents malicious users from scra
 Increasing this value can degrade performance as well as expose the data of an instance to scrapping.
 
 The facets that are returned are sorted in ascending lexicographical order.
+
+#### 3.1.2 `sortFacetValuesBy`
+
+- Type: Object
+- Required: False
+- Default:
+
+```json
+{
+    "*": "alpha"
+}
+```
+
+Defines how facet values are sorted. By default, all facets (`*`) are sorted by name, alphanumerically in ascending order (`alpha`).
+
+It is possible to sort them by the number of documents containing a facet value in descending order using `count`.
+
+It is possible to specify a particular order for a facet.
+
+```json
+{
+    "*": "alpha",
+    "genre": "count"
+}
+```
+
+In this example, values from facets other than `genres` will be displayed sorted by their name in ascending alphanumeric order, while values from the `genres` facet will be sorted in descending order by the count of the number of documents containing each value.
 
 ## 3.2. API Endpoints Definition
 
@@ -54,7 +82,10 @@ Allow fetching the current definition of the faceting setting for an index.
 
 ```json
     {
-        "maxValuesPerFacet": 100
+        "maxValuesPerFacet": 100,
+        "sortFacetValuesBy": {
+            "*": "alpha"
+        }
     }
 ```
 
@@ -103,8 +134,8 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid JSON payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
 - 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
-- 🔴 Sending a value different from `null` or with a different type than `Integer` for the `maxValuesPerFacet` field returns
-an [invalid_settings_faceting](0061-error-format-and-definitions.md#invalid_settings_faceting) error.
+- 🔴 Sending a value different from `null` or with a different type than `Integer` for the `maxValuesPerFacet` field returns an [invalid_settings_faceting](0061-error-format-and-definitions.md#invalid_settings_faceting) error.
+- 🔴 Sending a value different from `null` or an object with value with a different type than `"alpha"` or `"count"` for the `sortFacetValuesBy` field returns an [invalid_settings_faceting](0061-error-format-and-definitions.md#invalid_settings_faceting) error.
 
 ###### 3.2.2.2.2.1. Async Errors
 
@@ -149,5 +180,4 @@ The auth layer can return the following errors if Meilisearch is secured (a mast
 n/a
 
 ## 3. Future Possibilities
-
-- Introduces a field to define the sorting of facets. e.g `sort` by `count`/`alphanumeric`
+n/a

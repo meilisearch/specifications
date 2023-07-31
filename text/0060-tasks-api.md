@@ -564,6 +564,7 @@ The main drawback of this type of pagination is that it does not navigate within
 
 | field | type | description                          |
 |-------|------|--------------------------------------|
+| total | integer  | The total number of tasks matching the filter/query |
 | limit | integer  | Default `20`. |
 | from | integer | The first task uid returned |
 | next | integer - nullable  | Represents the value to send in `from` to fetch the next slice of the results. The first item for the next slice starts at this exact number. When the returned value is null, it means that all the data have been browsed in the given order. |
@@ -602,6 +603,7 @@ This part demonstrates keyset paging in action on `/tasks`. The items `uid` rema
             ...,
         }
     ],
+    "total": 1351,
     "limit": 20,
     "from": 1350,
     "next": 1329
@@ -629,6 +631,7 @@ This part demonstrates keyset paging in action on `/tasks`. The items `uid` rema
             ...,
         }
     ],
+    "total": 1330,
     "limit": 50,
     "from": 1329,
     "next": 1278
@@ -656,6 +659,7 @@ This part demonstrates keyset paging in action on `/tasks`. The items `uid` rema
             ...,
         }
     ],
+    "total": 20,
     "limit": 20,
     "from": 20,
     "next": null

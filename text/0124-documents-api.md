@@ -261,7 +261,31 @@ A document represented as a JSON object.
 - 🔴 If the requested `document_id` does not exist, the API returns an [document_not_found](0061-error-format-and-definitions.md#document_not_found) error.
 - 🔴 Sending a value with a different type than `String` or `null` for `fields` will return a [invalid_document_fields](0061-error-format-and-definitions.md#invalid_document_fields) error.
 
-#### 3.1.3. `POST` - `indexes/:index_uid/documents`
+#### 3.1.3. Documents Body Special Properties
+
+While the body of a document can contain any pair of keys and values, Meilisearch uses specific key names to leverage some search capabilities such as geo search and vector search.
+
+| Field                                                    | Type                     | Required |
+|----------------------------------------------------------|--------------------------|----------|
+| [`_geo`](#3131-_geo)                                     | String | Object          | False    |
+| [`_vectors`](#3132-_vectors-experimental) `EXPERIMENTAL` | Array of Float | Array[Array of Float]    | False    |
+
+##### 3.1.3.1. `_geo`
+
+Holds latitude and longitude geo coordinates for a document.
+
+Refer to the [geo search specification](0059-geo-search.md)
+
+##### 3.1.3.2. `_vectors` `EXPERIMENTAL`
+
+Type: Array of Float | Array[Array of Float]
+Required: False
+
+Holds a vectorized representation of a document. It is possible to send either one or several vectorized representations of the same document.
+
+- 🔴 Sending a value with a different type than `Array of Float`, `Array[Array of Float]` or `null` as a value for `_vectors` returns an [invalid_document_vectors_field](0061-error-format-and-definitions.md#invalid_document_vectors_field) error.
+- 🔴 Sending a value for `_vectors` whose length differs from another document `_vectors` field returns an [invalid_document_vectors_field](0061-error-format-and-definitions.md#invalid_document_vectors_field) error.
+#### 3.1.4. `POST` - `indexes/:index_uid/documents`
 
 Add a list of documents or replace them if they already exist.
 
@@ -277,100 +301,26 @@ This endpoint accepts various content-type:
 - [`text/csv`](0028-indexing-csv.md)
 - [`application/x-ndjson`](0029-indexing-ndjson.md)
 
-##### 3.1.3.1. Path Parameters
-
-| Field                    | Type                     | Required |
-|--------------------------|--------------------------|----------|
-| `index_uid`              | String                   | True     |
-
-###### 3.1.3.1.1 `index_uid`
-
-- Type: String
-- Required: True
-
-Unique identifier of an index.
-
-##### 3.1.3.2. Request Payload Definition
-
-| Field                    | Type                     | Required |
-|--------------------------|--------------------------|----------|
-| `primaryKey`             | String                   | False    |
-
-###### 3.1.3.2.1 `primaryKey`
-
-- Type: String
-- Required: False
-- Default: `null`
-
-Allows to bypass the auto-inference mechanism of the document identifiers.
-
-By default, the `primaryKey` will be chosen by the auto-inference mechanism by the engine when a first document is indexed.
-
-Specifying this field tells the engine to use the document attribute specified in `primaryKey` and bypasses this mechanism.
-
-When the index is empty, it is possible to modify the `primaryKey`.
-
-If the index is not empty, the query parameter `primaryKey` is ignored.
-
-##### 3.1.3.3. Response Definition
-
-When the request is successful, Meilisearch returns the HTTP code `202 Accepted`. The response's content is the summarized representation of the received asynchronous task.
-
-See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted).
-
-##### 3.1.3.4. Errors
-
-- 🔴 Omitting Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
-- 🔴 Sending an empty Content-Type returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
-- 🔴 Sending a different Content-Type than `application/json`, `text/csv`, or `application/x-ndjson` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
-- 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
-- 🔴 Sending an invalid payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
-- 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
-- 🔴 Sending a value with a different type than `String` or `null` for the `primaryKey` parameter will return a [invalid_index_primary_key](0061-error-format-and-definitions.md#invalid_index_primary_key) error.
-
-###### 3.1.3.4.1. Async Errors
-
-- 🔴 When Meilisearch is secured, if the API Key do not have the `indexes.create` action defined, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error in the related asynchronous `task` resource. See [3.2.2.2. Response Definition](#3222-response-definition).
-- 🔴 When updating the `primaryKey`, if the previous `primaryKey` value has already been used for a document, the API returns an [index_primary_key_already_exists](0061-error-format-and-definitions.md#index_primary_key_already_exists) error.
-
-##### 3.1.3.5. Lazy Index Creation
-
-If the requested `index_uid` does not exist, and the authorization layer allows it (See [3.1.3.4.1. Async Errors](#31341-async-errors)), Meilisearch will create the index when the related asynchronous task resource is executed. See [3.1.3.3. Response Definition](#3133-response-definition).
-
-#### 3.1.4. `PUT` - `indexes/:index_uid/documents`
-
-Add a list of documents or update them if they already exist.
-
-If the provided index does not exist, it will be created. See [3.1.4.5. Lazy Index Creation](#3145-lazy-index-creation)
-
-If an already existing document (same identifier) is set, the old document will be only partially updated according to the fields of the new document. Thus, any fields not present in the new document are kept and remain unchanged.
-
-This endpoint accepts various content-type:
-
-- [`application/json`](0135-indexing-json.md)
-- [`text/csv`](0028-indexing-csv.md)
-- [`application/x-ndjson`](0029-indexing-ndjson.md)
-
 ##### 3.1.4.1. Path Parameters
 
 | Field                    | Type                     | Required |
 |--------------------------|--------------------------|----------|
 | `index_uid`              | String                   | True     |
 
-###### 3.1.4.1.1. `index_uid`
+###### 3.1.4.1.1 `index_uid`
 
 - Type: String
 - Required: True
 
 Unique identifier of an index.
 
-##### 3.1.4.2. Query Parameters Definition
+##### 3.1.4.2. Request Payload Definition
 
 | Field                    | Type                     | Required |
 |--------------------------|--------------------------|----------|
 | `primaryKey`             | String                   | False    |
 
-###### 3.1.4.2.1. `primaryKey`
+###### 3.1.4.2.1 `primaryKey`
 
 - Type: String
 - Required: False
@@ -409,17 +359,27 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 
 ##### 3.1.4.5. Lazy Index Creation
 
-If the requested `index_uid` does not exist, and the authorization layer allows it (See [3.1.4.4.1. Async Errors](#31441-async-errors)), Meilisearch will create the index when the related asynchronous task resource is executed. See [3.1.4.3. Response Definition](#3143-response-definition).
+If the requested `index_uid` does not exist, and the authorization layer allows it (See [3.1.3.4.1. Async Errors](#31341-async-errors)), Meilisearch will create the index when the related asynchronous task resource is executed. See [3.1.3.3. Response Definition](#3133-response-definition).
 
-#### 3.1.5. `DELETE` - `indexes/:index_uid/documents`
+#### 3.1.5. `PUT` - `indexes/:index_uid/documents`
 
-Delete all documents in the specified index.
+Add a list of documents or update them if they already exist.
+
+If the provided index does not exist, it will be created. See [3.1.4.5. Lazy Index Creation](#3145-lazy-index-creation)
+
+If an already existing document (same identifier) is set, the old document will be only partially updated according to the fields of the new document. Thus, any fields not present in the new document are kept and remain unchanged.
+
+This endpoint accepts various content-type:
+
+- [`application/json`](0135-indexing-json.md)
+- [`text/csv`](0028-indexing-csv.md)
+- [`application/x-ndjson`](0029-indexing-ndjson.md)
 
 ##### 3.1.5.1. Path Parameters
 
 | Field                    | Type                     | Required |
 |--------------------------|--------------------------|----------|
-| `index_uid`              | String                   | true     |
+| `index_uid`              | String                   | True     |
 
 ###### 3.1.5.1.1. `index_uid`
 
@@ -428,8 +388,27 @@ Delete all documents in the specified index.
 
 Unique identifier of an index.
 
-##### 3.1.5.2. Request Payload Definition
-N/A
+##### 3.1.5.2. Query Parameters Definition
+
+| Field                    | Type                     | Required |
+|--------------------------|--------------------------|----------|
+| `primaryKey`             | String                   | False    |
+
+###### 3.1.5.2.1. `primaryKey`
+
+- Type: String
+- Required: False
+- Default: `null`
+
+Allows to bypass the auto-inference mechanism of the document identifiers.
+
+By default, the `primaryKey` will be chosen by the auto-inference mechanism by the engine when a first document is indexed.
+
+Specifying this field tells the engine to use the document attribute specified in `primaryKey` and bypasses this mechanism.
+
+When the index is empty, it is possible to modify the `primaryKey`.
+
+If the index is not empty, the query parameter `primaryKey` is ignored.
 
 ##### 3.1.5.3. Response Definition
 
@@ -439,22 +418,32 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 
 ##### 3.1.5.4. Errors
 
+- 🔴 Omitting Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
+- 🔴 Sending an empty Content-Type returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
+- 🔴 Sending a different Content-Type than `application/json`, `text/csv`, or `application/x-ndjson` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
+- 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
+- 🔴 Sending an invalid payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
 - 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
+- 🔴 Sending a value with a different type than `String` or `null` for the `primaryKey` parameter will return a [invalid_index_primary_key](0061-error-format-and-definitions.md#invalid_index_primary_key) error.
 
 ###### 3.1.5.4.1. Async Errors
 
-- 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
+- 🔴 When Meilisearch is secured, if the API Key do not have the `indexes.create` action defined, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error in the related asynchronous `task` resource. See [3.2.2.2. Response Definition](#3222-response-definition).
+- 🔴 When updating the `primaryKey`, if the previous `primaryKey` value has already been used for a document, the API returns an [index_primary_key_already_exists](0061-error-format-and-definitions.md#index_primary_key_already_exists) error.
 
-#### 3.1.6. `DELETE` - `indexes/:index_uid/documents/:document_id`
+##### 3.1.5.5. Lazy Index Creation
 
-Delete one document based on its unique id.
+If the requested `index_uid` does not exist, and the authorization layer allows it (See [3.1.4.4.1. Async Errors](#31441-async-errors)), Meilisearch will create the index when the related asynchronous task resource is executed. See [3.1.4.3. Response Definition](#3143-response-definition).
+
+#### 3.1.6. `DELETE` - `indexes/:index_uid/documents`
+
+Delete all documents in the specified index.
 
 ##### 3.1.6.1. Path Parameters
 
 | Field                    | Type                     | Required |
 |--------------------------|--------------------------|----------|
-| `index_uid`              | String                   | True     |
-| `document_id`            | String                   | True     |
+| `index_uid`              | String                   | true     |
 
 ###### 3.1.6.1.1. `index_uid`
 
@@ -462,13 +451,6 @@ Delete one document based on its unique id.
 - Required: True
 
 Unique identifier of an index.
-
-###### 3.1.6.1.2. `document_id`
-
-- Type: Integer
-- Required: True
-
-Unique identifier of a document.
 
 ##### 3.1.6.2. Request Payload Definition
 N/A
@@ -487,15 +469,16 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 
 - 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
-#### 3.1.7. `POST` - `indexes/:index_uid/documents/delete-batch`
+#### 3.1.7. `DELETE` - `indexes/:index_uid/documents/:document_id`
 
-Delete a selection of documents based on array of document id's.
+Delete one document based on its unique id.
 
 ##### 3.1.7.1. Path Parameters
 
 | Field                    | Type                     | Required |
 |--------------------------|--------------------------|----------|
 | `index_uid`              | String                   | True     |
+| `document_id`            | String                   | True     |
 
 ###### 3.1.7.1.1. `index_uid`
 
@@ -504,42 +487,33 @@ Delete a selection of documents based on array of document id's.
 
 Unique identifier of an index.
 
-##### 3.1.7.2 Request Payload Definition
+###### 3.1.7.1.2. `document_id`
 
-An array of document ids to delete.
-
-- Type: Array
+- Type: Integer
 - Required: True
 
-e.g.
+Unique identifier of a document.
 
-```json
-[122, 1194, 2501]
-```
+##### 3.1.7.2. Request Payload Definition
+N/A
 
 ##### 3.1.7.3. Response Definition
 
-When the request is successful, Meilisearch returns the HTTP code `202 Accepted`. The response's content is the summarized representation of the received asynchronous task with the type `documentDeletion`.
+When the request is successful, Meilisearch returns the HTTP code `202 Accepted`. The response's content is the summarized representation of the received asynchronous task.
 
 See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted).
 
 ##### 3.1.7.4. Errors
 
-- 🔴 Omitting Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
-- 🔴 Sending an empty Content-Type returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
-- 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
-- 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
-- 🔴 Sending an invalid payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
 - 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
-- 🔴 Sending a value with a different type than `Array` for the body request will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
-###### 3.1.7.4.1 Async Errors
+###### 3.1.7.4.1. Async Errors
 
 - 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
-#### 3.1.8. `POST` - `indexes/:index_uid/documents/delete`
+#### 3.1.8. `POST` - `indexes/:index_uid/documents/delete-batch`
 
-Delete a selection of documents based on a filter.
+Delete a selection of documents based on array of document id's.
 
 ##### 3.1.8.1. Path Parameters
 
@@ -556,17 +530,15 @@ Unique identifier of an index.
 
 ##### 3.1.8.2 Request Payload Definition
 
-A filter.
+An array of document ids to delete.
 
-- Type: String or array of array of strings
+- Type: Array
 - Required: True
 
 e.g.
 
 ```json
-{
-  "filter": "doggo = 'bernese mountain'"
-}
+[122, 1194, 2501]
 ```
 
 ##### 3.1.8.3. Response Definition
@@ -583,18 +555,70 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 - 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
 - 🔴 Sending an invalid payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
 - 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
-- 🔴 Sending a value without a filter will return a [missing_document_filter](0061-error-format-and-definitions.md#missing_document_filter) error.
-- 🔴 Sending a value with an invalid or empty filter will return an [invalid_document_filter](0061-error-format-and-definitions.md#invalid_document_filter) error.
+- 🔴 Sending a value with a different type than `Array` for the body request will return a [bad_request](0061-error-format-and-definitions.md#bad_request) error.
 
 ###### 3.1.8.4.1 Async Errors
 
 - 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
-#### 3.1.9. General Errors
+#### 3.1.9. `POST` - `indexes/:index_uid/documents/delete`
+
+Delete a selection of documents based on a filter.
+
+##### 3.1.9.1. Path Parameters
+
+| Field                    | Type                     | Required |
+|--------------------------|--------------------------|----------|
+| `index_uid`              | String                   | True     |
+
+###### 3.1.9.1.1. `index_uid`
+
+- Type: String
+- Required: True
+
+Unique identifier of an index.
+
+##### 3.1.9.2 Request Payload Definition
+
+A filter.
+
+- Type: String or array of array of strings
+- Required: True
+
+e.g.
+
+```json
+{
+  "filter": "doggo = 'bernese mountain'"
+}
+```
+
+##### 3.1.9.3. Response Definition
+
+When the request is successful, Meilisearch returns the HTTP code `202 Accepted`. The response's content is the summarized representation of the received asynchronous task with the type `documentDeletion`.
+
+See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-task-object-for-202-accepted).
+
+##### 3.1.9.4. Errors
+
+- 🔴 Omitting Content-Type header returns a [missing_content_type](0061-error-format-and-definitions.md#missing_content_type) error.
+- 🔴 Sending an empty Content-Type returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
+- 🔴 Sending a different Content-Type than `application/json` returns an [invalid_content_type](0061-error-format-and-definitions.md#invalid_content_type) error.
+- 🔴 Sending an empty payload returns a [missing_payload](0061-error-format-and-definitions.md#missing_payload) error.
+- 🔴 Sending an invalid payload returns a [malformed_payload](0061-error-format-and-definitions.md#malformed_payload) error.
+- 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
+- 🔴 Sending a value without a filter will return a [missing_document_filter](0061-error-format-and-definitions.md#missing_document_filter) error.
+- 🔴 Sending a value with an invalid or empty filter will return an [invalid_document_filter](0061-error-format-and-definitions.md#invalid_document_filter) error.
+
+###### 3.1.9.4.1 Async Errors
+
+- 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
+
+#### 3.1.10. General Errors
 
 These errors apply to all endpoints described here.
 
-##### 3.1.9.1 Auth Errors
+##### 3.1.10.1 Auth Errors
 
 The auth layer can return the following errors if Meilisearch is secured (a master-key is defined).
 
