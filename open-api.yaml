@@ -117,6 +117,157 @@ components:
         - start
         - length
       description: Starting position and length in bytes of the matched term in the returned value
+    order:
+      type: integer
+      description: The order that this ranking rule was applied
+    customRankingRuleDetails:
+      type: object
+      properties:
+        order:
+          $ref: '#/components/schemas/order'
+        value:
+          type:
+            - string
+            - number
+            - point
+          description: The value that was used for sorting this document
+        distance:
+          type: number
+          description: The distance between the target point and the geoPoint in the document
+      required:
+        - order
+        - value
+      description: Custom rule in the form of either `attribute:direction` or `_geoPoint(lat, lng):direction`.
+    score:
+      type: number
+      description: |
+        The relevancy score of a document according to a ranking rule and relative to a search query. Higher is better.
+
+        `1.0` indicates a perfect match, `0.0` no match at all (Meilisearch should not return documents that don't match the query).
+    rankingScoreDetails:
+      type: object
+      properties:
+        words:
+          type: object
+          properties:
+            order:
+              $ref: '#/components/schemas/order'
+            matchingWords:
+              type: integer
+              description: the number of words from the query found
+            maxMatchingWords:
+              type: integer
+            score:
+              $ref: '#/components/schemas/score'
+          required:
+            - order
+            - matchingWords
+            - maxMatchingWords
+            - score
+        typo:
+          type: object
+          properties:
+            order:
+              $ref: '#/components/schemas/order'
+            typoCount:
+              type: integer
+              description: The number of typos to correct in the query to match that document.
+            maxTypoCount:
+              type: integer
+              description: The maximum number of typos that can be corrected in the query to match a document.
+            score:
+              $ref: '#/components/schemas/score'
+          required:
+            - order
+            - typoCount
+            - maxTypoCount
+            - score
+        proximity:
+          type: object
+          properties:
+            order:
+              $ref: '#/components/schemas/order'
+            score:
+              $ref: '#/components/schemas/score'
+          required:
+            - order
+            - score
+        attribute:
+          type: object
+          properties:
+            order:
+              $ref: '#/components/schemas/order'
+            attribute_ranking_order_score:
+              type: number
+              description: |
+               Score computed depending on the first attribute each word of the query appears in.
+
+               The first attribute in the `searchableAttributes` list yields the highest score, the last attribute the lowest.
+            query_word_distance_score:
+              type: number
+              description: |
+               Score computed depending on the position the attributes where each word of the query appears in.
+
+               Words appearing in an attribute at the same position as in the query yield the highest score. The greater the distance to the position
+               in the query, the lower the score.
+            score:
+              $ref: '#/components/schemas/score'
+          required:
+            - order
+            - attribute_ranking_order_score
+            - query_word_distance_score
+            - score
+        exactness:
+          type: object
+          properties:
+            order:
+              $ref: '#/components/schemas/order'
+            matchType:
+              type: string
+              description: |
+               One of `exactMatch`, `matchesStart` or `noExactMatch`.
+               - `exactMatch`: the document contains an attribute that exactly matches the query.
+               - `matchesStart`: the document contains an attribute that exactly starts with the query.
+               - `noExactMatch`: any other document.
+            score:
+              $ref: '#/components/schemas/score'
+          required:
+            - order
+            - matchType
+            - score
+      additionalProperties:
+        $ref: '#/components/schemas/customRankingRuleDetails'
+      description: (EXPERIMENTAL) The ranking score per ranking rule.
+      examples:
+        With sort:
+          words:
+            order: 0
+            matchingWords: 7
+            maxMatchingWords: 7
+            score: 1.0
+          "typo":
+            "order": 1
+            "typoCount": 0
+            "maxTypoCount": 0
+            "score": 1.0
+          "proximity":
+            "order": 2,
+            "score": 1.0
+          "attribute":
+            "order": 3
+            "attribute_ranking_order_score": 1.0
+            "query_word_distance_score": 1.0
+            "score": 1.0
+          "title:asc":
+            "order": 4
+            "value": "batman: the dark knight returns, part 1"
+          "release_date:desc":
+            "order": 5
+            "value": 1345507200.0
+          "exactness":
+            "order": 6
+            "matchType": "exactMatch"
+            "score": 1.0
     hit:
       type: object
       additionalProperties: true
@@ -168,6 +319,15 @@ components:
           properties:
             '':
               $ref: '#/components/schemas/matchesPosition'
+        _rankingScore:
+          type: number
+          description: Only present if showRankingScore = `true`. The ranking score of that document.
+        _rankingScoreDetails:
+          type: object
+          description: (EXPERIMENTAL) Only present if showRankingScoreDetails = `true`. The ranking score of each ranking rule for that document.
+          properties:
+            '':
+              $ref: '#/components/schemas/rankingScoreDetails'
         attribute:
           type:
             - string
@@ -759,6 +919,14 @@ components:
           type: boolean
           description: Defines whether an `_matchesPosition` object that contains information about the matches should be returned or not.
           default: false
+        showRankingScore:
+          type: boolean
+          description: Defines whether a `_rankingScore` number representing the relevancy score of that document should be returned or not.
+          default: false
+        showRankingScoreDetails:
+          type: boolean
+          description: (EXPERIMENTAL) Defines whether a `_rankingScoreDetails` object containing information about the score of that document for each ranking rule should be returned or not.
+          default: false
         matchingStrategy:
           type: string
           description: Defines which strategy to use to match the query terms within the documents as search results. Two different strategies are available, `last` and `all`. By default, the `last` strategy is chosen.
@@ -813,6 +981,8 @@ components:
             attributesToHighlight:
               - overview
             showMatchesPosition: true
+            showRankingScore: true
+            wordsMatchingStrategy: all
             matchingStrategy: all
     facetSearchQuery:
       type: object
@@ -905,6 +1075,8 @@ components:
               - keys.create
               - keys.update
               - keys.delete
+              - experimental.get
+              - experimental.update
         indexes:
           type: array
           description: 'A list of accesible indexes permitted for the key. ["*"] for all indexes. The * character can be used as a wildcard when located at the last position. e.g. "products_*"" to allow access to all indexes whose names start with "products_".'
@@ -1432,6 +1604,10 @@ tags:
       During a [dump export](https://docs.meilisearch.com/reference/api/dump.html#create-a-dump), all indexes of the current instance are exported—together with their documents and settings—and saved as a single `.dump` file.
       During a dump import, all indexes contained in the indicated `.dump` file are imported along with their associated documents and settings. Any existing index with the same uid as an index in the dump file will be overwritten.
       Dump imports are [performed at launch](https://docs.meilisearch.com/reference/features/configuration.html#import-dump) using an option.
+  - name: Experimental
+    description: |
+      The `experimental-features` endpoint allows enabling and disabling [experimental features](https://github.com/meilisearch/engine-team/blob/main/resources/experimental-features.md) at runtime.
+      Experimental features are features that are not yet covered by [Meilisearch's stability guarantee](https://github.com/meilisearch/engine-team/blob/main/resources/versioning-policy.md) and that could break between minor and patch Meilisearch versions.
 paths:
   /dumps:
     post:
@@ -3900,7 +4076,7 @@ paths:
       summary: Get all tasks
       description: 'Get all [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html)'
       tags:
-        - tasks
+        - Tasks
       responses:
         '200':
           description: OK
@@ -3986,7 +4162,7 @@ paths:
       summary: Delete tasks
       description: 'Delete finished [tasks](https://docs.meilisearch.com/lean/advanced/asynchronous_operations.html)'
       tags:
-        - tasks
+        - Tasks
       responses:
         '202':
           description: Accepted
@@ -4023,7 +4199,7 @@ paths:
       summary: Get a task
       description: 'Get a [task](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) '
       tags:
-        - tasks
+        - Tasks
       responses:
         '200':
           description: OK
@@ -4072,7 +4248,7 @@ paths:
       summary: Cancel tasks
       description: 'Cancel enqueued and/or processing [tasks](https://docs.meilisearch.com/learn/advanced/asynchronous_operations.html) '
       tags:
-        - tasks
+        - Tasks
       responses:
         '202':
           description: Accepted
@@ -4141,12 +4317,93 @@ paths:
           $ref: '#/components/responses/401'
     parameters:
       - $ref: '#/components/parameters/taskUid'
+  '/experimental-features':
+    get:
+      operationId: experimental.get
+      security:
+        - apiKey: []
+      summary: (EXPERIMENTAL) Get the status of runtime experimental features
+      description: 'Get the status of all experimental features that can be toggled at runtime'
+      tags:
+        - Experimental
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  vectorStore:
+                    type: boolean
+                  scoreDetails:
+                    type: boolean
+                required:
+                  - vectorStore
+                  - scoreDetails
+              examples:
+                Default status of the features:
+                  value:
+                    vectorStore: false
+                    scoreDetails: false
+        '401':
+          $ref: '#/components/responses/401'
+    patch:
+      operationId: experimental.update
+      security:
+        - apiKey: []
+      summary: (EXPERIMENTAL) Set the status of runtime experimental features
+      description: 'Set the status of experimental features that can be toggled at runtime'
+      tags:
+        - Experimental
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                vectorStore:
+                  type: boolean
+                scoreDetails:
+                  type: boolean
+              additionalProperties: false
+            examples:
+              Example:
+                value:
+                  vectorStore: true
+                  scoreDetails: false
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  vectorStore:
+                    type: boolean
+                  scoreDetails:
+                    type: boolean
+                required:
+                  - vectorStore
+                  - scoreDetails
+              examples:
+                Updated status of the feature:
+                  value:
+                    vectorStore: true
+                    scoreDetails: false
+        '401':
+          $ref: '#/components/responses/401'
   /metrics:
     get:
       summary: (EXPERIMENTAL) Get prometheus format metrics for observability and monitoring
       description: 'See [technical specification](https://github.com/meilisearch/specifications/blob/main/text/0174-metrics-api.md)'
       tags:
-        - stats
+        - Stats
+        - Experimental
       responses:
         '200':
           description: OK

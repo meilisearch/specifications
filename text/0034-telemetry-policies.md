@@ -69,6 +69,9 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | Stats Seen | Occurs when stats are fetched via `GET` - `/stats` or `/indexes/:indexUid/stats`. |
 | Health Seen | Aggregated event on all received requests via the `GET - /health` route during one hour or until a batch size reaches `500Kb`. |
 | Version Seen | Occurs when `GET - /version` is fetched. |
+| Experimental features Seen | Occurs when `GET - /experimental-features` is fetched. |
+| Experimental features Updated | Occurs when experimental features are updated via `PATCH - /experimental-features` |
+
 
 ----
 
@@ -112,11 +115,11 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `stats.database_size`                   | Database size. Expressed in `Bytes`                     | 2621440           | Every hour |
 | `stats.indexes_number`                  | Number of indexes                                       | 2                 | Every hour |
 | `start_since_days`                      | Number of days since instance was launched              | 365               | Every hour |
-| `user_agent`                            | User-agent header encountered during one or more API calls | ["Meilisearch Ruby (v2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Documents Deleted`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `TypoTolerance Updated`, `Pagination Updated`, `Faceting Updated`, `DistinctAttribute Updated`, `DisplayedAttributes Updated`, `StopWords Updated`, `Synonyms Updated`, `Dump Created`, `Tasks Seen`, `Stats Seen`, `Health Seen`, `Version Seen`, `Documents Searched by Multi-Search POST`, `Facet Searched POST` |
-| `requests.99th_response_time`           | Highest latency from among the fastest 99% of successful search requests | 57ms    | `Documents Searched POST`, `Documents Searched GET`, `Facet Searched POST`|
-| `requests.total_succeeded`              | Total number of successful requests in this batch | 3456 | `Documents Searched POST`, `Documents Searched GET`, `Facet Searched POST`, `Documents Searched by Multi-Search POST` |
-| `requests.total_failed`                 | Total number of failed requests in this batch    | 24   | `Documents Searched POST`, `Documents Searched GET`, `Facet Searched POST`, `Documents Searched by Multi-Search POST` |
-| `requests.total_received`               | Total number of received requests in this batch  | 3480 | `Documents Searched POST`, `Documents Searched GET`, `Facet Searched POST`, `Documents Deleted`, `Documents Fetched GET`, `Documents Fetched POST`, `Health Seen`, `Tasks Seen`, `Documents Searched by Multi-Search POST` |
+| `user_agent`                            | User-agent header encountered during one or more API calls | ["Meilisearch Ruby (v2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Documents Deleted`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `TypoTolerance Updated`, `Pagination Updated`, `Faceting Updated`, `DistinctAttribute Updated`, `DisplayedAttributes Updated`, `StopWords Updated`, `Synonyms Updated`, `Dump Created`, `Tasks Seen`, `Stats Seen`, `Health Seen`, `Version Seen`, `Documents Searched by Multi-Search POST`, `Experimental features Seen`, `Experimental features Updated` |
+| `requests.99th_response_time`           | Highest latency from among the fastest 99% of successful search requests | 57ms    | `Documents Searched POST`, `Documents Searched GET`|
+| `requests.total_succeeded`              | Total number of successful requests in this batch | 3456 | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched by Multi-Search POST` |
+| `requests.total_failed`                 | Total number of failed requests in this batch    | 24   | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched by Multi-Search POST` |
+| `requests.total_received`               | Total number of received requests in this batch  | 3480 | `Documents Searched POST`, `Documents Searched GET`, `Documents Deleted`, `Documents Fetched GET`, `Documents Fetched POST`, `Health Seen`, `Tasks Seen`, `Documents Searched by Multi-Search POST` |
 | `sort.with_geoPoint`                    | `true` if the sort rule `_geoPoint` was used in this batch, otherwise `false` | true | `Documents Searched POST`, `Documents Searched GET` |
 | `sort.avg_criteria_number`              | Average number of sort criteria among all requests containing the `sort` parameter in this batch | 2 | `Documents Searched POST`, `Documents Searched GET` |
 | `filter.with_geoRadius`                 | `true` if the filter rule `_geoRadius` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
@@ -191,8 +194,13 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `per_batch` | `true` if `POST /indexes/:indexUid/documents/delete-batch` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
 | `per_filter`| `true` if `POST /indexes/:indexUid/documents/delete` endpoint was used in this batch, otherwise `false` | false | `Documents Fetched GET`, `Documents Fetched POST`, `Documents Deleted` |
 | `clear_all` | `true` if `DELETE /indexes/:indexUid/documents` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
+| vector_store | Whether the [vector store](./0193-experimental-features.md#vector-store) feature is enabled. | `true` | `Experimental features Updated` |
+| score_details | Whether the [score details](./0193-experimental-features.md#score-details) feature is enabled. | `true` | `Experimental features Updated` |
+| scoring.show_ranking_score | Was `showRankingScore` used in the aggregated event? If yes, `true`, otherwise `false` | `false` | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched by Multi-Search POST` |
+| scoring.show_ranking_score_details | Was `showRankingScoreDetails` used in the aggregated event? If yes, `true`, otherwise `false` | `false` | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched GET` |
 | `facets.total_distinct_facet_count` | The total number of distinct facets queried for the aggregated event | `3` | `Facet Searched POST` |
 | `facets.additional_search_parameters_provided` | Were additional search parameters provided for the aggregated event | `true` | `Facet Searched POST` |
+
 
 ----
 
@@ -287,9 +295,11 @@ This property allows us to gather essential information to better understand on 
 | formatting.max_attributes_to_crop | The maximum number of attributes to crop encountered among all requests in the aggregated event. | `100` |
 | formatting.crop_length | Does `cropLength` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.crop_marker | Does `cropMarker` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
-| formatting.show_matches_position | Does `showMatchesPosition` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
+| formatting.show_matches_position | Was `showMatchesPosition` used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | facets.avg_facets_number | The average number of facets among all the requests containing the `facets` parameter in the aggregated event. `"facets": []` equals to `0` while not sending `facets` does not influence the average in the aggregated event. | `10` |
 | matching_strategy.most_used_strategy | Most used word matching strategy among all search requests in the aggregated event. `last` / `all` | `last` |
+| scoring.show_ranking_score | Was `showRankingScore` used in the aggregated event? If yes, `true`, otherwise `false` | `false` |
+| scoring.show_ranking_score_details | Was `showRankingScoreDetails` used in the aggregated event? If yes, `true`, otherwise `false` | `false` |
 
 ---
 
@@ -325,6 +335,8 @@ This property allows us to gather essential information to better understand on 
 | formatting.show_matches_position | Does `showMatchesPosition` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | facets.avg_facets_number | The average number of facets among all the requests containing the `facets` parameter in the aggregated event. `"facets": []` equals to `0` while not sending `facets` does not influence the average in the aggregated event. | `10` |
 | matching_strategy.most_used_strategy | Most used word matching strategy among all search requests in the aggregated event. `last` / `all` | `last` |
+| scoring.show_ranking_score | Was `showRankingScore` used in the aggregated event? If yes, `true`, otherwise `false` | `false` |
+| scoring.show_ranking_score_details | Was `showRankingScoreDetails` used in the aggregated event? If yes, `true`, otherwise `false` | `false` |
 
 ---
 #### `Facet Searched POST`
@@ -663,6 +675,21 @@ This property allows us to gather essential information to better understand on 
 | Property name | Description | Example |
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+
+## `Experimental features Seen`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+
+## `Experimental features Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| vector_store | Whether the [vector store](./0193-experimental-features.md#vector-store) feature is enabled. | `true` |
+| score_details | Whether the [score details](./0193-experimental-features.md#score-details) feature is enabled. | `true` |
+
 
 ---
 
