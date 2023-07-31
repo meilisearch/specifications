@@ -122,6 +122,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `filter.with_geoRadius`                 | `true` if the filter rule `_geoRadius` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
 | `filter.with_geoBoundingBox`            | `true` if the filter rule `_geoBoundingBox` was used in this batch, otherwise `false`| false | `Documents Searched POST`, `Documents Searched GET` |
 | `filter.most_used_syntax`               | Most used filter syntax among all requests containing the `filter` parameter in this batch | string | `Documents Searched POST`, `Documents Searched GET` |
+| `attributes_to_search_on.total_number_of_uses`| Total number of queries where `attributesToSearchOn` is set | 5 | `Documents Searched POST`, `Documents Searched GET` |
 | `q.max_terms_number`                    | Highest number of terms given for the `q` parameter in this batch | 5 | `Documents Searched POST`, `Documents Searched GET` |
 | `vector.max_vector_size`                | Highest number of dimensions given for the `vector` parameter in this batch | 1536 | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched by Multi-Search POST` |
 | `pagination.max_limit`                  | Highest value given for the `limit` parameter in this batch | 60 | `Documents Searched POST`, `Documents Searched GET`, `Documents Fetched GET`, `Documents Fetched POST` |
@@ -273,6 +274,7 @@ This property allows us to gather essential information to better understand on 
 | filter.with_geoBoundingBox | Does the built-in filter rule _geoBoundingBox has been used in the aggregated event?| `false` |
 | filter.avg_criteria_number | The average number of filter criteria among all the requests containing the `filter` parameter in the aggregated event. `"filter": []` equals to `0` while not sending `filter` does not influence the average in the aggregated event. | `4` |
 | filter.most_used_syntax | The most used filter syntax among all the requests containing the requests containing the `filter` parameter in the aggregated event. `string` / `array` / `mixed` | `mixed` |
+| attributes_to_search_on.total_number_of_uses| Total number of queries where `attributesToSearchOn` is set | `5` |
 | q.max_terms_number | The maximum number of terms for the `q` parameter among all requests in the aggregated event. | `5` |
 | vector.max_vector_size | The maximum number of dimensions for the `vector` parameter among all requests in the aggregated event. | `1536` |
 | pagination.max_limit | The maximum limit encountered among all requests in the aggregated event. | `20` |
@@ -308,6 +310,7 @@ This property allows us to gather essential information to better understand on 
 | filter.with_geoBoundingBox | Does the built-in filter rule _geoBoundingBox has been used in the aggregated event?| `false` |
 | filter.avg_criteria_number | The average number of filter criteria among all the requests containing the `filter` parameter in the aggregated event. `"filter": []` equals to `0` while not sending `filter` does not influence the average in the aggregated event. | `4` |
 | filter.most_used_syntax | The most used filter syntax among all the requests containing the requests containing the `filter` parameter in the aggregated event. `string` / `array` / `mixed` | `mixed` |
+| attributes_to_search_on.total_number_of_uses | Total number of queries where `attributesToSearchOn` is set | 5 |
 | q.max_terms_number | The maximum number of terms for the `q` parameter among all requests in the aggregated event. | `5` |
 | pagination.max_limit | The maximum limit encountered among all requests in the aggregated event. | `20` |
 | pagination.max_offset | The maximum offset encountered among all requests in the aggregated event. | `1000` |

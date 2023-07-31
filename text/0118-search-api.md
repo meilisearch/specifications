@@ -51,6 +51,7 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 | [`cropMarker`](#3115-cropmarker)                      | String                   | False    |
 | [`showMatchesPosition`](#3116-showmatchesposition)    | Boolean                  | False    |
 | [`matchingStrategy`](#3117-matchingStrategy)          | String                   | False    |
+| [`attributesToSearchOn`](#3118-attributesToSearchOn)  | Array of String - String | False    |
 | [`vector`](#3118-vector) `EXPERIMENTAL`               | Array of Float           | False    |
 
 
@@ -913,7 +914,20 @@ The documents containing ALL the query words (i.e. in the `q` parameter) are ret
 
 Only the documents containing ALL the query words (i.e. in the `q` parameter) are returned by Meilisearch. If Meilisearch doesn't have enough documents to fit the requested `limit`, it returns the documents found without trying to match more documents.
 
-#### 3.1.18. `vector` `EXPERIMENTAL`
+#### 3.1.18. `attributesToSearchOn`
+
+- Type: Array of String (POST) | String (GET)
+- Required: False
+- Default: `["*"]`
+
+Defines which `searchableAttributes` the query will search on.
+
+- If `attributesToSearchOn` is not set, set to `["*"]` or set to `null`, then the query will search on all `searchableAttributes`.
+- Sending the attributes in a different order than the order set in the settings `searchableAttributes` doesn't reorder the fields' rank for the `Attributes` ranking rule
+- 🔴 Sending a value with a different type than `Array of String`(POST), `String`(GET) or `null` for `attributesToSearchOn` returns an [invalid_attributes_to_search_on](0061-error-format-and-definitions.md#invalid_search_attributes_to_search_on) error.
+- 🔴 Sending an attribute that is not part of the settings `searchableAttributes` list returns an [invalid_attributes_to_search_on](0061-error-format-and-definitions.md#invalid_search_attributes_to_search_on) error.
+
+#### 3.1.19. `vector` `EXPERIMENTAL`
 
 - Type: Array of Float
 - Required: False
