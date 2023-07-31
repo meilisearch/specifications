@@ -1474,6 +1474,31 @@ HTTP Code: `400 Bad Request`
 
 ---
 
+## invalid_search_vector
+
+`Synchronous`
+
+### Context
+
+This error occurs for the listed reasons:
+- if a value with a different type than `Array of Float` or `null` for `vector` is specified.
+- if the vector length differs from the documents `_vectors` length.
+
+### Error Definition
+
+HTTP Code: `400 Bad Request`
+
+```json
+{
+    "message": "`:deserr_helper`",
+    "code": "invalid_search_vector",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_search_vector"
+}
+```
+
+---
+
 ## invalid_search_offset
 
 `Synchronous`
@@ -1934,6 +1959,38 @@ These errors occurs when the `_geo` field of a document payload is not valid. Ei
 
 - The `:coord` is either `latitude` or `longitude` depending on what's wrong.
 - The `:field` is either `_geo.lat` or `_geo.lng` depending on what's wrong.
+
+---
+
+## invalid_document_vectors_field
+
+`Asynchronous`
+
+### Context
+
+This error occurs when the `_vectors` field of a document payload is not valid either due to the type of it or the number of dimensions.
+
+### Error Definition
+
+#### Variant: `_vectors` field value type is invalid
+
+```json
+{
+    "message": "The `_vectors` field in the document with the id: `:documentId` is not an array. Was expecting an array of floats or an array of arrays of floats but instead got `:field`",
+    "code": "invalid_document_vectors_type",
+    "type": "invalid_request",
+    "link": "https://docs.meilisearch.com/errors#invalid_document_vectors_type"
+}
+```
+
+#### Variant: Number of dimensions is not correct
+
+```json
+{
+    "message": "Invalid vector dimensions: expected: `:expected`, found: `:found`.",
+    ...
+}
+```
 
 ---
 
