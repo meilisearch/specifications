@@ -606,6 +606,12 @@ components:
           type: integer
           default: 100
           nullable: false
+        sortFacetValuesBy:
+          description: Defines how facet values are sorted. By default, all facets (`*`) are sorted by name, alphanumerically in ascending order (`alpha`). `count` sorts facet values by the number of documents containing a facet value in descending order.
+          type: object
+          example:
+            "*": 'alpha'
+            "genres": 'count'
     filterableAttributes:
       type: array
       description: |
@@ -2401,6 +2407,8 @@ paths:
                       maxTotalHits: 1000
                     faceting:
                       maxValuesPerFacet: 100
+                      sortFacetValuesBy:
+                        "*": "alpha"
         '401':
           $ref: '#/components/responses/401'
         '404':
@@ -2500,6 +2508,8 @@ paths:
                     maxTotalHits: 1000
                   faceting:
                     maxValuesPerFacet: 100
+                    sortFacetValuesBy:
+                      "*": "alpha"
       responses:
         '202':
           description: Accepted
@@ -3077,7 +3087,7 @@ paths:
       operationId: indexes.settings.faceting.update
       summary: Update faceting settings
       description: |
-        Update the typo tolerance faceting of an index.
+        Update the faceting settings of an index.
 
         > info
         > If the provided index does not exist, it will be created.
