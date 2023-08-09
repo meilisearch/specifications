@@ -1,8 +1,8 @@
-# Word Dictionary Setting API
+# Dictionary Setting API
 
 ## 1. Summary
 
-This specification describes the `wordDictionary` index setting API endpoints.
+This specification describes the `dictionary` index setting API endpoints.
 
 ## 2. Motivation
 N/A
@@ -11,32 +11,32 @@ N/A
 
 ### 3.1. Explanations
 
-The `wordDictionary` index setting allows the configuration of a list of words for which the segmentation is overriden in search queries and indexing. The dictionary's words contained in a search query will be segmented as defined in the dictionary.
+The `dictionary` index setting allows the configuration of a list of words for which the segmentation is overriden in search queries and indexing. The dictionary's words contained in a search query will be segmented as defined in the dictionary.
 
 #### 3.1.1. Usage Example
 
-Suppose a database contains books with authors. Some athors contains separators in their names like `J. R. R. Tolkien` or `J. K. Rowling`. To set `J. R. R.` and `J. K.` words in the word dictionary, it can be specified the following way.
+Suppose a database contains books with authors. Some athors contains separators in their names like `J. R. R. Tolkien` or `J. K. Rowling`. To set `J. R. R.` and `J. K.` words in the dictionary, it can be specified the following way.
 
-***Request payload `PUT`- `/indexes/articles/settings/word-dictionary`***
+***Request payload `PUT`- `/indexes/articles/settings/dictionary`***
 ```json
 ["J. R. R.", "J. K."]
 ```
 
-By adding authors names as `J. R. R.` and `J. K.` to the word-dictionary, Meilisearch consider them as unique words instead of splitting them in several parts.
+By adding authors names as `J. R. R.` and `J. K.` to the dictionary, Meilisearch consider them as unique words instead of splitting them in several parts.
 
 ### 3.2. Global Settings API Endpoints Definition
 
-`wordDictionary` is a sub-resource of `/indexes/:index_uid/settings`.
+`dictionary` is a sub-resource of `/indexes/:index_uid/settings`.
 
 See [Settings API](0123-settings-api.md).
 
 ### 3.3. API Endpoints Definition
 
-Manipulate the `wordDictionary` setting of a Meilisearch index.
+Manipulate the `dictionary` setting of a Meilisearch index.
 
-#### 3.3.1. `GET` - `indexes/:index_uid/settings/word-dictionary`
+#### 3.3.1. `GET` - `indexes/:index_uid/settings/dictionary`
 
-Fetch the `wordDictionary` setting of a Meilisearch index.
+Fetch the `dictionary` setting of a Meilisearch index.
 
 ##### 3.3.1.1. Response Definition
 
@@ -48,15 +48,15 @@ Fetch the `wordDictionary` setting of a Meilisearch index.
 - 🔴 Sending an invalid index uid format for the `:index_uid` path parameter returns an [invalid_index_uid](0061-error-format-and-definitions.md#invalid_index_uid) error.
 - 🔴 If the requested `index_uid` does not exist, the API returns an [index_not_found](0061-error-format-and-definitions.md#index_not_found) error.
 
-#### 3.3.2. `PUT` - `indexes/:index_uid/settings/word-dictionary`
+#### 3.3.2. `PUT` - `indexes/:index_uid/settings/dictionary`
 
-Modify the `wordDictionary` setting of a Meilisearch index.
+Modify the `dictionary` setting of a Meilisearch index.
 
 ##### 3.3.2.1. Request Payload Definition
 
 - Type: Array of String / `null`
 
-Setting `null` is equivalent to using the [3.3.3. `DELETE` - `indexes/:index_uid/settings/word-dictionary`](#333-delete---indexesindexuidsettingsword-dictionary) API endpoint.
+Setting `null` is equivalent to using the [3.3.3. `DELETE` - `indexes/:index_uid/settings/dictionary`](#333-delete---indexesindexuidsettingsdictionary) API endpoint.
 
 ##### 3.3.2.2. Response Definition
 
@@ -84,9 +84,9 @@ See [Summarized `task` Object for `202 Accepted`](0060-tasks-api.md#summarized-t
 
 If the requested `index_uid` does not exist, and the authorization layer allows it (See [3.3.2.3.1. Async Errors](#33231-async-errors)), Meilisearch will create the index when the related asynchronous task resource is executed. See [3.3.2.2. Response Definition](#3322-response-definition).
 
-#### 3.3.3. `DELETE` - `indexes/:index_uid/settings/word-dictionary`
+#### 3.3.3. `DELETE` - `indexes/:index_uid/settings/dictionary`
 
-Reset the `wordDictionary` setting of a Meilisearch index to the default value `[]`.
+Reset the `dictionary` setting of a Meilisearch index to the default value `[]`.
 
 ##### 3.3.3.1. Response Definition
 
@@ -123,7 +123,7 @@ Modifying this index setting cause documents to be re-indexed.
 
 ## 5. Future Possibilities
 
-In the future we could allow the user to provide a custom normalization for the words contained in the word dictionary by allowing to pass an object instead of an array:
+In the future we could allow the user to provide a custom normalization for the words contained in the dictionary by allowing to pass an object instead of an array:
 
 ```json
 {
