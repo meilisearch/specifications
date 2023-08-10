@@ -1,4 +1,4 @@
-# Stop Words Setting API
+# Separators Setting API
 
 ## 1. Summary
 
