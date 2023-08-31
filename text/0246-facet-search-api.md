@@ -45,8 +45,8 @@ If a master key is used to secure a Meilisearch instance, the auth layer returns
 
 `facetName` contains the facet name to search values on.
 
-- 🔴 Omitting `facetName` returns a `missing_facet_search_facet_name`(0061-error-format-and-definitions.md#missing_facet_search_facet_name) error.
-- 🔴 Sending a value with a different type than `String` for `facetName` returns a [missing_facet_search_facet_name](0061-error-format-and-definitions.md#minvalid_facet_search_facet_name) error.
+- 🔴 Omitting `facetName` returns a [missing_facet_search_facet_name](0061-error-format-and-definitions.md#missing_facet_search_facet_name) error.
+- 🔴 Sending a value with a different type than `String` for `facetName` returns a [invalid_facet_search_facet_name](0061-error-format-and-definitions.md#invalid_facet_search_facet_name) error.
 - 🔴 Sending a field not defined as a `filterableAttributes` for `facetname` returns an [invalid_facet_search_facet_name](0061-error-format-and-definitions.md#invalid_facet_search_facet_name) error.
 
 #### 3.1.2. `facetQuery`
