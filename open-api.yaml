@@ -490,6 +490,15 @@ components:
         - of
         - the
         - to
+    dictionary:
+      type: array
+      description: List of words on which the segmentation will be overridden.
+      items:
+        type: string
+      example:
+        - J.K
+        - Dr.
+        - G/Box
     sortableAttributes:
       type: array
       description: List of attributes to sort on at search.
