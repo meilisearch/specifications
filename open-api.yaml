@@ -1070,6 +1070,7 @@ components:
               - stats.get
               - metrics.get
               - dumps.create
+              - snapshots.create
               - version
               - keys.get
               - keys.create
@@ -1531,6 +1532,14 @@ components:
         status: enqueued
         type: dumpCreation
         enqueuedAt: '2021-01-01T09:39:00.000000Z'
+    202_snapshotCreation:
+      summary: 202 Accepted snapshotCreation response example
+      value:
+        taskUid: 0
+        indexUid: null
+        status: enqueued
+        type: snapshotCreation
+        enqueuedAt: '2021-01-01T09:39:00.000000Z'
     202_taskCancelation:
       summary: 202 Accepted taskCancelation response example
       value:
@@ -1604,6 +1613,13 @@ tags:
       During a [dump export](https://docs.meilisearch.com/reference/api/dump.html#create-a-dump), all indexes of the current instance are exported—together with their documents and settings—and saved as a single `.dump` file.
       During a dump import, all indexes contained in the indicated `.dump` file are imported along with their associated documents and settings. Any existing index with the same uid as an index in the dump file will be overwritten.
       Dump imports are [performed at launch](https://docs.meilisearch.com/reference/features/configuration.html#import-dump) using an option.
+  - name: Snapshots
+    description: |
+      The `snapshots` route allows the creation of database snapshots. Snapshots are `.snapshot` files that can be used to launch Meilisearch.
+      Creating a snapshot is also referred to as exporting it, whereas launching Meilisearch with a snapshot is referred to as importing it.
+      During a snapshot export, all indexes of the current instance are exported—together with their documents and settings—and saved as a single `.snapshot` file.
+      During a snapshot import, all indexes contained in the indicated `.snapshot` file are imported along with their associated documents and settings.
+      Snapshot imports are performed at launch using an option.
   - name: Experimental
     description: |
       The `experimental-features` endpoint allows enabling and disabling [experimental features](https://github.com/meilisearch/engine-team/blob/main/resources/experimental-features.md) at runtime.
@@ -1629,6 +1645,28 @@ paths:
               examples:
                 '202':
                   $ref: '#/components/examples/202_dumpCreation'
+        '401':
+          $ref: '#/components/responses/401'
+  /snapshots:
+    post:
+      operationId: snapshots.create
+      summary: Create a Snapshot
+      description: |
+        Triggers a snapshot creation process. Once the process is complete, a snapshot is created in the snapshot directory. If the snapshot directory does not exist yet, it will be created.
+      tags:
+        - Snapshots
+      security:
+        - apiKey: []
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/202'
+              examples:
+                '202':
+                  $ref: '#/components/examples/202_snapshotCreation'
         '401':
           $ref: '#/components/responses/401'
   /health:
