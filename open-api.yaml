@@ -2308,7 +2308,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/fields'
     delete:
-      operationId: indexes.documents.remove
+      operationId: indexes.documents.removeOne
       summary: Delete one document
       description: Delete one document based on its unique id.
       tags:
