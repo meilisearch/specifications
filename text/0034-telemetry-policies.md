@@ -63,6 +63,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | StopWords Updated | Occurs when stop words are updated via `PUT` — `/indexes/:indexUid/settings/stop-words`. |
 | Synonyms Updated | Occurs when synonyms are updated via `PUT` — `/indexes/:indexUid/settings/synonyms`. |
 | Dump Created | Occurs when a dump is created via `POST` - `/dumps`. |
+| Snapshot Created | Occurs when a snapshot is created via `POST` - `/snapshots`. |
 | Tasks Canceled | Occurs when tasks are requested to be canceled via `POST` - `/tasks/cancel`. |
 | Tasks Deleted | Occurs when tasks are requested to be deleted via `DELETE`- `/tasks`. |
 | Tasks Seen | Aggregated event on all received requests via the `GET` - `/tasks` route during one hour or until a batch size reaches `500Kb`. |
