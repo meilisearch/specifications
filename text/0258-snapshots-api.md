@@ -54,43 +54,7 @@ The name of the generated snapshot is the database path (`data.ms` by default), 
 
 ### 3.3. CLI Definition
 
-#### 3.3.1. `--snapshot-dir`
-
-By default, MeiliSearch creates snapshots in a directory called `snapshots` at the root of your MeiliSearch.
-
-The destination can be modified with the `--snapshot-dir` flag. e.g. `--snapshot-dir mySnapshots`
-
-#### 3.3.2. `--import-snapshot`
-
-Using the CLI flag `--import-snapshot`, MeiliSearch will replace the `data.ms` with the snapshot data and start the server using the provided snapshot. e.g. `--import-snapshot snapshot/data.ms.snapshot`.
-
-If the `--import-snapshot` flag is specified when a database exists, an error occurs in the CLI.
-
-```
-Error: database already exists at ":pathToDataMs/data.ms", try to delete it or rename it
-```
-
-#### 3.3.3. `--ignore-snapshot-if-db-exists`
-
-To avoid MeiliSearch to throw an error when finding that a database already exists, the following flag: `--ignore-snapshot-if-db-exists` can be used. When using this flag, MeiliSearch will use the existing database to start an instance instead of throwing an error. The snapshot will be ignored.
-
-#### 3.3.4. `--ignore-missing-snapshot`
-
-To avoid MeiliSearch to throw an error when there is no snapshot at the given path, the following flag: `--ignore-missing-snapshot` can be used. MeiliSearch will then continue its process and not import any snapshot.
-
-If the `--ignore-missing-snapshot` flag is not specified and the file cannot be found, an error occurs in the CLI.
-
-```
-Error: snapshot doesn't exist at ":pathToSnapshots/:missingFile"
-```
-
-#### 3.3.5 Other snapshots related errors
-
-When starting a new Meilisearch version, if Meilisearch tries to read an old `data.ms` but cannot read it, the following message should appear:
-
-```
-Error: Your database version (`:old_version`) is incompatible with your current engine (`:new_version`). To migrate data between Meilisearch versions, follow our guide on https://docs.meilisearch.com/learn/advanced/updating.html
-```
+You can find the CLI informations about the snapshots [here](text/0119-instance-options.md)
 
 ## 4. Technical Aspects
 
