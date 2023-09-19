@@ -116,7 +116,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `stats.database_size`                   | Database size. Expressed in `Bytes`                     | 2621440           | Every hour |
 | `stats.indexes_number`                  | Number of indexes                                       | 2                 | Every hour |
 | `start_since_days`                      | Number of days since instance was launched              | 365               | Every hour |
-| `user_agent`                            | User-agent header encountered during one or more API calls | ["Meilisearch Ruby (v2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Documents Deleted`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `TypoTolerance Updated`, `Pagination Updated`, `Faceting Updated`, `DistinctAttribute Updated`, `DisplayedAttributes Updated`, `StopWords Updated`, `Synonyms Updated`, `Dump Created`, `Tasks Seen`, `Stats Seen`, `Health Seen`, `Version Seen`, `Documents Searched by Multi-Search POST`, `Experimental features Seen`, `Experimental features Updated` |
+| `user_agent`                            | User-agent header encountered during one or more API calls | ["Meilisearch Ruby (v2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Documents Deleted`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `TypoTolerance Updated`, `Pagination Updated`, `Faceting Updated`, `DistinctAttribute Updated`, `DisplayedAttributes Updated`, `StopWords Updated`, `Synonyms Updated`, `Dump Created`, `Snapshot Created`, `Tasks Seen`, `Stats Seen`, `Health Seen`, `Version Seen`, `Documents Searched by Multi-Search POST`, `Experimental features Seen`, `Experimental features Updated` |
 | `requests.99th_response_time`           | Highest latency from among the fastest 99% of successful search requests | 57ms    | `Documents Searched POST`, `Documents Searched GET`|
 | `requests.total_succeeded`              | Total number of successful requests in this batch | 3456 | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched by Multi-Search POST` |
 | `requests.total_failed`                 | Total number of failed requests in this batch    | 24   | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched by Multi-Search POST` |
@@ -595,6 +595,12 @@ This property allows us to gather essential information to better understand on 
 | synonyms.total   | Number of synonyms. | `3` |
 
 ## `Dump Created`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+
+## `Snapshot Created`
 
 | Property name | Description | Example |
 |---------------|-------------|---------|
