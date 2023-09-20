@@ -22,7 +22,7 @@ Suppose a database contains books with authors. Some athors contains separators 
 ["J. R. R.", "J. K."]
 ```
 
-By adding authors names as `J. R. R.` and `J. K.` to the dictionary, Meilisearch consider them as unique words instead of splitting them in several parts.
+By adding authors' names as `J. R. R.` and `J. K.` to the dictionary, Meilisearch considers them as unique words instead of splitting them into several parts.
 
 ### 3.2. Global Settings API Endpoints Definition
 
