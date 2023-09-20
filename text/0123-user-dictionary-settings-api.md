@@ -119,7 +119,7 @@ The auth layer can return the following errors if Meilisearch is secured (a mast
 
 Meilisearch favors search speed and makes a trade-off on indexing speed by computing internal data structures to get search results as fast as possible.
 
-Modifying this index setting cause documents to be re-indexed.
+Modifying this index setting causes documents to be re-indexed.
 
 ## 5. Future Possibilities
 
