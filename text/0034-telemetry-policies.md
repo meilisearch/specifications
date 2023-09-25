@@ -40,6 +40,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | Launched   | Occurs when MeiliSearch is launched the first time. |
 | Documents Searched POST | Aggregated event on all received requests via the `POST` - `indexes/:indexUid/search` route during one hour or until a batch size reaches `500Kb`. |
 | Documents Searched GET | Aggregated event on all received requests via the `GET` - `/indexes/:indexUid/search` route during one hour or until a batch size reaches `500Kb`. |
+| Facet Searched POST | Aggregated event on all received requests via the `POST` - `/indexes/:indexUid/facet-search` route during one hour or until a batch size reaches `500Kb`. |
 | Documents Searched by Multi-Search POST | Aggregated event on all received requests via the `POST`- `/multi-search` route during one hour or until a batch size reaches `500Kb`. |
 | Documents Added | Aggregated event on all received requests via the `POST` - `/indexes/:indexUid/documents` route during one hour or until a batch size reaches `500Kb`. |
 | Documents Updated | Aggregated event on all received requests via the `PUT` - `/indexes/:indexUid/documents` route during one hour or until a batch size reaches `500Kb`. |
@@ -70,6 +71,9 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | Stats Seen | Occurs when stats are fetched via `GET` - `/stats` or `/indexes/:indexUid/stats`. |
 | Health Seen | Aggregated event on all received requests via the `GET - /health` route during one hour or until a batch size reaches `500Kb`. |
 | Version Seen | Occurs when `GET - /version` is fetched. |
+| Experimental features Seen | Occurs when `GET - /experimental-features` is fetched. |
+| Experimental features Updated | Occurs when experimental features are updated via `PATCH - /experimental-features` |
+
 
 ----
 
@@ -113,7 +117,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `stats.database_size`                   | Database size. Expressed in `Bytes`                     | 2621440           | Every hour |
 | `stats.indexes_number`                  | Number of indexes                                       | 2                 | Every hour |
 | `start_since_days`                      | Number of days since instance was launched              | 365               | Every hour |
-| `user_agent`                            | User-agent header encountered during one or more API calls | ["Meilisearch Ruby (v2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Documents Deleted`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `TypoTolerance Updated`, `Pagination Updated`, `Faceting Updated`, `DistinctAttribute Updated`, `DisplayedAttributes Updated`, `StopWords Updated`, `Synonyms Updated`, `Dump Created`, `Tasks Seen`, `Stats Seen`, `Health Seen`, `Version Seen`, `Documents Searched by Multi-Search POST` |
+| `user_agent`                            | User-agent header encountered during one or more API calls | ["Meilisearch Ruby (v2.1)", "Ruby (3.0)"] | `Documents Searched POST`, `Documents Searched GET`, `Index Created`, `Index Updated`, `Documents Added`, `Documents Updated`, `Documents Deleted`, `Settings Updated`, `Ranking Rules Updated`, `SortableAttributes Updated`, `FilterableAttributes Updated`, `SearchableAttributes Updated`, `TypoTolerance Updated`, `Pagination Updated`, `Faceting Updated`, `DistinctAttribute Updated`, `DisplayedAttributes Updated`, `StopWords Updated`, `Synonyms Updated`, `Dump Created`, `Tasks Seen`, `Stats Seen`, `Health Seen`, `Version Seen`, `Documents Searched by Multi-Search POST`, `Experimental features Seen`, `Experimental features Updated` |
 | `requests.99th_response_time`           | Highest latency from among the fastest 99% of successful search requests | 57ms    | `Documents Searched POST`, `Documents Searched GET`|
 | `requests.total_succeeded`              | Total number of successful requests in this batch | 3456 | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched by Multi-Search POST` |
 | `requests.total_failed`                 | Total number of failed requests in this batch    | 24   | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched by Multi-Search POST` |
@@ -123,7 +127,9 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `filter.with_geoRadius`                 | `true` if the filter rule `_geoRadius` was used in this batch, otherwise `false` | false | `Documents Searched POST`, `Documents Searched GET` |
 | `filter.with_geoBoundingBox`            | `true` if the filter rule `_geoBoundingBox` was used in this batch, otherwise `false`| false | `Documents Searched POST`, `Documents Searched GET` |
 | `filter.most_used_syntax`               | Most used filter syntax among all requests containing the `filter` parameter in this batch | string | `Documents Searched POST`, `Documents Searched GET` |
+| `attributes_to_search_on.total_number_of_uses`| Total number of queries where `attributesToSearchOn` is set | 5 | `Documents Searched POST`, `Documents Searched GET` |
 | `q.max_terms_number`                    | Highest number of terms given for the `q` parameter in this batch | 5 | `Documents Searched POST`, `Documents Searched GET` |
+| `vector.max_vector_size`                | Highest number of dimensions given for the `vector` parameter in this batch | 1536 | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched by Multi-Search POST` |
 | `pagination.max_limit`                  | Highest value given for the `limit` parameter in this batch | 60 | `Documents Searched POST`, `Documents Searched GET`, `Documents Fetched GET`, `Documents Fetched POST` |
 | `pagination.max_offset`                 | Highest value given for the `offset` parameter in this batch | 1000 | `Documents Searched POST`, `Documents Searched GET`, `Documents Fetched GET`, `Documents Fetched POST` |
 | `pagination.most_used_navigation`       | Most used search results navigation among all search requests in this batch. `estimated` / `exhaustive` | `estimated` | `Documents Searched POST`, `Documents Searched GET` |
@@ -159,12 +165,15 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `typo_tolerance.min_word_size_for_typos.two_typos`| The defined value for `minWordSizeForTypos.twoTypos` property | `9` | `Settings Updated`, `TypoTolerance Updated` |
 | `pagination.max_total_hits`                 | The defined value for `pagination.maxTotalHits` property | `1000` | `Settings Updated`, `Pagination Updated` |
 | `faceting.max_values_per_facet`         | The defined value for `faceting.maxValuesPerFacet` property | `100` | `Settings Updated`, `Faceting Updated` |
+| `faceting.sort_facet_values_by_star_count` | Whether the user set all fields to be sort by count | `true` | `Settings Updated`, `Faceting Updated` |
+| `faceting.sort_facet_values_by_total`      | The number of different values that were set | `10` | `Settings Updated`, `Faceting Updated` |
 | `distinct_attribute.set` | `true` if a field name is specified as a distrinct attribute, otherwise `false`. | `false` | `Settings Updated`, `DistinctAttribute Updated` |
 | `displayed_attributes.total`   | Number of displayed attributes. | `3` | `SettingUpdated`, `DisplayedAttributes Updated` |
 | `displayed_attributes.with_wildcard` | `true` if `*` is specified as a displayed attribute, otherwise `false`. | `false` | `SettingUpdated`, `DisplayedAttributes Updated` |
 | `stop_words.total`   | Number of stop words. | `3` | `Settings Updated`, `StopWords Updated` |
 | `separator_tokens.total`   | Number of separator tokens. | `3` | `Settings Updated`, `SeparatorTokens Updated` |
 | `non_separator_tokens.total`   | Number of non separator tokens. | `3` | `Settings Updated`, `NonSeparatorTokens Updated` |
+| `dictionary.total`   | Number of words in the dictionary. | `3` | `Settings Updated`, `Dictionary Updated` |
 | `synonyms.total`   | Number of synonyms. | `3` | `Settings Updated`, `Synonyms Updated` |
 | `per_task_uid`                          | `true` if an uid is used to fetch a particular task resource, otherwise `false` | true | `Tasks Seen` |
 | `filtered_by_uid`                       | `true` if tasks are filtered by the `uids` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled`, `Tasks Deleted` |
@@ -190,6 +199,13 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `per_batch` | `true` if `POST /indexes/:indexUid/documents/delete-batch` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
 | `per_filter`| `true` if `POST /indexes/:indexUid/documents/delete` endpoint was used in this batch, otherwise `false` | false | `Documents Fetched GET`, `Documents Fetched POST`, `Documents Deleted` |
 | `clear_all` | `true` if `DELETE /indexes/:indexUid/documents` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
+| vector_store | Whether the [vector store](./0193-experimental-features.md#vector-store) feature is enabled. | `true` | `Experimental features Updated` |
+| score_details | Whether the [score details](./0193-experimental-features.md#score-details) feature is enabled. | `true` | `Experimental features Updated` |
+| scoring.show_ranking_score | Was `showRankingScore` used in the aggregated event? If yes, `true`, otherwise `false` | `false` | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched by Multi-Search POST` |
+| scoring.show_ranking_score_details | Was `showRankingScoreDetails` used in the aggregated event? If yes, `true`, otherwise `false` | `false` | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched GET` |
+| `facets.total_distinct_facet_count` | The total number of distinct facets queried for the aggregated event | `3` | `Facet Searched POST` |
+| `facets.additional_search_parameters_provided` | Were additional search parameters provided for the aggregated event | `true` | `Facet Searched POST` |
+
 
 ----
 
@@ -271,7 +287,9 @@ This property allows us to gather essential information to better understand on 
 | filter.with_geoBoundingBox | Does the built-in filter rule _geoBoundingBox has been used in the aggregated event?| `false` |
 | filter.avg_criteria_number | The average number of filter criteria among all the requests containing the `filter` parameter in the aggregated event. `"filter": []` equals to `0` while not sending `filter` does not influence the average in the aggregated event. | `4` |
 | filter.most_used_syntax | The most used filter syntax among all the requests containing the requests containing the `filter` parameter in the aggregated event. `string` / `array` / `mixed` | `mixed` |
+| attributes_to_search_on.total_number_of_uses| Total number of queries where `attributesToSearchOn` is set | `5` |
 | q.max_terms_number | The maximum number of terms for the `q` parameter among all requests in the aggregated event. | `5` |
+| vector.max_vector_size | The maximum number of dimensions for the `vector` parameter among all requests in the aggregated event. | `1536` |
 | pagination.max_limit | The maximum limit encountered among all requests in the aggregated event. | `20` |
 | pagination.max_offset | The maximum offset encountered among all requests in the aggregated event. | `1000` |
 | pagination.most_used_navigation | Most used search results navigation among all requests in the aggregated event. `estimated` / `exhaustive` | `estimated` ||
@@ -282,9 +300,11 @@ This property allows us to gather essential information to better understand on 
 | formatting.max_attributes_to_crop | The maximum number of attributes to crop encountered among all requests in the aggregated event. | `100` |
 | formatting.crop_length | Does `cropLength` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | formatting.crop_marker | Does `cropMarker` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
-| formatting.show_matches_position | Does `showMatchesPosition` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
+| formatting.show_matches_position | Was `showMatchesPosition` used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | facets.avg_facets_number | The average number of facets among all the requests containing the `facets` parameter in the aggregated event. `"facets": []` equals to `0` while not sending `facets` does not influence the average in the aggregated event. | `10` |
 | matching_strategy.most_used_strategy | Most used word matching strategy among all search requests in the aggregated event. `last` / `all` | `last` |
+| scoring.show_ranking_score | Was `showRankingScore` used in the aggregated event? If yes, `true`, otherwise `false` | `false` |
+| scoring.show_ranking_score_details | Was `showRankingScoreDetails` used in the aggregated event? If yes, `true`, otherwise `false` | `false` |
 
 ---
 
@@ -305,6 +325,7 @@ This property allows us to gather essential information to better understand on 
 | filter.with_geoBoundingBox | Does the built-in filter rule _geoBoundingBox has been used in the aggregated event?| `false` |
 | filter.avg_criteria_number | The average number of filter criteria among all the requests containing the `filter` parameter in the aggregated event. `"filter": []` equals to `0` while not sending `filter` does not influence the average in the aggregated event. | `4` |
 | filter.most_used_syntax | The most used filter syntax among all the requests containing the requests containing the `filter` parameter in the aggregated event. `string` / `array` / `mixed` | `mixed` |
+| attributes_to_search_on.total_number_of_uses | Total number of queries where `attributesToSearchOn` is set | 5 |
 | q.max_terms_number | The maximum number of terms for the `q` parameter among all requests in the aggregated event. | `5` |
 | pagination.max_limit | The maximum limit encountered among all requests in the aggregated event. | `20` |
 | pagination.max_offset | The maximum offset encountered among all requests in the aggregated event. | `1000` |
@@ -319,6 +340,23 @@ This property allows us to gather essential information to better understand on 
 | formatting.show_matches_position | Does `showMatchesPosition` has been used in the aggregated event? If yes, `true` otherwise `false` | `false` |
 | facets.avg_facets_number | The average number of facets among all the requests containing the `facets` parameter in the aggregated event. `"facets": []` equals to `0` while not sending `facets` does not influence the average in the aggregated event. | `10` |
 | matching_strategy.most_used_strategy | Most used word matching strategy among all search requests in the aggregated event. `last` / `all` | `last` |
+| scoring.show_ranking_score | Was `showRankingScore` used in the aggregated event? If yes, `true`, otherwise `false` | `false` |
+| scoring.show_ranking_score_details | Was `showRankingScoreDetails` used in the aggregated event? If yes, `true`, otherwise `false` | `false` |
+
+---
+#### `Facet Searched POST`
+
+> The Facet Searched event is sent once an hour or when a batch reaches the maximum size of `500kb`. The event's properties are averaged over all requests on `POST` - `/indexes/:indexUid/facet-search`.
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents all the user-agents encountered on this endpoint in the aggregated event.| `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| requests.99th_response_time | Highest latency from among the fastest 99% of successful search requests. | `57ms` |
+| requests.total_succeeded | The total number of succeeded search requests in the aggregated event. | `3456` |
+| requests.total_failed | The total number of failed search requests in the aggregated event. | `24` |
+| requests.total_received | The total number of received search requests in the aggregated event. | `3480` |
+| facets.total_distinct_facet_count | The total number of distinct facets queried for the aggregated event. | `3` |
+| facets.additional_search_parameters_provided | Were additional search parameters provided for the aggregated event. | `true` |
 
 ---
 
@@ -453,12 +491,15 @@ This property allows us to gather essential information to better understand on 
 | typo_tolerance.min_word_size_for_typos.two_typos | The defined value for `minWordSizeForTypos.twoTypos` property. | `9` |
 | pagination.max_total_hits                 | The defined value for `pagination.maxTotalHits` property | `1000` |
 | faceting.max_values_per_facet         | The defined value for `faceting.maxValuesPerFacet` property | `100` |
+| faceting.sort_facet_values_by_star_count | Whether the user set all fields to be sort by count | `true` |
+| faceting.sort_facet_values_by_total | The number of different values that were set | `10` |
 | distinct_attribute.set | `true` if a field name is specified, otherwise `false`. | `false` |
 | displayed_attributes.total   | Number of displayed attributes. | `3` |
 | displayed_attributes.with_wildcard | `true` if `*` is specified as a displayed attribute, otherwise `false`. | `false` |
 | stop_words.total   | Number of stop words. | `3` |
 | separator_tokens.total   | Number of separator tokens. | `3` |
 | non_separator_tokens.total   | Number of non separator tokens. | `3` |
+| dictionary.total   | Number of words in the dictionary. | `3` |
 | synonyms.total   | Number of synonyms. | `3` |
 
 ---
@@ -528,6 +569,8 @@ This property allows us to gather essential information to better understand on 
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | faceting.max_values_per_facet | The defined value for `maxValuesPerFacet` property | `100` |
+| faceting.sort_facet_values_by_star_count | Whether the user set all fields to be sort by count | `true` |
+| faceting.sort_facet_values_by_total | The number of different values that were set | `10` |
 
 ## `DistinctAttribute Updated`
 
@@ -564,6 +607,14 @@ This property allows us to gather essential information to better understand on 
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | non_separator_tokens.total   | Number of non separator tokens. | `3` |
+
+## `Dictionary Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| dictionary.total   | Number of words in the dictionary. | `3` |
+
 
 ## `Synonyms Updated`
 
@@ -654,6 +705,21 @@ This property allows us to gather essential information to better understand on 
 | Property name | Description | Example |
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+
+## `Experimental features Seen`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+
+## `Experimental features Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| vector_store | Whether the [vector store](./0193-experimental-features.md#vector-store) feature is enabled. | `true` |
+| score_details | Whether the [score details](./0193-experimental-features.md#score-details) feature is enabled. | `true` |
+
 
 ---
 
