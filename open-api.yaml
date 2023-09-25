@@ -686,6 +686,24 @@ components:
         - of
         - the
         - to
+    separatorTokens:
+      type: array
+      description: List of tokens that will be considered as word separators by Meilisearch.
+      items:
+        type: string
+      example:
+        - "&"
+        - "</br>"
+        - "@"
+    nonSeparatorTokens:
+      type: array
+      description: List of tokens that will not be considered as word separators by Meilisearch.
+      items:
+        type: string
+      example:
+        - "#"
+        - "-"
+        - "_"
     dictionary:
       type: array
       description: List of words on which the segmentation will be overridden.
