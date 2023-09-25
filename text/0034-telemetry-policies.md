@@ -169,6 +169,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `displayed_attributes.total`   | Number of displayed attributes. | `3` | `SettingUpdated`, `DisplayedAttributes Updated` |
 | `displayed_attributes.with_wildcard` | `true` if `*` is specified as a displayed attribute, otherwise `false`. | `false` | `SettingUpdated`, `DisplayedAttributes Updated` |
 | `stop_words.total`   | Number of stop words. | `3` | `Settings Updated`, `StopWords Updated` |
+| `dictionary.total`   | Number of words in the dictionary. | `3` | `Settings Updated`, `Dictionary Updated` |
 | `synonyms.total`   | Number of synonyms. | `3` | `Settings Updated`, `Synonyms Updated` |
 | `per_task_uid`                          | `true` if an uid is used to fetch a particular task resource, otherwise `false` | true | `Tasks Seen` |
 | `filtered_by_uid`                       | `true` if tasks are filtered by the `uids` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled`, `Tasks Deleted` |
@@ -492,6 +493,7 @@ This property allows us to gather essential information to better understand on 
 | displayed_attributes.total   | Number of displayed attributes. | `3` |
 | displayed_attributes.with_wildcard | `true` if `*` is specified as a displayed attribute, otherwise `false`. | `false` |
 | stop_words.total   | Number of stop words. | `3` |
+| dictionary.total   | Number of words in the dictionary. | `3` |
 | synonyms.total   | Number of synonyms. | `3` |
 
 ---
@@ -585,6 +587,13 @@ This property allows us to gather essential information to better understand on 
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | stop_words.total   | Number of stop words. | `3` |
+
+## `Dictionary Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| dictionary.total   | Number of words in the dictionary. | `3` |
 
 ## `Synonyms Updated`
 
