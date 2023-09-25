@@ -11,7 +11,6 @@ N/A
 
 ### 3.1. Explanations
 
-TBD
 
 #### 3.1.1. Usage Examples
 
