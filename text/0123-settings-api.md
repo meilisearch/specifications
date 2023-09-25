@@ -19,6 +19,9 @@ N/A
 | [sortable-attributes](0123-sortable-attributes-setting-api.md)     | `sortableAttributes` sub-resource API endpoints definition   |
 | [ranking-rules](0123-ranking-rules-setting-api.md)                 | `rankingRules` sub-resource API endpoints definition         |
 | [stop-words](0123-stop-words-setting-api.md)                       | `stopWords` sub-resource API endpoints definition            |
+| [separator-tokens](0123-separators-settings-api.md)                | `separatorTokens` sub-resource API endpoints definition      |
+| [non-separator-tokens](0123-separators-settings-api.md)            | `nonSeparatorTokens` sub-resource API endpoints definition   |
+| [dictionary](0123-user-dictionary-settings-api.md)                 | `dictionary` sub-resource API endpoints definition           |
 | [synonyms](0123-synonyms-setting-api.md)                           | `synonyms` sub-resource API endpoints definition             |
 | [distinct-attribute](0123-distinct-attribute-setting-api.md)       | `distinctAttribute` sub-resource API endpoints definition    |
 | [typo-tolerance](0117-typo-tolerance-setting-api.md)               | `typoTolerance` sub-resource API endpoints definition        |
@@ -47,6 +50,9 @@ Fetch the settings of a Meilisearch index.
 | `sortableAttributes`     | Array of String         | true     |
 | `rankingRules`           | Array of String         | true     |
 | `stopWords`              | Array of String         | true     |
+| `separatorTokens`        | Array of String         | true     |
+| `nonSeparatorTokens`     | Array of String         | true     |
+| `dictionary`             | Array of String         | true     |
 | `synonyms`               | Object                  | true     |
 | `distinctAttribute`      | String / `null`         | true     |
 | `typoTolerance`          | Object                  | true     |
@@ -73,6 +79,9 @@ Modify the settings of a Meilisearch index.
 | `sortableAttributes`     | Array of String / `null` | false    |
 | `rankingRules`           | Array of String / `null` | false    |
 | `stopWords`              | Array of String / `null` | false    |
+| `separatorTokens`        | Array of String / `null` | false    |
+| `nonSeparatorTokens`     | Array of String / `null` | false    |
+| `dictionary`             | Array of String / `null` | false    |
 | `synonyms`               | Object / `null`          | false    |
 | `distinctAttribute`      | String / `null`          | false    |
 | `typoTolerance`          | Object / `null`          | false    |
@@ -157,6 +166,9 @@ Changing any of the following index settings will cause documents to be re-index
 - `sortableAttributes`
 - `distinctAttribute`
 - `stopWords`
+- `separatorTokens`
+- `nonSeparatorTokens`
+- `dictionary`
 
 ## 5. Future Possibilities
 

@@ -61,6 +61,8 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | DistinctAttribute Updated | Occurs when distinct attribute setting is updated via `PUT` — `/indexes/:indexUid/settings/distinct-attribute`. |
 | DisplayedAttributes Updated | Occurs when displayed attributes are updated via `PUT` — `/indexes/:indexUid/settings/displayed-attributes`. |
 | StopWords Updated | Occurs when stop words are updated via `PUT` — `/indexes/:indexUid/settings/stop-words`. |
+| SeparatorTokens Updated | Occurs when separator tokens are updated via `PUT` — `/indexes/:indexUid/settings/separator-tokens`. |
+| NonSeparatorTokens Updated | Occurs when non separator tokens are updated via `PUT` — `/indexes/:indexUid/settings/non-separator-tokens`. |
 | Synonyms Updated | Occurs when synonyms are updated via `PUT` — `/indexes/:indexUid/settings/synonyms`. |
 | Dump Created | Occurs when a dump is created via `POST` - `/dumps`. |
 | Tasks Canceled | Occurs when tasks are requested to be canceled via `POST` - `/tasks/cancel`. |
@@ -169,6 +171,9 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `displayed_attributes.total`   | Number of displayed attributes. | `3` | `SettingUpdated`, `DisplayedAttributes Updated` |
 | `displayed_attributes.with_wildcard` | `true` if `*` is specified as a displayed attribute, otherwise `false`. | `false` | `SettingUpdated`, `DisplayedAttributes Updated` |
 | `stop_words.total`   | Number of stop words. | `3` | `Settings Updated`, `StopWords Updated` |
+| `separator_tokens.total`   | Number of separator tokens. | `3` | `Settings Updated`, `SeparatorTokens Updated` |
+| `non_separator_tokens.total`   | Number of non separator tokens. | `3` | `Settings Updated`, `NonSeparatorTokens Updated` |
+| `dictionary.total`   | Number of words in the dictionary. | `3` | `Settings Updated`, `Dictionary Updated` |
 | `synonyms.total`   | Number of synonyms. | `3` | `Settings Updated`, `Synonyms Updated` |
 | `per_task_uid`                          | `true` if an uid is used to fetch a particular task resource, otherwise `false` | true | `Tasks Seen` |
 | `filtered_by_uid`                       | `true` if tasks are filtered by the `uids` query parameter, otherwise `false` | false | `Tasks Seen`, `Tasks Canceled`, `Tasks Deleted` |
@@ -492,6 +497,9 @@ This property allows us to gather essential information to better understand on 
 | displayed_attributes.total   | Number of displayed attributes. | `3` |
 | displayed_attributes.with_wildcard | `true` if `*` is specified as a displayed attribute, otherwise `false`. | `false` |
 | stop_words.total   | Number of stop words. | `3` |
+| separator_tokens.total   | Number of separator tokens. | `3` |
+| non_separator_tokens.total   | Number of non separator tokens. | `3` |
+| dictionary.total   | Number of words in the dictionary. | `3` |
 | synonyms.total   | Number of synonyms. | `3` |
 
 ---
@@ -585,6 +593,28 @@ This property allows us to gather essential information to better understand on 
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | stop_words.total   | Number of stop words. | `3` |
+
+## `SeparatorTokens Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| separator_tokens.total   | Number of separator tokens. | `3` |
+
+## `NonSeparatorTokens Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| non_separator_tokens.total   | Number of non separator tokens. | `3` |
+
+## `Dictionary Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| dictionary.total   | Number of words in the dictionary. | `3` |
+
 
 ## `Synonyms Updated`
 

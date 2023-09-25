@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: Meilisearch Core API
   description: 'Search documents, configure and manage the Meilisearch engine.'
-  version: 1.3.0
+  version: 1.4.0
   contact:
     name: Meilisearch
     email: bonjour@Meilisearch.com
@@ -686,6 +686,33 @@ components:
         - of
         - the
         - to
+    separatorTokens:
+      type: array
+      description: List of tokens that will be considered as word separators by Meilisearch.
+      items:
+        type: string
+      example:
+        - "&"
+        - "</br>"
+        - "@"
+    nonSeparatorTokens:
+      type: array
+      description: List of tokens that will not be considered as word separators by Meilisearch.
+      items:
+        type: string
+      example:
+        - "#"
+        - "-"
+        - "_"
+    dictionary:
+      type: array
+      description: List of words on which the segmentation will be overridden.
+      items:
+        type: string
+      example:
+        - J.K
+        - Dr.
+        - G/Box
     sortableAttributes:
       type: array
       description: List of attributes to sort on at search.
