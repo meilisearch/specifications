@@ -499,7 +499,7 @@ This property allows us to gather essential information to better understand on 
 | faceting.sort_facet_values_by_total | The number of different values that were set | `10` |
 | distinct_attribute.set | `true` if a field name is specified, otherwise `false`. | `false` |
 | proximity_precision.set | `true` the setting has been manually set, otherwise `false`. | `false` |
-| proximity_precision.value | `byword` or `byAttribute` if the setting has been set, otherwise `null`. | `null` |
+| proximity_precision.value | `byWord` or `byAttribute` if the setting has been set, otherwise `null`. | `null` |
 | displayed_attributes.total   | Number of displayed attributes. | `3` |
 | displayed_attributes.with_wildcard | `true` if `*` is specified as a displayed attribute, otherwise `false`. | `false` |
 | stop_words.total   | Number of stop words. | `3` |
