@@ -171,7 +171,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `faceting.sort_facet_values_by_total`      | The number of different values that were set | `10` | `Settings Updated`, `Faceting Updated` |
 | `distinct_attribute.set` | `true` if a field name is specified as a distrinct attribute, otherwise `false`. | `false` | `Settings Updated`, `DistinctAttribute Updated` |
 | `proximity_precision.set` | `true` the setting has been manually set, otherwise `false`. | `false` | `Settings Updated`, `ProximityPrecision Updated` |
-| `proximity_precision.value` | `byword` or `byAttribute` if the setting has been set, otherwise `null`. | `null` | `Settings Updated`, `ProximityPrecision Updated` |
+| `proximity_precision.value` | `byWord` or `byAttribute` if the setting has been set, otherwise `null`. | `null` | `Settings Updated`, `ProximityPrecision Updated` |
 | `displayed_attributes.total`   | Number of displayed attributes. | `3` | `SettingUpdated`, `DisplayedAttributes Updated` |
 | `displayed_attributes.with_wildcard` | `true` if `*` is specified as a displayed attribute, otherwise `false`. | `false` | `SettingUpdated`, `DisplayedAttributes Updated` |
 | `stop_words.total`   | Number of stop words. | `3` | `Settings Updated`, `StopWords Updated` |
