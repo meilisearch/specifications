@@ -591,7 +591,7 @@ This property allows us to gather essential information to better understand on 
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | proximity_precision.set | `true` the setting has been manually set, otherwise `false`. | `false` |
-| proximity_precision.value | `byword` or `byAttribute` if the setting has been set, otherwise `null`. | `byword` |
+| proximity_precision.value | `byWord` or `byAttribute` if the setting has been set, otherwise `null`. | `byWord` |
 
 ## `DisplayedAttributes Updated`
 
