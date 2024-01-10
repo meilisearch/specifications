@@ -59,7 +59,7 @@ Fetch the settings of a Meilisearch index.
 | `typoTolerance`          | Object                  | true     |
 | `pagination`             | Object                  | true     |
 | `faceting`               | Object                  | true     |
-| `proximityPrecision`     | String / `null`         | true     |
+| `proximityPrecision`     | String                  | true     |
 
 The attributes ordering in the response payload is equivalent to the order described in the table above.
 
