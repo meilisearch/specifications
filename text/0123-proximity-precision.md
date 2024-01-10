@@ -43,7 +43,7 @@ Fetch the `proximityPrecision` setting of a Meilisearch index.
 
 ##### 3.3.1.1. Response Definition
 
-- Type: String / `null`
+- Type: String
 - Default: `null` (`byWord`)
 
 ##### 3.3.1.2. Errors
