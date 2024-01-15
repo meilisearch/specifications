@@ -119,6 +119,8 @@ The expected behavior of each flag is described in the list above.
 - [Config file path](#3326-config-file-path)
 - [Experimental enable Metrics](#3327-experimental-enable-metrics)
 - [Experimental reduce indexing memory usage](#3328-experimental-reduce-indexing-memory-usage)
+- [Task webhook url](#3329-task-webhook-url)
+- [Task webhook authorization header](#3330-task-webhook-authorization-header)
 
 #### 3.3.1. Database path
 
@@ -497,6 +499,26 @@ Activate the `/metrics` endpoint to collect Meilisearch metrics for monitoring p
 ⚠️ This command-line option does not take any values. Assigning a value will throw an error.
 
 Enables the `MDB_WRITEMAP` option of LMDB, making the internal key-value store use much less RAM than usual.
+
+#### 3.3.29. Task webhook url
+
+**Environment variable**: `MEILI_TASK_WEBHOOK_URL`
+**CLI option**: `--task-webhook-url`
+**Default**: Disabled
+**Expected value**: an url to your server
+
+Sets the URL where Meilisearch will send a notification every time it processes a batch of tasks.
+⚠️  If the URL is not correctly formatted, it'll throw an error before starting.
+⚠️  If the URL is correctly formatted but doesn't point to a valid server, Meilisearch won't return an error but will log one every time it processes a batch of tasks.
+
+#### 3.3.30. Task webhook authorization header
+
+**Environment variable**: `MEILI_TASK_WEBHOOK_AUTHORIZATION_HEADER`
+**CLI option**: `--task-webhook-authorization-header`
+**Default**: Disabled
+**Expected value**: a string representing the value of the authorization header you want to send with the processed tasks
+
+Sets the authorization header value that meilisearch must send with the processed tasks.
 
 ## 4. Technical Aspects
 
