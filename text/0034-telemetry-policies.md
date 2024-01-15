@@ -59,6 +59,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | Pagination Updated | Occurs when pagination settings are updated via `PATCH` — `/indexes/:indexUid/settings/pagination`. |
 | Faceting Updated | Occurs when faceting settings are updated via `PATCH` — `/indexes/:indexUid/settings/faceting`. |
 | DistinctAttribute Updated | Occurs when distinct attribute setting is updated via `PUT` — `/indexes/:indexUid/settings/distinct-attribute`. |
+| ProximityPrecision Updated | Occurs when proximity precision setting is updated via `PUT` — `/indexes/:indexUid/settings/proximity-precision`. |
 | DisplayedAttributes Updated | Occurs when displayed attributes are updated via `PUT` — `/indexes/:indexUid/settings/displayed-attributes`. |
 | StopWords Updated | Occurs when stop words are updated via `PUT` — `/indexes/:indexUid/settings/stop-words`. |
 | SeparatorTokens Updated | Occurs when separator tokens are updated via `PUT` — `/indexes/:indexUid/settings/separator-tokens`. |
@@ -107,6 +108,7 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `infos.ssl_resumption` | `true` if `--ssl-resumption`/`MEILI_SSL_RESUMPTION` is specified, otherwise `false` | false | Every Hour |
 | `infos.ssl_tickets` | `true` if `--ssl-tickets`/`MEILI_SSL_TICKETS` is specified, otherwise `false` | false | Every Hour |
 | `infos.with_configuration_file`         | `true` if the instance is launched with a configuration file, otherwise `false` | false | Every Hour |
+| `infos.task_queue_webhook`              | `true` if the instance is launched with a task queue webhook, otherwise `false` | false | Every Hour |
 | `infos.experimental_enable_metrics`     | `true` if  `--experimental-enable-metrics`/`MEILI_EXPERIMENTAL_ENABLE_METRICS` is specified at launch, otherwise `false` | `false` | Every Hour |
 | `infos.experimental_reduce_indexing_memory_usage`     | `true` if  `--experimental-reduce-indexing-memory-usage`/`MEILI_EXPERIMENTAL_REDUCE_INDEXING_MEMORY_USAGE` is specified at launch, otherwise `false` | `false` | Every Hour |
 | `system.distribution`                   | Distribution on which MeiliSearch is launched           | Arch Linux        | Every hour |
@@ -169,6 +171,8 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `faceting.sort_facet_values_by_star_count` | Whether the user set all fields to be sort by count | `true` | `Settings Updated`, `Faceting Updated` |
 | `faceting.sort_facet_values_by_total`      | The number of different values that were set | `10` | `Settings Updated`, `Faceting Updated` |
 | `distinct_attribute.set` | `true` if a field name is specified as a distrinct attribute, otherwise `false`. | `false` | `Settings Updated`, `DistinctAttribute Updated` |
+| `proximity_precision.set` | `true` the setting has been manually set, otherwise `false`. | `false` | `Settings Updated`, `ProximityPrecision Updated` |
+| `proximity_precision.value` | `byWord` or `byAttribute` if the setting has been set, otherwise `null`. | `null` | `Settings Updated`, `ProximityPrecision Updated` |
 | `displayed_attributes.total`   | Number of displayed attributes. | `3` | `SettingUpdated`, `DisplayedAttributes Updated` |
 | `displayed_attributes.with_wildcard` | `true` if `*` is specified as a displayed attribute, otherwise `false`. | `false` | `SettingUpdated`, `DisplayedAttributes Updated` |
 | `stop_words.total`   | Number of stop words. | `3` | `Settings Updated`, `StopWords Updated` |
@@ -254,6 +258,7 @@ This property allows us to gather essential information to better understand on 
 | infos.ssl_resumption | `true` if `--ssl-resumption`/`MEILI_SSL_RESUMPTION` is specified, otherwise `false` | false |
 | infos.ssl_tickets | `true` if `--ssl-tickets`/`MEILI_SSL_TICKETS` is specified, otherwise `false` | false |
 | infos.with_configuration_file | `true` if the instance is launched with a configuration file, otherwise `false` | `false` |
+| infos.task_queue_webhook      | `true` if the instance is launched with a task queue webhook, otherwise `false` | `false` |
 | infos.experimental_enable_metrics | `true` if  `--experimental-enable-metrics`/`MEILI_EXPERIMENTAL_ENABLE_METRICS` is specified at launch, otherwise `false` | `false` |
 
 ##### MeiliSearch Statistics `stats`
@@ -495,6 +500,8 @@ This property allows us to gather essential information to better understand on 
 | faceting.sort_facet_values_by_star_count | Whether the user set all fields to be sort by count | `true` |
 | faceting.sort_facet_values_by_total | The number of different values that were set | `10` |
 | distinct_attribute.set | `true` if a field name is specified, otherwise `false`. | `false` |
+| proximity_precision.set | `true` the setting has been manually set, otherwise `false`. | `false` |
+| proximity_precision.value | `byWord` or `byAttribute` if the setting has been set, otherwise `null`. | `null` |
 | displayed_attributes.total   | Number of displayed attributes. | `3` |
 | displayed_attributes.with_wildcard | `true` if `*` is specified as a displayed attribute, otherwise `false`. | `false` |
 | stop_words.total   | Number of stop words. | `3` |
@@ -579,6 +586,14 @@ This property allows us to gather essential information to better understand on 
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | distinct_attribute.set | `true` if a field name is specified, otherwise `false`. | `false` |
+
+## `ProximityPrecision Updated`
+
+| Property name | Description | Example |
+|---------------|-------------|---------|
+| user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
+| proximity_precision.set | `true` the setting has been manually set, otherwise `false`. | `false` |
+| proximity_precision.value | `byWord` or `byAttribute` if the setting has been set, otherwise `null`. | `byWord` |
 
 ## `DisplayedAttributes Updated`
 
