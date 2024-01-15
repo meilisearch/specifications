@@ -27,6 +27,7 @@ N/A
 | [typo-tolerance](0117-typo-tolerance-setting-api.md)               | `typoTolerance` sub-resource API endpoints definition        |
 | [pagination](157-pagination-setting-api.md)                        | `pagination` sub-resource API endpoints definition           |
 | [faceting](157-faceting-setting-api.md)                            | `faceting` sub-resource API endpoints definition             |
+| [faceting](0123-proximity-precision.md)                            | `proximityPrecision` sub-resource API endpoints definition   |
 
 Each setting is exposed as a sub-resource of the `indexes/:index_uid/settings` endpoints. e.g. The ranking rules setting of a Meilisearch index is exposed at `indexes/:index_uid/settings/ranking-rules`.
 
@@ -58,6 +59,7 @@ Fetch the settings of a Meilisearch index.
 | `typoTolerance`          | Object                  | true     |
 | `pagination`             | Object                  | true     |
 | `faceting`               | Object                  | true     |
+| `proximityPrecision`     | String                  | true     |
 
 The attributes ordering in the response payload is equivalent to the order described in the table above.
 
@@ -87,6 +89,7 @@ Modify the settings of a Meilisearch index.
 | `typoTolerance`          | Object / `null`          | false    |
 | `pagination`             | Object / `null`          | false    |
 | `faceting`               | Object / `null`          | false    |
+| `proximityPrecision`     | String / `null`          | false    |
 
 - The request payload accepts partial definitions, the value of missing fields will remain unchanged.
 - The request payload accepts the `null` value for any setting, which will reset the setting to its default value.
@@ -169,6 +172,7 @@ Changing any of the following index settings will cause documents to be re-index
 - `separatorTokens`
 - `nonSeparatorTokens`
 - `dictionary`
+- `proximityPrecision`
 
 ## 5. Future Possibilities
 
