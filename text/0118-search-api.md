@@ -910,8 +910,6 @@ Adds a [`_rankingScore`](#32114-rankingscore) number to each document in the sea
 
 #### 3.1.18. `showRankingScoreDetails`
 
-(EXPERIMENTAL)
-
 - Type: Object
 - Required: False
 - Default: `false`
@@ -919,7 +917,6 @@ Adds a [`_rankingScore`](#32114-rankingscore) number to each document in the sea
 Adds a [`_rankingScoreDetails`](#32115-rankingscoredetails) object to each document in the search response, containing information about the score of that document for each applied ranking rule.
 
 - 🔴 Sending a value with a different type than `Boolean` or `null` for `showRankingScoreDetails` returns an [invalid_search_ranking_score_details](0061-error-format-and-definitions.md#invalid_search_show_ranking_score_details) error.
-- 🔴 Using that field while the [`score details`](./0193-experimental-features.md#score-details) experimental feature has not been enabled returns a [feature_not_enabled](0061-error-format-and-definitions.md#feature_not_enabled) error.
 
 #### 3.1.19. `matchingStrategy`
 
@@ -1228,7 +1225,7 @@ The relevancy score of a document relative to the search query. Higher is better
 - Type: Object
 - Required: False
 
-(EXPERIMENTAL) The ranking score of a document per each ranking rule and relative to the search query.
+The ranking score of a document per each ranking rule and relative to the search query.
 
 This object features one field for each applied ranking rule, whose values are an object with at least the field `order` indicating in which order this ranking rule has been applied.
 
