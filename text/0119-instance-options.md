@@ -500,7 +500,7 @@ Activate the `/metrics` endpoint to collect Meilisearch metrics for monitoring p
 
 Enables the `MDB_WRITEMAP` option of LMDB, making the internal key-value store use much less RAM than usual.
 
-#### 3.3.28. Experimental Reduce Indexing Memory Usage
+#### 3.3.28. Experimental Logs Mode
 
 **Environment variable**: `MEILI_EXPERIMENTAL_LOGS_MODE`
 **CLI option**: `--experimental-logs-mode`
