@@ -22,6 +22,8 @@ To enable instance experimental features, pass their associated command line fla
 |------------|-----------------|-----------|-------------------------|-----------------------------------|------------------|
 |Prometheus Metrics|`--experimental-enable-metrics`|The `/metrics` endpoint exposes metrics to be scraped by a Prometheus collector at regular intervals and stored for analysis.|We have yet to determine which metrics we want to expose and how|TBC|<https://github.com/meilisearch/product/discussions/625>|
 |Reduce Indexing Memory Usage|`--experimental-reduce-indexing-memory-usage`|Trades-off indexing speed with a lower RAM footprint.|We have yet to determine if a lot impacts performance and whether the RAM usage reduction is significant enough.|TBC|<https://github.com/meilisearch/product/discussions/652>|
+|Enable logs route|`--experimental-enable-logs-route`|The `/logs/*` endpoints exposes ways to retrieves and customizes logs.|TBC|<https://github.com/orgs/meilisearch/discussions/721>|
+|Change logs mode|`--experimental-logs-mode json`|The CLI flags takes a parameter, either `json` or `human` that will change the way we output the logs to the console. `human` is used by default.|TBC|<https://github.com/orgs/meilisearch/discussions/723>|
 
 
 ## 3.2. Runtime experimental features
@@ -58,29 +60,6 @@ curl \
             <td>
 
 <https://github.com/meilisearch/product/discussions/677>
-
-</td>
-        </tr>
-        <tr>
-            <td><a id="user-content-score-details" class="anchor" aria-hidden="true" href="#score-details">score details</a></td>
-            <td><!-- The newline below is required for the markdown to be rendered by GitHub -->
-
-```
-curl \
-  -X PATCH 'http://localhost:7700/experimental-features/' \
-  -H 'Content-Type: application/json'  \
---data-binary '{
-    "scoreDetails": true
-  }'
-```
-
- </td><!-- The newline above + starting from column 0 are required for the markdown to be rendered by GitHub -->
-  			<td>Enables computing detailed scores</td>
-  			<td>Confidence on the computed details names</td>
-  			<td>v1.4</td>
-            <td>
-
-<https://github.com/meilisearch/product/discussions/674>
 
 </td>
         </tr>

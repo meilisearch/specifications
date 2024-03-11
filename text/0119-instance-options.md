@@ -500,6 +500,18 @@ Activate the `/metrics` endpoint to collect Meilisearch metrics for monitoring p
 
 Enables the `MDB_WRITEMAP` option of LMDB, making the internal key-value store use much less RAM than usual.
 
+#### 3.3.28. Experimental Logs Mode
+
+**Environment variable**: `MEILI_EXPERIMENTAL_LOGS_MODE`
+**CLI option**: `--experimental-logs-mode`
+**Default**: `human`
+
+Lets you customize the mode in which meilisearch should output its logs.
+Only two values are possible:
+- `human` => The default one; it's easy to read for a human
+- `json` => It's better if you're going to send your logs to a log storage software
+
+
 #### 3.3.29. Task webhook url
 
 **Environment variable**: `MEILI_TASK_WEBHOOK_URL`
