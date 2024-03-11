@@ -34,7 +34,6 @@ This response is a JSON object containing the following fields:
 
 |Field name|Type|Experimental feature|
 |----------|----|-----|
-|`scoreDetails`|Boolean| [Score details](./0193-experimental-features.md#score-details) |
 |`vectorStore`|Boolean| [Vector store](./0193-experimental-features.md#vector-store) |
 
 The PATCH routes accept as payload a JSON object containing the same fields as in the response, with the following effects on the corresponding feature:

@@ -63,29 +63,6 @@ curl \
 
 </td>
         </tr>
-        <tr>
-            <td><a id="user-content-score-details" class="anchor" aria-hidden="true" href="#score-details">score details</a></td>
-            <td><!-- The newline below is required for the markdown to be rendered by GitHub -->
-
-```
-curl \
-  -X PATCH 'http://localhost:7700/experimental-features/' \
-  -H 'Content-Type: application/json'  \
---data-binary '{
-    "scoreDetails": true
-  }'
-```
-
- </td><!-- The newline above + starting from column 0 are required for the markdown to be rendered by GitHub -->
-  			<td>Enables computing detailed scores</td>
-  			<td>Confidence on the computed details names</td>
-  			<td>v1.4</td>
-            <td>
-
-<https://github.com/meilisearch/product/discussions/674>
-
-</td>
-        </tr>
     </tbody>
 </table>
 

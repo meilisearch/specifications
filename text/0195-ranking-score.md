@@ -64,9 +64,7 @@ If you need to factor sort ranking rules into your score, then use the [ranking 
 
 ### 3.2. Ranking score details
 
-(EXPERIMENTAL) The ranking score details are represented as an object attached to each document returned by a search when the [`showRankingScoreDetails`](./0118-search-api.md#3118-showrankingscoredetails) flag is set to true in the search query.
-
-The ranking score details are experimental and require enabling the corresponding [experimental feature](./0193-experimental-features.md#score-details).
+The ranking score details are represented as an object attached to each document returned by a search when the [`showRankingScoreDetails`](./0118-search-api.md#3118-showrankingscoredetails) flag is set to true in the search query.
 
 #### 3.2.1. General shape
 
@@ -90,16 +88,17 @@ The table below details these rule-specific fields.
 | `words`                | <ul><li>`matchingWords`: Number of words in the query that match in the document. The higher the better</li><li>`maxMatchingWords`: Maximum number of words in the query that can match in the document for this iteration of the `words` ranking rule. Usually, the query length, but if one of the query terms is set as a stop word, it won’t be counted here.</li></ul>                                                                                                                    |
 | `typo`                 | <ul><li>`typoCount`: Number of typos to correct in the query so that the document matches for this iteration of the `typo` ranking rule.</li><li>`maxTypoCount`: Maximum number of typos possible in a document for this iteration of the `typo` ranking rule.</li></ul>                    |
 | `proximity`            | No rule-specific field                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| `attribute`            | <ul><li>`attribute_ranking_order_score`: Results sorted based on the attribute ranking order</li><li>`query_word_distance_score`: Documents with attributes containing the query words close to their position in the query will be considered more relevant than documents containing the query words far from their position in the query</li></ul>                                                    |
+| `attribute`            | <ul><li>`attributeRankingOrderScore`: Results sorted based on the attribute ranking order</li><li>`queryWordDistanceScore`: Documents with attributes containing the query words close to their position in the query will be considered more relevant than documents containing the query words far from their position in the query</li></ul>                                                    |
 | `exactness`            | <ul><li>`matchType`: It has one of the following values:<ul><li>`exactMatch`: The query exactly matches the entire value of an attribute</li><li>`matchesStart`: The query matches exactly the start of the value of an attribute</li><li>`noExactMatch`: The query doesn't exactly match a document </li></ul></li><li>`matchingWords`: for `matchesStart`, the number of exact words contained in an attribute. The higher the better</li><li>`maxMatchingWords`: for `noExactMatch`, the maximum number of exact words contained in an attribute</li></ul> |
 
 #### 3.2.3. Sort ranking rules
 
-`Sort` and `geosort` ranking rules appear as fields in the score details, but with the following difference:
+`Sort`, `_geosort` and (EXPERIMENTAL) `vectorSort` ranking rules appear as fields in the score details, but with the following difference:
 
-- Their key follows the following format: `{:attribute-sorted-on}:{:sort-direction}`, with the `:attribute-sorted-on` the name of the attribute that is being sorted on, and the `:sort-direction` either `asc` if the sort is in ascending order, or `desc` if the sort is in descending order. For the `geosort` ranking rule, it is similarly `_geoPoint({:lat}, {:lng}):{:sort-direction}`, with the `:lat` and `:lng` being the latitude and respective longitude of the point that serves as base to sort by distance.
+- Their key follows the following format: `{:attribute-sorted-on}:{:sort-direction}`, with the `:attribute-sorted-on` the name of the attribute that is being sorted on, and the `:sort-direction` either `asc` if the sort is in ascending order, or `desc` if the sort is in descending order. For the `geosort` ranking rule, it is similarly `_geoPoint({:lat}, {:lng}):{:sort-direction}`, with the `:lat` and `:lng` being the latitude and respective longitude of the point that serves as base to sort by distance. (EXPERIMENTAL) For the  `vectorSort` ranking rule, it is similarly `vectorSort(:targetVector)` with the `:targetVector` being the searched for vector.
 - They don't have a `score` field, but instead they have a `value` field, representing the value used to sort the document. It is typically the value of the sorted attribute for the document, but can sometimes be a subvalue (case where the value is an array of values).
-- For the `geosort`, there is an additional `distance` field representing the distance between the target point and the point used in the document to sort the document.
+- For the `_geosort`, there is an additional `distance` field representing the distance between the target point and the point used in the document to sort the document.
+- (EXPERIMENTAL) for the `vectorSort`, there is an additional `similarity` field representing the similarity between the target vector and the value vector.
 
 #### 3.2.4 Example
 
