@@ -22,6 +22,8 @@ To enable instance experimental features, pass their associated command line fla
 |------------|-----------------|-----------|-------------------------|-----------------------------------|------------------|
 |Prometheus Metrics|`--experimental-enable-metrics`|The `/metrics` endpoint exposes metrics to be scraped by a Prometheus collector at regular intervals and stored for analysis.|We have yet to determine which metrics we want to expose and how|TBC|<https://github.com/meilisearch/product/discussions/625>|
 |Reduce Indexing Memory Usage|`--experimental-reduce-indexing-memory-usage`|Trades-off indexing speed with a lower RAM footprint.|We have yet to determine if a lot impacts performance and whether the RAM usage reduction is significant enough.|TBC|<https://github.com/meilisearch/product/discussions/652>|
+|Enable logs route|`--experimental-enable-logs-route`|The `/logs/*` endpoints exposes ways to retrieves and customizes logs.|TBC|<https://github.com/orgs/meilisearch/discussions/721>|
+|Change logs mode|`--experimental-logs-mode json`|The CLI flags takes a parameter, either `json` or `human` that will change the way we output the logs to the console. `human` is used by default.|TBC|<https://github.com/orgs/meilisearch/discussions/723>|
 
 
 ## 3.2. Runtime experimental features
