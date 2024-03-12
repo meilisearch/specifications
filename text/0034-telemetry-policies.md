@@ -111,7 +111,10 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `infos.task_queue_webhook`              | `true` if the instance is launched with a task queue webhook, otherwise `false` | false | Every Hour |
 | `infos.experimental_enable_metrics`     | `true` if  `--experimental-enable-metrics`/`MEILI_EXPERIMENTAL_ENABLE_METRICS` is specified at launch, otherwise `false` | `false` | Every Hour |
 | `infos.experimental_replication_parameters`| `true` if  `--experimental-replication-parameters`/`MEILI_EXPERIMENTAL_REPLICATION_PARAMETERS` is specified at launch, otherwise `false` | `false` | Every Hour |
+| `infos.experimental_logs_mode`          | `human` or `json` depending on the value specified. | `human` | Every Hour |
+| `infos.experimental_enable_logs_route`  | `true` if  `--experimental-enable-logs-route`/`MEILI_EXPERIMENTAL_ENABLE_LOGS_ROUTE` is specified at launch, otherwise `false` | `false` | Every Hour |
 | `infos.experimental_reduce_indexing_memory_usage`     | `true` if  `--experimental-reduce-indexing-memory-usage`/`MEILI_EXPERIMENTAL_REDUCE_INDEXING_MEMORY_USAGE` is specified at launch, otherwise `false` | `false` | Every Hour |
+| `infos.gpu_enabled` | `true` if Meilisearch was compiled with CUDA support, otherwise `false` | `false` | Every Hour |
 | `system.distribution`                   | Distribution on which MeiliSearch is launched           | Arch Linux        | Every hour |
 | `system.kernel_version`                 | Kernel version on which MeiliSearch is launched         | 5.14.10           | Every hour |
 | `system.cores`                          | Number of cores                                         | 24                | Every hour |
@@ -206,7 +209,6 @@ The collected data is sent to [Segment](https://segment.com/). Segment is a plat
 | `per_filter`| `true` if `POST /indexes/:indexUid/documents/delete` endpoint was used in this batch, otherwise `false` | false | `Documents Fetched GET`, `Documents Fetched POST`, `Documents Deleted` |
 | `clear_all` | `true` if `DELETE /indexes/:indexUid/documents` endpoint was used in this batch, otherwise `false` | false | `Documents Deleted` |
 | vector_store | Whether the [vector store](./0193-experimental-features.md#vector-store) feature is enabled. | `true` | `Experimental features Updated` |
-| score_details | Whether the [score details](./0193-experimental-features.md#score-details) feature is enabled. | `true` | `Experimental features Updated` |
 | scoring.show_ranking_score | Was `showRankingScore` used in the aggregated event? If yes, `true`, otherwise `false` | `false` | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched by Multi-Search POST` |
 | scoring.show_ranking_score_details | Was `showRankingScoreDetails` used in the aggregated event? If yes, `true`, otherwise `false` | `false` | `Documents Searched POST`, `Documents Searched GET`, `Documents Searched GET` |
 | `facets.total_distinct_facet_count` | The total number of distinct facets queried for the aggregated event | `3` | `Facet Searched POST` |
@@ -262,6 +264,10 @@ This property allows us to gather essential information to better understand on 
 | infos.task_queue_webhook      | `true` if the instance is launched with a task queue webhook, otherwise `false` | `false` |
 | infos.experimental_enable_metrics | `true` if  `--experimental-enable-metrics`/`MEILI_EXPERIMENTAL_ENABLE_METRICS` is specified at launch, otherwise `false` | `false` |
 | infos.experimental_replication_parameters | `true` if  `--experimental-replication-parameters`/`MEILI_EXPERIMENTAL_REPLICATION_PARAMETERS` is specified at launch, otherwise `false` | `false` |
+| infos.experimental_logs_mode          | `human` or `json` depending on the value specified. | `human` |
+| infos.experimental_enable_logs_route  | `true` if  `--experimental-enable-logs-route`/`MEILI_EXPERIMENTAL_ENABLE_LOGS_ROUTE` is specified at launch, otherwise `false` | `false` |
+| `infos.experimental_reduce_indexing_memory_usage`     | `true` if  `--experimental-reduce-indexing-memory-usage`/`MEILI_EXPERIMENTAL_REDUCE_INDEXING_MEMORY_USAGE` is specified at launch, otherwise `false` | `false` |
+| `infos.gpu_enabled` | `true` if Meilisearch was compiled with CUDA support, otherwise `false` | `false` |
 
 ##### MeiliSearch Statistics `stats`
 
@@ -742,7 +748,6 @@ This property allows us to gather essential information to better understand on 
 |---------------|-------------|---------|
 | user_agent    | Represents the user-agent encountered on this call. | `["Meilisearch Ruby (v2.1)", "Ruby (3.0)"]` |
 | vector_store | Whether the [vector store](./0193-experimental-features.md#vector-store) feature is enabled. | `true` |
-| score_details | Whether the [score details](./0193-experimental-features.md#score-details) feature is enabled. | `true` |
 
 
 ---

@@ -511,7 +511,7 @@ Enables the `MDB_WRITEMAP` option of LMDB, making the internal key-value store u
 Enable a bunch of features to help you run meilisearch in a replicated environment.
 See the following discussion: <https://github.com/orgs/meilisearch/discussions/725>
 
-#### 3.3.30. Task webhook url
+#### 3.3.29. Task webhook url
 
 **Environment variable**: `MEILI_TASK_WEBHOOK_URL`
 **CLI option**: `--task-webhook-url`
@@ -521,6 +521,17 @@ See the following discussion: <https://github.com/orgs/meilisearch/discussions/7
 Sets the URL where Meilisearch will send a notification every time it processes a batch of tasks.
 ⚠️  If the URL is not correctly formatted, it'll throw an error before starting.
 ⚠️  If the URL is correctly formatted but doesn't point to a valid server, Meilisearch won't return an error but will log one every time it processes a batch of tasks.
+
+#### 3.3.30. Experimental Logs Mode
+
+**Environment variable**: `MEILI_EXPERIMENTAL_LOGS_MODE`
+**CLI option**: `--experimental-logs-mode`
+**Default**: `human`
+
+Lets you customize the mode in which meilisearch should output its logs.
+Only two values are possible:
+- `human` => The default one; it's easy to read for a human
+- `json` => It's better if you're going to send your logs to a log storage software
 
 #### 3.3.31. Task webhook authorization header
 
