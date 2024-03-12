@@ -500,17 +500,16 @@ Activate the `/metrics` endpoint to collect Meilisearch metrics for monitoring p
 
 Enables the `MDB_WRITEMAP` option of LMDB, making the internal key-value store use much less RAM than usual.
 
-#### 3.3.28. Experimental Logs Mode
+#### 3.3.29. Experimental replication parameters
 
-**Environment variable**: `MEILI_EXPERIMENTAL_LOGS_MODE`
-**CLI option**: `--experimental-logs-mode`
-**Default**: `human`
+**Environment variable**: `MEILI_EXPERIMENTAL_REPLICATION_PARAMETERS`
+**CLI option**: `--experimental-replication-parameters`
+**Default**: Disabled
 
-Lets you customize the mode in which meilisearch should output its logs.
-Only two values are possible:
-- `human` => The default one; it's easy to read for a human
-- `json` => It's better if you're going to send your logs to a log storage software
+⚠️ This command-line option does not take any values. Assigning a value will throw an error.
 
+Enable a bunch of features to help you run meilisearch in a replicated environment.
+See the following discussion: <https://github.com/orgs/meilisearch/discussions/725>
 
 #### 3.3.29. Task webhook url
 
@@ -523,7 +522,18 @@ Sets the URL where Meilisearch will send a notification every time it processes 
 ⚠️  If the URL is not correctly formatted, it'll throw an error before starting.
 ⚠️  If the URL is correctly formatted but doesn't point to a valid server, Meilisearch won't return an error but will log one every time it processes a batch of tasks.
 
-#### 3.3.30. Task webhook authorization header
+#### 3.3.30. Experimental Logs Mode
+
+**Environment variable**: `MEILI_EXPERIMENTAL_LOGS_MODE`
+**CLI option**: `--experimental-logs-mode`
+**Default**: `human`
+
+Lets you customize the mode in which meilisearch should output its logs.
+Only two values are possible:
+- `human` => The default one; it's easy to read for a human
+- `json` => It's better if you're going to send your logs to a log storage software
+
+#### 3.3.31. Task webhook authorization header
 
 **Environment variable**: `MEILI_TASK_WEBHOOK_AUTHORIZATION_HEADER`
 **CLI option**: `--task-webhook-authorization-header`
