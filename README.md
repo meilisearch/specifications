@@ -1,3 +1,10 @@
+---
+# ⚠️ Archived Repository
+
+We now use public pages on Notion to describe engine feature usages.
+
+---
+
 # Specifications Workflow
 
 This repository manages the specifications of the Meilisearch API. Specifications are meant to describe the expected behavior on a high level and point out identified corner cases.
